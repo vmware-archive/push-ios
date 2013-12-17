@@ -9,10 +9,10 @@
 #import "LogItemCell.h"
 #import "LogItem.h"
 
-#define PADDING 8.0f
+#define PADDING 6.0f
 static CGFloat MESSAGE_LABEL_X = PADDING;
 static CGFloat MESSAGE_LABEL_Y = PADDING;
-static CGFloat MESSAGE_LABEL_FONT_SIZE = 15.0f;
+static CGFloat MESSAGE_LABEL_FONT_SIZE = 14.0f;
 static CGFloat MESSAGE_LABEL_MAX_HEIGHT = 300.0f;
 static CGFloat TIMESTAMP_LABEL_X = PADDING;
 static CGFloat TIMESTAMP_LABEL_HEIGHT = 10.0f;
@@ -38,6 +38,7 @@ static UIFont *labelFont = nil;
     self.labelMessage.frame = messageFrame;
     CGRect timestampFrame = CGRectMake(TIMESTAMP_LABEL_X, messageFrame.size.height + PADDING * 2.0f, TIMESTAMP_LABEL_WIDTH, TIMESTAMP_LABEL_HEIGHT);
     self.labelTimestamp.frame = timestampFrame;
+    self.backgroundColor = logItem.colour;
 }
 
 - (CGRect) frameForLabelWithText:(NSString*)text containerSize:(CGSize)containerSize {

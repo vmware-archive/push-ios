@@ -38,7 +38,6 @@
     }];
     [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
     OmniaPushSDK *sdk = [[OmniaPushSDK alloc] init];
-
 }
 
 - (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {

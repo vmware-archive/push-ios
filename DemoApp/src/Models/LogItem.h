@@ -14,8 +14,11 @@
 
 @property (nonatomic) NSString *message;
 @property (nonatomic) NSDate *timestamp;
+@property (nonatomic) UIColor *colour;
 
 - (instancetype) initWithMessage:(NSString*)message timestamp:(NSDate*)timestamp;
 - (NSString*) formattedTimestamp;
+
++ (void) updateBaseColour;
 
 @end
