@@ -9,9 +9,10 @@
 /* Begin PBXBuildFile section */
 		D44E7AAB186099B60072520F /* OmniaPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AA9186099B60072520F /* OmniaPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D44E7AAC186099B60072520F /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AAA186099B60072520F /* OmniaPushSDK.m */; };
-		D44E7AAD186099E10072520F /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
 		D44E7AB118609A8E0072520F /* OmniaPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */; };
 		D44E7AB218609A8E0072520F /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
+		D455CBB61860A4B9003539E0 /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
+		D455CBB71860A4BC003539E0 /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AAA186099B60072520F /* OmniaPushSDK.m */; };
 		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A812185BAFDC00A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A810185BAFDC00A841EE /* InfoPlist.strings */; };
 		D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
@@ -99,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D44E7AAD186099E10072520F /* OmniaPushSDK.framework in Frameworks */,
 				D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */,
 				D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */,
 				D4E8A831185BAFE900A841EE /* Cedar-iOS.framework in Frameworks */,
@@ -400,6 +400,8 @@
 			files = (
 				D4E8A82D185BAFE900A841EE /* main.m in Sources */,
 				D4E8A877185BB12200A841EE /* OmniaPushSDKSpec.mm in Sources */,
+				D455CBB61860A4B9003539E0 /* OmniaPushDebug.m in Sources */,
+				D455CBB71860A4BC003539E0 /* OmniaPushSDK.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

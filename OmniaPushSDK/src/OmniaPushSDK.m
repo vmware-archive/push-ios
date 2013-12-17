@@ -7,6 +7,7 @@
 //
 
 #import "OmniaPushSDK.h"
+#import "OmniaPushDebug.h"
 
 @implementation OmniaPushSDK
 
