@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#define LOG_ITEM_CELL @"LogItemCell"
+
 @interface LogItem : NSObject
 
-@property NSString *message;
-@property NSDate *timestamp;
+@property (nonatomic) NSString *message;
+@property (nonatomic) NSDate *timestamp;
 
 - (instancetype) initWithMessage:(NSString*)message timestamp:(NSDate*)timestamp;
+- (NSString*) formattedTimestamp;
 
 @end

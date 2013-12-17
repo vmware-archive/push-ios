@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4330EAC1860DEC000A141AF /* LogItemCell.m */; };
+		D4330EB11860E39E00A141AF /* LogItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4330EB01860E39E00A141AF /* LogItemCell.xib */; };
 		D44E7AAB186099B60072520F /* OmniaPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AA9186099B60072520F /* OmniaPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D44E7AAC186099B60072520F /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AAA186099B60072520F /* OmniaPushSDK.m */; };
 		D44E7AB118609A8E0072520F /* OmniaPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */; };
@@ -53,6 +55,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D4330EAB1860DEC000A141AF /* LogItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogItemCell.h; path = src/Views/LogItemCell.h; sourceTree = "<group>"; };
+		D4330EAC1860DEC000A141AF /* LogItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogItemCell.m; path = src/Views/LogItemCell.m; sourceTree = "<group>"; };
+		D4330EB01860E39E00A141AF /* LogItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogItemCell.xib; path = src/Views/LogItemCell.xib; sourceTree = "<group>"; };
 		D44E7AA9186099B60072520F /* OmniaPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushSDK.h; path = src/OmniaPushSDK.h; sourceTree = "<group>"; };
 		D44E7AAA186099B60072520F /* OmniaPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushSDK.m; path = src/OmniaPushSDK.m; sourceTree = "<group>"; };
 		D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushDebug.h; path = src/Util/OmniaPushDebug.h; sourceTree = "<group>"; };
@@ -122,6 +127,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D4330EA81860DDF000A141AF /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D4330EB01860E39E00A141AF /* LogItemCell.xib */,
+				D4330EAB1860DEC000A141AF /* LogItemCell.h */,
+				D4330EAC1860DEC000A141AF /* LogItemCell.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		D44E7AA8186099500072520F /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				D455CBC31860B4FD003539E0 /* Models */,
+				D4330EA81860DDF000A141AF /* Views */,
 				D455CBBC1860B495003539E0 /* ViewControllers */,
 			);
 			name = src;
@@ -386,6 +402,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4E8A855185BAFFE00A841EE /* Images.xcassets in Resources */,
+				D4330EB11860E39E00A141AF /* LogItemCell.xib in Resources */,
 				D4E8A84D185BAFFE00A841EE /* Main_iPhone.storyboard in Resources */,
 				D4E8A844185BAFFE00A841EE /* InfoPlist.strings in Resources */,
 			);
@@ -437,6 +454,7 @@
 				D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */,
 				D455CBC61860B51B003539E0 /* LogItem.m in Sources */,
 				D4E8A846185BAFFE00A841EE /* main.m in Sources */,
+				D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */,
 				D455CBBF1860B4CD003539E0 /* LogTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

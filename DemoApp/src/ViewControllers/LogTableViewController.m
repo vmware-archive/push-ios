@@ -10,6 +10,7 @@
 #import "OmniaPushSDK.h"
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
+#import "LogItemCell.h"
 
 @interface LogTableViewController ()
 
@@ -22,7 +23,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+ 
+    // Setup cells for loading into table view
+    UINib *nib = [UINib nibWithNibName:LOG_ITEM_CELL bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:LOG_ITEM_CELL];
+    
+    // Don't let the view appear under the status bar
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -64,68 +70,17 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"LogItemCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    LogItemCell *cell = [tableView dequeueReusableCellWithIdentifier:LOG_ITEM_CELL forIndexPath:indexPath];
     LogItem *logItem = (LogItem*) self.logItems[indexPath.row];
-    if (logItem) {
-        cell.textLabel.text = logItem.message;
-        cell.detailTextLabel.text = [self formatTimestamp:logItem.timestamp];
-    } else {
-        cell.textLabel.text = @"";
-        cell.detailTextLabel.text = @"";
-    }
-    
+    [cell setLogItem:logItem containerSize:self.view.frame.size];
     return cell;
 }
 
-- (NSString*) formatTimestamp:(NSDate*)timestamp {
-    static NSDateFormatter *dateFormatter;
-    if (dateFormatter == nil) {
-        dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
-        [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
-    }
-    return [dateFormatter stringFromDate:timestamp];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    LogItem *item = self.logItems[indexPath.row];
+    CGFloat height = [LogItemCell heightForCellWithText:item.message containerSize:self.view.frame.size];
+    return height;
 }
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
 
 /*
 #pragma mark - Navigation
