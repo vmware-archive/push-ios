@@ -13,7 +13,7 @@
 - (instancetype) init {
     self = [super init];
     if (self) {
-        NSLog(@"OmniaPushSDK:init");
+        OmniaPushLog(@"OmniaPushSDK:init");
     }
     return self;
 }

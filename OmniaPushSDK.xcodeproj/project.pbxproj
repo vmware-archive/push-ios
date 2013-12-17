@@ -7,9 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D44E7AAB186099B60072520F /* OmniaPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AA9186099B60072520F /* OmniaPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44E7AAC186099B60072520F /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AAA186099B60072520F /* OmniaPushSDK.m */; };
+		D44E7AAD186099E10072520F /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
+		D44E7AB118609A8E0072520F /* OmniaPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */; };
+		D44E7AB218609A8E0072520F /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
 		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A812185BAFDC00A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A810185BAFDC00A841EE /* InfoPlist.strings */; };
-		D4E8A816185BAFDC00A841EE /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A815185BAFDC00A841EE /* OmniaPushSDK.m */; };
 		D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
 		D4E8A823185BAFE900A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A824185BAFE900A841EE /* CoreGraphics.framework */; };
@@ -26,9 +30,7 @@
 		D4E8A850185BAFFE00A841EE /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */; };
 		D4E8A853185BAFFE00A841EE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A852185BAFFE00A841EE /* ViewController.m */; };
 		D4E8A855185BAFFE00A841EE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A854185BAFFE00A841EE /* Images.xcassets */; };
-		D4E8A871185BB02900A841EE /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
 		D4E8A874185BB03000A841EE /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
-		D4E8A875185BB08600A841EE /* OmniaPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E8A814185BAFDC00A841EE /* OmniaPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4E8A877185BB12200A841EE /* OmniaPushSDKSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A876185BB12200A841EE /* OmniaPushSDKSpec.mm */; };
 /* End PBXBuildFile section */
 
@@ -50,13 +52,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D44E7AA9186099B60072520F /* OmniaPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushSDK.h; path = src/OmniaPushSDK.h; sourceTree = "<group>"; };
+		D44E7AAA186099B60072520F /* OmniaPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushSDK.m; path = src/OmniaPushSDK.m; sourceTree = "<group>"; };
+		D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushDebug.h; path = src/Util/OmniaPushDebug.h; sourceTree = "<group>"; };
+		D44E7AB018609A8E0072520F /* OmniaPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushDebug.m; path = src/Util/OmniaPushDebug.m; sourceTree = "<group>"; };
 		D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = OmniaPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A80B185BAFDC00A841EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4E8A80F185BAFDC00A841EE /* OmniaPushSDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OmniaPushSDK-Info.plist"; sourceTree = "<group>"; };
 		D4E8A811185BAFDC00A841EE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D4E8A813185BAFDC00A841EE /* OmniaPushSDK-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OmniaPushSDK-Prefix.pch"; sourceTree = "<group>"; };
-		D4E8A814185BAFDC00A841EE /* OmniaPushSDK.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OmniaPushSDK.h; sourceTree = "<group>"; };
-		D4E8A815185BAFDC00A841EE /* OmniaPushSDK.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OmniaPushSDK.m; sourceTree = "<group>"; };
 		D4E8A820185BAFE900A841EE /* Specs.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Specs.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A821185BAFE900A841EE /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D4E8A824185BAFE900A841EE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -95,7 +99,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A871185BB02900A841EE /* OmniaPushSDK.framework in Frameworks */,
+				D44E7AAD186099E10072520F /* OmniaPushSDK.framework in Frameworks */,
 				D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */,
 				D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */,
 				D4E8A831185BAFE900A841EE /* Cedar-iOS.framework in Frameworks */,
@@ -117,6 +121,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D44E7AA8186099500072520F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D44E7AAE18609A190072520F /* Util */,
+				D44E7AA9186099B60072520F /* OmniaPushSDK.h */,
+				D44E7AAA186099B60072520F /* OmniaPushSDK.m */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		D44E7AAE18609A190072520F /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */,
+				D44E7AB018609A8E0072520F /* OmniaPushDebug.m */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
 		D4E8A7FD185BAFDC00A841EE = {
 			isa = PBXGroup;
 			children = (
@@ -152,8 +175,7 @@
 		D4E8A80D185BAFDC00A841EE /* OmniaPushSDK */ = {
 			isa = PBXGroup;
 			children = (
-				D4E8A814185BAFDC00A841EE /* OmniaPushSDK.h */,
-				D4E8A815185BAFDC00A841EE /* OmniaPushSDK.m */,
+				D44E7AA8186099500072520F /* src */,
 				D4E8A80E185BAFDC00A841EE /* Supporting Files */,
 			);
 			path = OmniaPushSDK;
@@ -224,7 +246,8 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A875185BB08600A841EE /* OmniaPushSDK.h in Headers */,
+				D44E7AAB186099B60072520F /* OmniaPushSDK.h in Headers */,
+				D44E7AB118609A8E0072520F /* OmniaPushDebug.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +389,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A816185BAFDC00A841EE /* OmniaPushSDK.m in Sources */,
+				D44E7AB218609A8E0072520F /* OmniaPushDebug.m in Sources */,
+				D44E7AAC186099B60072520F /* OmniaPushSDK.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -563,7 +587,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"Specs/Frameworks",
+					Specs/Frameworks,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/Specs-Prefix.pch";
@@ -589,7 +613,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"Specs/Frameworks",
+					Specs/Frameworks,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/Specs-Prefix.pch";
