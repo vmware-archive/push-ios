@@ -102,7 +102,7 @@
 
 #endif // if DEBUG
 
-typedef void (^OmniaPushLogListener)(NSString* logMessage);
+typedef void (^OmniaPushLogListener)(NSString *context, NSDate *timestamp);
 
 @interface OmniaPushDebug : NSObject
 

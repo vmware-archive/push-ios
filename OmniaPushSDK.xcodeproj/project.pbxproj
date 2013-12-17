@@ -13,6 +13,8 @@
 		D44E7AB218609A8E0072520F /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
 		D455CBB61860A4B9003539E0 /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
 		D455CBB71860A4BC003539E0 /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AAA186099B60072520F /* OmniaPushSDK.m */; };
+		D455CBBF1860B4CD003539E0 /* LogTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D455CBBE1860B4CD003539E0 /* LogTableViewController.m */; };
+		D455CBC61860B51B003539E0 /* LogItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D455CBC51860B51B003539E0 /* LogItem.m */; };
 		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A812185BAFDC00A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A810185BAFDC00A841EE /* InfoPlist.strings */; };
 		D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
@@ -29,7 +31,6 @@
 		D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A849185BAFFE00A841EE /* AppDelegate.m */; };
 		D4E8A84D185BAFFE00A841EE /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A84B185BAFFE00A841EE /* Main_iPhone.storyboard */; };
 		D4E8A850185BAFFE00A841EE /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */; };
-		D4E8A853185BAFFE00A841EE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A852185BAFFE00A841EE /* ViewController.m */; };
 		D4E8A855185BAFFE00A841EE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A854185BAFFE00A841EE /* Images.xcassets */; };
 		D4E8A874185BB03000A841EE /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
 		D4E8A877185BB12200A841EE /* OmniaPushSDKSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A876185BB12200A841EE /* OmniaPushSDKSpec.mm */; };
@@ -57,6 +58,10 @@
 		D44E7AAA186099B60072520F /* OmniaPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushSDK.m; path = src/OmniaPushSDK.m; sourceTree = "<group>"; };
 		D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushDebug.h; path = src/Util/OmniaPushDebug.h; sourceTree = "<group>"; };
 		D44E7AB018609A8E0072520F /* OmniaPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushDebug.m; path = src/Util/OmniaPushDebug.m; sourceTree = "<group>"; };
+		D455CBBD1860B4CD003539E0 /* LogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTableViewController.h; path = src/ViewControllers/LogTableViewController.h; sourceTree = "<group>"; };
+		D455CBBE1860B4CD003539E0 /* LogTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogTableViewController.m; path = src/ViewControllers/LogTableViewController.m; sourceTree = "<group>"; };
+		D455CBC41860B51B003539E0 /* LogItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogItem.h; path = src/Models/LogItem.h; sourceTree = "<group>"; };
+		D455CBC51860B51B003539E0 /* LogItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogItem.m; path = src/Models/LogItem.m; sourceTree = "<group>"; };
 		D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = OmniaPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A80B185BAFDC00A841EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4E8A80F185BAFDC00A841EE /* OmniaPushSDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OmniaPushSDK-Info.plist"; sourceTree = "<group>"; };
@@ -80,8 +85,6 @@
 		D4E8A849185BAFFE00A841EE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		D4E8A84C185BAFFE00A841EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		D4E8A84F185BAFFE00A841EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		D4E8A851185BAFFE00A841EE /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D4E8A852185BAFFE00A841EE /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D4E8A854185BAFFE00A841EE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D4E8A85B185BAFFE00A841EE /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		D4E8A876185BB12200A841EE /* OmniaPushSDKSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OmniaPushSDKSpec.mm; sourceTree = "<group>"; };
@@ -138,6 +141,33 @@
 				D44E7AB018609A8E0072520F /* OmniaPushDebug.m */,
 			);
 			name = Util;
+			sourceTree = "<group>";
+		};
+		D455CBB81860A7FC003539E0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				D455CBC31860B4FD003539E0 /* Models */,
+				D455CBBC1860B495003539E0 /* ViewControllers */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		D455CBBC1860B495003539E0 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				D455CBBD1860B4CD003539E0 /* LogTableViewController.h */,
+				D455CBBE1860B4CD003539E0 /* LogTableViewController.m */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		D455CBC31860B4FD003539E0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D455CBC41860B51B003539E0 /* LogItem.h */,
+				D455CBC51860B51B003539E0 /* LogItem.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 		D4E8A7FD185BAFDC00A841EE = {
@@ -216,12 +246,11 @@
 		D4E8A83F185BAFFE00A841EE /* DemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				D455CBB81860A7FC003539E0 /* src */,
 				D4E8A848185BAFFE00A841EE /* AppDelegate.h */,
 				D4E8A849185BAFFE00A841EE /* AppDelegate.m */,
 				D4E8A84B185BAFFE00A841EE /* Main_iPhone.storyboard */,
 				D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */,
-				D4E8A851185BAFFE00A841EE /* ViewController.h */,
-				D4E8A852185BAFFE00A841EE /* ViewController.m */,
 				D4E8A854185BAFFE00A841EE /* Images.xcassets */,
 				D4E8A840185BAFFE00A841EE /* Supporting Files */,
 			);
@@ -409,9 +438,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A853185BAFFE00A841EE /* ViewController.m in Sources */,
 				D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */,
+				D455CBC61860B51B003539E0 /* LogItem.m in Sources */,
 				D4E8A846185BAFFE00A841EE /* main.m in Sources */,
+				D455CBBF1860B4CD003539E0 /* LogTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

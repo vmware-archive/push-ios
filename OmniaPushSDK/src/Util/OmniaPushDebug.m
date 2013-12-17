@@ -49,7 +49,7 @@ OmniaPushLogListener listener = nil;
         NSLog(@"%@", output);
     }
     if (listener) {
-        listener(output);
+        listener(output, [NSDate date]);
     }
 }
 
@@ -85,7 +85,12 @@ OmniaPushLogListener listener = nil;
     [string_out appendString:stringLine];
     [string_out appendString:formatStr];
     
-    [OmniaPushDebug log:string_out];
+    if (!disableLogging) {
+        NSLog(@"%@", string_out);
+    }
+    if (listener) {
+        listener(formatStr, [NSDate date]);
+    }
 }
 
 + (void)error:(char *)fileName
@@ -107,10 +112,7 @@ OmniaPushLogListener listener = nil;
     va_end(argList);
     
     NSString *message = [NSString stringWithFormat:@"\n\n ERROR\n  File: %s\n  Line: %d\n  File: %s\n Cause: %@ \n\n", [[filePath lastPathComponent] UTF8String], lineNumber, stringFunction, formatStr];
-    NSLog(@"%@", message);
-    if (listener) {
-        listener(message);
-    }
+    [OmniaPushDebug log:message];
     
     OmniaPushBreakPoint;
     

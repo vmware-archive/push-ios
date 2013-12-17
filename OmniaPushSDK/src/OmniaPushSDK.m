@@ -14,7 +14,7 @@
 - (instancetype) init {
     self = [super init];
     if (self) {
-        OmniaPushLog(@"OmniaPushSDK:init");
+        OmniaPushLog(@"Library initialized.");
     }
     return self;
 }
