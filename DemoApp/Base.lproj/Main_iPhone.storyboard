@@ -41,7 +41,7 @@
                         <sections/>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="Omnia Push SDK - Test Log" id="zGW-sw-fAM"/>
+                    <navigationItem key="navigationItem" title="Omnia Push SDK" id="zGW-sw-fAM"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="awY-Vp-biX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

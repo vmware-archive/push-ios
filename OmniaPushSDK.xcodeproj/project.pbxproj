@@ -30,7 +30,6 @@
 		D4E8A846185BAFFE00A841EE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A845185BAFFE00A841EE /* main.m */; };
 		D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A849185BAFFE00A841EE /* AppDelegate.m */; };
 		D4E8A84D185BAFFE00A841EE /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A84B185BAFFE00A841EE /* Main_iPhone.storyboard */; };
-		D4E8A850185BAFFE00A841EE /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */; };
 		D4E8A855185BAFFE00A841EE /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A854185BAFFE00A841EE /* Images.xcassets */; };
 		D4E8A874185BB03000A841EE /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */; };
 		D4E8A877185BB12200A841EE /* OmniaPushSDKSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A876185BB12200A841EE /* OmniaPushSDKSpec.mm */; };
@@ -84,7 +83,6 @@
 		D4E8A848185BAFFE00A841EE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		D4E8A849185BAFFE00A841EE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		D4E8A84C185BAFFE00A841EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		D4E8A84F185BAFFE00A841EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		D4E8A854185BAFFE00A841EE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D4E8A85B185BAFFE00A841EE /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		D4E8A876185BB12200A841EE /* OmniaPushSDKSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OmniaPushSDKSpec.mm; sourceTree = "<group>"; };
@@ -250,7 +248,6 @@
 				D4E8A848185BAFFE00A841EE /* AppDelegate.h */,
 				D4E8A849185BAFFE00A841EE /* AppDelegate.m */,
 				D4E8A84B185BAFFE00A841EE /* Main_iPhone.storyboard */,
-				D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */,
 				D4E8A854185BAFFE00A841EE /* Images.xcassets */,
 				D4E8A840185BAFFE00A841EE /* Supporting Files */,
 			);
@@ -388,7 +385,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A850185BAFFE00A841EE /* Main_iPad.storyboard in Resources */,
 				D4E8A855185BAFFE00A841EE /* Images.xcassets in Resources */,
 				D4E8A84D185BAFFE00A841EE /* Main_iPhone.storyboard in Resources */,
 				D4E8A844185BAFFE00A841EE /* InfoPlist.strings in Resources */,
@@ -491,14 +487,6 @@
 				D4E8A84C185BAFFE00A841EE /* Base */,
 			);
 			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		D4E8A84E185BAFFE00A841EE /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D4E8A84F185BAFFE00A841EE /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -676,7 +664,7 @@
 				);
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -692,7 +680,7 @@
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
