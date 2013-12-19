@@ -6,6 +6,7 @@ using namespace Cedar::Doubles;
 SPEC_BEGIN(OmniaPushSDKSpec)
 
 describe(@"OmniaPushSDK", ^{
+    
     __block OmniaPushSDK *model;
 
     it(@"should be able to initialize the SDK", ^{
