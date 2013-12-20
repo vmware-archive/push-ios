@@ -13,6 +13,8 @@
 
 @interface OmniaPushSDKInstance ()
 
+@property (nonatomic) UIApplication *application;
+@property (nonatomic) NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
 @property (nonatomic) id<UIApplicationDelegate> currentApplicationDelegate;
 @property (nonatomic) OmniaPushAppDelegateProxyImpl *proxy;
 
@@ -20,20 +22,30 @@
 
 @implementation OmniaPushSDKInstance
 
-- (instancetype) init {
+- (instancetype) initWithApplication:(UIApplication*)application
+                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
+{
     self = [super init];
     if (self) {
-        
-        self.currentApplicationDelegate = [UIApplication sharedApplication].delegate;
-        NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest = [[OmniaPushAPNSRegistrationRequestImpl alloc] init];
-        self.proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:self.currentApplicationDelegate registrationRequest:registrationRequest];
-        [UIApplication sharedApplication].delegate = self.proxy;
-        [self.proxy registerForRemoteNotificationTypes:UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeBadge];
-        // TODO - accept notification types as method argument
-        
-        OmniaPushLog(@"Library initialized.");
+        if (application == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
+        }
+        if (registrationRequest == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"registrationRequest may not be nil"];
+        }
+        self.application = application;
+        self.registrationRequest = registrationRequest;
     }
     return self;
 }
+
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types {
+    self.currentApplicationDelegate = self.application.delegate;
+    self.proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:self.currentApplicationDelegate registrationRequest:self.registrationRequest];
+    self.application.delegate = self.proxy;
+    [self.proxy registerForRemoteNotificationTypes:types];
+    OmniaPushLog(@"Library initialized.");    
+}
+
 
 @end

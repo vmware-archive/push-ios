@@ -15,6 +15,7 @@
 - (instancetype) initWithAppDelegate:(NSObject<UIApplicationDelegate>*)appDelegate
                  registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
 {
+    // NOTE: no [super init] since there our super class, NSProxy, doesn't have any init method
     if (self) {
         if (appDelegate == nil) {
             [NSException raise:NSInvalidArgumentException format:@"appDelegate may not be nil"];

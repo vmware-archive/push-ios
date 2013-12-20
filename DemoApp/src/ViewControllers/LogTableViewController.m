@@ -7,6 +7,7 @@
 //
 
 #import "LogTableViewController.h"
+#import "OmniaPushAPNSRegistrationRequestImpl.h"
 #import "OmniaPushSDKInstance.h"
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
@@ -37,8 +38,8 @@
     [OmniaPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
         [self addLogItem:message timestamp:timestamp];
     }];
-    [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
-    self.sdk = [[OmniaPushSDKInstance alloc] init];
+    
+    [self initializeSDK];
 }
 
 - (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {
@@ -49,6 +50,14 @@
     LogItem *logItem = [[LogItem alloc] initWithMessage:message timestamp:timestamp];
     [self.logItems addObject:logItem];
     [self.tableView reloadData];
+}
+
+- (void) initializeSDK {
+    [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
+    // TODO - encapsulate all this stuff in an static wrapper method in the framework itself
+    NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest = [[OmniaPushAPNSRegistrationRequestImpl alloc] init];
+    self.sdk = [[OmniaPushSDKInstance alloc] initWithApplication:[UIApplication sharedApplication] registrationRequest:registrationRequest];
+    [self.sdk registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert];
 }
 
 - (void)didReceiveMemoryWarning

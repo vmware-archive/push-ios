@@ -8,8 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OmniaPushAPNSRegistrationRequest;
+
 @interface OmniaPushSDKInstance : NSObject
 
-- (instancetype) init;
+- (instancetype) initWithApplication:(UIApplication*)application
+                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest;
+
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
 
 @end
