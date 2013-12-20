@@ -33,6 +33,7 @@ static UIFont *labelFont = nil;
     self.logItem = logItem;
     self.labelTimestamp.text = logItem.formattedTimestamp;
     self.labelMessage.text = logItem.message;
+    self.labelMessage.font = labelFont;
     self.labelMessage.numberOfLines = 0;
     CGRect messageFrame = [self frameForLabelWithText:logItem.message containerSize:containerSize];
     self.labelMessage.frame = messageFrame;
@@ -65,7 +66,7 @@ static UIFont *labelFont = nil;
     
     CGSize maxSize = CGSizeMake(containerSize.width - MESSAGE_LABEL_X - PADDING, MESSAGE_LABEL_MAX_HEIGHT);
     CGSize measuredSize = [text sizeWithFont:labelFont constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
-    return measuredSize.height;
+    return measuredSize.height + 1;
 }
 
 @end

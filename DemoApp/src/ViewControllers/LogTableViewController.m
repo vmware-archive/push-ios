@@ -7,14 +7,15 @@
 //
 
 #import "LogTableViewController.h"
-#import "OmniaPushSDK.h"
+#import "OmniaPushSDKInstance.h"
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
 #import "LogItemCell.h"
 
 @interface LogTableViewController ()
 
-@property NSMutableArray *logItems;
+@property (nonatomic) NSMutableArray *logItems;
+@property (nonatomic) OmniaPushSDKInstance *sdk;
 
 @end
 
@@ -37,7 +38,7 @@
         [self addLogItem:message timestamp:timestamp];
     }];
     [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
-    OmniaPushSDK *sdk = [[OmniaPushSDK alloc] init];
+    self.sdk = [[OmniaPushSDKInstance alloc] init];
 }
 
 - (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {
@@ -47,6 +48,7 @@
     }
     LogItem *logItem = [[LogItem alloc] initWithMessage:message timestamp:timestamp];
     [self.logItems addObject:logItem];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning

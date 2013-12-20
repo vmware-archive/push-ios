@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Omnia. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface OmniaPushSDK : NSObject
+@interface OmniaPushSDKInstance : NSObject
 
 - (instancetype) init;
 

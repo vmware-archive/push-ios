@@ -33,16 +33,16 @@ static int numItems = 0;
     
     static NSArray *darkBaseRowColours = nil;
     if (darkBaseRowColours == nil) {
-        darkBaseRowColours = @[[UIColor colorWithRed:0.8f green:0.7f blue:0.6f alpha:1.0f],
-                           [UIColor colorWithRed:0.6f green:0.8f blue:0.7f alpha:1.0f],
-                           [UIColor colorWithRed:0.7f green:0.6f blue:0.8f alpha:1.0f]];
+        darkBaseRowColours = @[[UIColor colorWithRed:0.85f green:0.75f blue:0.75f alpha:1.0f],
+                           [UIColor colorWithRed:0.75f green:0.85f blue:0.75f alpha:1.0f],
+                           [UIColor colorWithRed:0.75f green:0.75f blue:0.85f alpha:1.0f]];
     }
     
     static NSArray *lightBaseRowColours = nil;
     if (lightBaseRowColours == nil) {
-        lightBaseRowColours = @[[UIColor colorWithRed:0.95f green:0.8f blue:0.7f alpha:1.0f],
-                               [UIColor colorWithRed:0.7f green:0.95f blue:0.8f alpha:1.0f],
-                               [UIColor colorWithRed:0.8f green:0.7f blue:0.95f alpha:1.0f]];
+        lightBaseRowColours = @[[UIColor colorWithRed:0.95f green:0.8f blue:0.8f alpha:1.0f],
+                               [UIColor colorWithRed:0.8f green:0.95f blue:0.8f alpha:1.0f],
+                               [UIColor colorWithRed:0.8f green:0.8f blue:0.95f alpha:1.0f]];
     }
 
     numItems += 1;

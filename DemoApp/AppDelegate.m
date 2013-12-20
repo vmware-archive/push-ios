@@ -22,6 +22,14 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    NSLog(@"##DemoApp:AppDelegate:didRegisterForRemoteNotificationsWithDeviceToken: %@", deviceToken);
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"##DemoApp:AppDelegate:didFailToRegisterForRemoteNotificationsWithError: %@", error);
+}
+
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // TODO - print to log on screen
     NSLog(@"### didReceiveRemoteNotification: %@", userInfo);

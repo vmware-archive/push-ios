@@ -1,4 +1,4 @@
-#import "OmniaPushAppDelegateProxy.h"
+#import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushAPNSRegistrationRequest.h"
 
 using namespace Cedar::Matchers;
@@ -6,11 +6,11 @@ using namespace Cedar::Doubles;
 
 #define TEST_NOTIFICATION_TYPE UIRemoteNotificationTypeAlert
 
-SPEC_BEGIN(OmniaPushAppDelegateProxySpec)
+SPEC_BEGIN(OmniaPushAppDelegateProxyImplSpec)
 
-describe(@"OmniaPushAppDelegateProxy", ^{
+describe(@"OmniaPushAppDelegateProxyImpl", ^{
     
-    __block OmniaPushAppDelegateProxy *proxy;
+    __block OmniaPushAppDelegateProxyImpl *proxy;
     __block id<CedarDouble> fakeAppDelegate;
     __block id<CedarDouble> fakeRegistrationRequest;
 
@@ -24,12 +24,12 @@ describe(@"OmniaPushAppDelegateProxy", ^{
     context(@"when init has invalid arguments", ^{
         
         it(@"should require an app delegate", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxy alloc] initWithAppDelegate:nil registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];}
+            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:nil registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];}
                 should raise_exception([NSException class]);
         });
 
         it(@"should require a registration request object", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxy alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:nil];}
+            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:nil];}
                 should raise_exception([NSException class]);
         });
         
@@ -42,7 +42,7 @@ describe(@"OmniaPushAppDelegateProxy", ^{
         __block NSError *testError;
         
         beforeEach(^{
-            proxy = [[OmniaPushAppDelegateProxy alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];
+            proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];
             deviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
             testApplication = [UIApplication sharedApplication];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
