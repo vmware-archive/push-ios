@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol OmniaPushAppDelegateProxyListener;
+
 @protocol OmniaPushAppDelegateProxy <UIApplicationDelegate>
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushAppDelegateProxyListener>)proxyListener;
 
 @end

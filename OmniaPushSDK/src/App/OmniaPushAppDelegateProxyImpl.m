@@ -9,6 +9,7 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushAPNSRegistrationRequest.h"
 #import "OmniaPushDebug.h"
+#import "OmniaPushAppDelegateProxyListener.h"
 
 @implementation OmniaPushAppDelegateProxyImpl
 
@@ -25,12 +26,13 @@
         }
         self.appDelegate = appDelegate;
         self.registrationRequest = registrationRequest;
+        self.listener = nil;
     }
     return self;
 }
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
-{
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushAppDelegateProxyListener>)proxyListener {
+    self.listener = proxyListener;
     [self.registrationRequest registerForRemoteNotificationTypes:types];
 }
 
@@ -39,12 +41,19 @@
     //const void *devTokenBytes = [devToken bytes];
     //[self sendProviderDeviceToken:devTokenBytes]; // custom method
     [self.appDelegate application:app didRegisterForRemoteNotificationsWithDeviceToken:devToken];
+    if (self.listener) {
+        [self.listener application:app didRegisterForRemoteNotificationsWithDeviceToken:devToken];
+    }
     // TODO - save the registration somehow
 }
 
+// TODO - decide if we even need this method - probably not.
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
     OmniaPushLog(@"Error in registration with APNS. Error: %@", err);
     [self.appDelegate application:app didFailToRegisterForRemoteNotificationsWithError:err];
+    if (self.listener) {
+        [self.listener application:app didFailToRegisterForRemoteNotificationsWithError:err];
+    }
     // TODO - handle the error somehow
 }
 

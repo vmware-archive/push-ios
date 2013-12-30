@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OmniaPushAppDelegateProxyListener.h"
+
 @protocol OmniaPushAPNSRegistrationRequest;
 @protocol OmniaPushAppDelegateProxy;
 
-@interface OmniaPushSDKInstance : NSObject
+@interface OmniaPushSDKInstance : NSObject<OmniaPushAppDelegateProxyListener>
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest

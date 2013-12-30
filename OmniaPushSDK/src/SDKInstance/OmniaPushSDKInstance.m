@@ -47,9 +47,20 @@
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types {
     self.currentApplicationDelegate = self.application.delegate;
     self.application.delegate = self.appDelegateProxy;
-    [self.appDelegateProxy registerForRemoteNotificationTypes:types];
+    [self.appDelegateProxy registerForRemoteNotificationTypes:types listener:self];
+}
+
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
+    [self registrationCompleteForApplication:application];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
+    [self registrationCompleteForApplication:application];
+}
+
+- (void)registrationCompleteForApplication:(UIApplication*)application {
+    application.delegate = self.currentApplicationDelegate;
     OmniaPushLog(@"Library initialized.");
-    // TODO - restore application delegate after registration is complete
 }
 
 
