@@ -11,25 +11,25 @@ SPEC_BEGIN(OmniaPushAppDelegateProxyImplSpec)
 describe(@"OmniaPushAppDelegateProxyImpl", ^{
     
     __block OmniaPushAppDelegateProxyImpl *proxy;
-    __block id<CedarDouble> fakeAppDelegate;
-    __block id<CedarDouble> fakeRegistrationRequest;
+    __block id<UIApplicationDelegate> appDelegate;
+    __block id<OmniaPushAPNSRegistrationRequest> registrationRequest;
 
     beforeEach(^{
-        fakeAppDelegate = fake_for(@protocol(UIApplicationDelegate));
-        fakeRegistrationRequest = fake_for(@protocol(OmniaPushAPNSRegistrationRequest));
-        spy_on(fakeAppDelegate);
-        spy_on(fakeRegistrationRequest);
+        appDelegate = fake_for(@protocol(UIApplicationDelegate));
+        registrationRequest = fake_for(@protocol(OmniaPushAPNSRegistrationRequest));
+        spy_on(appDelegate);
+        spy_on(registrationRequest);
     });
     
     context(@"when init has invalid arguments", ^{
         
         it(@"should require an app delegate", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:nil registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];}
+            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:nil registrationRequest:registrationRequest];}
                 should raise_exception([NSException class]);
         });
 
         it(@"should require a registration request object", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:nil];}
+            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:appDelegate registrationRequest:nil];}
                 should raise_exception([NSException class]);
         });
         
@@ -42,34 +42,34 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         __block NSError *testError;
         
         beforeEach(^{
-            proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:(id<UIApplicationDelegate>)fakeAppDelegate registrationRequest:(id<OmniaPushAPNSRegistrationRequest>)fakeRegistrationRequest];
+            proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:appDelegate registrationRequest:registrationRequest];
             deviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
             testApplication = [UIApplication sharedApplication];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
         });
         
         it(@"should have make a registration request with the same notification type", ^{
-            fakeRegistrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+            registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
             [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
-            fakeRegistrationRequest should have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+            registrationRequest should have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
         });
         
         it(@"should call didRegisterForRemoteNotifications on the appDelegate after a successful registration request", ^{
-            fakeRegistrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+            registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
                 [proxy application:testApplication didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
             });
-            fakeAppDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(testApplication, deviceToken);
+            appDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(testApplication, deviceToken);
             [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
-            fakeAppDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+            appDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
         });
 
         it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-            fakeRegistrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+            registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
                 [proxy application:testApplication didFailToRegisterForRemoteNotificationsWithError:testError];
             });
-            fakeAppDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(testApplication, testError);
+            appDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(testApplication, testError);
             [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
-            fakeAppDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            appDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
         });
 
         

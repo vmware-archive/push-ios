@@ -1,5 +1,6 @@
 #import "OmniaPushSDKInstance.h"
 #import "OmniaPushAPNSRegistrationRequestImpl.h"
+#import "OmniaPushAppDelegateProxy.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -12,13 +13,13 @@ describe(@"OmniaPushSDKInstance", ^{
     
     __block OmniaPushSDKInstance *sdkInstance;
     __block UIApplication *application;
-    __block NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
-    __block NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
+    __block id<OmniaPushAPNSRegistrationRequest> registrationRequest;
+    __block id<OmniaPushAppDelegateProxy> appDelegateProxy;
     
     beforeEach(^{
         application = [UIApplication sharedApplication];
-        registrationRequest = (NSObject<OmniaPushAPNSRegistrationRequest>*) fake_for(@protocol(OmniaPushAPNSRegistrationRequest));
-        appDelegateProxy = (NSProxy<OmniaPushAppDelegateProxy>*) fake_for(@protocol(OmniaPushAppDelegateProxy));
+        registrationRequest = fake_for(@protocol(OmniaPushAPNSRegistrationRequest));
+        appDelegateProxy = fake_for(@protocol(OmniaPushAppDelegateProxy));
     });
     
     context(@"when initialization arguments are invalid", ^{
@@ -41,8 +42,13 @@ describe(@"OmniaPushSDKInstance", ^{
     });
     
     context(@"when initialization arguments are valid", ^{
-        
+
+        __block NSData *deviceToken;
+        __block id<UIApplicationDelegate> previousApplicationDelegate;
+
         beforeEach(^{
+            previousApplicationDelegate = application.delegate;
+            deviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
             sdkInstance = [[OmniaPushSDKInstance alloc] initWithApplication:application registrationRequest:registrationRequest appDelegateProxy:appDelegateProxy];
         });
         
@@ -51,9 +57,25 @@ describe(@"OmniaPushSDKInstance", ^{
         });
         
         it(@"should call register on the registrationRequest successfully", ^{
-//            [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
-//            appDelegateProxy should_have have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
-//            registrationRequest should_have have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+            appDelegateProxy stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+                [registrationRequest registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
+            });
+            registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+                [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+            });
+            appDelegateProxy stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);
+
+            
+            [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
+            
+            
+            appDelegateProxy should have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+            registrationRequest should have_received("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+            appDelegateProxy should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);
+        });
+        
+        afterEach(^{
+//            previousApplicationDelegate should be_same_instance_as(application.delegate);
         });
         
     });
