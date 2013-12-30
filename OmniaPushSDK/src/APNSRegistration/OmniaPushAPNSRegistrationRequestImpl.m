@@ -10,6 +10,8 @@
 
 @implementation OmniaPushAPNSRegistrationRequestImpl
 
+// TODO: should this class also accept the UIApplication to use?  It would be more dependency-injectiony.
+
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types {
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
 }

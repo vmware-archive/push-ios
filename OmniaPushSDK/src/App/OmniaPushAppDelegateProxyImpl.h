@@ -11,7 +11,7 @@
 
 @protocol OmniaPushAPNSRegistrationRequest;
 
-@interface OmniaPushAppDelegateProxyImpl : NSProxy<UIApplicationDelegate, OmniaPushAppDelegateProxy>
+@interface OmniaPushAppDelegateProxyImpl : NSProxy<OmniaPushAppDelegateProxy>
 
 @property (nonatomic) NSObject<UIApplicationDelegate> *appDelegate;
 @property (nonatomic) NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;

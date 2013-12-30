@@ -9,11 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @protocol OmniaPushAPNSRegistrationRequest;
+@protocol OmniaPushAppDelegateProxy;
 
 @interface OmniaPushSDKInstance : NSObject
 
 - (instancetype) initWithApplication:(UIApplication*)application
-                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest;
+                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
+                    appDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy;
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
 

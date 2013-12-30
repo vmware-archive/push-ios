@@ -8,6 +8,7 @@
 
 #import "LogTableViewController.h"
 #import "OmniaPushAPNSRegistrationRequestImpl.h"
+#import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushSDKInstance.h"
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
@@ -56,7 +57,8 @@
     [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
     // TODO - encapsulate all this stuff in an static wrapper method in the framework itself
     NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest = [[OmniaPushAPNSRegistrationRequestImpl alloc] init];
-    self.sdk = [[OmniaPushSDKInstance alloc] initWithApplication:[UIApplication sharedApplication] registrationRequest:registrationRequest];
+    NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:[UIApplication sharedApplication].delegate registrationRequest:registrationRequest];
+    self.sdk = [[OmniaPushSDKInstance alloc] initWithApplication:[UIApplication sharedApplication] registrationRequest:registrationRequest appDelegateProxy:appDelegateProxy];
     [self.sdk registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert];
 }
 

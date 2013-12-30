@@ -16,7 +16,7 @@
 @property (nonatomic) UIApplication *application;
 @property (nonatomic) NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
 @property (nonatomic) id<UIApplicationDelegate> currentApplicationDelegate;
-@property (nonatomic) OmniaPushAppDelegateProxyImpl *proxy;
+@property (nonatomic) NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
 
 @end
 
@@ -24,6 +24,7 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
+                    appDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy
 {
     self = [super init];
     if (self) {
@@ -33,18 +34,22 @@
         if (registrationRequest == nil) {
             [NSException raise:NSInvalidArgumentException format:@"registrationRequest may not be nil"];
         }
+        if (appDelegateProxy == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"appDelegateProxy may not be nil"];
+        }
         self.application = application;
         self.registrationRequest = registrationRequest;
+        self.appDelegateProxy = appDelegateProxy;
     }
     return self;
 }
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types {
     self.currentApplicationDelegate = self.application.delegate;
-    self.proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:self.currentApplicationDelegate registrationRequest:self.registrationRequest];
-    self.application.delegate = self.proxy;
-    [self.proxy registerForRemoteNotificationTypes:types];
-    OmniaPushLog(@"Library initialized.");    
+    self.application.delegate = self.appDelegateProxy;
+    [self.appDelegateProxy registerForRemoteNotificationTypes:types];
+    OmniaPushLog(@"Library initialized.");
+    // TODO - restore application delegate after registration is complete
 }
 
 
