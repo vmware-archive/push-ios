@@ -19,6 +19,7 @@
 		D4433F861873147D005C100C /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4433F841873147D005C100C /* OmniaPushSDK.m */; };
 		D4433F871873147D005C100C /* OmniaPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4433F841873147D005C100C /* OmniaPushSDK.m */; };
 		D4433F8918731496005C100C /* OmniaPushSDKSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4433F8818731496005C100C /* OmniaPushSDKSpec.mm */; };
+		D4433F8C18735080005C100C /* OmniaSpecHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4433F8B18735080005C100C /* OmniaSpecHelper.mm */; };
 		D44E7AB118609A8E0072520F /* OmniaPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */; };
 		D44E7AB218609A8E0072520F /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
 		D455CBB61860A4B9003539E0 /* OmniaPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D44E7AB018609A8E0072520F /* OmniaPushDebug.m */; };
@@ -81,6 +82,8 @@
 		D4433F831873147D005C100C /* OmniaPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushSDK.h; path = src/OmniaPushSDK.h; sourceTree = "<group>"; };
 		D4433F841873147D005C100C /* OmniaPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushSDK.m; path = src/OmniaPushSDK.m; sourceTree = "<group>"; };
 		D4433F8818731496005C100C /* OmniaPushSDKSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushSDKSpec.mm; path = src/OmniaPushSDKSpec.mm; sourceTree = "<group>"; };
+		D4433F8A18735080005C100C /* OmniaSpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaSpecHelper.h; path = src/Helpers/OmniaSpecHelper.h; sourceTree = "<group>"; };
+		D4433F8B18735080005C100C /* OmniaSpecHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaSpecHelper.mm; path = src/Helpers/OmniaSpecHelper.mm; sourceTree = "<group>"; };
 		D44E7AAF18609A8E0072520F /* OmniaPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushDebug.h; path = src/Util/OmniaPushDebug.h; sourceTree = "<group>"; };
 		D44E7AB018609A8E0072520F /* OmniaPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushDebug.m; path = src/Util/OmniaPushDebug.m; sourceTree = "<group>"; };
 		D455CBBD1860B4CD003539E0 /* LogTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogTableViewController.h; path = src/ViewControllers/LogTableViewController.h; sourceTree = "<group>"; };
@@ -181,6 +184,15 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		D4433F8D18735086005C100C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				D4433F8A18735080005C100C /* OmniaSpecHelper.h */,
+				D4433F8B18735080005C100C /* OmniaSpecHelper.mm */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		D44E7AA8186099500072520F /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,8 +246,9 @@
 		D4BE825C18633FB200EF0EE3 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				D40F3A5E1864A61400CA129F /* SDKInstance */,
 				D4BE825D18633FB700EF0EE3 /* App */,
+				D4433F8D18735086005C100C /* Helpers */,
+				D40F3A5E1864A61400CA129F /* SDKInstance */,
 				D4BE826218637E0600EF0EE3 /* Globals.mm */,
 				D4433F8818731496005C100C /* OmniaPushSDKSpec.mm */,
 			);
@@ -545,6 +558,7 @@
 				D4EE8BDE18620DDD0082F7B6 /* OmniaPushAppDelegateProxyImpl.m in Sources */,
 				D40F3A5D186492EA00CA129F /* OmniaPushSDKInstance.m in Sources */,
 				D455CBB61860A4B9003539E0 /* OmniaPushDebug.m in Sources */,
+				D4433F8C18735080005C100C /* OmniaSpecHelper.mm in Sources */,
 				D4BE826818638F3F00EF0EE3 /* OmniaPushAPNSRegistrationRequestImpl.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
