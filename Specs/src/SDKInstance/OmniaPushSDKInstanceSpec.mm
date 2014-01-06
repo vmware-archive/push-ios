@@ -59,12 +59,10 @@ describe(@"OmniaPushSDKInstance", ^{
     context(@"when initialization arguments are valid", ^{
 
         __block id<UIApplicationDelegate> previousAppDelegate;
-        __block NSError *testError;
 
         beforeEach(^{
             previousAppDelegate = getApplication().delegate;
             sdkInstance = [[OmniaPushSDKInstance alloc] initWithApplication:getApplication() registrationRequest:getRegistrationRequest() appDelegateProxy:getAppDelegateProxy() queue:getDispatchQueue()];
-            testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
 //            spy_on(sdkInstance); -- need to wait for new Cedar release to stabilize using spies in asynchronous methods
         });
         
@@ -105,8 +103,11 @@ describe(@"OmniaPushSDKInstance", ^{
         });
         
         context(@"failed registrations", ^{
-            
+
+            __block NSError *testError;
+
             beforeEach(^{
+                testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
                 setupSDKInstanceRegistrationListener();
                 setupSDKInstanceRegistrationListenerForFailedRegistration(testError);
                 setupAppDelegateForFailedRegistration(testError);

@@ -38,27 +38,71 @@ describe(@"OmniaPushSDK", ^{
         resetOmniaPushSDK();
     });
     
-    describe(@"if you try to register", ^{
-
-        it(@"it should succeed", ^{
-            setupRegistrationRequestForSuccessfulRegistration(getAppDelegateProxy());
+    describe(@"successful registration", ^{
+        
+        beforeEach(^{
             setupAppDelegateForSuccessfulRegistration();
             setupSDKRegistrationListenerForSuccessfulRegistration();
-            
             setRegistrationRequestInSingleton();
             setApplicationInSingleton();
             setAppDelegateProxyInSingleton();
-            
-            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
-            
-            waitForSDKRegistrationListenerCallback();
-            
+        });
+        
+        afterEach(^{
             getSDKRegistrationListener() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
             getAppDelegate() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             previousAppDelegate should be_same_instance_as(getApplication().delegate);
         });
+
+        it(@"synchronous registration", ^{
+            setupRegistrationRequestForSuccessfulRegistration(getAppDelegateProxy());
+            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
+            sdk should_not be_nil;
+            waitForSDKRegistrationListenerCallback();
+        });
         
+        it(@"asynchronous registration", ^{
+            setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy());
+            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
+            sdk should_not be_nil;
+            waitForSDKRegistrationListenerCallback();
+        });
+    });
+    
+    describe(@"failed registration", ^{
+
+        __block NSError *testError;
+
+        beforeEach(^{
+            testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
+            setupAppDelegateForFailedRegistration(testError);
+            setupSDKRegistrationListenerForFailedRegistration(testError);
+            setRegistrationRequestInSingleton();
+            setApplicationInSingleton();
+            setAppDelegateProxyInSingleton();
+        });
+        
+        afterEach(^{
+            getSDKRegistrationListener() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
+            getAppDelegate() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            previousAppDelegate should be_same_instance_as(getApplication().delegate);
+        });
+        
+        it(@"synchronous registration", ^{
+            setupRegistrationRequestForFailedRegistration(getAppDelegateProxy(), testError);
+            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
+            sdk should_not be_nil;
+            waitForSDKRegistrationListenerCallback();
+        });
+        
+        it(@"asynchronous registration", ^{
+            setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError);
+            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
+            sdk should_not be_nil;
+            waitForSDKRegistrationListenerCallback();
+        });
     });
     
 });
