@@ -1,5 +1,5 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
-#import "OmniaPushAppDelegateProxyListener.h"
+#import "OmniaPushRegistrationListener.h"
 #import "OmniaPushAPNSRegistrationRequest.h"
 #import "OmniaSpecHelper.h"
 
@@ -16,7 +16,7 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         setupOmniaSpecHelper();
         setupAppDelegate();
         setupRegistrationRequest();
-        setupAppDelegateProxyListener();
+        setupAppDelegateProxyRegistrationListener();
     });
     
     afterEach(^{
@@ -53,28 +53,33 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
             proxy should_not be_nil;
         });
         
-        it(@"should have make a registration request with the same notification type", ^{
-            setupAppDelegateProxyListenerForSuccessfulRegistration();
-            setupRegistrationRequestForSuccessfulRegistration(proxy);
-            setupAppDelegateForSuccessfulRegistration();
+        context(@"when registering", ^{
             
-            [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyListener()];
+            afterEach(^{
+                getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
+            });
             
-            getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
-            getAppDelegate() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-            getAppDelegateProxyListener() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-        });
-
-        it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-            setupRegistrationRequestForFailedRegistration(proxy, testError);
-            setupAppDelegateProxyListenerForFailedRegistration(testError);
-            setupAppDelegateForFailedRegistration(testError);
+            it(@"should have make a registration request with the same notification type", ^{
+                setupAppDelegateProxyRegistrationListenerForSuccessfulRegistration();
+                setupRegistrationRequestForSuccessfulRegistration(proxy);
+                setupAppDelegateForSuccessfulRegistration();
+                
+                [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyRegistrationListener()];
+                
+                getAppDelegate() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+                getAppDelegateProxyRegistrationListener() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+            });
             
-            [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyListener()];
-            
-            getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
-            getAppDelegate() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            getAppDelegateProxyListener() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
+                setupRegistrationRequestForFailedRegistration(proxy, testError);
+                setupAppDelegateProxyRegistrationListenerForFailedRegistration(testError);
+                setupAppDelegateForFailedRegistration(testError);
+                
+                [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyRegistrationListener()];
+                
+                getAppDelegate() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+                getAppDelegateProxyRegistrationListener() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            });
         });
     });
 });

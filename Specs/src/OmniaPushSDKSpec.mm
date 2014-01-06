@@ -29,12 +29,11 @@ describe(@"OmniaPushSDK", ^{
         setupAppDelegate();
         setupRegistrationRequest();
         setupAppDelegateProxy();
+        setupSDKRegistrationListener();
         previousAppDelegate = getApplication().delegate;
     });
     
     afterEach(^{
-        // TODO - wait for any active intialization to complete before ending test
-        
         resetOmniaSpecHelper();
         resetOmniaPushSDK();
     });
@@ -44,12 +43,17 @@ describe(@"OmniaPushSDK", ^{
         it(@"it should succeed", ^{
             setupRegistrationRequestForSuccessfulRegistration(getAppDelegateProxy());
             setupAppDelegateForSuccessfulRegistration();
+            setupSDKRegistrationListenerForSuccessfulRegistration();
+            
             setRegistrationRequestInSingleton();
             setApplicationInSingleton();
             setAppDelegateProxyInSingleton();
             
-            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE];
+            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
             
+            waitForSDKRegistrationListenerCallback();
+            
+            getSDKRegistrationListener() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
             getAppDelegate() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             previousAppDelegate should be_same_instance_as(getApplication().delegate);

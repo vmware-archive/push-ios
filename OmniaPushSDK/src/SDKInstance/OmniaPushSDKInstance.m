@@ -17,6 +17,9 @@
 @property (nonatomic) NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
 @property (nonatomic) id<UIApplicationDelegate> currentApplicationDelegate;
 @property (nonatomic) NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
+@property (nonatomic) id<OmniaPushRegistrationListener> listener;
+@property (nonatomic) dispatch_queue_t queue;
+@property (nonatomic) BOOL didRegistrationReturn;
 
 @end
 
@@ -25,6 +28,7 @@
 - (instancetype) initWithApplication:(UIApplication*)application
                  registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
                     appDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy
+                               queue:(dispatch_queue_t)queue
 {
     self = [super init];
     if (self) {
@@ -37,31 +41,55 @@
         if (appDelegateProxy == nil) {
             [NSException raise:NSInvalidArgumentException format:@"appDelegateProxy may not be nil"];
         }
+        if (queue == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"queue may not be nil"];
+        }
         self.application = application;
         self.registrationRequest = registrationRequest;
         self.appDelegateProxy = appDelegateProxy;
+        self.queue = queue;
     }
     return self;
 }
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types {
-    self.currentApplicationDelegate = self.application.delegate;
-    self.application.delegate = self.appDelegateProxy;
-    [self.appDelegateProxy registerForRemoteNotificationTypes:types listener:self];
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+                                   listener:(id<OmniaPushRegistrationListener>)listener
+{
+    dispatch_async(self.queue, ^{
+        self.currentApplicationDelegate = self.application.delegate;
+        self.application.delegate = self.appDelegateProxy;
+        self.listener = listener;
+        [self.appDelegateProxy registerForRemoteNotificationTypes:types listener:self];
+    });
 }
 
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken {
-    [self registrationCompleteForApplication:application];
+- (void)application:(UIApplication*)application
+    didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    dispatch_async(self.queue, ^{
+        [self registrationCompleteForApplication:application];
+        if (self.listener) {
+            [self.listener application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+        }
+    });
 }
 
-- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error {
-    [self registrationCompleteForApplication:application];
+- (void)application:(UIApplication*)application
+    didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    dispatch_async(self.queue, ^{
+        [self registrationCompleteForApplication:application];
+        if (self.listener) {
+            [self.listener application:application didFailToRegisterForRemoteNotificationsWithError:error];
+        }
+    });
 }
 
-- (void)registrationCompleteForApplication:(UIApplication*)application {
+- (void)registrationCompleteForApplication:(UIApplication*)application
+{
+    self.didRegistrationReturn = YES;
     application.delegate = self.currentApplicationDelegate;
     OmniaPushLog(@"Library initialized.");
 }
-
 
 @end

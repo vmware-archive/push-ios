@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OmniaPushRegistrationListener.h"
 
-@interface OmniaPushSDK : NSObject
+@interface OmniaPushSDK : NSObject<OmniaPushRegistrationListener>
 
 + (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes;
++ (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes listener:(id<OmniaPushRegistrationListener>)listener;
 
 @end

@@ -9,7 +9,7 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushAPNSRegistrationRequest.h"
 #import "OmniaPushDebug.h"
-#import "OmniaPushAppDelegateProxyListener.h"
+#import "OmniaPushRegistrationListener.h"
 
 @implementation OmniaPushAppDelegateProxyImpl
 
@@ -31,12 +31,16 @@
     return self;
 }
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushAppDelegateProxyListener>)proxyListener {
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+                                   listener:(id<OmniaPushRegistrationListener>)proxyListener
+{
     self.listener = proxyListener;
     [self.registrationRequest registerForRemoteNotificationTypes:types];
 }
 
-- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken {
+- (void)application:(UIApplication *)app
+    didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+{
     OmniaPushLog(@"Registration with APNS successful. device token: %@", devToken);
     //const void *devTokenBytes = [devToken bytes];
     //[self sendProviderDeviceToken:devTokenBytes]; // custom method
@@ -48,7 +52,9 @@
 }
 
 // TODO - decide if we even need this method - probably not.
-- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
+- (void)application:(UIApplication *)app
+    didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
     OmniaPushLog(@"Error in registration with APNS. Error: %@", err);
     [self.appDelegate application:app didFailToRegisterForRemoteNotificationsWithError:err];
     if (self.listener) {
@@ -57,7 +63,9 @@
     // TODO - handle the error somehow
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+- (void)application:(UIApplication *)application
+    didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
     OmniaPushLog(@"didReceiveRemoteNotification: %@", userInfo);
     // TODO - do something here?
 }

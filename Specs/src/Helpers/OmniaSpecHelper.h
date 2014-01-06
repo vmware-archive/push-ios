@@ -12,7 +12,7 @@
 
 @protocol OmniaPushAPNSRegistrationRequest;
 @protocol OmniaPushAppDelegateProxy;
-@protocol OmniaPushAppDelegateProxyListener;
+@protocol OmniaPushRegistrationListener;
 
 // Spec Helper lifecycle
 extern void setupOmniaSpecHelper();
@@ -36,14 +36,35 @@ extern id<UIApplicationDelegate> getAppDelegate();
 extern NSProxy<OmniaPushAppDelegateProxy>* setupAppDelegateProxy();
 extern NSProxy<OmniaPushAppDelegateProxy>* getAppDelegateProxy();
 
-// App Delegate Proxy Listener helpers
-extern id<OmniaPushAppDelegateProxyListener> setupAppDelegateProxyListener();
-extern void setupAppDelegateProxyListenerForSuccessfulRegistration();
-extern void setupAppDelegateProxyListenerForFailedRegistration(NSError *error);
-extern id<OmniaPushAppDelegateProxyListener> getAppDelegateProxyListener();
+// App Delegate Proxy Registration Listener helpers
+extern id<OmniaPushRegistrationListener> setupAppDelegateProxyRegistrationListener();
+extern void setupAppDelegateProxyRegistrationListenerForSuccessfulRegistration();
+extern void setupAppDelegateProxyRegistrationListenerForFailedRegistration(NSError *error);
+extern id<OmniaPushRegistrationListener> getAppDelegateProxyRegistrationListener();
+
+// SDK Instance Registration Listener helpers
+extern id<OmniaPushRegistrationListener> setupSDKInstanceRegistrationListener();
+extern void setupSDKInstanceRegistrationListenerForSuccessfulRegistration();
+extern void setupSDKInstanceRegistrationListenerForFailedRegistration(NSError *error);
+extern void waitForSDKInstanceRegistrationListenerCallback();
+extern id<OmniaPushRegistrationListener> getSDKInstanceRegistrationListener();
+
+// SDK Registration Listener helpers
+extern id<OmniaPushRegistrationListener> setupSDKRegistrationListener();
+extern void setupSDKRegistrationListenerForSuccessfulRegistration();
+extern void setupSDKRegistrationListenerForFailedRegistration(NSError *error);
+extern void waitForSDKRegistrationListenerCallback();
+extern id<OmniaPushRegistrationListener> getSDKRegistrationListener();
 
 // Registration Request helpers
 extern id<OmniaPushAPNSRegistrationRequest> setupRegistrationRequest();
 extern void setupRegistrationRequestForSuccessfulRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
 extern void setupRegistrationRequestForFailedRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error);
+extern void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
+extern void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error);
+extern void setupRegistrationRequestForTimeout(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
 extern id<OmniaPushAPNSRegistrationRequest> getRegistrationRequest();
+
+// Dispatch Queue helpers
+extern dispatch_queue_t setupDispatchQueue();
+extern dispatch_queue_t getDispatchQueue();

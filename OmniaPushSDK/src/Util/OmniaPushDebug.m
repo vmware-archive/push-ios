@@ -33,7 +33,7 @@
 
 #import "OmniaPushDebug.h"
 
-#define MAX_COLUMN_WIDTH (75)   // Limits the maximum number of characters used in the console display for function name
+#define MAX_COLUMN_WIDTH (90)   // Limits the maximum number of characters used in the console display for function name
 
 
 BOOL flareHasFired = NO;

@@ -1,5 +1,5 @@
 //
-//  OmniaPushAppDelegateProxyListener.h
+//  OmniaPushRegistrationListener.h
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-30.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol OmniaPushAppDelegateProxyListener <NSObject>
+@protocol OmniaPushRegistrationListener <NSObject>
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken;
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error;

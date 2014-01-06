@@ -8,17 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OmniaPushAppDelegateProxyListener.h"
+#import "OmniaPushRegistrationListener.h"
 
 @protocol OmniaPushAPNSRegistrationRequest;
 @protocol OmniaPushAppDelegateProxy;
+@protocol OmniaPushRegistrationListener;
 
-@interface OmniaPushSDKInstance : NSObject<OmniaPushAppDelegateProxyListener>
+@interface OmniaPushSDKInstance : NSObject<OmniaPushRegistrationListener>
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
-                    appDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy;
+                    appDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy
+                               queue:(dispatch_queue_t)queue;
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushRegistrationListener>)listener;
 
 @end
