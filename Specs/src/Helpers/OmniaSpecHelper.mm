@@ -14,7 +14,10 @@
 #import "OmniaPushRegistrationListener.h"
 #import "OmniaPushDebug.h"
 
-#define DELAY_TIME_IN_SECONDS 2
+#define DELAY_TIME_IN_SECONDS 1
+
+using namespace Cedar::Matchers;
+using namespace Cedar::Doubles;
 
 static id<UIApplicationDelegate> appDelegate;
 static NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
@@ -120,6 +123,20 @@ void setupSDKInstanceRegistrationListenerForFailedRegistration(NSError *error) {
     });
 }
 
+void setupSDKInstanceRegistrationListenerForTimeout() {
+    sdkInstanceRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, Arguments::any([NSError class])).and_do(^(NSInvocation *inv) {
+        // TODO - this code causes an EXC_BAD_ACCESS crash when Cedar cleans up after this method. I think that examining the NSError object inside
+        // the invocation makes ARC retain and release it when it really doesn't need to.  I don't know how to prevent this.  Talk to an iOS guru in Toronto.
+//        NSError *error = nil;
+//        [inv getArgument:&error atIndex:3];
+//        error should_not be_nil;
+//        error.domain should equal(OmniaPushErrorDomain);
+//        error.localizedDescription should contain(@"timed out");
+//        error = nil;
+        dispatch_semaphore_signal(sdkInstanceRegistrationSemaphore);
+    });
+}
+
 extern void waitForSDKInstanceRegistrationListenerCallback() {
     dispatch_semaphore_wait(sdkInstanceRegistrationSemaphore, DISPATCH_TIME_FOREVER); // TODO - error if timeout
 }
@@ -179,17 +196,19 @@ void setupRegistrationRequestForFailedRegistration(NSProxy<OmniaPushAppDelegateP
     });
 }
 
-void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy) {
+void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, int delayInMilliseconds) {
     registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        dispatch_after(DELAY_TIME, backgroundQueue, ^(void) {
+        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
+        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
             [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
         });
     });
 }
 
-void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error) {
+void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error, int delayInMilliseconds) {
     registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        dispatch_after(DELAY_TIME, backgroundQueue, ^(void) {
+        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
+        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
             [appDelegateProxy application:application didFailToRegisterForRemoteNotificationsWithError:error];
         });
     });

@@ -11,6 +11,7 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushSDKInstance.h"
 
+// SDK instance variables
 static OmniaPushSDK* sharedInstance = nil;
 static dispatch_once_t once_token = 0;
 static NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
@@ -18,6 +19,9 @@ static NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
 static UIApplication *application;
 static dispatch_queue_t queue;
 static id<OmniaPushRegistrationListener> _listener;
+
+// Global constant storage
+NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
 @interface OmniaPushSDK ()
 
@@ -31,6 +35,10 @@ static id<OmniaPushRegistrationListener> _listener;
 {
     return [OmniaPushSDK registerForRemoteNotificationTypes:remoteNotificationTypes listener:nil];
 }
+
+// NOTE:  the application delegate will still be called after registration completes, except if the
+// registration attempt times out.  The listener will be regardless if the registration succeeds, fails,
+// or times out.  The default time out interval is 60 seconds.
 
 + (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
                                             listener:(id<OmniaPushRegistrationListener>)listener

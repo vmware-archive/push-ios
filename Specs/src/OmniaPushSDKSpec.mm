@@ -7,6 +7,7 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
+#define REGISTRATION_DELAY_IN_MILLISECONDS    1000ull
 
 SPEC_BEGIN(OmniaPushSDKSpec)
 
@@ -63,7 +64,7 @@ describe(@"OmniaPushSDK", ^{
         });
         
         it(@"asynchronous registration", ^{
-            setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy());
+            setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy(), REGISTRATION_DELAY_IN_MILLISECONDS);
             sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
             sdk should_not be_nil;
             waitForSDKRegistrationListenerCallback();
@@ -98,7 +99,7 @@ describe(@"OmniaPushSDK", ^{
         });
         
         it(@"asynchronous registration", ^{
-            setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError);
+            setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError, REGISTRATION_DELAY_IN_MILLISECONDS);
             sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
             sdk should_not be_nil;
             waitForSDKRegistrationListenerCallback();

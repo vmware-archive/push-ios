@@ -13,5 +13,6 @@
 @protocol OmniaPushAppDelegateProxy <UIApplicationDelegate>
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushRegistrationListener>)proxyListener;
+- (void) cancelRegistration;
 
 @end

@@ -46,6 +46,7 @@ extern id<OmniaPushRegistrationListener> getAppDelegateProxyRegistrationListener
 extern id<OmniaPushRegistrationListener> setupSDKInstanceRegistrationListener();
 extern void setupSDKInstanceRegistrationListenerForSuccessfulRegistration();
 extern void setupSDKInstanceRegistrationListenerForFailedRegistration(NSError *error);
+extern void setupSDKInstanceRegistrationListenerForTimeout();
 extern void waitForSDKInstanceRegistrationListenerCallback();
 extern id<OmniaPushRegistrationListener> getSDKInstanceRegistrationListener();
 
@@ -60,8 +61,8 @@ extern id<OmniaPushRegistrationListener> getSDKRegistrationListener();
 extern id<OmniaPushAPNSRegistrationRequest> setupRegistrationRequest();
 extern void setupRegistrationRequestForSuccessfulRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
 extern void setupRegistrationRequestForFailedRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error);
-extern void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
-extern void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error);
+extern void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, int delayInMilliseconds);
+extern void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error, int delayInMilliseconds);
 extern void setupRegistrationRequestForTimeout(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy);
 extern id<OmniaPushAPNSRegistrationRequest> getRegistrationRequest();
 

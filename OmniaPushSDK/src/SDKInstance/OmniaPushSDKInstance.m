@@ -10,6 +10,9 @@
 #import "OmniaPushDebug.h"
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushAPNSRegistrationRequestImpl.h"
+#import "OmniaPushErrors.h"
+
+#define DEFAULT_DELAY_TIME_IN_SECONDS 60ull
 
 @interface OmniaPushSDKInstance ()
 
@@ -20,7 +23,8 @@
 @property (nonatomic) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic) dispatch_queue_t queue;
 @property (nonatomic) BOOL didRegistrationReturn;
-
+@property (nonatomic) BOOL didRegistrationTimeout;
+@property (nonatomic) int64_t timeout;
 @end
 
 @implementation OmniaPushSDKInstance
@@ -48,22 +52,40 @@
         self.registrationRequest = registrationRequest;
         self.appDelegateProxy = appDelegateProxy;
         self.queue = queue;
+        self.didRegistrationReturn = NO;
+        self.didRegistrationTimeout = NO;
+        self.timeout = DEFAULT_DELAY_TIME_IN_SECONDS * NSEC_PER_SEC;
     }
     return self;
+}
+
+- (void) changeTimeout:(int64_t)newTimeoutInMilliseconds
+{
+    self.timeout = newTimeoutInMilliseconds * NSEC_PER_MSEC;
 }
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
                                    listener:(id<OmniaPushRegistrationListener>)listener
 {
+    // Send registration request
     dispatch_async(self.queue, ^{
         self.currentApplicationDelegate = self.application.delegate;
         self.application.delegate = self.appDelegateProxy;
         self.listener = listener;
         [self.appDelegateProxy registerForRemoteNotificationTypes:types listener:self];
+
+        dispatch_time_t delayTime = dispatch_time(DISPATCH_TIME_NOW, self.timeout);
+        
+        // Check for time out
+        dispatch_after(delayTime, self.queue, ^(void){
+            if (!self.didRegistrationReturn) {
+                [self registrationTimedOutForApplication:self.application];
+            }
+        });
     });
 }
 
-- (void)application:(UIApplication*)application
+- (void) application:(UIApplication*)application
     didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
     dispatch_async(self.queue, ^{
@@ -74,7 +96,7 @@
     });
 }
 
-- (void)application:(UIApplication*)application
+- (void) application:(UIApplication*)application
     didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
     dispatch_async(self.queue, ^{
@@ -85,11 +107,28 @@
     });
 }
 
-- (void)registrationCompleteForApplication:(UIApplication*)application
+- (void) registrationCompleteForApplication:(UIApplication*)application
 {
-    self.didRegistrationReturn = YES;
-    application.delegate = self.currentApplicationDelegate;
     OmniaPushLog(@"Library initialized.");
+    self.didRegistrationReturn = YES;
+    [self cleanupAfterRegistrationAttempt:application];
+}
+
+- (void) registrationTimedOutForApplication:(UIApplication*)application
+{
+    OmniaPushLog(@"Registration attempt timed out.");
+    self.didRegistrationTimeout = YES;
+    [self cleanupAfterRegistrationAttempt:application];
+    if (self.listener) {
+        NSDictionary *errorUserInfo = @{NSLocalizedDescriptionKey:@"Registration attempt with APNS has timed out."};
+        [self.listener application:application didFailToRegisterForRemoteNotificationsWithError:[NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushRegistrationTimeoutError userInfo:errorUserInfo]];
+    }
+}
+
+- (void) cleanupAfterRegistrationAttempt:(UIApplication*)application
+{
+    [self.appDelegateProxy cancelRegistration];
+    application.delegate = self.currentApplicationDelegate;
 }
 
 @end

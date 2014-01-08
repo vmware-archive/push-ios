@@ -8,7 +8,9 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-#define TEST_NOTIFICATION_TYPE UIRemoteNotificationTypeBadge
+#define REGISTRATION_TIMEOUT_IN_MILLISECONDS  1000
+#define REGISTRATION_DELAY_IN_MILLISECONDS    1000
+#define TEST_NOTIFICATION_TYPE                UIRemoteNotificationTypeBadge
 
 SPEC_BEGIN(OmniaPushSDKInstanceSpec)
 
@@ -95,11 +97,10 @@ describe(@"OmniaPushSDKInstance", ^{
             });
             
             it(@"should handle asynchronous responses", ^{
-                setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy());
+                setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy(), REGISTRATION_DELAY_IN_MILLISECONDS);
                 [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKInstanceRegistrationListener()];
                 waitForSDKInstanceRegistrationListenerCallback();
             });
-
         });
         
         context(@"failed registrations", ^{
@@ -126,25 +127,44 @@ describe(@"OmniaPushSDKInstance", ^{
             });
             
             it(@"should be able to handle failed registrations", ^{
-                setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError);
+                setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError, REGISTRATION_DELAY_IN_MILLISECONDS);
                 [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKInstanceRegistrationListener()];
                 waitForSDKInstanceRegistrationListenerCallback();
             });
+        });
+        
+        context(@"registration timeout", ^{
             
-//            it(@"should be able to handle failed registrations after a timeout", ^{
+            beforeEach(^{
+                setupSDKInstanceRegistrationListener();
+                [sdkInstance changeTimeout:REGISTRATION_TIMEOUT_IN_MILLISECONDS];
+            });
+            
+            afterEach(^{
+                getRegistrationRequest() should have_received("registerForRemoteNotificationTypes:");
+                getSDKInstanceRegistrationListener() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+                getAppDelegateProxy() should_not have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+                getAppDelegateProxy() should_not have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+                // sdkInstance should have_received("registrationCompleteForApplication:");
+            });
+
+//            it(@"timeout with no further registration callbacks", ^{
+//                setupSDKInstanceRegistrationListenerForTimeout();
 //                setupRegistrationRequestForTimeout(getAppDelegateProxy());
-//                setupAppDelegateForFailedRegistration(testError);
-//                setupSDKInstanceRegistrationListenerForFailedRegistration(testError);
-//                
 //                [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKInstanceRegistrationListener()];
 //                waitForSDKInstanceRegistrationListenerCallback();
-//                
-//                getAppDelegate() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+//            });
+            
+//            it(@"timeout followed by an application success callback", ^{
+//                setupSDKInstanceRegistrationListenerForTimeout();
+//                setupSDKInstanceRegistrationListenerForSuccessfulRegistration();
+//                setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy(), REGISTRATION_DELAY_IN_MILLISECONDS + REGISTRATION_TIMEOUT_IN_MILLISECONDS);
+//                [sdkInstance registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKInstanceRegistrationListener()];
+//                waitForSDKInstanceRegistrationListenerCallback();
+////                waitForSDKInstanceRegistrationListenerCallback();
 //            });
         });
-
     });
-
 });
 
 SPEC_END

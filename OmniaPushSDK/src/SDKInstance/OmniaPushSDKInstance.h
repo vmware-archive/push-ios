@@ -23,4 +23,6 @@
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types listener:(id<OmniaPushRegistrationListener>)listener;
 
+- (void) changeTimeout:(int64_t)newTimeoutInMilliseconds;
+
 @end
