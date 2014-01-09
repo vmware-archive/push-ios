@@ -7,9 +7,12 @@
 //
 
 #import "OmniaPushAppDelegateProxyImpl.h"
-#import "OmniaPushAPNSRegistrationRequest.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushDebug.h"
 #import "OmniaPushRegistrationListener.h"
+#import "OmniaPushOperationQueueProvider.h"
+#import "OmniaPushRegistrationCompleteOperation.h"
+#import "OmniaPushRegistrationFailedOperation.h"
 
 @interface OmniaPushAppDelegateProxyImpl ()
 
@@ -21,7 +24,7 @@
 @implementation OmniaPushAppDelegateProxyImpl
 
 - (instancetype) initWithAppDelegate:(NSObject<UIApplicationDelegate>*)appDelegate
-                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest
+                 registrationRequest:(OmniaPushAPNSRegistrationRequestOperation*)registrationRequest
 {
     // NOTE: no [super init] since there our super class, NSProxy, doesn't have any init method
     if (self) {
@@ -45,7 +48,8 @@
                                    listener:(id<OmniaPushRegistrationListener>)proxyListener
 {
     self.listener = proxyListener;
-    [self.registrationRequest registerForRemoteNotificationTypes:types];
+    
+    [[OmniaPushOperationQueueProvider operationQueue] addOperation:self.registrationRequest];
 }
 
 - (void)application:(UIApplication*)app
@@ -53,15 +57,10 @@
 {
     self.didRegistrationSucceed = YES;
     if (self.isRegistrationCancelled) return;
+
+    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.appDelegate listener:self.listener deviceToken:devToken];
     
-    OmniaPushLog(@"Registration with APNS successful. device token: %@", devToken);
-    //const void *devTokenBytes = [devToken bytes];
-    //[self sendProviderDeviceToken:devTokenBytes]; // custom method
-    [self.appDelegate application:app didRegisterForRemoteNotificationsWithDeviceToken:devToken];
-    if (self.listener) {
-        [self.listener application:app didRegisterForRemoteNotificationsWithDeviceToken:devToken];
-    }
-    // TODO - save the registration somehow
+    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
 }
 
 // TODO - decide if we even need this method - probably not.
@@ -71,12 +70,9 @@
     self.didRegistrationFail = YES;
     if (self.isRegistrationCancelled) return;
 
-    OmniaPushLog(@"Error in registration with APNS. Error: %@", err);
-    [self.appDelegate application:app didFailToRegisterForRemoteNotificationsWithError:err];
-    if (self.listener) {
-        [self.listener application:app didFailToRegisterForRemoteNotificationsWithError:err];
-    }
-    // TODO - handle the error somehow
+    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] init];
+
+    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
 }
 
 - (void) application:(UIApplication*)application

@@ -8,16 +8,15 @@
 
 #import <UIKit/UIKit.h>
 #import "OmniaPushAppDelegateProxy.h"
-
-@protocol OmniaPushAPNSRegistrationRequest;
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 
 @interface OmniaPushAppDelegateProxyImpl : NSProxy<OmniaPushAppDelegateProxy>
 
 @property (nonatomic) NSObject<UIApplicationDelegate> *appDelegate;
-@property (nonatomic) NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
+@property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequest;
 @property (nonatomic, weak) id<OmniaPushRegistrationListener> listener;
 
 - (instancetype) initWithAppDelegate:(NSObject<UIApplicationDelegate>*)appDelegate
-                 registrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)registrationRequest;
+                 registrationRequest:(OmniaPushAPNSRegistrationRequestOperation*)registrationRequest;
 
 @end

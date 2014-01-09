@@ -8,30 +8,29 @@
 
 #import "OmniaSpecHelper.h"
 #import "OmniaPushSDK.h"
-#import "OmniaPushAPNSRegistrationRequest.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushRegistrationListener.h"
 #import "OmniaPushDebug.h"
+#import "OmniaFakeOperationQueue.h"
+#import "OmniaPushOperationQueueProvider.h"
 
 #define DELAY_TIME_IN_SECONDS 1
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-static id<UIApplicationDelegate> appDelegate;
+static id<UIApplicationDelegate> applicationDelegate;
 static NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
 static id<OmniaPushRegistrationListener> appDelegateProxyRegistrationListener;
 static id<OmniaPushRegistrationListener> sdkInstanceRegistrationListener;
 static id<OmniaPushRegistrationListener> sdkRegistrationListener;
-static id<OmniaPushAPNSRegistrationRequest> registrationRequest;
+static OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
 static NSData *deviceToken;
 static UIApplication *application;
-static dispatch_queue_t dispatchQueue = nil;
-static dispatch_queue_t backgroundQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 static dispatch_time_t DELAY_TIME = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC));
-static dispatch_semaphore_t sdkInstanceRegistrationSemaphore;
-static dispatch_semaphore_t sdkRegistrationSemaphore;
+static OmniaFakeOperationQueue *operationQueue;
 
 # pragma mark - Spec Helper lifecycle
 
@@ -41,42 +40,65 @@ void setupOmniaSpecHelper() {
 }
 
 void resetOmniaSpecHelper() {
+    operationQueue = nil;
+    [OmniaPushOperationQueueProvider setOperationQueue:nil];
     deviceToken = nil;
     application = nil;
-    appDelegate = nil;
+    applicationDelegate = nil;
     appDelegateProxy = nil;
     appDelegateProxyRegistrationListener = nil;
     sdkInstanceRegistrationListener = nil;
     sdkRegistrationListener = nil;
-    sdkInstanceRegistrationSemaphore = nil;
-    sdkRegistrationSemaphore = nil;
-    registrationRequest = nil;
-    dispatchQueue = nil;
+    registrationRequestOperation = nil;
+}
+
+#pragma mark - Application helpers
+
+UIApplication *setupApplication() {
+    application = (UIApplication*) fake_for([UIApplication class]);
+    return application;
+}
+
+void setupApplicationForSuccessfulRegistration(UIRemoteNotificationType notificationTypes) {
+    application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
+        [applicationDelegate application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    });
+}
+
+void setupApplicationForFailedRegistration(UIRemoteNotificationType notificationTypes, NSError *error) {
+    application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
+        [applicationDelegate application:application didFailToRegisterForRemoteNotificationsWithError:error];
+    });
+}
+
+UIApplication *getApplication() {
+    return application;
 }
 
 #pragma mark - App Delegate Helpers
 
-id<UIApplicationDelegate> setupAppDelegate() {
-    appDelegate = fake_for(@protocol(UIApplicationDelegate));
-    return appDelegate;
+id<UIApplicationDelegate> setupApplicationDelegate() {
+    applicationDelegate = fake_for(@protocol(UIApplicationDelegate));
+    application stub_method("delegate").and_return(applicationDelegate);
+    return applicationDelegate;
 }
 
-void setupAppDelegateForSuccessfulRegistration() {
-    appDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);;
+void setupApplicationDelegateForSuccessfulRegistration() {
+    applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);;
 }
 
-void setupAppDelegateForFailedRegistration(NSError *error) {
-    appDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error);
+void setupApplicationDelegateForFailedRegistration(NSError *error) {
+    applicationDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error);
 }
 
-id<UIApplicationDelegate> getAppDelegate() {
-    return appDelegate;
+id<UIApplicationDelegate> getApplicationDelegate() {
+    return applicationDelegate;
 }
 
 #pragma mark - App Delegate Proxy helpers
 
 NSProxy<OmniaPushAppDelegateProxy>* setupAppDelegateProxy() {
-    appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:appDelegate registrationRequest:registrationRequest];
+    appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:applicationDelegate registrationRequest:registrationRequestOperation];
     return appDelegateProxy;
 }
 
@@ -84,150 +106,118 @@ NSProxy<OmniaPushAppDelegateProxy>* getAppDelegateProxy() {
     return appDelegateProxy;
 }
 
-#pragma mark - App Delegate Proxy Registration Listener helpers
-
-id<OmniaPushRegistrationListener> setupAppDelegateProxyRegistrationListener() {
-    appDelegateProxyRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
-    return appDelegateProxyRegistrationListener;
-}
-
-void setupAppDelegateProxyRegistrationListenerForSuccessfulRegistration() {
-    appDelegateProxyRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);
-}
-
-void setupAppDelegateProxyRegistrationListenerForFailedRegistration(NSError *error) {
-    appDelegateProxyRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error);
-}
-
-id<OmniaPushRegistrationListener> getAppDelegateProxyRegistrationListener() {
-    return appDelegateProxyRegistrationListener;
-}
-
-#pragma mark - SDK Instance Registration Listener helpers
-
-id<OmniaPushRegistrationListener> setupSDKInstanceRegistrationListener() {
-    sdkInstanceRegistrationSemaphore = dispatch_semaphore_create(0);
-    sdkInstanceRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
-    return sdkInstanceRegistrationListener;
-}
-
-void setupSDKInstanceRegistrationListenerForSuccessfulRegistration() {
-    sdkInstanceRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken).and_do(^(NSInvocation*) {
-        dispatch_semaphore_signal(sdkInstanceRegistrationSemaphore);
-    });
-}
-
-void setupSDKInstanceRegistrationListenerForFailedRegistration(NSError *error) {
-    sdkInstanceRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error).and_do(^(NSInvocation*) {
-        dispatch_semaphore_signal(sdkInstanceRegistrationSemaphore);
-    });
-}
-
-void setupSDKInstanceRegistrationListenerForTimeout() {
-    sdkInstanceRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, Arguments::any([NSError class])).and_do(^(NSInvocation *inv) {
-        // TODO - this code causes an EXC_BAD_ACCESS crash when Cedar cleans up after this method. I think that examining the NSError object inside
-        // the invocation makes ARC retain and release it when it really doesn't need to.  I don't know how to prevent this.  Talk to an iOS guru in Toronto.
-//        NSError *error = nil;
-//        [inv getArgument:&error atIndex:3];
-//        error should_not be_nil;
-//        error.domain should equal(OmniaPushErrorDomain);
-//        error.localizedDescription should contain(@"timed out");
-//        error = nil;
-        dispatch_semaphore_signal(sdkInstanceRegistrationSemaphore);
-    });
-}
-
-extern void waitForSDKInstanceRegistrationListenerCallback() {
-    dispatch_semaphore_wait(sdkInstanceRegistrationSemaphore, DISPATCH_TIME_FOREVER); // TODO - error if timeout
-}
-
-id<OmniaPushRegistrationListener> getSDKInstanceRegistrationListener() {
-    return sdkInstanceRegistrationListener;
-}
-
-#pragma mark - SDK Registration Listener helpers
-
-id<OmniaPushRegistrationListener> setupSDKRegistrationListener() {
-    sdkRegistrationSemaphore = dispatch_semaphore_create(0);
-    sdkRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
-    return sdkRegistrationListener;
-}
-
-void setupSDKRegistrationListenerForSuccessfulRegistration() {
-    sdkRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken).and_do(^(NSInvocation*) {
-        dispatch_semaphore_signal(sdkRegistrationSemaphore);
-    });
-}
-
-void setupSDKRegistrationListenerForFailedRegistration(NSError *error) {
-    sdkRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error).and_do(^(NSInvocation*) {
-        dispatch_semaphore_signal(sdkRegistrationSemaphore);
-    });
-}
-
-extern void waitForSDKRegistrationListenerCallback() {
-    dispatch_semaphore_wait(sdkRegistrationSemaphore, DISPATCH_TIME_FOREVER); // TODO - error if timeout
-}
-
-id<OmniaPushRegistrationListener> getSDKRegistrationListener() {
-    return sdkRegistrationListener;
-}
+//#pragma mark - App Delegate Proxy Registration Listener helpers
+//
+//id<OmniaPushRegistrationListener> setupAppDelegateProxyRegistrationListener() {
+//    appDelegateProxyRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
+//    return appDelegateProxyRegistrationListener;
+//}
+//
+//void setupAppDelegateProxyRegistrationListenerForSuccessfulRegistration() {
+//    appDelegateProxyRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken);
+//}
+//
+//void setupAppDelegateProxyRegistrationListenerForFailedRegistration(NSError *error) {
+//    appDelegateProxyRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error);
+//}
+//
+//id<OmniaPushRegistrationListener> getAppDelegateProxyRegistrationListener() {
+//    return appDelegateProxyRegistrationListener;
+//}
+//
+//#pragma mark - SDK Instance Registration Listener helpers
+//
+//id<OmniaPushRegistrationListener> setupSDKInstanceRegistrationListener() {
+//    sdkInstanceRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
+//    return sdkInstanceRegistrationListener;
+//}
+//
+//void setupSDKInstanceRegistrationListenerForSuccessfulRegistration() {
+//    sdkInstanceRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken).and_do(^(NSInvocation*) {
+//    });
+//}
+//
+//void setupSDKInstanceRegistrationListenerForFailedRegistration(NSError *error) {
+//    sdkInstanceRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error).and_do(^(NSInvocation*) {
+//    });
+//}
+//
+//id<OmniaPushRegistrationListener> getSDKInstanceRegistrationListener() {
+//    return sdkInstanceRegistrationListener;
+//}
+//
+//#pragma mark - SDK Registration Listener helpers
+//
+//id<OmniaPushRegistrationListener> setupSDKRegistrationListener() {
+//    sdkRegistrationListener = fake_for(@protocol(OmniaPushRegistrationListener));
+//    return sdkRegistrationListener;
+//}
+//
+//void setupSDKRegistrationListenerForSuccessfulRegistration() {
+//    sdkRegistrationListener stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(application, deviceToken).and_do(^(NSInvocation*) {
+//    });
+//}
+//
+//void setupSDKRegistrationListenerForFailedRegistration(NSError *error) {
+//    sdkRegistrationListener stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(application, error).and_do(^(NSInvocation*) {
+//    });
+//}
+//
+//id<OmniaPushRegistrationListener> getSDKRegistrationListener() {
+//    return sdkRegistrationListener;
+//}
 
 #pragma mark - Registration Request helpers
 
-id<OmniaPushAPNSRegistrationRequest> setupRegistrationRequest() {
-    registrationRequest = fake_for(@protocol(OmniaPushAPNSRegistrationRequest));
-    if (!registrationRequest) {
-        NSLog(@"Could not allocate fake registration request");
-        exit(EXIT_FAILURE);
-    }
-    return registrationRequest;
+OmniaPushAPNSRegistrationRequestOperation* setupRegistrationRequestOperation(UIRemoteNotificationType notificationTypes) {
+    registrationRequestOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:notificationTypes application:application];
+    return registrationRequestOperation;
 }
 
-void setupRegistrationRequestForSuccessfulRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy) {
-    registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-    });
-}
+//void setupRegistrationRequestOperationForSuccessfulRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy) {
+//    registrationRequestOperation stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+//        [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+//    });
+//}
 
-void setupRegistrationRequestForFailedRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error) {
-    registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        [appDelegateProxy application:application didFailToRegisterForRemoteNotificationsWithError:error];
-    });
-}
+//void setupRegistrationRequestOperationForFailedRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error) {
+//    registrationRequestOperation stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+//        [appDelegateProxy application:application didFailToRegisterForRemoteNotificationsWithError:error];
+//    });
+//}
 
-void setupRegistrationRequestForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, int delayInMilliseconds) {
-    registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
-        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
-            [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
-        });
-    });
-}
+//void setupRegistrationRequestOperationForSuccessfulAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, int delayInMilliseconds) {
+//    registrationRequestOperation stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+//        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
+//        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
+//            [appDelegateProxy application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+//        });
+//    });
+//}
 
-void setupRegistrationRequestForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error, int delayInMilliseconds) {
-    registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
-        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
-        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
-            [appDelegateProxy application:application didFailToRegisterForRemoteNotificationsWithError:error];
-        });
-    });
-}
+//void setupRegistrationRequestOperationForFailedAsynchronousRegistration(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy, NSError *error, int delayInMilliseconds) {
+//    registrationRequestOperation stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE).and_do(^(NSInvocation*) {
+//        dispatch_time_t dispatchTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInMilliseconds) * NSEC_PER_MSEC);
+//        dispatch_after(dispatchTime, backgroundQueue, ^(void) {
+//            [appDelegateProxy application:application didFailToRegisterForRemoteNotificationsWithError:error];
+//        });
+//    });
+//}
 
-void setupRegistrationRequestForTimeout(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy) {
-    // doesn't invoke callback so the semaphore times out instead
-    registrationRequest stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
-}
+//void setupRegistrationRequestOperationForTimeout(NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy) {
+//    // doesn't invoke callback so the semaphore times out instead
+//    registrationRequestOperation stub_method("registerForRemoteNotificationTypes:").with(TEST_NOTIFICATION_TYPE);
+//}
 
-id<OmniaPushAPNSRegistrationRequest> getRegistrationRequest() {
-    return registrationRequest;
+OmniaPushAPNSRegistrationRequestOperation* getRegistrationRequestOperation() {
+    return registrationRequestOperation;
 }
 
 #pragma mark - Front-end singleton helpers
 
 void setRegistrationRequestInSingleton() {
     SEL setupRegistrationRequestSelector = sel_registerName("setupRegistrationRequest:");
-    [OmniaPushSDK performSelector:setupRegistrationRequestSelector withObject:registrationRequest];
+    [OmniaPushSDK performSelector:setupRegistrationRequestSelector withObject:registrationRequestOperation];
 }
 
 void setApplicationInSingleton() {
@@ -240,19 +230,16 @@ void setAppDelegateProxyInSingleton() {
     [OmniaPushSDK performSelector:setupAppDelegateProxySelector withObject:appDelegateProxy];
 }
 
-#pragma mark - Application helpers
+#pragma mark - Operation Queue helpers
 
-UIApplication *getApplication() {
-    return application;
+OmniaFakeOperationQueue *setupOperationQueue() {
+    operationQueue = [[OmniaFakeOperationQueue alloc] init];
+    [OmniaPushOperationQueueProvider setOperationQueue:operationQueue];
+    return operationQueue;
 }
 
-#pragma mark - Dispatch Queue helpers
-
-dispatch_queue_t setupDispatchQueue() {
-    dispatchQueue = dispatch_queue_create("OmniaSpecHelperDispatchQueue", NULL);
-    return dispatchQueue;
+extern OmniaFakeOperationQueue *getOperationQueue() {
+    return operationQueue;
 }
 
-dispatch_queue_t getDispatchQueue() {
-    return dispatchQueue;
-}
+// TODO - need a method to drain operation queue

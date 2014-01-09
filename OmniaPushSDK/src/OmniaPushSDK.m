@@ -7,25 +7,22 @@
 //
 
 #import "OmniaPushSDK.h"
-#import "OmniaPushAPNSRegistrationRequestImpl.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxyImpl.h"
-#import "OmniaPushSDKInstance.h"
-
-// SDK instance variables
-static OmniaPushSDK* sharedInstance = nil;
-static dispatch_once_t once_token = 0;
-static NSObject<OmniaPushAPNSRegistrationRequest> *registrationRequest;
-static NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
-static UIApplication *application;
-static dispatch_queue_t queue;
-static id<OmniaPushRegistrationListener> _listener;
 
 // Global constant storage
 NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
+// SDK instance variables
+static OmniaPushSDK* sharedInstance = nil;
+static OmniaPushAPNSRegistrationRequestOperation *registrationRequest = nil;
+static dispatch_once_t once_token = 0;
+static UIApplication *application = nil;
+
 @interface OmniaPushSDK ()
 
-@property (nonatomic) OmniaPushSDKInstance *sdkInstance;
+@property (nonatomic, strong) id<UIApplicationDelegate> originalApplicationDelegate;
+@property (nonatomic, strong) NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
 
 @end
 
@@ -56,32 +53,34 @@ NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 {
     self = [super init];
     if (self) {
-        _listener = listener;
-        [OmniaPushSDK setupQueue:nil];
-        [OmniaPushSDK setupRegistrationRequest:nil];
         [OmniaPushSDK setupApplication:nil];
-        [OmniaPushSDK setupAppDelegateProxy:nil];
-        self.sdkInstance = [[OmniaPushSDKInstance alloc] initWithApplication:[UIApplication sharedApplication] registrationRequest:registrationRequest appDelegateProxy:appDelegateProxy queue:queue];
-        [self.sdkInstance registerForRemoteNotificationTypes:remoteNotificationTypes listener:self]; // TODO - wait for registration to complete?
+        [OmniaPushSDK setupRegistrationRequest:nil];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:application.delegate registrationRequest:registrationRequest];
+        [self registerForRemoteNotificationTypes:remoteNotificationTypes listener:listener]; // TODO - wait for registration to complete?
     }
     return self;
 }
 
-#pragma mark - OmniaPushRegistrationListener callbacks
-
-- (void)application:(UIApplication*)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
+                                   listener:(id<OmniaPushRegistrationListener>)listener
 {
-    if (_listener) {
-        [_listener application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    // Send registration request
+    @synchronized(self) {
+        self.originalApplicationDelegate = application.delegate;
+        application.delegate = self.appDelegateProxy;
+        [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes listener:listener]; // TODO - should be an operation
     }
+    // TODO - restore application delegate upon application shutdownx
 }
 
-- (void)application:(UIApplication*)application
-didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+- (void) cleanupInstance
 {
-    if (_listener) {
-        [_listener application:application didFailToRegisterForRemoteNotificationsWithError:error];
+    @synchronized(self) {
+        if (application && self.originalApplicationDelegate) {
+            application.delegate = self.originalApplicationDelegate;
+        }
+        self.appDelegateProxy = nil;
+        self.originalApplicationDelegate = nil;
     }
 }
 
@@ -89,30 +88,21 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 
 // Used by unit tests to provide a fake singleton or to reset this singleton for following tests
 + (void) setSharedInstance:(OmniaPushSDK*)newSharedInstance {
-    _listener = nil;
-    application = nil;
-    appDelegateProxy = nil;
-    registrationRequest = nil;
-    queue = nil;
-    sharedInstance = newSharedInstance;
-    once_token = 0;
-}
-
-// Used by unit tests to provide a dispatch queue
-+ (void) setupQueue:(dispatch_queue_t)testQueue {
-    if (queue) return;
-    if (testQueue == nil) {
-        queue = dispatch_queue_create("OmniaPushSDKWorkerQueue", NULL);
-    } else {
-        queue = testQueue;
+    if (sharedInstance) {
+        [sharedInstance cleanupInstance];
+        sharedInstance = nil;
     }
+    once_token = 0;
+    application = nil;
+    registrationRequest = nil;
+    sharedInstance = newSharedInstance;
 }
 
 // Used by unit tests to provide fake registration request objects
-+ (void) setupRegistrationRequest:(NSObject<OmniaPushAPNSRegistrationRequest>*)testRegistrationRequest {
++ (void) setupRegistrationRequest:(OmniaPushAPNSRegistrationRequestOperation*)testRegistrationRequest {
     if (registrationRequest) return;
     if (testRegistrationRequest == nil) {
-        registrationRequest = [[OmniaPushAPNSRegistrationRequestImpl alloc] init];
+        registrationRequest = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:UIRemoteNotificationTypeAlert application:application]; // TODO - accept notification type as argument
     } else {
         registrationRequest = testRegistrationRequest;
     }
@@ -125,16 +115,6 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
         application = [UIApplication sharedApplication];
     } else {
         application = testApplication;
-    }
-}
-
-// Used by unit tests to provide fake app delegate proxy objects
-+ (void) setupAppDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)testAppDelegateProxy {
-    if (appDelegateProxy) return;
-    if (testAppDelegateProxy == nil) {
-        appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:application.delegate registrationRequest:registrationRequest];
-    } else {
-        appDelegateProxy = testAppDelegateProxy;
     }
 }
 
