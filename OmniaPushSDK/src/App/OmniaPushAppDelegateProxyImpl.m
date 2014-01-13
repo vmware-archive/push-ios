@@ -16,39 +16,59 @@
 
 @interface OmniaPushAppDelegateProxyImpl ()
 
+@property (nonatomic, readwrite) UIApplication *application;
+@property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readwrite) OmniaPushAPNSRegistrationRequestOperation *registrationRequest;
+
 @property (atomic) BOOL isRegistrationCancelled;
 @property (atomic) BOOL didRegistrationSucceed;
 @property (atomic) BOOL didRegistrationFail;
+
 @end
+
 
 @implementation OmniaPushAppDelegateProxyImpl
 
-- (instancetype) initWithAppDelegate:(NSObject<UIApplicationDelegate>*)appDelegate
+- (instancetype) initWithApplication:(UIApplication*)application
+         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
                  registrationRequest:(OmniaPushAPNSRegistrationRequestOperation*)registrationRequest
 {
-    // NOTE: no [super init] since there our super class, NSProxy, doesn't have any init method
-    if (self) {
-        if (appDelegate == nil) {
-            [NSException raise:NSInvalidArgumentException format:@"appDelegate may not be nil"];
+    if (self = [super init]) {
+        if (application == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
+        }
+        if (originalApplicationDelegate == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"originalApplicationDelegate may not be nil"];
         }
         if (registrationRequest == nil) {
             [NSException raise:NSInvalidArgumentException format:@"registrationRequest may not be nil"];
         }
-        self.appDelegate = appDelegate;
+        self.application = application;
+        self.originalApplicationDelegate = originalApplicationDelegate;
         self.registrationRequest = registrationRequest;
-        self.listener = nil;
         self.isRegistrationCancelled = NO;
         self.didRegistrationFail = NO;
         self.didRegistrationSucceed = NO;
+        [self replaceApplicationDelegate];
     }
     return self;
 }
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
-                                   listener:(id<OmniaPushRegistrationListener>)proxyListener
+- (void) dealloc {
+    self.application = nil;
+    self.originalApplicationDelegate = nil;
+    self.registrationRequest = nil;
+}
+
+- (void) replaceApplicationDelegate
 {
-    self.listener = proxyListener;
-    
+    @synchronized(self) {
+        self.application.delegate = self;
+    }
+}
+
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
     [[OmniaPushOperationQueueProvider operationQueue] addOperation:self.registrationRequest];
 }
 
@@ -58,19 +78,18 @@
     self.didRegistrationSucceed = YES;
     if (self.isRegistrationCancelled) return;
 
-    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.appDelegate listener:self.listener deviceToken:devToken];
+    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate deviceToken:devToken];
     
     [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
 }
 
-// TODO - decide if we even need this method - probably not.
 - (void)application:(UIApplication *)app
     didFailToRegisterForRemoteNotificationsWithError:(NSError*)err
 {
     self.didRegistrationFail = YES;
     if (self.isRegistrationCancelled) return;
 
-    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] init];
+    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate error:err];
 
     [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
 }
@@ -84,13 +103,13 @@
 
 - (NSMethodSignature*) methodSignatureForSelector:(SEL)sel
 {
-    return [self.appDelegate methodSignatureForSelector:sel];
+    return [self.applicationDelegate methodSignatureForSelector:sel];
 }
 
 - (void) forwardInvocation:(NSInvocation*)invocation
 {
     // TODO - do I need to capture my own delegate methods above?
-    [invocation setTarget:self.appDelegate];
+    [invocation setTarget:self.originalApplicationDelegate];
     [invocation invoke];
 }
 

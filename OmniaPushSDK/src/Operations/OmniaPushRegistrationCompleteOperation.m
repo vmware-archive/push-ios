@@ -14,7 +14,6 @@
 
 @property (nonatomic) UIApplication *application;
 @property (nonatomic, weak) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic) NSData *deviceToken;
 
 @end
@@ -23,13 +22,12 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                            listener:(id<OmniaPushRegistrationListener>)listener
                          deviceToken:(NSData*)deviceToken
 {
     self = [super init];
     if (self) {
+        self.application = application;
         self.applicationDelegate = applicationDelegate;
-        self.listener = listener;
         self.deviceToken = deviceToken;
     }
     return self;
@@ -46,9 +44,9 @@
         // TODO - call on main thread
         [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
         
-        if (self.listener) {
-            [self.listener application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
-        }
+//        if (self.listener) {
+//            [self.listener application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
+//        }
         // TODO - save the registration somehow
     }
 }

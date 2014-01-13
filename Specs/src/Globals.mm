@@ -1,5 +1,4 @@
 #import "OmniaPushDebug.h"
-#import "OmniaSpecHelper.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -12,12 +11,6 @@ using namespace Cedar::Doubles;
 + (void) beforeEach
 {
     [OmniaPushDebug disableLogging:YES];
-    setupOmniaSpecHelper();
-}
-
-+ (void) afterEach
-{
-    resetOmniaSpecHelper();
 }
 
 @end

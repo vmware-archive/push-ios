@@ -14,7 +14,6 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                            listener:(id<OmniaPushRegistrationListener>)listener
                                error:(NSError*)error;
 
 @end

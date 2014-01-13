@@ -22,7 +22,7 @@ static UIApplication *application = nil;
 @interface OmniaPushSDK ()
 
 @property (nonatomic, strong) id<UIApplicationDelegate> originalApplicationDelegate;
-@property (nonatomic, strong) NSProxy<OmniaPushAppDelegateProxy> *appDelegateProxy;
+@property (nonatomic, strong) NSObject<OmniaPushAppDelegateProxy> *appDelegateProxy;
 
 @end
 
@@ -55,7 +55,7 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         [OmniaPushSDK setupRegistrationRequest:nil];
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:application.delegate registrationRequest:registrationRequest];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationRequest:registrationRequest];
         [self registerForRemoteNotificationTypes:remoteNotificationTypes listener:listener]; // TODO - wait for registration to complete?
     }
     return self;
@@ -65,11 +65,11 @@ static UIApplication *application = nil;
                                    listener:(id<OmniaPushRegistrationListener>)listener
 {
     // Send registration request
-    @synchronized(self) {
-        self.originalApplicationDelegate = application.delegate;
-        application.delegate = self.appDelegateProxy;
-        [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes listener:listener]; // TODO - should be an operation
-    }
+//    @synchronized(self) {
+//        self.originalApplicationDelegate = application.delegate;
+//        application.delegate = self.appDelegateProxy;
+        [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes]; // TODO - should be an operation
+//    }
     // TODO - restore application delegate upon application shutdownx
 }
 

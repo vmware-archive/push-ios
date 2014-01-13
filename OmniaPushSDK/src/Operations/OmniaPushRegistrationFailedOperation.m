@@ -14,7 +14,6 @@
 
 @property (nonatomic) UIApplication *application;
 @property (nonatomic, weak) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic) NSError *error;
 
 @end
@@ -23,14 +22,12 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                            listener:(id<OmniaPushRegistrationListener>)listener
                                error:(NSError*)error
 {
     self = [super init];
     if (self) {
         self.application = application;
         self.applicationDelegate = applicationDelegate;
-        self.listener = listener;
         self.error = error;
     }
     return self;
@@ -42,9 +39,9 @@
         
         OmniaPushLog(@"Error in registration with APNS. Error: %@", self.error);
         [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
-        if (self.listener) {
-            [self.listener application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
-        }
+//        if (self.listener) {
+//            [self.listener application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
+//        }
         // TODO - handle the error somehow
     }
 }

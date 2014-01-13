@@ -1,5 +1,8 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushRegistrationListener.h"
+#import "OmniaPushRegistrationCompleteOperation.h"
+#import "OmniaPushRegistrationFailedOperation.h"
+#import "OmniaFakeOperationQueue.h"
 #import "OmniaSpecHelper.h"
 
 using namespace Cedar::Matchers;
@@ -9,73 +12,91 @@ SPEC_BEGIN(OmniaPushAppDelegateProxyImplSpec)
 
 describe(@"OmniaPushAppDelegateProxyImpl", ^{
     
-    __block OmniaPushAppDelegateProxyImpl *proxy;
-    __block UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeAlert;
-
+    __block OmniaSpecHelper *helper = nil;
+    __block UIRemoteNotificationType testNotificationTypes = UIRemoteNotificationTypeAlert;
+    
     beforeEach(^{
-        setupOmniaSpecHelper();
-        setupApplication();
-        setupApplicationDelegate();
-        setupRegistrationRequestOperation(notificationTypes);
+        helper = [[OmniaSpecHelper alloc] init];
+        [helper setupApplication];
+        [helper setupApplicationDelegate];
+        [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
     });
     
     afterEach(^{
-        resetOmniaSpecHelper();
+        [helper reset];
+        helper = nil;
     });
-    
+
     context(@"when init has invalid arguments", ^{
         
         afterEach(^{
-            proxy should be_nil;
+            helper.applicationDelegateProxy should be_nil;
         });
         
-        it(@"should require an app delegate", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:nil registrationRequest:getRegistrationRequestOperation()];}
+        it(@"should require an application", ^{
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];}
+            should raise_exception([NSException class]);
+        });
+        
+        it(@"should require an application delegate", ^{
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:nil registrationRequest:helper.registrationRequestOperation];}
                 should raise_exception([NSException class]);
         });
 
         it(@"should require a registration request object", ^{
-            ^{proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:getApplicationDelegate() registrationRequest:nil];}
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:nil];}
                 should raise_exception([NSException class]);
         });
     });
-    
+
     context(@"when it has valid arguments", ^{
         
         __block NSError *testError;
         
         beforeEach(^{
+            [helper setupOperationQueue];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
-            proxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithAppDelegate:getApplicationDelegate() registrationRequest:getRegistrationRequestOperation()];
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];
+        });
+        
+        afterEach(^{
+            helper.applicationDelegateProxy = nil;
+            testError = nil;
         });
         
         it(@"should be constructed successfully", ^{
-            proxy should_not be_nil;
+            helper.applicationDelegateProxy should_not be_nil;
         });
     
         context(@"when registering", ^{
             
-            afterEach(^{
+            it(@"should have make a registration request with the same notification type", ^{
+                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
+                [helper setupApplicationDelegateForSuccessfulRegistration];
+                
+                [helper.applicationDelegateProxy registerForRemoteNotificationTypes:testNotificationTypes];
+                [helper.operationQueue drain];
+                
+                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+                helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+                [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
+                [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
             });
             
-//            it(@"should have make a registration request with the same notification type", ^{
-//                setupAppDelegateForSuccessfulRegistration();
-//                
-//                [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyRegistrationListener()];
-//                
-//                getAppDelegate() should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-//            });
-            
-//            it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-//                setupRegistrationRequestForFailedRegistration(proxy, testError);
-//                setupAppDelegateProxyRegistrationListenerForFailedRegistration(testError);
-//                setupAppDelegateForFailedRegistration(testError);
-//                
-//                [proxy registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getAppDelegateProxyRegistrationListener()];
-//                
-//                getAppDelegate() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-//                getAppDelegateProxyRegistrationListener() should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-//            });
+            it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
+                [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationTypes error:testError];
+                [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                
+                [helper.applicationDelegateProxy registerForRemoteNotificationTypes:testNotificationTypes];
+                [helper.operationQueue drain];
+                
+                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+                helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+                [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+                [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+            });
         });
     });
 });
