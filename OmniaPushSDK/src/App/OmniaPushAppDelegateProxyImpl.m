@@ -13,6 +13,8 @@
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
+#import "OmniaPushApplicationDelegateSwitcherProvider.h"
+#import "OmniaPushApplicationDelegateSwitcher.h"
 
 @interface OmniaPushAppDelegateProxyImpl ()
 
@@ -54,7 +56,8 @@
     return self;
 }
 
-- (void) dealloc {
+- (void) dealloc
+{
     self.application = nil;
     self.originalApplicationDelegate = nil;
     self.registrationRequest = nil;
@@ -62,9 +65,8 @@
 
 - (void) replaceApplicationDelegate
 {
-    @synchronized(self) {
-        self.application.delegate = self;
-    }
+    NSObject<OmniaPushApplicationDelegateSwitcher> *switcher = [OmniaPushApplicationDelegateSwitcherProvider switcher];
+    [switcher switchApplicationDelegate:self inApplication:self.application];
 }
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types

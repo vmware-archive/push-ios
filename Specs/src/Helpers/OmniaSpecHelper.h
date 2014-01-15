@@ -14,6 +14,7 @@
 @class OmniaPushAppDelegateProxyImpl;
 @class OmniaPushAPNSRegistrationRequestOperation;
 @class OmniaFakeOperationQueue;
+@class OmniaPushFakeApplicationDelegateSwitcher;
 
 @interface OmniaSpecHelper : NSObject
 
@@ -22,15 +23,15 @@
 @property (nonatomic) OmniaFakeOperationQueue *operationQueue;
 @property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
 @property (nonatomic) OmniaPushAppDelegateProxyImpl *applicationDelegateProxy;
+@property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 
 // Spec Helper lifecycle
 - (instancetype) init;
 - (void) reset;
 
 // Front-end singleton helpers
-//- (void) setRegistrationRequestInSingleton;
-//- (void) setApplicationInSingleton;
-//XXextern void setAppDelegateProxyInSingleton();
+- (void) resetSingleton;
+- (void) setApplicationInSingleton;
 
 // Application helpers
 - (id) setupApplication;
@@ -38,17 +39,13 @@
 - (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError*)error;
 
 // Application Delegate helpers
+- (id<UIApplicationDelegate>) currentApplicationDelegate;
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
 
 // Registration Request Operation helpers
 - (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-//- (void) setupRegistrationRequestOperationForSuccessfulRegistrationWithApplicationDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)applicationDelegateProxy;
-//- (void) setupRegistrationRequestOperationForFailedRegistrationWithApplicationDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy error:(NSError*)error;
-//- (void) setupRegistrationRequestOperationForSuccessfulAsynchronousRegistrationWithApplicationDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy delayInMilliseconds:(int)delayInMilliseconds;
-//- (void) setupRegistrationRequestOperationForFailedAsynchronousRegistrationWithApplicationDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy error:(NSError*)error delayInMilliseconds:(int)delayInMilliseconds;
-//- (void) setupRegistrationRequestOperationForTimeoutWithApplicationDelegateProxy:(NSProxy<OmniaPushAppDelegateProxy>*)appDelegateProxy;
 
 // Operation Queue helpers
 - (OmniaFakeOperationQueue*) setupOperationQueue;
