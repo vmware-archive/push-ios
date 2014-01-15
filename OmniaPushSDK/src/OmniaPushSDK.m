@@ -10,6 +10,8 @@
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushOperationQueueProvider.h"
+#import "OmniaPushApplicationDelegateSwitcher.h"
+#import "OmniaPushApplicationDelegateSwitcherProvider.h"
 
 // Global constant storage
 NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
@@ -74,11 +76,22 @@ static UIApplication *application = nil;
 - (void) cleanupInstance
 {
     @synchronized(self) {
-        if (application && self.originalApplicationDelegate) {
-            application.delegate = self.originalApplicationDelegate;
+        if (self.appDelegateProxy) {
+            [self.appDelegateProxy cleanup];
         }
         self.appDelegateProxy = nil;
         self.originalApplicationDelegate = nil;
+    }
+}
+
++ (void) teardown
+{
+    // NOTE - may be called multiple times during unit tests
+    if (sharedInstance) {
+        [sharedInstance cleanupInstance];
+        sharedInstance = nil;
+        once_token = 0;
+        application = nil;
     }
 }
 
@@ -86,12 +99,7 @@ static UIApplication *application = nil;
 
 // Used by unit tests to provide a fake singleton or to reset this singleton for following tests
 + (void) setSharedInstance:(OmniaPushSDK*)newSharedInstance {
-    if (sharedInstance) {
-        [sharedInstance cleanupInstance];
-        sharedInstance = nil;
-    }
-    once_token = 0;
-    application = nil;
+    [OmniaPushSDK teardown];
     sharedInstance = newSharedInstance;
 }
 

@@ -57,6 +57,9 @@ using namespace Cedar::Doubles;
     self.application = nil;
     self.applicationDelegate = nil;
     self.registrationRequestOperation = nil;
+    if (self.applicationDelegateProxy && [self.applicationDelegateProxy isKindOfClass:[OmniaPushAppDelegateProxyImpl class]]) {
+        [self.applicationDelegateProxy cleanup];
+    }
     self.applicationDelegateProxy = nil;
     self.applicationDelegateSwitcher = nil;
 }

@@ -56,8 +56,11 @@
     return self;
 }
 
-- (void) dealloc
+- (void) cleanup
 {
+    if (self.application && self.originalApplicationDelegate) {
+        [self restoreApplicationDelegate];
+    }
     self.application = nil;
     self.originalApplicationDelegate = nil;
     self.registrationRequest = nil;
@@ -65,8 +68,17 @@
 
 - (void) replaceApplicationDelegate
 {
-    NSObject<OmniaPushApplicationDelegateSwitcher> *switcher = [OmniaPushApplicationDelegateSwitcherProvider switcher];
-    [switcher switchApplicationDelegate:self inApplication:self.application];
+    [[self getApplicationDelegateSwitcher] switchApplicationDelegate:self inApplication:self.application];
+}
+
+- (void) restoreApplicationDelegate
+{
+    [[self getApplicationDelegateSwitcher] switchApplicationDelegate:self.originalApplicationDelegate inApplication:self.application];
+}
+
+- (NSObject<OmniaPushApplicationDelegateSwitcher>*) getApplicationDelegateSwitcher
+{
+    return [OmniaPushApplicationDelegateSwitcherProvider switcher];
 }
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types

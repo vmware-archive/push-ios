@@ -40,30 +40,31 @@ describe(@"OmniaPushSDK", ^{
 
     describe(@"successful registration", ^{
         
-        it(@"synchronous registration", ^{
+        beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setApplicationInSingleton];
-            
+
             sdk = [OmniaPushSDK registerForRemoteNotificationTypes:testNotificationTypes];
             sdk should_not be_nil;
-
-            [helper.operationQueue drain];
             
+            [helper.operationQueue drain];
+        });
+        
+        it(@"should handle successful registrations from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
             [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
-            //            previousAppDelegate should be_same_instance_as(getApplication().delegate);
         });
-//        
-//        it(@"asynchronous registration", ^{
-//            setupRegistrationRequestForSuccessfulAsynchronousRegistration(getAppDelegateProxy(), REGISTRATION_DELAY_IN_MILLISECONDS);
-//            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
-//            sdk should_not be_nil;
-//            waitForSDKRegistrationListenerCallback();
-//        });
+        
+        it(@"should restore the application delegate after tearing down", ^{
+            SEL teardownSelector = sel_registerName("teardown");
+            [OmniaPushSDK performSelector:teardownSelector];
+            UIApplication *app = (UIApplication*)(helper.application);
+            app.delegate should be_same_instance_as(previousAppDelegate);
+        });
     });
 
     describe(@"failed registration", ^{
@@ -72,13 +73,6 @@ describe(@"OmniaPushSDK", ^{
 
         beforeEach(^{
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
-        });
-        
-        afterEach(^{
-            testError = nil;
-        });
-        
-        it(@"synchronous registration", ^{
             [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationTypes error:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
             [helper setApplicationInSingleton];
@@ -87,23 +81,27 @@ describe(@"OmniaPushSDK", ^{
             sdk should_not be_nil;
             
             [helper.operationQueue drain];
-            
+        });
+        
+        afterEach(^{
+            testError = nil;
+        });
+        
+        it(@"should handle registration failures from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
             [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
             [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-            //            previousAppDelegate should be_same_instance_as(getApplication().delegate);
         });
-
-//        it(@"asynchronous registration", ^{
-//            setupRegistrationRequestForFailedAsynchronousRegistration(getAppDelegateProxy(), testError, REGISTRATION_DELAY_IN_MILLISECONDS);
-//            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:TEST_NOTIFICATION_TYPE listener:getSDKRegistrationListener()];
-//            sdk should_not be_nil;
-//            waitForSDKRegistrationListenerCallback();
-//        });
+        
+        it(@"should restore the application delegate after tearing down", ^{
+            SEL teardownSelector = sel_registerName("teardown");
+            [OmniaPushSDK performSelector:teardownSelector];
+            UIApplication *app = (UIApplication*)(helper.application);
+            app.delegate should be_same_instance_as(previousAppDelegate);
+        });
     });
-
 });
 
 SPEC_END

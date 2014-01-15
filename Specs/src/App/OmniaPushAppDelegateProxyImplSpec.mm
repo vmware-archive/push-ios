@@ -48,6 +48,32 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
                 should raise_exception([NSException class]);
         });
     });
+    
+    context(@"switching application delegates", ^{
+        
+        __block id<UIApplicationDelegate> originalApplicationDelegate = nil;
+        
+        beforeEach(^{
+            UIApplication *app = (UIApplication*) helper.application;
+            originalApplicationDelegate = app.delegate;
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];
+        });
+        
+        afterEach(^{
+            originalApplicationDelegate = nil;
+        });
+        
+        it(@"should switch the application delegate after initialization", ^{
+            UIApplication *app = (UIApplication*) helper.application;
+            app.delegate should be_same_instance_as(helper.applicationDelegateProxy);
+        });
+        
+        it(@"should restore the application delegate after teardown", ^{
+            [helper.applicationDelegateProxy cleanup];
+            UIApplication *app = (UIApplication*) helper.application;
+            app.delegate should be_same_instance_as(originalApplicationDelegate);
+        });
+    });
 
     context(@"when it has valid arguments", ^{
         
