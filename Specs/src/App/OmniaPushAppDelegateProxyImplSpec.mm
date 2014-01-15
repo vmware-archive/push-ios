@@ -1,5 +1,6 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushRegistrationListener.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaFakeOperationQueue.h"
@@ -19,7 +20,6 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         helper = [[OmniaSpecHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
-        [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
     });
     
     afterEach(^{
@@ -34,19 +34,15 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         });
         
         it(@"should require an application", ^{
-            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];}
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate];}
             should raise_exception([NSException class]);
         });
         
         it(@"should require an application delegate", ^{
-            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:nil registrationRequest:helper.registrationRequestOperation];}
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:nil];}
                 should raise_exception([NSException class]);
         });
 
-        it(@"should require a registration request object", ^{
-            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:nil];}
-                should raise_exception([NSException class]);
-        });
     });
     
     context(@"switching application delegates", ^{
@@ -56,7 +52,7 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         beforeEach(^{
             UIApplication *app = (UIApplication*) helper.application;
             originalApplicationDelegate = app.delegate;
-            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
         });
         
         afterEach(^{
@@ -82,7 +78,7 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         beforeEach(^{
             [helper setupOperationQueue];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
-            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationRequest:helper.registrationRequestOperation];
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
         });
         
         afterEach(^{

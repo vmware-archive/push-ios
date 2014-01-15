@@ -20,7 +20,6 @@
 
 @property (nonatomic, readwrite) UIApplication *application;
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
-@property (nonatomic, readwrite) OmniaPushAPNSRegistrationRequestOperation *registrationRequest;
 
 @property (atomic) BOOL isRegistrationCancelled;
 @property (atomic) BOOL didRegistrationSucceed;
@@ -28,12 +27,10 @@
 
 @end
 
-
 @implementation OmniaPushAppDelegateProxyImpl
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
-                 registrationRequest:(OmniaPushAPNSRegistrationRequestOperation*)registrationRequest
 {
     if (self = [super init]) {
         if (application == nil) {
@@ -42,12 +39,8 @@
         if (originalApplicationDelegate == nil) {
             [NSException raise:NSInvalidArgumentException format:@"originalApplicationDelegate may not be nil"];
         }
-        if (registrationRequest == nil) {
-            [NSException raise:NSInvalidArgumentException format:@"registrationRequest may not be nil"];
-        }
         self.application = application;
         self.originalApplicationDelegate = originalApplicationDelegate;
-        self.registrationRequest = registrationRequest;
         self.isRegistrationCancelled = NO;
         self.didRegistrationFail = NO;
         self.didRegistrationSucceed = NO;
@@ -63,7 +56,6 @@
     }
     self.application = nil;
     self.originalApplicationDelegate = nil;
-    self.registrationRequest = nil;
 }
 
 - (void) replaceApplicationDelegate
@@ -83,7 +75,9 @@
 
 - (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
 {
-    [[OmniaPushOperationQueueProvider operationQueue] addOperation:self.registrationRequest];
+    OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:types application:self.application];
+    
+    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
 }
 
 - (void)application:(UIApplication*)app

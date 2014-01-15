@@ -58,9 +58,7 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         
-        OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:remoteNotificationTypes application:application];
-        
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationRequest:op];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
         
         [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes]; // TODO - should be an operation
         
