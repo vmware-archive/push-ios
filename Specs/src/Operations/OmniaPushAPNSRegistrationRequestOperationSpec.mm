@@ -58,6 +58,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
                 [helper.operationQueue drain];
                 [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
                 helper.applicationDelegate should have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
+                helper.applicationDelegate should_not have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
             });
             
             it(@"should be able to register successfully", ^{
@@ -66,6 +67,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
                 [helper.operationQueue addOperation:operation];
                 [helper.operationQueue drain];
                 [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                helper.applicationDelegate should_not have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
                 helper.applicationDelegate should have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
             });
         });

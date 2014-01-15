@@ -24,6 +24,7 @@
 @property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
 @property (nonatomic) OmniaPushAppDelegateProxyImpl *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
+@property (nonatomic) NSData *deviceToken;
 
 // Spec Helper lifecycle
 - (instancetype) init;

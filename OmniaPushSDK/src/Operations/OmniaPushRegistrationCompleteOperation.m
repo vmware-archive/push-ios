@@ -26,6 +26,15 @@
 {
     self = [super init];
     if (self) {
+        if (application == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
+        }
+        if (applicationDelegate == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"applicationDelegate may not be nil"];
+        }
+        if (deviceToken == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"deviceToken may not be nil"];
+        }
         self.application = application;
         self.applicationDelegate = applicationDelegate;
         self.deviceToken = deviceToken;

@@ -28,12 +28,6 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-@interface OmniaSpecHelper ()
-
-@property (nonatomic) NSData *deviceToken;
-
-@end
-
 @implementation OmniaSpecHelper
 
 # pragma mark - Spec Helper lifecycle
