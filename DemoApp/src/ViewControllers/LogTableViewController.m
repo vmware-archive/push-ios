@@ -34,14 +34,15 @@
     }
     
     [OmniaPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
-        [self addLogItem:message timestamp:timestamp];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self addLogItem:message timestamp:timestamp];
+        });
     }];
     
     [self initializeSDK];
 }
 
 - (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {
-    // TODO - may need a version of this method that can get called from a background thread safely
     if (!self.logItems) {
         self.logItems = [NSMutableArray array];
     }
@@ -51,7 +52,7 @@
 }
 
 - (void) initializeSDK {
-    [self addLogItem:@"Initializing library..." timestamp:[NSDate date]];
+    [self addLogItem:@"Initializing library." timestamp:[NSDate date]];
     [OmniaPushSDK registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge];
 }
 

@@ -8,23 +8,23 @@
 
 #import "OmniaPushOperationQueueProvider.h"
 
-static NSOperationQueue *_operationQueue;
+static NSOperationQueue *_workerQueue;
 
 @implementation OmniaPushOperationQueueProvider
 
-+ (NSOperationQueue *) operationQueue
++ (NSOperationQueue *) workerQueue
 {
-    if (_operationQueue == nil) {
-        _operationQueue = [[NSOperationQueue alloc] init];
-        _operationQueue.maxConcurrentOperationCount = 1;
-        _operationQueue.name = @"OmniaPushOperationQueue";
+    if (_workerQueue == nil) {
+        _workerQueue = [[NSOperationQueue alloc] init];
+        _workerQueue.maxConcurrentOperationCount = 1;
+        _workerQueue.name = @"OmniaPushOperationQueue";
     }
-    return _operationQueue;
+    return _workerQueue;
 }
 
-+ (void) setOperationQueue:(NSOperationQueue *) operationQueue
++ (void) setWorkerQueue:(NSOperationQueue *) workerQueue
 {
-    _operationQueue = operationQueue;
+    _workerQueue = workerQueue;
 }
 
 @end

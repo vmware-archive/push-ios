@@ -47,7 +47,7 @@ describe(@"OmniaPushRegistrationFailedOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            [helper setupOperationQueue];
+            [helper setupWorkerQueue];
             operation = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate error:testError];
         });
         
@@ -63,9 +63,9 @@ describe(@"OmniaPushRegistrationFailedOperation", ^{
         
         it(@"should run correctly on the queue", ^{
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-            [helper.operationQueue addOperation:operation];
-            [helper.operationQueue drain];
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+            [helper.workerQueue addOperation:operation];
+            [helper.workerQueue drain];
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
             helper.applicationDelegate should_not have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
             helper.applicationDelegate should have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
         });

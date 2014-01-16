@@ -77,7 +77,7 @@
 {
     OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:types application:self.application];
     
-    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
+    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 
 - (void)application:(UIApplication*)app
@@ -88,7 +88,7 @@
 
     OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate deviceToken:devToken];
     
-    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
+    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 
 - (void)application:(UIApplication *)app
@@ -99,7 +99,7 @@
 
     OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate error:err];
 
-    [[OmniaPushOperationQueueProvider operationQueue] addOperation:op];
+    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 
 - (void) application:(UIApplication*)application

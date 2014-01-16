@@ -16,7 +16,7 @@ static NSObject<OmniaPushApplicationDelegateSwitcher>* _switcher = nil;
 + (NSObject<OmniaPushApplicationDelegateSwitcher>*) switcher
 {
     if (_switcher == nil) {
-        // TODO - allocate switcher if there isn't one
+        _switcher = [[OmniaPushApplicationDelegateSwitcherImpl alloc] init];
     }
     return _switcher;
 }

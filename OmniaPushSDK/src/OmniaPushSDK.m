@@ -17,7 +17,6 @@
 NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
 // SDK instance variables
-static NSOperationQueue *operationQueue = nil;
 static OmniaPushSDK* sharedInstance = nil;
 static dispatch_once_t once_token = 0;
 static UIApplication *application = nil;
@@ -67,6 +66,8 @@ static UIApplication *application = nil;
         // outside and inspect the results
         // BETTER - simply start running it here either way so the same code works for both
         // testing and regular code.
+//        NSOperationQueue *queue = [OmniaPushOperationQueueProvider workerQueue];
+//        queue.suspended = NO;
     }
     return self;
 }

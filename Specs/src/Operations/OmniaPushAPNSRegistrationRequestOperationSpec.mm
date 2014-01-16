@@ -44,7 +44,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             __block NSError *testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
             
             beforeEach(^{
-                [helper setupOperationQueue];
+                [helper setupWorkerQueue];
             });
             
             afterEach(^{
@@ -54,9 +54,9 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             it(@"should be able to register successfully", ^{
                 [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationType];
                 [helper setupApplicationDelegateForSuccessfulRegistration];
-                [helper.operationQueue addOperation:operation];
-                [helper.operationQueue drain];
-                [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.workerQueue addOperation:operation];
+                [helper.workerQueue drain];
+                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
                 helper.applicationDelegate should have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
                 helper.applicationDelegate should_not have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
             });
@@ -64,9 +64,9 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             it(@"should be able to register successfully", ^{
                 [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationType error:testError];
                 [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                [helper.operationQueue addOperation:operation];
-                [helper.operationQueue drain];
-                [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.workerQueue addOperation:operation];
+                [helper.workerQueue drain];
+                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
                 helper.applicationDelegate should_not have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
                 helper.applicationDelegate should have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
             });

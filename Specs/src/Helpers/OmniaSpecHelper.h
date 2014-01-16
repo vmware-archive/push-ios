@@ -20,7 +20,7 @@
 
 @property (nonatomic) id application;
 @property (nonatomic) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic) OmniaFakeOperationQueue *operationQueue;
+@property (nonatomic) OmniaFakeOperationQueue *workerQueue;
 @property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
 @property (nonatomic) OmniaPushAppDelegateProxyImpl *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
@@ -49,6 +49,6 @@
 - (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 
 // Operation Queue helpers
-- (OmniaFakeOperationQueue*) setupOperationQueue;
+- (OmniaFakeOperationQueue*) setupWorkerQueue;
 
 @end

@@ -44,9 +44,8 @@ using namespace Cedar::Doubles;
 
 - (void) reset
 {
-    self.operationQueue = nil;
-    [OmniaPushOperationQueueProvider setOperationQueue:nil];
-    [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:nil];
+    self.workerQueue = nil;
+    [OmniaPushOperationQueueProvider setWorkerQueue:nil];
     self.deviceToken = nil;
     self.application = nil;
     self.applicationDelegate = nil;
@@ -56,6 +55,7 @@ using namespace Cedar::Doubles;
     }
     self.applicationDelegateProxy = nil;
     self.applicationDelegateSwitcher = nil;
+    [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:nil];
 }
 
 #pragma mark - Application helpers
@@ -137,11 +137,11 @@ using namespace Cedar::Doubles;
 
 #pragma mark - Operation Queue helpers
 
-- (OmniaFakeOperationQueue*) setupOperationQueue
+- (OmniaFakeOperationQueue*) setupWorkerQueue
 {
-    self.operationQueue = [[OmniaFakeOperationQueue alloc] init];
-    [OmniaPushOperationQueueProvider setOperationQueue:self.operationQueue];
-    return self.operationQueue;
+    self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
+    [OmniaPushOperationQueueProvider setWorkerQueue:self.workerQueue];
+    return self.workerQueue;
 }
 
 // TODO - need a method to drain operation queue

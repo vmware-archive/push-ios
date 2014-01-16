@@ -10,7 +10,7 @@
 
 @interface OmniaPushOperationQueueProvider : NSObject
 
-+ (NSOperationQueue *) operationQueue;
-+ (void) setOperationQueue:(NSOperationQueue *) operationQueue;
++ (NSOperationQueue *) workerQueue;
++ (void) setWorkerQueue:(NSOperationQueue *) workerQueue;
 
 @end

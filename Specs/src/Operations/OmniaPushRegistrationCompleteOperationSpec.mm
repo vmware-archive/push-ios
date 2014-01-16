@@ -44,7 +44,7 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            [helper setupOperationQueue];
+            [helper setupWorkerQueue];
             operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate deviceToken:helper.deviceToken];
         });
         
@@ -60,9 +60,9 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
         
         it(@"should run correctly on the queue", ^{
             [helper setupApplicationDelegateForSuccessfulRegistration];
-            [helper.operationQueue addOperation:operation];
-            [helper.operationQueue drain];
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
+            [helper.workerQueue addOperation:operation];
+            [helper.workerQueue drain];
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
             helper.applicationDelegate should have_received(@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:));
             helper.applicationDelegate should_not have_received(@selector(application:didFailToRegisterForRemoteNotificationsWithError:));
         });

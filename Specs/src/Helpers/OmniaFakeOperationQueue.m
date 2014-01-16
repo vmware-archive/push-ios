@@ -17,7 +17,8 @@
 
 @implementation OmniaFakeOperationQueue
 
-- (id) init {
+- (id) init
+{
     if (self = [super init]) {
         self.suspended = YES;
         [self reset];
@@ -25,16 +26,24 @@
     return self;
 }
 
-- (void) dealloc {
+- (void) dealloc
+{
     self.mutableOperations = nil;
 }
 
-- (void) reset {
+- (void) reset
+{
     self.mutableOperations = [NSMutableArray array];
     self.operationsFinished = [NSMutableArray array];
 }
 
-- (void) addOperation:(NSOperation *)op {
+- (void) setSuspended:(BOOL)b
+{
+    // override for unit tests.  supposed to do nothing.
+}
+
+- (void) addOperation:(NSOperation *)op
+{
     if (self.runSynchronously) {
         [self performOperationAndWait:op];
     } else {
@@ -42,7 +51,8 @@
     }
 }
 
-- (void) addOperations:(NSArray *)operations waitUntilFinished:(BOOL)wait {
+- (void) addOperations:(NSArray *)operations waitUntilFinished:(BOOL)wait
+{
     for (id op in operations) {
         
         id operation;
@@ -60,7 +70,8 @@
     }
 }
 
-- (void)addOperationWithBlock:(void (^)(void))block {
+- (void)addOperationWithBlock:(void (^)(void))block
+{
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:[block copy]];
     if (self.runSynchronously) {
         [self performOperationAndWait:blockOperation];
@@ -69,21 +80,25 @@
     }
 }
 
-- (NSArray *) operations {
+- (NSArray *) operations
+{
     return self.mutableOperations;
 }
 
-- (NSUInteger) operationCount {
+- (NSUInteger) operationCount
+{
     return self.mutableOperations.count;
 }
 
-- (void) performOperationAndWait:(NSOperation *)op {
+- (void) performOperationAndWait:(NSOperation *)op
+{
     [op start];
     [op waitUntilFinished];
     [self.operationsFinished addObject:[op class]];
 }
 
-- (id) runNextOperation {
+- (id) runNextOperation
+{
     if (self.mutableOperations.count == 0) {
         [[NSException exceptionWithName:NSInternalInconsistencyException reason:@"Can't run an operation that doesn't exist" userInfo:nil] raise];
     }
@@ -97,13 +112,15 @@
     return operation;
 }
 
-- (void) drain {
+- (void) drain
+{
     while ([self operationCount] > 0) {
         [self runNextOperation];
     }
 }
 
-- (BOOL) didFinishOperation:(Class)classOfOperation {
+- (BOOL) didFinishOperation:(Class)classOfOperation
+{
     return [self.operationsFinished containsObject:classOfOperation];
 }
 

@@ -26,7 +26,7 @@ describe(@"OmniaPushSDK", ^{
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
-        [helper setupOperationQueue];
+        [helper setupWorkerQueue];
         previousAppDelegate = helper.applicationDelegate;
     });
     
@@ -48,15 +48,15 @@ describe(@"OmniaPushSDK", ^{
             sdk = [OmniaPushSDK registerForRemoteNotificationTypes:testNotificationTypes];
             sdk should_not be_nil;
             
-            [helper.operationQueue drain];
+            [helper.workerQueue drain];
         });
         
         it(@"should handle successful registrations from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-            [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
         });
         
         it(@"should restore the application delegate after tearing down", ^{
@@ -80,7 +80,7 @@ describe(@"OmniaPushSDK", ^{
             sdk = [OmniaPushSDK registerForRemoteNotificationTypes:testNotificationTypes];
             sdk should_not be_nil;
             
-            [helper.operationQueue drain];
+            [helper.workerQueue drain];
         });
         
         afterEach(^{
@@ -90,9 +90,9 @@ describe(@"OmniaPushSDK", ^{
         it(@"should handle registration failures from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            [helper.operationQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
-            [helper.operationQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
         });
         
         it(@"should restore the application delegate after tearing down", ^{

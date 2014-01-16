@@ -7,6 +7,7 @@
 //
 
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
+#import "OmniaPushDebug.h"
 
 @interface OmniaPushAPNSRegistrationRequestOperation ()
 
@@ -36,6 +37,7 @@
 - (void) main
 {
     @autoreleasepool {
+        OmniaPushLog(@"Registering for remote notifications with APNS.");
         [self.application registerForRemoteNotificationTypes:self.notificationTypes];
     }
 }

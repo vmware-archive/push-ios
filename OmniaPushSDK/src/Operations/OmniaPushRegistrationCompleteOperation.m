@@ -45,18 +45,16 @@
 - (void) main
 {
     @autoreleasepool {
-        OmniaPushLog(@"Registration with APNS successful. device token: %@", self.deviceToken);
         
-        //const void *devTokenBytes = [devToken bytes];
-        //[self sendProviderDeviceToken:devTokenBytes]; // custom method
+        OmniaPushLog(@"Registration with APNS successful. Device token is %@.", self.deviceToken);
         
-        // TODO - call on main thread
-        [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
-        
-//        if (self.listener) {
-//            [self.listener application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
-//        }
-        // TODO - save the registration somehow
+        // TODO - dispatch on main thread, except in unit tests (otherwise they won't finish)
+//        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
+//        });
+
+        // TODO - save the registration somehow.
+        // TODO - send device token to back end
     }
 }
 

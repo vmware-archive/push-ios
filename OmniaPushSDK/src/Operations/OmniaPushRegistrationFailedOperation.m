@@ -46,11 +46,12 @@
 {
     @autoreleasepool {
         
-        OmniaPushLog(@"Error in registration with APNS. Error: %@", self.error);
-        [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
-//        if (self.listener) {
-//            [self.listener application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
-//        }
+        OmniaPushLog(@"Error in registration with APNS. Error: \"%@\".", self.error);
+        
+//        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
+//        });
+
         // TODO - handle the error somehow
     }
 }
