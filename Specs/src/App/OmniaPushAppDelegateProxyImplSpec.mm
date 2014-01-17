@@ -87,6 +87,15 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         it(@"should be constructed successfully", ^{
             helper.applicationDelegateProxy should_not be_nil;
         });
+        
+        it(@"should forward messages to the original application delegate", ^{
+            __block BOOL didCallSelector = NO;
+            helper.applicationDelegate stub_method("applicationDidReceiveMemoryWarning:").with(helper.application).and_do(^(NSInvocation*) {
+                didCallSelector = YES;
+            });
+            [helper.applicationDelegateProxy performSelector:@selector(applicationDidReceiveMemoryWarning:) withObject:helper.application];
+            didCallSelector should be_truthy;
+        });
     
         context(@"when registering", ^{
             

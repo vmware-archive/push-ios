@@ -11,9 +11,6 @@
 
 @interface OmniaPushAppDelegateProxyImpl : NSObject<OmniaPushAppDelegateProxy>
 
-@property (nonatomic, readonly) UIApplication *application;
-@property (nonatomic, readonly) NSObject<UIApplicationDelegate> *applicationDelegate;
-
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;
 

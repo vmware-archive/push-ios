@@ -104,7 +104,7 @@ using namespace Cedar::Doubles;
 
 - (void) setupApplicationDelegateForSuccessfulRegistration
 {
-    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, self.deviceToken);;
+    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, self.deviceToken);
 }
 
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error
