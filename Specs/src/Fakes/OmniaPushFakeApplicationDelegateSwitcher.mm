@@ -7,7 +7,7 @@
 //
 
 #import "OmniaPushFakeApplicationDelegateSwitcher.h"
-#import "OmniaPushAppDelegateProxyImpl.h"
+#import "OmniaPushAppDelegateProxy.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -31,7 +31,7 @@ using namespace Cedar::Doubles;
 
 - (void) switchApplicationDelegate:(id<UIApplicationDelegate>)applicationDelegate inApplication:(UIApplication*)application
 {
-    self.specHelper.applicationDelegateProxy = (OmniaPushAppDelegateProxyImpl*) applicationDelegate;
+    self.specHelper.applicationDelegateProxy = (OmniaPushAppDelegateProxy*) applicationDelegate;
 }
 
 @end

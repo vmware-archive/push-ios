@@ -10,7 +10,6 @@
 #import "OmniaPushSDK.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxy.h"
-#import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushDebug.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushOperationQueueProvider.h"
@@ -49,7 +48,7 @@ using namespace Cedar::Doubles;
     self.application = nil;
     self.applicationDelegate = nil;
     self.registrationRequestOperation = nil;
-    if (self.applicationDelegateProxy && [self.applicationDelegateProxy isKindOfClass:[OmniaPushAppDelegateProxyImpl class]]) {
+    if (self.applicationDelegateProxy && [self.applicationDelegateProxy isKindOfClass:[OmniaPushAppDelegateProxy class]]) {
         [self.applicationDelegateProxy cleanup];
     }
     self.applicationDelegateProxy = nil;

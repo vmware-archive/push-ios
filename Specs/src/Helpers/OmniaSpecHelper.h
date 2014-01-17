@@ -11,7 +11,7 @@
 @protocol OmniaPushAppDelegateProxy;
 @protocol OmniaPushRegistrationListener;
 
-@class OmniaPushAppDelegateProxyImpl;
+@class OmniaPushAppDelegateProxy;
 @class OmniaPushAPNSRegistrationRequestOperation;
 @class OmniaFakeOperationQueue;
 @class OmniaPushFakeApplicationDelegateSwitcher;
@@ -22,7 +22,7 @@
 @property (nonatomic) id<UIApplicationDelegate> applicationDelegate;
 @property (nonatomic) OmniaFakeOperationQueue *workerQueue;
 @property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
-@property (nonatomic) OmniaPushAppDelegateProxyImpl *applicationDelegateProxy;
+@property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *deviceToken;
 

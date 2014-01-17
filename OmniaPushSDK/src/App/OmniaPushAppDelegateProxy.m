@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Omnia. All rights reserved.
 //
 
-#import "OmniaPushAppDelegateProxyImpl.h"
+#import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushDebug.h"
 #import "OmniaPushOperationQueueProvider.h"
@@ -15,14 +15,14 @@
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 
-@interface OmniaPushAppDelegateProxyImpl ()
+@interface OmniaPushAppDelegateProxy ()
 
 @property (nonatomic) UIApplication *application;
 @property (nonatomic) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 
 @end
 
-@implementation OmniaPushAppDelegateProxyImpl
+@implementation OmniaPushAppDelegateProxy
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate

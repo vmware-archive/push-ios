@@ -2,17 +2,17 @@
 //  OmniaPushAppDelegateProxy.h
 //  OmniaPushSDK
 //
-//  Created by Rob Szumlakowski on 2013-12-20.
+//  Created by Rob Szumlakowski on 2013-12-18.
 //  Copyright (c) 2013 Omnia. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@protocol OmniaPushRegistrationListener;
+@interface OmniaPushAppDelegateProxy : NSObject
 
-@protocol OmniaPushAppDelegateProxy <UIApplicationDelegate>
-
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (instancetype) initWithApplication:(UIApplication*)application
+         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;
+- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 - (void) cleanup;
 
 @end

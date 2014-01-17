@@ -1,6 +1,5 @@
 #import "OmniaPushSDK.h"
 #import "OmniaPushAppDelegateProxy.h"
-#import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"

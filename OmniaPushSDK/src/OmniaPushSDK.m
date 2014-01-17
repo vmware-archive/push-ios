@@ -8,7 +8,7 @@
 
 #import "OmniaPushSDK.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
-#import "OmniaPushAppDelegateProxyImpl.h"
+#import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
@@ -24,7 +24,7 @@ static UIApplication *application = nil;
 @interface OmniaPushSDK ()
 
 @property (nonatomic, strong) id<UIApplicationDelegate> originalApplicationDelegate;
-@property (nonatomic, strong) NSObject<OmniaPushAppDelegateProxy> *appDelegateProxy;
+@property (nonatomic, strong) OmniaPushAppDelegateProxy *appDelegateProxy;
 
 @end
 
@@ -57,7 +57,7 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
         
         [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes]; // TODO - should be an operation
         
