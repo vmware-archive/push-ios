@@ -26,7 +26,7 @@ describe(@"OmniaPushSDK", ^{
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
-        [helper setupWorkerQueue];
+        [helper setupQueues];
         previousAppDelegate = helper.applicationDelegate;
     });
     

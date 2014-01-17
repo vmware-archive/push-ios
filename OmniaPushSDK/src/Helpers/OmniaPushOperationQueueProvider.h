@@ -13,4 +13,7 @@
 + (NSOperationQueue *) workerQueue;
 + (void) setWorkerQueue:(NSOperationQueue *) workerQueue;
 
++ (NSOperationQueue *) mainQueue;
++ (void) setMainQueue:(NSOperationQueue *) mainQueue;
+
 @end

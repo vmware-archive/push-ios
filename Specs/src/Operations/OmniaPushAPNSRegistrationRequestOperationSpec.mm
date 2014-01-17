@@ -44,7 +44,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             __block NSError *testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
             
             beforeEach(^{
-                [helper setupWorkerQueue];
+                [helper setupQueues];
             });
             
             afterEach(^{

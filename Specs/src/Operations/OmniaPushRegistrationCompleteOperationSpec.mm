@@ -44,7 +44,7 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            [helper setupWorkerQueue];
+            [helper setupQueues];
             operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate deviceToken:helper.deviceToken];
         });
         

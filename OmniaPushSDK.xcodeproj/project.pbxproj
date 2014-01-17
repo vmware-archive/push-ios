@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D40F3A571864906400CA129F /* OmniaPushAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D40F3A561864906400CA129F /* OmniaPushAppDelegateProxy.h */; };
-		D42429061872138300B61E1F /* OmniaPushRegistrationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D42429051872138300B61E1F /* OmniaPushRegistrationListener.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4330EAC1860DEC000A141AF /* LogItemCell.m */; };
 		D4330EB11860E39E00A141AF /* LogItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4330EB01860E39E00A141AF /* LogItemCell.xib */; };
 		D4433F851873147D005C100C /* OmniaPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4433F831873147D005C100C /* OmniaPushSDK.h */; };
@@ -89,7 +88,6 @@
 
 /* Begin PBXFileReference section */
 		D40F3A561864906400CA129F /* OmniaPushAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushAppDelegateProxy.h; path = src/App/OmniaPushAppDelegateProxy.h; sourceTree = "<group>"; };
-		D42429051872138300B61E1F /* OmniaPushRegistrationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationListener.h; path = src/App/OmniaPushRegistrationListener.h; sourceTree = "<group>"; };
 		D4330EAB1860DEC000A141AF /* LogItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogItemCell.h; path = src/Views/LogItemCell.h; sourceTree = "<group>"; };
 		D4330EAC1860DEC000A141AF /* LogItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogItemCell.m; path = src/Views/LogItemCell.m; sourceTree = "<group>"; };
 		D4330EB01860E39E00A141AF /* LogItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogItemCell.xib; path = src/Views/LogItemCell.xib; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 			children = (
 				D4433F831873147D005C100C /* OmniaPushSDK.h */,
 				D44BE79D187B5DB900971A2A /* OmniaPushErrors.h */,
-				D42429051872138300B61E1F /* OmniaPushRegistrationListener.h */,
 			);
 			name = "Public Headers";
 			sourceTree = "<group>";
@@ -444,7 +441,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44BE7B5187E030A00971A2A /* OmniaPushRegistrationFailedOperation.h in Headers */,
-				D42429061872138300B61E1F /* OmniaPushRegistrationListener.h in Headers */,
 				D44BE7A5187DF8A000971A2A /* OmniaPushOperationQueueProvider.h in Headers */,
 				D44BE79E187B5DB900971A2A /* OmniaPushErrors.h in Headers */,
 				D4601408188486E200EF09FF /* OmniaPushApplicationDelegateSwitcher.h in Headers */,

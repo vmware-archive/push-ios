@@ -49,6 +49,6 @@
 - (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 
 // Operation Queue helpers
-- (OmniaFakeOperationQueue*) setupWorkerQueue;
+- (OmniaFakeOperationQueue*) setupQueues;
 
 @end

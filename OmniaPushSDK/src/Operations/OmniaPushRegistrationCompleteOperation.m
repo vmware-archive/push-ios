@@ -7,7 +7,7 @@
 //
 
 #import "OmniaPushRegistrationCompleteOperation.h"
-#import "OmniaPushRegistrationListener.h"
+#import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushDebug.h"
 
 @interface OmniaPushRegistrationCompleteOperation ()
@@ -48,10 +48,9 @@
         
         OmniaPushLog(@"Registration with APNS successful. Device token is %@.", self.deviceToken);
         
-        // TODO - dispatch on main thread, except in unit tests (otherwise they won't finish)
-//        dispatch_async(dispatch_get_main_queue(), ^{
+        [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
             [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
-//        });
+        }];
 
         // TODO - save the registration somehow.
         // TODO - send device token to back end

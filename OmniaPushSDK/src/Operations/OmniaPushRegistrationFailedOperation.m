@@ -7,7 +7,7 @@
 //
 
 #import "OmniaPushRegistrationFailedOperation.h"
-#import "OmniaPushRegistrationListener.h"
+#import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushDebug.h"
 
 @interface OmniaPushRegistrationFailedOperation ()
@@ -48,9 +48,9 @@
         
         OmniaPushLog(@"Error in registration with APNS. Error: \"%@\".", self.error);
         
-//        dispatch_async(dispatch_get_main_queue(), ^{
+        [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
             [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
-//        });
+        }];
 
         // TODO - handle the error somehow
     }

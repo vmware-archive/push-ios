@@ -34,9 +34,9 @@
     }
     
     [OmniaPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self addLogItem:message timestamp:timestamp];
-        });
+        }];
     }];
     
     [self initializeSDK];

@@ -9,6 +9,7 @@
 #import "OmniaPushOperationQueueProvider.h"
 
 static NSOperationQueue *_workerQueue;
+static NSOperationQueue *_mainQueue;
 
 @implementation OmniaPushOperationQueueProvider
 
@@ -25,6 +26,19 @@ static NSOperationQueue *_workerQueue;
 + (void) setWorkerQueue:(NSOperationQueue *) workerQueue
 {
     _workerQueue = workerQueue;
+}
+
++ (NSOperationQueue *) mainQueue
+{
+    if (_mainQueue == nil) {
+        _mainQueue = [NSOperationQueue mainQueue];
+    }
+    return _mainQueue;
+}
+
++ (void) setMainQueue:(NSOperationQueue *) mainQueue
+{
+    _mainQueue = mainQueue;
 }
 
 @end

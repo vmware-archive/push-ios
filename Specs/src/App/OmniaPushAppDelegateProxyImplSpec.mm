@@ -1,5 +1,4 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
-#import "OmniaPushRegistrationListener.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
@@ -75,7 +74,7 @@ describe(@"OmniaPushAppDelegateProxyImpl", ^{
         __block NSError *testError;
         
         beforeEach(^{
-            [helper setupWorkerQueue];
+            [helper setupQueues];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
             helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxyImpl alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
         });

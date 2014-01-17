@@ -47,7 +47,7 @@ describe(@"OmniaPushRegistrationFailedOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            [helper setupWorkerQueue];
+            [helper setupQueues];
             operation = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate error:testError];
         });
         

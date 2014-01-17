@@ -9,7 +9,6 @@
 #import "OmniaPushAppDelegateProxyImpl.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushDebug.h"
-#import "OmniaPushRegistrationListener.h"
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"

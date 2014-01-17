@@ -11,7 +11,6 @@
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushAppDelegateProxyImpl.h"
-#import "OmniaPushRegistrationListener.h"
 #import "OmniaPushDebug.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushOperationQueueProvider.h"
@@ -137,10 +136,11 @@ using namespace Cedar::Doubles;
 
 #pragma mark - Operation Queue helpers
 
-- (OmniaFakeOperationQueue*) setupWorkerQueue
+- (OmniaFakeOperationQueue*) setupQueues
 {
     self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
     [OmniaPushOperationQueueProvider setWorkerQueue:self.workerQueue];
+    [OmniaPushOperationQueueProvider setMainQueue:self.workerQueue];
     return self.workerQueue;
 }
 
