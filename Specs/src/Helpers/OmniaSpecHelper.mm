@@ -15,6 +15,7 @@
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushFakeApplicationDelegateSwitcher.h"
+#import "OmniaPushPersistentStorage.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -36,6 +37,8 @@ using namespace Cedar::Doubles;
     if (self) {
         self.deviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
         self.application = [UIApplication sharedApplication];
+        self.storage = [[OmniaPushPersistentStorage alloc] init];
+        [self.storage reset];
     }
     return self;
 }
@@ -53,6 +56,7 @@ using namespace Cedar::Doubles;
     }
     self.applicationDelegateProxy = nil;
     self.applicationDelegateSwitcher = nil;
+    self.storage = nil;
     [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:nil];
 }
 

@@ -1,6 +1,7 @@
 #import "OmniaPushSDK.h"
 #import "OmniaPushAppDelegateProxy.h"
 #import "OmniaSpecHelper.h"
+#import "OmniaPushPersistentStorage.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
@@ -56,6 +57,7 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+            [helper.storage loadDeviceToken] should equal(helper.deviceToken);
         });
         
         it(@"should restore the application delegate after tearing down", ^{
@@ -92,6 +94,7 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+            [helper.storage loadDeviceToken] should be_nil;
         });
         
         it(@"should restore the application delegate after tearing down", ^{

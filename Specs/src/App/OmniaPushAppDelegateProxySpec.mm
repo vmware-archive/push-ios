@@ -2,6 +2,7 @@
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
+#import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaSpecHelper.h"
 
@@ -111,6 +112,7 @@ describe(@"OmniaPushAppDelegateProxy", ^{
                 [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
                 [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
                 [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+                [helper.storage loadDeviceToken] should equal(helper.deviceToken);
             });
             
             it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
@@ -125,6 +127,7 @@ describe(@"OmniaPushAppDelegateProxy", ^{
                 [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
                 [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
                 [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+                [helper.storage loadDeviceToken] should be_nil;
             });
         });
     });

@@ -14,6 +14,7 @@
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
+#import "OmniaPushPersistentStorage.h"
 
 @interface OmniaPushAppDelegateProxy ()
 
@@ -74,8 +75,15 @@
 - (void)application:(UIApplication*)app
     didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
 {
+    [self saveDeviceToken:devToken];
     OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate deviceToken:devToken];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
+}
+
+- (void) saveDeviceToken:(NSData*)deviceToken
+{
+    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
+    [storage saveDeviceToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)app

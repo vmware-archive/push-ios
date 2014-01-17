@@ -15,6 +15,7 @@
 @class OmniaPushAPNSRegistrationRequestOperation;
 @class OmniaFakeOperationQueue;
 @class OmniaPushFakeApplicationDelegateSwitcher;
+@class OmniaPushPersistentStorage;
 
 @interface OmniaSpecHelper : NSObject
 
@@ -25,6 +26,7 @@
 @property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *deviceToken;
+@property (nonatomic) OmniaPushPersistentStorage *storage;
 
 // Spec Helper lifecycle
 - (instancetype) init;
