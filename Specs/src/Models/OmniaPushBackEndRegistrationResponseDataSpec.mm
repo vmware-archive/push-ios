@@ -1,41 +1,41 @@
-#import "OmniaPushBackEndRegistrationRequestData.h"
+#import "OmniaPushBackEndRegistrationResponseData.h"
+
+#define TEST_REPLICANT_ID         @"123-456-789"
+#define TEST_DEVICE_UUID          @"L337-L337-OH-YEAH"
+#define TEST_DEVICE_ALIAS         @"l33t devices of badness"
+#define TEST_DEVICE_MANUFACTURER  @"Amiga"
+#define TEST_DEVICE_MODEL         @"500"
+#define TEST_OS                   @"AmigaOS"
+#define TEST_OS_VERSION           @"5.0"
+#define TEST_REGISTRATION_TOKEN   @"ABC-DEF-GHI"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-#define TEST_RELEASE_UUID         @"123-456-789"
-#define TEST_SECRET               @"My cat's breath smells like cat food"
-#define TEST_DEVICE_ALIAS         @"l33t devices of badness"
-#define TEST_DEVICE_MANUFACTURER  @"Commodore"
-#define TEST_DEVICE_MODEL         @"64C"
-#define TEST_OS                   @"BASIC"
-#define TEST_OS_VERSION           @"2.0"
-#define TEST_REGISTRATION_TOKEN   @"ABC-DEF-GHI"
+SPEC_BEGIN(OmniaPushBackEndRegistrationResponseDataSpec)
 
-SPEC_BEGIN(OmniaPushBackEndRegistrationRequestDataSpec)
-
-describe(@"OmniaPushBackEndRegistrationRequestData", ^{
+describe(@"OmniaPushBackEndRegistrationResponseData", ^{
     
-    __block OmniaPushBackEndRegistrationRequestData *model;
+    __block OmniaPushBackEndRegistrationResponseData *model;
     
     afterEach(^{
         model = nil;
     });
     
     it(@"should be initializable", ^{
-        model = [[OmniaPushBackEndRegistrationRequestData alloc] init];
+        model = [[OmniaPushBackEndRegistrationResponseData alloc] init];
         model should_not be_nil;
     });
     
     context(@"fields", ^{
         
         beforeEach(^{
-            model = [[OmniaPushBackEndRegistrationRequestData alloc] init];
+            model = [[OmniaPushBackEndRegistrationResponseData alloc] init];
         });
         
         it(@"should start as nil", ^{
-            model.releaseUuid should be_nil;
-            model.secret should be_nil;
+            model.replicantId should be_nil;
+            model.deviceUuid should be_nil;
             model.deviceAlias should be_nil;
             model.deviceManufacturer should be_nil;
             model.deviceModel should be_nil;
@@ -45,13 +45,13 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should have a release_uuid", ^{
-            model.releaseUuid = TEST_RELEASE_UUID;
-            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.replicantId = TEST_REPLICANT_ID;
+            model.replicantId should equal(TEST_REPLICANT_ID);
         });
         
-        it(@"should have a secret", ^{
-            model.secret = TEST_SECRET;
-            model.secret should equal(TEST_SECRET);
+        it(@"should have a deviceUuid", ^{
+            model.deviceUuid = TEST_DEVICE_UUID;
+            model.deviceUuid should equal(TEST_DEVICE_UUID);
         });
         
         it(@"should have a device_alias", ^{
@@ -84,24 +84,24 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
         });
     });
-
+    
     context(@"serialization", ^{
         
         __block NSDictionary *dict = nil;
         
         beforeEach(^{
-            model = [[OmniaPushBackEndRegistrationRequestData alloc] init];
+            model = [[OmniaPushBackEndRegistrationResponseData alloc] init];
         });
         
         afterEach(^{
             dict = nil;
         });
-
+        
         context(@"populated object", ^{
             
             beforeEach(^{
-                model.releaseUuid = TEST_RELEASE_UUID;
-                model.secret = TEST_SECRET;
+                model.replicantId = TEST_REPLICANT_ID;
+                model.deviceUuid = TEST_DEVICE_UUID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
                 model.deviceModel = TEST_DEVICE_MODEL;
@@ -112,8 +112,8 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"release_uuid"] should equal(TEST_RELEASE_UUID);
-                dict[@"secret"] should equal(TEST_SECRET);
+                dict[@"replicant_id"] should equal(TEST_REPLICANT_ID);
+                dict[@"device_uuid"] should equal(TEST_DEVICE_UUID);
                 dict[@"device_alias"] should equal(TEST_DEVICE_ALIAS);
                 dict[@"device_manufacturer"] should equal(TEST_DEVICE_MANUFACTURER);
                 dict[@"device_model"] should equal(TEST_DEVICE_MODEL);
@@ -121,7 +121,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
                 dict[@"os_version"] should equal(TEST_OS_VERSION);
                 dict[@"registration_token"] should equal(TEST_REGISTRATION_TOKEN);
             });
-
+            
             it(@"should be dictionaryizable", ^{
                 dict = [model toDictionary];
             });
@@ -140,7 +140,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             afterEach(^{
                 dict should_not be_nil;
                 dict[@"release_uuid"] should be_nil;
-                dict[@"secret"] should be_nil;
+                dict[@"device_uuid"] should be_nil;
                 dict[@"device_alias"] should be_nil;
                 dict[@"device_manufacturer"] should be_nil;
                 dict[@"device_model"] should be_nil;
