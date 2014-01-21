@@ -65,8 +65,10 @@ static UIFont *labelFont = nil;
     }
     
     CGSize maxSize = CGSizeMake(containerSize.width - MESSAGE_LABEL_X - PADDING, MESSAGE_LABEL_MAX_HEIGHT);
-    CGSize measuredSize = [text sizeWithFont:labelFont constrainedToSize:maxSize lineBreakMode:NSLineBreakByWordWrapping];
-    return measuredSize.height + 1;
+    NSDictionary *attr = @{NSFontAttributeName:labelFont};
+    CGRect r = [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin attributes:attr context:nil];    
+    
+    return r.size.height + 1;
 }
 
 @end

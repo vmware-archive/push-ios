@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OmniaPushAppDelegateProxy : NSObject
+@interface OmniaPushAppDelegateProxy : NSObject<UIApplicationDelegate>
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;

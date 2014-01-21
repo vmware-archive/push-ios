@@ -10,6 +10,6 @@
 
 @protocol OmniaPushApplicationDelegateSwitcher <NSObject>
 
-- (void) switchApplicationDelegate:(id<UIApplicationDelegate>)applicationDelegate inApplication:(UIApplication*)application;
+- (void) switchApplicationDelegate:(NSObject<UIApplicationDelegate>*)applicationDelegate inApplication:(UIApplication*)application;
 
 @end
