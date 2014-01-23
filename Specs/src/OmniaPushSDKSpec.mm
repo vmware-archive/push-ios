@@ -6,6 +6,7 @@
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaFakeOperationQueue.h"
+#import "OmniaPushRegistrationParameters.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -18,13 +19,14 @@ describe(@"OmniaPushSDK", ^{
     
     __block OmniaPushSDK *sdk;
     __block OmniaSpecHelper *helper = nil;
-    __block UIRemoteNotificationType testNotificationTypes = UIRemoteNotificationTypeAlert;
     __block id<UIApplicationDelegate> previousAppDelegate;
+    __block UIRemoteNotificationType testNotificationTypes = TEST_NOTIFICATION_TYPES;
     
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
+        [helper setupParametersWithNotificationTypes:testNotificationTypes];
         [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
         [helper setupQueues];
         previousAppDelegate = helper.applicationDelegate;
@@ -37,6 +39,21 @@ describe(@"OmniaPushSDK", ^{
         helper = nil;
         sdk = nil;
     });
+    
+    describe(@"registration with bad arguments", ^{
+        
+        beforeEach(^{
+            [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
+            [helper setupApplicationDelegateForSuccessfulRegistration];
+            [helper setApplicationInSingleton];
+        });
+                   
+        it(@"should require a parameters object", ^{
+            ^{sdk = [OmniaPushSDK registerWithParameters:nil];}
+                should raise_exception([NSException class]);
+            sdk should be_nil;
+        });
+    });
 
     describe(@"successful registration", ^{
         
@@ -45,7 +62,7 @@ describe(@"OmniaPushSDK", ^{
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setApplicationInSingleton];
 
-            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:testNotificationTypes];
+            sdk = [OmniaPushSDK registerWithParameters:helper.params];
             sdk should_not be_nil;
             
             [helper.workerQueue drain];
@@ -59,7 +76,7 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
             [helper.storage loadDeviceToken] should equal(helper.deviceToken);
         });
-        
+
         it(@"should restore the application delegate after tearing down", ^{
             SEL teardownSelector = sel_registerName("teardown");
             [OmniaPushSDK performSelector:teardownSelector];
@@ -74,11 +91,11 @@ describe(@"OmniaPushSDK", ^{
 
         beforeEach(^{
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
-            [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationTypes error:testError];
+            [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
             [helper setApplicationInSingleton];
             
-            sdk = [OmniaPushSDK registerForRemoteNotificationTypes:testNotificationTypes];
+            sdk = [OmniaPushSDK registerWithParameters:helper.params];
             sdk should_not be_nil;
             
             [helper.workerQueue drain];

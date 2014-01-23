@@ -1,0 +1,3 @@
+#!/bin/bash
+cd Specs
+rake Specs CEDAR_REPORTER_CLASS=CDRColorizedReporter CEDAR_SYMBOLICATE_EXCEPTIONS=YES CEDAR_REPORTER_OPTS=nested

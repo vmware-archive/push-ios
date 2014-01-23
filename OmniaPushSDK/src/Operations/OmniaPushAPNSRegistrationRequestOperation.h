@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+@class OmniaPushRegistrationParameters;
+
 @interface OmniaPushAPNSRegistrationRequestOperation : NSOperation
 
-@property (nonatomic, readonly, assign) UIRemoteNotificationType notificationTypes;
+@property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readonly) UIApplication *application;
 
-- (instancetype) initForRegistrationForRemoteNotificationTypes:(UIRemoteNotificationType)types
-                                                   application:(UIApplication*)application;
+- (instancetype) initWithParameters:(OmniaPushRegistrationParameters*)parameters
+                        application:(UIApplication*)application;
 
 @end

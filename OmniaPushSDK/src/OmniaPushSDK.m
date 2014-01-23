@@ -30,28 +30,32 @@ static UIApplication *application = nil;
 
 @implementation OmniaPushSDK
 
-+ (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
++ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
 {
-    return [OmniaPushSDK registerForRemoteNotificationTypes:remoteNotificationTypes listener:nil];
+    return [OmniaPushSDK registerWithParameters:parameters listener:nil];
 }
 
 // NOTE:  the application delegate will still be called after registration completes, except if the
 // registration attempt times out.  The listener will be regardless if the registration succeeds, fails,
 // or times out.  The default time out interval is 60 seconds.
 
-+ (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
++ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
                                             listener:(id<OmniaPushRegistrationListener>)listener
 {
+    if (parameters == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
+    }
+    
     dispatch_once(&once_token, ^{
         if (sharedInstance == nil) {
-            sharedInstance = [[OmniaPushSDK alloc] initWithRemoteNotificationTypes:remoteNotificationTypes listener:listener];
+            sharedInstance = [[OmniaPushSDK alloc] initWithParameters:parameters listener:listener];
         }
     });
     return sharedInstance;
 }
 
-- (instancetype) initWithRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
-                                        listener:(id<OmniaPushRegistrationListener>)listener
+- (instancetype) initWithParameters:(OmniaPushRegistrationParameters*)parameters
+                           listener:(id<OmniaPushRegistrationListener>)listener
 {
     self = [super init];
     if (self) {
@@ -59,7 +63,7 @@ static UIApplication *application = nil;
         
         self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
         
-        [self.appDelegateProxy registerForRemoteNotificationTypes:remoteNotificationTypes]; // TODO - should be an operation
+        [self.appDelegateProxy registerWithParameters:parameters]; // TODO - should be an operation
         
         // TODO - start running the queue here if it's the real one
         // MAYBE - don't start running it here if it's the fake one since we want to drain it
@@ -89,9 +93,9 @@ static UIApplication *application = nil;
     if (sharedInstance) {
         [sharedInstance cleanupInstance];
         sharedInstance = nil;
-        once_token = 0;
-        application = nil;
     }
+    once_token = 0;
+    application = nil;
 }
 
 #pragma mark - Unit test helpers

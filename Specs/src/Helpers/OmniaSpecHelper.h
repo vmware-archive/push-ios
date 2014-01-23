@@ -16,6 +16,12 @@
 @class OmniaFakeOperationQueue;
 @class OmniaPushFakeApplicationDelegateSwitcher;
 @class OmniaPushPersistentStorage;
+@class OmniaPushRegistrationParameters;
+
+#define TEST_NOTIFICATION_TYPES               UIRemoteNotificationTypeAlert
+#define TEST_RELEASE_UUID                     @"444-555-666-777"
+#define TEST_RELEASE_SECRET                   @"No secret is as strong as its blabbiest keeper"
+#define TEST_DEVICE_ALIAS                     @"Let's watch cat videos"
 
 @interface OmniaSpecHelper : NSObject
 
@@ -27,6 +33,7 @@
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *deviceToken;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
+@property (nonatomic) OmniaPushRegistrationParameters *params;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -52,5 +59,8 @@
 
 // Operation Queue helpers
 - (OmniaFakeOperationQueue*) setupQueues;
+
+// Parameters helpers
+- (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 
 @end

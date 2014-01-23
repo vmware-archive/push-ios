@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OmniaPushErrors.h"
+#import "OmniaPushRegistrationParameters.h"
 
 @protocol OmniaPushRegistrationListener;
 
-#import "OmniaPushErrors.h"
-
 @interface OmniaPushSDK : NSObject
 
-+ (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes;
-+ (OmniaPushSDK*) registerForRemoteNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes listener:(id<OmniaPushRegistrationListener>)listener;
++ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters;
++ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters listener:(id<OmniaPushRegistrationListener>)listener;
 
 @end

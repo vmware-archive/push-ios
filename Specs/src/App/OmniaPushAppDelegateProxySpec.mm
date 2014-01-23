@@ -2,6 +2,7 @@
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
+#import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaSpecHelper.h"
@@ -14,12 +15,12 @@ SPEC_BEGIN(OmniaPushAppDelegateProxySpec)
 describe(@"OmniaPushAppDelegateProxy", ^{
     
     __block OmniaSpecHelper *helper = nil;
-    __block UIRemoteNotificationType testNotificationTypes = UIRemoteNotificationTypeAlert;
     
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
+        [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
     });
     
     afterEach(^{
@@ -100,11 +101,16 @@ describe(@"OmniaPushAppDelegateProxy", ^{
     
         context(@"when registering", ^{
             
+            it(@"should require parameters", ^{
+                ^{[helper.applicationDelegateProxy registerWithParameters:nil];}
+                    should raise_exception([NSException class]);
+            });
+            
             it(@"should have make a registration request with the same notification type", ^{
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
+                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
                 [helper setupApplicationDelegateForSuccessfulRegistration];
                 
-                [helper.applicationDelegateProxy registerForRemoteNotificationTypes:testNotificationTypes];
+                [helper.applicationDelegateProxy registerWithParameters:helper.params];
                 [helper.workerQueue drain];
                 
                 helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
@@ -116,10 +122,10 @@ describe(@"OmniaPushAppDelegateProxy", ^{
             });
             
             it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationTypes error:testError];
+                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
                 [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
                 
-                [helper.applicationDelegateProxy registerForRemoteNotificationTypes:testNotificationTypes];
+                [helper.applicationDelegateProxy registerWithParameters:helper.params];
                 [helper.workerQueue drain];
                 
                 helper.application should have_received(@selector(registerForRemoteNotificationTypes:));

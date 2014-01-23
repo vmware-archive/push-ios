@@ -16,6 +16,7 @@
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushFakeApplicationDelegateSwitcher.h"
 #import "OmniaPushPersistentStorage.h"
+#import "OmniaPushRegistrationParameters.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -45,6 +46,7 @@ using namespace Cedar::Doubles;
 
 - (void) reset
 {
+    self.params = nil;
     self.workerQueue = nil;
     [OmniaPushOperationQueueProvider setWorkerQueue:nil];
     self.deviceToken = nil;
@@ -119,7 +121,7 @@ using namespace Cedar::Doubles;
 
 - (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
-    self.registrationRequestOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:notificationTypes application:self.application];
+    self.registrationRequestOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:self.params application:self.application];
     return self.registrationRequestOperation;
 }
 
@@ -148,5 +150,13 @@ using namespace Cedar::Doubles;
 }
 
 // TODO - need a method to drain operation queue
+
+#pragma mark - Parameters helpers
+
+- (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+{
+    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:notificationTypes releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
+    return self.params;
+}
 
 @end

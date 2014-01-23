@@ -10,29 +10,37 @@ SPEC_BEGIN(OmniaPushAPNSRegistrationRequestOperationSpec)
 describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     
     __block OmniaPushAPNSRegistrationRequestOperation *operation;
-    __block UIRemoteNotificationType testNotificationType = UIRemoteNotificationTypeBadge;
+    __block OmniaSpecHelper *helper;
+
+    beforeEach(^{
+        helper = [[OmniaSpecHelper alloc] init];
+        [helper setupApplication];
+        [helper setupApplicationDelegate];
+        [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+    });
     
+    afterEach(^{
+        [helper reset];
+        helper = nil;
+    });
+
     context(@"contructing with invalid arguments", ^{
+        
+        it(@"should require parameters", ^{
+            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:nil application:helper.application];}
+            should raise_exception([NSException class]);
+        });
+
         it(@"should require an application", ^{
-            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:testNotificationType application:nil];}
+            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:helper.params application:nil];}
                 should raise_exception([NSException class]);
         });
     });
     
     context(@"constructing with valid arguments", ^{
         
-        __block OmniaSpecHelper *helper;
-        
         beforeEach(^{
-            helper = [[OmniaSpecHelper alloc] init];
-            [helper setupApplication];
-            [helper setupApplicationDelegate];
-            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:testNotificationType application:helper.application];
-        });
-        
-        afterEach(^{
-            [helper reset];
-            helper = nil;
+            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:helper.params application:helper.application];
         });
         
         it(@"should produce a valid instance", ^{
@@ -52,7 +60,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             });
             
             it(@"should be able to register successfully", ^{
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationType];
+                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
                 [helper setupApplicationDelegateForSuccessfulRegistration];
                 [helper.workerQueue addOperation:operation];
                 [helper.workerQueue drain];
@@ -62,7 +70,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             });
             
             it(@"should be able to register successfully", ^{
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:testNotificationType error:testError];
+                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
                 [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
                 [helper.workerQueue addOperation:operation];
                 [helper.workerQueue drain];

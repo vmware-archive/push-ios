@@ -12,6 +12,10 @@
 #import "LogItem.h"
 #import "LogItemCell.h"
 
+#define RELEASE_UUID    @"INSERT-UUID-HERE"
+#define RELEASE_SECRET  @"INSERT-RELEASE-SECRET-HERE"
+#define DEVICE_ALIAS    @"INSERT-DEVICE-ALIAS-HERE"
+
 @interface LogTableViewController ()
 
 @property (nonatomic) NSMutableArray *logItems;
@@ -53,7 +57,8 @@
 
 - (void) initializeSDK {
     [self addLogItem:@"Initializing library." timestamp:[NSDate date]];
-    [OmniaPushSDK registerForRemoteNotificationTypes:UIRemoteNotificationTypeBadge];
+    OmniaPushRegistrationParameters *parameters = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge releaseUuid:RELEASE_UUID releaseSecret:RELEASE_SECRET deviceAlias:DEVICE_ALIAS];
+    [OmniaPushSDK registerWithParameters:parameters];
 }
 
 - (void)didReceiveMemoryWarning

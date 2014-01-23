@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@class OmniaPushRegistrationParameters;
+
 @interface OmniaPushAppDelegateProxy : NSObject<UIApplicationDelegate>
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+- (void) registerWithParameters:(OmniaPushRegistrationParameters*)parameters;
 - (void) cleanup;
 
 @end

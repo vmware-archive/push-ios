@@ -15,6 +15,7 @@
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushPersistentStorage.h"
+#import "OmniaPushRegistrationParameters.h"
 
 @interface OmniaPushAppDelegateProxy ()
 
@@ -66,9 +67,12 @@
     return [OmniaPushApplicationDelegateSwitcherProvider switcher];
 }
 
-- (void) registerForRemoteNotificationTypes:(UIRemoteNotificationType)types
+- (void) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
 {
-    OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initForRegistrationForRemoteNotificationTypes:types application:self.application];
+    if (parameters == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
+    }
+    OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:parameters application:self.application];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 
