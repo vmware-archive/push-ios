@@ -31,7 +31,6 @@ describe(@"OmniaPushPersistentStorage", ^{
         [storage reset];
         [storage loadDeviceToken] should be_nil;
     });
-
 });
 
 SPEC_END

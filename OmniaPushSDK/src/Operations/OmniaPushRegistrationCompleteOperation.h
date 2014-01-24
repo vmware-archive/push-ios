@@ -12,6 +12,10 @@
 
 @interface OmniaPushRegistrationCompleteOperation : NSOperation
 
+@property (nonatomic, readonly) UIApplication *application;
+@property (nonatomic, weak, readonly) id<UIApplicationDelegate> applicationDelegate;
+@property (nonatomic, readonly) NSData *deviceToken;
+
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
                          deviceToken:(NSData*)deviceToken;

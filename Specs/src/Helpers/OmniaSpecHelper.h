@@ -17,6 +17,7 @@
 @class OmniaPushFakeApplicationDelegateSwitcher;
 @class OmniaPushPersistentStorage;
 @class OmniaPushRegistrationParameters;
+@class OmniaPushRegistrationEngine;
 
 #define TEST_NOTIFICATION_TYPES               UIRemoteNotificationTypeAlert
 #define TEST_RELEASE_UUID                     @"444-555-666-777"
@@ -34,6 +35,7 @@
 @property (nonatomic) NSData *deviceToken;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
+@property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -62,5 +64,8 @@
 
 // Parameters helpers
 - (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+
+// Registration Engine helpers
+- (OmniaPushRegistrationEngine*) setupRegistrationEngine;
 
 @end

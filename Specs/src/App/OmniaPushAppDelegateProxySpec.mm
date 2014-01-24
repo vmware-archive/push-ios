@@ -15,15 +15,20 @@ SPEC_BEGIN(OmniaPushAppDelegateProxySpec)
 describe(@"OmniaPushAppDelegateProxy", ^{
     
     __block OmniaSpecHelper *helper = nil;
-    
+    __block id<UIApplicationDelegate> originalApplicationDelegate = nil;
+
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+        [helper setupRegistrationEngine];
+        UIApplication *app = (UIApplication*) helper.application;
+        originalApplicationDelegate = app.delegate;
     });
     
     afterEach(^{
+        originalApplicationDelegate = nil;
         [helper reset];
         helper = nil;
     });
@@ -35,24 +40,26 @@ describe(@"OmniaPushAppDelegateProxy", ^{
         });
         
         it(@"should require an application", ^{
-            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate];}
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate registrationEngine:helper.registrationEngine];}
             should raise_exception([NSException class]);
         });
         
         it(@"should require an application delegate", ^{
-            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:nil];}
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:nil registrationEngine:helper.registrationEngine];}
                 should raise_exception([NSException class]);
+        });
+        
+        it(@"should require a registration engine", ^{
+            ^{helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationEngine:nil];}
+            should raise_exception([NSException class]);
         });
     });
     
     context(@"switching application delegates", ^{
         
-        __block id<UIApplicationDelegate> originalApplicationDelegate = nil;
         
         beforeEach(^{
-            UIApplication *app = (UIApplication*) helper.application;
-            originalApplicationDelegate = app.delegate;
-            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationEngine:helper.registrationEngine];
         });
         
         afterEach(^{
@@ -78,7 +85,7 @@ describe(@"OmniaPushAppDelegateProxy", ^{
         beforeEach(^{
             [helper setupQueues];
             testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
-            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
+            helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationEngine:helper.registrationEngine];
         });
         
         afterEach(^{
@@ -88,6 +95,12 @@ describe(@"OmniaPushAppDelegateProxy", ^{
         
         it(@"should be constructed successfully", ^{
             helper.applicationDelegateProxy should_not be_nil;
+        });
+        
+        it(@"should retain its arguments as properties", ^{
+            helper.applicationDelegateProxy.application should be_same_instance_as(helper.application);
+            helper.applicationDelegateProxy.originalApplicationDelegate should be_same_instance_as(originalApplicationDelegate);
+            helper.applicationDelegateProxy.registrationEngine should be_same_instance_as(helper.registrationEngine);
         });
         
         it(@"should forward messages to the original application delegate", ^{

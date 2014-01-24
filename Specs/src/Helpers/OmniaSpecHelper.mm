@@ -17,6 +17,7 @@
 #import "OmniaPushFakeApplicationDelegateSwitcher.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
+#import "OmniaPushRegistrationEngine.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -46,6 +47,7 @@ using namespace Cedar::Doubles;
 
 - (void) reset
 {
+    self.registrationEngine = nil;
     self.params = nil;
     self.workerQueue = nil;
     [OmniaPushOperationQueueProvider setWorkerQueue:nil];
@@ -157,6 +159,14 @@ using namespace Cedar::Doubles;
 {
     self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:notificationTypes releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
     return self.params;
+}
+
+#pragma mark - Registration Engine helpers
+
+- (OmniaPushRegistrationEngine*) setupRegistrationEngine
+{
+    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application];
+    return self.registrationEngine;
 }
 
 @end

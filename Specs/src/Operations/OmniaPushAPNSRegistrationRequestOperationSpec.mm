@@ -47,6 +47,11 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             operation should_not be_nil;
         });
         
+        it(@"should retain its arguments as properties", ^{
+            operation.parameters should be_same_instance_as(helper.params);
+            operation.application should be_same_instance_as(helper.application);
+        });
+        
         context(@"registration", ^{
             
             __block NSError *testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];

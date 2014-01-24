@@ -49,6 +49,13 @@ describe(@"OmniaPushRegistrationParameters", ^{
         it(@"should be initialized successfully", ^{
             model should_not be_nil;
         });
+        
+        it(@"should retain its arguments as properties", ^{
+            model.remoteNotificationTypes should equal(TEST_NOTIFICATION_TYPES);
+            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.releaseSecret should equal(TEST_RELEASE_SECRET);
+            model.deviceAlias should equal(TEST_DEVICE_ALIAS);
+        });
     });
 });
 

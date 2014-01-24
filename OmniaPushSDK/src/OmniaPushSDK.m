@@ -12,6 +12,7 @@
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
+#import "OmniaPushRegistrationEngine.h"
 
 // Global constant storage
 NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
@@ -61,7 +62,9 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
+        OmniaPushRegistrationEngine *engine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application];
+        
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationEngine:engine];
         
         [self.appDelegateProxy registerWithParameters:parameters]; // TODO - should be an operation
         

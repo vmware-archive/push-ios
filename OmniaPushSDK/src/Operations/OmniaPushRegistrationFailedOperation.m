@@ -12,9 +12,9 @@
 
 @interface OmniaPushRegistrationFailedOperation ()
 
-@property (nonatomic) UIApplication *application;
-@property (nonatomic, weak) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic) NSError *error;
+@property (nonatomic, readwrite) UIApplication *application;
+@property (nonatomic, weak, readwrite) id<UIApplicationDelegate> applicationDelegate;
+@property (nonatomic, readwrite) NSError *error;
 
 @end
 

@@ -9,11 +9,18 @@
 #import <UIKit/UIKit.h>
 
 @class OmniaPushRegistrationParameters;
+@class OmniaPushRegistrationEngine;
 
 @interface OmniaPushAppDelegateProxy : NSObject<UIApplicationDelegate>
 
+@property (nonatomic, readonly) UIApplication *application;
+@property (nonatomic, readonly) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readonly) OmniaPushRegistrationEngine *registrationEngine;
+
 - (instancetype) initWithApplication:(UIApplication*)application
-         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;
+         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
+                  registrationEngine:(OmniaPushRegistrationEngine*)registrationEngine;
+
 - (void) registerWithParameters:(OmniaPushRegistrationParameters*)parameters;
 - (void) cleanup;
 

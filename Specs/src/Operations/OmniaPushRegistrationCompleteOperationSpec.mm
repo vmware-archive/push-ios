@@ -58,6 +58,12 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
             operation should_not be_nil;
         });
         
+        it(@"should retain its arguments as properties", ^{
+            operation.deviceToken should be_same_instance_as(helper.deviceToken);
+            operation.application should be_same_instance_as(helper.application);
+            operation.applicationDelegate should be_same_instance_as(helper.applicationDelegate);
+        });
+        
         it(@"should run correctly on the queue", ^{
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper.workerQueue addOperation:operation];

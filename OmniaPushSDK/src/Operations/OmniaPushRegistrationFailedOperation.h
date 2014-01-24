@@ -12,6 +12,10 @@
 
 @interface OmniaPushRegistrationFailedOperation : NSOperation
 
+@property (nonatomic, readonly) UIApplication *application;
+@property (nonatomic, weak, readonly) id<UIApplicationDelegate> applicationDelegate;
+@property (nonatomic, readonly) NSError *error;
+
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
                                error:(NSError*)error;

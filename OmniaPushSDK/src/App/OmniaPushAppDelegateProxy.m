@@ -19,8 +19,9 @@
 
 @interface OmniaPushAppDelegateProxy ()
 
-@property (nonatomic) UIApplication *application;
-@property (nonatomic) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readwrite) UIApplication *application;
+@property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readwrite) OmniaPushRegistrationEngine *registrationEngine;
 
 @end
 
@@ -28,16 +29,22 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
+                  registrationEngine:(OmniaPushRegistrationEngine*)registrationEngine
 {
-    if (self = [super init]) {
+    self = [super init];
+    if (self) {
         if (application == nil) {
             [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
         }
         if (originalApplicationDelegate == nil) {
             [NSException raise:NSInvalidArgumentException format:@"originalApplicationDelegate may not be nil"];
         }
+        if (registrationEngine == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"registrationEngine may not be nil"];
+        }
         self.application = application;
         self.originalApplicationDelegate = originalApplicationDelegate;
+        self.registrationEngine = registrationEngine;
         [self replaceApplicationDelegate];
     }
     return self;

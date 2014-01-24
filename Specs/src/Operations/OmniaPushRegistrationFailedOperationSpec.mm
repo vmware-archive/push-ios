@@ -61,6 +61,12 @@ describe(@"OmniaPushRegistrationFailedOperation", ^{
             operation should_not be_nil;
         });
         
+        it(@"should retain its arguments as properties", ^{
+            operation.application should be_same_instance_as(helper.application);
+            operation.applicationDelegate should be_same_instance_as(helper.applicationDelegate);
+            operation.error should be_same_instance_as(testError);
+        });
+        
         it(@"should run correctly on the queue", ^{
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
             [helper.workerQueue addOperation:operation];
