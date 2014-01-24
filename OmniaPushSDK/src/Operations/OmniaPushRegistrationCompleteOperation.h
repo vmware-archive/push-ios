@@ -14,10 +14,10 @@
 
 @property (nonatomic, readonly) UIApplication *application;
 @property (nonatomic, weak, readonly) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic, readonly) NSData *deviceToken;
+@property (nonatomic, readonly) NSData *apnsDeviceToken;
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                         deviceToken:(NSData*)deviceToken;
+                     apnsDeviceToken:(NSData*)apnsDeviceToken;
 
 @end

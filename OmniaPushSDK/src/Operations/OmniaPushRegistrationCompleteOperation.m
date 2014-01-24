@@ -14,7 +14,7 @@
 
 @property (nonatomic, readwrite) UIApplication *application;
 @property (nonatomic, weak, readwrite) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic, readwrite) NSData *deviceToken;
+@property (nonatomic, readwrite) NSData *apnsDeviceToken;
 
 @end
 
@@ -22,7 +22,7 @@
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                         deviceToken:(NSData*)deviceToken
+                     apnsDeviceToken:(NSData*)apnsDeviceToken
 {
     self = [super init];
     if (self) {
@@ -32,12 +32,12 @@
         if (applicationDelegate == nil) {
             [NSException raise:NSInvalidArgumentException format:@"applicationDelegate may not be nil"];
         }
-        if (deviceToken == nil) {
-            [NSException raise:NSInvalidArgumentException format:@"deviceToken may not be nil"];
+        if (apnsDeviceToken == nil) {
+            [NSException raise:NSInvalidArgumentException format:@"apnsDeviceToken may not be nil"];
         }
         self.application = application;
         self.applicationDelegate = applicationDelegate;
-        self.deviceToken = deviceToken;
+        self.apnsDeviceToken = apnsDeviceToken;
     }
     return self;
 }
@@ -46,14 +46,11 @@
 {
     @autoreleasepool {
         
-        OmniaPushLog(@"Registration with APNS successful. Device token is %@.", self.deviceToken);
+        OmniaPushLog(@"Registration with APNS successful. Device token is %@.", self.apnsDeviceToken);
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
-            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
+            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];
         }];
-
-        // TODO - save the registration somehow.
-        // TODO - send device token to back end
     }
 }
 

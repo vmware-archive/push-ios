@@ -21,7 +21,6 @@
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
                   registrationEngine:(OmniaPushRegistrationEngine*)registrationEngine;
 
-- (void) registerWithParameters:(OmniaPushRegistrationParameters*)parameters;
 - (void) cleanup;
 
 @end

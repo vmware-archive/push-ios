@@ -7,15 +7,11 @@
 //
 
 #import "OmniaPushAppDelegateProxy.h"
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushDebug.h"
-#import "OmniaPushOperationQueueProvider.h"
-#import "OmniaPushRegistrationCompleteOperation.h"
-#import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
-#import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
+#import "OmniaPushRegistrationEngine.h"
 
 @interface OmniaPushAppDelegateProxy ()
 
@@ -74,34 +70,20 @@
     return [OmniaPushApplicationDelegateSwitcherProvider switcher];
 }
 
-- (void) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
-{
-    if (parameters == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
-    }
-    OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:parameters application:self.application];
-    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
-}
-
 - (void)application:(UIApplication*)app
     didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)devToken
 {
-    [self saveDeviceToken:devToken];
-    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate deviceToken:devToken];
-    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
-}
-
-- (void) saveDeviceToken:(NSData*)deviceToken
-{
-    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
-    [storage saveDeviceToken:deviceToken];
+    if (self.registrationEngine) {
+        [self.registrationEngine apnsRegistrationSucceeded:devToken];
+    }
 }
 
 - (void)application:(UIApplication *)app
     didFailToRegisterForRemoteNotificationsWithError:(NSError*)err
 {
-    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:app applicationDelegate:self.originalApplicationDelegate error:err];
-    [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
+    if (self.registrationEngine) {
+        [self.registrationEngine apnsRegistrationFailed:err];
+    }
 }
 
 - (NSMethodSignature*) methodSignatureForSelector:(SEL)sel

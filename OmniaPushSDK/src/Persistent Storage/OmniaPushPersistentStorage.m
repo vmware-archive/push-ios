@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Omnia. All rights reserved.
 //
 
-#define KEY_DEVICE_TOKEN @"DEVICE_TOKEN"
+#define KEY_APNS_DEVICE_TOKEN @"OMNIA_PUSH_APNS_DEVICE_TOKEN"
 
 #import "OmniaPushPersistentStorage.h"
 
@@ -14,17 +14,17 @@
 
 - (void) reset
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_DEVICE_TOKEN];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-- (void) saveDeviceToken:(NSData*)deviceToken
+- (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken
 {
-    [[NSUserDefaults standardUserDefaults] setObject:deviceToken forKey:KEY_DEVICE_TOKEN];
+    [[NSUserDefaults standardUserDefaults] setObject:apnsDeviceToken forKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-- (NSData*) loadDeviceToken
+- (NSData*) loadAPNSDeviceToken
 {
-    return [[NSUserDefaults standardUserDefaults] dataForKey:KEY_DEVICE_TOKEN];
+    return [[NSUserDefaults standardUserDefaults] dataForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
 @end

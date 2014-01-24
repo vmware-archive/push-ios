@@ -26,17 +26,17 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
     context(@"when init has invalid arguments", ^{
         
         it(@"should require an application", ^{
-            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:nil applicationDelegate:helper.applicationDelegate deviceToken:helper.deviceToken];}
+            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:nil applicationDelegate:helper.applicationDelegate apnsDeviceToken:helper.apnsDeviceToken];}
             should raise_exception([NSException class]);
         });
         
         it(@"should require an application delegate", ^{
-            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:nil deviceToken:helper.deviceToken];}
+            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:nil apnsDeviceToken:helper.apnsDeviceToken];}
             should raise_exception([NSException class]);
         });
         
         it(@"should require a device token", ^{
-            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate deviceToken:nil];}
+            ^{operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate apnsDeviceToken:nil];}
             should raise_exception([NSException class]);
         });
     });
@@ -45,7 +45,7 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
         
         beforeEach(^{
             [helper setupQueues];
-            operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate deviceToken:helper.deviceToken];
+            operation = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:helper.application applicationDelegate:helper.applicationDelegate apnsDeviceToken:helper.apnsDeviceToken];
         });
         
         afterEach(^{
@@ -59,7 +59,7 @@ describe(@"OmniaPushRegistrationCompleteOperation", ^{
         });
         
         it(@"should retain its arguments as properties", ^{
-            operation.deviceToken should be_same_instance_as(helper.deviceToken);
+            operation.apnsDeviceToken should equal(helper.apnsDeviceToken);
             operation.application should be_same_instance_as(helper.application);
             operation.applicationDelegate should be_same_instance_as(helper.applicationDelegate);
         });

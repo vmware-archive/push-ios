@@ -57,7 +57,6 @@ describe(@"OmniaPushAppDelegateProxy", ^{
     
     context(@"switching application delegates", ^{
         
-        
         beforeEach(^{
             helper.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate registrationEngine:helper.registrationEngine];
         });
@@ -110,44 +109,6 @@ describe(@"OmniaPushAppDelegateProxy", ^{
             });
             [helper.applicationDelegateProxy performSelector:@selector(applicationDidReceiveMemoryWarning:) withObject:helper.application];
             didCallSelector should be_truthy;
-        });
-    
-        context(@"when registering", ^{
-            
-            it(@"should require parameters", ^{
-                ^{[helper.applicationDelegateProxy registerWithParameters:nil];}
-                    should raise_exception([NSException class]);
-            });
-            
-            it(@"should have make a registration request with the same notification type", ^{
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                [helper setupApplicationDelegateForSuccessfulRegistration];
-                
-                [helper.applicationDelegateProxy registerWithParameters:helper.params];
-                [helper.workerQueue drain];
-                
-                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
-                [helper.storage loadDeviceToken] should equal(helper.deviceToken);
-            });
-            
-            it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-                [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                
-                [helper.applicationDelegateProxy registerWithParameters:helper.params];
-                [helper.workerQueue drain];
-                
-                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-                [helper.storage loadDeviceToken] should be_nil;
-            });
         });
     });
 });

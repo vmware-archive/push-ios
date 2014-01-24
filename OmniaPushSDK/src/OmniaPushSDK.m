@@ -26,6 +26,7 @@ static UIApplication *application = nil;
 
 @property (nonatomic, strong) id<UIApplicationDelegate> originalApplicationDelegate;
 @property (nonatomic, strong) OmniaPushAppDelegateProxy *appDelegateProxy;
+@property (nonatomic, strong) OmniaPushRegistrationEngine *registrationEngine;
 
 @end
 
@@ -62,11 +63,11 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         
-        OmniaPushRegistrationEngine *engine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application];
+        self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
         
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationEngine:engine];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationEngine:self.registrationEngine];
         
-        [self.appDelegateProxy registerWithParameters:parameters]; // TODO - should be an operation
+        [self.registrationEngine startRegistration:parameters];
         
         // TODO - start running the queue here if it's the real one
         // MAYBE - don't start running it here if it's the fake one since we want to drain it
@@ -87,6 +88,7 @@ static UIApplication *application = nil;
         }
         self.appDelegateProxy = nil;
         self.originalApplicationDelegate = nil;
+        self.registrationEngine = nil;
     }
 }
 

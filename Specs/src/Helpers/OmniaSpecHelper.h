@@ -32,7 +32,7 @@
 @property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
 @property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
-@property (nonatomic) NSData *deviceToken;
+@property (nonatomic) NSData *apnsDeviceToken;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
 @property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;
@@ -55,6 +55,9 @@
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
+
+// Application Delegate Proxy helpers
+- (OmniaPushAppDelegateProxy*) setupAppDelegateProxy;
 
 // Registration Request Operation helpers
 - (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;

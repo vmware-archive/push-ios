@@ -74,7 +74,7 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
-            [helper.storage loadDeviceToken] should equal(helper.deviceToken);
+            [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
         });
 
         it(@"should restore the application delegate after tearing down", ^{
@@ -111,7 +111,7 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-            [helper.storage loadDeviceToken] should be_nil;
+            [helper.storage loadAPNSDeviceToken] should be_nil;
         });
         
         it(@"should restore the application delegate after tearing down", ^{

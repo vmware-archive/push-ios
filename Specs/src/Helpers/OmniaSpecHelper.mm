@@ -37,7 +37,7 @@ using namespace Cedar::Doubles;
 {
     self = [super init];
     if (self) {
-        self.deviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
+        self.apnsDeviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
         self.application = [UIApplication sharedApplication];
         self.storage = [[OmniaPushPersistentStorage alloc] init];
         [self.storage reset];
@@ -51,7 +51,7 @@ using namespace Cedar::Doubles;
     self.params = nil;
     self.workerQueue = nil;
     [OmniaPushOperationQueueProvider setWorkerQueue:nil];
-    self.deviceToken = nil;
+    self.apnsDeviceToken = nil;
     self.application = nil;
     self.applicationDelegate = nil;
     self.registrationRequestOperation = nil;
@@ -75,7 +75,7 @@ using namespace Cedar::Doubles;
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
     self.application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
-        [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.deviceToken];
+        [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];
     });
 }
 
@@ -111,12 +111,20 @@ using namespace Cedar::Doubles;
 
 - (void) setupApplicationDelegateForSuccessfulRegistration
 {
-    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, self.deviceToken);
+    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, self.apnsDeviceToken);
 }
 
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error
 {
     self.applicationDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(self.application, error);
+}
+
+#pragma mark - Application Delegate Proxy helpers
+
+- (OmniaPushAppDelegateProxy*) setupAppDelegateProxy
+{
+    self.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate registrationEngine:self.registrationEngine];
+    return self.applicationDelegateProxy;
 }
 
 #pragma mark - Registration Request helpers
@@ -165,7 +173,7 @@ using namespace Cedar::Doubles;
 
 - (OmniaPushRegistrationEngine*) setupRegistrationEngine
 {
-    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application];
+    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate];
     return self.registrationEngine;
 }
 
