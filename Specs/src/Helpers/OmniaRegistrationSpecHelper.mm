@@ -10,6 +10,7 @@
 #import "OmniaPushRegistrationEngine.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
+#import "OmniaFakeOperationQueue.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -32,6 +33,8 @@ using namespace Cedar::Doubles;
 
 @implementation OmniaRegistrationSpecHelper
 
+#pragma mark - Helper lifecycle
+
 - (instancetype) initWithSpecHelper:(OmniaSpecHelper*)helper
 {
     self = [super init];
@@ -43,6 +46,8 @@ using namespace Cedar::Doubles;
 
 - (void) setup
 {
+    self.applicationMessages = [NSMutableArray array];
+    self.applicationDelegateMessages = [NSMutableArray array];
     [self.helper setupApplication];
     [self.helper setupApplicationDelegate];
     [self.helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
@@ -55,6 +60,35 @@ using namespace Cedar::Doubles;
         self.helper = nil;
     }
 }
+
+#pragma mark - Test setup helpers
+
+- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+{
+    [self.applicationMessages addObject:@"registerForRemoteNotificationTypes:"];
+    [self.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+    [self.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+    [self.helper setupApplicationDelegateForSuccessfulRegistration];
+}
+
+- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+                                                              error:(NSError *)error
+{
+    [self.applicationMessages addObject:@"registerForRemoteNotificationTypes:"];
+    [self.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
+    [self.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:error];
+    [self.helper setupApplicationDelegateForFailedRegistrationWithError:error];
+}
+
+#pragma mark - Test running helpers
+
+- (void) startRegistration
+{
+    [self.helper.registrationEngine startRegistration:self.helper.params];
+    [self.helper.workerQueue drain];
+}
+
+#pragma mark - Verification helpers
 
 - (void) verifyDidStartRegistration:(RegistrationStateResult)stateDidStartRegistration
            didStartAPNSRegistration:(RegistrationStateResult)stateDidStartAPNSRegistration
@@ -84,6 +118,27 @@ using namespace Cedar::Doubles;
     verifyValue(self.helper.registrationEngine.apnsDeviceToken, resultApnsDeviceToken);
     verifyValue(self.helper.registrationEngine.apnsRegistrationError, resultApnsRegistrationError);
     verifyValue([self.helper.storage loadAPNSDeviceToken], resultApnsDeviceToken);
+}
+
+- (void) verifyQueueCompletedOperations:(NSArray*)completedOperations
+                 notCompletedOperations:(NSArray*)notCompletedOperations;
+{
+    for (Class classOfOperation : completedOperations) {
+        [self.helper.workerQueue didFinishOperation:classOfOperation] should be_truthy;
+    }
+    for (Class classOfOperation : notCompletedOperations) {
+        [self.helper.workerQueue didFinishOperation:classOfOperation] should_not be_truthy;
+    }
+}
+
+- (void) verifyMessages
+{
+    for (NSString *message in self.applicationMessages) {
+        self.helper.application should have_received([message cStringUsingEncoding:NSUTF8StringEncoding]);
+    }
+    for (NSString *message in self.applicationDelegateMessages) {
+        self.helper.applicationDelegate should have_received([message cStringUsingEncoding:NSUTF8StringEncoding]);
+    }
 }
 
 @end

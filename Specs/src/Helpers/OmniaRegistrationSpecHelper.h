@@ -19,11 +19,26 @@ typedef enum RegistrationStateResult : NSUInteger {
 @interface OmniaRegistrationSpecHelper : NSObject
 
 @property (nonatomic) OmniaSpecHelper* helper;
+@property (nonatomic) NSMutableArray* applicationMessages;
+@property (nonatomic) NSMutableArray* applicationDelegateMessages;
+
+// Helper lifecycle
 
 - (instancetype) initWithSpecHelper:(OmniaSpecHelper*)helper;
-
 - (void) setup;
 - (void) reset;
+
+// Test setup helpers
+
+- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+                                                              error:(NSError *)error;
+
+// Test running helpers
+
+- (void) startRegistration;
+
+// Verification helpers
 
 - (void) verifyDidStartRegistration:(RegistrationStateResult)didStartRegistration
            didStartAPNSRegistration:(RegistrationStateResult)didStartAPNSRegistration
@@ -38,5 +53,10 @@ typedef enum RegistrationStateResult : NSUInteger {
                 didRegistrationFail:(RegistrationStateResult)didRegistrationFail
               resultAPNSDeviceToken:(NSData*)resultApnsDeviceToken
         resultAPNSRegistrationError:(NSError*)resultApnsRegistrationError;
+
+- (void) verifyQueueCompletedOperations:(NSArray*)completedOperations
+                 notCompletedOperations:(NSArray*)notCompletedOperations;
+
+- (void) verifyMessages;
 
 @end

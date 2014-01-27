@@ -90,17 +90,15 @@ describe(@"OmniaPushRegistrationEngine", ^{
             });
             
             it(@"should have make a registration request with the same notification type", ^{
-                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                [helper.helper setupApplicationDelegateForSuccessfulRegistration];
+                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
                 
-                [helper.helper.registrationEngine startRegistration:helper.helper.params];
-                [helper.helper.workerQueue drain];
+                [helper startRegistration];
                 
-                helper.helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+                [helper verifyMessages];
+
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
                 [helper verifyDidStartRegistration:BE_TRUE
                           didStartAPNSRegistration:BE_TRUE
                          didFinishAPNSRegistration:BE_TRUE
@@ -117,18 +115,15 @@ describe(@"OmniaPushRegistrationEngine", ^{
             });
             
             it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-                [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+
+                [helper startRegistration];
+
+                [helper verifyMessages];
                 
-                [helper.helper.registrationEngine startRegistration:helper.helper.params];
-                [helper.helper.workerQueue drain];
-                
-                helper.helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
-                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
+
                 [helper verifyDidStartRegistration:BE_TRUE
                           didStartAPNSRegistration:BE_TRUE
                          didFinishAPNSRegistration:BE_TRUE
