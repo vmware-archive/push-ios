@@ -30,9 +30,8 @@ typedef enum RegistrationStateResult : NSUInteger {
 
 // Test setup helpers
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                              error:(NSError *)error;
+- (void) setupBackEndForSuccessfulRegistration;
+- (void) setupBackEndForFailedRegistrationWithError:(NSError*)error;
 
 // Test running helpers
 
@@ -49,14 +48,18 @@ typedef enum RegistrationStateResult : NSUInteger {
      didFinishBackendUnregistration:(RegistrationStateResult)didFinishBackendUnregistration
         didStartBackendRegistration:(RegistrationStateResult)didStartBackendRegistration
        didFinishBackendRegistration:(RegistrationStateResult)didFinishBackendRegistration
+      didBackendRegistrationSucceed:(RegistrationStateResult)didBackendRegistrationSucceed
+         didBackendRegistrationFail:(RegistrationStateResult)didBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)didRegistrationSucceed
                 didRegistrationFail:(RegistrationStateResult)didRegistrationFail
               resultAPNSDeviceToken:(NSData*)resultApnsDeviceToken
-        resultAPNSRegistrationError:(NSError*)resultApnsRegistrationError;
+                        resultError:(NSError*)resultError;
 
 - (void) verifyQueueCompletedOperations:(NSArray*)completedOperations
                  notCompletedOperations:(NSArray*)notCompletedOperations;
 
 - (void) verifyMessages;
+
+- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken;
 
 @end

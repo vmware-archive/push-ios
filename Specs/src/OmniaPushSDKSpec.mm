@@ -7,6 +7,7 @@
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
+#import "OmniaRegistrationSpecHelper.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -19,11 +20,13 @@ describe(@"OmniaPushSDK", ^{
     
     __block OmniaPushSDK *sdk;
     __block OmniaSpecHelper *helper = nil;
+    __block OmniaRegistrationSpecHelper *registrationHelper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
     __block UIRemoteNotificationType testNotificationTypes = TEST_NOTIFICATION_TYPES;
     
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
+        registrationHelper = [[OmniaRegistrationSpecHelper alloc] initWithSpecHelper:nil];
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:testNotificationTypes];
@@ -61,6 +64,7 @@ describe(@"OmniaPushSDK", ^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setApplicationInSingleton];
+            [registrationHelper setupBackEndForSuccessfulRegistration];
 
             sdk = [OmniaPushSDK registerWithParameters:helper.params];
             sdk should_not be_nil;

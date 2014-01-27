@@ -13,6 +13,8 @@
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushPersistentStorage.h"
+#import "OmniaPushBackEndRegistrationRequest.h"
+#import "OmniaPushBackEndRegistrationRequestProvider.h"
 
 /*
  
@@ -56,7 +58,7 @@ YES |  \
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readwrite) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readwrite) NSData *apnsDeviceToken;
-@property (nonatomic, readwrite) NSError *apnsRegistrationError;
+@property (nonatomic, readwrite) NSError *error;
 @property (nonatomic, readwrite) BOOL didStartRegistration;
 @property (nonatomic, readwrite) BOOL didStartAPNSRegistration;
 @property (nonatomic, readwrite) BOOL didFinishAPNSRegistration;
@@ -66,6 +68,8 @@ YES |  \
 @property (nonatomic, readwrite) BOOL didFinishBackendUnregistration;
 @property (nonatomic, readwrite) BOOL didStartBackendRegistration;
 @property (nonatomic, readwrite) BOOL didFinishBackendRegistration;
+@property (nonatomic, readwrite) BOOL didBackendRegistrationSucceed;
+@property (nonatomic, readwrite) BOOL didBackendRegistrationFail;
 @property (nonatomic, readwrite) BOOL didRegistrationSucceed;
 @property (nonatomic, readwrite) BOOL didRegistrationFail;
 
@@ -113,13 +117,23 @@ YES |  \
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = YES;
     [self saveAPNSDeviceToken:apnsDeviceToken];
+    self.didStartBackendRegistration = YES;
     
-    [self registrationSucceeded];  // TODO - move to later in the flow
+    NSObject<OmniaPushBackEndRegistrationRequest> *request = [OmniaPushBackEndRegistrationRequestProvider request];
+    [request startDeviceRegistration:apnsDeviceToken
+                          parameters:self.parameters
+                           onSuccess:^(OmniaPushBackEndRegistrationResponseData *responseData) {
+                               [self backendRegistrationSucceeded:responseData];
+                           }
+                           onFailure:^(NSError *error) {
+                               [self backendRegistrationFailed:error];
+                           }];
+    
 }
 
 - (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError
 {
-    self.apnsRegistrationError = apnsRegistrationError;
+    self.error = apnsRegistrationError;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationFail = YES;
     
@@ -131,19 +145,27 @@ YES |  \
     
 }
 
-- (void) backendUnregistrationFailed
+- (void) backendUnregistrationFailed:(NSError*)error
 {
     
 }
 
-- (void) backendRegistrationSucceeded
+- (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
 {
+    self.didFinishBackendRegistration = YES;
+    self.didBackendRegistrationSucceed = YES;
+//    self.did = YES;
     
+    [self registrationSucceeded]; // TODO - move to later in the flow
 }
 
-- (void) backendRegistrationFailed
+- (void) backendRegistrationFailed:(NSError*)backendRegistrationError
 {
-    
+    self.error = backendRegistrationError;
+    self.didFinishBackendRegistration = YES;
+    self.didBackendRegistrationFail = YES;
+
+    [self registrationFailed]; // TODO - move to later in the flow
 }
 
 - (void) registrationSucceeded
@@ -156,7 +178,7 @@ YES |  \
 - (void) registrationFailed
 {
     self.didRegistrationFail = YES;
-    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:self.application applicationDelegate:self.originalApplicationDelegate error:self.apnsRegistrationError];
+    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:self.application applicationDelegate:self.originalApplicationDelegate error:self.error];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 

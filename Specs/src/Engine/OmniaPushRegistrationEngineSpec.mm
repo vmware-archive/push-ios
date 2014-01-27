@@ -68,10 +68,12 @@ describe(@"OmniaPushRegistrationEngine", ^{
                 didFinishBackendUnregistration:BE_FALSE
                    didStartBackendRegistration:BE_FALSE
                   didFinishBackendRegistration:BE_FALSE
+                 didBackendRegistrationSucceed:BE_FALSE
+                    didBackendRegistrationFail:BE_FALSE
                         didRegistrationSucceed:BE_FALSE
                            didRegistrationFail:BE_FALSE
                          resultAPNSDeviceToken:nil
-                   resultAPNSRegistrationError:nil];
+                                   resultError:nil];
         });
         
         context(@"when registering", ^{
@@ -89,8 +91,11 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     should raise_exception([NSException class]);
             });
             
-            it(@"should have make a registration request with the same notification type", ^{
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+            it(@"successful registration", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistration];
+                [helper setupBackEndForSuccessfulRegistration];
                 
                 [helper startRegistration];
                 
@@ -106,16 +111,22 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
-                       didStartBackendRegistration:BE_FALSE
-                      didFinishBackendRegistration:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_TRUE
+                        didBackendRegistrationFail:BE_FALSE
                             didRegistrationSucceed:BE_TRUE
                                didRegistrationFail:BE_FALSE
                              resultAPNSDeviceToken:helper.helper.apnsDeviceToken
-                       resultAPNSRegistrationError:nil];
+                                       resultError:nil];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken];
             });
             
-            it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+            it(@"APNS registration fails", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
+                [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
 
                 [helper startRegistration];
 
@@ -133,10 +144,46 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     didFinishBackendUnregistration:BE_FALSE
                        didStartBackendRegistration:BE_FALSE
                       didFinishBackendRegistration:BE_FALSE
+                     didBackendRegistrationSucceed:BE_FALSE
+                        didBackendRegistrationFail:BE_FALSE
                             didRegistrationSucceed:BE_FALSE
                                didRegistrationFail:BE_TRUE
                              resultAPNSDeviceToken:nil
-                       resultAPNSRegistrationError:testError];
+                                       resultError:testError];
+
+                [helper verifyPersistentStorageAPNSDeviceToken:nil];
+            });
+            
+            it(@"APNS registration succeeds and back-end registration fails", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper setupBackEndForFailedRegistrationWithError:testError];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_FALSE
+                        didBackendRegistrationFail:BE_TRUE
+                            didRegistrationSucceed:BE_FALSE
+                               didRegistrationFail:BE_TRUE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                       resultError:testError];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken];
             });
         });
     });

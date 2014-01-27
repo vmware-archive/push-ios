@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class OmniaPushRegistrationParameters;
+@class OmniaPushBackEndRegistrationResponseData;
 
 @interface OmniaPushRegistrationEngine : NSObject
 
@@ -16,7 +17,7 @@
 @property (nonatomic, readonly) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readonly) NSData *apnsDeviceToken;
-@property (nonatomic, readonly) NSError *apnsRegistrationError;
+@property (nonatomic, readonly) NSError *error;
 @property (nonatomic, readonly) BOOL didStartRegistration;
 @property (nonatomic, readonly) BOOL didStartAPNSRegistration;
 @property (nonatomic, readonly) BOOL didFinishAPNSRegistration;
@@ -26,6 +27,8 @@
 @property (nonatomic, readonly) BOOL didFinishBackendUnregistration;
 @property (nonatomic, readonly) BOOL didStartBackendRegistration;
 @property (nonatomic, readonly) BOOL didFinishBackendRegistration;
+@property (nonatomic, readonly) BOOL didBackendRegistrationSucceed;
+@property (nonatomic, readonly) BOOL didBackendRegistrationFail;
 @property (nonatomic, readonly) BOOL didRegistrationSucceed;
 @property (nonatomic, readonly) BOOL didRegistrationFail;
 
@@ -36,9 +39,9 @@
 - (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken;
 - (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError;
 - (void) backendUnregistrationSucceeded;
-- (void) backendUnregistrationFailed;
-- (void) backendRegistrationSucceeded;
-- (void) backendRegistrationFailed;
+- (void) backendUnregistrationFailed:(NSError*)error;
+- (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData;
+- (void) backendRegistrationFailed:(NSError*)error;
 - (void) registrationSucceeded;
 - (void) registrationFailed;
 

@@ -11,6 +11,9 @@
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
+#import "OmniaPushBackEndRegistrationRequest.h"
+#import "OmniaPushBackEndRegistrationRequestProvider.h"
+#import "OmniaPushFakeBackEndRegistrationRequest.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -51,6 +54,7 @@ using namespace Cedar::Doubles;
     [self.helper setupApplication];
     [self.helper setupApplicationDelegate];
     [self.helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+    [self.applicationMessages addObject:@"registerForRemoteNotificationTypes:"];
 }
 
 - (void) reset
@@ -63,21 +67,18 @@ using namespace Cedar::Doubles;
 
 #pragma mark - Test setup helpers
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (void) setupBackEndForSuccessfulRegistration
 {
-    [self.applicationMessages addObject:@"registerForRemoteNotificationTypes:"];
-    [self.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
-    [self.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-    [self.helper setupApplicationDelegateForSuccessfulRegistration];
+    OmniaPushFakeBackEndRegistrationRequest *backEndRegistrationRequest = [[OmniaPushFakeBackEndRegistrationRequest alloc] init];
+    [backEndRegistrationRequest setupForSuccessWithResponseData:nil];
+    [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                              error:(NSError *)error
+- (void) setupBackEndForFailedRegistrationWithError:(NSError*)error
 {
-    [self.applicationMessages addObject:@"registerForRemoteNotificationTypes:"];
-    [self.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
-    [self.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:error];
-    [self.helper setupApplicationDelegateForFailedRegistrationWithError:error];
+    OmniaPushFakeBackEndRegistrationRequest *backEndRegistrationRequest = [[OmniaPushFakeBackEndRegistrationRequest alloc] init];
+    [backEndRegistrationRequest setupForFailureWithError:error];
+    [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
 #pragma mark - Test running helpers
@@ -99,10 +100,12 @@ using namespace Cedar::Doubles;
      didFinishBackendUnregistration:(RegistrationStateResult)stateDidFinishBackendUnregistration
         didStartBackendRegistration:(RegistrationStateResult)stateDidStartBackendRegistration
        didFinishBackendRegistration:(RegistrationStateResult)stateDidFinishBackendRegistration
+      didBackendRegistrationSucceed:(RegistrationStateResult)stateDidBackendRegistrationSucceed
+         didBackendRegistrationFail:(RegistrationStateResult)stateDidBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)stateDidRegistrationSucceed
                 didRegistrationFail:(RegistrationStateResult)stateDidRegistrationFail
               resultAPNSDeviceToken:(NSData*)resultApnsDeviceToken
-        resultAPNSRegistrationError:(NSError*)resultApnsRegistrationError
+                        resultError:(NSError*)resultError
 {
     verifyState(self.helper.registrationEngine.didStartRegistration, stateDidStartRegistration);
     verifyState(self.helper.registrationEngine.didStartAPNSRegistration, stateDidStartAPNSRegistration);
@@ -113,11 +116,12 @@ using namespace Cedar::Doubles;
     verifyState(self.helper.registrationEngine.didFinishBackendUnregistration, stateDidFinishBackendUnregistration);
     verifyState(self.helper.registrationEngine.didStartBackendRegistration, stateDidStartBackendRegistration);
     verifyState(self.helper.registrationEngine.didFinishBackendRegistration, stateDidFinishBackendRegistration);
+    verifyState(self.helper.registrationEngine.didBackendRegistrationSucceed, stateDidBackendRegistrationSucceed);
+    verifyState(self.helper.registrationEngine.didBackendRegistrationFail, stateDidBackendRegistrationFail);
     verifyState(self.helper.registrationEngine.didRegistrationSucceed, stateDidRegistrationSucceed);
     verifyState(self.helper.registrationEngine.didRegistrationFail, stateDidRegistrationFail);
     verifyValue(self.helper.registrationEngine.apnsDeviceToken, resultApnsDeviceToken);
-    verifyValue(self.helper.registrationEngine.apnsRegistrationError, resultApnsRegistrationError);
-    verifyValue([self.helper.storage loadAPNSDeviceToken], resultApnsDeviceToken);
+    verifyValue(self.helper.registrationEngine.error, resultError);
 }
 
 - (void) verifyQueueCompletedOperations:(NSArray*)completedOperations
@@ -139,6 +143,11 @@ using namespace Cedar::Doubles;
     for (NSString *message in self.applicationDelegateMessages) {
         self.helper.applicationDelegate should have_received([message cStringUsingEncoding:NSUTF8StringEncoding]);
     }
+}
+
+- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
+{
+    verifyValue([self.helper.storage loadAPNSDeviceToken], apnsDeviceToken);
 }
 
 @end
