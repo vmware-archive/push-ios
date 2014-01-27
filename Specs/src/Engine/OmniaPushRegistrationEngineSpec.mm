@@ -4,6 +4,7 @@
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationFailedOperation.h"
+#import "OmniaRegistrationSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 
 using namespace Cedar::Matchers;
@@ -13,13 +14,11 @@ SPEC_BEGIN(OmniaPushRegistrationEngineSpec)
 
 describe(@"OmniaPushRegistrationEngine", ^{
     
-    __block OmniaSpecHelper *helper;
+    __block OmniaRegistrationSpecHelper *helper;
 
     beforeEach(^{
-        helper = [[OmniaSpecHelper alloc] init];
-        [helper setupApplication];
-        [helper setupApplicationDelegate];
-        [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+        helper = [[OmniaRegistrationSpecHelper alloc] initWithSpecHelper:[[OmniaSpecHelper alloc] init]];
+        [helper setup];
     });
     
     afterEach(^{
@@ -30,16 +29,16 @@ describe(@"OmniaPushRegistrationEngine", ^{
     context(@"initialization with bad arguments", ^{
         
         afterEach(^{
-            helper.registrationEngine should be_nil;
+            helper.helper.registrationEngine should be_nil;
         });
 
         it(@"should require an application", ^{
-            ^{helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:nil originalApplicationDelegate:helper.applicationDelegate];}
+            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:nil originalApplicationDelegate:helper.helper.applicationDelegate];}
                 should raise_exception([NSException class]);
         });
         
         it(@"should require the original application delegate", ^{
-            ^{helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.application originalApplicationDelegate:nil];}
+            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:nil];}
             should raise_exception([NSException class]);
         });
     });
@@ -47,31 +46,32 @@ describe(@"OmniaPushRegistrationEngine", ^{
     context(@"initialization with good arguments", ^{
        
         beforeEach(^{
-            helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.application originalApplicationDelegate:helper.applicationDelegate];
+            helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:helper.helper.applicationDelegate];
         });
         
         it(@"should produce a valid instance", ^{
-            helper.registrationEngine should_not be_nil;
+            helper.helper.registrationEngine should_not be_nil;
         });
 
         it(@"should retain its arguments in properties", ^{
-            helper.registrationEngine.application should be_same_instance_as(helper.application);
+            helper.helper.registrationEngine.application should be_same_instance_as(helper.helper.application);
         });
         
         it(@"should initialize all the state properties to false", ^{
-            helper.registrationEngine.didStartRegistration should_not be_truthy;
-            helper.registrationEngine.didStartAPNSRegistration should_not be_truthy;
-            helper.registrationEngine.didFinishAPNSRegistration should_not be_truthy;
-            helper.registrationEngine.didAPNSRegistrationSucceed should_not be_truthy;
-            helper.registrationEngine.didAPNSRegistrationFail should_not be_truthy;
-            helper.registrationEngine.didStartBackendUnregistration should_not be_truthy;
-            helper.registrationEngine.didFinishBackendUnregistration should_not be_truthy;
-            helper.registrationEngine.didStartBackendRegistration should_not be_truthy;
-            helper.registrationEngine.didFinishBackendRegistration should_not be_truthy;
-            helper.registrationEngine.didRegistrationSucceed should_not be_truthy;
-            helper.registrationEngine.didRegistrationFail should_not be_truthy;
-            helper.registrationEngine.apnsDeviceToken should be_nil;
-            helper.registrationEngine.apnsRegistrationError should be_nil;
+            
+            [helper verifyDidStartRegistration:BE_FALSE
+                      didStartAPNSRegistration:BE_FALSE
+                     didFinishAPNSRegistration:BE_FALSE
+                    didAPNSRegistrationSucceed:BE_FALSE
+                       didAPNSRegistrationFail:BE_FALSE
+                 didStartBackendUnregistration:BE_FALSE
+                didFinishBackendUnregistration:BE_FALSE
+                   didStartBackendRegistration:BE_FALSE
+                  didFinishBackendRegistration:BE_FALSE
+                        didRegistrationSucceed:BE_FALSE
+                           didRegistrationFail:BE_FALSE
+                         resultAPNSDeviceToken:nil
+                   resultAPNSRegistrationError:nil];
         });
         
         context(@"when registering", ^{
@@ -79,62 +79,69 @@ describe(@"OmniaPushRegistrationEngine", ^{
             __block NSError *testError;
             
             beforeEach(^{
-                [helper setupQueues];
-                [helper setupAppDelegateProxy];
+                [helper.helper setupQueues];
+                [helper.helper setupAppDelegateProxy];
                 testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
             });
             
             it(@"should require parameters", ^{
-                ^{[helper.registrationEngine startRegistration:nil];}
+                ^{[helper.helper.registrationEngine startRegistration:nil];}
                     should raise_exception([NSException class]);
             });
             
             it(@"should have make a registration request with the same notification type", ^{
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                [helper setupApplicationDelegateForSuccessfulRegistration];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistration];
                 
-                [helper.registrationEngine startRegistration:helper.params];
-                [helper.workerQueue drain];
+                [helper.helper.registrationEngine startRegistration:helper.helper.params];
+                [helper.helper.workerQueue drain];
                 
-                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
-                [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
-                helper.registrationEngine.didStartRegistration should be_truthy;
-                helper.registrationEngine.didStartAPNSRegistration should be_truthy;
-                helper.registrationEngine.didFinishAPNSRegistration should be_truthy;
-                helper.registrationEngine.didAPNSRegistrationSucceed should be_truthy;
-                helper.registrationEngine.didAPNSRegistrationFail should_not be_truthy;
-                helper.registrationEngine.didRegistrationSucceed should be_truthy;
-                helper.registrationEngine.didRegistrationFail should_not be_truthy;
-                helper.registrationEngine.apnsDeviceToken should equal(helper.apnsDeviceToken);
-                helper.registrationEngine.apnsRegistrationError should be_nil;
+                helper.helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+                helper.helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_FALSE
+                      didFinishBackendRegistration:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
+                       resultAPNSRegistrationError:nil];
             });
             
             it(@"should call didFailToRegisterForRemoteNotificationsWithError on the appDelegate after a failed registration request", ^{
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-                [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
                 
-                [helper.registrationEngine startRegistration:helper.params];
-                [helper.workerQueue drain];
+                [helper.helper.registrationEngine startRegistration:helper.helper.params];
+                [helper.helper.workerQueue drain];
                 
-                helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-                helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-                [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
-                [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-                [helper.storage loadAPNSDeviceToken] should be_nil;
-                helper.registrationEngine.didStartRegistration should be_truthy;
-                helper.registrationEngine.didStartAPNSRegistration should be_truthy;
-                helper.registrationEngine.didFinishAPNSRegistration should be_truthy;
-                helper.registrationEngine.didAPNSRegistrationSucceed should_not be_truthy;
-                helper.registrationEngine.didAPNSRegistrationFail should be_truthy;
-                helper.registrationEngine.didRegistrationSucceed should_not be_truthy;
-                helper.registrationEngine.didRegistrationFail should be_truthy;
-                helper.registrationEngine.apnsDeviceToken should be_nil;
-                helper.registrationEngine.apnsRegistrationError should equal(testError);
+                helper.helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+                helper.helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+                [helper.helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_FALSE
+                           didAPNSRegistrationFail:BE_TRUE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_FALSE
+                      didFinishBackendRegistration:BE_FALSE
+                            didRegistrationSucceed:BE_FALSE
+                               didRegistrationFail:BE_TRUE
+                             resultAPNSDeviceToken:nil
+                       resultAPNSRegistrationError:testError];
             });
         });
     });
