@@ -38,6 +38,7 @@ using namespace Cedar::Doubles;
     self = [super init];
     if (self) {
         self.apnsDeviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
+        self.backEndDeviceId = @"BACK END DEVICE ID";
         self.application = [UIApplication sharedApplication];
         self.storage = [[OmniaPushPersistentStorage alloc] init];
         [self.storage reset];

@@ -15,6 +15,7 @@
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushBackEndRegistrationRequest.h"
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
+#import "OmniaPushBackEndRegistrationResponseData.h"
 
 /*
  
@@ -154,8 +155,7 @@ YES |  \
 {
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = YES;
-//    self.did = YES;
-    
+    [self saveBackEndDeviceId:responseData.deviceUuid];
     [self registrationSucceeded]; // TODO - move to later in the flow
 }
 
@@ -164,7 +164,7 @@ YES |  \
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationFail = YES;
-
+    [self saveBackEndDeviceId:nil];
     [self registrationFailed]; // TODO - move to later in the flow
 }
 
@@ -189,4 +189,11 @@ YES |  \
     OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
     [storage saveAPNSDeviceToken:apnsDeviceToken];
 }
+
+- (void) saveBackEndDeviceId:(NSString*)backEndDeviceId
+{
+    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
+    [storage saveBackEndDeviceID:backEndDeviceId];
+}
+
 @end

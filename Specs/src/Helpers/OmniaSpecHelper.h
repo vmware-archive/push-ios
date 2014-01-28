@@ -33,6 +33,7 @@
 @property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *apnsDeviceToken;
+@property (nonatomic) NSString *backEndDeviceId;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
 @property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;

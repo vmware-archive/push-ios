@@ -19,6 +19,7 @@ describe(@"OmniaPushPersistentStorage", ^{
                    
     it(@"should start empty", ^{
         [storage loadAPNSDeviceToken] should be_nil;
+        [storage loadBackEndDeviceID] should be_nil;
     });
     
     it(@"should be able to save the APNS device token", ^{
@@ -26,10 +27,17 @@ describe(@"OmniaPushPersistentStorage", ^{
         [storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
     });
     
+    it(@"should be able to save the back-end device ID", ^{
+        [storage saveBackEndDeviceID:helper.backEndDeviceId];
+        [storage loadBackEndDeviceID] should equal(helper.backEndDeviceId);
+    });
+    
     it(@"should clear values after being reset", ^{
         [storage saveAPNSDeviceToken:helper.apnsDeviceToken];
+        [storage saveBackEndDeviceID:helper.backEndDeviceId];
         [storage reset];
         [storage loadAPNSDeviceToken] should be_nil;
+        [storage loadBackEndDeviceID] should be_nil;
     });
 });
 

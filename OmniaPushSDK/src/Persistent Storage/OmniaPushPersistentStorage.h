@@ -11,7 +11,11 @@
 @interface OmniaPushPersistentStorage : NSObject
 
 - (void) reset;
+
 - (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken;
 - (NSData*) loadAPNSDeviceToken;
+
+- (void) saveBackEndDeviceID:(NSString*)backEndDeviceId;
+- (NSString*) loadBackEndDeviceID;
 
 @end

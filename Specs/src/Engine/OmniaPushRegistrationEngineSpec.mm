@@ -120,7 +120,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                              resultAPNSDeviceToken:helper.helper.apnsDeviceToken
                                        resultError:nil];
                 
-                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                               backEndDeviceId:helper.helper.backEndDeviceId];
             });
             
             it(@"APNS registration fails", ^{
@@ -151,7 +152,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                              resultAPNSDeviceToken:nil
                                        resultError:testError];
 
-                [helper verifyPersistentStorageAPNSDeviceToken:nil];
+                [helper verifyPersistentStorageAPNSDeviceToken:nil
+                                               backEndDeviceId:nil];
             });
             
             it(@"APNS registration succeeds and back-end registration fails", ^{
@@ -183,7 +185,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                              resultAPNSDeviceToken:helper.helper.apnsDeviceToken
                                        resultError:testError];
                 
-                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                               backEndDeviceId:nil];
             });
         });
     });

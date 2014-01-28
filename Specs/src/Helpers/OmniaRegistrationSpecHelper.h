@@ -60,6 +60,7 @@ typedef enum RegistrationStateResult : NSUInteger {
 
 - (void) verifyMessages;
 
-- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken;
+- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
+                                backEndDeviceId:(NSString*)backEndDeviceId;
 
 @end

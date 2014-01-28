@@ -14,6 +14,7 @@
 #import "OmniaPushBackEndRegistrationRequest.h"
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
 #import "OmniaPushFakeBackEndRegistrationRequest.h"
+#import "OmniaPushBackEndRegistrationResponseData.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -67,10 +68,17 @@ using namespace Cedar::Doubles;
 
 #pragma mark - Test setup helpers
 
+- (OmniaPushBackEndRegistrationResponseData*) getBackEndRegistrationResponseData
+{
+    OmniaPushBackEndRegistrationResponseData *responseData = [[OmniaPushBackEndRegistrationResponseData alloc] init];
+    responseData.deviceUuid = self.helper.backEndDeviceId;
+    return responseData;
+}
+
 - (void) setupBackEndForSuccessfulRegistration
 {
     OmniaPushFakeBackEndRegistrationRequest *backEndRegistrationRequest = [[OmniaPushFakeBackEndRegistrationRequest alloc] init];
-    [backEndRegistrationRequest setupForSuccessWithResponseData:nil];
+    [backEndRegistrationRequest setupForSuccessWithResponseData:[self getBackEndRegistrationResponseData]];
     [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
@@ -146,8 +154,10 @@ using namespace Cedar::Doubles;
 }
 
 - (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
+                                backEndDeviceId:(NSString*)backEndDeviceId
 {
     verifyValue([self.helper.storage loadAPNSDeviceToken], apnsDeviceToken);
+    verifyValue([self.helper.storage loadBackEndDeviceID], backEndDeviceId);
 }
 
 @end
