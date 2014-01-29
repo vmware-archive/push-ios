@@ -158,7 +158,7 @@ YES |  \
 
 - (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
 {
-    OmniaPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData);
+    OmniaPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData.deviceUuid);
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = YES;
 

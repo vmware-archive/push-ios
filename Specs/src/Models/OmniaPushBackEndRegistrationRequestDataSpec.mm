@@ -99,7 +99,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
-            error.code should equal(OmniaPushBackendRegistrationRequestDataUnparseable);
+            error.code should equal(OmniaPushBackEndRegistrationRequestDataUnparseable);
         });
         
         it(@"should handle empty input", ^{
@@ -107,7 +107,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
-            error.code should equal(OmniaPushBackendRegistrationRequestDataUnparseable);
+            error.code should equal(OmniaPushBackEndRegistrationRequestDataUnparseable);
         });
         
         it(@"should handle bad JSON", ^{

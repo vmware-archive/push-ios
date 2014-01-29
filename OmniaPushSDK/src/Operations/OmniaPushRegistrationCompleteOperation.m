@@ -46,7 +46,7 @@
 {
     @autoreleasepool {
         
-        OmniaPushLog(@"Registration with APNS successful. Device token is %@.", self.apnsDeviceToken);
+        OmniaPushLog(@"Registration complete.");
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
             [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];

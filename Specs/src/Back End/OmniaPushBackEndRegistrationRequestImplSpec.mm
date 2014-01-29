@@ -66,7 +66,7 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
     context(@"valid object arguments", ^{
         
         __block NSError *testError;
-        __block BOOL wasExpectedResult;
+        __block BOOL wasExpectedResult = NO;
 
         beforeEach(^{
             testError = [NSError errorWithDomain:@"Crazy, yet amusing, error" code:0 userInfo:nil];
@@ -74,6 +74,7 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
         });
         
         afterEach(^{
+            wasExpectedResult should be_truthy;
             testError = nil;
         });
         
@@ -89,8 +90,6 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error should equal(testError);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
         
         it(@"should require an HTTP response", ^{
@@ -107,8 +106,6 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error.code should equal(OmniaPushBackEndRegistrationNotHTTPResponseError);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
 
         it(@"should handle an HTTP status error", ^{
@@ -125,11 +122,9 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error.code should equal(OmniaPushBackEndRegistrationFailedHTTPStatusCode);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
         
-        it(@"should handle a succesful response with empty data", ^{
+        it(@"should handle a successful response with empty data", ^{
             __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:nil];
             
@@ -143,11 +138,9 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
         
-        it(@"should handle a succesful response with nil data", ^{
+        it(@"should handle a successful response with nil data", ^{
             __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[]];
             
@@ -161,11 +154,9 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
         
-        it(@"should handle a succesful response with zero-length", ^{
+        it(@"should handle a successful response with zero-length", ^{
             __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[@""]];
             
@@ -179,11 +170,9 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
         
-        it(@"should handle a succesful response that contains unparseable text", ^{
+        it(@"should handle a successful response that contains unparseable text", ^{
             __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[@"I AM NOT JSON"]];
             
@@ -196,9 +185,62 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                        error should_not be_nil;
                                        wasExpectedResult = YES;
                                    }];
-            
-            wasExpectedResult should be_truthy;
         });
+        
+        it(@"should require a device_uuid in the server response", ^{
+            __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[@"{\"os\":\"AmigaOS\"}"]];
+            
+            [request startDeviceRegistration:helper.apnsDeviceToken
+                                  parameters:helper.params
+                                   onSuccess:^(OmniaPushBackEndRegistrationResponseData*) {
+                                       wasExpectedResult = NO;
+                                   }
+                                   onFailure:^(NSError *error) {
+                                       wasExpectedResult = YES;
+                                       error.domain should equal(OmniaPushErrorDomain);
+                                       error.code should equal(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid);
+                                   }];
+        });
+        
+        it(@"should handle a successful response that with valid data in 1 chunk", ^{
+            __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[@"{\"os\":\"AmigaOS\", \"device_uuid\":\"123\"}"]];
+            
+            [request startDeviceRegistration:helper.apnsDeviceToken
+                                  parameters:helper.params
+                                   onSuccess:^(OmniaPushBackEndRegistrationResponseData *responseData) {
+                                       responseData.os should equal(@"AmigaOS");
+                                       responseData.deviceUuid should equal(@"123");
+                                       wasExpectedResult = YES;
+                                   }
+                                   onFailure:^(NSError*) {
+                                       wasExpectedResult = NO;
+                                   }];
+        });
+        
+        it(@"should handle a successful response that with valid data in several chunks", ^{
+            __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[
+                                                                                              @"{\"os\":\"BASIC 2",
+                                                                                              @".0\", \"dev",
+                                                                                              @"ice_manufacturer\":\"Commodore\", \"device_model\":\"64\", \"devi",
+                                                                                              @"ce_uuid\":\"456\"}"]];
+            
+            [request startDeviceRegistration:helper.apnsDeviceToken
+                                  parameters:helper.params
+                                   onSuccess:^(OmniaPushBackEndRegistrationResponseData *responseData) {
+                                       responseData.os should equal(@"BASIC 2.0");
+                                       responseData.deviceManufacturer should equal(@"Commodore");
+                                       responseData.deviceModel should equal(@"64");
+                                       responseData.deviceUuid should equal(@"456");
+                                       wasExpectedResult = YES;
+                                   }
+                                   onFailure:^(NSError*) {
+                                       wasExpectedResult = NO;
+                                   }];
+        });
+    
     });
     
 });

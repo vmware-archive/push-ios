@@ -59,7 +59,7 @@
     *error = nil;
     
     if (jsonData == nil || jsonData.length <= 0) {
-        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackendRegistrationRequestDataUnparseable localizedDescription:@"request data is empty"];
+        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationRequestDataUnparseable localizedDescription:@"request data is empty"];
         return nil;
     }
     

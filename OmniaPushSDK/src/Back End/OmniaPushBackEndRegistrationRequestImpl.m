@@ -125,7 +125,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection*)connection
 {
-    // Return previous error, if there is one
+    // Return previous error (i.e.: failure HTTP status code), if there is one
     if (self.resultantError != nil) {
         [self returnError];
         return;
@@ -145,6 +145,16 @@
         return;
     }
     
+    // The server response must contain a device_uuid
+    if (responseData.deviceUuid == nil || responseData.deviceUuid.length <= 0) {
+        [self returnError:[OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationResponseDataNoDeviceUuid localizedDescription:@"Did not receive a device_uuid from back-end server when attempting registration"]];
+        return;
+    }
+    
+    // Return response data
+    if (self.successBlock) {
+        self.successBlock(responseData);
+    }
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection

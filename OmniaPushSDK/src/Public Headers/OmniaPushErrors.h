@@ -19,8 +19,9 @@ enum {
     OmniaPushBackEndRegistrationEmptyResponseData = 23,
     OmniaPushBackEndRegistrationUnparseableResponseData = 24,
     
-    OmniaPushBackendRegistrationRequestDataUnparseable = 30,
-    OmniaPushBackendRegistrationResponseDataUnparseable = 31
+    OmniaPushBackEndRegistrationRequestDataUnparseable = 30,
+    OmniaPushBackEndRegistrationResponseDataUnparseable = 31,
+    OmniaPushBackEndRegistrationResponseDataNoDeviceUuid = 32
 };
 
 #endif
