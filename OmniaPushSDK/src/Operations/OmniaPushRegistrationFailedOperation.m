@@ -8,6 +8,7 @@
 
 #import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaPushOperationQueueProvider.h"
+#import "OmniaPushRegistrationListener.h"
 #import "OmniaPushDebug.h"
 
 @interface OmniaPushRegistrationFailedOperation ()
@@ -15,6 +16,7 @@
 @property (nonatomic, readwrite) UIApplication *application;
 @property (nonatomic, weak, readwrite) id<UIApplicationDelegate> applicationDelegate;
 @property (nonatomic, readwrite) NSError *error;
+@property (nonatomic, weak, readwrite) id<OmniaPushRegistrationListener> listener;
 
 @end
 
@@ -23,6 +25,7 @@
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
                                error:(NSError*)error
+                            listener:(id<OmniaPushRegistrationListener>)listener
 {
     self = [super init];
     if (self) {
@@ -38,6 +41,7 @@
         self.application = application;
         self.applicationDelegate = applicationDelegate;
         self.error = error;
+        self.listener = listener;
     }
     return self;
 }
@@ -50,6 +54,9 @@
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
             [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
+            if (self.listener) {
+                [self.listener registrationFailedWithError:self.error];
+            }
         }];
 
         // TODO - handle the error somehow

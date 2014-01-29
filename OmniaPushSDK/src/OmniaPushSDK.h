@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OmniaPushErrors.h"
 #import "OmniaPushRegistrationParameters.h"
-
-@protocol OmniaPushRegistrationListener;
+#import "OmniaPushRegistrationListener.h"
 
 @interface OmniaPushSDK : NSObject
 

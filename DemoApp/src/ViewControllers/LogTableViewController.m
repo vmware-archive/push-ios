@@ -58,7 +58,7 @@
 - (void) initializeSDK {
     [self addLogItem:@"Initializing library." timestamp:[NSDate date]];
     OmniaPushRegistrationParameters *parameters = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge releaseUuid:RELEASE_UUID releaseSecret:RELEASE_SECRET deviceAlias:DEVICE_ALIAS];
-    [OmniaPushSDK registerWithParameters:parameters];
+    [OmniaPushSDK registerWithParameters:parameters listener:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,16 +93,16 @@
     return height;
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - OmniaPushRegistrationListener callbacks
 
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void) registrationSucceeded
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    OmniaPushLog(@"Application received callback \"registrationSucceeded\".");
 }
 
- */
+- (void) registrationFailedWithError:(NSError*)error
+{
+    OmniaPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
+}
 
 @end

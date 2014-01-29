@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OmniaPushSDK.h"
 
-@interface LogTableViewController : UITableViewController
+@interface LogTableViewController : UITableViewController<OmniaPushRegistrationListener>
 
 @end

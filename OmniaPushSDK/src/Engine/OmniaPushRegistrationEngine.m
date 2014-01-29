@@ -58,6 +58,7 @@ YES |  \
 
 @property (nonatomic, readwrite) UIApplication *application;
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readwrite, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readwrite) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readwrite) NSData *apnsDeviceToken;
 @property (nonatomic, readwrite) NSError *error;
@@ -83,6 +84,7 @@ YES |  \
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
+                            listener:(id<OmniaPushRegistrationListener>)listener;
 {
     self = [super init];
     if (self) {
@@ -94,6 +96,7 @@ YES |  \
         }
         self.application = application;
         self.originalApplicationDelegate = originalApplicationDelegate;
+        self.listener = listener;
     }
     return self;
 }
@@ -179,14 +182,20 @@ YES |  \
 - (void) registrationSucceeded
 {    
     self.didRegistrationSucceed = YES;
-    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:self.application applicationDelegate:self.originalApplicationDelegate apnsDeviceToken:self.apnsDeviceToken];
+    OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:self.application
+                                                                                                 applicationDelegate:self.originalApplicationDelegate
+                                                                                                     apnsDeviceToken:self.apnsDeviceToken
+                                                                                                            listener:self.listener];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 
 - (void) registrationFailed
 {
     self.didRegistrationFail = YES;
-    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:self.application applicationDelegate:self.originalApplicationDelegate error:self.error];
+    OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:self.application
+                                                                                             applicationDelegate:self.originalApplicationDelegate
+                                                                                                           error:self.error
+                                                                                                        listener:self.listener];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
 

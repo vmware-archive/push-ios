@@ -15,9 +15,11 @@
 @property (nonatomic, readonly) UIApplication *application;
 @property (nonatomic, weak, readonly) id<UIApplicationDelegate> applicationDelegate;
 @property (nonatomic, readonly) NSError *error;
+@property (nonatomic, weak, readonly) id<OmniaPushRegistrationListener> listener;
 
 - (instancetype) initWithApplication:(UIApplication*)application
                  applicationDelegate:(id<UIApplicationDelegate>)applicationDelegate
-                               error:(NSError*)error;
+                               error:(NSError*)error
+                            listener:(id<OmniaPushRegistrationListener>)listener;
 
 @end

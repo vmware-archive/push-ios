@@ -178,7 +178,7 @@ using namespace Cedar::Doubles;
 
 - (OmniaPushRegistrationEngine*) setupRegistrationEngine
 {
-    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate];
+    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate listener:nil];
     return self.registrationEngine;
 }
 

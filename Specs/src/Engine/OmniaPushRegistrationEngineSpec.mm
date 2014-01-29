@@ -33,12 +33,12 @@ describe(@"OmniaPushRegistrationEngine", ^{
         });
 
         it(@"should require an application", ^{
-            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:nil originalApplicationDelegate:helper.helper.applicationDelegate];}
+            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:nil originalApplicationDelegate:helper.helper.applicationDelegate listener:nil];}
                 should raise_exception([NSException class]);
         });
         
         it(@"should require the original application delegate", ^{
-            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:nil];}
+            ^{helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:nil listener:nil];}
             should raise_exception([NSException class]);
         });
     });
@@ -46,7 +46,7 @@ describe(@"OmniaPushRegistrationEngine", ^{
     context(@"initialization with good arguments", ^{
        
         beforeEach(^{
-            helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:helper.helper.applicationDelegate];
+            helper.helper.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:helper.helper.application originalApplicationDelegate:helper.helper.applicationDelegate listener:nil];
         });
         
         it(@"should produce a valid instance", ^{

@@ -88,7 +88,33 @@ describe(@"OmniaPushSDK", ^{
             app.delegate should be_same_instance_as(previousAppDelegate);
         });
     });
-
+    
+    describe(@"successful registration with listener", ^{
+        
+        it(@"should call the listener after successful registration from APNS", ^{
+            [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
+            [helper setupApplicationDelegateForSuccessfulRegistration];
+            [helper setApplicationInSingleton];
+            [registrationHelper setupBackEndForSuccessfulRegistration];
+            
+            id listener = fake_for(@protocol(OmniaPushRegistrationListener));
+            listener stub_method("registrationSucceeded");
+            
+            sdk = [OmniaPushSDK registerWithParameters:helper.params listener:listener];
+            sdk should_not be_nil;
+            
+            [helper.workerQueue drain];
+        
+            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+            helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
+            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+            [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
+            listener should have_received("registrationSucceeded");
+        });
+    });
+    
     describe(@"failed registration", ^{
 
         __block NSError *testError;
@@ -123,6 +149,34 @@ describe(@"OmniaPushSDK", ^{
             [OmniaPushSDK performSelector:teardownSelector];
             UIApplication *app = (UIApplication*)(helper.application);
             app.delegate should be_same_instance_as(previousAppDelegate);
+        });
+    });
+    
+    describe(@"failed registration with a listener", ^{
+        
+        __block NSError *testError;
+        
+        it(@"should call the listener after registration fails", ^{
+            testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
+            [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+            [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+            [helper setApplicationInSingleton];
+
+            id listener = fake_for(@protocol(OmniaPushRegistrationListener));
+            listener stub_method("registrationFailedWithError:").with(testError);
+
+            sdk = [OmniaPushSDK registerWithParameters:helper.params listener:listener];
+            sdk should_not be_nil;
+            
+            [helper.workerQueue drain];
+
+            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
+            helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
+            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
+            [helper.storage loadAPNSDeviceToken] should be_nil;
+            listener should have_received("registrationFailedWithError:");
         });
     });
 });

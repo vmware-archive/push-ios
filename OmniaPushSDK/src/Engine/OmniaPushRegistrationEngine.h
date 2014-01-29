@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol OmniaPushRegistrationListener;
 @class OmniaPushRegistrationParameters;
 @class OmniaPushBackEndRegistrationResponseData;
 
@@ -15,6 +16,7 @@
 
 @property (nonatomic, readonly) UIApplication *application;
 @property (nonatomic, readonly) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic, readonly, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readonly) NSData *apnsDeviceToken;
 @property (nonatomic, readonly) NSError *error;
@@ -33,7 +35,8 @@
 @property (nonatomic, readonly) BOOL didRegistrationFail;
 
 - (instancetype) initWithApplication:(UIApplication*)application
-         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate;
+         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
+                            listener:(id<OmniaPushRegistrationListener>)listener;
 
 - (void) startRegistration:(OmniaPushRegistrationParameters*)parameters;
 - (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken;

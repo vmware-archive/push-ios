@@ -37,9 +37,10 @@ static UIApplication *application = nil;
     return [OmniaPushSDK registerWithParameters:parameters listener:nil];
 }
 
-// NOTE:  the application delegate will still be called after registration completes, except if the
-// registration attempt times out.  The listener will be regardless if the registration succeeds, fails,
-// or times out.  The default time out interval is 60 seconds.
+// NOTE:  the application delegate will still be called after APNS registration completes, except if the
+// registration attempt times out.  The listener will be called after both APNS registration and registration
+// with the back-end Omnia server compeltes of fails.  Time-outs with APNS registration are not detected.  Time-outs
+// with the Omnia server are detected after 60 seconds.
 
 + (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
                                             listener:(id<OmniaPushRegistrationListener>)listener
@@ -63,19 +64,15 @@ static UIApplication *application = nil;
     if (self) {
         [OmniaPushSDK setupApplication:nil];
         
-        self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application originalApplicationDelegate:application.delegate];
+        self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application
+                                                               originalApplicationDelegate:application.delegate
+                                                                                  listener:listener];
         
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application originalApplicationDelegate:application.delegate registrationEngine:self.registrationEngine];
+        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application
+                                                           originalApplicationDelegate:application.delegate
+                                                                    registrationEngine:self.registrationEngine];
         
         [self.registrationEngine startRegistration:parameters];
-        
-        // TODO - start running the queue here if it's the real one
-        // MAYBE - don't start running it here if it's the fake one since we want to drain it
-        // outside and inspect the results
-        // BETTER - simply start running it here either way so the same code works for both
-        // testing and regular code.
-//        NSOperationQueue *queue = [OmniaPushOperationQueueProvider workerQueue];
-//        queue.suspended = NO;
     }
     return self;
 }
