@@ -12,9 +12,9 @@
 #import "LogItem.h"
 #import "LogItemCell.h"
 
-#define RELEASE_UUID    @"INSERT-UUID-HERE"
-#define RELEASE_SECRET  @"INSERT-RELEASE-SECRET-HERE"
-#define DEVICE_ALIAS    @"INSERT-DEVICE-ALIAS-HERE"
+#define RELEASE_UUID    @"0e98c4aa-786e-4675-b2e3-05e5d040ab38"
+#define RELEASE_SECRET  @"5f2009b5-bb6a-4963-8abf-a18a2162929b"
+#define DEVICE_ALIAS    @"Karijini iPod Touch"
 
 @interface LogTableViewController ()
 

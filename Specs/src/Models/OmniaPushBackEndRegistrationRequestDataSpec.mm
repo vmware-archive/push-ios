@@ -1,4 +1,5 @@
 #import "OmniaPushBackEndRegistrationRequestData.h"
+#import "OmniaPushErrors.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -81,6 +82,63 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         
         it(@"should have an registration_token", ^{
             model.registrationToken = TEST_REGISTRATION_TOKEN;
+            model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
+        });
+    });
+    
+    context(@"deserialization", ^{
+        
+        __block NSError *error = nil;
+        
+        afterEach(^{
+            error = nil;
+        });
+        
+        it(@"should handle a nil input", ^{
+            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:nil error:&error];
+            model should be_nil;
+            error should_not be_nil;
+            error.domain should equal(OmniaPushErrorDomain);
+            error.code should equal(OmniaPushBackendRegistrationRequestDataUnparseable);
+        });
+        
+        it(@"should handle empty input", ^{
+            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:[NSData data] error:&error];
+            model should be_nil;
+            error should_not be_nil;
+            error.domain should equal(OmniaPushErrorDomain);
+            error.code should equal(OmniaPushBackendRegistrationRequestDataUnparseable);
+        });
+        
+        it(@"should handle bad JSON", ^{
+            NSData *jsonData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
+            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:jsonData error:&error];
+            model should be_nil;
+            error should_not be_nil;
+        });
+        
+        it(@"should construct a complete response object", ^{
+            id dict = @{
+                        @"os":TEST_OS,
+                        @"os_version":TEST_OS_VERSION,
+                        @"device_alias":TEST_DEVICE_ALIAS,
+                        @"device_manufacturer":TEST_DEVICE_MANUFACTURER,
+                        @"device_model":TEST_DEVICE_MODEL,
+                        @"release_uuid":TEST_RELEASE_UUID,
+                        @"secret":TEST_SECRET,
+                        @"registration_token":TEST_REGISTRATION_TOKEN
+                        };
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+            error should be_nil;
+            data should_not be_nil;
+            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:data error:&error];
+            model.os should equal(TEST_OS);
+            model.osVersion should equal(TEST_OS_VERSION);
+            model.deviceAlias should equal(TEST_DEVICE_ALIAS);
+            model.deviceManufacturer should equal(TEST_DEVICE_MANUFACTURER);
+            model.deviceModel should equal(TEST_DEVICE_MODEL);
+            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.secret should equal(TEST_SECRET);
             model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
         });
     });

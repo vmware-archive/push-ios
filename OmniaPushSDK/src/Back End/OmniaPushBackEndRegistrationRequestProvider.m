@@ -8,6 +8,7 @@
 
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
 #import "OmniaPushBackEndRegistrationRequest.h"
+#import "OmniaPushBackEndRegistrationRequestImpl.h"
 
 static NSObject<OmniaPushBackEndRegistrationRequest> *_request;
 
@@ -15,8 +16,10 @@ static NSObject<OmniaPushBackEndRegistrationRequest> *_request;
 
 + (NSObject<OmniaPushBackEndRegistrationRequest>*) request
 {
+    if (_request == nil) {
+        _request = [[OmniaPushBackEndRegistrationRequestImpl alloc] init];
+    }
     return _request;
-    // TODO - create default request if nil
 }
 
 + (void) setRequest:(NSObject<OmniaPushBackEndRegistrationRequest>*)request

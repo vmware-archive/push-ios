@@ -18,6 +18,7 @@
 @class OmniaPushPersistentStorage;
 @class OmniaPushRegistrationParameters;
 @class OmniaPushRegistrationEngine;
+@class OmniaPushFakeNSURLConnectionFactory;
 
 #define TEST_NOTIFICATION_TYPES               UIRemoteNotificationTypeAlert
 #define TEST_RELEASE_UUID                     @"444-555-666-777"
@@ -37,6 +38,7 @@
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
 @property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;
+@property (nonatomic) OmniaPushFakeNSURLConnectionFactory *connectionFactory;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -71,5 +73,8 @@
 
 // Registration Engine helpers
 - (OmniaPushRegistrationEngine*) setupRegistrationEngine;
+
+// NSURLConnection heleprs
+- (OmniaPushFakeNSURLConnectionFactory*) setupConnectionFactory;
 
 @end

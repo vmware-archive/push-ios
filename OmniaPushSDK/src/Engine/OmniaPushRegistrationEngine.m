@@ -16,6 +16,7 @@
 #import "OmniaPushBackEndRegistrationRequest.h"
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
 #import "OmniaPushBackEndRegistrationResponseData.h"
+#import "OmniaPushDebug.h"
 
 /*
  
@@ -104,6 +105,7 @@ YES |  \
     if (parameters == nil) {
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
+    self.parameters = parameters;
     self.didStartRegistration = YES;
     self.didStartAPNSRegistration = YES;
     OmniaPushAPNSRegistrationRequestOperation *op = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:parameters application:self.application];
@@ -114,12 +116,14 @@ YES |  \
 
 - (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken
 {
+    OmniaPushLog(@"Registration with APNS succeeded. Device token: \"%@\".", apnsDeviceToken);
     self.apnsDeviceToken = apnsDeviceToken;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = YES;
     [self saveAPNSDeviceToken:apnsDeviceToken];
     self.didStartBackendRegistration = YES;
     
+    OmniaPushLog(@"Attempting registration with back-end server.");
     NSObject<OmniaPushBackEndRegistrationRequest> *request = [OmniaPushBackEndRegistrationRequestProvider request];
     [request startDeviceRegistration:apnsDeviceToken
                           parameters:self.parameters
@@ -134,6 +138,7 @@ YES |  \
 
 - (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError
 {
+    OmniaPushLog(@"Registration with APNS failed. Error: \"%@\".", apnsRegistrationError.localizedDescription);
     self.error = apnsRegistrationError;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationFail = YES;
@@ -153,14 +158,17 @@ YES |  \
 
 - (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
 {
+    OmniaPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData);
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = YES;
+
     [self saveBackEndDeviceId:responseData.deviceUuid];
     [self registrationSucceeded]; // TODO - move to later in the flow
 }
 
 - (void) backendRegistrationFailed:(NSError*)backendRegistrationError
 {
+    OmniaPushLog(@"Registration with back-end failed. Error: \"%@\".", backendRegistrationError.localizedDescription);
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationFail = YES;

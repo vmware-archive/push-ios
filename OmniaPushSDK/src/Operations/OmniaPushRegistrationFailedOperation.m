@@ -46,7 +46,7 @@
 {
     @autoreleasepool {
         
-        OmniaPushLog(@"Error in registration with APNS. Error: \"%@\".", self.error);
+        OmniaPushLog(@"Error in registration. Error: \"%@\".", self.error.localizedDescription);
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
             [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];

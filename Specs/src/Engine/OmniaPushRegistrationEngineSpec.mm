@@ -91,6 +91,14 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     should raise_exception([NSException class]);
             });
             
+            it(@"should retain its parameters", ^{
+                [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper startRegistration];
+                helper.helper.registrationEngine.parameters should equal(helper.helper.params);
+                helper.helper.registrationEngine.parameters should_not be_nil;
+            });
+            
             it(@"successful registration", ^{
                 [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
                 [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];

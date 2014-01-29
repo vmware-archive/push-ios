@@ -12,7 +12,15 @@
 OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 
 enum {
-    OmniaPushRegistrationTimeoutError = 10
+    OmniaPushRegistrationTimeoutError = 10,
+    
+    OmniaPushBackEndRegistrationNotHTTPResponseError = 21,
+    OmniaPushBackEndRegistrationFailedHTTPStatusCode = 22,
+    OmniaPushBackEndRegistrationEmptyResponseData = 23,
+    OmniaPushBackEndRegistrationUnparseableResponseData = 24,
+    
+    OmniaPushBackendRegistrationRequestDataUnparseable = 30,
+    OmniaPushBackendRegistrationResponseDataUnparseable = 31
 };
 
 #endif

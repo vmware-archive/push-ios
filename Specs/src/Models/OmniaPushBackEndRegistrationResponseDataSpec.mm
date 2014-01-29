@@ -1,6 +1,7 @@
 #import "OmniaPushBackEndRegistrationResponseData.h"
+#import "OmniaPushErrors.h"
 
-#define TEST_REPLICANT_ID         @"123-456-789"
+#define TEST_RELEASE_UUID         @"123-456-789"
 #define TEST_DEVICE_UUID          @"L337-L337-OH-YEAH"
 #define TEST_DEVICE_ALIAS         @"l33t devices of badness"
 #define TEST_DEVICE_MANUFACTURER  @"Amiga"
@@ -34,7 +35,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should start as nil", ^{
-            model.replicantId should be_nil;
+            model.releaseUuid should be_nil;
             model.deviceUuid should be_nil;
             model.deviceAlias should be_nil;
             model.deviceManufacturer should be_nil;
@@ -45,8 +46,8 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should have a release_uuid", ^{
-            model.replicantId = TEST_REPLICANT_ID;
-            model.replicantId should equal(TEST_REPLICANT_ID);
+            model.releaseUuid = TEST_RELEASE_UUID;
+            model.releaseUuid should equal(TEST_RELEASE_UUID);
         });
         
         it(@"should have a deviceUuid", ^{
@@ -85,6 +86,63 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
     });
     
+    context(@"deserialization", ^{
+        
+        __block NSError *error = nil;
+        
+        afterEach(^{
+            error = nil;
+        });
+        
+        it(@"should handle a nil input", ^{
+            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:nil error:&error];
+            model should be_nil;
+            error should_not be_nil;
+            error.domain should equal(OmniaPushErrorDomain);
+            error.code should equal(OmniaPushBackendRegistrationResponseDataUnparseable);
+        });
+        
+        it(@"should handle empty input", ^{
+            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:[NSData data] error:&error];
+            model should be_nil;
+            error should_not be_nil;
+            error.domain should equal(OmniaPushErrorDomain);
+            error.code should equal(OmniaPushBackendRegistrationResponseDataUnparseable);
+        });
+        
+        it(@"should handle bad JSON", ^{
+            NSData *jsonData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
+            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:jsonData error:&error];
+            model should be_nil;
+            error should_not be_nil;
+        });
+        
+        it(@"should construct a complete response object", ^{
+            id dict = @{
+                        @"os":TEST_OS,
+                        @"os_version":TEST_OS_VERSION,
+                        @"device_uuid":TEST_DEVICE_UUID,
+                        @"device_alias":TEST_DEVICE_ALIAS,
+                        @"device_manufacturer":TEST_DEVICE_MANUFACTURER,
+                        @"device_model":TEST_DEVICE_MODEL,
+                        @"release_uuid":TEST_RELEASE_UUID,
+                        @"registration_token":TEST_REGISTRATION_TOKEN
+                        };
+            NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
+            error should be_nil;
+            data should_not be_nil;
+            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:data error:&error];
+            model.os should equal(TEST_OS);
+            model.osVersion should equal(TEST_OS_VERSION);
+            model.deviceUuid should equal(TEST_DEVICE_UUID);
+            model.deviceAlias should equal(TEST_DEVICE_ALIAS);
+            model.deviceManufacturer should equal(TEST_DEVICE_MANUFACTURER);
+            model.deviceModel should equal(TEST_DEVICE_MODEL);
+            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
+        });
+    });
+    
     context(@"serialization", ^{
         
         __block NSDictionary *dict = nil;
@@ -100,7 +158,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         context(@"populated object", ^{
             
             beforeEach(^{
-                model.replicantId = TEST_REPLICANT_ID;
+                model.releaseUuid = TEST_RELEASE_UUID;
                 model.deviceUuid = TEST_DEVICE_UUID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
@@ -112,7 +170,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"replicant_id"] should equal(TEST_REPLICANT_ID);
+                dict[@"release_uuid"] should equal(TEST_RELEASE_UUID);
                 dict[@"device_uuid"] should equal(TEST_DEVICE_UUID);
                 dict[@"device_alias"] should equal(TEST_DEVICE_ALIAS);
                 dict[@"device_manufacturer"] should equal(TEST_DEVICE_MANUFACTURER);

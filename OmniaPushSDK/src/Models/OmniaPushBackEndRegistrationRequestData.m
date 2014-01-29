@@ -7,6 +7,8 @@
 //
 
 #import "OmniaPushBackEndRegistrationRequestData.h"
+#import "OmniaPushErrors.h"
+#import "OmniaPushErrorUtil.h"
 #import "OmniaPushDebug.h"
 
 @implementation OmniaPushBackEndRegistrationRequestData
@@ -30,11 +32,44 @@
     NSError *error = nil;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:&error];
     if (error) {
+        // TODO - should return error?
         OmniaPushCriticalLog(@"Error upon serializing object to JSON: %@", error);
         return nil;
     } else {
         return jsonData;
     }
+}
+
++ (instancetype) fromDictionary:(NSDictionary*)dict
+{
+    OmniaPushBackEndRegistrationRequestData *result = [[OmniaPushBackEndRegistrationRequestData alloc] init];
+    result.os = dict[@"os"];
+    result.osVersion = dict[@"os_version"];
+    result.deviceAlias = dict[@"device_alias"];
+    result.deviceManufacturer = dict[@"device_manufacturer"];
+    result.deviceModel = dict[@"device_model"];
+    result.releaseUuid = dict[@"release_uuid"];
+    result.secret = dict[@"secret"];
+    result.registrationToken = dict[@"registration_token"];
+    return result;
+}
+
++ (instancetype) fromJsonData:(NSData*)jsonData error:(NSError**)error
+{
+    *error = nil;
+    
+    if (jsonData == nil || jsonData.length <= 0) {
+        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackendRegistrationRequestDataUnparseable localizedDescription:@"request data is empty"];
+        return nil;
+    }
+    
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:error];
+    
+    if (*error != nil) {
+        return nil;
+    }
+    
+    return [OmniaPushBackEndRegistrationRequestData fromDictionary:dict];
 }
 
 @end

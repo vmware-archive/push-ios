@@ -18,6 +18,8 @@
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushRegistrationEngine.h"
+#import "OmniaPushFakeNSURLConnectionFactory.h"
+#import "OmniaPushNSURLConnectionProvider.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -62,7 +64,9 @@ using namespace Cedar::Doubles;
     self.applicationDelegateProxy = nil;
     self.applicationDelegateSwitcher = nil;
     self.storage = nil;
+    self.connectionFactory = nil;
     [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:nil];
+    [OmniaPushNSURLConnectionProvider setFactory:nil];
 }
 
 #pragma mark - Application helpers
@@ -176,6 +180,15 @@ using namespace Cedar::Doubles;
 {
     self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate];
     return self.registrationEngine;
+}
+
+#pragma mark - NSURLConnection heleprs
+
+- (OmniaPushFakeNSURLConnectionFactory*) setupConnectionFactory
+{
+    self.connectionFactory = [[OmniaPushFakeNSURLConnectionFactory alloc] init];
+    [OmniaPushNSURLConnectionProvider setFactory:self.connectionFactory];
+    return self.connectionFactory;
 }
 
 @end
