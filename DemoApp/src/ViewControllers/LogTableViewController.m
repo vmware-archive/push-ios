@@ -46,6 +46,11 @@
     [self initializeSDK];
 }
 
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self.tableView reloadData];
+}
+
 - (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {
     if (!self.logItems) {
         self.logItems = [NSMutableArray array];
