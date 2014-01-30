@@ -53,6 +53,7 @@
 
 - (void) registerButtonPressed
 {
+    [self updateCurrentBaseRowColour];
     [self resetSDK];
     [self initializeSDK];
 }
@@ -63,6 +64,10 @@
     [OmniaPushSDK performSelector:setSharedInstanceSelector withObject:nil];
 }
 
+- (void) updateCurrentBaseRowColour
+{
+    [LogItem updateBaseColour];
+}
 
 - (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
