@@ -17,6 +17,8 @@
 #import "OmniaPushErrors.h"
 #import "OmniaPushNSURLConnectionProvider.h"
 #import "OmniaPushDebug.h"
+#import "UIDevice+Hardware.h"
+
 
 @interface OmniaPushBackEndRegistrationRequestImpl ()
 
@@ -81,15 +83,25 @@
 - (OmniaPushBackEndRegistrationRequestData*) getRequestDataForAPNSDeviceToken:(NSData*)apnsDeviceToken
                                                                    parameters:(OmniaPushRegistrationParameters*)parameters
 {
+    static NSString *osVersion = nil;
+    if (osVersion == nil) {
+        osVersion = [[UIDevice currentDevice] systemVersion];
+    }
+    
+    static NSString *deviceModel = nil;
+    if (deviceModel == nil) {
+        deviceModel = [[UIDevice currentDevice] hardwareSimpleDescription];
+    }
+    
     OmniaPushBackEndRegistrationRequestData *requestData = [[OmniaPushBackEndRegistrationRequestData alloc] init];
     requestData.registrationToken = [OmniaPushHexUtil hexDumpForData:apnsDeviceToken];
     requestData.releaseUuid = parameters.releaseUuid;
     requestData.secret = parameters.releaseSecret;
     requestData.deviceAlias = parameters.deviceAlias;
     requestData.deviceManufacturer = @"Apple";
-    requestData.deviceModel = @"TODO: provide device model";
+    requestData.deviceModel = deviceModel;
     requestData.os = @"ios";
-    requestData.osVersion = @"TODO: provide OS version";
+    requestData.osVersion = osVersion;
     return requestData;
 }
 

@@ -101,6 +101,10 @@
 		D4BE825F18633FDD00EF0EE3 /* OmniaPushAppDelegateProxySpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4BE825E18633FDD00EF0EE3 /* OmniaPushAppDelegateProxySpec.mm */; };
 		D4BE826318637E0600EF0EE3 /* Globals.mm in Sources */ = {isa = PBXBuildFile; fileRef = D4BE826218637E0600EF0EE3 /* Globals.mm */; };
 		D4E5BA8018999BC50012B32B /* OmniaPushRegistrationListener.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E5BA7F18999BC50012B32B /* OmniaPushRegistrationListener.h */; };
+		D4E5BA83189AB8080012B32B /* UIDevice+Hardware.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E5BA81189AB8080012B32B /* UIDevice+Hardware.h */; };
+		D4E5BA84189AB8080012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
+		D4E5BA85189AB8080012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
+		D4E5BA86189ABB6B0012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
 		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A812185BAFDC00A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A810185BAFDC00A841EE /* InfoPlist.strings */; };
 		D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
@@ -224,6 +228,8 @@
 		D4BE825E18633FDD00EF0EE3 /* OmniaPushAppDelegateProxySpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushAppDelegateProxySpec.mm; path = src/App/OmniaPushAppDelegateProxySpec.mm; sourceTree = "<group>"; };
 		D4BE826218637E0600EF0EE3 /* Globals.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Globals.mm; path = src/Globals.mm; sourceTree = "<group>"; };
 		D4E5BA7F18999BC50012B32B /* OmniaPushRegistrationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationListener.h; path = "src/Public Headers/OmniaPushRegistrationListener.h"; sourceTree = "<group>"; };
+		D4E5BA81189AB8080012B32B /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "src/Util/UIDevice+Hardware.h"; sourceTree = "<group>"; };
+		D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "src/Util/UIDevice+Hardware.m"; sourceTree = "<group>"; };
 		D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = OmniaPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A80B185BAFDC00A841EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4E8A80F185BAFDC00A841EE /* OmniaPushSDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OmniaPushSDK-Info.plist"; sourceTree = "<group>"; };
@@ -442,6 +448,8 @@
 				D421713918984466007A26A5 /* OmniaPushHexUtil.m */,
 				D44BE7A3187DF8A000971A2A /* OmniaPushOperationQueueProvider.h */,
 				D44BE7A4187DF8A000971A2A /* OmniaPushOperationQueueProvider.m */,
+				D4E5BA81189AB8080012B32B /* UIDevice+Hardware.h */,
+				D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */,
 			);
 			name = Util;
 			sourceTree = "<group>";
@@ -672,6 +680,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4E5BA83189AB8080012B32B /* UIDevice+Hardware.h in Headers */,
 				D4871042188F141500AE1660 /* OmniaPushBackEndRegistrationResponseData.h in Headers */,
 				D44BE7B5187E030A00971A2A /* OmniaPushRegistrationFailedOperation.h in Headers */,
 				D44BE7A5187DF8A000971A2A /* OmniaPushOperationQueueProvider.h in Headers */,
@@ -852,6 +861,7 @@
 				D44BE7A6187DF8A000971A2A /* OmniaPushOperationQueueProvider.m in Sources */,
 				D487102F1889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */,
 				D421711A1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */,
+				D4E5BA84189AB8080012B32B /* UIDevice+Hardware.m in Sources */,
 				D421713018980C00007A26A5 /* OmniaPushBackEndRegistrationRequestImpl.m in Sources */,
 				D4871039188EC85000AE1660 /* OmniaPushBackEndRegistrationRequestData.m in Sources */,
 				D4601416188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */,
@@ -872,6 +882,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44BE7A1187DF6F200971A2A /* OmniaFakeOperationQueue.m in Sources */,
+				D4E5BA85189AB8080012B32B /* UIDevice+Hardware.m in Sources */,
 				D4E8A82D185BAFE900A841EE /* main.m in Sources */,
 				D4433F8918731496005C100C /* OmniaPushSDKSpec.mm in Sources */,
 				D460141A18848ED300EF09FF /* OmniaPushFakeApplicationDelegateSwitcher.mm in Sources */,
@@ -924,6 +935,7 @@
 				D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */,
 				D455CBC61860B51B003539E0 /* LogItem.m in Sources */,
 				D4E8A846185BAFFE00A841EE /* main.m in Sources */,
+				D4E5BA86189ABB6B0012B32B /* UIDevice+Hardware.m in Sources */,
 				D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */,
 				D455CBBF1860B4CD003539E0 /* LogTableViewController.m in Sources */,
 			);
@@ -1097,6 +1109,8 @@
 					"$(inherited)",
 					Specs/Frameworks,
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/Specs-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -1123,6 +1137,8 @@
 					"$(inherited)",
 					Specs/Frameworks,
 				);
+				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Specs/Specs-Prefix.pch";
 				INFOPLIST_FILE = "Specs/Specs-Info.plist";
