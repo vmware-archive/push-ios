@@ -43,10 +43,28 @@
         }];
     }];
     
+    UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(registerButtonPressed)];
+
+    self.navigationController.toolbarHidden = NO;
+    [self setToolbarItems:@[registerButton] animated:NO];
+    
+    [self addLogItem:@"Press the \"Play\" button below to register the device for push notifications" timestamp:[NSDate date]];
+}
+
+- (void) registerButtonPressed
+{
+    [self resetSDK];
     [self initializeSDK];
 }
 
-- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+- (void) resetSDK
+{
+    SEL setSharedInstanceSelector = sel_registerName("setSharedInstance:");
+    [OmniaPushSDK performSelector:setSharedInstanceSelector withObject:nil];
+}
+
+
+- (void) willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     [self.tableView reloadData];
 }
@@ -58,6 +76,7 @@
     LogItem *logItem = [[LogItem alloc] initWithMessage:message timestamp:timestamp];
     [self.logItems addObject:logItem];
     [self.tableView reloadData];
+    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(self.logItems.count-1) inSection:0]  atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
 - (void) initializeSDK {
