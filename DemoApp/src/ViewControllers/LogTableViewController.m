@@ -124,6 +124,7 @@
 }
 
 - (void) initializeSDK {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self addLogItem:@"Initializing library." timestamp:[NSDate date]];
     OmniaPushRegistrationParameters *parameters = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge releaseUuid:RELEASE_UUID releaseSecret:RELEASE_SECRET deviceAlias:DEVICE_ALIAS];
     [OmniaPushSDK registerWithParameters:parameters listener:self];
@@ -167,11 +168,13 @@
 
 - (void) registrationSucceeded
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     OmniaPushLog(@"Application received callback \"registrationSucceeded\".");
 }
 
 - (void) registrationFailedWithError:(NSError*)error
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     OmniaPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
 }
 
