@@ -11,10 +11,8 @@
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
 #import "LogItemCell.h"
-
-#define RELEASE_UUID    @"0e98c4aa-786e-4675-b2e3-05e5d040ab38"
-#define RELEASE_SECRET  @"5f2009b5-bb6a-4963-8abf-a18a2162929b"
-#define DEVICE_ALIAS    @"Karijini iPod Touch"
+#import "SettingsTableViewController.h"
+#import "Settings.h"
 
 @interface LogTableViewController ()
 
@@ -43,16 +41,17 @@
         }];
     }];
     
-    UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(registerButtonPressed)];
-    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonPressed)];
+    UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithTitle:@"Register" style:UIBarButtonItemStylePlain target:self action:@selector(registerButtonPressed)];
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Copy" style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonPressed)];
     UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonPressed)];
+    UIBarButtonItem *preferencesButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(preferencesButtonPressed)];
+    UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    self.navigationController.toolbarHidden = NO;
-    [self setToolbarItems:@[registerButton, flexibleSpace, saveButton, flexibleSpace, trashButton] animated:NO];
+    [self setToolbarItems:@[registerButton, space, saveButton, space, preferencesButton, space, trashButton] animated:NO];
     
-    [self addLogItem:@"Press the \"Play\" button below to register the device for push notifications." timestamp:[NSDate date]];
-    [self addLogItem:@"Press the \"Save\" button below to copy the log to the clipboard." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Register\" button below to register the device for push notifications." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Copy\" button below to copy the log to the clipboard." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Settings\" button below to change the SDK settings." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Trash\" button below to clear the log contents." timestamp:[NSDate date]];
 }
 
@@ -61,6 +60,13 @@
     [self updateCurrentBaseRowColour];
     [self resetSDK];
     [self initializeSDK];
+}
+
+- (void) preferencesButtonPressed
+{
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main_iPhone" bundle:nil];
+    SettingsTableViewController *settingsTableViewController = (SettingsTableViewController*)[storyboard instantiateViewControllerWithIdentifier:@"SettingsTableViewController"];
+    [self.navigationController pushViewController:settingsTableViewController animated:YES];
 }
 
 - (void) saveButtonPressed
@@ -113,7 +119,8 @@
     [self.tableView reloadData];
 }
 
-- (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp {
+- (void) addLogItem:(NSString*)message timestamp:(NSDate*)timestamp
+{
     if (!self.logItems) {
         self.logItems = [NSMutableArray array];
     }
@@ -123,10 +130,15 @@
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(self.logItems.count-1) inSection:0]  atScrollPosition:UITableViewScrollPositionBottom animated:YES];
 }
 
-- (void) initializeSDK {
+- (void) initializeSDK
+{
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self addLogItem:@"Initializing library." timestamp:[NSDate date]];
-    OmniaPushRegistrationParameters *parameters = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge releaseUuid:RELEASE_UUID releaseSecret:RELEASE_SECRET deviceAlias:DEVICE_ALIAS];
+    OmniaPushRegistrationParameters *parameters = [Settings getRegistrationParameters];
+    NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
+                         parameters.releaseUuid,
+                         parameters.releaseSecret,
+                         parameters.deviceAlias];
+    [self addLogItem:message timestamp:[NSDate date]];
     [OmniaPushSDK registerWithParameters:parameters listener:self];
 }
 
@@ -158,7 +170,8 @@
     return cell;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     LogItem *item = self.logItems[indexPath.row];
     CGFloat height = [LogItemCell heightForCellWithText:item.message containerSize:self.view.frame.size];
     return height;

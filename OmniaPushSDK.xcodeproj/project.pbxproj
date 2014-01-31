@@ -105,6 +105,8 @@
 		D4E5BA84189AB8080012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
 		D4E5BA85189AB8080012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
 		D4E5BA86189ABB6B0012B32B /* UIDevice+Hardware.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */; };
+		D4E5BA89189C09E10012B32B /* SettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA88189C09E10012B32B /* SettingsTableViewController.m */; };
+		D4E5BA8D189C18070012B32B /* Settings.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E5BA8C189C18070012B32B /* Settings.m */; };
 		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A812185BAFDC00A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A810185BAFDC00A841EE /* InfoPlist.strings */; };
 		D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
@@ -230,6 +232,10 @@
 		D4E5BA7F18999BC50012B32B /* OmniaPushRegistrationListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationListener.h; path = "src/Public Headers/OmniaPushRegistrationListener.h"; sourceTree = "<group>"; };
 		D4E5BA81189AB8080012B32B /* UIDevice+Hardware.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIDevice+Hardware.h"; path = "src/Util/UIDevice+Hardware.h"; sourceTree = "<group>"; };
 		D4E5BA82189AB8080012B32B /* UIDevice+Hardware.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIDevice+Hardware.m"; path = "src/Util/UIDevice+Hardware.m"; sourceTree = "<group>"; };
+		D4E5BA87189C09E10012B32B /* SettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsTableViewController.h; path = src/ViewControllers/SettingsTableViewController.h; sourceTree = "<group>"; };
+		D4E5BA88189C09E10012B32B /* SettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsTableViewController.m; path = src/ViewControllers/SettingsTableViewController.m; sourceTree = "<group>"; };
+		D4E5BA8B189C18070012B32B /* Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Settings.h; path = src/Settings/Settings.h; sourceTree = "<group>"; };
+		D4E5BA8C189C18070012B32B /* Settings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Settings.m; path = src/Settings/Settings.m; sourceTree = "<group>"; };
 		D4E8A808185BAFDC00A841EE /* OmniaPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = OmniaPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A80B185BAFDC00A841EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D4E8A80F185BAFDC00A841EE /* OmniaPushSDK-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OmniaPushSDK-Info.plist"; sourceTree = "<group>"; };
@@ -458,6 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				D455CBC31860B4FD003539E0 /* Models */,
+				D4E5BA8A189C17DD0012B32B /* Settings */,
 				D4330EA81860DDF000A141AF /* Views */,
 				D455CBBC1860B495003539E0 /* ViewControllers */,
 			);
@@ -469,6 +476,8 @@
 			children = (
 				D455CBBD1860B4CD003539E0 /* LogTableViewController.h */,
 				D455CBBE1860B4CD003539E0 /* LogTableViewController.m */,
+				D4E5BA87189C09E10012B32B /* SettingsTableViewController.h */,
+				D4E5BA88189C09E10012B32B /* SettingsTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -560,6 +569,15 @@
 				D4BE825E18633FDD00EF0EE3 /* OmniaPushAppDelegateProxySpec.mm */,
 			);
 			name = App;
+			sourceTree = "<group>";
+		};
+		D4E5BA8A189C17DD0012B32B /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D4E5BA8B189C18070012B32B /* Settings.h */,
+				D4E5BA8C189C18070012B32B /* Settings.m */,
+			);
+			name = Settings;
 			sourceTree = "<group>";
 		};
 		D4E8A7FD185BAFDC00A841EE = {
@@ -932,11 +950,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D4E5BA89189C09E10012B32B /* SettingsTableViewController.m in Sources */,
 				D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */,
 				D455CBC61860B51B003539E0 /* LogItem.m in Sources */,
 				D4E8A846185BAFFE00A841EE /* main.m in Sources */,
 				D4E5BA86189ABB6B0012B32B /* UIDevice+Hardware.m in Sources */,
 				D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */,
+				D4E5BA8D189C18070012B32B /* Settings.m in Sources */,
 				D455CBBF1860B4CD003539E0 /* LogTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
