@@ -44,9 +44,11 @@
     }];
     
     UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(registerButtonPressed)];
+    UIBarButtonItem *flexibleSpace1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonPressed)];
 
     self.navigationController.toolbarHidden = NO;
-    [self setToolbarItems:@[registerButton] animated:NO];
+    [self setToolbarItems:@[registerButton, flexibleSpace1, trashButton] animated:NO];
     
     [self addLogItem:@"Press the \"Play\" button below to register the device for push notifications" timestamp:[NSDate date]];
 }
@@ -56,6 +58,12 @@
     [self updateCurrentBaseRowColour];
     [self resetSDK];
     [self initializeSDK];
+}
+
+- (void) trashButtonPressed
+{
+    self.logItems = [NSMutableArray array];
+    [self.tableView reloadData];
 }
 
 - (void) resetSDK
