@@ -44,13 +44,16 @@
     }];
     
     UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(registerButtonPressed)];
-    UIBarButtonItem *flexibleSpace1 = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *flexibleSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveButtonPressed)];
     UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonPressed)];
 
     self.navigationController.toolbarHidden = NO;
-    [self setToolbarItems:@[registerButton, flexibleSpace1, trashButton] animated:NO];
+    [self setToolbarItems:@[registerButton, flexibleSpace, saveButton, flexibleSpace, trashButton] animated:NO];
     
-    [self addLogItem:@"Press the \"Play\" button below to register the device for push notifications" timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Play\" button below to register the device for push notifications." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Save\" button below to copy the log to the clipboard." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Trash\" button below to clear the log contents." timestamp:[NSDate date]];
 }
 
 - (void) registerButtonPressed
@@ -58,6 +61,34 @@
     [self updateCurrentBaseRowColour];
     [self resetSDK];
     [self initializeSDK];
+}
+
+- (void) saveButtonPressed
+{
+    [self copyEntireLog];
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Copied entire log to clipboard."
+                                                    message:nil
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+}
+
+- (void) copyEntireLog
+{
+    NSMutableString *s = [NSMutableString string];
+    for (LogItem *logItem in self.logItems) {
+        [s appendString:[NSString stringWithFormat:@"%@\t%@\n", logItem.timestamp, logItem.message]];
+    }
+    [self copyStringToPasteboard:s];
+}
+
+- (void) copyStringToPasteboard:(NSString*)s
+{
+    UIPasteboard *pb = [UIPasteboard generalPasteboard];
+    pb.persistent = YES;
+    [pb setString:s];
 }
 
 - (void) trashButtonPressed
@@ -119,6 +150,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     LogItemCell *cell = [tableView dequeueReusableCellWithIdentifier:LOG_ITEM_CELL forIndexPath:indexPath];
+    cell.userInteractionEnabled = NO;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     LogItem *logItem = (LogItem*) self.logItems[indexPath.row];
     [cell setLogItem:logItem containerSize:self.view.frame.size];
     return cell;
