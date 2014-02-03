@@ -18,10 +18,13 @@ enum {
     OmniaPushBackEndRegistrationFailedHTTPStatusCode = 22,
     OmniaPushBackEndRegistrationEmptyResponseData = 23,
     OmniaPushBackEndRegistrationUnparseableResponseData = 24,
-    
-    OmniaPushBackEndRegistrationRequestDataUnparseable = 30,
-    OmniaPushBackEndRegistrationResponseDataUnparseable = 31,
-    OmniaPushBackEndRegistrationResponseDataNoDeviceUuid = 32
+
+    OmniaPushBackEndUnregistrationNotHTTPResponseError = 30,
+    OmniaPushBackEndUnregistrationFailedHTTPStatusCode = 31,
+
+    OmniaPushBackEndRegistrationRequestDataUnparseable = 40,
+    OmniaPushBackEndRegistrationResponseDataUnparseable = 41,
+    OmniaPushBackEndRegistrationResponseDataNoDeviceUuid = 42
 };
 
 #endif

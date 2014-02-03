@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @class OmniaPushRegistrationParameters;
-@class OmniaPushRegistrationEngine;
 @class OmniaPushBackEndRegistrationResponseData;
 
 typedef void (^OmniaPushBackEndRegistrationComplete) (OmniaPushBackEndRegistrationResponseData* responseData);

@@ -49,27 +49,34 @@
 {
     // TODO - support ASYNC request in order to test timeouts
     if (self.shouldBeSuccessful) {
+        
         SEL selConnectionDidReceiveResponse = sel_registerName("connection:didReceiveResponse:");
+        SEL selConnectionDidReceiveData = sel_registerName("connection:didReceiveData:");
+        SEL selConnectionDidFinishLoading = sel_registerName("connectionDidFinishLoading:");
+        
         if ([self.delegate respondsToSelector:selConnectionDidReceiveResponse]) {
             
             [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveResponse:self.response];
             
-            if (self.chunks != nil) {
-                if (self.chunks.count > 0) {
-                    for (id chunk in self.chunks) {
-                        NSData *data = nil;
-                        if ([chunk isKindOfClass:[NSData class]]) {
-                            data = chunk;
-                        } else if ([chunk isKindOfClass:[NSString class]]) {
-                            data = [(NSString*)chunk dataUsingEncoding:NSUTF8StringEncoding];
+            if ([self.delegate respondsToSelector:selConnectionDidReceiveData]) {
+                if (self.chunks != nil) {
+                    if (self.chunks.count > 0) {
+                        for (id chunk in self.chunks) {
+                            NSData *data = nil;
+                            if ([chunk isKindOfClass:[NSData class]]) {
+                                data = chunk;
+                            } else if ([chunk isKindOfClass:[NSString class]]) {
+                                data = [(NSString*)chunk dataUsingEncoding:NSUTF8StringEncoding];
+                            }
+                            [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:data];
                         }
-                        [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:data];
+                    } else {
+                        [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:nil];
                     }
-                } else {
-                    [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:nil];
                 }
             }
-            
+        }
+        if ([self.delegate respondsToSelector:selConnectionDidFinishLoading]) {
             [(id<NSURLConnectionDataDelegate>)(self.delegate) connectionDidFinishLoading:self];
         }
     } else {
