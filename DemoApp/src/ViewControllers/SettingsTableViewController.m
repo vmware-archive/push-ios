@@ -22,7 +22,9 @@
 {
     [super viewDidLoad];
     [self loadSettings];
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
 }
+
 
 - (void) viewDidDisappear:(BOOL)animated
 {
