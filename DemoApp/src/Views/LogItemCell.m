@@ -36,7 +36,7 @@ static UIFont *labelFont = nil;
     self.labelMessage.frame = messageFrame;
     CGRect timestampFrame = CGRectMake(TIMESTAMP_LABEL_X, messageFrame.size.height + PADDING * 2.0f, TIMESTAMP_LABEL_WIDTH, TIMESTAMP_LABEL_HEIGHT);
     self.labelTimestamp.frame = timestampFrame;
-    self.backgroundColor = logItem.colour;
+    self.contentView.backgroundColor = logItem.colour;
 }
 
 - (CGRect) frameForLabelWithText:(NSString*)text containerSize:(CGSize)containerSize {
