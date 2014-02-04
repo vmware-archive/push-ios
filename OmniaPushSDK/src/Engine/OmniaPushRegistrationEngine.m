@@ -16,6 +16,8 @@
 #import "OmniaPushBackEndRegistrationRequest.h"
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
 #import "OmniaPushBackEndRegistrationResponseData.h"
+#import "OmniaPushBackEndUnregistrationRequest.h"
+#import "OmniaPushBackEndUnregistrationRequestProvider.h"
 #import "OmniaPushDebug.h"
 
 /*
@@ -60,7 +62,8 @@ YES |  \
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readwrite, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readwrite) OmniaPushRegistrationParameters *parameters;
-@property (nonatomic, readwrite) NSData *apnsDeviceToken;
+@property (nonatomic, readwrite) NSData *originalApnsDeviceToken;
+@property (nonatomic, readwrite) NSData *updatedApnsDeviceToken;
 @property (nonatomic, readwrite) NSError *error;
 @property (nonatomic, readwrite) BOOL didStartRegistration;
 @property (nonatomic, readwrite) BOOL didStartAPNSRegistration;
@@ -73,6 +76,8 @@ YES |  \
 @property (nonatomic, readwrite) BOOL didFinishBackendRegistration;
 @property (nonatomic, readwrite) BOOL didBackendRegistrationSucceed;
 @property (nonatomic, readwrite) BOOL didBackendRegistrationFail;
+@property (nonatomic, readwrite) BOOL didBackEndUnregistrationSucceed;
+@property (nonatomic, readwrite) BOOL didBackEndUnregistrationFail;
 @property (nonatomic, readwrite) BOOL didRegistrationSucceed;
 @property (nonatomic, readwrite) BOOL didRegistrationFail;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
@@ -110,6 +115,7 @@ YES |  \
     if (parameters == nil) {
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
+    self.originalApnsDeviceToken = [self.storage loadAPNSDeviceToken];
     self.parameters = parameters;
     self.didStartRegistration = YES;
     self.didStartAPNSRegistration = YES;
@@ -122,30 +128,23 @@ YES |  \
 - (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken
 {
     OmniaPushLog(@"Registration with APNS succeeded. Device token: \"%@\".", apnsDeviceToken);
-    self.apnsDeviceToken = apnsDeviceToken;
+    self.updatedApnsDeviceToken = apnsDeviceToken;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = YES;
+    [self.storage saveAPNSDeviceToken:apnsDeviceToken];
 
-    if (![self isBackEndRegistrationRequiredWithNewDeviceToken:apnsDeviceToken]) {
+    if ([self isBackEndUnregistrationRequired]) {
+        [self startBackEndUnregistration];
+        return;
+    }
+    
+    if (![self isBackEndRegistrationRequired]) {
         // Skip back-end registration and proceed to finish
         [self registrationSucceeded];
         return;
     }
     
-    [self.storage saveAPNSDeviceToken:apnsDeviceToken];
-    self.didStartBackendRegistration = YES;
-    
-    OmniaPushLog(@"Attempting registration with back-end server.");
-    NSObject<OmniaPushBackEndRegistrationRequest> *request = [OmniaPushBackEndRegistrationRequestProvider request];
-    [request startDeviceRegistration:apnsDeviceToken
-                          parameters:self.parameters
-                           onSuccess:^(OmniaPushBackEndRegistrationResponseData *responseData) {
-                               [self backendRegistrationSucceeded:responseData];
-                           }
-                           onFailure:^(NSError *error) {
-                               [self backendRegistrationFailed:error];
-                           }];
-    
+    [self startBackEndRegistration];
 }
 
 - (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError
@@ -155,18 +154,21 @@ YES |  \
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationFail = YES;
     [self.storage saveAPNSDeviceToken:nil];
-
-    [self registrationFailed]; // TODO - move to later in the flow
+    [self registrationFailed];
 }
 
 - (void) backendUnregistrationSucceeded
 {
-    
+    self.didFinishBackendUnregistration = YES;
+    self.didBackEndUnregistrationSucceed = YES;
+    [self startBackEndRegistration];
 }
 
 - (void) backendUnregistrationFailed:(NSError*)error
 {
-    
+    self.didFinishBackendUnregistration = YES;
+    self.didBackEndUnregistrationFail = YES;
+    [self startBackEndRegistration];
 }
 
 - (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
@@ -176,7 +178,7 @@ YES |  \
     self.didBackendRegistrationSucceed = YES;
 
     [self.storage saveBackEndDeviceID:responseData.deviceUuid];
-    [self registrationSucceeded]; // TODO - move to later in the flow
+    [self registrationSucceeded];
 }
 
 - (void) backendRegistrationFailed:(NSError*)backendRegistrationError
@@ -186,7 +188,7 @@ YES |  \
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationFail = YES;
     [self.storage saveBackEndDeviceID:nil];
-    [self registrationFailed]; // TODO - move to later in the flow
+    [self registrationFailed];
 }
 
 - (void) registrationSucceeded
@@ -194,7 +196,7 @@ YES |  \
     self.didRegistrationSucceed = YES;
     OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:self.application
                                                                                                  applicationDelegate:self.originalApplicationDelegate
-                                                                                                     apnsDeviceToken:self.apnsDeviceToken
+                                                                                                     apnsDeviceToken:self.updatedApnsDeviceToken
                                                                                                             listener:self.listener];
     [[OmniaPushOperationQueueProvider workerQueue] addOperation:op];
 }
@@ -211,20 +213,70 @@ YES |  \
 
 #pragma mark - Helpers
 
-- (BOOL) isBackEndRegistrationRequiredWithNewDeviceToken:(NSData*)newApnsDeviceToken
+- (BOOL) isBackEndRegistrationRequired
 {
+    // If not currently registered with the back-end then registration will be required
     NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
     if (previousBackEndDeviceId == nil) {
         return YES;
     }
     
-    NSData *previousApnsDeviceToken = [self.storage loadAPNSDeviceToken];
-    if (![newApnsDeviceToken isEqualToData:previousApnsDeviceToken]) {
+    // If the new device token is different from the old one then a new registration with the back-end will be required
+    if (![self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
         return YES;
     }
     
     OmniaPushLog(@"The new device token from APNS is the same as the old one. Back-end registration is not required.");
     return NO;
+}
+
+- (BOOL) isBackEndUnregistrationRequired
+{
+    // If not currently registered with the back-end then unregistration is not required
+    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
+    if (previousBackEndDeviceId == nil) {
+        return NO;
+    }
+
+    // If the new device token is the same as the previous one then unregistration is not required
+    if ([self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
+        return NO;
+    }
+
+    OmniaPushLog(@"Unregistration with the back-end is required.");
+    return YES;
+}
+
+- (void) startBackEndUnregistration
+{
+    self.didStartBackendUnregistration = YES;
+    [self.storage saveBackEndDeviceID:nil];
+    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
+    OmniaPushLog(@"Attempting unregistration with back-end server for back-end device ID \"%@\".", previousBackEndDeviceId);
+    
+    NSObject<OmniaPushBackEndUnregistrationRequest> *request = [OmniaPushBackEndUnregistrationRequestProvider request];
+    [request startDeviceUnregistration:previousBackEndDeviceId
+                             onSuccess:^{
+                                 [self backendUnregistrationSucceeded];
+                             }
+                             onFailure:^(NSError *error) {
+                                 [self backendUnregistrationFailed:error];
+                             }];
+}
+
+- (void) startBackEndRegistration
+{
+    self.didStartBackendRegistration = YES;
+    OmniaPushLog(@"Attempting registration with back-end server.");
+    NSObject<OmniaPushBackEndRegistrationRequest> *request = [OmniaPushBackEndRegistrationRequestProvider request];
+    [request startDeviceRegistration:self.updatedApnsDeviceToken
+                          parameters:self.parameters
+                           onSuccess:^(OmniaPushBackEndRegistrationResponseData *responseData) {
+                               [self backendRegistrationSucceeded:responseData];
+                           }
+                           onFailure:^(NSError *error) {
+                               [self backendRegistrationFailed:error];
+                           }];
 }
 
 @end

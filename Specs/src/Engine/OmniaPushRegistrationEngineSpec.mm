@@ -66,6 +66,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                        didAPNSRegistrationFail:BE_FALSE
                  didStartBackendUnregistration:BE_FALSE
                 didFinishBackendUnregistration:BE_FALSE
+               didBackEndUnregistrationSucceed:BE_FALSE
+                  didBackEndUnregistrationFail:BE_FALSE
                    didStartBackendRegistration:BE_FALSE
                   didFinishBackendRegistration:BE_FALSE
                  didBackendRegistrationSucceed:BE_FALSE
@@ -121,6 +123,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_TRUE
                       didFinishBackendRegistration:BE_TRUE
                      didBackendRegistrationSucceed:BE_TRUE
@@ -156,6 +160,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_TRUE
                       didFinishBackendRegistration:BE_TRUE
                      didBackendRegistrationSucceed:BE_TRUE
@@ -167,6 +173,119 @@ describe(@"OmniaPushRegistrationEngine", ^{
                 
                 [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
                                                backEndDeviceId:helper.helper.backEndDeviceId];
+            });
+            
+            it(@"successful complete registration after already registered with APNS and receiving a different device token from APNS", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper setupBackEndForSuccessfulRegistration];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:nil];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_TRUE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                       resultError:nil];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                               backEndDeviceId:helper.helper.backEndDeviceId];
+            });
+            
+            it(@"successful complete registration after already registered with everything and receiving a different device token from APNS with a successful unregistration", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper setupBackEndForSuccessfulUnregistration];
+                [helper setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:helper.helper.backEndDeviceId2];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:helper.helper.backEndDeviceId];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_TRUE
+                    didFinishBackendUnregistration:BE_TRUE
+                   didBackEndUnregistrationSucceed:BE_TRUE
+                      didBackEndUnregistrationFail:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_TRUE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                       resultError:nil];
+            
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                               backEndDeviceId:helper.helper.backEndDeviceId2];
+            });
+            
+            it(@"successful complete registration after already registered with everything and receiving a different device token from APNS with a failed unregistration", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                [helper setupBackEndForFailedUnregistrationWithError:testError];
+                [helper setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:helper.helper.backEndDeviceId2];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:helper.helper.backEndDeviceId];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_TRUE
+                    didFinishBackendUnregistration:BE_TRUE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_TRUE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_TRUE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                       resultError:nil];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                               backEndDeviceId:helper.helper.backEndDeviceId2];
             });
             
             it(@"successful complete registration after already registered with APNS and back-end", ^{
@@ -190,6 +309,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_FALSE
                       didFinishBackendRegistration:BE_FALSE
                      didBackendRegistrationSucceed:BE_FALSE
@@ -224,6 +345,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_TRUE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_FALSE
                       didFinishBackendRegistration:BE_FALSE
                      didBackendRegistrationSucceed:BE_FALSE
@@ -258,6 +381,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_TRUE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_FALSE
                       didFinishBackendRegistration:BE_FALSE
                      didBackendRegistrationSucceed:BE_FALSE
@@ -293,6 +418,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_TRUE
                       didFinishBackendRegistration:BE_TRUE
                      didBackendRegistrationSucceed:BE_FALSE
@@ -328,6 +455,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                            didAPNSRegistrationFail:BE_FALSE
                      didStartBackendUnregistration:BE_FALSE
                     didFinishBackendUnregistration:BE_FALSE
+                   didBackEndUnregistrationSucceed:BE_FALSE
+                      didBackEndUnregistrationFail:BE_FALSE
                        didStartBackendRegistration:BE_TRUE
                       didFinishBackendRegistration:BE_TRUE
                      didBackendRegistrationSucceed:BE_FALSE

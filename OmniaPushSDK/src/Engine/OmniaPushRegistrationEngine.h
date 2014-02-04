@@ -18,7 +18,8 @@
 @property (nonatomic, readonly) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readonly, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
-@property (nonatomic, readonly) NSData *apnsDeviceToken;
+@property (nonatomic, readonly) NSData *originalApnsDeviceToken;
+@property (nonatomic, readonly) NSData *updatedApnsDeviceToken;
 @property (nonatomic, readonly) NSError *error;
 @property (nonatomic, readonly) BOOL didStartRegistration;
 @property (nonatomic, readonly) BOOL didStartAPNSRegistration;
@@ -31,6 +32,8 @@
 @property (nonatomic, readonly) BOOL didFinishBackendRegistration;
 @property (nonatomic, readonly) BOOL didBackendRegistrationSucceed;
 @property (nonatomic, readonly) BOOL didBackendRegistrationFail;
+@property (nonatomic, readonly) BOOL didBackEndUnregistrationSucceed;
+@property (nonatomic, readonly) BOOL didBackEndUnregistrationFail;
 @property (nonatomic, readonly) BOOL didRegistrationSucceed;
 @property (nonatomic, readonly) BOOL didRegistrationFail;
 

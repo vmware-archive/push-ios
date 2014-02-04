@@ -34,7 +34,9 @@
 @property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
 @property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *apnsDeviceToken;
+@property (nonatomic) NSData *apnsDeviceToken2;
 @property (nonatomic) NSString *backEndDeviceId;
+@property (nonatomic) NSString *backEndDeviceId2;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
 @property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;
@@ -51,12 +53,14 @@
 // Application helpers
 - (id) setupApplication;
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes withNewApnsDeviceToken:(NSData*)newApnsDeviceToken;
 - (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError*)error;
 
 // Application Delegate helpers
 - (id<UIApplicationDelegate>) currentApplicationDelegate;
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
+- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
 
 // Application Delegate Proxy helpers

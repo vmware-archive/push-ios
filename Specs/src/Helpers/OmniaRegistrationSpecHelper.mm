@@ -13,7 +13,9 @@
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushBackEndRegistrationRequest.h"
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
+#import "OmniaPushBackEndUnregistrationRequestProvider.h"
 #import "OmniaPushFakeBackEndRegistrationRequest.h"
+#import "OmniaPushFakeBackEndUnregistrationRequest.h"
 #import "OmniaPushBackEndRegistrationResponseData.h"
 
 using namespace Cedar::Matchers;
@@ -63,22 +65,31 @@ using namespace Cedar::Doubles;
     if (self.helper) {
         [self.helper reset];
         self.helper = nil;
+        self.applicationMessages = nil;
+        self.applicationDelegateMessages = nil;
+        [OmniaPushBackEndRegistrationRequestProvider setRequest:nil];
+        [OmniaPushBackEndUnregistrationRequestProvider setRequest:nil];
     }
 }
 
 #pragma mark - Test setup helpers
 
-- (OmniaPushBackEndRegistrationResponseData*) getBackEndRegistrationResponseData
+- (OmniaPushBackEndRegistrationResponseData*) getBackEndRegistrationResponseDataForBackEndDeviceId:(NSString*)backEndDeviceId
 {
     OmniaPushBackEndRegistrationResponseData *responseData = [[OmniaPushBackEndRegistrationResponseData alloc] init];
-    responseData.deviceUuid = self.helper.backEndDeviceId;
+    responseData.deviceUuid = backEndDeviceId;
     return responseData;
 }
 
 - (void) setupBackEndForSuccessfulRegistration
 {
+    [self setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:self.helper.backEndDeviceId];
+}
+
+- (void) setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:(NSString*)newBackEndDeviceId
+{
     OmniaPushFakeBackEndRegistrationRequest *backEndRegistrationRequest = [[OmniaPushFakeBackEndRegistrationRequest alloc] init];
-    [backEndRegistrationRequest setupForSuccessWithResponseData:[self getBackEndRegistrationResponseData]];
+    [backEndRegistrationRequest setupForSuccessWithResponseData:[self getBackEndRegistrationResponseDataForBackEndDeviceId:newBackEndDeviceId]];
     [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
@@ -89,6 +100,19 @@ using namespace Cedar::Doubles;
     [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
+- (void) setupBackEndForSuccessfulUnregistration
+{
+    OmniaPushFakeBackEndUnregistrationRequest *backEndUnregistrationRequest = [[OmniaPushFakeBackEndUnregistrationRequest alloc] init];
+    [backEndUnregistrationRequest setupForSuccess];
+    [OmniaPushBackEndUnregistrationRequestProvider setRequest:backEndUnregistrationRequest];
+}
+
+- (void) setupBackEndForFailedUnregistrationWithError:(NSError*)error
+{
+    OmniaPushFakeBackEndUnregistrationRequest *backEndUnregistrationRequest = [[OmniaPushFakeBackEndUnregistrationRequest alloc] init];
+    [backEndUnregistrationRequest setupForFailureWithError:error];
+    [OmniaPushBackEndUnregistrationRequestProvider setRequest:backEndUnregistrationRequest];
+}
 
 - (void) setupPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
                                backEndDeviceId:(NSString*)backEndDeviceId
@@ -114,6 +138,8 @@ using namespace Cedar::Doubles;
             didAPNSRegistrationFail:(RegistrationStateResult)stateDidAPNSRegistrationFail
       didStartBackendUnregistration:(RegistrationStateResult)stateDidStartBackendUnregistration
      didFinishBackendUnregistration:(RegistrationStateResult)stateDidFinishBackendUnregistration
+    didBackEndUnregistrationSucceed:(RegistrationStateResult)stateDidBackEndUnregistrationSucceed
+       didBackEndUnregistrationFail:(RegistrationStateResult)stateDidBackEndUnregistrationFail
         didStartBackendRegistration:(RegistrationStateResult)stateDidStartBackendRegistration
        didFinishBackendRegistration:(RegistrationStateResult)stateDidFinishBackendRegistration
       didBackendRegistrationSucceed:(RegistrationStateResult)stateDidBackendRegistrationSucceed
@@ -130,13 +156,15 @@ using namespace Cedar::Doubles;
     verifyState(self.helper.registrationEngine.didAPNSRegistrationFail, stateDidAPNSRegistrationFail);
     verifyState(self.helper.registrationEngine.didStartBackendUnregistration, stateDidStartBackendUnregistration);
     verifyState(self.helper.registrationEngine.didFinishBackendUnregistration, stateDidFinishBackendUnregistration);
+    verifyState(self.helper.registrationEngine.didBackEndUnregistrationSucceed, stateDidBackEndUnregistrationSucceed);
+    verifyState(self.helper.registrationEngine.didBackEndUnregistrationFail, stateDidBackEndUnregistrationFail);
     verifyState(self.helper.registrationEngine.didStartBackendRegistration, stateDidStartBackendRegistration);
     verifyState(self.helper.registrationEngine.didFinishBackendRegistration, stateDidFinishBackendRegistration);
     verifyState(self.helper.registrationEngine.didBackendRegistrationSucceed, stateDidBackendRegistrationSucceed);
     verifyState(self.helper.registrationEngine.didBackendRegistrationFail, stateDidBackendRegistrationFail);
     verifyState(self.helper.registrationEngine.didRegistrationSucceed, stateDidRegistrationSucceed);
     verifyState(self.helper.registrationEngine.didRegistrationFail, stateDidRegistrationFail);
-    verifyValue(self.helper.registrationEngine.apnsDeviceToken, resultApnsDeviceToken);
+    verifyValue(self.helper.registrationEngine.updatedApnsDeviceToken, resultApnsDeviceToken);
     verifyValue(self.helper.registrationEngine.error, resultError);
 }
 

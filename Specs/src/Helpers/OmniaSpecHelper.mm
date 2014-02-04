@@ -39,8 +39,10 @@ using namespace Cedar::Doubles;
 {
     self = [super init];
     if (self) {
-        self.apnsDeviceToken = [@"TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
-        self.backEndDeviceId = @"BACK END DEVICE ID";
+        self.apnsDeviceToken = [@"TEST DEVICE TOKEN 1" dataUsingEncoding:NSUTF8StringEncoding];
+        self.apnsDeviceToken2 = [@"TEST DEVICE TOKEN 2" dataUsingEncoding:NSUTF8StringEncoding];
+        self.backEndDeviceId = @"BACK END DEVICE ID 1";
+        self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.application = [UIApplication sharedApplication];
         self.storage = [[OmniaPushPersistentStorage alloc] init];
         [self.storage reset];
@@ -55,6 +57,9 @@ using namespace Cedar::Doubles;
     self.workerQueue = nil;
     [OmniaPushOperationQueueProvider setWorkerQueue:nil];
     self.apnsDeviceToken = nil;
+    self.apnsDeviceToken2 = nil;
+    self.backEndDeviceId = nil;
+    self.backEndDeviceId2 = nil;
     self.application = nil;
     self.applicationDelegate = nil;
     self.registrationRequestOperation = nil;
@@ -79,8 +84,14 @@ using namespace Cedar::Doubles;
 
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
+    [self setupApplicationForSuccessfulRegistrationWithNotificationTypes:notificationTypes withNewApnsDeviceToken:self.apnsDeviceToken];
+}
+
+- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+                                                 withNewApnsDeviceToken:(NSData*)newApnsDeviceToken
+{
     self.application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
-        [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];
+        [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
     });
 }
 
@@ -116,7 +127,12 @@ using namespace Cedar::Doubles;
 
 - (void) setupApplicationDelegateForSuccessfulRegistration
 {
-    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, self.apnsDeviceToken);
+    [self setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:self.apnsDeviceToken];
+}
+
+- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken
+{
+    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, apnsDeviceToken);
 }
 
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error
