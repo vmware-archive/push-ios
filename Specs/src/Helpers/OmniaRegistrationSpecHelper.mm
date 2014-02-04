@@ -89,6 +89,14 @@ using namespace Cedar::Doubles;
     [OmniaPushBackEndRegistrationRequestProvider setRequest:backEndRegistrationRequest];
 }
 
+
+- (void) setupPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
+                               backEndDeviceId:(NSString*)backEndDeviceId
+{
+    [self.helper.storage saveAPNSDeviceToken:apnsDeviceToken];
+    [self.helper.storage saveBackEndDeviceID:backEndDeviceId];
+}
+
 #pragma mark - Test running helpers
 
 - (void) startRegistration

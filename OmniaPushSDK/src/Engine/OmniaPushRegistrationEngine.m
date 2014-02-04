@@ -75,6 +75,7 @@ YES |  \
 @property (nonatomic, readwrite) BOOL didBackendRegistrationFail;
 @property (nonatomic, readwrite) BOOL didRegistrationSucceed;
 @property (nonatomic, readwrite) BOOL didRegistrationFail;
+@property (nonatomic) OmniaPushPersistentStorage *storage;
 
 @end
 
@@ -97,6 +98,7 @@ YES |  \
         self.application = application;
         self.originalApplicationDelegate = originalApplicationDelegate;
         self.listener = listener;
+        self.storage = [[OmniaPushPersistentStorage alloc] init];
     }
     return self;
 }
@@ -123,7 +125,14 @@ YES |  \
     self.apnsDeviceToken = apnsDeviceToken;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = YES;
-    [self saveAPNSDeviceToken:apnsDeviceToken];
+
+    if (![self isBackEndRegistrationRequiredWithNewDeviceToken:apnsDeviceToken]) {
+        // Skip back-end registration and proceed to finish
+        [self registrationSucceeded];
+        return;
+    }
+    
+    [self.storage saveAPNSDeviceToken:apnsDeviceToken];
     self.didStartBackendRegistration = YES;
     
     OmniaPushLog(@"Attempting registration with back-end server.");
@@ -145,7 +154,8 @@ YES |  \
     self.error = apnsRegistrationError;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationFail = YES;
-    
+    [self.storage saveAPNSDeviceToken:nil];
+
     [self registrationFailed]; // TODO - move to later in the flow
 }
 
@@ -165,7 +175,7 @@ YES |  \
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = YES;
 
-    [self saveBackEndDeviceId:responseData.deviceUuid];
+    [self.storage saveBackEndDeviceID:responseData.deviceUuid];
     [self registrationSucceeded]; // TODO - move to later in the flow
 }
 
@@ -175,7 +185,7 @@ YES |  \
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationFail = YES;
-    [self saveBackEndDeviceId:nil];
+    [self.storage saveBackEndDeviceID:nil];
     [self registrationFailed]; // TODO - move to later in the flow
 }
 
@@ -201,16 +211,20 @@ YES |  \
 
 #pragma mark - Helpers
 
-- (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken
+- (BOOL) isBackEndRegistrationRequiredWithNewDeviceToken:(NSData*)newApnsDeviceToken
 {
-    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
-    [storage saveAPNSDeviceToken:apnsDeviceToken];
-}
-
-- (void) saveBackEndDeviceId:(NSString*)backEndDeviceId
-{
-    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
-    [storage saveBackEndDeviceID:backEndDeviceId];
+    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
+    if (previousBackEndDeviceId == nil) {
+        return YES;
+    }
+    
+    NSData *previousApnsDeviceToken = [self.storage loadAPNSDeviceToken];
+    if (![newApnsDeviceToken isEqualToData:previousApnsDeviceToken]) {
+        return YES;
+    }
+    
+    OmniaPushLog(@"The new device token from APNS is the same as the old one. Back-end registration is not required.");
+    return NO;
 }
 
 @end

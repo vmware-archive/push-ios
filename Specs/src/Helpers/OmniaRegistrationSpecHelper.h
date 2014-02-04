@@ -32,6 +32,8 @@ typedef enum RegistrationStateResult : NSUInteger {
 
 - (void) setupBackEndForSuccessfulRegistration;
 - (void) setupBackEndForFailedRegistrationWithError:(NSError*)error;
+- (void) setupPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
+                               backEndDeviceId:(NSString*)backEndDeviceId;
 
 // Test running helpers
 

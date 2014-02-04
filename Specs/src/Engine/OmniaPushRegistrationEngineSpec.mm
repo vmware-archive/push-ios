@@ -99,11 +99,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                 helper.helper.registrationEngine.parameters should_not be_nil;
             });
             
-            it(@"successful registration", ^{
+            it(@"successful complete registration", ^{
                 [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
                 [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
                 [helper.helper setupApplicationDelegateForSuccessfulRegistration];
                 [helper setupBackEndForSuccessfulRegistration];
+                [helper setupPersistentStorageAPNSDeviceToken:nil
+                                              backEndDeviceId:nil];
                 
                 [helper startRegistration];
                 
@@ -132,10 +134,81 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                backEndDeviceId:helper.helper.backEndDeviceId];
             });
             
-            it(@"APNS registration fails", ^{
+            it(@"successful complete registration after already registered with APNS", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistration];
+                [helper setupBackEndForSuccessfulRegistration];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:nil];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_TRUE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                       resultError:nil];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                               backEndDeviceId:helper.helper.backEndDeviceId];
+            });
+            
+            it(@"successful complete registration after already registered with APNS and back-end", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didRegisterForRemoteNotificationsWithDeviceToken:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForSuccessfulRegistration];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:helper.helper.backEndDeviceId];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_FALSE
+                      didFinishBackendRegistration:BE_FALSE
+                     didBackendRegistrationSucceed:BE_FALSE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_TRUE
+                               didRegistrationFail:BE_FALSE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                       resultError:nil];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                               backEndDeviceId:helper.helper.backEndDeviceId];
+            });
+            
+            it(@"APNS registration fails after fresh install", ^{
                 [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
                 [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
                 [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper setupPersistentStorageAPNSDeviceToken:nil
+                                              backEndDeviceId:nil];
 
                 [helper startRegistration];
 
@@ -164,12 +237,83 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                backEndDeviceId:nil];
             });
             
-            it(@"APNS registration succeeds and back-end registration fails", ^{
+            it(@"APNS registration fails after already registered", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
+                [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:nil];
+                
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_FALSE
+                           didAPNSRegistrationFail:BE_TRUE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_FALSE
+                      didFinishBackendRegistration:BE_FALSE
+                     didBackendRegistrationSucceed:BE_FALSE
+                        didBackendRegistrationFail:BE_FALSE
+                            didRegistrationSucceed:BE_FALSE
+                               didRegistrationFail:BE_TRUE
+                             resultAPNSDeviceToken:nil
+                                       resultError:testError];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:nil
+                                               backEndDeviceId:nil];
+            });
+            
+            it(@"APNS registration succeeds and back-end registration fails after fresh install", ^{
                 [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
                 [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
                 [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
                 [helper setupBackEndForFailedRegistrationWithError:testError];
+                [helper setupPersistentStorageAPNSDeviceToken:nil
+                                              backEndDeviceId:nil];
                 
+                [helper startRegistration];
+                
+                [helper verifyMessages];
+                
+                [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
+                                notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
+                
+                [helper verifyDidStartRegistration:BE_TRUE
+                          didStartAPNSRegistration:BE_TRUE
+                         didFinishAPNSRegistration:BE_TRUE
+                        didAPNSRegistrationSucceed:BE_TRUE
+                           didAPNSRegistrationFail:BE_FALSE
+                     didStartBackendUnregistration:BE_FALSE
+                    didFinishBackendUnregistration:BE_FALSE
+                       didStartBackendRegistration:BE_TRUE
+                      didFinishBackendRegistration:BE_TRUE
+                     didBackendRegistrationSucceed:BE_FALSE
+                        didBackendRegistrationFail:BE_TRUE
+                            didRegistrationSucceed:BE_FALSE
+                               didRegistrationFail:BE_TRUE
+                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                       resultError:testError];
+                
+                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                               backEndDeviceId:nil];
+            });
+            
+            it(@"APNS registration succeeds and back-end registration fails after previously registered", ^{
+                [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
+                [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+                [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+                [helper setupBackEndForFailedRegistrationWithError:testError];
+                [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                              backEndDeviceId:nil];
+
                 [helper startRegistration];
                 
                 [helper verifyMessages];
