@@ -21,10 +21,15 @@ NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 static OmniaPushSDK* sharedInstance = nil;
 static dispatch_once_t once_token = 0;
 static UIApplication *application = nil;
+static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+
+// Something seems to dealloc the original application delegate in the demo app between individual instances of the
+// SDK unless we keep a static reference to it above.  I think it's safe to leak the original application delegate
+// since there should usually be only one during most applications.  The demo app is an exception, but it's a test
+// app that is not intended to be released to production.
 
 @interface OmniaPushSDK ()
 
-@property (nonatomic, strong) id<UIApplicationDelegate> originalApplicationDelegate;
 @property (nonatomic, strong) OmniaPushAppDelegateProxy *appDelegateProxy;
 @property (nonatomic, strong) OmniaPushRegistrationEngine *registrationEngine;
 
@@ -63,6 +68,7 @@ static UIApplication *application = nil;
     self = [super init];
     if (self) {
         [OmniaPushSDK setupApplication:nil];
+        originalApplicationDelegate = application.delegate;
         
         self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application
                                                                originalApplicationDelegate:application.delegate
@@ -84,7 +90,6 @@ static UIApplication *application = nil;
             [self.appDelegateProxy cleanup];
         }
         self.appDelegateProxy = nil;
-        self.originalApplicationDelegate = nil;
         self.registrationEngine = nil;
     }
 }
