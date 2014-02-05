@@ -34,13 +34,17 @@
 
 - (IBAction) clearRegistrationPressed:(id)sender
 {
-    // TODO: WRITE ME!
+    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
+    [storage saveBackEndDeviceID:nil];
+    [storage saveAPNSDeviceToken:nil];
+    [self showAlert:@"Registration cleared."];
 }
 
 - (IBAction) resetToDefaults:(id)sender
 {
     [Settings resetToDefaults];
     [self loadSettings];
+    [self showAlert:@"Settings reset to defaults."];
 }
 
 - (void) loadSettings
@@ -55,6 +59,12 @@
     [Settings saveReleaseUuid:self.releaseUuidTextField.text];
     [Settings saveReleaseSecret:self.releaseSecretTextField.text];
     [Settings saveDeviceAlias:self.deviceAliasTextField.text];
+}
+
+- (void) showAlert:(NSString*)message
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:message message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+    [alertView show];
 }
 
 @end
