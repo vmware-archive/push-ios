@@ -59,7 +59,6 @@ typedef enum RegistrationStateResult : NSUInteger {
          didBackendRegistrationFail:(RegistrationStateResult)didBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)didRegistrationSucceed
                 didRegistrationFail:(RegistrationStateResult)didRegistrationFail
-              resultAPNSDeviceToken:(NSData*)resultApnsDeviceToken
                         resultError:(NSError*)resultError;
 
 - (void) verifyQueueCompletedOperations:(NSArray*)completedOperations

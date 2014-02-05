@@ -74,18 +74,19 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     didBackendRegistrationFail:BE_FALSE
                         didRegistrationSucceed:BE_FALSE
                            didRegistrationFail:BE_FALSE
-                         resultAPNSDeviceToken:nil
                                    resultError:nil];
         });
         
         context(@"when registering", ^{
             
             __block NSError *testError;
+            __block NSError *testError2;
             
             beforeEach(^{
                 [helper.helper setupQueues];
                 [helper.helper setupAppDelegateProxy];
                 testError = [NSError errorWithDomain:@"Some dumb error" code:0 userInfo:nil];
+                testError2 = [NSError errorWithDomain:@"Some exciting error" code:0 userInfo:nil];
             });
             
             it(@"should require parameters", ^{
@@ -149,7 +150,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                     didBackendRegistrationFail:BE_FALSE
                                         didRegistrationSucceed:BE_TRUE
                                            didRegistrationFail:BE_FALSE
-                                         resultAPNSDeviceToken:helper.helper.apnsDeviceToken
                                                    resultError:nil];
                         });
                     });
@@ -180,7 +180,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                         didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
                                                didRegistrationFail:BE_FALSE
-                                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
                                                        resultError:nil];
                             });
                         });
@@ -208,7 +207,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                         didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
                                                didRegistrationFail:BE_FALSE
-                                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken
                                                        resultError:nil];
                             });
                         });
@@ -251,7 +249,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                     didBackendRegistrationFail:BE_FALSE
                                         didRegistrationSucceed:BE_TRUE
                                            didRegistrationFail:BE_FALSE
-                                         resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
                                                    resultError:nil];
                         });
                     });
@@ -285,7 +282,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                         didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
                                                didRegistrationFail:BE_FALSE
-                                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
                                                        resultError:nil];
                                 
                             });
@@ -313,7 +309,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                         didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
                                                didRegistrationFail:BE_FALSE
-                                             resultAPNSDeviceToken:helper.helper.apnsDeviceToken2
                                                        resultError:nil];
                             });
                         });
@@ -322,153 +317,264 @@ describe(@"OmniaPushRegistrationEngine", ^{
             });
             
             context(@"failed registration", ^{
-                it(@"APNS registration fails after fresh install", ^{
+                
+                beforeEach(^{
                     [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
-                    [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
                     [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                    [helper setupPersistentStorageAPNSDeviceToken:nil
-                                                  backEndDeviceId:nil];
-                    
-                    [helper startRegistration];
-                    
-                    [helper verifyMessages];
-                    
-                    [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
-                                    notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
-                    
-                    [helper verifyDidStartRegistration:BE_TRUE
-                              didStartAPNSRegistration:BE_TRUE
-                             didFinishAPNSRegistration:BE_TRUE
-                            didAPNSRegistrationSucceed:BE_FALSE
-                               didAPNSRegistrationFail:BE_TRUE
-                         didStartBackendUnregistration:BE_FALSE
-                        didFinishBackendUnregistration:BE_FALSE
-                       didBackEndUnregistrationSucceed:BE_FALSE
-                          didBackEndUnregistrationFail:BE_FALSE
-                           didStartBackendRegistration:BE_FALSE
-                          didFinishBackendRegistration:BE_FALSE
-                         didBackendRegistrationSucceed:BE_FALSE
-                            didBackendRegistrationFail:BE_FALSE
-                                didRegistrationSucceed:BE_FALSE
-                                   didRegistrationFail:BE_TRUE
-                                 resultAPNSDeviceToken:nil
-                                           resultError:testError];
-                    
-                    [helper verifyPersistentStorageAPNSDeviceToken:nil
-                                                   backEndDeviceId:nil];
                 });
                 
-                it(@"APNS registration fails after already registered", ^{
-                    [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
-                    [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-                    [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                    [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                                  backEndDeviceId:nil];
-                    
-                    [helper startRegistration];
-                    
+                afterEach(^{
                     [helper verifyMessages];
-                    
                     [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
                                     notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
-                    
-                    [helper verifyDidStartRegistration:BE_TRUE
-                              didStartAPNSRegistration:BE_TRUE
-                             didFinishAPNSRegistration:BE_TRUE
-                            didAPNSRegistrationSucceed:BE_FALSE
-                               didAPNSRegistrationFail:BE_TRUE
-                         didStartBackendUnregistration:BE_FALSE
-                        didFinishBackendUnregistration:BE_FALSE
-                       didBackEndUnregistrationSucceed:BE_FALSE
-                          didBackEndUnregistrationFail:BE_FALSE
-                           didStartBackendRegistration:BE_FALSE
-                          didFinishBackendRegistration:BE_FALSE
-                         didBackendRegistrationSucceed:BE_FALSE
-                            didBackendRegistrationFail:BE_FALSE
-                                didRegistrationSucceed:BE_FALSE
-                                   didRegistrationFail:BE_TRUE
-                                 resultAPNSDeviceToken:nil
-                                           resultError:testError];
-                    
-                    [helper verifyPersistentStorageAPNSDeviceToken:nil
-                                                   backEndDeviceId:nil];
                 });
                 
-                it(@"APNS registration succeeds and back-end registration fails after fresh install", ^{
-                    [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
-                    [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                    [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                    [helper setupBackEndForFailedRegistrationWithError:testError];
-                    [helper setupPersistentStorageAPNSDeviceToken:nil
-                                                  backEndDeviceId:nil];
+                context(@"APNS registration fails", ^{
                     
-                    [helper startRegistration];
+                    beforeEach(^{
+                        [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+                    });
                     
-                    [helper verifyMessages];
+                    afterEach(^{
+                        [helper verifyPersistentStorageAPNSDeviceToken:nil
+                                                       backEndDeviceId:nil];
+                    });
                     
-                    [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
-                                    notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
+                    context(@"after a fresh install", ^{
+                        
+                        it(@"it should attempt to register with APNS and stop after that", ^{
+                            [helper setupPersistentStorageAPNSDeviceToken:nil
+                                                          backEndDeviceId:nil];
+                            
+                            [helper startRegistration];
+                            
+                            [helper verifyDidStartRegistration:BE_TRUE
+                                      didStartAPNSRegistration:BE_TRUE
+                                     didFinishAPNSRegistration:BE_TRUE
+                                    didAPNSRegistrationSucceed:BE_FALSE
+                                       didAPNSRegistrationFail:BE_TRUE
+                                 didStartBackendUnregistration:BE_FALSE
+                                didFinishBackendUnregistration:BE_FALSE
+                               didBackEndUnregistrationSucceed:BE_FALSE
+                                  didBackEndUnregistrationFail:BE_FALSE
+                                   didStartBackendRegistration:BE_FALSE
+                                  didFinishBackendRegistration:BE_FALSE
+                                 didBackendRegistrationSucceed:BE_FALSE
+                                    didBackendRegistrationFail:BE_FALSE
+                                        didRegistrationSucceed:BE_FALSE
+                                           didRegistrationFail:BE_TRUE
+                                                   resultError:testError];
+                        });
+                    });
+
+                    context(@"after already registered with APNS", ^{
+                        
+                        it(@"it should attempt to register anew with APNS and stop after that", ^{
+                            [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                                          backEndDeviceId:nil];
+                            
+                            [helper startRegistration];
+                            
+                            [helper verifyDidStartRegistration:BE_TRUE
+                                      didStartAPNSRegistration:BE_TRUE
+                                     didFinishAPNSRegistration:BE_TRUE
+                                    didAPNSRegistrationSucceed:BE_FALSE
+                                       didAPNSRegistrationFail:BE_TRUE
+                                 didStartBackendUnregistration:BE_FALSE
+                                didFinishBackendUnregistration:BE_FALSE
+                               didBackEndUnregistrationSucceed:BE_FALSE
+                                  didBackEndUnregistrationFail:BE_FALSE
+                                   didStartBackendRegistration:BE_FALSE
+                                  didFinishBackendRegistration:BE_FALSE
+                                 didBackendRegistrationSucceed:BE_FALSE
+                                    didBackendRegistrationFail:BE_FALSE
+                                        didRegistrationSucceed:BE_FALSE
+                                           didRegistrationFail:BE_TRUE
+                                                   resultError:testError];
+                        });
+                    });
                     
-                    [helper verifyDidStartRegistration:BE_TRUE
-                              didStartAPNSRegistration:BE_TRUE
-                             didFinishAPNSRegistration:BE_TRUE
-                            didAPNSRegistrationSucceed:BE_TRUE
-                               didAPNSRegistrationFail:BE_FALSE
-                         didStartBackendUnregistration:BE_FALSE
-                        didFinishBackendUnregistration:BE_FALSE
-                       didBackEndUnregistrationSucceed:BE_FALSE
-                          didBackEndUnregistrationFail:BE_FALSE
-                           didStartBackendRegistration:BE_TRUE
-                          didFinishBackendRegistration:BE_TRUE
-                         didBackendRegistrationSucceed:BE_FALSE
-                            didBackendRegistrationFail:BE_TRUE
-                                didRegistrationSucceed:BE_FALSE
-                                   didRegistrationFail:BE_TRUE
-                                 resultAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                           resultError:testError];
-                    
-                    [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                                   backEndDeviceId:nil];
+                    // TODO - add context - after registered with APNS and the back-end
                 });
-                
-                it(@"APNS registration succeeds and back-end registration fails after previously registered", ^{
-                    [helper.applicationDelegateMessages addObject:@"application:didFailToRegisterForRemoteNotificationsWithError:"];
-                    [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                    [helper.helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                    [helper setupBackEndForFailedRegistrationWithError:testError];
-                    [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                                  backEndDeviceId:nil];
+
+                context(@"APNS registration succeeds", ^{
                     
-                    [helper startRegistration];
-                    
-                    [helper verifyMessages];
-                    
-                    [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationFailedOperation class]]
-                                    notCompletedOperations:@[[OmniaPushRegistrationCompleteOperation class]]];
-                    
-                    [helper verifyDidStartRegistration:BE_TRUE
-                              didStartAPNSRegistration:BE_TRUE
-                             didFinishAPNSRegistration:BE_TRUE
-                            didAPNSRegistrationSucceed:BE_TRUE
-                               didAPNSRegistrationFail:BE_FALSE
-                         didStartBackendUnregistration:BE_FALSE
-                        didFinishBackendUnregistration:BE_FALSE
-                       didBackEndUnregistrationSucceed:BE_FALSE
-                          didBackEndUnregistrationFail:BE_FALSE
-                           didStartBackendRegistration:BE_TRUE
-                          didFinishBackendRegistration:BE_TRUE
-                         didBackendRegistrationSucceed:BE_FALSE
-                            didBackendRegistrationFail:BE_TRUE
-                                didRegistrationSucceed:BE_FALSE
-                                   didRegistrationFail:BE_TRUE
-                                 resultAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                           resultError:testError];
-                    
-                    [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                                   backEndDeviceId:nil];
+                    context(@"back-end registration fails", ^{
+                        
+                        beforeEach(^{
+                            [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
+                            [helper setupBackEndForFailedRegistrationWithError:testError];
+                        });
+                        
+                        context(@"previously not registered with APNS", ^{
+                            
+                            beforeEach(^{
+                                [helper setupPersistentStorageAPNSDeviceToken:nil
+                                                              backEndDeviceId:nil];
+                            });
+                            
+                            afterEach(^{
+                                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                                               backEndDeviceId:nil];
+                            });
+
+                            it(@"it should save the APNS device token, attempt to register with the back-end, and stop after that fails", ^{
+                                
+                                [helper startRegistration];
+                                
+                                [helper verifyDidStartRegistration:BE_TRUE
+                                          didStartAPNSRegistration:BE_TRUE
+                                         didFinishAPNSRegistration:BE_TRUE
+                                        didAPNSRegistrationSucceed:BE_TRUE
+                                           didAPNSRegistrationFail:BE_FALSE
+                                     didStartBackendUnregistration:BE_FALSE
+                                    didFinishBackendUnregistration:BE_FALSE
+                                   didBackEndUnregistrationSucceed:BE_FALSE
+                                      didBackEndUnregistrationFail:BE_FALSE
+                                       didStartBackendRegistration:BE_TRUE
+                                      didFinishBackendRegistration:BE_TRUE
+                                     didBackendRegistrationSucceed:BE_FALSE
+                                        didBackendRegistrationFail:BE_TRUE
+                                            didRegistrationSucceed:BE_FALSE
+                                               didRegistrationFail:BE_TRUE
+                                                       resultError:testError];
+                            });
+                        });
+                        
+                        context(@"previously registered with APNS", ^{
+                            
+                            context(@"APNS returns the same device token as before", ^{
+                                
+                                afterEach(^{
+                                    [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                                                   backEndDeviceId:nil];
+                                });
+
+                                context(@"previously not registered with back-end", ^{
+
+                                    beforeEach(^{
+                                        [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                                                      backEndDeviceId:nil];
+                                    });
+
+                                    it(@"it should attempt to register with the back-end and stop after that fails", ^{
+                                        
+                                        [helper startRegistration];
+                                        
+                                        [helper verifyDidStartRegistration:BE_TRUE
+                                                  didStartAPNSRegistration:BE_TRUE
+                                                 didFinishAPNSRegistration:BE_TRUE
+                                                didAPNSRegistrationSucceed:BE_TRUE
+                                                   didAPNSRegistrationFail:BE_FALSE
+                                             didStartBackendUnregistration:BE_FALSE
+                                            didFinishBackendUnregistration:BE_FALSE
+                                           didBackEndUnregistrationSucceed:BE_FALSE
+                                              didBackEndUnregistrationFail:BE_FALSE
+                                               didStartBackendRegistration:BE_TRUE
+                                              didFinishBackendRegistration:BE_TRUE
+                                             didBackendRegistrationSucceed:BE_FALSE
+                                                didBackendRegistrationFail:BE_TRUE
+                                                    didRegistrationSucceed:BE_FALSE
+                                                       didRegistrationFail:BE_TRUE
+                                                               resultError:testError];
+                                    });
+                                    
+                                });
+                                
+                                // NOTE - context @"back-end registration fails"/@"previously registered with APNS"/@"previously registered with back-end"
+                                // does not need a test here since back-end registration is skipped entirely in this scenario.
+                                
+                            });
+                            
+                            context(@"APNS returns a new device token", ^{
+
+                                context(@"previously not registered with back-end", ^{
+                                    
+                                    beforeEach(^{
+                                        [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                                                      backEndDeviceId:nil];
+                                    });
+                                    
+                                    afterEach(^{
+                                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                                                       backEndDeviceId:nil];
+                                    });
+                                    
+                                    it(@"it should attempt to register with the back-end and stop after that fails", ^{
+                                        
+                                        [helper startRegistration];
+                                        
+                                        [helper verifyDidStartRegistration:BE_TRUE
+                                                  didStartAPNSRegistration:BE_TRUE
+                                                 didFinishAPNSRegistration:BE_TRUE
+                                                didAPNSRegistrationSucceed:BE_TRUE
+                                                   didAPNSRegistrationFail:BE_FALSE
+                                             didStartBackendUnregistration:BE_FALSE
+                                            didFinishBackendUnregistration:BE_FALSE
+                                           didBackEndUnregistrationSucceed:BE_FALSE
+                                              didBackEndUnregistrationFail:BE_FALSE
+                                               didStartBackendRegistration:BE_TRUE
+                                              didFinishBackendRegistration:BE_TRUE
+                                             didBackendRegistrationSucceed:BE_FALSE
+                                                didBackendRegistrationFail:BE_TRUE
+                                                    didRegistrationSucceed:BE_FALSE
+                                                       didRegistrationFail:BE_TRUE
+                                                               resultError:testError];
+                                    });
+                                });
+                                
+                                context(@"previously registered with back-end", ^{
+                                    
+                                    beforeEach(^{
+                                        [helper setupPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
+                                                                      backEndDeviceId:helper.helper.backEndDeviceId];
+                                    });
+                                    
+                                    afterEach(^{
+                                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
+                                                                       backEndDeviceId:nil];
+                                    });
+
+                                    context(@"unregistration fails", ^{
+                                        
+                                        it(@"should save the new device token, unregister, watch that fail, start back-end registration anew, and stop after that fails", ^{
+                                            
+                                            [helper setupBackEndForFailedUnregistrationWithError:testError2];
+                                            
+                                            [helper startRegistration];
+                                            
+                                            [helper verifyDidStartRegistration:BE_TRUE
+                                                      didStartAPNSRegistration:BE_TRUE
+                                                     didFinishAPNSRegistration:BE_TRUE
+                                                    didAPNSRegistrationSucceed:BE_TRUE
+                                                       didAPNSRegistrationFail:BE_FALSE
+                                                 didStartBackendUnregistration:BE_TRUE
+                                                didFinishBackendUnregistration:BE_TRUE
+                                               didBackEndUnregistrationSucceed:BE_FALSE
+                                                  didBackEndUnregistrationFail:BE_TRUE
+                                                   didStartBackendRegistration:BE_TRUE
+                                                  didFinishBackendRegistration:BE_TRUE
+                                                 didBackendRegistrationSucceed:BE_FALSE
+                                                    didBackendRegistrationFail:BE_TRUE
+                                                        didRegistrationSucceed:BE_FALSE
+                                                           didRegistrationFail:BE_TRUE
+                                                                   resultError:testError];
+                                        });
+                                    });
+                                    
+//                                    context(@"unregistration succeeds", ^{
+//                                        
+//                                        it(@"should save the new device token, unregister, start back-end registration anew, and stop after that fails", ^{
+//                                            
+//                                        });
+//                                    });
+
+                                });
+                            });
+                        });
+                    });
                 });
             });
-
         });
     });
 });

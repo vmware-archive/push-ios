@@ -146,7 +146,6 @@ using namespace Cedar::Doubles;
          didBackendRegistrationFail:(RegistrationStateResult)stateDidBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)stateDidRegistrationSucceed
                 didRegistrationFail:(RegistrationStateResult)stateDidRegistrationFail
-              resultAPNSDeviceToken:(NSData*)resultApnsDeviceToken
                         resultError:(NSError*)resultError
 {
     verifyState(self.helper.registrationEngine.didStartRegistration, stateDidStartRegistration);
@@ -164,7 +163,6 @@ using namespace Cedar::Doubles;
     verifyState(self.helper.registrationEngine.didBackendRegistrationFail, stateDidBackendRegistrationFail);
     verifyState(self.helper.registrationEngine.didRegistrationSucceed, stateDidRegistrationSucceed);
     verifyState(self.helper.registrationEngine.didRegistrationFail, stateDidRegistrationFail);
-    verifyValue(self.helper.registrationEngine.updatedApnsDeviceToken, resultApnsDeviceToken);
     verifyValue(self.helper.registrationEngine.error, resultError);
 }
 
