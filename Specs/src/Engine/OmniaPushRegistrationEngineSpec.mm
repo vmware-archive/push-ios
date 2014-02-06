@@ -19,8 +19,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
     beforeEach(^{
         helper = [[OmniaRegistrationSpecHelper alloc] initWithSpecHelper:[[OmniaSpecHelper alloc] init]];
         [helper setup];
-        [helper.helper.storage saveAPNSDeviceToken:nil];
-        [helper.helper.storage saveBackEndDeviceID:nil];
+        [helper saveAPNSDeviceToken:nil];
+        [helper saveBackEndDeviceID:nil];
     });
     
     afterEach(^{
@@ -114,8 +114,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     });
                     
                     afterEach(^{
-                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken
-                                                       backEndDeviceId:helper.helper.backEndDeviceId];
+                        [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken);
+                        [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
                     });
                     
                     context(@"when not already registered with APNS", ^{
@@ -140,7 +140,7 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     context(@"already registered with APNS", ^{
                         
                         beforeEach(^{
-                            [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                            [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
                         });
                         
                         context(@"not already registered with the back-end", ^{
@@ -165,7 +165,7 @@ describe(@"OmniaPushRegistrationEngine", ^{
                         context(@"already registered with the back-end", ^{
                             
                             beforeEach(^{
-                                [helper.helper.storage saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
                             });
                             
                             it(@"should still register with APNS but skip the back-end registration", ^{
@@ -189,12 +189,12 @@ describe(@"OmniaPushRegistrationEngine", ^{
                         [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
                         [helper.helper setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:helper.helper.apnsDeviceToken2];
                         [helper setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:helper.helper.backEndDeviceId2];
-                        [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                        [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
                     });
                     
                     afterEach(^{
-                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
-                                                       backEndDeviceId:helper.helper.backEndDeviceId2];
+                        [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken2);
+                        [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId2);
                     });
 
                     context(@"not registered with back-end yet", ^{
@@ -215,7 +215,7 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     context(@"already registered with the back-end", ^{
                         
                         beforeEach(^{
-                            [helper.helper.storage saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                            [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
                         });
 
                         context(@"unregistration is successful", ^{
@@ -283,8 +283,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     context(@"not previously registered with the back-end", ^{
                         
                         afterEach(^{
-                            [helper verifyPersistentStorageAPNSDeviceToken:nil
-                                                           backEndDeviceId:nil];
+                            [helper apnsDeviceToken] should be_nil;
+                            [helper backEndDeviceID] should be_nil;
                         });
                         
                         context(@"after a fresh install", ^{
@@ -305,7 +305,7 @@ describe(@"OmniaPushRegistrationEngine", ^{
                         context(@"after already registered with APNS", ^{
                             
                             beforeEach(^{
-                                [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                                [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
                             });
                             
                             it(@"it should attempt to register anew with APNS and stop after that", ^{
@@ -325,13 +325,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     context(@"previously registered with the back-end", ^{
                         
                         beforeEach(^{
-                            [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
-                            [helper.helper.storage saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                            [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                            [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
                         });
                         
                         afterEach(^{
-                            [helper verifyPersistentStorageAPNSDeviceToken:nil
-                                                           backEndDeviceId:helper.helper.backEndDeviceId];
+                            [helper apnsDeviceToken] should be_nil;
+                            [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
                         });
 
                         context(@"after already registered with APNS and the back-end", ^{
@@ -363,8 +363,8 @@ describe(@"OmniaPushRegistrationEngine", ^{
                         context(@"previously not registered with APNS", ^{
                             
                             afterEach(^{
-                                [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
-                                                               backEndDeviceId:nil];
+                                [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken2);
+                                [helper backEndDeviceID] should be_nil;
                             });
 
                             it(@"it should save the APNS device token, attempt to register with the back-end, and stop after that fails", ^{
@@ -384,16 +384,16 @@ describe(@"OmniaPushRegistrationEngine", ^{
                             
                             context(@"APNS returns the same device token as before", ^{
                                 
+                                beforeEach(^{
+                                    [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken2];
+                                });
+                                
                                 afterEach(^{
-                                    [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
-                                                                   backEndDeviceId:nil];
+                                    [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken2);
+                                    [helper backEndDeviceID] should be_nil;
                                 });
 
                                 context(@"previously not registered with back-end", ^{
-
-                                    beforeEach(^{
-                                        [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken2];
-                                    });
 
                                     it(@"it should attempt to register with the back-end and stop after that fails", ^{
                                         
@@ -417,14 +417,17 @@ describe(@"OmniaPushRegistrationEngine", ^{
                             context(@"APNS returns a new device token", ^{
 
                                 beforeEach(^{
-                                    [helper.helper.storage saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                                    [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
+                                });
+                                
+                                afterEach(^{
+                                    [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken2);
                                 });
 
                                 context(@"previously not registered with back-end", ^{
                                     
                                     afterEach(^{
-                                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
-                                                                       backEndDeviceId:nil];
+                                        [helper backEndDeviceID] should be_nil;
                                     });
                                     
                                     it(@"it should attempt to register with the back-end and stop after that fails", ^{
@@ -443,12 +446,11 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                 context(@"previously registered with back-end", ^{
                                     
                                     beforeEach(^{
-                                        [helper.helper.storage saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                        [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
                                     });
                                     
                                     afterEach(^{
-                                        [helper verifyPersistentStorageAPNSDeviceToken:helper.helper.apnsDeviceToken2
-                                                                       backEndDeviceId:nil];
+                                        [helper backEndDeviceID] should be_nil;
                                     });
 
                                     context(@"unregistration fails", ^{

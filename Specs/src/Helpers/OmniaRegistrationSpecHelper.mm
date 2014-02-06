@@ -114,11 +114,56 @@ using namespace Cedar::Doubles;
     [OmniaPushBackEndUnregistrationRequestProvider setRequest:backEndUnregistrationRequest];
 }
 
-- (void) setupPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
-                               backEndDeviceId:(NSString*)backEndDeviceId
+#pragma mark - Storage helpers
+
+- (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken
 {
     [self.helper.storage saveAPNSDeviceToken:apnsDeviceToken];
+}
+
+- (NSData*) apnsDeviceToken
+{
+    return [self.helper.storage loadAPNSDeviceToken];
+}
+
+- (void) saveBackEndDeviceID:(NSString*)backEndDeviceId
+{
     [self.helper.storage saveBackEndDeviceID:backEndDeviceId];
+}
+
+- (NSString*) backEndDeviceID
+{
+    return [self.helper.storage loadBackEndDeviceID];
+}
+
+- (void) saveReleaseUuid:(NSString*)releaseUuid
+{
+    [self.helper.storage saveReleaseUuid:releaseUuid];
+}
+
+- (NSString*) releaseUuid
+{
+    return [self.helper.storage loadReleaseUuid];
+}
+
+- (void) saveReleaseSecret:(NSString*)releaseSecret
+{
+    [self.helper.storage saveReleaseSecret:releaseSecret];
+}
+
+- (NSString*) releaseSecret
+{
+    return [self.helper.storage loadReleaseSecret];
+}
+
+- (void) saveDeviceAlias:(NSString*)deviceAlias
+{
+    [self.helper.storage saveDeviceAlias:deviceAlias];
+}
+
+- (NSString*) deviceAlias
+{
+    return [self.helper.storage loadDeviceAlias];
 }
 
 #pragma mark - Test running helpers
@@ -179,11 +224,5 @@ using namespace Cedar::Doubles;
     }
 }
 
-- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
-                                backEndDeviceId:(NSString*)backEndDeviceId
-{
-    verifyValue([self.helper.storage loadAPNSDeviceToken], apnsDeviceToken);
-    verifyValue([self.helper.storage loadBackEndDeviceID], backEndDeviceId);
-}
 
 @end

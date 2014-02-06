@@ -35,8 +35,19 @@ typedef enum RegistrationStateResult : NSUInteger {
 - (void) setupBackEndForFailedRegistrationWithError:(NSError*)error;
 - (void) setupBackEndForSuccessfulUnregistration;
 - (void) setupBackEndForFailedUnregistrationWithError:(NSError*)error;
-- (void) setupPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
-                               backEndDeviceId:(NSString*)backEndDeviceId;
+
+// Storage helpers
+
+- (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken;
+- (void) saveBackEndDeviceID:(NSString*)backEndDeviceId;
+- (void) saveReleaseUuid:(NSString*)releaseUuid;
+- (void) saveReleaseSecret:(NSString*)releaseSecret;
+- (void) saveDeviceAlias:(NSString*)deviceAlias;
+- (NSData*) apnsDeviceToken;
+- (NSString*) backEndDeviceID;
+- (NSString*) releaseUuid;
+- (NSString*) releaseSecret;
+- (NSString*) deviceAlias;
 
 // Test running helpers
 
@@ -61,8 +72,5 @@ typedef enum RegistrationStateResult : NSUInteger {
                  notCompletedOperations:(NSArray*)notCompletedOperations;
 
 - (void) verifyMessages;
-
-- (void) verifyPersistentStorageAPNSDeviceToken:(NSData*)apnsDeviceToken
-                                backEndDeviceId:(NSString*)backEndDeviceId;
 
 @end

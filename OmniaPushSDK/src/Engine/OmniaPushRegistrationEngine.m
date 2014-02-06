@@ -64,6 +64,9 @@ YES |  \
 @property (nonatomic, readwrite) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readwrite) NSData *originalApnsDeviceToken;
 @property (nonatomic, readwrite) NSData *updatedApnsDeviceToken;
+@property (nonatomic, readwrite) NSString *originalReleaseUuid;
+@property (nonatomic, readwrite) NSString *originalReleaseSecret;
+@property (nonatomic, readwrite) NSString *originalDeviceAlias;
 @property (nonatomic, readwrite) NSError *error;
 @property (nonatomic, readwrite) BOOL didStartRegistration;
 @property (nonatomic, readwrite) BOOL didStartAPNSRegistration;
@@ -112,6 +115,9 @@ YES |  \
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
     self.originalApnsDeviceToken = [self.storage loadAPNSDeviceToken];
+    self.originalReleaseUuid = [self.storage loadReleaseUuid];
+    self.originalReleaseSecret = [self.storage loadReleaseSecret];
+    self.originalDeviceAlias = [self.storage loadDeviceAlias];
     self.parameters = parameters;
     self.didStartRegistration = YES;
     self.didStartAPNSRegistration = YES;
@@ -209,6 +215,23 @@ YES |  \
 
 #pragma mark - Helpers
 
+- (BOOL) isBackEndUnregistrationRequired
+{
+    // If not currently registered with the back-end then unregistration is not required
+    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
+    if (previousBackEndDeviceId == nil) {
+        return NO;
+    }
+    
+    // If the new device token is the same as the previous one then unregistration is not required
+    if ([self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
+        return NO;
+    }
+    
+    OmniaPushLog(@"Unregistration with the back-end is required.");
+    return YES;
+}
+
 - (BOOL) isBackEndRegistrationRequired
 {
     // If not currently registered with the back-end then registration will be required
@@ -226,22 +249,6 @@ YES |  \
     return NO;
 }
 
-- (BOOL) isBackEndUnregistrationRequired
-{
-    // If not currently registered with the back-end then unregistration is not required
-    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
-    if (previousBackEndDeviceId == nil) {
-        return NO;
-    }
-
-    // If the new device token is the same as the previous one then unregistration is not required
-    if ([self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
-        return NO;
-    }
-
-    OmniaPushLog(@"Unregistration with the back-end is required.");
-    return YES;
-}
 
 - (void) startBackEndUnregistration
 {

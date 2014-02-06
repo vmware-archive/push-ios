@@ -20,6 +20,9 @@
 @property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
 @property (nonatomic, readonly) NSData *originalApnsDeviceToken;
 @property (nonatomic, readonly) NSData *updatedApnsDeviceToken;
+@property (nonatomic, readonly) NSString *originalReleaseUuid;
+@property (nonatomic, readonly) NSString *originalReleaseSecret;
+@property (nonatomic, readonly) NSString *originalDeviceAlias;
 @property (nonatomic, readonly) NSError *error;
 @property (nonatomic, readonly) BOOL didStartRegistration;
 @property (nonatomic, readonly) BOOL didStartAPNSRegistration;
