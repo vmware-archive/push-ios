@@ -18,4 +18,13 @@
 - (void) saveBackEndDeviceID:(NSString*)backEndDeviceId;
 - (NSString*) loadBackEndDeviceID;
 
+- (void) saveReleaseUuid:(NSString*)releaseUuid;
+- (NSString*) loadReleaseUuid;
+
+- (void) saveReleaseSecret:(NSString*)releaseSecret;
+- (NSString*) loadReleaseSecret;
+
+- (void) saveDeviceAlias:(NSString*)deviceAlias;
+- (NSString*) loadDeviceAlias;
+
 @end
