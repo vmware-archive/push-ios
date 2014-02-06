@@ -37,6 +37,9 @@
     OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
     [storage saveBackEndDeviceID:nil];
     [storage saveAPNSDeviceToken:nil];
+    [storage saveReleaseUuid:nil];
+    [storage saveReleaseSecret:nil];
+    [storage saveDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
 }
 

@@ -37,6 +37,19 @@
                        onSuccess:(OmniaPushBackEndRegistrationComplete)successBlock
                        onFailure:(OmniaPushBackEndRegistrationFailed)failBlock
 {
+    if (apnsDeviceToken == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"apnsDeviceToken may not be nil"];
+    }
+    if (parameters == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
+    }
+    if (successBlock == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"successBlock may not be nil"];
+    }
+    if (failBlock == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"failBlock may not be nil"];
+    }
+    
     if (self.isSuccessfulRequest) {
         successBlock(self.responseData);
     } else {

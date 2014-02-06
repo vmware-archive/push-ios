@@ -24,6 +24,9 @@
 #define TEST_RELEASE_UUID                     @"444-555-666-777"
 #define TEST_RELEASE_SECRET                   @"No secret is as strong as its blabbiest keeper"
 #define TEST_DEVICE_ALIAS                     @"Let's watch cat videos"
+#define TEST_RELEASE_UUID_2                   @"222-444-999-ZZZ"
+#define TEST_RELEASE_SECRET_2                 @"My cat's breath smells like cat food"
+#define TEST_DEVICE_ALIAS_2                   @"I can haz cheezburger?"
 
 @interface OmniaSpecHelper : NSObject
 
@@ -74,6 +77,9 @@
 
 // Parameters helpers
 - (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+- (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid;
+- (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret;
+- (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias;
 
 // Registration Engine helpers
 - (OmniaPushRegistrationEngine*) setupRegistrationEngine;

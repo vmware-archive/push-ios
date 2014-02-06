@@ -107,9 +107,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     [helper verifyMessages];
                     [helper verifyQueueCompletedOperations:@[[OmniaPushAPNSRegistrationRequestOperation class], [OmniaPushRegistrationCompleteOperation class]]
                                     notCompletedOperations:@[[OmniaPushRegistrationFailedOperation class]]];
-                    [helper releaseUuid] should equal(TEST_RELEASE_UUID);
-                    [helper releaseSecret] should equal(TEST_RELEASE_SECRET);
-                    [helper deviceAlias] should equal(TEST_DEVICE_ALIAS);
                 });
                 
                 context(@"receiving the regular device token from APNS", ^{
@@ -122,6 +119,9 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     afterEach(^{
                         [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken);
                         [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
+                        [helper releaseUuid] should equal(TEST_RELEASE_UUID);
+                        [helper releaseSecret] should equal(TEST_RELEASE_SECRET);
+                        [helper deviceAlias] should equal(TEST_DEVICE_ALIAS);
                     });
                     
                     context(@"when not already registered with APNS", ^{
@@ -192,77 +192,326 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     });
                 });
                 
-                context(@"receiving a different device token from APNS", ^{
-
+                context(@"already registered with APNS",^{
+                    
                     beforeEach(^{
                         [helper.helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES withNewApnsDeviceToken:helper.helper.apnsDeviceToken2];
                         [helper.helper setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:helper.helper.apnsDeviceToken2];
-                        [helper setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:helper.helper.backEndDeviceId2];
                         [helper saveAPNSDeviceToken:helper.helper.apnsDeviceToken];
                     });
                     
                     afterEach(^{
                         [helper apnsDeviceToken] should equal(helper.helper.apnsDeviceToken2);
-                        [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId2);
                     });
-
-                    context(@"not registered with back-end yet", ^{
-
-                        it(@"should skip unregistration with the back-end and then register with the back-end", ^{
-                            
-                            [helper startRegistration];
-                            
-                            [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
-                                     didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
-                                 didStartBackendUnregistration:BE_FALSE didFinishBackendUnregistration:BE_FALSE
-                               didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
-                                  didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
-                                        didRegistrationSucceed:BE_TRUE  resultError:nil];
-                        });
-                    });
-
-                    context(@"already registered with the back-end", ^{
+                    
+                    context(@"receiving a different device token from APNS", ^{
                         
                         beforeEach(^{
-                            [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
-                        });
-
-                        context(@"unregistration is successful", ^{
-                            
-                            beforeEach(^{
-                                [helper setupBackEndForSuccessfulUnregistration];
-                            });
-                            
-                            it(@"should unregister with the back-end and then register anew with the back-end", ^{
-                                
-                                [helper startRegistration];
-                                
-                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
-                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
-                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
-                                   didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
-                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
-                                            didRegistrationSucceed:BE_TRUE  resultError:nil];
-                                
-                            });
+                            [helper setupBackEndForSuccessfulRegistrationWithNewBackEndDeviceId:helper.helper.backEndDeviceId2];
                         });
                         
-                        context(@"unregistration fails", ^{
+                        afterEach(^{
+                            [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId2);
+                            [helper releaseUuid] should equal(TEST_RELEASE_UUID);
+                            [helper releaseSecret] should equal(TEST_RELEASE_SECRET);
+                            [helper deviceAlias] should equal(TEST_DEVICE_ALIAS);
+                        });
+                        
+                        context(@"not registered with back-end yet", ^{
                             
-                            beforeEach(^{
-                                [helper setupBackEndForFailedUnregistrationWithError:testError];
-                            });
-                            
-                            it(@"should register anew with the back-end even after unregistration fails", ^{
+                            it(@"should skip unregistration with the back-end and then register with the back-end", ^{
                                 
                                 [helper startRegistration];
                                 
                                 [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
-                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                     didStartBackendUnregistration:BE_FALSE didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
                                       didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
                                             didRegistrationSucceed:BE_TRUE  resultError:nil];
+                            });
+                        });
+                        
+                        context(@"already registered with the back-end", ^{
+                            
+                            beforeEach(^{
+                                [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                            });
+                            
+                            context(@"unregistration is successful", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForSuccessfulUnregistration];
+                                });
+                                
+                                it(@"should unregister with the back-end and then register anew with the back-end", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                    
+                                });
+                            });
+                            
+                            context(@"unregistration fails", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForFailedUnregistrationWithError:testError];
+                                });
+                                
+                                it(@"should register anew with the back-end even after unregistration fails", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                });
+                            });
+                        });
+                    });
+                    
+                    context(@"receiving a new release uuid in the parameters", ^{
+                        
+                        beforeEach(^{
+                            [helper setupBackEndForSuccessfulRegistration];
+                            [helper.helper changeReleaseUuidInParameters:TEST_RELEASE_UUID_2];
+                        });
+                        
+                        afterEach(^{
+                            [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
+                            [helper releaseUuid] should equal(TEST_RELEASE_UUID_2);
+                            [helper releaseSecret] should equal(TEST_RELEASE_SECRET);
+                            [helper deviceAlias] should equal(TEST_DEVICE_ALIAS);
+                        });
+                        
+                        context(@"not registered with back-end yet", ^{
+                            
+                            it(@"should skip unregistration with the back-end and then register with the back-end", ^{
+                                
+                                [helper startRegistration];
+                                
+                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                     didStartBackendUnregistration:BE_FALSE didFinishBackendUnregistration:BE_FALSE
+                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                            didRegistrationSucceed:BE_TRUE  resultError:nil];
+                            });
+                        });
+                        
+                        context(@"already registered with the back-end", ^{
+                            
+                            beforeEach(^{
+                                [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                [helper saveReleaseUuid:TEST_RELEASE_UUID];
+                                [helper saveReleaseSecret:TEST_RELEASE_SECRET];
+                                [helper saveDeviceAlias:TEST_DEVICE_ALIAS];
+                            });
+                            
+                            context(@"unregistration is successful", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForSuccessfulUnregistration];
+                                });
+                                
+                                it(@"should unregister with the back-end and then register anew with the back-end", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                    
+                                });
+                            });
+                            
+                            context(@"unregistration fails", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForFailedUnregistrationWithError:testError];
+                                });
+                                
+                                it(@"should register anew with the back-end even after unregistration fails", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                });
+                            });
+                        });
+                    });
+                    
+                    context(@"receiving a new release secret in the parameters", ^{
+                        
+                        beforeEach(^{
+                            [helper setupBackEndForSuccessfulRegistration];
+                            [helper.helper changeReleaseSecretInParameters:TEST_RELEASE_SECRET_2];
+                        });
+                        
+                        afterEach(^{
+                            [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
+                            [helper releaseUuid] should equal(TEST_RELEASE_UUID);
+                            [helper releaseSecret] should equal(TEST_RELEASE_SECRET_2);
+                            [helper deviceAlias] should equal(TEST_DEVICE_ALIAS);
+                        });
+                        
+                        context(@"not registered with back-end yet", ^{
+                            
+                            it(@"should skip unregistration with the back-end and then register with the back-end", ^{
+                                
+                                [helper startRegistration];
+                                
+                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                     didStartBackendUnregistration:BE_FALSE didFinishBackendUnregistration:BE_FALSE
+                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                            didRegistrationSucceed:BE_TRUE  resultError:nil];
+                            });
+                        });
+                        
+                        context(@"already registered with the back-end", ^{
+                            
+                            beforeEach(^{
+                                [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                [helper saveReleaseUuid:TEST_RELEASE_UUID];
+                                [helper saveReleaseSecret:TEST_RELEASE_SECRET];
+                                [helper saveDeviceAlias:TEST_DEVICE_ALIAS];
+                            });
+                            
+                            context(@"unregistration is successful", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForSuccessfulUnregistration];
+                                });
+                                
+                                it(@"should unregister with the back-end and then register anew with the back-end", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                    
+                                });
+                            });
+                            
+                            context(@"unregistration fails", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForFailedUnregistrationWithError:testError];
+                                });
+                                
+                                it(@"should register anew with the back-end even after unregistration fails", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                });
+                            });
+                        });
+                    });
+                    
+                    context(@"receiving a new device alias in the parameters", ^{
+                        
+                        beforeEach(^{
+                            [helper setupBackEndForSuccessfulRegistration];
+                            [helper.helper changeDeviceAliasInParameters:TEST_DEVICE_ALIAS_2];
+                        });
+                        
+                        afterEach(^{
+                            [helper backEndDeviceID] should equal(helper.helper.backEndDeviceId);
+                            [helper releaseUuid] should equal(TEST_RELEASE_UUID);
+                            [helper releaseSecret] should equal(TEST_RELEASE_SECRET);
+                            [helper deviceAlias] should equal(TEST_DEVICE_ALIAS_2);
+                        });
+                        
+                        context(@"not registered with back-end yet", ^{
+                            
+                            it(@"should skip unregistration with the back-end and then register with the back-end", ^{
+                                
+                                [helper startRegistration];
+                                
+                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                     didStartBackendUnregistration:BE_FALSE didFinishBackendUnregistration:BE_FALSE
+                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                            didRegistrationSucceed:BE_TRUE  resultError:nil];
+                            });
+                        });
+                        
+                        context(@"already registered with the back-end", ^{
+                            
+                            beforeEach(^{
+                                [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                [helper saveReleaseUuid:TEST_RELEASE_UUID];
+                                [helper saveReleaseSecret:TEST_RELEASE_SECRET];
+                                [helper saveDeviceAlias:TEST_DEVICE_ALIAS];
+                            });
+                            
+                            context(@"unregistration is successful", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForSuccessfulUnregistration];
+                                });
+                                
+                                it(@"should unregister with the back-end and then register anew with the back-end", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                    
+                                });
+                            });
+                            
+                            context(@"unregistration fails", ^{
+                                
+                                beforeEach(^{
+                                    [helper setupBackEndForFailedUnregistrationWithError:testError];
+                                });
+                                
+                                it(@"should register anew with the back-end even after unregistration fails", ^{
+                                    
+                                    [helper startRegistration];
+                                    
+                                    [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                             didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                         didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                       didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                          didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_TRUE
+                                                didRegistrationSucceed:BE_TRUE  resultError:nil];
+                                });
                             });
                         });
                     });
@@ -287,7 +536,6 @@ describe(@"OmniaPushRegistrationEngine", ^{
                     beforeEach(^{
                         [helper.helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
                     });
-                    
                     
                     context(@"not previously registered with the back-end", ^{
                         
@@ -434,9 +682,154 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                     
                                 });
                                 
-                                // NOTE - context @"back-end registration fails"/@"previously registered with APNS"/@"previously registered with back-end"
-                                // does not need a test here since back-end registration is skipped entirely in this scenario (and hence would be considered a success)
-                                
+                                context(@"previously registered with back-end", ^{
+                                    
+                                    beforeEach(^{
+                                        [helper saveBackEndDeviceID:helper.helper.backEndDeviceId];
+                                        [helper saveReleaseUuid:TEST_RELEASE_UUID];
+                                        [helper saveReleaseSecret:TEST_RELEASE_SECRET];
+                                        [helper saveDeviceAlias:TEST_DEVICE_ALIAS];
+                                    });
+                                   
+                                    context(@"different release uuid in the parameters",^{
+                                        
+                                        beforeEach(^{
+                                            [helper.helper changeReleaseUuidInParameters:TEST_RELEASE_UUID_2];
+                                        });
+                                        
+                                        context(@"unregistration succeeds", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForSuccessfulUnregistration];
+                                            });
+                                            
+                                            it(@"it should unregister successfully and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                        
+                                        context(@"unregistration fails", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForFailedUnregistrationWithError:testError2];
+                                            });
+                                            
+                                            it(@"should fail the unregistration and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                    });
+                                    
+                                    context(@"different release secret in the parameters",^{
+                                        
+                                        beforeEach(^{
+                                            [helper.helper changeReleaseSecretInParameters:TEST_RELEASE_SECRET_2];
+                                        });
+                                        
+                                        context(@"unregistration succeeds", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForSuccessfulUnregistration];
+                                            });
+                                            
+                                            it(@"it should unregister successfully and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                        
+                                        context(@"unregistration fails", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForFailedUnregistrationWithError:testError2];
+                                            });
+                                            
+                                            it(@"should fail the unregistration and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                    });
+                                    
+                                    context(@"different device alias in the parameters",^{
+                                        
+                                        beforeEach(^{
+                                            [helper.helper changeDeviceAliasInParameters:TEST_DEVICE_ALIAS_2];
+                                        });
+                                        
+                                        context(@"unregistration succeeds", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForSuccessfulUnregistration];
+                                            });
+                                            
+                                            it(@"it should unregister successfully and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_TRUE  didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                        
+                                        context(@"unregistration fails", ^{
+                                            
+                                            beforeEach(^{
+                                                [helper setupBackEndForFailedUnregistrationWithError:testError2];
+                                            });
+                                            
+                                            it(@"should fail the unregistration and then attempt to register with the back-end and stop after that fails", ^{
+                                                
+                                                [helper startRegistration];
+                                                
+                                                [helper verifyDidStartRegistration:BE_TRUE  didStartAPNSRegistration:BE_TRUE
+                                                         didFinishAPNSRegistration:BE_TRUE  didAPNSRegistrationSucceed:BE_TRUE
+                                                     didStartBackendUnregistration:BE_TRUE  didFinishBackendUnregistration:BE_TRUE
+                                                   didBackEndUnregistrationSucceed:BE_FALSE didStartBackendRegistration:BE_TRUE
+                                                      didFinishBackendRegistration:BE_TRUE  didBackendRegistrationSucceed:BE_FALSE
+                                                            didRegistrationSucceed:BE_FALSE resultError:testError];
+                                            });
+                                        });
+                                    });
+                                    
+                                    // NOTE - context back-end registration fails/previously registered with APNS/previously registered with back-end/registration parameters all the same
+                                    // does not need a test here since back-end registration is skipped entirely in this scenario (and hence would be considered a success)
+                               
+                                });
                             });
                             
                             context(@"APNS returns a new device token", ^{

@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readonly, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readonly) OmniaPushRegistrationParameters *parameters;
+@property (nonatomic, readonly) NSString *originalBackEndDeviceId;
 @property (nonatomic, readonly) NSData *originalApnsDeviceToken;
 @property (nonatomic, readonly) NSData *updatedApnsDeviceToken;
 @property (nonatomic, readonly) NSString *originalReleaseUuid;

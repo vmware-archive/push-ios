@@ -186,9 +186,37 @@ using namespace Cedar::Doubles;
 
 - (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
-    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:notificationTypes releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
+    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:notificationTypes
+                                                                        releaseUuid:TEST_RELEASE_UUID
+                                                                      releaseSecret:TEST_RELEASE_SECRET
+                                                                        deviceAlias:TEST_DEVICE_ALIAS];
     return self.params;
 }
+
+- (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid
+{
+    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
+                                                                       releaseUuid:newReleaseUuid
+                                                                     releaseSecret:self.params.releaseSecret
+                                                                        deviceAlias:self.params.deviceAlias];
+}
+
+- (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
+{
+    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
+                                                                        releaseUuid:self.params.releaseUuid
+                                                                      releaseSecret:newReleaseSecret
+                                                                        deviceAlias:self.params.deviceAlias];
+}
+
+- (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
+{
+    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
+                                                                        releaseUuid:self.params.releaseUuid
+                                                                      releaseSecret:self.params.releaseSecret
+                                                                        deviceAlias:newDeviceAlias];
+}
+
 
 #pragma mark - Registration Engine helpers
 

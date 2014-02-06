@@ -62,6 +62,7 @@ YES |  \
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readwrite, weak) id<OmniaPushRegistrationListener> listener;
 @property (nonatomic, readwrite) OmniaPushRegistrationParameters *parameters;
+@property (nonatomic, readwrite) NSString *originalBackEndDeviceId;
 @property (nonatomic, readwrite) NSData *originalApnsDeviceToken;
 @property (nonatomic, readwrite) NSData *updatedApnsDeviceToken;
 @property (nonatomic, readwrite) NSString *originalReleaseUuid;
@@ -115,6 +116,7 @@ YES |  \
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
     self.originalApnsDeviceToken = [self.storage loadAPNSDeviceToken];
+    self.originalBackEndDeviceId = [self.storage loadBackEndDeviceID];
     self.originalReleaseUuid = [self.storage loadReleaseUuid];
     self.originalReleaseSecret = [self.storage loadReleaseSecret];
     self.originalDeviceAlias = [self.storage loadDeviceAlias];
@@ -161,6 +163,7 @@ YES |  \
 
 - (void) backendUnregistrationSucceeded
 {
+    OmniaPushLog(@"Unregistration with the back-end server succeeded.");
     self.didFinishBackendUnregistration = YES;
     self.didBackEndUnregistrationSucceed = YES;
     [self startBackEndRegistration];
@@ -168,6 +171,8 @@ YES |  \
 
 - (void) backendUnregistrationFailed:(NSError*)error
 {
+    OmniaPushLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
+    OmniaPushLog(@"Nevertheless, registration will be attempted.");
     self.didFinishBackendUnregistration = YES;
     self.didBackEndUnregistrationSucceed = NO;
     [self startBackEndRegistration];
@@ -227,30 +232,57 @@ YES |  \
 - (BOOL) isBackEndUnregistrationRequired
 {
     // If not currently registered with the back-end then unregistration is not required
-    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
-    if (previousBackEndDeviceId == nil) {
+    if (self.originalBackEndDeviceId == nil) {
         return NO;
     }
     
-    // If the new device token is the same as the previous one then unregistration is not required
-    if ([self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
-        return NO;
+    // If the new device token is different from as the previous one then unregistration is required
+    if (![self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
+        OmniaPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
+        return YES;
     }
     
-    OmniaPushLog(@"Unregistration with the back-end is required.");
-    return YES;
+    // If any of the registration parameters are different then unregistration is required
+    if (![self.parameters.releaseUuid isEqualToString:self.originalReleaseUuid]) {
+        OmniaPushLog(@"Parameters specify a different releaseUuid. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    if (![self.parameters.releaseSecret isEqualToString:self.originalReleaseSecret]) {
+        OmniaPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    if (![self.parameters.deviceAlias isEqualToString:self.originalDeviceAlias]) {
+        OmniaPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
+        return YES;
+    }
+
+    return NO;
 }
 
 - (BOOL) isBackEndRegistrationRequired
 {
     // If not currently registered with the back-end then registration will be required
-    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
-    if (previousBackEndDeviceId == nil) {
+    if (self.originalBackEndDeviceId == nil) {
         return YES;
     }
     
     // If the new device token is different from the old one then a new registration with the back-end will be required
     if (![self.updatedApnsDeviceToken isEqualToData:self.originalApnsDeviceToken]) {
+        return YES;
+    }
+
+    // If any of the registration parameters are different then unregistration is required
+    if (![self.parameters.releaseUuid isEqualToString:self.originalReleaseUuid]) {
+        return YES;
+    }
+    
+    if (![self.parameters.releaseSecret isEqualToString:self.originalReleaseSecret]) {
+        return YES;
+    }
+    
+    if (![self.parameters.deviceAlias isEqualToString:self.originalDeviceAlias]) {
         return YES;
     }
     
@@ -263,7 +295,7 @@ YES |  \
 {
     self.didStartBackendUnregistration = YES;
     [self.storage saveBackEndDeviceID:nil];
-    NSString *previousBackEndDeviceId = [self.storage loadBackEndDeviceID];
+    NSString *previousBackEndDeviceId = self.originalBackEndDeviceId;
     OmniaPushLog(@"Attempting unregistration with back-end server for back-end device ID \"%@\".", previousBackEndDeviceId);
     
     NSObject<OmniaPushBackEndUnregistrationRequest> *request = [OmniaPushBackEndUnregistrationRequestProvider request];
