@@ -180,6 +180,10 @@ YES |  \
     self.didBackendRegistrationSucceed = YES;
 
     [self.storage saveBackEndDeviceID:responseData.deviceUuid];
+    [self.storage saveReleaseUuid:self.parameters.releaseUuid];
+    [self.storage saveReleaseSecret:self.parameters.releaseSecret];
+    [self.storage saveDeviceAlias:self.parameters.deviceAlias];
+
     [self registrationSucceeded];
 }
 
@@ -189,12 +193,17 @@ YES |  \
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = NO;
+    
     [self.storage saveBackEndDeviceID:nil];
+    [self.storage saveReleaseUuid:nil];
+    [self.storage saveReleaseSecret:nil];
+    [self.storage saveDeviceAlias:nil];
+
     [self registrationFailed];
 }
 
 - (void) registrationSucceeded
-{    
+{
     self.didRegistrationSucceed = YES;
     OmniaPushRegistrationCompleteOperation *op = [[OmniaPushRegistrationCompleteOperation alloc] initWithApplication:self.application
                                                                                                  applicationDelegate:self.originalApplicationDelegate
