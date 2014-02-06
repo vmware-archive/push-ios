@@ -69,17 +69,13 @@ YES |  \
 @property (nonatomic, readwrite) BOOL didStartAPNSRegistration;
 @property (nonatomic, readwrite) BOOL didFinishAPNSRegistration;
 @property (nonatomic, readwrite) BOOL didAPNSRegistrationSucceed;
-@property (nonatomic, readwrite) BOOL didAPNSRegistrationFail;
 @property (nonatomic, readwrite) BOOL didStartBackendUnregistration;
 @property (nonatomic, readwrite) BOOL didFinishBackendUnregistration;
 @property (nonatomic, readwrite) BOOL didStartBackendRegistration;
 @property (nonatomic, readwrite) BOOL didFinishBackendRegistration;
 @property (nonatomic, readwrite) BOOL didBackendRegistrationSucceed;
-@property (nonatomic, readwrite) BOOL didBackendRegistrationFail;
 @property (nonatomic, readwrite) BOOL didBackEndUnregistrationSucceed;
-@property (nonatomic, readwrite) BOOL didBackEndUnregistrationFail;
 @property (nonatomic, readwrite) BOOL didRegistrationSucceed;
-@property (nonatomic, readwrite) BOOL didRegistrationFail;
 @property (nonatomic) OmniaPushPersistentStorage *storage;
 
 @end
@@ -152,7 +148,7 @@ YES |  \
     OmniaPushLog(@"Registration with APNS failed. Error: \"%@\".", apnsRegistrationError.localizedDescription);
     self.error = apnsRegistrationError;
     self.didFinishAPNSRegistration = YES;
-    self.didAPNSRegistrationFail = YES;
+    self.didAPNSRegistrationSucceed = NO;
     [self.storage saveAPNSDeviceToken:nil];
     [self registrationFailed];
 }
@@ -167,7 +163,7 @@ YES |  \
 - (void) backendUnregistrationFailed:(NSError*)error
 {
     self.didFinishBackendUnregistration = YES;
-    self.didBackEndUnregistrationFail = YES;
+    self.didBackEndUnregistrationSucceed = NO;
     [self startBackEndRegistration];
 }
 
@@ -186,7 +182,7 @@ YES |  \
     OmniaPushLog(@"Registration with back-end failed. Error: \"%@\".", backendRegistrationError.localizedDescription);
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
-    self.didBackendRegistrationFail = YES;
+    self.didBackendRegistrationSucceed = NO;
     [self.storage saveBackEndDeviceID:nil];
     [self registrationFailed];
 }
@@ -203,7 +199,7 @@ YES |  \
 
 - (void) registrationFailed
 {
-    self.didRegistrationFail = YES;
+    self.didRegistrationSucceed = NO;
     OmniaPushRegistrationFailedOperation *op = [[OmniaPushRegistrationFailedOperation alloc] initWithApplication:self.application
                                                                                              applicationDelegate:self.originalApplicationDelegate
                                                                                                            error:self.error

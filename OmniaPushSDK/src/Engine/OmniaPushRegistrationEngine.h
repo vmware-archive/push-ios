@@ -25,17 +25,13 @@
 @property (nonatomic, readonly) BOOL didStartAPNSRegistration;
 @property (nonatomic, readonly) BOOL didFinishAPNSRegistration;
 @property (nonatomic, readonly) BOOL didAPNSRegistrationSucceed;
-@property (nonatomic, readonly) BOOL didAPNSRegistrationFail;
 @property (nonatomic, readonly) BOOL didStartBackendUnregistration;
 @property (nonatomic, readonly) BOOL didFinishBackendUnregistration;
 @property (nonatomic, readonly) BOOL didStartBackendRegistration;
 @property (nonatomic, readonly) BOOL didFinishBackendRegistration;
 @property (nonatomic, readonly) BOOL didBackendRegistrationSucceed;
-@property (nonatomic, readonly) BOOL didBackendRegistrationFail;
 @property (nonatomic, readonly) BOOL didBackEndUnregistrationSucceed;
-@property (nonatomic, readonly) BOOL didBackEndUnregistrationFail;
 @property (nonatomic, readonly) BOOL didRegistrationSucceed;
-@property (nonatomic, readonly) BOOL didRegistrationFail;
 
 - (instancetype) initWithApplication:(UIApplication*)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate

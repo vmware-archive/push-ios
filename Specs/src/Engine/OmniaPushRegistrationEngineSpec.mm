@@ -63,17 +63,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                       didStartAPNSRegistration:BE_FALSE
                      didFinishAPNSRegistration:BE_FALSE
                     didAPNSRegistrationSucceed:BE_FALSE
-                       didAPNSRegistrationFail:BE_FALSE
                  didStartBackendUnregistration:BE_FALSE
                 didFinishBackendUnregistration:BE_FALSE
                didBackEndUnregistrationSucceed:BE_FALSE
-                  didBackEndUnregistrationFail:BE_FALSE
                    didStartBackendRegistration:BE_FALSE
                   didFinishBackendRegistration:BE_FALSE
                  didBackendRegistrationSucceed:BE_FALSE
-                    didBackendRegistrationFail:BE_FALSE
                         didRegistrationSucceed:BE_FALSE
-                           didRegistrationFail:BE_FALSE
                                    resultError:nil];
         });
         
@@ -139,17 +135,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                       didStartAPNSRegistration:BE_TRUE
                                      didFinishAPNSRegistration:BE_TRUE
                                     didAPNSRegistrationSucceed:BE_TRUE
-                                       didAPNSRegistrationFail:BE_FALSE
                                  didStartBackendUnregistration:BE_FALSE
                                 didFinishBackendUnregistration:BE_FALSE
                                didBackEndUnregistrationSucceed:BE_FALSE
-                                  didBackEndUnregistrationFail:BE_FALSE
                                    didStartBackendRegistration:BE_TRUE
                                   didFinishBackendRegistration:BE_TRUE
                                  didBackendRegistrationSucceed:BE_TRUE
-                                    didBackendRegistrationFail:BE_FALSE
                                         didRegistrationSucceed:BE_TRUE
-                                           didRegistrationFail:BE_FALSE
                                                    resultError:nil];
                         });
                     });
@@ -169,17 +161,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_TRUE
-                                           didAPNSRegistrationFail:BE_FALSE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_TRUE
                                       didFinishBackendRegistration:BE_TRUE
                                      didBackendRegistrationSucceed:BE_TRUE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
-                                               didRegistrationFail:BE_FALSE
                                                        resultError:nil];
                             });
                         });
@@ -196,17 +184,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_TRUE
-                                           didAPNSRegistrationFail:BE_FALSE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_FALSE
                                       didFinishBackendRegistration:BE_FALSE
                                      didBackendRegistrationSucceed:BE_FALSE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
-                                               didRegistrationFail:BE_FALSE
                                                        resultError:nil];
                             });
                         });
@@ -238,17 +222,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                       didStartAPNSRegistration:BE_TRUE
                                      didFinishAPNSRegistration:BE_TRUE
                                     didAPNSRegistrationSucceed:BE_TRUE
-                                       didAPNSRegistrationFail:BE_FALSE
                                  didStartBackendUnregistration:BE_FALSE
                                 didFinishBackendUnregistration:BE_FALSE
                                didBackEndUnregistrationSucceed:BE_FALSE
-                                  didBackEndUnregistrationFail:BE_FALSE
                                    didStartBackendRegistration:BE_TRUE
                                   didFinishBackendRegistration:BE_TRUE
                                  didBackendRegistrationSucceed:BE_TRUE
-                                    didBackendRegistrationFail:BE_FALSE
                                         didRegistrationSucceed:BE_TRUE
-                                           didRegistrationFail:BE_FALSE
                                                    resultError:nil];
                         });
                     });
@@ -271,17 +251,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_TRUE
-                                           didAPNSRegistrationFail:BE_FALSE
                                      didStartBackendUnregistration:BE_TRUE
                                     didFinishBackendUnregistration:BE_TRUE
                                    didBackEndUnregistrationSucceed:BE_TRUE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_TRUE
                                       didFinishBackendRegistration:BE_TRUE
                                      didBackendRegistrationSucceed:BE_TRUE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
-                                               didRegistrationFail:BE_FALSE
                                                        resultError:nil];
                                 
                             });
@@ -298,17 +274,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_TRUE
-                                           didAPNSRegistrationFail:BE_FALSE
                                      didStartBackendUnregistration:BE_TRUE
                                     didFinishBackendUnregistration:BE_TRUE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_TRUE
                                        didStartBackendRegistration:BE_TRUE
                                       didFinishBackendRegistration:BE_TRUE
                                      didBackendRegistrationSucceed:BE_TRUE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_TRUE
-                                               didRegistrationFail:BE_FALSE
                                                        resultError:nil];
                             });
                         });
@@ -355,17 +327,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_FALSE
-                                           didAPNSRegistrationFail:BE_TRUE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_FALSE
                                       didFinishBackendRegistration:BE_FALSE
                                      didBackendRegistrationSucceed:BE_FALSE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_FALSE
-                                               didRegistrationFail:BE_TRUE
                                                        resultError:testError];
                             });
                         });
@@ -382,17 +350,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_FALSE
-                                           didAPNSRegistrationFail:BE_TRUE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_FALSE
                                       didFinishBackendRegistration:BE_FALSE
                                      didBackendRegistrationSucceed:BE_FALSE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_FALSE
-                                               didRegistrationFail:BE_TRUE
                                                        resultError:testError];
                             });
                         });
@@ -417,17 +381,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_FALSE
-                                           didAPNSRegistrationFail:BE_TRUE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_FALSE
                                       didFinishBackendRegistration:BE_FALSE
                                      didBackendRegistrationSucceed:BE_FALSE
-                                        didBackendRegistrationFail:BE_FALSE
                                             didRegistrationSucceed:BE_FALSE
-                                               didRegistrationFail:BE_TRUE
                                                        resultError:testError];
                             });
                         });
@@ -463,17 +423,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                           didStartAPNSRegistration:BE_TRUE
                                          didFinishAPNSRegistration:BE_TRUE
                                         didAPNSRegistrationSucceed:BE_TRUE
-                                           didAPNSRegistrationFail:BE_FALSE
                                      didStartBackendUnregistration:BE_FALSE
                                     didFinishBackendUnregistration:BE_FALSE
                                    didBackEndUnregistrationSucceed:BE_FALSE
-                                      didBackEndUnregistrationFail:BE_FALSE
                                        didStartBackendRegistration:BE_TRUE
                                       didFinishBackendRegistration:BE_TRUE
                                      didBackendRegistrationSucceed:BE_FALSE
-                                        didBackendRegistrationFail:BE_TRUE
                                             didRegistrationSucceed:BE_FALSE
-                                               didRegistrationFail:BE_TRUE
                                                        resultError:testError];
                             });
                         });
@@ -502,17 +458,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                   didStartAPNSRegistration:BE_TRUE
                                                  didFinishAPNSRegistration:BE_TRUE
                                                 didAPNSRegistrationSucceed:BE_TRUE
-                                                   didAPNSRegistrationFail:BE_FALSE
                                              didStartBackendUnregistration:BE_FALSE
                                             didFinishBackendUnregistration:BE_FALSE
                                            didBackEndUnregistrationSucceed:BE_FALSE
-                                              didBackEndUnregistrationFail:BE_FALSE
                                                didStartBackendRegistration:BE_TRUE
                                               didFinishBackendRegistration:BE_TRUE
                                              didBackendRegistrationSucceed:BE_FALSE
-                                                didBackendRegistrationFail:BE_TRUE
                                                     didRegistrationSucceed:BE_FALSE
-                                                       didRegistrationFail:BE_TRUE
                                                                resultError:testError];
                                     });
                                     
@@ -545,17 +497,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                   didStartAPNSRegistration:BE_TRUE
                                                  didFinishAPNSRegistration:BE_TRUE
                                                 didAPNSRegistrationSucceed:BE_TRUE
-                                                   didAPNSRegistrationFail:BE_FALSE
                                              didStartBackendUnregistration:BE_FALSE
                                             didFinishBackendUnregistration:BE_FALSE
                                            didBackEndUnregistrationSucceed:BE_FALSE
-                                              didBackEndUnregistrationFail:BE_FALSE
                                                didStartBackendRegistration:BE_TRUE
                                               didFinishBackendRegistration:BE_TRUE
                                              didBackendRegistrationSucceed:BE_FALSE
-                                                didBackendRegistrationFail:BE_TRUE
                                                     didRegistrationSucceed:BE_FALSE
-                                                       didRegistrationFail:BE_TRUE
                                                                resultError:testError];
                                     });
                                 });
@@ -584,17 +532,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                       didStartAPNSRegistration:BE_TRUE
                                                      didFinishAPNSRegistration:BE_TRUE
                                                     didAPNSRegistrationSucceed:BE_TRUE
-                                                       didAPNSRegistrationFail:BE_FALSE
                                                  didStartBackendUnregistration:BE_TRUE
                                                 didFinishBackendUnregistration:BE_TRUE
                                                didBackEndUnregistrationSucceed:BE_FALSE
-                                                  didBackEndUnregistrationFail:BE_TRUE
                                                    didStartBackendRegistration:BE_TRUE
                                                   didFinishBackendRegistration:BE_TRUE
                                                  didBackendRegistrationSucceed:BE_FALSE
-                                                    didBackendRegistrationFail:BE_TRUE
                                                         didRegistrationSucceed:BE_FALSE
-                                                           didRegistrationFail:BE_TRUE
                                                                    resultError:testError];
                                         });
                                     });
@@ -611,17 +555,13 @@ describe(@"OmniaPushRegistrationEngine", ^{
                                                       didStartAPNSRegistration:BE_TRUE
                                                      didFinishAPNSRegistration:BE_TRUE
                                                     didAPNSRegistrationSucceed:BE_TRUE
-                                                       didAPNSRegistrationFail:BE_FALSE
                                                  didStartBackendUnregistration:BE_TRUE
                                                 didFinishBackendUnregistration:BE_TRUE
                                                didBackEndUnregistrationSucceed:BE_TRUE
-                                                  didBackEndUnregistrationFail:BE_FALSE
                                                    didStartBackendRegistration:BE_TRUE
                                                   didFinishBackendRegistration:BE_TRUE
                                                  didBackendRegistrationSucceed:BE_FALSE
-                                                    didBackendRegistrationFail:BE_TRUE
                                                         didRegistrationSucceed:BE_FALSE
-                                                           didRegistrationFail:BE_TRUE
                                                                    resultError:testError];
                                         });
                                     });

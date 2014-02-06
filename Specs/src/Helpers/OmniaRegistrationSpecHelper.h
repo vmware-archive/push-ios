@@ -48,17 +48,13 @@ typedef enum RegistrationStateResult : NSUInteger {
            didStartAPNSRegistration:(RegistrationStateResult)didStartAPNSRegistration
           didFinishAPNSRegistration:(RegistrationStateResult)didFinishAPNSRegistration
          didAPNSRegistrationSucceed:(RegistrationStateResult)didAPNSRegistrationSucceed
-            didAPNSRegistrationFail:(RegistrationStateResult)didAPNSRegistrationFail
       didStartBackendUnregistration:(RegistrationStateResult)didStartBackendUnregistration
      didFinishBackendUnregistration:(RegistrationStateResult)didFinishBackendUnregistration
     didBackEndUnregistrationSucceed:(RegistrationStateResult)didBackEndUnregistrationSucceed
-       didBackEndUnregistrationFail:(RegistrationStateResult)didBackEndUnregistrationFail
         didStartBackendRegistration:(RegistrationStateResult)didStartBackendRegistration
        didFinishBackendRegistration:(RegistrationStateResult)didFinishBackendRegistration
       didBackendRegistrationSucceed:(RegistrationStateResult)didBackendRegistrationSucceed
-         didBackendRegistrationFail:(RegistrationStateResult)didBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)didRegistrationSucceed
-                didRegistrationFail:(RegistrationStateResult)didRegistrationFail
                         resultError:(NSError*)resultError;
 
 - (void) verifyQueueCompletedOperations:(NSArray*)completedOperations

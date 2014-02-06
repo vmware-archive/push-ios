@@ -135,34 +135,26 @@ using namespace Cedar::Doubles;
            didStartAPNSRegistration:(RegistrationStateResult)stateDidStartAPNSRegistration
           didFinishAPNSRegistration:(RegistrationStateResult)stateDidFinishAPNSRegistration
          didAPNSRegistrationSucceed:(RegistrationStateResult)stateDidAPNSRegistrationSucceed
-            didAPNSRegistrationFail:(RegistrationStateResult)stateDidAPNSRegistrationFail
       didStartBackendUnregistration:(RegistrationStateResult)stateDidStartBackendUnregistration
      didFinishBackendUnregistration:(RegistrationStateResult)stateDidFinishBackendUnregistration
     didBackEndUnregistrationSucceed:(RegistrationStateResult)stateDidBackEndUnregistrationSucceed
-       didBackEndUnregistrationFail:(RegistrationStateResult)stateDidBackEndUnregistrationFail
         didStartBackendRegistration:(RegistrationStateResult)stateDidStartBackendRegistration
        didFinishBackendRegistration:(RegistrationStateResult)stateDidFinishBackendRegistration
       didBackendRegistrationSucceed:(RegistrationStateResult)stateDidBackendRegistrationSucceed
-         didBackendRegistrationFail:(RegistrationStateResult)stateDidBackendRegistrationFail
              didRegistrationSucceed:(RegistrationStateResult)stateDidRegistrationSucceed
-                didRegistrationFail:(RegistrationStateResult)stateDidRegistrationFail
                         resultError:(NSError*)resultError
 {
     verifyState(self.helper.registrationEngine.didStartRegistration, stateDidStartRegistration);
     verifyState(self.helper.registrationEngine.didStartAPNSRegistration, stateDidStartAPNSRegistration);
     verifyState(self.helper.registrationEngine.didFinishAPNSRegistration, stateDidFinishAPNSRegistration);
     verifyState(self.helper.registrationEngine.didAPNSRegistrationSucceed, stateDidAPNSRegistrationSucceed);
-    verifyState(self.helper.registrationEngine.didAPNSRegistrationFail, stateDidAPNSRegistrationFail);
     verifyState(self.helper.registrationEngine.didStartBackendUnregistration, stateDidStartBackendUnregistration);
     verifyState(self.helper.registrationEngine.didFinishBackendUnregistration, stateDidFinishBackendUnregistration);
     verifyState(self.helper.registrationEngine.didBackEndUnregistrationSucceed, stateDidBackEndUnregistrationSucceed);
-    verifyState(self.helper.registrationEngine.didBackEndUnregistrationFail, stateDidBackEndUnregistrationFail);
     verifyState(self.helper.registrationEngine.didStartBackendRegistration, stateDidStartBackendRegistration);
     verifyState(self.helper.registrationEngine.didFinishBackendRegistration, stateDidFinishBackendRegistration);
     verifyState(self.helper.registrationEngine.didBackendRegistrationSucceed, stateDidBackendRegistrationSucceed);
-    verifyState(self.helper.registrationEngine.didBackendRegistrationFail, stateDidBackendRegistrationFail);
     verifyState(self.helper.registrationEngine.didRegistrationSucceed, stateDidRegistrationSucceed);
-    verifyState(self.helper.registrationEngine.didRegistrationFail, stateDidRegistrationFail);
     verifyValue(self.helper.registrationEngine.error, resultError);
 }
 
