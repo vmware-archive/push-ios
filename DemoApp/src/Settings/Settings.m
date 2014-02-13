@@ -9,8 +9,8 @@
 #import "Settings.h"
 #import "OmniaPushRegistrationParameters.h"
 
-#define DEFAULT_RELEASE_UUID    @"0e98c4aa-786e-4675-b2e3-05e5d040ab38"
-#define DEFAULT_RELEASE_SECRET  @"5f2009b5-bb6a-4963-8abf-a18a2162929b"
+#define DEFAULT_RELEASE_UUID    @"a5ca5693-f729-4e9a-8df2-65e02cebc852"
+#define DEFAULT_RELEASE_SECRET  @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3"
 #define DEFAULT_DEVICE_ALIAS    @"Default Device Alias"
 
 #define KEY_RELEASE_UUID   @"KEY_RELEASE_UUID"
@@ -58,7 +58,7 @@
 
 + (OmniaPushRegistrationParameters*) getRegistrationParameters
 {
-    return [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge
+    return [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
                                                                  releaseUuid:[Settings loadReleaseUuid]
                                                                releaseSecret:[Settings loadReleaseSecret]
                                                                  deviceAlias:[Settings loadDeviceAlias]];

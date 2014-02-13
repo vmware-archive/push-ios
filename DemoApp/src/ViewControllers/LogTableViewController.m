@@ -13,6 +13,11 @@
 #import "LogItemCell.h"
 #import "SettingsTableViewController.h"
 #import "Settings.h"
+#import "BackEndMessageRequest.h"
+#import "OmniaPushPersistentStorage.h"
+
+#define APP_UUID        @"11623d1b-6a80-4a6f-9597-e5d0f320ade9"
+#define APP_SECRET_KEY  @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e"
 
 @interface LogTableViewController ()
 
@@ -44,15 +49,37 @@
     UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithTitle:@"Register" style:UIBarButtonItemStylePlain target:self action:@selector(registerButtonPressed)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Copy" style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonPressed)];
     UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonPressed)];
+    UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(sendButtonPressed)];
     UIBarButtonItem *preferencesButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(preferencesButtonPressed)];
     UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    [self setToolbarItems:@[registerButton, space, saveButton, space, preferencesButton, space, trashButton] animated:NO];
+    [self setToolbarItems:@[registerButton, space, saveButton, space, preferencesButton, space, sendButton, space, trashButton] animated:NO];
     
     [self addLogItem:@"Press the \"Register\" button below to register the device for push notifications." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Copy\" button below to copy the log to the clipboard." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Settings\" button below to change the SDK settings." timestamp:[NSDate date]];
+    [self addLogItem:@"Press the \"Play\" button below to send a push message via the back-end server." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Trash\" button below to clear the log contents." timestamp:[NSDate date]];
+}
+
+- (void) sendButtonPressed
+{
+    [self updateCurrentBaseRowColour];
+    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
+    NSString *backEndDeviceID = [storage loadBackEndDeviceID];
+    if (backEndDeviceID == nil) {
+        [self addLogItem:@"You must register with the back-end server before attempting to send a message" timestamp:[NSDate date]];
+        return;
+        
+    }
+    BackEndMessageRequest *request = [[BackEndMessageRequest alloc] init];
+    request.messageTitle = @"Sample Message Title";
+    request.messageBody = [NSString stringWithFormat:@"This message was sent to the back-end at %@.", [[LogItem getDateFormatter] stringFromDate:[NSDate date]]];
+    request.appUuid = APP_UUID;
+    request.appSecretKey = APP_SECRET_KEY;
+    request.targetPlatform = @"ios";
+    request.targetDevices = @[backEndDeviceID];
+    [request sendMessage];
 }
 
 - (void) registerButtonPressed

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D4009DB418A445420084B5EC /* OmniaFakeOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */; };
 		D4009DB518A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */; };
+		D41AB57518AD3085000F3516 /* BackEndMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */; };
 		D42171191892AC8F007A26A5 /* OmniaPushRegistrationEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */; };
 		D421711A1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
 		D421711B1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
@@ -162,6 +163,8 @@
 		D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaFakeOperationQueue.m; path = src/Fakes/OmniaFakeOperationQueue.m; sourceTree = "<group>"; };
 		D4009DB218A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeBackEndRegistrationRequest.h; path = src/Fakes/OmniaPushFakeBackEndRegistrationRequest.h; sourceTree = "<group>"; };
 		D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeBackEndRegistrationRequest.m; path = src/Fakes/OmniaPushFakeBackEndRegistrationRequest.m; sourceTree = "<group>"; };
+		D41AB57318AD3085000F3516 /* BackEndMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackEndMessageRequest.h; path = src/Network/BackEndMessageRequest.h; sourceTree = "<group>"; };
+		D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackEndMessageRequest.m; path = src/Network/BackEndMessageRequest.m; sourceTree = "<group>"; };
 		D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationEngine.h; path = src/Engine/OmniaPushRegistrationEngine.h; sourceTree = "<group>"; };
 		D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushRegistrationEngine.m; path = src/Engine/OmniaPushRegistrationEngine.m; sourceTree = "<group>"; };
 		D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationEngineSpec.mm; path = src/Engine/OmniaPushRegistrationEngineSpec.mm; sourceTree = "<group>"; };
@@ -317,6 +320,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D41AB57218AD3038000F3516 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				D41AB57318AD3085000F3516 /* BackEndMessageRequest.h */,
+				D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */,
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
 		D42171161892AC61007A26A5 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -485,6 +497,7 @@
 			isa = PBXGroup;
 			children = (
 				D455CBC31860B4FD003539E0 /* Models */,
+				D41AB57218AD3038000F3516 /* Network */,
 				D4E5BA8A189C17DD0012B32B /* Settings */,
 				D4330EA81860DDF000A141AF /* Views */,
 				D455CBBC1860B495003539E0 /* ViewControllers */,
@@ -992,6 +1005,7 @@
 				D4E8A84A185BAFFE00A841EE /* AppDelegate.m in Sources */,
 				D455CBC61860B51B003539E0 /* LogItem.m in Sources */,
 				D4E8A846185BAFFE00A841EE /* main.m in Sources */,
+				D41AB57518AD3085000F3516 /* BackEndMessageRequest.m in Sources */,
 				D4E5BA86189ABB6B0012B32B /* UIDevice+Hardware.m in Sources */,
 				D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */,
 				D4E5BA8D189C18070012B32B /* Settings.m in Sources */,

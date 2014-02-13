@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Settings.h"
+#import "OmniaPushDebug.h"
 
 @interface AppDelegate ()
 
@@ -37,8 +38,12 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    // TODO - print to log on screen
-    NSLog(@"### didReceiveRemoteNotification: %@", userInfo);
+    OmniaPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    application.applicationIconBadgeNumber = 0;
 }
 
 @end

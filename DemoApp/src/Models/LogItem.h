@@ -20,5 +20,6 @@
 - (NSString*) formattedTimestamp;
 
 + (void) updateBaseColour;
++ (NSDateFormatter*) getDateFormatter;
 
 @end
