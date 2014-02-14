@@ -1,5 +1,5 @@
 //
-//  SpecHelper.h
+//  OmniaSpecHelper.h
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-31.

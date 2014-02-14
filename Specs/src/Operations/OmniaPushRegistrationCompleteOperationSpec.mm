@@ -1,3 +1,11 @@
+//
+//  OmniaPushRegistrationCompleteOperationSpec.mm
+//  OmniaPushSDK
+//
+//  Created by Rob Szumlakowski on 2014-02-14.
+//  Copyright (c) 2014 Omnia. All rights reserved.
+//
+
 #import "OmniaPushRegistrationCompleteOperation.h"
 #import "OmniaPushRegistrationListener.h"
 #import "OmniaSpecHelper.h"

@@ -1,5 +1,5 @@
 //
-//  OmniaPushFakeBackEndRegistrationRequestt.m
+//  OmniaPushFakeBackEndRegistrationRequest.m
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-27.

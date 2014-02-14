@@ -1,3 +1,11 @@
+//
+//  OmniaPushSDKSpec.mm
+//  OmniaPushSDK
+//
+//  Created by Rob Szumlakowski on 2014-02-14.
+//  Copyright (c) 2014 Omnia. All rights reserved.
+//
+
 #import "OmniaPushSDK.h"
 #import "OmniaPushAppDelegateProxy.h"
 #import "OmniaSpecHelper.h"
