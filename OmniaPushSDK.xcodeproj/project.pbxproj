@@ -10,6 +10,7 @@
 		D4009DB418A445420084B5EC /* OmniaFakeOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */; };
 		D4009DB518A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */; };
 		D41AB57518AD3085000F3516 /* BackEndMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */; };
+		D41AB57718AEBBCB000F3516 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */; };
 		D42171191892AC8F007A26A5 /* OmniaPushRegistrationEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */; };
 		D421711A1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
 		D421711B1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
@@ -165,6 +166,7 @@
 		D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeBackEndRegistrationRequest.m; path = src/Fakes/OmniaPushFakeBackEndRegistrationRequest.m; sourceTree = "<group>"; };
 		D41AB57318AD3085000F3516 /* BackEndMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackEndMessageRequest.h; path = src/Network/BackEndMessageRequest.h; sourceTree = "<group>"; };
 		D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackEndMessageRequest.m; path = src/Network/BackEndMessageRequest.m; sourceTree = "<group>"; };
+		D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationEngine.h; path = src/Engine/OmniaPushRegistrationEngine.h; sourceTree = "<group>"; };
 		D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushRegistrationEngine.m; path = src/Engine/OmniaPushRegistrationEngine.m; sourceTree = "<group>"; };
 		D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationEngineSpec.mm; path = src/Engine/OmniaPushRegistrationEngineSpec.mm; sourceTree = "<group>"; };
@@ -623,6 +625,7 @@
 		D4E8A7FD185BAFDC00A841EE = {
 			isa = PBXGroup;
 			children = (
+				D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */,
 				D4E8A80D185BAFDC00A841EE /* OmniaPushSDK */,
 				D4E8A826185BAFE900A841EE /* Specs */,
 				D4E8A83F185BAFFE00A841EE /* DemoApp */,
@@ -875,6 +878,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D4E8A82B185BAFE900A841EE /* InfoPlist.strings in Resources */,
+				D41AB57718AEBBCB000F3516 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

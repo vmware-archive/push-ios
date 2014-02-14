@@ -121,7 +121,7 @@
     NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse*)response;
     
     if (![self isSuccessfulResponseCode:httpURLResponse]) {
-        self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %d", httpURLResponse.statusCode]];
+        self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %ld", (long)httpURLResponse.statusCode]];
          return;
     }
 }

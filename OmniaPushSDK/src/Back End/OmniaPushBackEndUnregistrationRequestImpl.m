@@ -69,7 +69,7 @@
     NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse*)response;
     
     if (![self isSuccessfulResponseCode:httpURLResponse]) {
-        self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndUnregistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping unregistration with back-end server: %d", httpURLResponse.statusCode]];
+        self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndUnregistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping unregistration with back-end server: %ldd",(long) (long)httpURLResponse.statusCode]];
         return;
     }
 }
