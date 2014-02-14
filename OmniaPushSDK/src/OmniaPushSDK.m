@@ -108,13 +108,15 @@ static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 #pragma mark - Unit test helpers
 
 // Used by unit tests to provide a fake singleton or to reset this singleton for following tests
-+ (void) setSharedInstance:(OmniaPushSDK*)newSharedInstance {
++ (void) setSharedInstance:(OmniaPushSDK*)newSharedInstance
+{
     [OmniaPushSDK teardown];
     sharedInstance = newSharedInstance;
 }
 
 // Used by unit tests to provide fake application objects
-+ (void) setupApplication:(UIApplication*)testApplication {
++ (void) setupApplication:(UIApplication*)testApplication
+{
     if (application) return;
     if (testApplication == nil) {
         application = [UIApplication sharedApplication];

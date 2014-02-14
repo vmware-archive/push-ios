@@ -11,6 +11,7 @@
 #include <sys/sysctl.h>
 
 @implementation UIDevice (Hardware)
+
 - (NSString*)hardwareString {
     size_t size = 100;
     char *hw_machine = malloc(size);

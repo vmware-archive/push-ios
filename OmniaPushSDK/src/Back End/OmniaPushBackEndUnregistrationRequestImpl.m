@@ -72,7 +72,6 @@
         self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndUnregistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping unregistration with back-end server: %d", httpURLResponse.statusCode]];
         return;
     }
-    
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection*)connection
@@ -96,12 +95,14 @@
     return nil;
 }
 
-- (void) returnError:(NSError*)error {
+- (void) returnError:(NSError*)error
+{
     self.resultantError = error;
     [self returnError];
 }
 
-- (void) returnError {
+- (void) returnError
+{
     if (self.failBlock) {
         self.failBlock(self.resultantError);
     }

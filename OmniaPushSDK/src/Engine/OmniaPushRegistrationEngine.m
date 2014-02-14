@@ -153,7 +153,7 @@ YES |  \
 
 - (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError
 {
-    OmniaPushLog(@"Registration with APNS failed. Error: \"%@\".", apnsRegistrationError.localizedDescription);
+    OmniaPushCriticalLog(@"Registration with APNS failed. Error: \"%@\".", apnsRegistrationError.localizedDescription);
     self.error = apnsRegistrationError;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = NO;
@@ -194,7 +194,7 @@ YES |  \
 
 - (void) backendRegistrationFailed:(NSError*)backendRegistrationError
 {
-    OmniaPushLog(@"Registration with back-end failed. Error: \"%@\".", backendRegistrationError.localizedDescription);
+    OmniaPushCriticalLog(@"Registration with back-end failed. Error: \"%@\".", backendRegistrationError.localizedDescription);
     self.error = backendRegistrationError;
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = NO;

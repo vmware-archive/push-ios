@@ -53,7 +53,11 @@
         OmniaPushLog(@"Registration complete.");
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
-            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];
+            
+            if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
+                [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:self.apnsDeviceToken];
+            }
+            
             if (self.listener) {
                 [self.listener registrationSucceeded];
             }

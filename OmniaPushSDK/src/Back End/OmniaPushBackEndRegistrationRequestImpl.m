@@ -19,7 +19,6 @@
 #import "OmniaPushDebug.h"
 #import "UIDevice+Hardware.h"
 
-
 @interface OmniaPushBackEndRegistrationRequestImpl ()
 
 @property (nonatomic, strong) NSMutableURLRequest *urlRequest;
@@ -125,7 +124,6 @@
         self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %d", httpURLResponse.statusCode]];
          return;
     }
-    
 }
 
 - (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data

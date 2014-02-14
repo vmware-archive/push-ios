@@ -53,13 +53,13 @@
         OmniaPushLog(@"Error in registration. Error: \"%@\".", self.error.localizedDescription);
         
         [[OmniaPushOperationQueueProvider mainQueue] addOperationWithBlock:^{
-            [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
+            if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
+                [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:self.error];
+            }
             if (self.listener) {
                 [self.listener registrationFailedWithError:self.error];
             }
         }];
-
-        // TODO - handle the error somehow
     }
 }
 

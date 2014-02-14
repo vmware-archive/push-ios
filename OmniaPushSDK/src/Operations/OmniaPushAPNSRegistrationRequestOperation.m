@@ -36,8 +36,6 @@
     return self;
 }
 
-// TODO: should this class also accept the UIApplication to use?  It would be more dependency-injectiony.
-
 - (void) main
 {
     @autoreleasepool {
