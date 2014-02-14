@@ -72,8 +72,8 @@
  
  */
 
-#define OmniaPushCriticalLog(format,...) [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] input:(format), ##__VA_ARGS__]
-#define OmniaPushLog(format,...)         [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] input:(format), ##__VA_ARGS__]
+#define OmniaPushCriticalLog(format,...) [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] isCritical:YES input:(format), ##__VA_ARGS__]
+#define OmniaPushLog(format,...)         [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] isCritical:NO input:(format), ##__VA_ARGS__]
 
 #if DEBUG
 
@@ -106,7 +106,7 @@ typedef void (^OmniaPushLogListener)(NSString *context, NSDate *timestamp);
 @interface OmniaPushDebug : NSObject
 
 + (void)trace:(const char *)stringFunction;
-+ (void)log:(char *)fileName lineNumber:(int)lineNumber function:(const char *)stringFunction thread:(NSThread*)thread input:(NSString *)input, ...;
++ (void)log:(char *)fileName lineNumber:(int)lineNumber function:(const char *)stringFunction thread:(NSThread*)thread isCritical:(BOOL)isCritical input:(NSString *)input, ...;
 + (void)error:(char *)fileName lineNumber:(int)lineNumber function:(const char *)stringFunction input:(NSString *)input, ...;
 + (void)assert:(int)evaluate output:(char *)fileName lineNumber:(int)lineNumber function:(const char *)stringFunction input:(NSString *)input, ...;
 + (void)beacon:(NSString *)input, ...;

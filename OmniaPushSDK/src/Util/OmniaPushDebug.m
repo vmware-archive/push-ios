@@ -61,6 +61,7 @@ OmniaPushLogListener listener = nil;
  lineNumber:(int)lineNumber
    function:(const char *)stringFunction
      thread:(NSThread*)thread
+ isCritical:(BOOL)isCritical
       input:(NSString *)input, ...
 {
     if (disableLogging == YES && listener == nil) {
@@ -84,13 +85,18 @@ OmniaPushLogListener listener = nil;
     
     [string_out appendString:stringLine];
     [string_out appendString:formatStr];
+
+    BOOL isDebug = NO;
+    #if DEBUG
+    isDebug = YES;
+    #endif
     
-#if DEBUG
-    if (!disableLogging) {
-        NSLog(@"%@", string_out);
+    if (isDebug || isCritical) {
+        if (!disableLogging) {
+            NSLog(@"%@", string_out);
+        }
     }
-#endif
-    
+
     if (listener) {
         listener(formatStr, [NSDate date]);
     }
