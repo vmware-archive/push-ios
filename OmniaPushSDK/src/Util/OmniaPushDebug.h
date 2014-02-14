@@ -73,10 +73,10 @@
  */
 
 #define OmniaPushCriticalLog(format,...) [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] input:(format), ##__VA_ARGS__]
+#define OmniaPushLog(format,...)         [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] input:(format), ##__VA_ARGS__]
 
 #if DEBUG
 
-#define OmniaPushLog(format,...)         [OmniaPushDebug log:__FILE__    lineNumber:__LINE__ function:__PRETTY_FUNCTION__ thread:[NSThread currentThread] input:(format), ##__VA_ARGS__]
 #define OmniaPushTrace                   [OmniaPushDebug trace:__PRETTY_FUNCTION__]
 #define OmniaPushError(format,...)       [OmniaPushDebug error:__FILE__ lineNumber:__LINE__ function:__PRETTY_FUNCTION__ input:(format), ##__VA_ARGS__]
 #define OmniaPushAssert(eval,format,...) [OmniaPushDebug assert: eval     output:__FILE__ lineNumber:__LINE__ function:__PRETTY_FUNCTION__ input:(format), ##__VA_ARGS__]
@@ -90,7 +90,6 @@
 #else
 
 #define OmniaPushTrace
-#define OmniaPushLog(format,...)
 #define OmniaPushError(format,...)
 #define OmniaPushAssert(eval,format,...)
 #define OmniaPushBeacon(format)

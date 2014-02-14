@@ -85,9 +85,12 @@ OmniaPushLogListener listener = nil;
     [string_out appendString:stringLine];
     [string_out appendString:formatStr];
     
+#if DEBUG
     if (!disableLogging) {
         NSLog(@"%@", string_out);
     }
+#endif
+    
     if (listener) {
         listener(formatStr, [NSDate date]);
     }
