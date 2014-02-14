@@ -6,6 +6,9 @@
 //  Copyright (c) 2013 Rathore. All rights reserved.
 //
 
+// The method names in this category have been prefixed with "OmniaPush_" so that they don't collide
+// with other categories brought in my other developers.
+
 #import <UIKit/UIKit.h>
 
 #define IS_IPAD (UI_USER_INTERFACE_IDIOM()==UIUserInterfaceIdiomPad)
@@ -63,17 +66,17 @@ typedef enum
 
 @interface UIDevice (Hardware)
 /** This method retruns the hardware type */
-- (NSString*)hardwareString;
+- (NSString*)OmniaPush_hardwareString;
 
 /** This method returns the Hardware enum depending upon harware string */
-- (Hardware)hardware;
+- (Hardware)OmniaPush_hardware;
 
 /** This method returns the readable description of hardware string */
-- (NSString*)hardwareDescription;
+- (NSString*)OmniaPush_hardwareDescription;
 
 /** This method returs the readble description without identifier (GSM, CDMA, GLOBAL) */
-- (NSString *)hardwareSimpleDescription;
+- (NSString *)OmniaPush_hardwareSimpleDescription;
 
 /** This method returns YES if the current device is better than the hardware passed */
-- (BOOL)isCurrentDeviceHardwareBetterThan:(Hardware)hardware;
+- (BOOL)OmniaPush_isCurrentDeviceHardwareBetterThan:(Hardware)hardware;
 @end

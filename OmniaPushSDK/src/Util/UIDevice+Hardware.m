@@ -12,7 +12,7 @@
 
 @implementation UIDevice (Hardware)
 
-- (NSString*)hardwareString {
+- (NSString*)OmniaPush_hardwareString {
     size_t size = 100;
     char *hw_machine = malloc(size);
     int name[] = {CTL_HW,HW_MACHINE};
@@ -35,8 +35,8 @@
  }
  */
 
-- (Hardware)hardware {
-    NSString *hardware = [self hardwareString];
+- (Hardware)OmniaPush_hardware {
+    NSString *hardware = [self OmniaPush_hardwareString];
     if ([hardware isEqualToString:@"iPhone1,1"])    return IPHONE_2G;
     if ([hardware isEqualToString:@"iPhone1,2"])    return IPHONE_3G;
     if ([hardware isEqualToString:@"iPhone2,1"])    return IPHONE_3GS;
@@ -84,8 +84,8 @@
     return NOT_AVAILABLE;
 }
 
-- (NSString*)hardwareDescription {
-    NSString *hardware = [self hardwareString];
+- (NSString*)OmniaPush_hardwareDescription {
+    NSString *hardware = [self OmniaPush_hardwareString];
     if ([hardware isEqualToString:@"iPhone1,1"])    return @"iPhone 2G";
     if ([hardware isEqualToString:@"iPhone1,2"])    return @"iPhone 3G";
     if ([hardware isEqualToString:@"iPhone2,1"])    return @"iPhone 3GS";
@@ -137,9 +137,9 @@
     return nil;
 }
 
-- (NSString*)hardwareSimpleDescription
+- (NSString*)OmniaPush_hardwareSimpleDescription
 {
-    NSString *hardware = [self hardwareString];
+    NSString *hardware = [self OmniaPush_hardwareString];
     if ([hardware isEqualToString:@"iPhone1,1"])    return @"iPhone 2G";
     if ([hardware isEqualToString:@"iPhone1,2"])    return @"iPhone 3G";
     if ([hardware isEqualToString:@"iPhone2,1"])    return @"iPhone 3GS";
@@ -195,7 +195,7 @@
 }
 
 
-- (float)hardwareNumber:(Hardware)hardware {
+- (float)OmniaPush_hardwareNumber:(Hardware)hardware {
     switch (hardware) {
         case IPHONE_2G: return 1.1f;
         case IPHONE_3G: return 1.2f;
@@ -242,9 +242,9 @@
     return 200.0f; //Device is not available
 }
 
-- (BOOL)isCurrentDeviceHardwareBetterThan:(Hardware)hardware {
-    float otherHardware = [self hardwareNumber:hardware];
-    float currentHardware = [self hardwareNumber:[self hardware]];
+- (BOOL)OmniaPush_isCurrentDeviceHardwareBetterThan:(Hardware)hardware {
+    float otherHardware = [self OmniaPush_hardwareNumber:hardware];
+    float currentHardware = [self OmniaPush_hardwareNumber:[self OmniaPush_hardware]];
     return currentHardware >= otherHardware;
 }
 @end

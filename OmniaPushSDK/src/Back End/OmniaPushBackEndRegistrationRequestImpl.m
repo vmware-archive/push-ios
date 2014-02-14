@@ -89,7 +89,7 @@
     
     static NSString *deviceModel = nil;
     if (deviceModel == nil) {
-        deviceModel = [[UIDevice currentDevice] hardwareSimpleDescription];
+        deviceModel = [[UIDevice currentDevice] OmniaPush_hardwareSimpleDescription];
     }
     
     OmniaPushBackEndRegistrationRequestData *requestData = [[OmniaPushBackEndRegistrationRequestData alloc] init];
