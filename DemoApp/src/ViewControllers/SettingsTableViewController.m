@@ -22,7 +22,14 @@
 {
     [super viewDidLoad];
     [self loadSettings];
-    self.versionLabel.text = [NSString stringWithFormat:@"Version %@", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"]];
+    
+#if DEBUG
+    NSString *buildType = @"Debug";
+#else
+    NSString *buildType = @"Release";
+#endif
+    
+    self.versionLabel.text = [NSString stringWithFormat:@"Version %@ - %@ Build", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"], buildType];
 }
 
 
