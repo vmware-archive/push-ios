@@ -1,6 +1,7 @@
 // Base
 #import "Equal.h"
 #import "BeTruthy.h"
+#import "BeFalsy.h"
 #import "BeNil.h"
 #import "BeCloseTo.h"
 #import "BeSameInstanceAs.h"
@@ -16,6 +17,9 @@
 // Container
 #import "BeEmpty.h"
 #import "Contain.h"
+
+// Verifiers
+#import "Exist.h"
 
 #ifdef CEDAR_CUSTOM_MATCHERS
 #import CEDAR_CUSTOM_MATCHERS

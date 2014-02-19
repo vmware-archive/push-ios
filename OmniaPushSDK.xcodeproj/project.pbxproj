@@ -89,6 +89,7 @@
 		D460141A18848ED300EF09FF /* OmniaPushFakeApplicationDelegateSwitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = D460141918848ED300EF09FF /* OmniaPushFakeApplicationDelegateSwitcher.mm */; };
 		D460141D188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D460141C188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm */; };
 		D460141F1887423B00EF09FF /* OmniaPushRegistrationFailedOperationSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D460141E1887423B00EF09FF /* OmniaPushRegistrationFailedOperationSpec.mm */; };
+		D4615E3218B512BE00CA0D2B /* Cedar-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */; };
 		D474E15418A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D474E15318A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m */; };
 		D487102E1889B8B400AE1660 /* OmniaPushPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D487102C1889B8B400AE1660 /* OmniaPushPersistentStorage.h */; };
 		D487102F1889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */; };
@@ -127,7 +128,6 @@
 		D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A824185BAFE900A841EE /* CoreGraphics.framework */; };
 		D4E8A82B185BAFE900A841EE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D4E8A829185BAFE900A841EE /* InfoPlist.strings */; };
 		D4E8A82D185BAFE900A841EE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D4E8A82C185BAFE900A841EE /* main.m */; };
-		D4E8A831185BAFE900A841EE /* Cedar-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A830185BAFE900A841EE /* Cedar-iOS.framework */; };
 		D4E8A83C185BAFFE00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		D4E8A83D185BAFFE00A841EE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A824185BAFE900A841EE /* CoreGraphics.framework */; };
 		D4E8A83E185BAFFE00A841EE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A821185BAFE900A841EE /* UIKit.framework */; };
@@ -233,6 +233,7 @@
 		D460141918848ED300EF09FF /* OmniaPushFakeApplicationDelegateSwitcher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushFakeApplicationDelegateSwitcher.mm; path = src/Fakes/OmniaPushFakeApplicationDelegateSwitcher.mm; sourceTree = "<group>"; };
 		D460141C188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationCompleteOperationSpec.mm; path = src/Operations/OmniaPushRegistrationCompleteOperationSpec.mm; sourceTree = "<group>"; };
 		D460141E1887423B00EF09FF /* OmniaPushRegistrationFailedOperationSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationFailedOperationSpec.mm; path = src/Operations/OmniaPushRegistrationFailedOperationSpec.mm; sourceTree = "<group>"; };
+		D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Cedar-iOS.framework"; path = "Frameworks/Cedar-iOS.framework"; sourceTree = "<group>"; };
 		D474E15218A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeBackEndUnregistrationRequest.h; path = src/Fakes/OmniaPushFakeBackEndUnregistrationRequest.h; sourceTree = "<group>"; };
 		D474E15318A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeBackEndUnregistrationRequest.m; path = src/Fakes/OmniaPushFakeBackEndUnregistrationRequest.m; sourceTree = "<group>"; };
 		D487102C1889B8B400AE1660 /* OmniaPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushPersistentStorage.h; path = "src/Persistent Storage/OmniaPushPersistentStorage.h"; sourceTree = "<group>"; };
@@ -273,7 +274,6 @@
 		D4E8A82C185BAFE900A841EE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D4E8A82E185BAFE900A841EE /* Specs-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Specs-Prefix.pch"; sourceTree = "<group>"; };
 		D4E8A82F185BAFE900A841EE /* Rakefile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Rakefile; sourceTree = "<group>"; };
-		D4E8A830185BAFE900A841EE /* Cedar-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Cedar-iOS.framework"; path = "Frameworks/Cedar-iOS.framework"; sourceTree = "<group>"; };
 		D4E8A83B185BAFFE00A841EE /* DemoApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DemoApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4E8A841185BAFFE00A841EE /* DemoApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DemoApp-Info.plist"; sourceTree = "<group>"; };
 		D4E8A843185BAFFE00A841EE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -303,7 +303,7 @@
 			files = (
 				D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */,
 				D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */,
-				D4E8A831185BAFE900A841EE /* Cedar-iOS.framework in Frameworks */,
+				D4615E3218B512BE00CA0D2B /* Cedar-iOS.framework in Frameworks */,
 				D4E8A823185BAFE900A841EE /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -677,9 +677,9 @@
 		D4E8A826185BAFE900A841EE /* Specs */ = {
 			isa = PBXGroup;
 			children = (
+				D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */,
 				D4BE825C18633FB200EF0EE3 /* src */,
 				D4E8A82F185BAFE900A841EE /* Rakefile */,
-				D4E8A830185BAFE900A841EE /* Cedar-iOS.framework */,
 				D4E8A827185BAFE900A841EE /* Supporting Files */,
 			);
 			path = Specs;
@@ -843,6 +843,15 @@
 			attributes = {
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Omnia;
+				TargetAttributes = {
+					D4E8A83A185BAFFE00A841EE = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "OmniaPushSDK" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1178,6 +1187,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Specs/Frameworks,
+					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
@@ -1206,6 +1216,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					Specs/Frameworks,
+					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
