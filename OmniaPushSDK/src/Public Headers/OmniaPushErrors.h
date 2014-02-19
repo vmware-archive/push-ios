@@ -11,7 +11,8 @@
 
 OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 
-enum {
+typedef enum OmniaPushErrorCodes : NSInteger {
+    
     OmniaPushRegistrationTimeoutError = 10,
     
     OmniaPushBackEndRegistrationNotHTTPResponseError = 21,
@@ -25,6 +26,7 @@ enum {
     OmniaPushBackEndRegistrationRequestDataUnparseable = 40,
     OmniaPushBackEndRegistrationResponseDataUnparseable = 41,
     OmniaPushBackEndRegistrationResponseDataNoDeviceUuid = 42
-};
+    
+} OmniaPushErrorCodes;
 
 #endif
