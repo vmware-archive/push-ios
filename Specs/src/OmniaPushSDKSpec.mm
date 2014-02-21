@@ -85,7 +85,7 @@ describe(@"OmniaPushSDK", ^{
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_falsy;
             [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
         });
 
@@ -117,7 +117,7 @@ describe(@"OmniaPushSDK", ^{
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_falsy;
             [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
             listener should have_received("registrationSucceeded");
         });
@@ -147,7 +147,7 @@ describe(@"OmniaPushSDK", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_falsy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
             [helper.storage loadAPNSDeviceToken] should be_nil;
         });
@@ -181,7 +181,7 @@ describe(@"OmniaPushSDK", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should_not be_truthy;
+            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_falsy;
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
             [helper.storage loadAPNSDeviceToken] should be_nil;
             listener should have_received("registrationFailedWithError:");

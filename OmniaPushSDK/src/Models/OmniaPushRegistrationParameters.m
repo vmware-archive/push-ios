@@ -32,8 +32,11 @@
         if (releaseSecret == nil) {
             [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be nil"];
         }
-        if (deviceAlias == nil) {
-            [NSException raise:NSInvalidArgumentException format:@"deviceAlias may not be nil"];
+        if (releaseUuid.length <= 0) {
+            [NSException raise:NSInvalidArgumentException format:@"releaseUuid may not be empty"];
+        }
+        if (releaseSecret.length <= 0) {
+            [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be empty"];
         }
         self.remoteNotificationTypes = remoteNotificationTypes;
         self.releaseUuid = releaseUuid;

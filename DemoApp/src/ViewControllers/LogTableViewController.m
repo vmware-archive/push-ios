@@ -160,13 +160,19 @@
 - (void) initializeSDK
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    OmniaPushRegistrationParameters *parameters = [Settings getRegistrationParameters];
-    NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
-                         parameters.releaseUuid,
-                         parameters.releaseSecret,
-                         parameters.deviceAlias];
-    [self addLogItem:message timestamp:[NSDate date]];
-    [OmniaPushSDK registerWithParameters:parameters listener:self];
+    
+    @try {
+        OmniaPushRegistrationParameters *parameters = [Settings getRegistrationParameters];
+        NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
+                             parameters.releaseUuid,
+                             parameters.releaseSecret,
+                             parameters.deviceAlias];
+        [self addLogItem:message timestamp:[NSDate date]];
+        [OmniaPushSDK registerWithParameters:parameters listener:self];
+    }
+    @catch (NSException *e) {
+        [self addLogItem:[NSString stringWithFormat:@"Caught exception while trying to register: \"%@\".", e] timestamp:[NSDate date]];
+    }
 }
 
 - (void)didReceiveMemoryWarning

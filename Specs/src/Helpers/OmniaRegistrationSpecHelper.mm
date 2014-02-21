@@ -25,7 +25,7 @@ using namespace Cedar::Doubles;
     if ((stateResult) == BE_TRUE) { \
         (stateField) should be_truthy; \
     } else if ((stateResult) == BE_FALSE) { \
-        (stateField) should_not be_truthy; \
+        (stateField) should be_falsy; \
     } else if ((stateResult) == BE_NIL) { \
         (stateField) should be_nil; \
     }
@@ -210,7 +210,7 @@ using namespace Cedar::Doubles;
         [self.helper.workerQueue didFinishOperation:classOfOperation] should be_truthy;
     }
     for (Class classOfOperation : notCompletedOperations) {
-        [self.helper.workerQueue didFinishOperation:classOfOperation] should_not be_truthy;
+        [self.helper.workerQueue didFinishOperation:classOfOperation] should be_falsy;
     }
 }
 

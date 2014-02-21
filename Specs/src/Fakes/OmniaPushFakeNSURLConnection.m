@@ -47,18 +47,20 @@
 
 - (void) start
 {
-    // TODO - support ASYNC request in order to test timeouts
+    // TODO - support ASYNC request in order to test timeouts - unfortunately,
+    // doing async anything is pretty challenging under Cedar
     if (self.shouldBeSuccessful) {
         
         SEL selConnectionDidReceiveResponse = sel_registerName("connection:didReceiveResponse:");
         SEL selConnectionDidReceiveData = sel_registerName("connection:didReceiveData:");
         SEL selConnectionDidFinishLoading = sel_registerName("connectionDidFinishLoading:");
+        id<NSURLConnectionDataDelegate> del = (id<NSURLConnectionDataDelegate>) self.delegate;
         
-        if ([self.delegate respondsToSelector:selConnectionDidReceiveResponse]) {
+        if ([del respondsToSelector:selConnectionDidReceiveResponse]) {
             
-            [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveResponse:self.response];
+            [del connection:self didReceiveResponse:self.response];
             
-            if ([self.delegate respondsToSelector:selConnectionDidReceiveData]) {
+            if ([del respondsToSelector:selConnectionDidReceiveData]) {
                 if (self.chunks != nil) {
                     if (self.chunks.count > 0) {
                         for (id chunk in self.chunks) {
@@ -68,16 +70,16 @@
                             } else if ([chunk isKindOfClass:[NSString class]]) {
                                 data = [(NSString*)chunk dataUsingEncoding:NSUTF8StringEncoding];
                             }
-                            [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:data];
+                            [del connection:self didReceiveData:data];
                         }
                     } else {
-                        [(id<NSURLConnectionDataDelegate>)(self.delegate) connection:self didReceiveData:nil];
+                        [del connection:self didReceiveData:nil];
                     }
                 }
             }
         }
-        if ([self.delegate respondsToSelector:selConnectionDidFinishLoading]) {
-            [(id<NSURLConnectionDataDelegate>)(self.delegate) connectionDidFinishLoading:self];
+        if ([del respondsToSelector:selConnectionDidFinishLoading]) {
+            [del connectionDidFinishLoading:self];
         }
     } else {
         if ([self.delegate respondsToSelector:@selector(connection:didFailWithError:)]) {
