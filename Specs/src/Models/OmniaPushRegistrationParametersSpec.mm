@@ -52,12 +52,17 @@ describe(@"OmniaPushRegistrationParameters", ^{
             ^{model = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUuid:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];}
             should raise_exception([NSException class]);
         });
+        
+        it(@"should require a non-nil deviceAlias", ^{
+            ^{model = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];}
+            should raise_exception([NSException class]);
+        });
     });
     
-    context(@"initializing with valid arguments (nil device alias)", ^{
+    context(@"initializing with valid arguments (empty device alias)", ^{
         
         beforeEach(^{
-            model = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];
+            model = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUuid:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:@""];
         });
         
         it(@"should be initialized successfully", ^{
@@ -68,7 +73,7 @@ describe(@"OmniaPushRegistrationParameters", ^{
             model.remoteNotificationTypes should equal(TEST_NOTIFICATION_TYPES);
             model.releaseUuid should equal(TEST_RELEASE_UUID);
             model.releaseSecret should equal(TEST_RELEASE_SECRET);
-            model.deviceAlias should be_nil;
+            model.deviceAlias should be_empty;
         });
     });
 
