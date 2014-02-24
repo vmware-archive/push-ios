@@ -10,55 +10,6 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-typedef NS_ENUM(NSUInteger, Hardware)
-{
-    NOT_AVAILABLE,
-    
-    IPHONE_2G,
-    IPHONE_3G,
-    IPHONE_3GS,
-    IPHONE_4,
-    IPHONE_4_CDMA,
-    IPHONE_4S,
-    IPHONE_5,
-    IPHONE_5_CDMA_GSM,
-    IPHONE_5C,
-    IPHONE_5C_CDMA_GSM,
-    IPHONE_5S,
-    IPHONE_5S_CDMA_GSM,
-    
-    IPOD_TOUCH_1G,
-    IPOD_TOUCH_2G,
-    IPOD_TOUCH_3G,
-    IPOD_TOUCH_4G,
-    IPOD_TOUCH_5G,
-    
-    IPAD,
-    IPAD_2,
-    IPAD_2_WIFI,
-    IPAD_2_CDMA,
-    IPAD_3,
-    IPAD_3G,
-    IPAD_3_WIFI,
-    IPAD_3_WIFI_CDMA,
-    IPAD_4,
-    IPAD_4_WIFI,
-    IPAD_4_GSM_CDMA,
-    
-    IPAD_MINI,
-    IPAD_MINI_WIFI,
-    IPAD_MINI_WIFI_CDMA,
-    IPAD_MINI_RETINA_WIFI,
-    IPAD_MINI_RETINA_WIFI_CDMA,
-    
-    IPAD_AIR_WIFI,
-    IPAD_AIR_WIFI_GSM,
-    IPAD_AIR_WIFI_CDMA,
-    
-    SIMULATOR
-};
-
-
 @implementation OmniaPushHardwareUtil
 
 + (NSString*)OmniaPush_hardwareString {
@@ -73,58 +24,72 @@ typedef NS_ENUM(NSUInteger, Hardware)
 
 + (NSString*)OmniaPush_hardwareSimpleDescription
 {
+    static NSDictionary *hardwareDescriptionDictionary = nil;
+    
+    if (!hardwareDescriptionDictionary) {
+        hardwareDescriptionDictionary = @{
+                                          @"iPhone1,1" : @"iPhone 2G",
+                                          @"iPhone1,2" : @"iPhone 3G",
+                                          @"iPhone2,1" : @"iPhone 3GS",
+                                          @"iPhone3,1" : @"iPhone 4",
+                                          @"iPhone3,2" : @"iPhone 4",
+                                          @"iPhone3,3" : @"iPhone 4",
+                                          @"iPhone4,1" : @"iPhone 4S",
+                                          @"iPhone5,1" : @"iPhone 5",
+                                          @"iPhone5,2" : @"iPhone 5",
+                                          @"iPhone5,3" : @"iPhone 5C",
+                                          @"iPhone5,4" : @"iPhone 5C",
+                                          @"iPhone6,1" : @"iPhone 5S",
+                                          @"iPhone6,2" : @"iPhone 5S",
+                                          @"iPod1,1" : @"iPod Touch (1 Gen)",
+                                          @"iPod2,1" : @"iPod Touch (2 Gen)",
+                                          @"iPod3,1" : @"iPod Touch (3 Gen)",
+                                          @"iPod4,1" : @"iPod Touch (4 Gen)",
+                                          @"iPod5,1" : @"iPod Touch (5 Gen)",
+                                          @"iPad1,1" : @"iPad",
+                                          @"iPad1,2" : @"iPad",
+                                          @"iPad2,1" : @"iPad 2",
+                                          @"iPad2,2" : @"iPad 2",
+                                          @"iPad2,3" : @"iPad 2",
+                                          @"iPad2,4" : @"iPad 2",
+                                          @"iPad2,5" : @"iPad Mini",
+                                          @"iPad2,6" : @"iPad Mini",
+                                          @"iPad2,7" : @"iPad Mini",
+                                          @"iPad3,1" : @"iPad 3",
+                                          @"iPad3,2" : @"iPad 3",
+                                          @"iPad3,3" : @"iPad 3",
+                                          @"iPad3,4" : @"iPad 4",
+                                          @"iPad3,5" : @"iPad 4",
+                                          @"iPad3,6" : @"iPad 4",
+                                          @"iPad4,1" : @"iPad Air",
+                                          @"iPad4,2" : @"iPad Air",
+                                          @"iPad4,3" : @"iPad Air",
+                                          @"iPad4,4" : @"iPad Mini Retina",
+                                          @"iPad4,5" : @"iPad Mini Retina",
+                                          @"i386" : @"Simulator",
+                                          @"x86_64" : @"Simulator",
+                                          };
+    }
+    
     NSString *hardware = [self OmniaPush_hardwareString];
-    if ([hardware isEqualToString:@"iPhone1,1"])    return @"iPhone 2G";
-    if ([hardware isEqualToString:@"iPhone1,2"])    return @"iPhone 3G";
-    if ([hardware isEqualToString:@"iPhone2,1"])    return @"iPhone 3GS";
-    if ([hardware isEqualToString:@"iPhone3,1"])    return @"iPhone 4";
-    if ([hardware isEqualToString:@"iPhone3,2"])    return @"iPhone 4";
-    if ([hardware isEqualToString:@"iPhone3,3"])    return @"iPhone 4";
-    if ([hardware isEqualToString:@"iPhone4,1"])    return @"iPhone 4S";
-    if ([hardware isEqualToString:@"iPhone5,1"])    return @"iPhone 5";
-    if ([hardware isEqualToString:@"iPhone5,2"])    return @"iPhone 5";
-    if ([hardware isEqualToString:@"iPhone5,3"])    return @"iPhone 5C";
-    if ([hardware isEqualToString:@"iPhone5,4"])    return @"iPhone 5C";
-    if ([hardware isEqualToString:@"iPhone6,1"])    return @"iPhone 5S";
-    if ([hardware isEqualToString:@"iPhone6,2"])    return @"iPhone 5S";
+    NSString *description = hardwareDescriptionDictionary[hardware];
     
-    if ([hardware isEqualToString:@"iPod1,1"])      return @"iPod Touch (1 Gen)";
-    if ([hardware isEqualToString:@"iPod2,1"])      return @"iPod Touch (2 Gen)";
-    if ([hardware isEqualToString:@"iPod3,1"])      return @"iPod Touch (3 Gen)";
-    if ([hardware isEqualToString:@"iPod4,1"])      return @"iPod Touch (4 Gen)";
-    if ([hardware isEqualToString:@"iPod5,1"])      return @"iPod Touch (5 Gen)";
+    if (description) {
+        return description;
+    }
     
-    if ([hardware isEqualToString:@"iPad1,1"])      return @"iPad";
-    if ([hardware isEqualToString:@"iPad1,2"])      return @"iPad";
-    if ([hardware isEqualToString:@"iPad2,1"])      return @"iPad 2";
-    if ([hardware isEqualToString:@"iPad2,2"])      return @"iPad 2";
-    if ([hardware isEqualToString:@"iPad2,3"])      return @"iPad 2";
-    if ([hardware isEqualToString:@"iPad2,4"])      return @"iPad 2";
-    if ([hardware isEqualToString:@"iPad2,5"])      return @"iPad Mini";
-    if ([hardware isEqualToString:@"iPad2,6"])      return @"iPad Mini";
-    if ([hardware isEqualToString:@"iPad2,7"])      return @"iPad Mini";
-    if ([hardware isEqualToString:@"iPad3,1"])      return @"iPad 3";
-    if ([hardware isEqualToString:@"iPad3,2"])      return @"iPad 3";
-    if ([hardware isEqualToString:@"iPad3,3"])      return @"iPad 3";
-    if ([hardware isEqualToString:@"iPad3,4"])      return @"iPad 4";
-    if ([hardware isEqualToString:@"iPad3,5"])      return @"iPad 4";
-    if ([hardware isEqualToString:@"iPad3,6"])      return @"iPad 4";
-    if ([hardware isEqualToString:@"iPad4,1"])      return @"iPad Air";
-    if ([hardware isEqualToString:@"iPad4,2"])      return @"iPad Air";
-    if ([hardware isEqualToString:@"iPad4,3"])      return @"iPad Air";
-    if ([hardware isEqualToString:@"iPad4,4"])      return @"iPad Mini Retina";
-    if ([hardware isEqualToString:@"iPad4,5"])      return @"iPad Mini Retina";
-    
-    if ([hardware isEqualToString:@"i386"])         return @"Simulator";
-    if ([hardware isEqualToString:@"x86_64"])       return @"Simulator";
-    
-    NSLog(@"This is a device which is not listed in this category. Please visit https://github.com/inderkumarrathore/UIDevice-Hardware and add a comment there.");
     NSLog(@"Your device hardware string is: %@", hardware);
     
-    if ([hardware hasPrefix:@"iPhone"]) return @"iPhone";
-    if ([hardware hasPrefix:@"iPod"]) return @"iPod";
-    if ([hardware hasPrefix:@"iPad"]) return @"iPad";
-    
+    if ([hardware hasPrefix:@"iPhone"]) {
+        return @"iPhone";
+    }
+    if ([hardware hasPrefix:@"iPod"]) {
+        return @"iPod";
+    }
+    if ([hardware hasPrefix:@"iPad"]) {
+        return @"iPad";
+    }
+
     return nil;
 }
 
