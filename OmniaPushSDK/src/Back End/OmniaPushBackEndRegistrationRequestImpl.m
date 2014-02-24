@@ -17,7 +17,7 @@
 #import "OmniaPushErrors.h"
 #import "OmniaPushNSURLConnectionProvider.h"
 #import "OmniaPushDebug.h"
-#import "UIDevice+Hardware.h"
+#import "OmniaPushHardwareUtil.h"
 
 @interface OmniaPushBackEndRegistrationRequestImpl ()
 
@@ -89,7 +89,7 @@
     
     static NSString *deviceModel = nil;
     if (deviceModel == nil) {
-        deviceModel = [[UIDevice currentDevice] OmniaPush_hardwareSimpleDescription];
+        deviceModel = [OmniaPushHardwareUtil OmniaPush_hardwareSimpleDescription];
     }
     
     OmniaPushBackEndRegistrationRequestData *requestData = [[OmniaPushBackEndRegistrationRequestData alloc] init];
