@@ -117,7 +117,10 @@ static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 // Used by unit tests to provide fake application objects
 + (void) setupApplication:(UIApplication*)testApplication
 {
-    if (application) return;
+    if (application) {
+        return;
+    }
+    
     if (testApplication == nil) {
         application = [UIApplication sharedApplication];
     } else {

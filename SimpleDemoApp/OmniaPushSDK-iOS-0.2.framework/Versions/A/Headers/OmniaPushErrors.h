@@ -14,8 +14,6 @@
  */
 OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 
-// TODO - think about switching this to use NS_ENUM
-
 /**
  * Defines the error codes that are specific to the Omnia Push SDK Client
  */
