@@ -7,16 +7,17 @@
 //
 
 #import "OmniaPushBackEndRegistrationResponseData.h"
+#import "OmniaPushBackEndRegistrationRequestData.h"
 #import "OmniaPushErrors.h"
 
-#define TEST_RELEASE_UUID         @"123-456-789"
-#define TEST_DEVICE_UUID          @"L337-L337-OH-YEAH"
-#define TEST_DEVICE_ALIAS         @"l33t devices of badness"
-#define TEST_DEVICE_MANUFACTURER  @"Amiga"
-#define TEST_DEVICE_MODEL         @"500"
-#define TEST_OS                   @"AmigaOS"
-#define TEST_OS_VERSION           @"5.0"
-#define TEST_REGISTRATION_TOKEN   @"ABC-DEF-GHI"
+static NSString *const TEST_RELEASE_UUID         = @"123-456-789";
+static NSString *const TEST_DEVICE_UUID          = @"L337-L337-OH-YEAH";
+static NSString *const TEST_DEVICE_ALIAS         = @"l33t devices of badness";
+static NSString *const TEST_DEVICE_MANUFACTURER  = @"Amiga";
+static NSString *const TEST_DEVICE_MODEL         = @"500";
+static NSString *const TEST_OS                   = @"AmigaOS";
+static NSString *const TEST_OS_VERSION           = @"5.0";
+static NSString *const TEST_REGISTRATION_TOKEN   = @"ABC-DEF-GHI";
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -127,14 +128,14 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         
         it(@"should construct a complete response object", ^{
             id dict = @{
-                        @"os":TEST_OS,
-                        @"os_version":TEST_OS_VERSION,
-                        @"device_uuid":TEST_DEVICE_UUID,
-                        @"device_alias":TEST_DEVICE_ALIAS,
-                        @"device_manufacturer":TEST_DEVICE_MANUFACTURER,
-                        @"device_model":TEST_DEVICE_MODEL,
-                        @"release_uuid":TEST_RELEASE_UUID,
-                        @"registration_token":TEST_REGISTRATION_TOKEN
+                        kDeviceOS : TEST_OS,
+                        kDeviceOSVersion : TEST_OS_VERSION,
+                        kDeviceUUID : TEST_DEVICE_UUID,
+                        kDeviceAlias : TEST_DEVICE_ALIAS,
+                        kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                        kDeviceModel : TEST_DEVICE_MODEL,
+                        kReleaseUUID : TEST_RELEASE_UUID,
+                        kRegistrationToken : TEST_REGISTRATION_TOKEN,
                         };
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             error should be_nil;
@@ -178,14 +179,14 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"release_uuid"] should equal(TEST_RELEASE_UUID);
-                dict[@"device_uuid"] should equal(TEST_DEVICE_UUID);
-                dict[@"device_alias"] should equal(TEST_DEVICE_ALIAS);
-                dict[@"device_manufacturer"] should equal(TEST_DEVICE_MANUFACTURER);
-                dict[@"device_model"] should equal(TEST_DEVICE_MODEL);
-                dict[@"os"] should equal(TEST_OS);
-                dict[@"os_version"] should equal(TEST_OS_VERSION);
-                dict[@"registration_token"] should equal(TEST_REGISTRATION_TOKEN);
+                dict[kReleaseUUID] should equal(TEST_RELEASE_UUID);
+                dict[kDeviceUUID] should equal(TEST_DEVICE_UUID);
+                dict[kDeviceAlias] should equal(TEST_DEVICE_ALIAS);
+                dict[kDeviceManufacturer] should equal(TEST_DEVICE_MANUFACTURER);
+                dict[kDeviceModel] should equal(TEST_DEVICE_MODEL);
+                dict[kDeviceOS] should equal(TEST_OS);
+                dict[kDeviceOSVersion] should equal(TEST_OS_VERSION);
+                dict[kRegistrationToken] should equal(TEST_REGISTRATION_TOKEN);
             });
             
             it(@"should be dictionaryizable", ^{
@@ -205,14 +206,14 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"release_uuid"] should be_nil;
-                dict[@"device_uuid"] should be_nil;
-                dict[@"device_alias"] should be_nil;
-                dict[@"device_manufacturer"] should be_nil;
-                dict[@"device_model"] should be_nil;
-                dict[@"os"] should be_nil;
-                dict[@"os_version"] should be_nil;
-                dict[@"registration_token"] should be_nil;
+                dict[kReleaseUUID] should be_nil;
+                dict[kDeviceUUID] should be_nil;
+                dict[kDeviceAlias] should be_nil;
+                dict[kDeviceManufacturer] should be_nil;
+                dict[kDeviceModel] should be_nil;
+                dict[kDeviceOS] should be_nil;
+                dict[kDeviceOSVersion] should be_nil;
+                dict[kRegistrationToken] should be_nil;
             });
             
             it(@"should be dictionaryizable", ^{

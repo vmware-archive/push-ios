@@ -127,14 +127,14 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         
         it(@"should construct a complete response object", ^{
             id dict = @{
-                        @"os":TEST_OS,
-                        @"os_version":TEST_OS_VERSION,
-                        @"device_alias":TEST_DEVICE_ALIAS,
-                        @"device_manufacturer":TEST_DEVICE_MANUFACTURER,
-                        @"device_model":TEST_DEVICE_MODEL,
-                        @"release_uuid":TEST_RELEASE_UUID,
-                        @"secret":TEST_SECRET,
-                        @"registration_token":TEST_REGISTRATION_TOKEN
+                        kDeviceOS : TEST_OS,
+                        kDeviceOSVersion : TEST_OS_VERSION,
+                        kDeviceAlias : TEST_DEVICE_ALIAS,
+                        kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                        kDeviceModel : TEST_DEVICE_MODEL,
+                        kReleaseUUID : TEST_RELEASE_UUID,
+                        kReleaseSecret : TEST_SECRET,
+                        kRegistrationToken : TEST_REGISTRATION_TOKEN,
                         };
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             error should be_nil;
@@ -178,14 +178,14 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"release_uuid"] should equal(TEST_RELEASE_UUID);
-                dict[@"secret"] should equal(TEST_SECRET);
-                dict[@"device_alias"] should equal(TEST_DEVICE_ALIAS);
-                dict[@"device_manufacturer"] should equal(TEST_DEVICE_MANUFACTURER);
-                dict[@"device_model"] should equal(TEST_DEVICE_MODEL);
-                dict[@"os"] should equal(TEST_OS);
-                dict[@"os_version"] should equal(TEST_OS_VERSION);
-                dict[@"registration_token"] should equal(TEST_REGISTRATION_TOKEN);
+                dict[kReleaseUUID] should equal(TEST_RELEASE_UUID);
+                dict[kReleaseSecret] should equal(TEST_SECRET);
+                dict[kDeviceAlias] should equal(TEST_DEVICE_ALIAS);
+                dict[kDeviceManufacturer] should equal(TEST_DEVICE_MANUFACTURER);
+                dict[kDeviceModel] should equal(TEST_DEVICE_MODEL);
+                dict[kDeviceOS] should equal(TEST_OS);
+                dict[kDeviceOSVersion] should equal(TEST_OS_VERSION);
+                dict[kRegistrationToken] should equal(TEST_REGISTRATION_TOKEN);
             });
 
             it(@"should be dictionaryizable", ^{
@@ -205,14 +205,14 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             
             afterEach(^{
                 dict should_not be_nil;
-                dict[@"release_uuid"] should be_nil;
-                dict[@"secret"] should be_nil;
-                dict[@"device_alias"] should be_nil;
-                dict[@"device_manufacturer"] should be_nil;
-                dict[@"device_model"] should be_nil;
-                dict[@"os"] should be_nil;
-                dict[@"os_version"] should be_nil;
-                dict[@"registration_token"] should be_nil;
+                dict[kReleaseUUID] should be_nil;
+                dict[kReleaseSecret] should be_nil;
+                dict[kDeviceAlias] should be_nil;
+                dict[kDeviceManufacturer] should be_nil;
+                dict[kDeviceModel] should be_nil;
+                dict[kDeviceOS] should be_nil;
+                dict[kDeviceOSVersion] should be_nil;
+                dict[kRegistrationToken] should be_nil;
             });
             
             it(@"should be dictionaryizable", ^{

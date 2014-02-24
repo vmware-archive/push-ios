@@ -10,6 +10,16 @@
 #import "OmniaPushDictionaryizable.h"
 #import "OmniaPushJsonizable.h"
 
+extern NSString *const kReleaseUUID;
+extern NSString *const kDeviceUUID;
+extern NSString *const kReleaseSecret;
+extern NSString *const kDeviceAlias;
+extern NSString *const kDeviceManufacturer;
+extern NSString *const kDeviceModel;
+extern NSString *const kDeviceOS;
+extern NSString *const kDeviceOSVersion;
+extern NSString *const kRegistrationToken;
+
 @interface OmniaPushBackEndRegistrationRequestData : NSObject<OmniaPushJsonizable, OmniaPushDictionaryizable>
 
 @property (nonatomic) NSString *releaseUuid;

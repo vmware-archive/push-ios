@@ -19,6 +19,7 @@ OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 /**
  * Defines the error codes that are specific to the Omnia Push SDK Client
  */
+
 typedef enum OmniaPushErrorCodes : NSInteger {
     
     /**

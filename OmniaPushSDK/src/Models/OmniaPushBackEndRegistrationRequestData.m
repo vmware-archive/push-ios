@@ -11,19 +11,45 @@
 #import "OmniaPushErrorUtil.h"
 #import "OmniaPushDebug.h"
 
+NSString *const kReleaseUUID         = @"release_uuid";
+NSString *const kDeviceUUID          = @"device_uuid";
+NSString *const kReleaseSecret       = @"secret";
+NSString *const kDeviceAlias         = @"device_alias";
+NSString *const kDeviceManufacturer  = @"device_manufacturer";
+NSString *const kDeviceModel         = @"device_model";
+NSString *const kDeviceOS            = @"os";
+NSString *const kDeviceOSVersion     = @"os_version";
+NSString *const kRegistrationToken   = @"registration_token";
+
 @implementation OmniaPushBackEndRegistrationRequestData
 
 - (NSDictionary*) toDictionary
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (self.releaseUuid) dict[@"release_uuid"] = self.releaseUuid;
-    if (self.secret) dict[@"secret"] = self.secret;
-    if (self.deviceAlias) dict[@"device_alias"] = self.deviceAlias;
-    if (self.deviceManufacturer) dict[@"device_manufacturer"] = self.deviceManufacturer;
-    if (self.deviceModel) dict[@"device_model"] = self.deviceModel;
-    if (self.os) dict[@"os"] = self.os;
-    if (self.osVersion) dict[@"os_version"] = self.osVersion;
-    if (self.registrationToken) dict[@"registration_token"] = self.registrationToken;
+    if (self.releaseUuid) {
+        dict[kReleaseUUID] = self.releaseUuid;
+    }
+    if (self.secret) {
+        dict[kReleaseSecret] = self.secret;
+    }
+    if (self.deviceAlias) {
+        dict[kDeviceAlias] = self.deviceAlias;
+    }
+    if (self.deviceManufacturer) {
+        dict[kDeviceManufacturer] = self.deviceManufacturer;
+    }
+    if (self.deviceModel) {
+        dict[kDeviceModel] = self.deviceModel;
+    }
+    if (self.os) {
+        dict[kDeviceOS] = self.os;
+    }
+    if (self.osVersion) {
+        dict[kDeviceOSVersion] = self.osVersion;
+    }
+    if (self.registrationToken) {
+        dict[kRegistrationToken] = self.registrationToken;
+    }
     return dict;
 }
 
@@ -43,14 +69,14 @@
 + (instancetype) fromDictionary:(NSDictionary*)dict
 {
     OmniaPushBackEndRegistrationRequestData *result = [[OmniaPushBackEndRegistrationRequestData alloc] init];
-    result.os = dict[@"os"];
-    result.osVersion = dict[@"os_version"];
-    result.deviceAlias = dict[@"device_alias"];
-    result.deviceManufacturer = dict[@"device_manufacturer"];
-    result.deviceModel = dict[@"device_model"];
-    result.releaseUuid = dict[@"release_uuid"];
-    result.secret = dict[@"secret"];
-    result.registrationToken = dict[@"registration_token"];
+    result.os = dict[kDeviceOS];
+    result.osVersion = dict[kDeviceOSVersion];
+    result.deviceAlias = dict[kDeviceAlias];
+    result.deviceManufacturer = dict[kDeviceManufacturer];
+    result.deviceModel = dict[kDeviceModel];
+    result.releaseUuid = dict[kReleaseUUID];
+    result.secret = dict[kReleaseSecret];
+    result.registrationToken = dict[kRegistrationToken];
     return result;
 }
 

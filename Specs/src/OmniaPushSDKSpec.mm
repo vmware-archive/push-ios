@@ -20,8 +20,6 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-#define REGISTRATION_DELAY_IN_MILLISECONDS    1000ull
-
 SPEC_BEGIN(OmniaPushSDKSpec)
 
 describe(@"OmniaPushSDK", ^{
