@@ -11,10 +11,11 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-#define TEST_NOTIFICATION_TYPES  UIRemoteNotificationTypeAlert
-#define TEST_RELEASE_UUID        @"SOS-WE-LIKE-IT-SPICY"
-#define TEST_RELEASE_SECRET      @"Put sweet chili sauce on everything"
-#define TEST_DEVICE_ALIAS        @"Extreme spiciness classification"
+static NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
+
+static NSString *const TEST_RELEASE_UUID   = @"SOS-WE-LIKE-IT-SPICY";
+static NSString *const TEST_RELEASE_SECRET = @"Put sweet chili sauce on everything";
+static NSString *const TEST_DEVICE_ALIAS   = @"Extreme spiciness classification";
 
 SPEC_BEGIN(OmniaPushRegistrationParametersSpec)
 

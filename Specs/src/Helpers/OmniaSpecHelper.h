@@ -20,13 +20,14 @@
 @class OmniaPushRegistrationEngine;
 @class OmniaPushFakeNSURLConnectionFactory;
 
-#define TEST_NOTIFICATION_TYPES               UIRemoteNotificationTypeAlert
-#define TEST_RELEASE_UUID                     @"444-555-666-777"
-#define TEST_RELEASE_SECRET                   @"No secret is as strong as its blabbiest keeper"
-#define TEST_DEVICE_ALIAS                     @"Let's watch cat videos"
-#define TEST_RELEASE_UUID_2                   @"222-444-999-ZZZ"
-#define TEST_RELEASE_SECRET_2                 @"My cat's breath smells like cat food"
-#define TEST_DEVICE_ALIAS_2                   @"I can haz cheezburger?"
+OBJC_EXPORT NSInteger TEST_NOTIFICATION_TYPES;
+
+OBJC_EXPORT NSString *const TEST_RELEASE_UUID;
+OBJC_EXPORT NSString *const TEST_RELEASE_SECRET;
+OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS;
+OBJC_EXPORT NSString *const TEST_RELEASE_UUID_2;
+OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_2;
+OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
 @interface OmniaSpecHelper : NSObject
 
@@ -87,4 +88,4 @@
 // NSURLConnection heleprs
 - (OmniaPushFakeNSURLConnectionFactory*) setupConnectionFactory;
 
-@end
+@end;

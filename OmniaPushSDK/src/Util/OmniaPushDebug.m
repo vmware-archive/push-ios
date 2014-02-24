@@ -33,12 +33,12 @@
 
 #import "OmniaPushDebug.h"
 
-#define MAX_COLUMN_WIDTH (90)   // Limits the maximum number of characters used in the console display for function name
+static NSInteger MAX_COLUMN_WIDTH = 90;   // Limits the maximum number of characters used in the console display for function name
 
 
 BOOL flareHasFired = NO;
 BOOL disableLogging = NO;
-int timesRemainingBeforeBreak = 0;
+NSInteger timesRemainingBeforeBreak = 0;
 OmniaPushLogListener listener = nil;
 
 

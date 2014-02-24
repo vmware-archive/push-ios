@@ -14,13 +14,11 @@
  */
 OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 
-// TODO - think about switching this to use NS_ENUM
-
 /**
  * Defines the error codes that are specific to the Omnia Push SDK Client
  */
 
-typedef enum OmniaPushErrorCodes : NSInteger {
+typedef NS_ENUM(NSInteger, OmniaPushErrorCodes) {
     
     /**
      * iOS returned an object to the back-end registration code that was not an NSHTTPURLResponse object.
@@ -66,9 +64,8 @@ typedef enum OmniaPushErrorCodes : NSInteger {
     /**
      * The back-end server did not return a device_uuid after attempting to register.
      */
-
     OmniaPushBackEndRegistrationResponseDataNoDeviceUuid = 42
     
-} OmniaPushErrorCodes;
+};
 
 #endif

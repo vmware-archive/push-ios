@@ -8,6 +8,8 @@
 
 #import "LogItem.h"
 
+NSString *const LOG_ITEM_CELL = @"LogItemCell";
+
 static int currentBaseRowColour = 0;
 static int numItems = 0;
 

@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define BACK_END_REGISTRATION_REQUEST_URL           @"http://ec2-54-234-124-123.compute-1.amazonaws.com:8090/v1/registration"
-#define BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS    60.0
+OBJC_EXPORT NSString *const BACK_END_REGISTRATION_REQUEST_URL;
+OBJC_EXPORT NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS;
 
 @interface OmniaPushConst : NSObject
 

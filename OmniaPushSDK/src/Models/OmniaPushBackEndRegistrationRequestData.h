@@ -10,15 +10,15 @@
 #import "OmniaPushDictionaryizable.h"
 #import "OmniaPushJsonizable.h"
 
-extern NSString *const kReleaseUUID;
-extern NSString *const kDeviceUUID;
-extern NSString *const kReleaseSecret;
-extern NSString *const kDeviceAlias;
-extern NSString *const kDeviceManufacturer;
-extern NSString *const kDeviceModel;
-extern NSString *const kDeviceOS;
-extern NSString *const kDeviceOSVersion;
-extern NSString *const kRegistrationToken;
+OBJC_EXPORT NSString *const kReleaseUUID;
+OBJC_EXPORT NSString *const kDeviceUUID;
+OBJC_EXPORT NSString *const kReleaseSecret;
+OBJC_EXPORT NSString *const kDeviceAlias;
+OBJC_EXPORT NSString *const kDeviceManufacturer;
+OBJC_EXPORT NSString *const kDeviceModel;
+OBJC_EXPORT NSString *const kDeviceOS;
+OBJC_EXPORT NSString *const kDeviceOSVersion;
+OBJC_EXPORT NSString *const kRegistrationToken;
 
 @interface OmniaPushBackEndRegistrationRequestData : NSObject<OmniaPushJsonizable, OmniaPushDictionaryizable>
 

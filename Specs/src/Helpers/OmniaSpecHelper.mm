@@ -31,6 +31,15 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
+NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
+
+NSString *const TEST_RELEASE_UUID     = @"444-555-666-777";
+NSString *const TEST_RELEASE_SECRET   = @"No secret is as strong as its blabbiest keeper";
+NSString *const TEST_DEVICE_ALIAS     = @"Let's watch cat videos";
+NSString *const TEST_RELEASE_UUID_2   = @"222-444-999-ZZZ";
+NSString *const TEST_RELEASE_SECRET_2 = @"My cat's breath smells like cat food";
+NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
+
 @implementation OmniaSpecHelper
 
 # pragma mark - Spec Helper lifecycle

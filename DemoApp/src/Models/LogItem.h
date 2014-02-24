@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define LOG_ITEM_CELL @"LogItemCell"
+OBJC_EXTERN NSString *const LOG_ITEM_CELL;
 
 @interface LogItem : NSObject
 

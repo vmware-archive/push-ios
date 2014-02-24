@@ -10,11 +10,11 @@
 
 @class OmniaSpecHelper;
 
-typedef enum RegistrationStateResult : NSUInteger {
+typedef NS_ENUM(NSUInteger, RegistrationStateResult) {
     BE_NIL,
     BE_FALSE,
     BE_TRUE
-} RegistrationStateResult;
+};
 
 @interface OmniaRegistrationSpecHelper : NSObject
 
