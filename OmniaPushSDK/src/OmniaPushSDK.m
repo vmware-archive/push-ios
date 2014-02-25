@@ -6,10 +6,11 @@
 //  Copyright (c) 2013 Omnia. All rights reserved.
 //
 
+#import <objc/runtime.h>
+
 #import "OmniaPushSDK.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxy.h"
-#import "OmniaPushOperationQueueProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushRegistrationEngine.h"
@@ -103,6 +104,11 @@ static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
     }
     once_token = 0;
     application = nil;
+    
+#ifdef DEBUG
+    extern void __gcov_flush();
+    __gcov_flush();
+#endif
 }
 
 #pragma mark - Unit test helpers
