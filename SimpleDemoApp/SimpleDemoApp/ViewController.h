@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <OmniaPushSDK/OmniaPushSDK.h>
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<OmniaPushRegistrationListener>
+
+@property (nonatomic) IBOutlet UILabel *label;
 
 @end

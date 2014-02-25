@@ -17,12 +17,12 @@ The Push SDK requires iOS 6.0 or greater.  It should work on both 32-bit and 64-
 Library Requirements
 --------------------
 
-This library does not depend on any external libraries or frameworks.
+This library does not depend on any external libraries or frameworks when integrating with client applications.
 
 Instructions for Integrating the Omnia Mobile Push Services Push Client SDK for Android
 ---------------------------------------------------------------------------------------
 
-In order to receive push messages from Omnia in your Android application you will need to follow these tasks:
+In order to receive push messages from Omnia in your Android application you will need to follow these steps:
 
  1. You will need to obtain a certificate and provisioning profile from Apple before you can use push notifications
     in your application.  Please follow the instructions here:
@@ -42,7 +42,7 @@ In order to receive push messages from Omnia in your Android application you wil
  
     Include the following header:
 	
-        #import "OmniaPushSDK.h"
+        #import <OmniaPushSDK/OmniaPushSDK.h>
 	    
 
     In your `application:didFinishLaunchingWithOptions` method, please add the following lines:
@@ -68,7 +68,8 @@ In order to receive push messages from Omnia in your Android application you wil
     The `startRegistration` method is asynchronous and will return before registration is complete.  If you need to know
     when registration is complete (or if it fails), then provide a `OmniaPushRegistrationListener` as the second argument.
 
-    You do not need to call UIApplication `registerForRemoteNotificationTypes:`.  The library takes care of that for you.
+    You do not need to call the UIApplication `registerForRemoteNotificationTypes:` method.  The library takes care of that
+	for you.
 
  6. The library is not set up, at this time, to receive push messages for you since Apple has provided straightforward
     boilerplate code that you can copy into your application.  In order to receive messages in your application, please
@@ -83,11 +84,10 @@ Although you do not need any extra libraries or frameworks to build the project 
 your local Xcode installation in order to support building universal frameworks.  You will need to use this project
 in order to build this project:
 
-* https://github.com/kstenerud/iOS-Universal-Framework
+ * https://github.com/kstenerud/iOS-Universal-Framework
 
-Clone that repo onto your computer, close XCode, and run the `install.sh` script in the `Real
+Clone that repository onto your computer, close XCode, and run the `install.sh` script in the `Real
 Framework` subdirectory.
-
 
 The source code of the project is divided into three targets:
 
@@ -108,9 +108,7 @@ The source code of the project is divided into three targets:
 
      Demo application.
 
-
 	 More information below in the "Demo Application" section"
-
 
 Building the Framework
 ----------------------
@@ -120,8 +118,7 @@ depends on the [iOS Universal Framework](https://github.com/kstenerud/iOS-Univer
 
 To build the framework, make sure the iOS Universal Framework is installed and load the OmniaPushSDK project in Xcode.  Select
 the "OmniaPushSDK" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a
-Finder window containing the resultant Framework.  I recommend amending the filename to include the suffixes "iOS" and the current
-version.  e.g.:  "OmniaPushSDK-iOS-0.2.framework".
+Finder window containing the resultant framework.
 
 Staging Server
 --------------
@@ -132,6 +129,20 @@ to point to a production server when it is available.
 
 Note that the existing staging server is currently hardcoded to use the Apple APNS "sandbox" server only and is
 not suitable for production use at this time.
+
+Simple Demo Application
+-----------------------
+
+The Simple Demo Application is an example of the simplest application possible that uses the Omnia Push Client SDK.  At
+this time, it only demonstrates how to register for push notifications.
+
+This demo application registers for push notifications in the View Controller in order to make it easier to display the
+output on the screen.  It is probably more appropriate for you to register for push notifications in your application
+delegate instead.
+
+This application may be expanded in the future to demonstrate how to receive push notifications but we may need to decide
+whether we want to expose the Omnia device ID (which is the "address" that push messages are delivered to).  This information
+is not really pertinent to client applications so we might not want to expose it.
 
 Demo Application
 ----------------
@@ -175,8 +186,3 @@ with APNS and Omnia.  Although the library does not support receiving push messa
 already provides very straightforward example code that you can copy into your application), the sample application
 does as a demonstration to show that the "system works".  It can be useful for testing your registration set up, or
 for testing the server itself.
-
-Simple Demo Application
------------------------
-
-
