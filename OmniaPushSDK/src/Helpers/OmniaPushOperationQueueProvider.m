@@ -9,17 +9,22 @@
 #import "OmniaPushOperationQueueProvider.h"
 
 static NSOperationQueue *_workerQueue;
+static dispatch_once_t workerQueueOnceToken;
+
 static NSOperationQueue *_mainQueue;
+static dispatch_once_t mainQueueOnceToken;
 
 @implementation OmniaPushOperationQueueProvider
 
 + (NSOperationQueue *) workerQueue
 {
-    if (_workerQueue == nil) {
-        _workerQueue = [[NSOperationQueue alloc] init];
-        _workerQueue.maxConcurrentOperationCount = 1;
-        _workerQueue.name = @"OmniaPushOperationQueue";
-    }
+    dispatch_once(&workerQueueOnceToken, ^{
+        if (_workerQueue == nil) {
+            _workerQueue = [[NSOperationQueue alloc] init];
+            _workerQueue.maxConcurrentOperationCount = 1;
+            _workerQueue.name = @"OmniaPushOperationQueue";
+        }
+    });
     return _workerQueue;
 }
 
@@ -30,9 +35,11 @@ static NSOperationQueue *_mainQueue;
 
 + (NSOperationQueue *) mainQueue
 {
-    if (_mainQueue == nil) {
-        _mainQueue = [NSOperationQueue mainQueue];
-    }
+    dispatch_once(&mainQueueOnceToken, ^{
+        if (_mainQueue == nil) {
+            _mainQueue = [NSOperationQueue mainQueue];
+        }
+    });
     return _mainQueue;
 }
 
