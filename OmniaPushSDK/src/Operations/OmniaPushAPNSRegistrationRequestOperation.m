@@ -39,7 +39,7 @@
 - (void) main
 {
     @autoreleasepool {
-        OmniaPushLog(@"Registering for remote notifications with APNS.");
+        OmniaPushCriticalLog(@"Registering for remote notifications with APNS.");
         [self.application registerForRemoteNotificationTypes:self.parameters.remoteNotificationTypes];
     }
 }

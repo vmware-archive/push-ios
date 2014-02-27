@@ -131,7 +131,7 @@ YES |  \
 
 - (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken
 {
-    OmniaPushLog(@"Registration with APNS succeeded. Device token: \"%@\".", apnsDeviceToken);
+    OmniaPushCriticalLog(@"Registration with APNS succeeded. Device token: \"%@\".", apnsDeviceToken);
     self.updatedApnsDeviceToken = apnsDeviceToken;
     self.didFinishAPNSRegistration = YES;
     self.didAPNSRegistrationSucceed = YES;
@@ -163,7 +163,7 @@ YES |  \
 
 - (void) backendUnregistrationSucceeded
 {
-    OmniaPushLog(@"Unregistration with the back-end server succeeded.");
+    OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
     self.didFinishBackendUnregistration = YES;
     self.didBackEndUnregistrationSucceed = YES;
     [self startBackEndRegistration];
@@ -171,7 +171,7 @@ YES |  \
 
 - (void) backendUnregistrationFailed:(NSError*)error
 {
-    OmniaPushLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
+    OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
     OmniaPushLog(@"Nevertheless, registration will be attempted.");
     self.didFinishBackendUnregistration = YES;
     self.didBackEndUnregistrationSucceed = NO;
@@ -180,7 +180,7 @@ YES |  \
 
 - (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
 {
-    OmniaPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData.deviceUuid);
+    OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData.deviceUuid);
     self.didFinishBackendRegistration = YES;
     self.didBackendRegistrationSucceed = YES;
 
@@ -296,7 +296,7 @@ YES |  \
     self.didStartBackendUnregistration = YES;
     [self.storage saveBackEndDeviceID:nil];
     NSString *previousBackEndDeviceId = self.originalBackEndDeviceId;
-    OmniaPushLog(@"Attempting unregistration with back-end server for back-end device ID \"%@\".", previousBackEndDeviceId);
+    OmniaPushCriticalLog(@"Attempting unregistration with back-end server for back-end device ID \"%@\".", previousBackEndDeviceId);
     
     NSObject<OmniaPushBackEndUnregistrationRequest> *request = [OmniaPushBackEndUnregistrationRequestProvider request];
     [request startDeviceUnregistration:previousBackEndDeviceId
@@ -311,7 +311,7 @@ YES |  \
 - (void) startBackEndRegistration
 {
     self.didStartBackendRegistration = YES;
-    OmniaPushLog(@"Attempting registration with back-end server.");
+    OmniaPushCriticalLog(@"Attempting registration with back-end server.");
     NSObject<OmniaPushBackEndRegistrationRequest> *request = [OmniaPushBackEndRegistrationRequestProvider request];
     [request startDeviceRegistration:self.updatedApnsDeviceToken
                           parameters:self.parameters
