@@ -180,9 +180,24 @@ describe(@"OmniaPushBackEndRegistrationRequestImpl", ^{
                                    }];
         });
         
-        it(@"should handle a successful response that contains unparseable text", ^{
+        it(@"should handle a successful response that contains unparseable text (1)", ^{
             __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[@"I AM NOT JSON"]];
+            
+            [request startDeviceRegistration:helper.apnsDeviceToken
+                                  parameters:helper.params
+                                   onSuccess:^(OmniaPushBackEndRegistrationResponseData*) {
+                                       wasExpectedResult = NO;
+                                   }
+                                   onFailure:^(NSError *error) {
+                                       error should_not be_nil;
+                                       wasExpectedResult = YES;
+                                   }];
+        });
+        
+        it(@"should handle a successful response that contains unparseable text (2)", ^{
+            __block NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            [helper.connectionFactory setupForSuccessWithResponse:response withDataInChunks:@[[@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding]]];
             
             [request startDeviceRegistration:helper.apnsDeviceToken
                                   parameters:helper.params

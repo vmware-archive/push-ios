@@ -104,11 +104,6 @@ static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
     }
     once_token = 0;
     application = nil;
-    
-#ifdef DEBUG
-    extern void __gcov_flush();
-    __gcov_flush();
-#endif
 }
 
 #pragma mark - Unit test helpers
