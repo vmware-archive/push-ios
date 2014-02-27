@@ -1193,7 +1193,6 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "EC8EAD46-7C83-40C0-8C33-1D7160806737";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1221,7 +1220,6 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "EC8EAD46-7C83-40C0-8C33-1D7160806737";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

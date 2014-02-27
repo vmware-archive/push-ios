@@ -97,20 +97,28 @@ describe(@"OmniaPushSDK", ^{
     
     describe(@"successful registration with listener", ^{
         
-        it(@"should call the listener after successful registration from APNS", ^{
+        __block id listener;
+        
+        beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setApplicationInSingleton];
             [registrationHelper setupBackEndForSuccessfulRegistration];
             
-            id listener = fake_for(@protocol(OmniaPushRegistrationListener));
+            listener = fake_for(@protocol(OmniaPushRegistrationListener));
             listener stub_method("registrationSucceeded");
             
             sdk = [OmniaPushSDK registerWithParameters:helper.params listener:listener];
             sdk should_not be_nil;
             
             [helper.workerQueue drain];
+        });
         
+        afterEach(^{
+            listener = nil;
+        });
+        
+        it(@"should call the listener after successful registration from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
             [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
@@ -118,6 +126,19 @@ describe(@"OmniaPushSDK", ^{
             [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_falsy;
             [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
             listener should have_received("registrationSucceeded");
+        });
+        
+        it(@"should call the original application delegate after a push message is delivered", ^{
+            NSDictionary *userInfo = @{ @"aps" : @"I am a push message" };
+            [helper setupApplicationDelegateToReceiveNotification:userInfo];
+            SEL selectorAppDelegateProxy = sel_registerName("appDelegateProxy");
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+            OmniaPushAppDelegateProxy *appDelegateProxy = (OmniaPushAppDelegateProxy*) [sdk performSelector:selectorAppDelegateProxy];
+#pragma clang diagnostic pop
+            [appDelegateProxy respondsToSelector:@selector(application:didReceiveRemoteNotification:)] should be_truthy;
+            [appDelegateProxy application:helper.application didReceiveRemoteNotification:userInfo];
+            helper.applicationDelegate should have_received("application:didReceiveRemoteNotification:");
         });
     });
     

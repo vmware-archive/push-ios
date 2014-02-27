@@ -10,8 +10,8 @@
 #import "OmniaPushRegistrationParameters.h"
 
 static NSString *const DEFAULT_RELEASE_UUID   = @"a5ca5693-f729-4e9a-8df2-65e02cebc852";
-static NSString *const DEFAULT_RELEASE_SECRET = @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3"
-static NSString *const DEFAULT_DEVICE_ALIAS   = @"Default Device Alias"
+static NSString *const DEFAULT_RELEASE_SECRET = @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3";
+static NSString *const DEFAULT_DEVICE_ALIAS   = @"Default Device Alias";
 
 static NSString *const KEY_RELEASE_UUID    = @"KEY_RELEASE_UUID";
 static NSString *const KEY_RELEASE_SECRET  = @"KEY_RELEASE_SECRET";

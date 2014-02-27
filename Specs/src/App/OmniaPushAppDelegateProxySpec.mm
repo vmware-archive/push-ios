@@ -110,6 +110,17 @@ describe(@"OmniaPushAppDelegateProxy", ^{
             helper.applicationDelegateProxy.registrationEngine should be_same_instance_as(helper.registrationEngine);
         });
         
+        it(@"should respond to its own UIApplicationDelegate selectors", ^{
+            [helper.applicationDelegateProxy respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)] should be_truthy;
+            [helper.applicationDelegateProxy respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)] should be_truthy;
+        });
+        
+        it(@"should respond to the selectors of the original application delegate", ^{
+            [helper.applicationDelegateProxy respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)] should be_falsy;
+            helper.applicationDelegate stub_method("applicationDidReceiveMemoryWarning:").with(helper.application);
+            [helper.applicationDelegateProxy respondsToSelector:@selector(applicationDidReceiveMemoryWarning:)] should be_truthy;
+        });
+        
         it(@"should forward messages to the original application delegate", ^{
             __block BOOL didCallSelector = NO;
             helper.applicationDelegate stub_method("applicationDidReceiveMemoryWarning:").with(helper.application).and_do(^(NSInvocation*) {

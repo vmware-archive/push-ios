@@ -12,6 +12,7 @@
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushRegistrationEngine.h"
+#import <objc/runtime.h>
 
 @interface OmniaPushAppDelegateProxy ()
 
@@ -95,6 +96,22 @@
 {
     [invocation setTarget:self.originalApplicationDelegate];
     [invocation invoke];
+}
+
+- (BOOL) respondsToSelector:(SEL)sel
+{
+    return [self respondsToProxySelectors:sel] || [self.originalApplicationDelegate respondsToSelector:sel];
+}
+
+- (BOOL) respondsToProxySelectors:(SEL)sel
+{
+    if (sel_isEqual(sel, @selector(application:didRegisterForRemoteNotificationsWithDeviceToken:))) {
+        return YES;
+    } else if (sel_isEqual(sel, @selector(application:didFailToRegisterForRemoteNotificationsWithError:))) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 @end

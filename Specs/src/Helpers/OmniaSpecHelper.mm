@@ -149,6 +149,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.applicationDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(self.application, error);
 }
 
+- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary*)userInfo
+{
+    self.applicationDelegate stub_method("application:didReceiveRemoteNotification:").with(self.application, userInfo);
+}
+
 #pragma mark - Application Delegate Proxy helpers
 
 - (OmniaPushAppDelegateProxy*) setupAppDelegateProxy

@@ -66,6 +66,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
 - (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
+- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary*)userInfo;
 
 // Application Delegate Proxy helpers
 - (OmniaPushAppDelegateProxy*) setupAppDelegateProxy;
