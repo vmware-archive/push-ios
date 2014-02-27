@@ -2,7 +2,7 @@
 //  OmniaFakeOperationQueue.h
 //  OmniaPushSDK
 //
-//  Copyright (c) 2014 Omnia. All rights reserved.
+//  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 //  From PivotalCoreKit: https://github.com/pivotal/PivotalCoreKit (MIT License)
 

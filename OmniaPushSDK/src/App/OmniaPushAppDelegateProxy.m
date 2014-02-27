@@ -3,7 +3,7 @@
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-18.
-//  Copyright (c) 2013 Omnia. All rights reserved.
+//  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
 #import "OmniaPushAppDelegateProxy.h"

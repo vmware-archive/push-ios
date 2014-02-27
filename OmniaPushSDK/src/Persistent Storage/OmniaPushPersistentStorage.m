@@ -3,7 +3,7 @@
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-17.
-//  Copyright (c) 2014 Omnia. All rights reserved.
+//  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 static NSString *const KEY_APNS_DEVICE_TOKEN = @"OMNIA_PUSH_APNS_DEVICE_TOKEN";

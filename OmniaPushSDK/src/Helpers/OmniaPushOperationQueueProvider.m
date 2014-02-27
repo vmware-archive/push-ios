@@ -3,7 +3,7 @@
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-08.
-//  Copyright (c) 2014 Omnia. All rights reserved.
+//  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 #import "OmniaPushOperationQueueProvider.h"
