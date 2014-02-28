@@ -8,6 +8,8 @@
 
 #import "AppDelegate.h"
 
+NSString *kReceivedRemoteNotification = @"org.omnia.pushsdk.SimpleDemoApp.ReceivedRemoteNotification";
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -15,5 +17,10 @@
     return YES;
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    // Notify the view controller that a remote notification has been received.
+    [[NSNotificationCenter defaultCenter] postNotificationName:kReceivedRemoteNotification object:nil userInfo:userInfo];
+}
 
 @end

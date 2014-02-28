@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+OBJC_EXPORT NSString *kReceivedRemoteNotification;
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;

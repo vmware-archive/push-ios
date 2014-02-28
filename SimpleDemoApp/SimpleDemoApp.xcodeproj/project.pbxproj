@@ -16,7 +16,7 @@
 		D4007EF818BBA4EB009EA88D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D4007EF618BBA4EB009EA88D /* Main.storyboard */; };
 		D4007EFB18BBA4EB009EA88D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D4007EFA18BBA4EB009EA88D /* ViewController.m */; };
 		D4007EFD18BBA4EB009EA88D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D4007EFC18BBA4EB009EA88D /* Images.xcassets */; };
-		D4007F2418BC00E4009EA88D /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4007F2318BC00E4009EA88D /* OmniaPushSDK.framework */; };
+		D4ED6BCB18C0DA7A004A3B63 /* OmniaPushSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4ED6BCA18C0DA7A004A3B63 /* OmniaPushSDK.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,7 +34,7 @@
 		D4007EF918BBA4EB009EA88D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		D4007EFA18BBA4EB009EA88D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D4007EFC18BBA4EB009EA88D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		D4007F2318BC00E4009EA88D /* OmniaPushSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OmniaPushSDK.framework; sourceTree = "<group>"; };
+		D4ED6BCA18C0DA7A004A3B63 /* OmniaPushSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = OmniaPushSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,7 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4007F2418BC00E4009EA88D /* OmniaPushSDK.framework in Frameworks */,
+				D4ED6BCB18C0DA7A004A3B63 /* OmniaPushSDK.framework in Frameworks */,
 				D4007EE718BBA4EB009EA88D /* CoreGraphics.framework in Frameworks */,
 				D4007EE918BBA4EB009EA88D /* UIKit.framework in Frameworks */,
 				D4007EE518BBA4EB009EA88D /* Foundation.framework in Frameworks */,
@@ -72,7 +72,7 @@
 		D4007EE318BBA4EB009EA88D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D4007F2318BC00E4009EA88D /* OmniaPushSDK.framework */,
+				D4ED6BCA18C0DA7A004A3B63 /* OmniaPushSDK.framework */,
 				D4007EE418BBA4EB009EA88D /* Foundation.framework */,
 				D4007EE618BBA4EB009EA88D /* CoreGraphics.framework */,
 				D4007EE818BBA4EB009EA88D /* UIKit.framework */,
