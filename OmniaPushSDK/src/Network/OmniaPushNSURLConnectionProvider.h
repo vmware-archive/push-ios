@@ -12,9 +12,9 @@
 
 @interface OmniaPushNSURLConnectionProvider : NSObject
 
-+ (NSURLConnection*) getNSURLConnectionWithRequest:(NSURLRequest*)request
-                                          delegate:(id<NSURLConnectionDelegate>)delegate;
++ (NSURLConnection *) connectionWithRequest:(NSURLRequest *)request
+                                      delegate:(id<NSURLConnectionDelegate>)delegate;
 
-+ (void) setFactory:(NSObject<OmniaPushNSURLConnectionFactory>*)factory;
++ (void) setFactory:(Class<OmniaPushNSURLConnectionFactory>)factory;
 
 @end

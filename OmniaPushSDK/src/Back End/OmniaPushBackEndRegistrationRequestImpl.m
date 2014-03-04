@@ -54,13 +54,13 @@
     self.resultantError = nil;
     self.successBlock = successBlock;
     self.failBlock = failBlock;
-    self.urlRequest = [self getRequestForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
-    self.urlConnection = [OmniaPushNSURLConnectionProvider getNSURLConnectionWithRequest:self.urlRequest delegate:self];
+    self.urlRequest = [self requestForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
+    self.urlConnection = [OmniaPushNSURLConnectionProvider connectionWithRequest:self.urlRequest delegate:self];
     [self.urlConnection start];
 }
 
-- (NSMutableURLRequest*) getRequestForAPNSDeviceToken:(NSData*)apnsDeviceToken
-                                           parameters:(OmniaPushRegistrationParameters*)parameters
+- (NSMutableURLRequest *) requestForAPNSDeviceToken:(NSData *)apnsDeviceToken
+                                         parameters:(OmniaPushRegistrationParameters *)parameters
 {
     NSURL *url = [NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL];
     NSTimeInterval timeout = BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS;
@@ -72,14 +72,14 @@
     return urlRequest;
 }
 
-- (NSData*) getURLRequestBodyDataForForAPNSDeviceToken:(NSData*)apnsDeviceToken
-                                              parameters:(OmniaPushRegistrationParameters*)parameters
+- (NSData *) getURLRequestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
+                                              parameters:(OmniaPushRegistrationParameters *)parameters
 {
     OmniaPushBackEndRegistrationRequestData *requestData = [self getRequestDataForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
     return [requestData toJsonData];
 }
 
-- (OmniaPushBackEndRegistrationRequestData*) getRequestDataForAPNSDeviceToken:(NSData*)apnsDeviceToken
+- (OmniaPushBackEndRegistrationRequestData *) getRequestDataForAPNSDeviceToken:(NSData*)apnsDeviceToken
                                                                    parameters:(OmniaPushRegistrationParameters*)parameters
 {
     static NSString *osVersion = nil;
@@ -104,12 +104,12 @@
     return requestData;
 }
 
-- (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [self returnError:error];
 }
 
-- (void)connection:(NSURLConnection*)connection didReceiveResponse:(NSURLResponse*)response
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     self.responseData = [NSMutableData data];
     
@@ -118,7 +118,7 @@
         return;
     }
     
-    NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse*)response;
+    NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse *)response;
     
     if (![self isSuccessfulResponseCode:httpURLResponse]) {
         self.resultantError = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %ld", (long)httpURLResponse.statusCode]];
@@ -126,14 +126,14 @@
     }
 }
 
-- (void)connection:(NSURLConnection*)connection didReceiveData:(NSData*)data
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     if (data != nil && data.length > 0) {
         [self.responseData appendData:data];
     }
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection*)connection
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     // Return previous error (i.e.: failure HTTP status code), if there is one
     if (self.resultantError != nil) {
@@ -168,7 +168,7 @@
 }
 
 - (NSCachedURLResponse *)connection:(NSURLConnection *)connection
-                  willCacheResponse:(NSCachedURLResponse*)cachedResponse
+                  willCacheResponse:(NSCachedURLResponse *)cachedResponse
 {
     // Return nil to indicate not necessary to store a cached response for this connection
     return nil;
@@ -185,7 +185,7 @@
     }
 }
 
-- (BOOL) isSuccessfulResponseCode:(NSHTTPURLResponse*)response
+- (BOOL) isSuccessfulResponseCode:(NSHTTPURLResponse *)response
 {
     return (response.statusCode >= 200 && response.statusCode < 300);
 }

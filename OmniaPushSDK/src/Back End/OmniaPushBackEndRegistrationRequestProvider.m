@@ -14,7 +14,7 @@ static NSObject<OmniaPushBackEndRegistrationRequest> *_request;
 
 @implementation OmniaPushBackEndRegistrationRequestProvider
 
-+ (NSObject<OmniaPushBackEndRegistrationRequest>*) request
++ (NSObject<OmniaPushBackEndRegistrationRequest> *) request
 {
     if (_request == nil) {
         _request = [[OmniaPushBackEndRegistrationRequestImpl alloc] init];
@@ -22,7 +22,7 @@ static NSObject<OmniaPushBackEndRegistrationRequest> *_request;
     return _request;
 }
 
-+ (void) setRequest:(NSObject<OmniaPushBackEndRegistrationRequest>*)request
++ (void) setRequest:(NSObject<OmniaPushBackEndRegistrationRequest> *)request
 {
     _request = request;
 }

@@ -21,6 +21,11 @@ OBJC_EXPORT NSString *const OmniaPushErrorDomain;
 typedef NS_ENUM(NSInteger, OmniaPushErrorCodes) {
     
     /**
+     * The request for the Apple push devToken was cancelled.
+     */
+    OmniaPushBackEndRegistrationCancelled = 11,
+    
+    /**
      * iOS returned an object to the back-end registration code that was not an NSHTTPURLResponse object.
      */
     OmniaPushBackEndRegistrationNotHTTPResponseError = 21,

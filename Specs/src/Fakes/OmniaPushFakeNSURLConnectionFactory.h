@@ -11,7 +11,7 @@
 
 @interface OmniaPushFakeNSURLConnectionFactory : NSObject<OmniaPushNSURLConnectionFactory>
 
-- (void) setupForFailureWithError:(NSError*)error;
-- (void) setupForSuccessWithResponse:(NSURLResponse*)response withDataInChunks:(NSArray*)chunks;
+- (void) setupForFailureWithError:(NSError *)error;
+- (void) setupForSuccessWithResponse:(NSURLResponse *)response withDataInChunks:(NSArray *)chunks;
 
 @end

@@ -11,8 +11,8 @@
 
 @implementation OmniaPushNSURLConnectionFactoryImpl
 
-- (NSURLConnection*) getNSURLConnectionWithRequest:(NSURLRequest*)request
-                                          delegate:(id<NSURLConnectionDelegate>)delegate
++ (NSURLConnection *) connectionWithRequest:(NSURLRequest *)request
+                                   delegate:(id<NSURLConnectionDelegate>)delegate
 {
     return [NSURLConnection connectionWithRequest:request delegate:delegate];
 }

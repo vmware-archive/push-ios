@@ -9,19 +9,22 @@
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcherImpl.h"
 
-static NSObject<OmniaPushApplicationDelegateSwitcher>* _switcher = nil;
+static NSObject<OmniaPushApplicationDelegateSwitcher> *_switcher = nil;
 
 @implementation OmniaPushApplicationDelegateSwitcherProvider
 
-+ (NSObject<OmniaPushApplicationDelegateSwitcher>*) switcher
++ (NSObject<OmniaPushApplicationDelegateSwitcher> *) switcher
 {
-    if (_switcher == nil) {
-        _switcher = [[OmniaPushApplicationDelegateSwitcherImpl alloc] init];
-    }
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (!_switcher) {
+            _switcher = [[OmniaPushApplicationDelegateSwitcherImpl alloc] init];
+        }
+    });
     return _switcher;
 }
 
-+ (void) setSwitcher:(NSObject<OmniaPushApplicationDelegateSwitcher>*) switcher
++ (void) setSwitcher:(NSObject<OmniaPushApplicationDelegateSwitcher> *) switcher
 {
     _switcher = switcher;
 }

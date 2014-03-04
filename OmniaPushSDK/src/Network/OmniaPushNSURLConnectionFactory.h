@@ -10,7 +10,7 @@
 
 @protocol OmniaPushNSURLConnectionFactory <NSObject>
 
-- (NSURLConnection*) getNSURLConnectionWithRequest:(NSURLRequest*)request
-                                          delegate:(id<NSURLConnectionDelegate>)delegate;
++ (NSURLConnection *) connectionWithRequest:(NSURLRequest *)request
+                                   delegate:(id<NSURLConnectionDelegate>)delegate;
 
 @end

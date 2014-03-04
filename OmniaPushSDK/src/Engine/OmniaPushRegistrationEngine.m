@@ -88,21 +88,21 @@ YES |  \
 
 #pragma mark - Initialization and setup
 
-- (instancetype) initWithApplication:(UIApplication*)application
-         originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
-                            listener:(id<OmniaPushRegistrationListener>)listener;
+- (instancetype) initWithApplication:(UIApplication *)application
+         originalApplicationDelegate:(NSObject<UIApplicationDelegate> *)originalApplicationDelegate
+                             success:(void (^)(id responseObject))success
+                             failure:(void (^)(NSError *error))failure
 {
     self = [super init];
     if (self) {
-        if (application == nil) {
+        if (!application) {
             [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
         }
-        if (originalApplicationDelegate == nil) {
+        if (!originalApplicationDelegate) {
             [NSException raise:NSInvalidArgumentException format:@"originalApplicationDelegate may not be nil"];
         }
         self.application = application;
         self.originalApplicationDelegate = originalApplicationDelegate;
-        self.listener = listener;
         self.storage = [[OmniaPushPersistentStorage alloc] init];
     }
     return self;
@@ -110,9 +110,9 @@ YES |  \
 
 #pragma mark - Registration entrypoint
 
-- (void) startRegistration:(OmniaPushRegistrationParameters*)parameters
+- (void) startRegistration:(OmniaPushRegistrationParameters *)parameters
 {
-    if (parameters == nil) {
+    if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
     self.originalApnsDeviceToken = [self.storage loadAPNSDeviceToken];
@@ -129,7 +129,7 @@ YES |  \
 
 #pragma mark - State callbacks
 
-- (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken
+- (void) apnsRegistrationSucceeded:(NSData *)apnsDeviceToken
 {
     OmniaPushCriticalLog(@"Registration with APNS succeeded. Device token: \"%@\".", apnsDeviceToken);
     self.updatedApnsDeviceToken = apnsDeviceToken;
@@ -151,7 +151,7 @@ YES |  \
     [self startBackEndRegistration];
 }
 
-- (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError
+- (void) apnsRegistrationFailed:(NSError *)apnsRegistrationError
 {
     OmniaPushCriticalLog(@"Registration with APNS failed. Error: \"%@\".", apnsRegistrationError.localizedDescription);
     self.error = apnsRegistrationError;
@@ -169,7 +169,7 @@ YES |  \
     [self startBackEndRegistration];
 }
 
-- (void) backendUnregistrationFailed:(NSError*)error
+- (void) backendUnregistrationFailed:(NSError *)error
 {
     OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
     OmniaPushLog(@"Nevertheless, registration will be attempted.");
@@ -178,7 +178,7 @@ YES |  \
     [self startBackEndRegistration];
 }
 
-- (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData
+- (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData *)responseData
 {
     OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseData.deviceUuid);
     self.didFinishBackendRegistration = YES;
@@ -192,7 +192,7 @@ YES |  \
     [self registrationSucceeded];
 }
 
-- (void) backendRegistrationFailed:(NSError*)backendRegistrationError
+- (void) backendRegistrationFailed:(NSError *)backendRegistrationError
 {
     OmniaPushCriticalLog(@"Registration with back-end failed. Error: \"%@\".", backendRegistrationError.localizedDescription);
     self.error = backendRegistrationError;

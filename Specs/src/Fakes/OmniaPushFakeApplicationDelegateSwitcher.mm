@@ -29,7 +29,7 @@ using namespace Cedar::Doubles;
     return self;
 }
 
-- (void) switchApplicationDelegate:(id<UIApplicationDelegate>)applicationDelegate inApplication:(UIApplication*)application
+- (void) switchApplicationDelegate:(id<UIApplicationDelegate>)applicationDelegate inApplication:(UIApplication *)application
 {
     self.specHelper.applicationDelegateProxy = (OmniaPushAppDelegateProxy*) applicationDelegate;
 }

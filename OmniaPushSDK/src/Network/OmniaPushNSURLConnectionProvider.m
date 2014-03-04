@@ -10,22 +10,22 @@
 #import "OmniaPushNSURLConnectionFactory.h"
 #import "OmniaPushNSURLConnectionFactoryImpl.h"
 
-static NSObject<OmniaPushNSURLConnectionFactory>* _factory;
+static Class<OmniaPushNSURLConnectionFactory> _factoryClass;
 
 @implementation OmniaPushNSURLConnectionProvider
 
-+ (NSURLConnection*) getNSURLConnectionWithRequest:(NSURLRequest*)request
-                                          delegate:(id<NSURLConnectionDelegate>)delegate
++ (NSURLConnection *) connectionWithRequest:(NSURLRequest *)request
+                                   delegate:(id<NSURLConnectionDelegate>)delegate
 {
-    if (_factory == nil) {
-        _factory = [[OmniaPushNSURLConnectionFactoryImpl alloc] init];
+    if (_factoryClass == nil) {
+        _factoryClass = [OmniaPushNSURLConnectionFactoryImpl class];
     }
-    return [_factory getNSURLConnectionWithRequest:request delegate:delegate];
+    return [_factoryClass connectionWithRequest:request delegate:delegate];
 }
 
-+ (void) setFactory:(NSObject<OmniaPushNSURLConnectionFactory>*)factory
++ (void) setFactory:(Class<OmniaPushNSURLConnectionFactory>)factoryClass
 {
-    _factory = factory;
+    _factoryClass = factoryClass;
 }
 
 @end

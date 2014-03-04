@@ -58,10 +58,10 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 + (OmniaPushRegistrationParameters*) getRegistrationParameters
 {
-    return [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
-                                                                 releaseUuid:[Settings loadReleaseUuid]
-                                                               releaseSecret:[Settings loadReleaseSecret]
-                                                                 deviceAlias:[Settings loadDeviceAlias]];
+    return [OmniaPushRegistrationParameters parametersForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
+                                                               releaseUuid:[Settings loadReleaseUuid]
+                                                             releaseSecret:[Settings loadReleaseSecret]
+                                                               deviceAlias:[Settings loadDeviceAlias]];
 }
 
 + (NSDictionary*) getDefaults

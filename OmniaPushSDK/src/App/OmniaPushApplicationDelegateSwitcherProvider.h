@@ -12,7 +12,7 @@
 
 @interface OmniaPushApplicationDelegateSwitcherProvider : NSObject
 
-+ (NSObject<OmniaPushApplicationDelegateSwitcher>*) switcher;
-+ (void) setSwitcher:(NSObject<OmniaPushApplicationDelegateSwitcher>*) switcher;
++ (NSObject<OmniaPushApplicationDelegateSwitcher> *) switcher;
++ (void) setSwitcher:(NSObject<OmniaPushApplicationDelegateSwitcher> *) switcher;
 
 @end

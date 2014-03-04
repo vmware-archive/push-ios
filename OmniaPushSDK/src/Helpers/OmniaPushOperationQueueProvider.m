@@ -19,7 +19,7 @@ static dispatch_once_t mainQueueOnceToken;
 + (NSOperationQueue *) workerQueue
 {
     dispatch_once(&workerQueueOnceToken, ^{
-        if (_workerQueue == nil) {
+        if (!_workerQueue) {
             _workerQueue = [[NSOperationQueue alloc] init];
             _workerQueue.maxConcurrentOperationCount = 1;
             _workerQueue.name = @"OmniaPushOperationQueue";
@@ -36,7 +36,7 @@ static dispatch_once_t mainQueueOnceToken;
 + (NSOperationQueue *) mainQueue
 {
     dispatch_once(&mainQueueOnceToken, ^{
-        if (_mainQueue == nil) {
+        if (!_mainQueue) {
             _mainQueue = [NSOperationQueue mainQueue];
         }
     });

@@ -20,12 +20,14 @@
 
 @implementation OmniaPushFakeNSURLConnectionFactory
 
-- (NSURLConnection*) getNSURLConnectionWithRequest:(NSURLRequest*)request
-                                          delegate:(id<NSURLConnectionDelegate>)delegate
+- (NSURLConnection *) URLConnectionWithRequest:(NSURLRequest *)request
+                                      delegate:(id<NSURLConnectionDelegate>)delegate
 {
     OmniaPushFakeNSURLConnection *fake = [[OmniaPushFakeNSURLConnection alloc] initWithRequest:request delegate:delegate startImmediately:NO];
+    
     if (self.shouldBeSuccessful) {
         [fake setupForSuccessWithResponse:self.response withDataInChunks:self.chunks];
+        
     } else {
         [fake setupForFailureWithError:self.error];
     }
@@ -38,7 +40,7 @@
     self.error = error;
 }
 
-- (void) setupForSuccessWithResponse:(NSURLResponse*)response withDataInChunks:(NSArray*)chunks
+- (void) setupForSuccessWithResponse:(NSURLResponse *)response withDataInChunks:(NSArray *)chunks
 {
     self.shouldBeSuccessful = YES;
     self.response = response;

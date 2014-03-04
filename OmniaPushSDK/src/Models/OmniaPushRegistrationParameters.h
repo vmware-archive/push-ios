@@ -35,9 +35,9 @@
  * @param deviceAlias   A developer-defined "device alias" which can be used to designate this device, or class.
  *                      of devices, in push or notification campaigns. May not be `nil`. May be empty.
  */
-- (instancetype) initForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
-                              releaseUuid:(NSString*)releaseUuid
-                            releaseSecret:(NSString*)releaseSecret
-                              deviceAlias:(NSString*)deviceAlias;
++ (instancetype) parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
+                                    releaseUuid:(NSString *)releaseUuid
+                                  releaseSecret:(NSString *)releaseSecret
+                                    deviceAlias:(NSString *)deviceAlias;
 
 @end

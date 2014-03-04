@@ -10,37 +10,41 @@
 
 #import "OmniaPushSDK.h"
 #import "OmniaPushAPNSRegistrationRequestOperation.h"
-#import "OmniaPushAppDelegateProxy.h"
+#import "OmniaPushAppDelegateOperation.h"
+#import "OmniaPushBackEndUnregistrationOperationProtocol.h"
+#import "OmniaPushBackEndUnregistrationOperationImpl.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushRegistrationEngine.h"
+#import "OmniaPushRegistrationParameters.h"
+#import "OmniaPushPersistentStorage.h"
+#import "OmniaPushDebug.h"
 
 // Global constant storage
-NSString* const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
+NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
-// SDK instance variables
-static OmniaPushSDK* sharedInstance = nil;
-static dispatch_once_t once_token = 0;
-static UIApplication *application = nil;
-static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
-
-// Something seems to dealloc the original application delegate in the demo app between individual instances of the
-// SDK unless we keep a static reference to it above.  I think it's safe to leak the original application delegate
-// since there should usually be only one during most applications.  The demo app is an exception, but it's a test
-// app that is not intended to be released to production.
+static NSString *deviceID = nil;
 
 @interface OmniaPushSDK ()
-
-@property (nonatomic, strong) OmniaPushAppDelegateProxy *appDelegateProxy;
-@property (nonatomic, strong) OmniaPushRegistrationEngine *registrationEngine;
 
 @end
 
 @implementation OmniaPushSDK
 
-+ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
++ (NSOperationQueue *)omniaPushOperationQueue {
+    static NSOperationQueue *workerQueue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        workerQueue = [[NSOperationQueue alloc] init];
+        workerQueue.maxConcurrentOperationCount = 1;
+        workerQueue.name = @"OmniaPushOperationQueue";
+    });
+    return workerQueue;
+}
+
++ (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
 {
-    return [OmniaPushSDK registerWithParameters:parameters listener:nil];
+    [self registerWithParameters:parameters success:nil failure:nil];
 }
 
 // NOTE:  the application delegate will still be called after APNS registration completes, except if the
@@ -48,85 +52,92 @@ static NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 // with the back-end Omnia server compeltes of fails.  Time-outs with APNS registration are not detected.  Time-outs
 // with the Omnia server are detected after 60 seconds.
 
-+ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters
-                                            listener:(id<OmniaPushRegistrationListener>)listener
++ (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
+                        success:(void (^)(id responseObject))success
+                        failure:(void (^)(NSError *error))failure
 {
     if (parameters == nil) {
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
     
-    dispatch_once(&once_token, ^{
-        if (sharedInstance == nil) {
-            sharedInstance = [[OmniaPushSDK alloc] initWithParameters:parameters listener:listener];
-        }
-    });
-    return sharedInstance;
-}
-
-- (instancetype) initWithParameters:(OmniaPushRegistrationParameters*)parameters
-                           listener:(id<OmniaPushRegistrationListener>)listener
-{
-    self = [super init];
-    if (self) {
-        [OmniaPushSDK setupApplication:nil];
-        originalApplicationDelegate = application.delegate;
-        
-        self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:application
-                                                               originalApplicationDelegate:application.delegate
-                                                                                  listener:listener];
-        
-        self.appDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:application
-                                                           originalApplicationDelegate:application.delegate
-                                                                    registrationEngine:self.registrationEngine];
-        
-        [self.registrationEngine startRegistration:parameters];
+    NSOperation *unregisterOperation = [[OmniaPushBackEndUnregistrationOperation alloc] initDeviceUnregistrationWithUUID:@""
+                                                                                                               onSuccess:^{
+        <#code#>
     }
-    return self;
+                                                                                                               onFailure:^(NSError *error) {
+        <#code#>
+    }];
+    
+    NSOperation *appDelegateOperation = [[OmniaPushAppDelegateOperation alloc] initWithApplication:[self sharedApplication]
+                                                                remoteNotificationTypes:parameters.remoteNotificationTypes
+                                                                                success:^(NSData *devToken) {
+                                                                                    if ([self.class isBackEndUnregistrationRequiredForDevToken:devToken parameters:parameters]) {
+                                                                                        [[self omniaPushOperationQueue] addOperation:];
+                                                                                        
+                                                                                    } else if([self.class isBackEndRegistrationRequiredForDevToken:devToken parameters:parameters]) {
+                                                                                        [[self omniaPushOperationQueue] addOperation:];
+                                                                                        
+                                                                                    }
+                                                                                }
+                                                                                failure:^(NSError *error) {
+                                                                                    failure(error);
+                                                                                }];
+    [[self omniaPushOperationQueue] addOperation:appDelegateOperation];
 }
 
-- (void) cleanupInstance
++ (UIApplication *) sharedApplication
 {
-    @synchronized(self) {
-        if (self.appDelegateProxy) {
-            [self.appDelegateProxy cleanup];
-        }
-        self.appDelegateProxy = nil;
-        self.registrationEngine = nil;
-    }
+    return [UIApplication sharedApplication];
 }
 
-+ (void) teardown
++ (BOOL) isBackEndUnregistrationRequiredForDevToken:(NSData *)devToken
+                                         parameters:(OmniaPushRegistrationParameters *)parameters
 {
-    // NOTE - may be called multiple times during unit tests
-    if (sharedInstance) {
-        [sharedInstance cleanupInstance];
-        sharedInstance = nil;
-    }
-    once_token = 0;
-    application = nil;
-}
-
-#pragma mark - Unit test helpers
-
-// Used by unit tests to provide a fake singleton or to reset this singleton for following tests
-+ (void) setSharedInstance:(OmniaPushSDK*)newSharedInstance
-{
-    [OmniaPushSDK teardown];
-    sharedInstance = newSharedInstance;
-}
-
-// Used by unit tests to provide fake application objects
-+ (void) setupApplication:(UIApplication*)testApplication
-{
-    if (application) {
-        return;
+    // If not currently registered with the back-end then unregistration is not required
+    if (devToken == nil) {
+        return NO;
     }
     
-    if (testApplication == nil) {
-        application = [UIApplication sharedApplication];
-    } else {
-        application = testApplication;
+    return [self.class newParametersMismatchLocalParametersForDevToken:devToken parameters:parameters];
+
+}
+
++ (BOOL)isBackEndRegistrationRequiredForDevToken:(NSData *)devToken
+                                      parameters:(OmniaPushRegistrationParameters *)parameters
+{
+    // If not currently registered with the back-end then registration will be required
+    if ([OmniaPushPersistentStorage loadBackEndDeviceID] == nil) {
+        return YES;
     }
+    
+    return [self.class newParametersMismatchLocalParametersForDevToken:devToken parameters:parameters];
+    
+}
+
++ (BOOL)newParametersMismatchLocalParametersForDevToken:(NSData *)devToken
+                                             parameters:(OmniaPushRegistrationParameters *)parameters {
+    if (![devToken isEqualToData:[OmniaPushPersistentStorage loadAPNSDeviceToken]]) {
+        OmniaPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    // If any of the registration parameters are different then unregistration is required
+    if (![parameters.releaseUuid isEqualToString:[OmniaPushPersistentStorage loadReleaseUuid]]) {
+        OmniaPushLog(@"Parameters specify a different releaseUuid. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    if (![parameters.releaseSecret isEqualToString:[OmniaPushPersistentStorage loadReleaseSecret]]) {
+        OmniaPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    if (![parameters.deviceAlias isEqualToString:[OmniaPushPersistentStorage loadDeviceAlias]]) {
+        OmniaPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
+        return YES;
+    }
+    
+    return NO;
 }
 
 @end

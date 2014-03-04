@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OmniaPushErrors.h"
-#import "OmniaPushRegistrationParameters.h"
-#import "OmniaPushRegistrationListener.h"
+
+@class OmniaPushRegistrationParameters;
 
 /**
  * Primary entry point for the Omnia Push Client SDK library.
@@ -28,7 +27,7 @@
  *
  * @param parameters Provides the parameters required for registration.  May not be `nil`.
  */
-+ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters;
++ (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters;
 
 /**
  * Asynchronously registers the device and application for receiving push notifications.  If the application
@@ -45,6 +44,8 @@
  * @note It is possible for APNS registration to fail silently and never call back.  These
  *       scenarios could be considered failures, but will never be reported.
  */
-+ (OmniaPushSDK*) registerWithParameters:(OmniaPushRegistrationParameters*)parameters listener:(id<OmniaPushRegistrationListener>)listener;
++ (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
+                                  success:(void (^)(id responseObject))success
+                                  failure:(void (^)(NSError *error))failure;
 
 @end

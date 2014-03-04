@@ -16,7 +16,7 @@ static NSString *const KEY_DEVICE_ALIAS = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 @implementation OmniaPushPersistentStorage
 
-- (void) reset
++ (void)reset
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_APNS_DEVICE_TOKEN];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_BACK_END_DEVICE_ID];
@@ -25,52 +25,52 @@ static NSString *const KEY_DEVICE_ALIAS = @"OMNIA_PUSH_DEVICE_ALIAS";
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_DEVICE_ALIAS];
 }
 
-- (void) saveAPNSDeviceToken:(NSData*)apnsDeviceToken
++ (void)saveAPNSDeviceToken:(NSData *)apnsDeviceToken
 {
     [[NSUserDefaults standardUserDefaults] setObject:apnsDeviceToken forKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-- (NSData*) loadAPNSDeviceToken
++ (NSData *)loadAPNSDeviceToken
 {
     return [[NSUserDefaults standardUserDefaults] dataForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-- (void) saveBackEndDeviceID:(NSString*)backEndDeviceId
++ (void) saveBackEndDeviceID:(NSString*)backEndDeviceId
 {
     [[NSUserDefaults standardUserDefaults] setObject:backEndDeviceId forKey:KEY_BACK_END_DEVICE_ID];
 }
 
-- (NSString*) loadBackEndDeviceID
++ (NSString *)loadBackEndDeviceID
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_BACK_END_DEVICE_ID];
 }
 
-- (void) saveReleaseUuid:(NSString*)releaseUuid
++ (void) saveReleaseUuid:(NSString*)releaseUuid
 {
     [[NSUserDefaults standardUserDefaults] setObject:releaseUuid forKey:KEY_RELEASE_UUID];
 }
 
-- (NSString*) loadReleaseUuid
++ (NSString *)loadReleaseUuid
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_UUID];
 }
 
-- (void) saveReleaseSecret:(NSString*)releaseSecret
++ (void) saveReleaseSecret:(NSString*)releaseSecret
 {
     [[NSUserDefaults standardUserDefaults] setObject:releaseSecret forKey:KEY_RELEASE_SECRET];
 }
 
-- (NSString*) loadReleaseSecret
++ (NSString *)loadReleaseSecret
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_SECRET];
 }
 
-- (void) saveDeviceAlias:(NSString*)deviceAlias
++ (void) saveDeviceAlias:(NSString*)deviceAlias
 {
     [[NSUserDefaults standardUserDefaults] setObject:deviceAlias forKey:KEY_DEVICE_ALIAS];
 }
 
-- (NSString*) loadDeviceAlias
++ (NSString *)loadDeviceAlias
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_DEVICE_ALIAS];
 }

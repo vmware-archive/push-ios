@@ -37,18 +37,12 @@
 @property (nonatomic, readonly) BOOL didBackEndUnregistrationSucceed;
 @property (nonatomic, readonly) BOOL didRegistrationSucceed;
 
-- (instancetype) initWithApplication:(UIApplication*)application
+- (instancetype) initWithApplication:(UIApplication *)application
          originalApplicationDelegate:(NSObject<UIApplicationDelegate>*)originalApplicationDelegate
                             listener:(id<OmniaPushRegistrationListener>)listener;
 
-- (void) startRegistration:(OmniaPushRegistrationParameters*)parameters;
-- (void) apnsRegistrationSucceeded:(NSData*)apnsDeviceToken;
-- (void) apnsRegistrationFailed:(NSError*)apnsRegistrationError;
-- (void) backendUnregistrationSucceeded;
-- (void) backendUnregistrationFailed:(NSError*)error;
-- (void) backendRegistrationSucceeded:(OmniaPushBackEndRegistrationResponseData*)responseData;
-- (void) backendRegistrationFailed:(NSError*)error;
-- (void) registrationSucceeded;
-- (void) registrationFailed;
+- (void) startRegistration:(OmniaPushRegistrationParameters *)parameters;
+- (void) apnsRegistrationSucceeded:(NSData *)apnsDeviceToken;
+- (void) apnsRegistrationFailed:(NSError *)apnsRegistrationError;
 
 @end

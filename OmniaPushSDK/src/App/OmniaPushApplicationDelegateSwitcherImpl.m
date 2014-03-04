@@ -11,7 +11,7 @@
 
 @implementation OmniaPushApplicationDelegateSwitcherImpl
 
-- (void) switchApplicationDelegate:(NSObject<UIApplicationDelegate>*)applicationDelegate inApplication:(UIApplication*)application
+- (void) switchApplicationDelegate:(NSObject<UIApplicationDelegate> *)applicationDelegate inApplication:(UIApplication *)application
 {
     @synchronized(self) {
         application.delegate = applicationDelegate;
