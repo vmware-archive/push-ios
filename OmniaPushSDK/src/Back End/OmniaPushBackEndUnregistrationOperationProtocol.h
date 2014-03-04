@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^OmniaPushBackEndUnregistrationComplete) (void);
-typedef void (^OmniaPushBackEndUnregistrationFailed) (NSError *error);
+typedef void (^OmniaPushBackEndSuccessBlock) (id responseData);
+typedef void (^OmniaPushBackEndFailureBlock) (NSError *error);
 
 @protocol OmniaPushBackEndUnregistrationOperation <NSObject>
 
 - (instancetype)initDeviceUnregistrationWithUUID:(NSString *)backEndDeviceUUID
-                                       onSuccess:(OmniaPushBackEndUnregistrationComplete)successBlock
-                                       onFailure:(OmniaPushBackEndUnregistrationFailed)failBlock;
+                                       onSuccess:(OmniaPushBackEndSuccessBlock)successBlock
+                                       onFailure:(OmniaPushBackEndFailureBlock)failBlock;
 
 @end

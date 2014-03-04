@@ -60,19 +60,25 @@ static NSString *deviceID = nil;
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
     
-    NSOperation *unregisterOperation = [[OmniaPushBackEndUnregistrationOperation alloc] initDeviceUnregistrationWithUUID:@""
+    NSOperation *registerOperation =
+    
+    NSOperation *unregisterOperation = [[OmniaPushBackEndUnregistrationOperation alloc] initDeviceUnregistrationWithUUID:[OmniaPushPersistentStorage loadBackEndDeviceID]
                                                                                                                onSuccess:^{
-        <#code#>
-    }
+                                                                                                                   OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
+                                                                                                                   [[self omniaPushOperationQueue] addOperation:];
+                                                                                                               }
                                                                                                                onFailure:^(NSError *error) {
-        <#code#>
-    }];
+                                                                                                                   OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
+                                                                                                                   OmniaPushLog(@"Nevertheless, registration will be attempted.");
+                                                                                                                   [[self omniaPushOperationQueue] addOperation:];
+                                                                                                               }];
     
     NSOperation *appDelegateOperation = [[OmniaPushAppDelegateOperation alloc] initWithApplication:[self sharedApplication]
                                                                 remoteNotificationTypes:parameters.remoteNotificationTypes
                                                                                 success:^(NSData *devToken) {
                                                                                     if ([self.class isBackEndUnregistrationRequiredForDevToken:devToken parameters:parameters]) {
-                                                                                        [[self omniaPushOperationQueue] addOperation:];
+                                                                                        [OmniaPushPersistentStorage saveBackEndDeviceID:nil];
+                                                                                        [[self omniaPushOperationQueue] addOperation:unregisterOperation];
                                                                                         
                                                                                     } else if([self.class isBackEndRegistrationRequiredForDevToken:devToken parameters:parameters]) {
                                                                                         [[self omniaPushOperationQueue] addOperation:];

@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OmniaPushBackEndOperation.h"
 #import "OmniaPushBackEndUnregistrationOperationProtocol.h"
 
-@interface OmniaPushBackEndUnregistrationOperation : NSOperation <OmniaPushBackEndUnregistrationOperation, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface OmniaPushBackEndUnregistrationOperation : OmniaPushBackEndOperation <OmniaPushBackEndUnregistrationOperation>
 
 @end
