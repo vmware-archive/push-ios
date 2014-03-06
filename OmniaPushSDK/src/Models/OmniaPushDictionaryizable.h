@@ -10,7 +10,7 @@
 
 @protocol OmniaPushDictionaryizable <NSObject>
 
-+ (instancetype) fromDictionary:(NSDictionary*)dict;
-- (NSDictionary*) toDictionary;
++ (instancetype)fromDictionary:(NSDictionary *)dict;
+- (NSDictionary *)toDictionary;
 
 @end

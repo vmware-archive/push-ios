@@ -7,9 +7,9 @@
 //
 
 #import "OmniaPushAppDelegateOperation.h"
+#import "OmniaPushApplicationDelegateSwitcherImpl.h"
 #import "OmniaPushErrors.h"
 #import "OmniaPushDebug.h"
-#import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushApplicationDelegateSwitcher.h"
 #import <objc/runtime.h>
 
@@ -95,17 +95,12 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 - (void) replaceApplicationDelegate
 {
-    [[self applicationDelegateSwitcher] switchApplicationDelegate:self inApplication:self.application];
+    [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self inApplication:self.application];
 }
 
 - (void) restoreApplicationDelegate
 {
-    [[self applicationDelegateSwitcher] switchApplicationDelegate:self.originalApplicationDelegate inApplication:self.application];
-}
-
-- (NSObject<OmniaPushApplicationDelegateSwitcher> *) applicationDelegateSwitcher
-{
-    return [OmniaPushApplicationDelegateSwitcherProvider switcher];
+    [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self.originalApplicationDelegate inApplication:self.application];
 }
 
 - (NSMethodSignature *) methodSignatureForSelector:(SEL)sel

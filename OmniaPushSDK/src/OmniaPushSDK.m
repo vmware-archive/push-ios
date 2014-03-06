@@ -10,12 +10,10 @@
 
 #import "OmniaPushSDK.h"
 
-//Operations
 #import "OmniaPushBackEndConnection.h"
+
 #import "OmniaPushAppDelegateOperation.h"
 
-#import "OmniaPushApplicationDelegateSwitcher.h"
-#import "OmniaPushApplicationDelegateSwitcherProvider.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushDebug.h"

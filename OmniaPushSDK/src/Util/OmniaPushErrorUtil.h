@@ -10,6 +10,6 @@
 
 @interface OmniaPushErrorUtil : NSObject
 
-+ (NSError*) errorWithCode:(NSInteger)code localizedDescription:(NSString*)localizedDescription;
++ (NSError *)errorWithCode:(NSInteger)code localizedDescription:(NSString *)localizedDescription;
 
 @end

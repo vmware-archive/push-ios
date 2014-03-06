@@ -11,7 +11,7 @@
 
 @implementation OmniaPushErrorUtil
 
-+ (NSError*) errorWithCode:(NSInteger)code localizedDescription:(NSString*)localizedDescription
++ (NSError *)errorWithCode:(NSInteger)code localizedDescription:(NSString *)localizedDescription
 {
     NSDictionary *userInfo = @{NSLocalizedDescriptionKey:NSLocalizedString(localizedDescription, nil)};
     return [NSError errorWithDomain:OmniaPushErrorDomain code:code userInfo:userInfo];
