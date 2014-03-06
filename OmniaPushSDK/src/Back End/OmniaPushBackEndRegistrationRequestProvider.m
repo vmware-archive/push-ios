@@ -7,24 +7,23 @@
 //
 
 #import "OmniaPushBackEndRegistrationRequestProvider.h"
-#import "OmniaPushBackEndRegistrationRequest.h"
-#import "OmniaPushBackEndRegistrationRequestImpl.h"
+#import "OmniaPushBackEndRegistrationOperationImpl.h"
 
-static NSObject<OmniaPushBackEndRegistrationRequest> *_request;
+static NSObject<OmniaPushBackEndRegistrationOperationProtocol> *_operation;
 
-@implementation OmniaPushBackEndRegistrationRequestProvider
+@implementation OmniaPushBackEndRegistrationOperationProvider
 
-+ (NSObject<OmniaPushBackEndRegistrationRequest> *) request
++ (NSObject<OmniaPushBackEndRegistrationOperationProtocol> *)operation
 {
-    if (_request == nil) {
-        _request = [[OmniaPushBackEndRegistrationRequestImpl alloc] init];
+    if (_operation == nil) {
+        _operation = [[OmniaPushBackEndRegistrationOperation alloc] init];
     }
-    return _request;
+    return _operation;
 }
 
-+ (void) setRequest:(NSObject<OmniaPushBackEndRegistrationRequest> *)request
++ (void) setRequest:(NSObject<OmniaPushBackEndRegistrationOperationProtocol> *)operation
 {
-    _request = request;
+    _operation = operation;
 }
 
 @end

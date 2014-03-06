@@ -13,6 +13,6 @@
 int main(int argc, char * argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, @"CedarApplicationDelegate");
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass([CedarApplicationDelegate class]));
     }
 }

@@ -13,6 +13,7 @@ static NSString *const KEY_RELEASE_SECRET = @"OMNIA_PUSH_RELEASE_SECRET";
 static NSString *const KEY_DEVICE_ALIAS = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 #import "OmniaPushPersistentStorage.h"
+#import "OmniaPushBackEndRegistrationResponseData.h"
 
 @implementation OmniaPushPersistentStorage
 

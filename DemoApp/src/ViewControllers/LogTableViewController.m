@@ -7,6 +7,7 @@
 //
 
 #import "LogTableViewController.h"
+#import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushSDK.h"
 #import "OmniaPushDebug.h"
 #import "LogItem.h"
@@ -65,8 +66,8 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
 - (void) sendButtonPressed
 {
     [self updateCurrentBaseRowColour];
-    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
-    NSString *backEndDeviceID = [storage loadBackEndDeviceID];
+    NSString *backEndDeviceID = [OmniaPushPersistentStorage loadBackEndDeviceID];
+    
     if (backEndDeviceID == nil) {
         [self addLogItem:@"You must register with the back-end server before attempting to send a message" timestamp:[NSDate date]];
         return;
@@ -85,7 +86,6 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
 - (void) registerButtonPressed
 {
     [self updateCurrentBaseRowColour];
-    [self resetSDK];
     [self initializeSDK];
 }
 
@@ -130,12 +130,6 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     [self.tableView reloadData];
 }
 
-- (void) resetSDK
-{
-    SEL setSharedInstanceSelector = sel_registerName("setSharedInstance:");
-    [OmniaPushSDK performSelector:setSharedInstanceSelector withObject:nil];
-}
-
 - (void) updateCurrentBaseRowColour
 {
     [LogItem updateBaseColour];
@@ -168,7 +162,15 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
                              parameters.releaseSecret,
                              parameters.deviceAlias];
         [self addLogItem:message timestamp:[NSDate date]];
-        [OmniaPushSDK registerWithParameters:parameters listener:self];
+        
+        [OmniaPushSDK registerWithParameters:parameters success:^(id responseObject) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            OmniaPushLog(@"Application received callback \"registrationSucceeded\".");
+
+        } failure:^(NSError *error) {
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            OmniaPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
+        }];
     }
     @catch (NSException *e) {
         [self addLogItem:[NSString stringWithFormat:@"Caught exception while trying to register: \"%@\".", e] timestamp:[NSDate date]];
@@ -208,20 +210,6 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     LogItem *item = self.logItems[indexPath.row];
     CGFloat height = [LogItemCell heightForCellWithText:item.message containerSize:self.view.frame.size];
     return height;
-}
-
-#pragma mark - OmniaPushRegistrationListener callbacks
-
-- (void) registrationSucceeded
-{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    OmniaPushLog(@"Application received callback \"registrationSucceeded\".");
-}
-
-- (void) registrationFailedWithError:(NSError*)error
-{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    OmniaPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
 }
 
 @end

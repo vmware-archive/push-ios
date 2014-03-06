@@ -13,10 +13,10 @@
 
 @protocol OmniaPushBackEndRegistrationOperationProtocol <NSObject>
 
-- (instancetype)initDeviceRegistration:(NSData *)apnsDeviceToken
-                            parameters:(OmniaPushRegistrationParameters *)parameters
-                             onSuccess:(OmniaPushBackEndSuccessBlock)successBlock
-                             onFailure:(OmniaPushBackEndFailureBlock)failBlock;
+- (instancetype)initDeviceRegistrationWithDevToken:(NSData *)apnsDeviceToken
+                                        parameters:(OmniaPushRegistrationParameters *)parameters
+                                         onSuccess:(OmniaPushBackEndSuccessBlock)successBlock
+                                         onFailure:(OmniaPushBackEndFailureBlock)failBlock;
 
 
 @end

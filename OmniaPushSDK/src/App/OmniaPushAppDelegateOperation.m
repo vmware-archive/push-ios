@@ -37,23 +37,23 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 @interface OmniaPushAppDelegateOperation ()
 
-@property (nonatomic, readwrite, assign) OmniaState state;
-@property (nonatomic, readwrite) UIApplication *application;
+@property (nonatomic, readwrite, weak) UIApplication *application;
+
+@property (nonatomic, readwrite) OmniaState state;
+@property (readwrite, nonatomic) NSError *resultantError;
+@property (readwrite, nonatomic) NSData *devToken;
 @property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic, readwrite) UIRemoteNotificationType remoteNotificationTypes;
 @property (nonatomic, readwrite) NSRecursiveLock *lock;
-
-@property (nonatomic, copy) void (^success)(NSData *devToken);
-@property (nonatomic, copy) void (^failure)(NSError *error);
 
 @end
 
 @implementation OmniaPushAppDelegateOperation
 
-- (instancetype) initWithApplication:(UIApplication *)application
-             remoteNotificationTypes:(UIRemoteNotificationType)types
-                             success:(void (^)(NSData *devToken))success
-                             failure:(void (^)(NSError *error))failure
+- (instancetype)initWithApplication:(UIApplication *)application
+            remoteNotificationTypes:(UIRemoteNotificationType)types
+                            success:(void (^)(NSData *devToken))success
+                            failure:(void (^)(NSError *error))failure
 {
     
     self = [super init];
@@ -68,13 +68,21 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     self.lock = [[NSRecursiveLock alloc] init];
     self.lock.name = kOmniaOperationLockName;
     
-    self.success = success;
-    self.failure = failure;
+    [self setCompletionBlockWithSuccess:success failure:failure];
     
     self.application = application;
     self.originalApplicationDelegate = application.delegate;
+    self.remoteNotificationTypes = types;
     [self replaceApplicationDelegate];
+    
+    self.state = OmniaReadyState;
+    
     return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"DEALLOC");
 }
 
 - (void) cleanup
@@ -129,7 +137,7 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     }
 }
 
-- (void) setState:(OmniaState)state
+- (void)setState:(OmniaState)state
 {
     [self.lock lock];
     NSString *oldStateKey = OmniaKeyPathFromOperationState(self.state);
@@ -143,7 +151,10 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     [self.lock unlock];
 }
 
-- (void)finish {
+- (void)finish
+{
+    [self restoreApplicationDelegate];
+    
     [self.lock lock];
     self.state = OmniaFinishedState;
     [self.lock unlock];
@@ -151,12 +162,9 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 #pragma mark - UIApplicationDelegate Push Notification Callback
 
-- (void) application:(UIApplication *)app
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+- (void)application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
 {
-    if (self.success) {
-        self.success(devToken);
-    }
+    self.devToken = devToken;
     
     if ([self.originalApplicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
         [self.originalApplicationDelegate application:app didRegisterForRemoteNotificationsWithDeviceToken:devToken];
@@ -164,17 +172,60 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
     [self finish];
 }
 
-- (void) application:(UIApplication *)app
-didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    if (self.failure) {
-        self.failure(err);
-    }
-    
     if ([self.originalApplicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
         [self.originalApplicationDelegate application:app didFailToRegisterForRemoteNotificationsWithError:err];
     }
+    
+    [self.lock lock];
+    self.resultantError = err;
+    [self.lock unlock];
+    
     [self finish];
+}
+
+- (void)setCompletionBlockWithSuccess:(void (^)(id responseObject))success
+                              failure:(void (^)(NSError *error))failure
+{
+    // completionBlock is manually nilled out in AFURLConnectionOperation to break the retain cycle.
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-retain-cycles"
+#pragma clang diagnostic ignored "-Wgnu"
+    self.completionBlock = ^{
+        if (self.resultantError) {
+            if (failure) {
+                failure(self.resultantError);
+            }
+        } else {
+            NSData *devToken = self.devToken;
+            if (self.resultantError) {
+                if (failure) {
+                    failure(self.resultantError);
+                }
+            } else {
+                if (success) {
+                    success(devToken);
+                }
+            }
+        }
+    };
+}
+
+- (void)setCompletionBlock:(void (^)(void))block {
+    [self.lock lock];
+    if (!block) {
+        [super setCompletionBlock:nil];
+    } else {
+        __weak __typeof(self)weakSelf = self;
+        [super setCompletionBlock:^ {
+            __strong __typeof(weakSelf)strongSelf = weakSelf;
+            block();
+            
+            [strongSelf setCompletionBlock:nil];
+        }];
+    }
+    [self.lock unlock];
 }
 
 #pragma mark - NSOperation
@@ -184,8 +235,8 @@ didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
     [self.lock lock];
     
     if ([self isCancelled]) {
-        NSError *error = [NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushBackEndRegistrationCancelled userInfo:nil];
-        self.failure(error);
+        self.resultantError = [NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushBackEndRegistrationCancelled userInfo:nil];
+        [self finish];
         
     } else if ([self isReady]) {
         self.state = OmniaExecutingState;

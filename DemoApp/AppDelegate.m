@@ -18,6 +18,10 @@
 
 @implementation AppDelegate
 
+- (void)dealloc {
+    NSLog(@"dealloc");
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[Settings getDefaults]];
@@ -34,6 +38,18 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     application.applicationIconBadgeNumber = 0;
+}
+
+#pragma mark - UIApplicationDelegate Push Notification Callback
+
+- (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+{
+
+}
+
+- (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
+{
+    
 }
 
 @end

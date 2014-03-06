@@ -8,11 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
-@protocol OmniaPushBackEndRegistrationRequest;
+@protocol OmniaPushBackEndRegistrationOperationProtocol;
 
-@interface OmniaPushBackEndRegistrationRequestProvider : NSObject
+@interface OmniaPushBackEndRegistrationOperationProvider : NSObject
 
-+ (NSObject<OmniaPushBackEndRegistrationRequest>*) request;
-+ (void) setRequest:(NSObject<OmniaPushBackEndRegistrationRequest>*)request;
++ (NSObject<OmniaPushBackEndRegistrationOperationProtocol> *)operation;
++ (void)setRequest:(NSObject<OmniaPushBackEndRegistrationOperationProtocol> *)operation;
 
 @end

@@ -17,12 +17,12 @@
 #import "OmniaPushErrors.h"
 #import "OmniaPushConst.h"
 
-@implementation OmniaPushBackEndRegistrationOperationImpl
+@implementation OmniaPushBackEndRegistrationOperation
 
-- (instancetype)initDeviceRegistration:(NSData *)apnsDeviceToken
-                    parameters:(OmniaPushRegistrationParameters *)parameters
-                     onSuccess:(OmniaPushBackEndSuccessBlock)successBlock
-                     onFailure:(OmniaPushBackEndFailureBlock)failBlock
+- (instancetype)initDeviceRegistrationWithDevToken:(NSData *)apnsDeviceToken
+                                        parameters:(OmniaPushRegistrationParameters *)parameters
+                                         onSuccess:(void (^)(id responseData))successBlock
+                                         onFailure:(OmniaPushBackEndFailureBlock)failBlock
 {
     NSURLRequest *request = [self.class requestForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
     self = [super initWithRequest:request success:successBlock failure:failBlock];
@@ -44,8 +44,8 @@
     return urlRequest;
 }
 
-+ (NSData *) getURLRequestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
-                                              parameters:(OmniaPushRegistrationParameters *)parameters
++ (NSData *)getURLRequestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
+                                            parameters:(OmniaPushRegistrationParameters *)parameters
 {
     OmniaPushBackEndRegistrationRequestData *requestData = [self getRequestDataForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
     return [requestData toJsonData];
@@ -74,6 +74,25 @@
     requestData.os = @"ios";
     requestData.osVersion = osVersion;
     return requestData;
+}
+
+- (void)setResponseData:(id)responseData
+{
+    if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
+        [self returnError:[OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"]];
+        return;
+    }
+    
+    // Parse response data
+    NSError *error = nil;
+    OmniaPushBackEndRegistrationResponseData *parsedData = [OmniaPushBackEndRegistrationResponseData fromJsonData:responseData error:&error];
+    
+    if (error) {
+        [self returnError:error];
+        return;
+    }
+    
+    [super setResponseData:parsedData];
 }
 
 @end

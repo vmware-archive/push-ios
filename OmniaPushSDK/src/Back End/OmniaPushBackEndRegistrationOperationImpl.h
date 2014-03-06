@@ -10,6 +10,11 @@
 #import "OmniaPushBackEndOperation.h"
 #import "OmniaPushBackEndRegistrationOperationProtocol.h"
 
-@interface OmniaPushBackEndRegistrationOperationImpl : OmniaPushBackEndOperation <OmniaPushBackEndRegistrationOperationProtocol>
+@interface OmniaPushBackEndRegistrationOperation : OmniaPushBackEndOperation <OmniaPushBackEndRegistrationOperationProtocol>
+
+- (instancetype)initDeviceRegistrationWithDevToken:(NSData *)apnsDeviceToken
+                                        parameters:(OmniaPushRegistrationParameters *)parameters
+                                         onSuccess:(void (^)(id responseData))successBlock
+                                         onFailure:(OmniaPushBackEndFailureBlock)failBlock;
 
 @end

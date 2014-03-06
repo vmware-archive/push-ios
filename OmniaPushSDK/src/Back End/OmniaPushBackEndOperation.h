@@ -9,11 +9,12 @@
 #import <Foundation/Foundation.h>
 #import "OmniaPushBackEndUnregistrationOperationProtocol.h"
 
-@interface OmniaPushBackEndOperation : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface OmniaPushBackEndOperation : NSOperation <NSURLConnectionDataDelegate>
 
 @property (nonatomic, strong) NSOutputStream *outputStream;
+@property (nonatomic, strong) id responseData;
 @property (readonly, nonatomic, strong) NSError *resultantError;
-@property (readonly, nonatomic, strong) NSData *responseData;
+
 
 - (id)initWithRequest:(NSURLRequest *)request
               success:(OmniaPushBackEndSuccessBlock)success

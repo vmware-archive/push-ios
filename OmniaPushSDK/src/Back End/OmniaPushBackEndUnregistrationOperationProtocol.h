@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^OmniaPushBackEndSuccessBlock) (id responseData);
+typedef void (^OmniaPushBackEndSuccessBlock) (NSData *devToken);
 typedef void (^OmniaPushBackEndFailureBlock) (NSError *error);
 
 @protocol OmniaPushBackEndUnregistrationOperation <NSObject>

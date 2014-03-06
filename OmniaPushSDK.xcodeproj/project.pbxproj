@@ -11,9 +11,6 @@
 		D4009DB518A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */; };
 		D41AB57518AD3085000F3516 /* BackEndMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */; };
 		D41AB57718AEBBCB000F3516 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */; };
-		D42171191892AC8F007A26A5 /* OmniaPushRegistrationEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */; };
-		D421711A1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
-		D421711B1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */; };
 		D421711E1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */; };
 		D42171211896B900007A26A5 /* OmniaPushBackEndRegistrationOperationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = D42171201896B900007A26A5 /* OmniaPushBackEndRegistrationOperationProtocol.h */; };
 		D42171241896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42171231896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm */; };
@@ -163,8 +160,6 @@
 		D41AB57318AD3085000F3516 /* BackEndMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackEndMessageRequest.h; path = src/Network/BackEndMessageRequest.h; sourceTree = "<group>"; };
 		D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackEndMessageRequest.m; path = src/Network/BackEndMessageRequest.m; sourceTree = "<group>"; };
 		D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushRegistrationEngine.h; path = src/Engine/OmniaPushRegistrationEngine.h; sourceTree = "<group>"; };
-		D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushRegistrationEngine.m; path = src/Engine/OmniaPushRegistrationEngine.m; sourceTree = "<group>"; };
 		D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationEngineSpec.mm; path = src/Engine/OmniaPushRegistrationEngineSpec.mm; sourceTree = "<group>"; };
 		D42171201896B900007A26A5 /* OmniaPushBackEndRegistrationOperationProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushBackEndRegistrationOperationProtocol.h; path = "src/Back End/OmniaPushBackEndRegistrationOperationProtocol.h"; sourceTree = "<group>"; };
 		D42171221896BB7A007A26A5 /* OmniaRegistrationSpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaRegistrationSpecHelper.h; path = src/Helpers/OmniaRegistrationSpecHelper.h; sourceTree = "<group>"; };
@@ -328,8 +323,6 @@
 		D42171161892AC61007A26A5 /* Engine */ = {
 			isa = PBXGroup;
 			children = (
-				D42171171892AC8F007A26A5 /* OmniaPushRegistrationEngine.h */,
-				D42171181892AC8F007A26A5 /* OmniaPushRegistrationEngine.m */,
 			);
 			name = Engine;
 			sourceTree = "<group>";
@@ -756,7 +749,6 @@
 				D42171211896B900007A26A5 /* OmniaPushBackEndRegistrationOperationProtocol.h in Headers */,
 				D421713518980DCC007A26A5 /* OmniaPushConst.h in Headers */,
 				D4601415188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.h in Headers */,
-				D42171191892AC8F007A26A5 /* OmniaPushRegistrationEngine.h in Headers */,
 				D4871038188EC85000AE1660 /* OmniaPushBackEndRegistrationRequestData.h in Headers */,
 				D487103C188EC92700AE1660 /* OmniaPushDictionaryizable.h in Headers */,
 				F168B75918BBF6EB00455508 /* OmniaPushHardwareUtil.h in Headers */,
@@ -836,6 +828,7 @@
 				ORGANIZATIONNAME = Pivotal;
 				TargetAttributes = {
 					D4E8A83A185BAFFE00A841EE = {
+						DevelopmentTeam = DB2ELL349P;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -927,7 +920,6 @@
 				D421713B18984466007A26A5 /* OmniaPushHexUtil.m in Sources */,
 				D44BE7A6187DF8A000971A2A /* OmniaPushOperationQueueProvider.m in Sources */,
 				D487102F1889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */,
-				D421711A1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */,
 				D436224618A030EF005A52FC /* OmniaPushBackEndUnregistrationOperationImpl.m in Sources */,
 				D421713018980C00007A26A5 /* OmniaPushBackEndRegistrationOperationImpl.m in Sources */,
 				D4871039188EC85000AE1660 /* OmniaPushBackEndRegistrationRequestData.m in Sources */,
@@ -986,7 +978,6 @@
 				D421713118980C00007A26A5 /* OmniaPushBackEndRegistrationOperationImpl.m in Sources */,
 				D487103A188EC85000AE1660 /* OmniaPushBackEndRegistrationRequestData.m in Sources */,
 				D4EE8BDE18620DDD0082F7B6 /* OmniaPushAppDelegateOperation.m in Sources */,
-				D421711B1892AC8F007A26A5 /* OmniaPushRegistrationEngine.m in Sources */,
 				D44BE7A7187DF8A000971A2A /* OmniaPushOperationQueueProvider.m in Sources */,
 				D436224A18A03172005A52FC /* OmniaPushBackEndUnregistrationRequestImplSpec.mm in Sources */,
 				D4217151189856AA007A26A5 /* OmniaPushNSURLConnectionFactoryImpl.m in Sources */,
@@ -1230,6 +1221,7 @@
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
@@ -1239,6 +1231,7 @@
 				);
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "533B50D2-0E76-42C5-AD77-2F2701289078";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1250,11 +1243,13 @@
 				ARCHS = "$(ARCHS_STANDARD_INCLUDING_64_BIT)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DemoApp/DemoApp-Prefix.pch";
 				INFOPLIST_FILE = "DemoApp/DemoApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "533B50D2-0E76-42C5-AD77-2F2701289078";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -33,19 +33,62 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
     }
 }
 
+static dispatch_queue_t omnia_request_operation_processing_queue() {
+    static dispatch_queue_t af_http_request_operation_processing_queue;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        af_http_request_operation_processing_queue = dispatch_queue_create("Omina.Request.Processing", DISPATCH_QUEUE_CONCURRENT);
+    });
+    
+    return af_http_request_operation_processing_queue;
+}
+
+static dispatch_group_t omnia_request_operation_completion_group() {
+    static dispatch_group_t omnia_http_request_operation_completion_group;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        omnia_http_request_operation_completion_group = dispatch_group_create();
+    });
+    
+    return omnia_http_request_operation_completion_group;
+}
+
+
 @interface OmniaPushBackEndOperation ()
 
 @property (readwrite, nonatomic, assign) OmniaOperationState state;
 @property (readwrite, nonatomic, strong) NSRecursiveLock *lock;
 @property (readwrite, nonatomic, strong) NSURLRequest *request;
 @property (readwrite, nonatomic, strong) NSError *resultantError;
-@property (readwrite, nonatomic, strong) NSData *responseData;
 
 @property (nonatomic, strong) NSURLConnection *URLConnection;
+@property (nonatomic, strong) dispatch_queue_t completionQueue;
+@property (nonatomic, strong) dispatch_group_t completionGroup;
 
 @end
 
 @implementation OmniaPushBackEndOperation
+
++ (void)networkRequestThreadEntryPoint:(id)__unused object {
+    @autoreleasepool {
+        [[NSThread currentThread] setName:@"OmniaPushSDK"];
+        
+        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+        [runLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];
+        [runLoop run];
+    }
+}
+
++ (NSThread *)networkRequestThread {
+    static NSThread *_networkRequestThread = nil;
+    static dispatch_once_t oncePredicate;
+    dispatch_once(&oncePredicate, ^{
+        _networkRequestThread = [[NSThread alloc] initWithTarget:self selector:@selector(networkRequestThreadEntryPoint:) object:nil];
+        [_networkRequestThread start];
+    });
+    
+    return _networkRequestThread;
+}
 
 - (id)initWithRequest:(NSURLRequest *)request success:(OmniaPushBackEndSuccessBlock)success failure:(OmniaPushBackEndFailureBlock)failure {
     self = [super init];
@@ -58,9 +101,15 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
     self.resultantError = nil;
     [self setCompletionBlockWithSuccess:success failure:failure];
     self.request = request;
-    self.URLConnection = [OmniaPushNSURLConnectionProvider connectionWithRequest:request delegate:self];
+    
+    self.state = OmniaOperationReadyState;
     
     return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"");
 }
 
 - (void)setCompletionBlockWithSuccess:(void (^)(id responseObject))success
@@ -71,22 +120,37 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
 #pragma clang diagnostic ignored "-Warc-retain-cycles"
 #pragma clang diagnostic ignored "-Wgnu"
     self.completionBlock = ^{
-        if (self.resultantError) {
-            if (failure) {
-                failure(self.resultantError);
-            }
-        } else {
-            NSData *responseData = self.responseData;
+        if (self.completionGroup) {
+            dispatch_group_enter(self.completionGroup);
+        }
+        
+        dispatch_async(omnia_request_operation_processing_queue(), ^{
             if (self.resultantError) {
                 if (failure) {
-                    failure(self.resultantError);
+                    dispatch_group_async(self.completionGroup ?: omnia_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                        failure(self.resultantError);
+                    });
                 }
             } else {
-                if (success) {
-                    success(responseData);
+                id responseData = self.responseData;
+                if (self.resultantError) {
+                    if (failure) {
+                        dispatch_group_async(self.completionGroup ?: omnia_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                            failure(self.resultantError);
+                        });
+                    }
+                } else {
+                    if (success) {
+                        dispatch_group_async(self.completionGroup ?: omnia_request_operation_completion_group(), self.completionQueue ?: dispatch_get_main_queue(), ^{
+                            success(responseData);
+                        });
+                    }
                 }
             }
-        }
+            if (self.completionGroup) {
+                dispatch_group_leave(self.completionGroup);
+            }
+        });
     };
 }
 
@@ -98,14 +162,26 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
         __weak __typeof(self)weakSelf = self;
         [super setCompletionBlock:^ {
             __strong __typeof(weakSelf)strongSelf = weakSelf;
-            block();
-            [strongSelf setCompletionBlock:nil];
+            
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu"
+            dispatch_group_t group = strongSelf.completionGroup ?: omnia_request_operation_completion_group();
+            dispatch_queue_t queue = strongSelf.completionQueue ?: dispatch_get_main_queue();
+#pragma clang diagnostic pop
+
+            dispatch_group_async(group, queue, ^{
+                block();
+            });
+            
+            dispatch_group_notify(group, omnia_request_operation_processing_queue(), ^{
+                [strongSelf setCompletionBlock:nil];
+            });
         }];
     }
     [self.lock unlock];
 }
 
-- (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     [self returnError:error];
 }
@@ -181,7 +257,7 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
     return nil;
 }
 
-- (void) returnError:(NSError *)error
+- (void)returnError:(NSError *)error
 {
     self.resultantError = error;
     
@@ -193,7 +269,7 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
 
 }
 
-- (BOOL) isSuccessfulResponseCode:(NSHTTPURLResponse*)response
+- (BOOL)isSuccessfulResponseCode:(NSHTTPURLResponse *)response
 {
     return (response.statusCode >= 200 && response.statusCode < 300);
 }
@@ -201,6 +277,22 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
 - (void)finish {
     [self.lock lock];
     self.state = OmniaOperationFinishedState;
+    [self.lock unlock];
+}
+
+- (void)operationDidStart {
+    [self.lock lock];
+    
+    if (![self isCancelled]) {
+        self.URLConnection = [NSURLConnection connectionWithRequest:self.request delegate:self];
+        
+        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+        [self.URLConnection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+        [self.outputStream scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
+        
+        [self.URLConnection start];
+    }
+    
     [self.lock unlock];
 }
 
@@ -224,6 +316,7 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
 
 - (void)start {
     [self.lock lock];
+    
     if ([self isCancelled]) {
         self.resultantError = [NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushBackEndRegistrationCancelled userInfo:nil];
         
@@ -239,8 +332,9 @@ static inline NSString * OmniaKeyPathFromOperationState(OmniaOperationState stat
         
     } else if ([self isReady]) {
         self.state = OmniaOperationExecutingState;
-        [self.URLConnection start];
+        [self performSelector:@selector(operationDidStart) onThread:[[self class] networkRequestThread] withObject:nil waitUntilDone:NO modes:@[NSRunLoopCommonModes]];
     }
+    
     [self.lock unlock];
 }
 

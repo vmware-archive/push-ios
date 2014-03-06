@@ -41,12 +41,11 @@
 
 - (IBAction) clearRegistrationPressed:(id)sender
 {
-    OmniaPushPersistentStorage *storage = [[OmniaPushPersistentStorage alloc] init];
-    [storage saveBackEndDeviceID:nil];
-    [storage saveAPNSDeviceToken:nil];
-    [storage saveReleaseUuid:nil];
-    [storage saveReleaseSecret:nil];
-    [storage saveDeviceAlias:nil];
+    [OmniaPushPersistentStorage saveBackEndDeviceID:nil];
+    [OmniaPushPersistentStorage saveAPNSDeviceToken:nil];
+    [OmniaPushPersistentStorage saveReleaseUuid:nil];
+    [OmniaPushPersistentStorage saveReleaseSecret:nil];
+    [OmniaPushPersistentStorage saveDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
 }
 
