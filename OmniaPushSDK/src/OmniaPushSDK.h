@@ -45,7 +45,7 @@
  *       scenarios could be considered failures, but will never be reported.
  */
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
-                       success:(void (^)(id responseObject))success
-                       failure:(void (^)(NSError *error))failure;
+                       success:(void (^)(NSURLResponse *response, id responseObject))success
+                       failure:(void (^)(NSURLResponse *response, NSError *error))failure;
 
 @end

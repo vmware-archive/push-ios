@@ -71,7 +71,7 @@
     return result;
 }
 
-+ (instancetype) fromJsonData:(NSData*)jsonData error:(NSError**)error
++ (instancetype)fromJsonData:(NSData *)jsonData error:(NSError **)error
 {
     *error = nil;
     

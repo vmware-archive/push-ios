@@ -163,11 +163,11 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
                              parameters.deviceAlias];
         [self addLogItem:message timestamp:[NSDate date]];
         
-        [OmniaPushSDK registerWithParameters:parameters success:^(id responseObject) {
+        [OmniaPushSDK registerWithParameters:parameters success:^(NSURLResponse *response, id responseObject) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             OmniaPushLog(@"Application received callback \"registrationSucceeded\".");
 
-        } failure:^(NSError *error) {
+        } failure:^(NSURLResponse *response, NSError *error) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
             OmniaPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
         }];

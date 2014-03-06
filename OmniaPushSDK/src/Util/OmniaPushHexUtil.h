@@ -10,6 +10,6 @@
 
 @interface OmniaPushHexUtil : NSObject
 
-+ (NSString*) hexDumpForData:(NSData*)data;
++ (NSString *)hexDumpForData:(NSData *)data;
 
 @end

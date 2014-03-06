@@ -11,11 +11,7 @@
 #import "OmniaPushSDK.h"
 
 //Operations
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
-#import "OmniaPushBackEndUnregistrationOperationProtocol.h"
-#import "OmniaPushBackEndUnregistrationOperationImpl.h"
-#import "OmniaPushBackEndRegistrationOperationProtocol.h"
-#import "OmniaPushBackEndRegistrationOperationImpl.h"
+#import "OmniaPushBackEndConnection.h"
 #import "OmniaPushAppDelegateOperation.h"
 
 #import "OmniaPushApplicationDelegateSwitcher.h"
@@ -23,6 +19,9 @@
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushDebug.h"
+
+#import "OmniaPushErrorUtil.h"
+#import "OmniaPushErrors.h"
 
 //Models
 #import "OmniaPushBackEndRegistrationResponseData.h"
@@ -64,8 +63,8 @@ static NSString *deviceID = nil;
 }
 
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
-                       success:(void (^)(id responseObject))success
-                       failure:(void (^)(NSError *error))failure
+                       success:(void (^)(NSURLResponse *response, id responseObject))success
+                       failure:(void (^)(NSURLResponse *response, NSError *error))failure
 {
     if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
@@ -77,60 +76,75 @@ static NSString *deviceID = nil;
     [[self omniaPushOperationQueue] addOperation:appDelegateOperation];
 }
 
-+ (NSOperation *)unregisterOperation
++ (void)sendUnregisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
+                                   devToken:(NSData *)devToken
+                               successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
+                               failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    NSOperation *unregisterOperation = [[OmniaPushBackEndUnregistrationOperation alloc] initDeviceUnregistrationWithUUID:[OmniaPushPersistentStorage loadBackEndDeviceID]
-                                                                                                               onSuccess:^(NSData *devToken){
-                                                                                                                   OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
-                                                                                                               }
-                                                                                                               onFailure:^(NSError *error) {
-                                                                                                                   OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
-                                                                                                                   OmniaPushLog(@"Nevertheless, registration will be attempted.");
-                                                                                                               }];
-    return unregisterOperation;
+    [OmniaPushBackEndConnection sendUnregistrationRequestOnQueue:[self omniaPushOperationQueue]
+                                                    withDeviceID:[OmniaPushPersistentStorage loadBackEndDeviceID]
+                                                         success:^(NSURLResponse *response, NSData *data) {
+                                                             OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
+                                                             [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                                         }
+                                                         failure:^(NSURLResponse *response, NSError *error) {
+                                                             OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
+                                                             OmniaPushLog(@"Nevertheless, registration will be attempted.");
+                                                             [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                                         }];
 }
 
-+ (NSOperation *)registerOperationWithParameters:(OmniaPushRegistrationParameters *)parameters
-                                        devToken:(NSData *)devToken
-                                    successBlock:(void (^)(id responseObject))successBlock
-                                    failureBlock:(void (^)(NSError *error))failureBlock
++ (void)sendRegisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
+                                 devToken:(NSData *)devToken
+                             successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
+                             failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    OmniaPushBackEndSuccessBlock registrationSuccessfulBlock = ^(id responseData) {
-        OmniaPushBackEndRegistrationResponseData *responseObject = responseData;
+    void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
+        NSError *error;
         
-        OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", responseObject.deviceUuid);
-        [OmniaPushPersistentStorage saveBackEndDeviceID:responseObject.deviceUuid];
+        if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
+            error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"];
+            failureBlock(response, error);
+            return;
+        }
+        
+        OmniaPushBackEndRegistrationResponseData *parsedData = [OmniaPushBackEndRegistrationResponseData fromJsonData:responseData error:&error];
+        
+        if (error) {
+            failureBlock(response, error);
+            return;
+        }
+        
+        OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUuid);
+        [OmniaPushPersistentStorage saveBackEndDeviceID:parsedData.deviceUuid];
         [OmniaPushPersistentStorage saveReleaseUuid:parameters.releaseUuid];
         [OmniaPushPersistentStorage saveReleaseSecret:parameters.releaseSecret];
         [OmniaPushPersistentStorage saveDeviceAlias:parameters.deviceAlias];
-        successBlock(responseObject);
+        
+        successBlock(response, parsedData);
     };
-    NSOperation *registerOperation = [[OmniaPushBackEndRegistrationOperation alloc] initDeviceRegistrationWithDevToken:devToken
-                                                                                                            parameters:parameters
-                                                                                                             onSuccess:registrationSuccessfulBlock
-                                                                                                             onFailure:failureBlock];
-    return registerOperation;
-    
+    [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:[self omniaPushOperationQueue]
+                                                withParameters:parameters
+                                                      devToken:devToken
+                                                       success:registrationSuccessfulBlock
+                                                       failure:failureBlock];
 }
 
 + (OmniaPushAppDelegateOperation *)appDelegateOperationWithRegistrationParameters:(OmniaPushRegistrationParameters *)parameters
-                                                                     successBlock:(void (^)(id responseObject))successBlock
-                                                                     failureBlock:(void (^)(NSError *error))failureBlock
+                                                                     successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
+                                                                     failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    void (^success)(NSData *devToken) = ^(NSData *devToken) {
-        NSOperation *registerOperation = [self.class registerOperationWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+    void (^success)(NSURLResponse *response, NSData *devToken) = ^(NSURLResponse *response, NSData *devToken) {
         
         if ([self.class isBackEndUnregistrationRequiredForDevToken:devToken parameters:parameters]) {
             [OmniaPushPersistentStorage saveBackEndDeviceID:nil];
-            NSOperation *unregisterOperation = [OmniaPushSDK unregisterOperation];
-            [unregisterOperation addDependency:registerOperation];
-            [[self omniaPushOperationQueue] addOperation:unregisterOperation];
+            [self sendUnregisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
             
         } else if([self.class isBackEndRegistrationRequiredForDevToken:devToken parameters:parameters]) {
-            [[self omniaPushOperationQueue] addOperation:registerOperation];
+            [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
             
         } else {
-            successBlock(devToken);
+            successBlock(nil, devToken);
         }
     };
     OmniaPushAppDelegateOperation *appDelegateOperation = [[OmniaPushAppDelegateOperation alloc] initWithApplication:[self sharedApplication]

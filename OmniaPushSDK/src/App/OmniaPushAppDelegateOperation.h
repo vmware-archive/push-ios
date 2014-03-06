@@ -10,10 +10,12 @@
 
 @interface OmniaPushAppDelegateOperation :  NSOperation <UIApplicationDelegate>
 
+@property (nonatomic) NSError *resultantError;
+
 - (instancetype)initWithApplication:(UIApplication *)application
             remoteNotificationTypes:(UIRemoteNotificationType)types
-                            success:(void (^)(NSData *devToken))success
-                            failure:(void (^)(NSError *error))failure;
+                            success:(void (^)(NSURLResponse *response, NSData *devToken))success
+                            failure:(void (^)(NSURLResponse *response, NSError *error))failure;
 
 - (void)cleanup;
 

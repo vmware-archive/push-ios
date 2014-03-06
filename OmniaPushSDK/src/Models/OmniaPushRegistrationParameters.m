@@ -7,6 +7,7 @@
 //
 
 #import "OmniaPushRegistrationParameters.h"
+#import "OmniaPushRegistrationParameters.h"
 
 @interface OmniaPushRegistrationParameters ()
 
