@@ -17,11 +17,11 @@
 - (NSDictionary*) toDictionary
 {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    if (self.releaseUuid) {
-        dict[kReleaseUUID] = self.releaseUuid;
+    if (self.releaseUUID) {
+        dict[kReleaseUUID] = self.releaseUUID;
     }
-    if (self.deviceUuid) {
-        dict[kDeviceUUID] = self.deviceUuid;
+    if (self.deviceUUID) {
+        dict[kDeviceUUID] = self.deviceUUID;
     }
     if (self.deviceAlias) {
         dict[kDeviceAlias] = self.deviceAlias;
@@ -44,43 +44,43 @@
     return dict;
 }
 
-- (NSData*) toJsonData
+- (NSData *)toJSONData
 {
     NSError *error = nil;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:&error];
+    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:&error];
     if (error) {
         // TODO - should return error?
         OmniaPushCriticalLog(@"Error upon serializing object to JSON: %@", error);
         return nil;
     } else {
-        return jsonData;
+        return JSONData;
     }
 }
 
-+ (instancetype) fromDictionary:(NSDictionary*)dict
++ (instancetype)fromDictionary:(NSDictionary *)dict
 {
     OmniaPushBackEndRegistrationResponseData *result = [[OmniaPushBackEndRegistrationResponseData alloc] init];
     result.os = dict[kDeviceOS];
     result.osVersion = dict[kDeviceOSVersion];
-    result.deviceUuid = dict[kDeviceUUID];
+    result.deviceUUID = dict[kDeviceUUID];
     result.deviceAlias = dict[kDeviceAlias];
     result.deviceManufacturer = dict[kDeviceManufacturer];
     result.deviceModel = dict[kDeviceModel];
-    result.releaseUuid = dict[kReleaseUUID];
+    result.releaseUUID = dict[kReleaseUUID];
     result.registrationToken = dict[kRegistrationToken];
     return result;
 }
 
-+ (instancetype)fromJsonData:(NSData *)jsonData error:(NSError **)error
++ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error
 {
     *error = nil;
     
-    if (jsonData == nil || jsonData.length <= 0) {
+    if (!JSONData || JSONData.length <= 0) {
         *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationResponseDataUnparseable localizedDescription:@"response data is empty"];
         return nil;
     }
     
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:error];
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:error];
     
     if (*error != nil) {
         return nil;

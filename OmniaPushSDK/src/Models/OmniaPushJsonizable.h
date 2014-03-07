@@ -10,7 +10,7 @@
 
 @protocol OmniaPushJsonizable <NSObject>
 
-+ (instancetype)fromJsonData:(NSData *)jsonData error:(NSError **)error;
-- (NSData *)toJsonData;
++ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error;
+- (NSData *)toJSONData;
 
 @end

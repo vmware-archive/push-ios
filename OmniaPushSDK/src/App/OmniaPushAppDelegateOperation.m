@@ -51,8 +51,8 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 - (instancetype)initWithApplication:(UIApplication *)application
             remoteNotificationTypes:(UIRemoteNotificationType)types
-                            success:(void (^)(NSURLResponse *response, NSData *devToken))success
-                            failure:(void (^)(NSURLResponse *response, NSError *error))failure
+                            success:(void (^)(NSData *devToken))success
+                            failure:(void (^)( NSError *error))failure
 {
     
     self = [super init];
@@ -179,8 +179,8 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     [self finish];
 }
 
-- (void)setCompletionBlockWithSuccess:(void (^)(NSURLResponse *response, NSData *devToken))success
-                              failure:(void (^)(NSURLResponse *response, NSError *error))failure
+- (void)setCompletionBlockWithSuccess:(void (^)(NSData *devToken))success
+                              failure:(void (^)(NSError *error))failure
 {
     // completionBlock is manually nilled out in AFURLConnectionOperation to break the retain cycle.
 #pragma clang diagnostic push
@@ -189,13 +189,13 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     self.completionBlock = ^{
         if (self.resultantError) {
             if (failure) {
-                failure(nil, self.resultantError);
+                failure(self.resultantError);
             }
         } else {
             NSData *devToken = self.devToken;
             
             if (success) {
-                success(nil, devToken);
+                success(devToken);
             }
         }
     };

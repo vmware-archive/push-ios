@@ -14,8 +14,8 @@
 
 - (instancetype)initWithApplication:(UIApplication *)application
             remoteNotificationTypes:(UIRemoteNotificationType)types
-                            success:(void (^)(NSURLResponse *response, NSData *devToken))success
-                            failure:(void (^)(NSURLResponse *response, NSError *error))failure;
+                            success:(void (^)(NSData *devToken))success
+                            failure:(void (^)(NSError *error))failure;
 
 - (void)cleanup;
 

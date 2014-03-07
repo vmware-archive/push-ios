@@ -12,8 +12,8 @@
 
 @interface OmniaPushBackEndRegistrationResponseData : NSObject<OmniaPushJsonizable, OmniaPushDictionaryizable>
 
-@property (nonatomic) NSString *releaseUuid;
-@property (nonatomic) NSString *deviceUuid;
+@property (nonatomic) NSString *releaseUUID;
+@property (nonatomic) NSString *deviceUUID;
 @property (nonatomic) NSString *deviceAlias;
 @property (nonatomic) NSString *deviceManufacturer;
 @property (nonatomic) NSString *deviceModel;

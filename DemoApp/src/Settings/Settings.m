@@ -19,52 +19,52 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 @implementation Settings
 
-+ (NSString*) loadReleaseUuid
++ (NSString *)releaseUUID
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_UUID];
 }
 
-+ (void) saveReleaseUuid:(NSString*)releaseUuid
++ (void)setReleaseUUID:(NSString *)releaseUUID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:releaseUuid forKey:KEY_RELEASE_UUID];
+    [[NSUserDefaults standardUserDefaults] setObject:releaseUUID forKey:KEY_RELEASE_UUID];
 }
 
-+ (NSString*) loadReleaseSecret
++ (NSString *)releaseSecret
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_SECRET];
 }
 
-+ (void) saveReleaseSecret:(NSString*)releaseSecret
++ (void)setReleaseSecret:(NSString *)releaseSecret
 {
     [[NSUserDefaults standardUserDefaults] setObject:releaseSecret forKey:KEY_RELEASE_SECRET];
 }
 
-+ (NSString*) loadDeviceAlias
++ (NSString *)deviceAlias
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_DEVICE_ALIAS];
 }
 
-+ (void) saveDeviceAlias:(NSString*)deviceAlias
++ (void)setDeviceAlias:(NSString *)deviceAlias
 {
     [[NSUserDefaults standardUserDefaults] setObject:deviceAlias forKey:KEY_DEVICE_ALIAS];
 }
 
-+ (void) resetToDefaults
++ (void)resetToDefaults
 {
-    [self saveReleaseUuid:DEFAULT_RELEASE_UUID];
-    [self saveReleaseSecret:DEFAULT_RELEASE_SECRET];
-    [self saveDeviceAlias:DEFAULT_DEVICE_ALIAS];
+    [self setReleaseUUID:DEFAULT_RELEASE_UUID];
+    [self setReleaseSecret:DEFAULT_RELEASE_SECRET];
+    [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
-+ (OmniaPushRegistrationParameters*) getRegistrationParameters
++ (OmniaPushRegistrationParameters *)registrationParameters
 {
     return [OmniaPushRegistrationParameters parametersForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
-                                                               releaseUuid:[Settings loadReleaseUuid]
-                                                             releaseSecret:[Settings loadReleaseSecret]
-                                                               deviceAlias:[Settings loadDeviceAlias]];
+                                                               releaseUUID:[Settings releaseUUID]
+                                                             releaseSecret:[Settings releaseSecret]
+                                                               deviceAlias:[Settings deviceAlias]];
 }
 
-+ (NSDictionary*) getDefaults
++ (NSDictionary *)defaults
 {
     return @{
              KEY_RELEASE_UUID : DEFAULT_RELEASE_UUID,

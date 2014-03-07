@@ -26,52 +26,52 @@ static NSString *const KEY_DEVICE_ALIAS = @"OMNIA_PUSH_DEVICE_ALIAS";
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_DEVICE_ALIAS];
 }
 
-+ (void)saveAPNSDeviceToken:(NSData *)apnsDeviceToken
++ (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken
 {
     [[NSUserDefaults standardUserDefaults] setObject:apnsDeviceToken forKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-+ (NSData *)loadAPNSDeviceToken
++ (NSData *)APNSDeviceToken
 {
     return [[NSUserDefaults standardUserDefaults] dataForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-+ (void) saveBackEndDeviceID:(NSString*)backEndDeviceId
++ (void)setBackEndDeviceID:(NSString *)backEndDeviceId
 {
     [[NSUserDefaults standardUserDefaults] setObject:backEndDeviceId forKey:KEY_BACK_END_DEVICE_ID];
 }
 
-+ (NSString *)loadBackEndDeviceID
++ (NSString *)backEndDeviceID
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_BACK_END_DEVICE_ID];
 }
 
-+ (void) saveReleaseUuid:(NSString*)releaseUuid
++ (void)setReleaseUUID:(NSString *)releaseUUID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:releaseUuid forKey:KEY_RELEASE_UUID];
+    [[NSUserDefaults standardUserDefaults] setObject:releaseUUID forKey:KEY_RELEASE_UUID];
 }
 
-+ (NSString *)loadReleaseUuid
++ (NSString *)releaseUUID
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_UUID];
 }
 
-+ (void) saveReleaseSecret:(NSString*)releaseSecret
++ (void)setReleaseSecret:(NSString *)releaseSecret
 {
     [[NSUserDefaults standardUserDefaults] setObject:releaseSecret forKey:KEY_RELEASE_SECRET];
 }
 
-+ (NSString *)loadReleaseSecret
++ (NSString *)releaseSecret
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_SECRET];
 }
 
-+ (void) saveDeviceAlias:(NSString*)deviceAlias
++ (void)setDeviceAlias:(NSString *)deviceAlias
 {
     [[NSUserDefaults standardUserDefaults] setObject:deviceAlias forKey:KEY_DEVICE_ALIAS];
 }
 
-+ (NSString *)loadDeviceAlias
++ (NSString *)deviceAlias
 {
     return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_DEVICE_ALIAS];
 }

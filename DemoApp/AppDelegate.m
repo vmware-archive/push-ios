@@ -24,7 +24,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[Settings getDefaults]];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[Settings defaults]];
     
     // Override point for customization after application launch.
     return YES;

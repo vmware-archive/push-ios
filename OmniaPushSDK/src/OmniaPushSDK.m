@@ -26,8 +26,6 @@
 
 NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
-static NSString *deviceID = nil;
-
 #pragma mark - OmniaOperationQueue
 
 @interface OmniaOperationQueue : NSOperationQueue
@@ -80,7 +78,7 @@ static NSString *deviceID = nil;
                                failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
     [OmniaPushBackEndConnection sendUnregistrationRequestOnQueue:[self omniaPushOperationQueue]
-                                                    withDeviceID:[OmniaPushPersistentStorage loadBackEndDeviceID]
+                                                    withDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
                                                          success:^(NSURLResponse *response, NSData *data) {
                                                              OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
                                                              [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
@@ -106,18 +104,18 @@ static NSString *deviceID = nil;
             return;
         }
         
-        OmniaPushBackEndRegistrationResponseData *parsedData = [OmniaPushBackEndRegistrationResponseData fromJsonData:responseData error:&error];
+        OmniaPushBackEndRegistrationResponseData *parsedData = [OmniaPushBackEndRegistrationResponseData fromJSONData:responseData error:&error];
         
         if (error) {
             failureBlock(response, error);
             return;
         }
         
-        OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUuid);
-        [OmniaPushPersistentStorage saveBackEndDeviceID:parsedData.deviceUuid];
-        [OmniaPushPersistentStorage saveReleaseUuid:parameters.releaseUuid];
-        [OmniaPushPersistentStorage saveReleaseSecret:parameters.releaseSecret];
-        [OmniaPushPersistentStorage saveDeviceAlias:parameters.deviceAlias];
+        OmniaPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
+        [OmniaPushPersistentStorage setBackEndDeviceID:parsedData.deviceUUID];
+        [OmniaPushPersistentStorage setReleaseUUID:parameters.releaseUUID];
+        [OmniaPushPersistentStorage setReleaseSecret:parameters.releaseSecret];
+        [OmniaPushPersistentStorage setDeviceAlias:parameters.deviceAlias];
         
         successBlock(response, parsedData);
     };
@@ -132,23 +130,28 @@ static NSString *deviceID = nil;
                                                                      successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
                                                                      failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    void (^success)(NSURLResponse *response, NSData *devToken) = ^(NSURLResponse *response, NSData *devToken) {
+    void (^success)(NSData *devToken) = ^(NSData *devToken) {
         
-        if ([self.class isBackEndUnregistrationRequiredForDevToken:devToken parameters:parameters]) {
-            [OmniaPushPersistentStorage saveBackEndDeviceID:nil];
+        if ([self unregistrationRequiredForDevToken:devToken parameters:parameters]) {
+            [OmniaPushPersistentStorage setBackEndDeviceID:nil];
             [self sendUnregisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
             
-        } else if([self.class isBackEndRegistrationRequiredForDevToken:devToken parameters:parameters]) {
+        } else if([self registrationRequiredForDevToken:devToken parameters:parameters]) {
             [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
             
         } else {
             successBlock(nil, devToken);
         }
     };
+    
+    void (^failure)(NSError *error) = ^(NSError *error) {
+        failureBlock(nil, error);
+    };
+    
     OmniaPushAppDelegateOperation *appDelegateOperation = [[OmniaPushAppDelegateOperation alloc] initWithApplication:[self sharedApplication]
                                                                                              remoteNotificationTypes:parameters.remoteNotificationTypes
                                                                                                              success:success
-                                                                                                             failure:failureBlock];
+                                                                                                             failure:failure];
     return appDelegateOperation;
 }
 
@@ -157,54 +160,71 @@ static NSString *deviceID = nil;
     return [UIApplication sharedApplication];
 }
 
-+ (BOOL)isBackEndUnregistrationRequiredForDevToken:(NSData *)devToken
-                                         parameters:(OmniaPushRegistrationParameters *)parameters
++ (BOOL)unregistrationRequiredForDevToken:(NSData *)devToken
+                               parameters:(OmniaPushRegistrationParameters *)parameters
 {
     // If not currently registered with the back-end then unregistration is not required
-    if (![OmniaPushPersistentStorage loadAPNSDeviceToken]) {
+    if (![OmniaPushPersistentStorage APNSDeviceToken]) {
         return NO;
     }
     
-    return [self.class newParameters:parameters mismatchLocalParametersForDevToken:devToken];
-
-}
-
-+ (BOOL)isBackEndRegistrationRequiredForDevToken:(NSData *)devToken
-                                      parameters:(OmniaPushRegistrationParameters *)parameters
-{
-    // If not currently registered with the back-end then registration will be required
-    if (![OmniaPushPersistentStorage loadBackEndDeviceID]) {
+    if (![self localdeviceTokenMatchesNewToken:devToken]) {
         return YES;
     }
     
-    return [self.class newParameters:parameters mismatchLocalParametersForDevToken:devToken];
-    
-}
-
-+ (BOOL)newParameters:(OmniaPushRegistrationParameters *)parameters mismatchLocalParametersForDevToken:(NSData *)devToken
-{
-    if (![devToken isEqualToData:[OmniaPushPersistentStorage loadAPNSDeviceToken]]) {
-        OmniaPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
-        return YES;
-    }
-    
-    // If any of the registration parameters are different then unregistration is required
-    if (![parameters.releaseUuid isEqualToString:[OmniaPushPersistentStorage loadReleaseUuid]]) {
-        OmniaPushLog(@"Parameters specify a different releaseUuid. Unregistration and re-registration will be required.");
-        return YES;
-    }
-    
-    if (![parameters.releaseSecret isEqualToString:[OmniaPushPersistentStorage loadReleaseSecret]]) {
-        OmniaPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
-        return YES;
-    }
-    
-    if (![parameters.deviceAlias isEqualToString:[OmniaPushPersistentStorage loadDeviceAlias]]) {
-        OmniaPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
+    if (![self localParametersMatchNewParameters:parameters]) {
         return YES;
     }
     
     return NO;
+}
+
++ (BOOL)registrationRequiredForDevToken:(NSData *)devToken
+                             parameters:(OmniaPushRegistrationParameters *)parameters
+{
+    // If not currently registered with the back-end then registration will be required
+    if (![OmniaPushPersistentStorage backEndDeviceID]) {
+        return YES;
+    }
+    
+    if (![self localdeviceTokenMatchesNewToken:devToken]) {
+        return YES;
+    }
+    
+    if (![self localParametersMatchNewParameters:parameters]) {
+        return YES;
+    }
+    
+    return NO;
+}
+
++ (BOOL)localParametersMatchNewParameters:(OmniaPushRegistrationParameters *)parameters
+{
+    // If any of the registration parameters are different then unregistration is required
+    if (![parameters.releaseUUID isEqualToString:[OmniaPushPersistentStorage releaseUUID]]) {
+        OmniaPushLog(@"Parameters specify a different releaseUuid. Unregistration and re-registration will be required.");
+        return NO;
+    }
+    
+    if (![parameters.releaseSecret isEqualToString:[OmniaPushPersistentStorage releaseSecret]]) {
+        OmniaPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
+        return NO;
+    }
+    
+    if (![parameters.deviceAlias isEqualToString:[OmniaPushPersistentStorage deviceAlias]]) {
+        OmniaPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
+        return NO;
+    }
+    
+    return YES;
+}
+
++ (BOOL)localdeviceTokenMatchesNewToken:(NSData *)devToken {
+    if (![devToken isEqualToData:[OmniaPushPersistentStorage APNSDeviceToken]]) {
+        OmniaPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
+        return NO;
+    }
+    return YES;
 }
 
 @end

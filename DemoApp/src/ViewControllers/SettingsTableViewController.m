@@ -33,19 +33,19 @@
 }
 
 
-- (void) viewDidDisappear:(BOOL)animated
+- (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     [self saveSettings];
 }
 
-- (IBAction) clearRegistrationPressed:(id)sender
+- (IBAction)clearRegistrationPressed:(id)sender
 {
-    [OmniaPushPersistentStorage saveBackEndDeviceID:nil];
-    [OmniaPushPersistentStorage saveAPNSDeviceToken:nil];
-    [OmniaPushPersistentStorage saveReleaseUuid:nil];
-    [OmniaPushPersistentStorage saveReleaseSecret:nil];
-    [OmniaPushPersistentStorage saveDeviceAlias:nil];
+    [OmniaPushPersistentStorage setBackEndDeviceID:nil];
+    [OmniaPushPersistentStorage setAPNSDeviceToken:nil];
+    [OmniaPushPersistentStorage setReleaseUUID:nil];
+    [OmniaPushPersistentStorage setReleaseSecret:nil];
+    [OmniaPushPersistentStorage setDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
 }
 
@@ -58,19 +58,19 @@
 
 - (void) loadSettings
 {
-    self.releaseUuidTextField.text = [Settings loadReleaseUuid];
-    self.releaseSecretTextField.text = [Settings loadReleaseSecret];
-    self.deviceAliasTextField.text = [Settings loadDeviceAlias];
+    self.releaseUuidTextField.text = [Settings releaseUUID];
+    self.releaseSecretTextField.text = [Settings releaseSecret];
+    self.deviceAliasTextField.text = [Settings deviceAlias];
 }
 
 - (void) saveSettings
 {
-    [Settings saveReleaseUuid:self.releaseUuidTextField.text];
-    [Settings saveReleaseSecret:self.releaseSecretTextField.text];
-    [Settings saveDeviceAlias:self.deviceAliasTextField.text];
+    [Settings setReleaseUUID:self.releaseUuidTextField.text];
+    [Settings setReleaseSecret:self.releaseSecretTextField.text];
+    [Settings setDeviceAlias:self.deviceAliasTextField.text];
 }
 
-- (void) showAlert:(NSString*)message
+- (void)showAlert:(NSString *)message
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:message message:nil delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
     [alertView show];

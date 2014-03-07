@@ -15,7 +15,7 @@
 @interface OmniaPushRegistrationParameters : NSObject
 
 @property (nonatomic, readonly) UIRemoteNotificationType remoteNotificationTypes;
-@property (nonatomic, readonly) NSString *releaseUuid;
+@property (nonatomic, readonly) NSString *releaseUUID;
 @property (nonatomic, readonly) NSString *releaseSecret;
 @property (nonatomic, readonly) NSString *deviceAlias;
 
@@ -35,9 +35,9 @@
  * @param deviceAlias   A developer-defined "device alias" which can be used to designate this device, or class.
  *                      of devices, in push or notification campaigns. May not be `nil`. May be empty.
  */
-+ (instancetype) parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
-                                    releaseUuid:(NSString *)releaseUuid
-                                  releaseSecret:(NSString *)releaseSecret
-                                    deviceAlias:(NSString *)deviceAlias;
++ (instancetype)parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
+                                   releaseUUID:(NSString *)releaseUUID
+                                 releaseSecret:(NSString *)releaseSecret
+                                   deviceAlias:(NSString *)deviceAlias;
 
 @end

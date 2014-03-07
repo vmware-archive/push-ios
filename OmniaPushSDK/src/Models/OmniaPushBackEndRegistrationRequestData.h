@@ -22,7 +22,7 @@ OBJC_EXPORT NSString *const kRegistrationToken;
 
 @interface OmniaPushBackEndRegistrationRequestData : NSObject<OmniaPushJsonizable, OmniaPushDictionaryizable>
 
-@property (nonatomic) NSString *releaseUuid;
+@property (nonatomic) NSString *releaseUUID;
 @property (nonatomic) NSString *secret;
 @property (nonatomic) NSString *deviceAlias;
 @property (nonatomic) NSString *deviceManufacturer;

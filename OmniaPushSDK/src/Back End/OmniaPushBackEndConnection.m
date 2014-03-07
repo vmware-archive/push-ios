@@ -85,7 +85,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                                       parameters:(OmniaPushRegistrationParameters *)parameters
 {
     OmniaPushBackEndRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
-    return [requestData toJsonData];
+    return [requestData toJSONData];
 }
 
 + (OmniaPushBackEndRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
@@ -103,7 +103,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     
     OmniaPushBackEndRegistrationRequestData *requestData = [[OmniaPushBackEndRegistrationRequestData alloc] init];
     requestData.registrationToken = [OmniaPushHexUtil hexDumpForData:apnsDeviceToken];
-    requestData.releaseUuid = parameters.releaseUuid;
+    requestData.releaseUUID = parameters.releaseUUID;
     requestData.secret = parameters.releaseSecret;
     requestData.deviceAlias = parameters.deviceAlias;
     requestData.deviceManufacturer = @"Apple";

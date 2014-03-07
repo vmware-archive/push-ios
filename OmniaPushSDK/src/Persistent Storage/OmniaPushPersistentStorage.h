@@ -12,19 +12,19 @@
 
 + (void)reset;
 
-+ (void)saveAPNSDeviceToken:(NSData *)apnsDeviceToken;
-+ (NSData *)loadAPNSDeviceToken;
++ (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken;
++ (NSData *)APNSDeviceToken;
 
-+ (void)saveBackEndDeviceID:(NSString *)backEndDeviceId;
-+ (NSString *)loadBackEndDeviceID;
++ (void)setBackEndDeviceID:(NSString *)backEndDeviceID;
++ (NSString *)backEndDeviceID;
 
-+ (void)saveReleaseUuid:(NSString *)releaseUuid;
-+ (NSString *)loadReleaseUuid;
++ (void)setReleaseUUID:(NSString *)releaseUUID;
++ (NSString *)releaseUUID;
 
-+ (void)saveReleaseSecret:(NSString *)releaseSecret;
-+ (NSString *)loadReleaseSecret;
++ (void)setReleaseSecret:(NSString *)releaseSecret;
++ (NSString *)releaseSecret;
 
-+ (void)saveDeviceAlias:(NSString *)deviceAlias;
-+ (NSString *)loadDeviceAlias;
++ (void)setDeviceAlias:(NSString *)deviceAlias;
++ (NSString *)deviceAlias;
 
 @end

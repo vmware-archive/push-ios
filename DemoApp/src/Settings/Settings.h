@@ -12,18 +12,18 @@
 
 @interface Settings : NSObject
 
-+ (NSString*) loadReleaseUuid;
-+ (void) saveReleaseUuid:(NSString*)releaseUuid;
++ (NSString *)releaseUUID;
++ (void)setReleaseUUID:(NSString *)releaseUUID;
 
-+ (NSString*) loadReleaseSecret;
-+ (void) saveReleaseSecret:(NSString*)releaseSecret;
++ (NSString *)releaseSecret;
++ (void)setReleaseSecret:(NSString *)releaseSecret;
 
-+ (NSString*) loadDeviceAlias;
-+ (void) saveDeviceAlias:(NSString*)deviceAlias;
++ (NSString *)deviceAlias;
++ (void)setDeviceAlias:(NSString *)deviceAlias;
 
-+ (void) resetToDefaults;
++ (void)resetToDefaults;
 
-+ (OmniaPushRegistrationParameters*) getRegistrationParameters;
-+ (NSDictionary*) getDefaults;
++ (OmniaPushRegistrationParameters *)registrationParameters;
++ (NSDictionary *)defaults;
 
 @end
