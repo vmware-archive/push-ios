@@ -12,7 +12,8 @@
 
 @implementation OmniaPushHardwareUtil
 
-+ (NSString*)OmniaPush_hardwareString {
++ (NSString *)OmniaPush_hardwareString
+{
     size_t size = 100;
     char *hw_machine = malloc(size);
     int name[] = {CTL_HW,HW_MACHINE};
@@ -22,7 +23,7 @@
     return hardware;
 }
 
-+ (NSString*)OmniaPush_hardwareSimpleDescription
++ (NSString *)OmniaPush_hardwareSimpleDescription
 {
     static NSDictionary *hardwareDescriptionDictionary = nil;
     

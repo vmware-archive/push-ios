@@ -7,15 +7,8 @@
 //
 
 #import "OmniaRegistrationSpecHelper.h"
-#import "OmniaPushRegistrationEngine.h"
-#import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
-#import "OmniaPushBackEndRegistrationRequest.h"
-#import "OmniaPushBackEndRegistrationRequestProvider.h"
-#import "OmniaPushBackEndUnregistrationRequestProvider.h"
-#import "OmniaPushFakeBackEndRegistrationRequest.h"
-#import "OmniaPushFakeBackEndUnregistrationRequest.h"
 #import "OmniaPushBackEndRegistrationResponseData.h"
 
 using namespace Cedar::Matchers;

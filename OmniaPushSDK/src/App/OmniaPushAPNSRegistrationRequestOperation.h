@@ -17,6 +17,4 @@
                             success:(void (^)(NSData *devToken))success
                             failure:(void (^)(NSError *error))failure;
 
-- (void)cleanup;
-
 @end

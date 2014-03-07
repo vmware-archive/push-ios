@@ -8,10 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		D4009DB418A445420084B5EC /* OmniaFakeOperationQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */; };
-		D4009DB518A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */; };
 		D41AB57518AD3085000F3516 /* BackEndMessageRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */; };
 		D41AB57718AEBBCB000F3516 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */; };
-		D421711E1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */; };
 		D42171241896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42171231896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm */; };
 		D421713A18984466007A26A5 /* OmniaPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D421713818984466007A26A5 /* OmniaPushHexUtil.h */; };
 		D421713B18984466007A26A5 /* OmniaPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D421713918984466007A26A5 /* OmniaPushHexUtil.m */; };
@@ -20,9 +18,7 @@
 		D421714218985193007A26A5 /* OmniaPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D421714018985193007A26A5 /* OmniaPushErrorUtil.h */; };
 		D421714318985193007A26A5 /* OmniaPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D421714118985193007A26A5 /* OmniaPushErrorUtil.m */; };
 		D421714418985193007A26A5 /* OmniaPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D421714118985193007A26A5 /* OmniaPushErrorUtil.m */; };
-		D42171541898596A007A26A5 /* OmniaPushBackEndRegistrationRequestImplSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42171531898596A007A26A5 /* OmniaPushBackEndRegistrationRequestImplSpec.mm */; };
-		D421715718985A87007A26A5 /* OmniaPushFakeNSURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D421715618985A87007A26A5 /* OmniaPushFakeNSURLConnection.m */; };
-		D421715A18985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = D421715918985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.m */; };
+		D42171541898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D42171531898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm */; };
 		D4330EAD1860DEC000A141AF /* LogItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4330EAC1860DEC000A141AF /* LogItemCell.m */; };
 		D4330EB11860E39E00A141AF /* LogItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D4330EB01860E39E00A141AF /* LogItemCell.xib */; };
 		D436224A18A03172005A52FC /* OmniaPushBackEndUnregistrationRequestImplSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D436224918A03172005A52FC /* OmniaPushBackEndUnregistrationRequestImplSpec.mm */; };
@@ -43,7 +39,6 @@
 		D4601417188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = D4601414188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m */; };
 		D460141D188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = D460141C188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm */; };
 		D4615E3218B512BE00CA0D2B /* Cedar-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */; };
-		D474E15418A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D474E15318A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m */; };
 		D487102E1889B8B400AE1660 /* OmniaPushPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D487102C1889B8B400AE1660 /* OmniaPushPersistentStorage.h */; };
 		D487102F1889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */; };
 		D48710301889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */; };
@@ -119,12 +114,9 @@
 /* Begin PBXFileReference section */
 		D4009DB018A445420084B5EC /* OmniaFakeOperationQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaFakeOperationQueue.h; path = src/Fakes/OmniaFakeOperationQueue.h; sourceTree = "<group>"; };
 		D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaFakeOperationQueue.m; path = src/Fakes/OmniaFakeOperationQueue.m; sourceTree = "<group>"; };
-		D4009DB218A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeBackEndRegistrationRequest.h; path = src/Fakes/OmniaPushFakeBackEndRegistrationRequest.h; sourceTree = "<group>"; };
-		D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeBackEndRegistrationRequest.m; path = src/Fakes/OmniaPushFakeBackEndRegistrationRequest.m; sourceTree = "<group>"; };
 		D41AB57318AD3085000F3516 /* BackEndMessageRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BackEndMessageRequest.h; path = src/Network/BackEndMessageRequest.h; sourceTree = "<group>"; };
 		D41AB57418AD3085000F3516 /* BackEndMessageRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BackEndMessageRequest.m; path = src/Network/BackEndMessageRequest.m; sourceTree = "<group>"; };
 		D41AB57618AEBBCB000F3516 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationEngineSpec.mm; path = src/Engine/OmniaPushRegistrationEngineSpec.mm; sourceTree = "<group>"; };
 		D42171221896BB7A007A26A5 /* OmniaRegistrationSpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaRegistrationSpecHelper.h; path = src/Helpers/OmniaRegistrationSpecHelper.h; sourceTree = "<group>"; };
 		D42171231896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaRegistrationSpecHelper.mm; path = src/Helpers/OmniaRegistrationSpecHelper.mm; sourceTree = "<group>"; };
 		D421713818984466007A26A5 /* OmniaPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushHexUtil.h; path = src/Util/OmniaPushHexUtil.h; sourceTree = "<group>"; };
@@ -132,11 +124,7 @@
 		D421713E1898449D007A26A5 /* OmniaPushHexUtilSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushHexUtilSpec.mm; path = src/Util/OmniaPushHexUtilSpec.mm; sourceTree = "<group>"; };
 		D421714018985193007A26A5 /* OmniaPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushErrorUtil.h; path = src/Util/OmniaPushErrorUtil.h; sourceTree = "<group>"; };
 		D421714118985193007A26A5 /* OmniaPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushErrorUtil.m; path = src/Util/OmniaPushErrorUtil.m; sourceTree = "<group>"; };
-		D42171531898596A007A26A5 /* OmniaPushBackEndRegistrationRequestImplSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushBackEndRegistrationRequestImplSpec.mm; path = "src/Back End/OmniaPushBackEndRegistrationRequestImplSpec.mm"; sourceTree = "<group>"; };
-		D421715518985A87007A26A5 /* OmniaPushFakeNSURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeNSURLConnection.h; path = src/Fakes/OmniaPushFakeNSURLConnection.h; sourceTree = "<group>"; };
-		D421715618985A87007A26A5 /* OmniaPushFakeNSURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeNSURLConnection.m; path = src/Fakes/OmniaPushFakeNSURLConnection.m; sourceTree = "<group>"; };
-		D421715818985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeNSURLConnectionFactory.h; path = src/Fakes/OmniaPushFakeNSURLConnectionFactory.h; sourceTree = "<group>"; };
-		D421715918985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeNSURLConnectionFactory.m; path = src/Fakes/OmniaPushFakeNSURLConnectionFactory.m; sourceTree = "<group>"; };
+		D42171531898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushBackEndConnectionSpec.mm; path = "src/Back End/OmniaPushBackEndConnectionSpec.mm"; sourceTree = "<group>"; };
 		D4330EAB1860DEC000A141AF /* LogItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LogItemCell.h; path = src/Views/LogItemCell.h; sourceTree = "<group>"; };
 		D4330EAC1860DEC000A141AF /* LogItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LogItemCell.m; path = src/Views/LogItemCell.m; sourceTree = "<group>"; };
 		D4330EB01860E39E00A141AF /* LogItemCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LogItemCell.xib; path = src/Views/LogItemCell.xib; sourceTree = "<group>"; };
@@ -158,8 +146,6 @@
 		D4601414188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushApplicationDelegateSwitcherImpl.m; path = src/App/OmniaPushApplicationDelegateSwitcherImpl.m; sourceTree = "<group>"; };
 		D460141C188711DF00EF09FF /* OmniaPushRegistrationCompleteOperationSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushRegistrationCompleteOperationSpec.mm; path = src/Operations/OmniaPushRegistrationCompleteOperationSpec.mm; sourceTree = "<group>"; };
 		D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "Cedar-iOS.framework"; path = "Frameworks/Cedar-iOS.framework"; sourceTree = "<group>"; };
-		D474E15218A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushFakeBackEndUnregistrationRequest.h; path = src/Fakes/OmniaPushFakeBackEndUnregistrationRequest.h; sourceTree = "<group>"; };
-		D474E15318A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushFakeBackEndUnregistrationRequest.m; path = src/Fakes/OmniaPushFakeBackEndUnregistrationRequest.m; sourceTree = "<group>"; };
 		D487102C1889B8B400AE1660 /* OmniaPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushPersistentStorage.h; path = "src/Persistent Storage/OmniaPushPersistentStorage.h"; sourceTree = "<group>"; };
 		D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushPersistentStorage.m; path = "src/Persistent Storage/OmniaPushPersistentStorage.m"; sourceTree = "<group>"; };
 		D48710311889BC5600AE1660 /* OmniaPushPersistentStorageSpec.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OmniaPushPersistentStorageSpec.mm; path = "src/Persistent Storage/OmniaPushPersistentStorageSpec.mm"; sourceTree = "<group>"; };
@@ -210,6 +196,7 @@
 		F147F49718CA667200728D1D /* OmniaPushApplicationDelegateSwitcherProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushApplicationDelegateSwitcherProtocol.h; sourceTree = "<group>"; };
 		F147F49918CA66E600728D1D /* OmniaPushBackEndRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushBackEndRegistrationData.h; path = src/Models/OmniaPushBackEndRegistrationData.h; sourceTree = "<group>"; };
 		F147F49A18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushBackEndRegistrationData.m; path = src/Models/OmniaPushBackEndRegistrationData.m; sourceTree = "<group>"; };
+		F147F4A018CA73B100728D1D /* OmniaPushAPNSRegistrationRequestOperationTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushAPNSRegistrationRequestOperationTest.h; sourceTree = "<group>"; };
 		F168B75718BBF6EB00455508 /* OmniaPushHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OmniaPushHardwareUtil.h; path = src/Util/OmniaPushHardwareUtil.h; sourceTree = "<group>"; };
 		F168B75818BBF6EB00455508 /* OmniaPushHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OmniaPushHardwareUtil.m; path = src/Util/OmniaPushHardwareUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -257,14 +244,6 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
-		D421711C1892AC99007A26A5 /* Engine */ = {
-			isa = PBXGroup;
-			children = (
-				D421711D1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm */,
-			);
-			name = Engine;
-			sourceTree = "<group>";
-		};
 		D421711F1896B89E007A26A5 /* Back End */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,7 +264,7 @@
 		D421715218985942007A26A5 /* Back End */ = {
 			isa = PBXGroup;
 			children = (
-				D42171531898596A007A26A5 /* OmniaPushBackEndRegistrationRequestImplSpec.mm */,
+				D42171531898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm */,
 				D436224918A03172005A52FC /* OmniaPushBackEndUnregistrationRequestImplSpec.mm */,
 			);
 			name = "Back End";
@@ -397,14 +376,6 @@
 			children = (
 				D4009DB018A445420084B5EC /* OmniaFakeOperationQueue.h */,
 				D4009DB118A445420084B5EC /* OmniaFakeOperationQueue.m */,
-				D4009DB218A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.h */,
-				D4009DB318A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m */,
-				D474E15218A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.h */,
-				D474E15318A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m */,
-				D421715518985A87007A26A5 /* OmniaPushFakeNSURLConnection.h */,
-				D421715618985A87007A26A5 /* OmniaPushFakeNSURLConnection.m */,
-				D421715818985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.h */,
-				D421715918985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.m */,
 			);
 			name = Fakes;
 			sourceTree = "<group>";
@@ -454,9 +425,9 @@
 		D4BE825C18633FB200EF0EE3 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				F147F49F18CA739000728D1D /* Test Headers */,
 				D4BE825D18633FB700EF0EE3 /* App */,
 				D421715218985942007A26A5 /* Back End */,
-				D421711C1892AC99007A26A5 /* Engine */,
 				D460141B18848ED800EF09FF /* Fakes */,
 				D4433F8D18735086005C100C /* Helpers */,
 				D487103D188ECADD00AE1660 /* Models */,
@@ -604,6 +575,15 @@
 			);
 			name = Protocols;
 			path = src/Protocols;
+			sourceTree = "<group>";
+		};
+		F147F49F18CA739000728D1D /* Test Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F147F4A018CA73B100728D1D /* OmniaPushAPNSRegistrationRequestOperationTest.h */,
+			);
+			name = "Test Headers";
+			path = "src/Test Headers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -806,15 +786,12 @@
 				D4433F8918731496005C100C /* OmniaPushSDKSpec.mm in Sources */,
 				D4601417188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */,
 				F110713318C66C47007EE7F1 /* OmniaPushBackEndConnection.m in Sources */,
-				D421715718985A87007A26A5 /* OmniaPushFakeNSURLConnection.m in Sources */,
 				D4433F871873147D005C100C /* OmniaPushSDK.m in Sources */,
 				D421713C18984466007A26A5 /* OmniaPushHexUtil.m in Sources */,
-				D421711E1892ACBA007A26A5 /* OmniaPushRegistrationEngineSpec.mm in Sources */,
 				D42171241896BB7A007A26A5 /* OmniaRegistrationSpecHelper.mm in Sources */,
 				D44BE7BA187F0A9E00971A2A /* OmniaPushAPNSRegistrationRequestOperationSpec.mm in Sources */,
-				D474E15418A193BC00B0B751 /* OmniaPushFakeBackEndUnregistrationRequest.m in Sources */,
 				D4871050188F185200AE1660 /* OmniaPushRegistrationParameters.m in Sources */,
-				D42171541898596A007A26A5 /* OmniaPushBackEndRegistrationRequestImplSpec.mm in Sources */,
+				D42171541898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm in Sources */,
 				D421714418985193007A26A5 /* OmniaPushErrorUtil.m in Sources */,
 				D4BE826318637E0600EF0EE3 /* Globals.mm in Sources */,
 				D421713F1898449D007A26A5 /* OmniaPushHexUtilSpec.mm in Sources */,
@@ -822,13 +799,11 @@
 				D4BE825F18633FDD00EF0EE3 /* OmniaPushAppDelegateProxySpec.mm in Sources */,
 				F147F49D18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m in Sources */,
 				D4871046188F14DB00AE1660 /* OmniaPushBackEndRegistrationResponseDataSpec.mm in Sources */,
-				D4009DB518A445420084B5EC /* OmniaPushFakeBackEndRegistrationRequest.m in Sources */,
 				D4009DB418A445420084B5EC /* OmniaFakeOperationQueue.m in Sources */,
 				D487103F188ECB1200AE1660 /* OmniaPushBackEndRegistrationRequestDataSpec.mm in Sources */,
 				D48710301889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */,
 				D4871052188F194500AE1660 /* OmniaPushRegistrationParametersSpec.mm in Sources */,
 				F168B75B18BBF6EB00455508 /* OmniaPushHardwareUtil.m in Sources */,
-				D421715A18985C40007A26A5 /* OmniaPushFakeNSURLConnectionFactory.m in Sources */,
 				D487103A188EC85000AE1660 /* OmniaPushBackEndRegistrationRequestData.m in Sources */,
 				D4EE8BDE18620DDD0082F7B6 /* OmniaPushAPNSRegistrationRequestOperation.m in Sources */,
 				D436224A18A03172005A52FC /* OmniaPushBackEndUnregistrationRequestImplSpec.mm in Sources */,

@@ -38,7 +38,6 @@ describe(@"OmniaPushSDK", ^{
         previousAppDelegate = nil;
         [helper reset];
         helper = nil;
-        sdk = nil;
     });
     
     describe(@"registration with bad arguments", ^{

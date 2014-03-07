@@ -6,7 +6,8 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
+#import "OmniaPushAPNSRegistrationRequestOperationTest.h"
+#import "OmniaPushRegistrationParameters.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaSpecHelper.h"
 
@@ -35,12 +36,12 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     context(@"contructing with invalid arguments", ^{
         
         it(@"should require parameters", ^{
-            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:nil application:helper.application];}
+            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:nil success:nil failure:nil];}
             should raise_exception([NSException class]);
         });
 
         it(@"should require an application", ^{
-            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:helper.params application:nil];}
+            ^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];}
                 should raise_exception([NSException class]);
         });
     });
@@ -48,7 +49,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:helper.params application:helper.application];
+            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];
         });
         
         it(@"should produce a valid instance", ^{
@@ -56,7 +57,7 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
         });
         
         it(@"should retain its arguments as properties", ^{
-            operation.parameters should be_same_instance_as(helper.params);
+            operation.remoteNotificationTypes should equal(helper.params.remoteNotificationTypes);
             operation.application should be_same_instance_as(helper.application);
         });
         

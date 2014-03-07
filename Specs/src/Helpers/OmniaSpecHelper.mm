@@ -147,7 +147,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - Parameters helpers
 
-- (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (OmniaPushRegistrationParameters *)setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
     self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:notificationTypes
                                                                        releaseUUID:TEST_RELEASE_UUID

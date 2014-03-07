@@ -37,13 +37,13 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 @interface OmniaPushAPNSRegistrationRequestOperation ()
 
-@property (nonatomic, readwrite, weak) UIApplication *application;
+@property (nonatomic, weak) UIApplication *application;
 
-@property (nonatomic, readwrite) OmniaState state;
-@property (readwrite, nonatomic) NSData *devToken;
-@property (nonatomic, readwrite) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
-@property (nonatomic, readwrite) UIRemoteNotificationType remoteNotificationTypes;
-@property (nonatomic, readwrite) NSRecursiveLock *lock;
+@property (nonatomic) OmniaState state;
+@property (nonatomic) NSData *devToken;
+@property (nonatomic) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
+@property (nonatomic) UIRemoteNotificationType remoteNotificationTypes;
+@property (nonatomic) NSRecursiveLock *lock;
 
 @end
 

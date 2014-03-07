@@ -19,18 +19,18 @@
 
 @implementation OmniaPushRegistrationParameters
 
-+ (instancetype) parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
-                                    releaseUUID:(NSString *)releaseUUID
-                                  releaseSecret:(NSString *)releaseSecret
-                                    deviceAlias:(NSString *)deviceAlias
++ (instancetype)parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
+                                   releaseUUID:(NSString *)releaseUUID
+                                 releaseSecret:(NSString *)releaseSecret
+                                   deviceAlias:(NSString *)deviceAlias
 {
     OmniaPushRegistrationParameters *params = [[OmniaPushRegistrationParameters alloc] init];
     
     if (params) {
-        if (releaseUUID == nil) {
+        if (!releaseUUID) {
             [NSException raise:NSInvalidArgumentException format:@"releaseUuid may not be nil"];
         }
-        if (releaseSecret == nil) {
+        if (!releaseSecret) {
             [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be nil"];
         }
         if (releaseUUID.length <= 0) {
@@ -39,7 +39,7 @@
         if (releaseSecret.length <= 0) {
             [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be empty"];
         }
-        if (deviceAlias == nil) {
+        if (!deviceAlias) {
             [NSException raise:NSInvalidArgumentException format:@"deviceAlias may not be nil"];
         }
         params.remoteNotificationTypes = remoteNotificationTypes;
