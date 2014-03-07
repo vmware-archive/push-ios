@@ -7,7 +7,6 @@
 //
 
 #import "OmniaPushApplicationDelegateSwitcherImpl.h"
-#import "OmniaPushApplicationDelegateSwitcher.h"
 
 @implementation OmniaPushApplicationDelegateSwitcherImpl
 

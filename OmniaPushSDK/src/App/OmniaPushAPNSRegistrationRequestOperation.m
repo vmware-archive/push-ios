@@ -10,7 +10,7 @@
 #import "OmniaPushApplicationDelegateSwitcherImpl.h"
 #import "OmniaPushErrors.h"
 #import "OmniaPushDebug.h"
-#import "OmniaPushApplicationDelegateSwitcher.h"
+#import "OmniaPushApplicationDelegateSwitcherImpl.h"
 #import <objc/runtime.h>
 
 typedef NS_ENUM(NSInteger, OmniaState) {

@@ -7,18 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OmniaPushDictionaryizable.h"
-#import "OmniaPushJsonizable.h"
+#import "OmniaPushBackEndRegistrationData.h"
 
-@interface OmniaPushBackEndRegistrationResponseData : NSObject<OmniaPushJsonizable, OmniaPushDictionaryizable>
+@interface OmniaPushBackEndRegistrationResponseData : OmniaPushBackEndRegistrationData
 
-@property (nonatomic) NSString *releaseUUID;
 @property (nonatomic) NSString *deviceUUID;
-@property (nonatomic) NSString *deviceAlias;
-@property (nonatomic) NSString *deviceManufacturer;
-@property (nonatomic) NSString *deviceModel;
-@property (nonatomic) NSString *os;
-@property (nonatomic) NSString *osVersion;
-@property (nonatomic) NSString *registrationToken;
 
 @end

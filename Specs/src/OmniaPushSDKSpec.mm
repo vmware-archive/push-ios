@@ -19,8 +19,6 @@ using namespace Cedar::Doubles;
 SPEC_BEGIN(OmniaPushSDKSpec)
 
 describe(@"OmniaPushSDK", ^{
-    
-    __block OmniaPushSDK *sdk;
     __block OmniaSpecHelper *helper = nil;
     __block OmniaRegistrationSpecHelper *registrationHelper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
