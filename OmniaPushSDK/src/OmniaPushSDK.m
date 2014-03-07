@@ -12,7 +12,7 @@
 
 #import "OmniaPushBackEndConnection.h"
 
-#import "OmniaPushAppDelegateOperation.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
@@ -66,9 +66,9 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
 
-    NSOperation *appDelegateOperation = [OmniaPushSDK appDelegateOperationWithRegistrationParameters:parameters
-                                                                                        successBlock:success
-                                                                                        failureBlock:failure];
+    NSOperation *appDelegateOperation = [OmniaPushSDK APNSRegistrationOperationWithParameters:parameters
+                                                                                 successBlock:success
+                                                                                 failureBlock:failure];
     [[self omniaPushOperationQueue] addOperation:appDelegateOperation];
 }
 
@@ -126,9 +126,9 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
                                                        failure:failureBlock];
 }
 
-+ (OmniaPushAppDelegateOperation *)appDelegateOperationWithRegistrationParameters:(OmniaPushRegistrationParameters *)parameters
-                                                                     successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
-                                                                     failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
++ (OmniaPushAPNSRegistrationRequestOperation *)APNSRegistrationOperationWithParameters:(OmniaPushRegistrationParameters *)parameters
+                                                                          successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
+                                                                          failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
     void (^success)(NSData *devToken) = ^(NSData *devToken) {
         
@@ -148,7 +148,7 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
         failureBlock(nil, error);
     };
     
-    OmniaPushAppDelegateOperation *appDelegateOperation = [[OmniaPushAppDelegateOperation alloc] initWithApplication:[self sharedApplication]
+    OmniaPushAPNSRegistrationRequestOperation *appDelegateOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:[self sharedApplication]
                                                                                              remoteNotificationTypes:parameters.remoteNotificationTypes
                                                                                                              success:success
                                                                                                              failure:failure];

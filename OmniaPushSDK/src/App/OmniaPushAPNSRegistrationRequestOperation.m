@@ -1,12 +1,12 @@
 //
-//  OmniaPushAppDelegateOperation.m
+//  OmniaPushAPNSRegistrationRequestOperation.m
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-18.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushAppDelegateOperation.h"
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushApplicationDelegateSwitcherImpl.h"
 #import "OmniaPushErrors.h"
 #import "OmniaPushDebug.h"
@@ -35,7 +35,7 @@ static inline NSString *OmniaKeyPathFromOperationState(OmniaState state) {
 
 static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation.Lock";
 
-@interface OmniaPushAppDelegateOperation ()
+@interface OmniaPushAPNSRegistrationRequestOperation ()
 
 @property (nonatomic, readwrite, weak) UIApplication *application;
 
@@ -47,14 +47,13 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
 
 @end
 
-@implementation OmniaPushAppDelegateOperation
+@implementation OmniaPushAPNSRegistrationRequestOperation
 
 - (instancetype)initWithApplication:(UIApplication *)application
             remoteNotificationTypes:(UIRemoteNotificationType)types
                             success:(void (^)(NSData *devToken))success
-                            failure:(void (^)( NSError *error))failure
+                            failure:(void (^)(NSError *error))failure
 {
-    
     self = [super init];
     if (!self) {
         return nil;
@@ -84,7 +83,7 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     NSLog(@"DEALLOC");
 }
 
-- (void) cleanup
+- (void)cleanup
 {
     if (self.application && self.originalApplicationDelegate) {
         [self restoreApplicationDelegate];
@@ -93,32 +92,32 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     self.originalApplicationDelegate = nil;
 }
 
-- (void) replaceApplicationDelegate
+- (void)replaceApplicationDelegate
 {
     [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self inApplication:self.application];
 }
 
-- (void) restoreApplicationDelegate
+- (void)restoreApplicationDelegate
 {
     [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self.originalApplicationDelegate inApplication:self.application];
 }
 
-- (NSMethodSignature *) methodSignatureForSelector:(SEL)sel
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
 {
     return [self.originalApplicationDelegate methodSignatureForSelector:sel];
 }
 
-- (void) forwardInvocation:(NSInvocation *)invocation
+- (void)forwardInvocation:(NSInvocation *)invocation
 {
     [invocation invokeWithTarget:self.originalApplicationDelegate];
 }
 
-- (BOOL) respondsToSelector:(SEL)sel
+- (BOOL)respondsToSelector:(SEL)sel
 {
     return [self respondsToProxySelectors:sel] || [self.originalApplicationDelegate respondsToSelector:sel];
 }
 
-- (BOOL) respondsToProxySelectors:(SEL)sel
+- (BOOL)respondsToProxySelectors:(SEL)sel
 {
     if (sel_isEqual(sel, @selector(application:didRegisterForRemoteNotificationsWithDeviceToken:))) {
         return YES;

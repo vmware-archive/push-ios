@@ -8,17 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OmniaPushAppDelegateProxy;
-@protocol OmniaPushRegistrationListener;
-
 @class OmniaPushAppDelegateProxy;
-@class OmniaPushAPNSRegistrationRequestOperation;
 @class OmniaFakeOperationQueue;
-@class OmniaPushFakeApplicationDelegateSwitcher;
 @class OmniaPushPersistentStorage;
 @class OmniaPushRegistrationParameters;
-@class OmniaPushRegistrationEngine;
-@class OmniaPushFakeNSURLConnectionFactory;
 
 OBJC_EXPORT NSInteger TEST_NOTIFICATION_TYPES;
 
@@ -34,25 +27,15 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 @property (nonatomic) id application;
 @property (nonatomic) id<UIApplicationDelegate> applicationDelegate;
 @property (nonatomic) OmniaFakeOperationQueue *workerQueue;
-@property (nonatomic) OmniaPushAPNSRegistrationRequestOperation *registrationRequestOperation;
-@property (nonatomic) OmniaPushAppDelegateProxy *applicationDelegateProxy;
-@property (nonatomic) OmniaPushFakeApplicationDelegateSwitcher *applicationDelegateSwitcher;
 @property (nonatomic) NSData *apnsDeviceToken;
 @property (nonatomic) NSData *apnsDeviceToken2;
 @property (nonatomic) NSString *backEndDeviceId;
 @property (nonatomic) NSString *backEndDeviceId2;
-@property (nonatomic) OmniaPushPersistentStorage *storage;
 @property (nonatomic) OmniaPushRegistrationParameters *params;
-@property (nonatomic) OmniaPushRegistrationEngine *registrationEngine;
-@property (nonatomic) OmniaPushFakeNSURLConnectionFactory *connectionFactory;
 
 // Spec Helper lifecycle
 - (instancetype) init;
 - (void) reset;
-
-// Front-end singleton helpers
-- (void) resetSingleton;
-- (void) setApplicationInSingleton;
 
 // Application helpers
 - (id) setupApplication;
@@ -68,12 +51,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
 - (void) setupApplicationDelegateToReceiveNotification:(NSDictionary*)userInfo;
 
-// Application Delegate Proxy helpers
-- (OmniaPushAppDelegateProxy*) setupAppDelegateProxy;
-
-// Registration Request Operation helpers
-- (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-
 // Operation Queue helpers
 - (OmniaFakeOperationQueue*) setupQueues;
 
@@ -82,11 +59,5 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid;
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret;
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias;
-
-// Registration Engine helpers
-- (OmniaPushRegistrationEngine*) setupRegistrationEngine;
-
-// NSURLConnection heleprs
-- (OmniaPushFakeNSURLConnectionFactory*) setupConnectionFactory;
 
 @end;

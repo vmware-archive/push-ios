@@ -1,5 +1,5 @@
 //
-//  OmniaPushAppDelegateProxy.h
+//  OmniaPushAPNSRegistrationRequestOperation.h
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-18.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OmniaPushAppDelegateOperation :  NSOperation <UIApplicationDelegate>
+@interface OmniaPushAPNSRegistrationRequestOperation :  NSOperation <UIApplicationDelegate>
 
 @property (nonatomic) NSError *resultantError;
 

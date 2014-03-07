@@ -8,7 +8,6 @@
 
 #import "OmniaSpecHelper.h"
 #import "OmniaPushSDK.h"
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
 #import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushDebug.h"
 #import "OmniaFakeOperationQueue.h"
@@ -53,34 +52,22 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.application = [UIApplication sharedApplication];
-        self.storage = [[OmniaPushPersistentStorage alloc] init];
-        [self.storage reset];
+        [OmniaPushPersistentStorage reset];
     }
     return self;
 }
 
 - (void) reset
 {
-    self.registrationEngine = nil;
     self.params = nil;
     self.workerQueue = nil;
-    [OmniaPushOperationQueueProvider setWorkerQueue:nil];
     self.apnsDeviceToken = nil;
     self.apnsDeviceToken2 = nil;
     self.backEndDeviceId = nil;
     self.backEndDeviceId2 = nil;
     self.application = nil;
     self.applicationDelegate = nil;
-    self.registrationRequestOperation = nil;
-    if (self.applicationDelegateProxy && [self.applicationDelegateProxy isKindOfClass:[OmniaPushAppDelegateProxy class]]) {
-        [self.applicationDelegateProxy cleanup];
-    }
-    self.applicationDelegateProxy = nil;
-    self.applicationDelegateSwitcher = nil;
     self.storage = nil;
-    self.connectionFactory = nil;
-    [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:nil];
-    [OmniaPushNSURLConnectionProvider setFactory:nil];
 }
 
 #pragma mark - Application helpers
@@ -115,17 +102,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (id<UIApplicationDelegate>) currentApplicationDelegate
 {
-    if (self.applicationDelegateProxy) {
-        return self.applicationDelegateProxy;
-    } else {
-        return self.applicationDelegate;
-    }
+    return self.applicationDelegate;
 }
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
-    self.applicationDelegateSwitcher = [[OmniaPushFakeApplicationDelegateSwitcher alloc] initWithSpecHelper:self];
-    [OmniaPushApplicationDelegateSwitcherProvider setSwitcher:self.applicationDelegateSwitcher];
     self.applicationDelegate = fake_for(@protocol(UIApplicationDelegate));
     self.application stub_method("delegate").and_do(^(NSInvocation *invocation) {
         id<UIApplicationDelegate> d = [self currentApplicationDelegate];
@@ -154,43 +135,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.applicationDelegate stub_method("application:didReceiveRemoteNotification:").with(self.application, userInfo);
 }
 
-#pragma mark - Application Delegate Proxy helpers
-
-- (OmniaPushAppDelegateProxy*) setupAppDelegateProxy
-{
-    self.applicationDelegateProxy = [[OmniaPushAppDelegateProxy alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate registrationEngine:self.registrationEngine];
-    return self.applicationDelegateProxy;
-}
-
-#pragma mark - Registration Request helpers
-
-- (OmniaPushAPNSRegistrationRequestOperation*) setupRegistrationRequestOperationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-{
-    self.registrationRequestOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithParameters:self.params application:self.application];
-    return self.registrationRequestOperation;
-}
-
-#pragma mark - Front-end singleton helpers
-
-- (void) resetSingleton
-{
-    SEL setSharedInstanceSelector = sel_registerName("setSharedInstance:");
-    [OmniaPushSDK performSelector:setSharedInstanceSelector withObject:nil];
-}
-
-- (void) setApplicationInSingleton
-{
-    SEL setupApplicationSelector = sel_registerName("setupApplication:");
-    [OmniaPushSDK performSelector:setupApplicationSelector withObject:self.application];
-}
-
 #pragma mark - Operation Queue helpers
 
 - (OmniaFakeOperationQueue*) setupQueues
 {
     self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
-    [OmniaPushOperationQueueProvider setWorkerQueue:self.workerQueue];
-    [OmniaPushOperationQueueProvider setMainQueue:self.workerQueue];
     return self.workerQueue;
 }
 
@@ -200,53 +149,35 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
-    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:notificationTypes
-                                                                        releaseUuid:TEST_RELEASE_UUID
-                                                                      releaseSecret:TEST_RELEASE_SECRET
-                                                                        deviceAlias:TEST_DEVICE_ALIAS];
+    self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:notificationTypes
+                                                                       releaseUUID:TEST_RELEASE_UUID
+                                                                     releaseSecret:TEST_RELEASE_SECRET
+                                                                       deviceAlias:TEST_DEVICE_ALIAS];
     return self.params;
 }
 
 - (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid
 {
-    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
-                                                                       releaseUuid:newReleaseUuid
-                                                                     releaseSecret:self.params.releaseSecret
-                                                                        deviceAlias:self.params.deviceAlias];
+    self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
+                                                                      releaseUUID:newReleaseUuid
+                                                                    releaseSecret:self.params.releaseSecret
+                                                                      deviceAlias:self.params.deviceAlias];
 }
 
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
 {
-    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
-                                                                        releaseUuid:self.params.releaseUuid
-                                                                      releaseSecret:newReleaseSecret
-                                                                        deviceAlias:self.params.deviceAlias];
+    self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
+                                                                      releaseUUID:self.params.releaseUUID
+                                                                    releaseSecret:newReleaseSecret
+                                                                      deviceAlias:self.params.deviceAlias];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
 {
-    self.params = [[OmniaPushRegistrationParameters alloc] initForNotificationTypes:self.params.remoteNotificationTypes
-                                                                        releaseUuid:self.params.releaseUuid
-                                                                      releaseSecret:self.params.releaseSecret
-                                                                        deviceAlias:newDeviceAlias];
-}
-
-
-#pragma mark - Registration Engine helpers
-
-- (OmniaPushRegistrationEngine*) setupRegistrationEngine
-{
-    self.registrationEngine = [[OmniaPushRegistrationEngine alloc] initWithApplication:self.application originalApplicationDelegate:self.applicationDelegate listener:nil];
-    return self.registrationEngine;
-}
-
-#pragma mark - NSURLConnection heleprs
-
-- (OmniaPushFakeNSURLConnectionFactory*) setupConnectionFactory
-{
-    self.connectionFactory = [[OmniaPushFakeNSURLConnectionFactory alloc] init];
-    [OmniaPushNSURLConnectionProvider setFactory:self.connectionFactory];
-    return self.connectionFactory;
+    self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
+                                                                      releaseUUID:self.params.releaseUUID
+                                                                    releaseSecret:self.params.releaseSecret
+                                                                      deviceAlias:newDeviceAlias];
 }
 
 @end

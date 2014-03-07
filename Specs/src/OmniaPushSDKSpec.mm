@@ -9,9 +9,6 @@
 #import "OmniaPushSDK.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
-#import "OmniaPushRegistrationCompleteOperation.h"
-#import "OmniaPushRegistrationFailedOperation.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaRegistrationSpecHelper.h"
@@ -35,14 +32,12 @@ describe(@"OmniaPushSDK", ^{
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:testNotificationTypes];
-        [helper setupRegistrationRequestOperationWithNotificationTypes:testNotificationTypes];
         [helper setupQueues];
         previousAppDelegate = helper.applicationDelegate;
     });
     
     afterEach(^{
         previousAppDelegate = nil;
-        [helper resetSingleton];
         [helper reset];
         helper = nil;
         sdk = nil;
@@ -53,13 +48,17 @@ describe(@"OmniaPushSDK", ^{
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
-            [helper setApplicationInSingleton];
         });
                    
         it(@"should require a parameters object", ^{
-            ^{sdk = [OmniaPushSDK registerWithParameters:nil];}
+            __block BOOL blockExecuted = NO;
+            ^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
+                blockExecuted = YES;
+            } failure:^(NSURLResponse *response, NSError *error) {
+                blockExecuted = YES;
+            }];}
                 should raise_exception([NSException class]);
-            sdk should be_nil;
+            blockExecuted should be_falsy;
         });
     });
 
@@ -68,11 +67,13 @@ describe(@"OmniaPushSDK", ^{
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
-            [helper setApplicationInSingleton];
             [registrationHelper setupBackEndForSuccessfulRegistration];
 
-            sdk = [OmniaPushSDK registerWithParameters:helper.params];
-            sdk should_not be_nil;
+            __block BOOL successBlockExecuted = NO;
+            [OmniaPushSDK registerWithParameters:helper.params success:^(NSURLResponse *response, id responseObject) {
+                successBlockExecuted = YES;
+            } failure:nil];
+            successBlockExecuted should be_truthy;
             
             [helper.workerQueue drain];
         });
@@ -80,10 +81,7 @@ describe(@"OmniaPushSDK", ^{
         it(@"should handle successful registrations from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_falsy;
-            [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
+            [OmniaPushPersistentStorage APNSDeviceToken] should equal(helper.apnsDeviceToken);
         });
 
         it(@"should restore the application delegate after tearing down", ^{
@@ -91,53 +89,6 @@ describe(@"OmniaPushSDK", ^{
             [OmniaPushSDK performSelector:teardownSelector];
             UIApplication *app = (UIApplication*)(helper.application);
             app.delegate should be_same_instance_as(previousAppDelegate);
-        });
-    });
-    
-    describe(@"successful registration with listener", ^{
-        
-        __block id listener;
-        
-        beforeEach(^{
-            [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
-            [helper setupApplicationDelegateForSuccessfulRegistration];
-            [helper setApplicationInSingleton];
-            [registrationHelper setupBackEndForSuccessfulRegistration];
-            
-            listener = fake_for(@protocol(OmniaPushRegistrationListener));
-            listener stub_method("registrationSucceeded");
-            
-            sdk = [OmniaPushSDK registerWithParameters:helper.params listener:listener];
-            sdk should_not be_nil;
-            
-            [helper.workerQueue drain];
-        });
-        
-        afterEach(^{
-            listener = nil;
-        });
-        
-        it(@"should call the listener after successful registration from APNS", ^{
-            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-            helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_falsy;
-            [helper.storage loadAPNSDeviceToken] should equal(helper.apnsDeviceToken);
-            listener should have_received("registrationSucceeded");
-        });
-        
-        it(@"should call the original application delegate after a push message is delivered", ^{
-            NSDictionary *userInfo = @{ @"aps" : @"I am a push message" };
-            [helper setupApplicationDelegateToReceiveNotification:userInfo];
-            SEL selectorAppDelegateProxy = sel_registerName("appDelegateProxy");
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-            OmniaPushAppDelegateProxy *appDelegateProxy = (OmniaPushAppDelegateProxy*) [sdk performSelector:selectorAppDelegateProxy];
-#pragma clang diagnostic pop
-            [appDelegateProxy respondsToSelector:@selector(application:didReceiveRemoteNotification:)] should be_truthy;
-            [appDelegateProxy application:helper.application didReceiveRemoteNotification:userInfo];
-            helper.applicationDelegate should have_received("application:didReceiveRemoteNotification:");
         });
     });
     
@@ -149,11 +100,15 @@ describe(@"OmniaPushSDK", ^{
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-            [helper setApplicationInSingleton];
             
-            sdk = [OmniaPushSDK registerWithParameters:helper.params];
-            sdk should_not be_nil;
-            
+            __block BOOL failureBlockExecuted = NO;
+            [OmniaPushSDK registerWithParameters:helper.params
+                                         success:nil
+                                         failure:^(NSURLResponse *response, NSError *error) {
+                                             failureBlockExecuted = YES;
+                                         }];
+            failureBlockExecuted should be_truthy;
+
             [helper.workerQueue drain];
         });
         
@@ -164,10 +119,7 @@ describe(@"OmniaPushSDK", ^{
         it(@"should handle registration failures from APNS", ^{
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_falsy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-            [helper.storage loadAPNSDeviceToken] should be_nil;
+            [OmniaPushPersistentStorage APNSDeviceToken] should be_nil;
         });
         
         it(@"should restore the application delegate after tearing down", ^{
@@ -178,7 +130,7 @@ describe(@"OmniaPushSDK", ^{
         });
     });
     
-    describe(@"failed registration with a listener", ^{
+    describe(@"failed registration with failure block", ^{
         
         __block NSError *testError;
         
@@ -186,23 +138,20 @@ describe(@"OmniaPushSDK", ^{
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-            [helper setApplicationInSingleton];
 
-            id listener = fake_for(@protocol(OmniaPushRegistrationListener));
-            listener stub_method("registrationFailedWithError:").with(testError);
-
-            sdk = [OmniaPushSDK registerWithParameters:helper.params listener:listener];
-            sdk should_not be_nil;
+            __block BOOL failureBlockExecuted = NO;
+            [OmniaPushSDK registerWithParameters:helper.params
+                                         success:nil
+                                         failure:^(NSURLResponse *response, NSError *error) {
+                                             failureBlockExecuted = YES;
+                                         }];
             
             [helper.workerQueue drain];
 
             helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
             helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            [helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]] should be_truthy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationCompleteOperation class]] should be_falsy;
-            [helper.workerQueue didFinishOperation:[OmniaPushRegistrationFailedOperation class]] should be_truthy;
-            [helper.storage loadAPNSDeviceToken] should be_nil;
-            listener should have_received("registrationFailedWithError:");
+            [OmniaPushPersistentStorage APNSDeviceToken] should be_nil;
+            failureBlockExecuted should be_truthy;
         });
     });
 });
