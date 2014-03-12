@@ -71,7 +71,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
-    [self setupApplicationForSuccessfulRegistrationWithNotificationTypes:notificationTypes withNewApnsDeviceToken:self.apnsDeviceToken];
+    [self setupApplicationForSuccessfulRegistrationWithNotificationTypes:notificationTypes
+                                                  withNewApnsDeviceToken:self.apnsDeviceToken];
 }
 
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
@@ -133,8 +134,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
     return self.workerQueue;
 }
-
-// TODO - need a method to drain operation queue
 
 #pragma mark - Parameters helpers
 

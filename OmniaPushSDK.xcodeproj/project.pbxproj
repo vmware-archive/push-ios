@@ -193,6 +193,7 @@
 		F174B62C18CFB0E6009771BB /* OmniaPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
 		F174B62D18CFB27D009771BB /* OmniaPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
 		F174B62E18D0F220009771BB /* OmniaPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
+		F174B62F18D0FF48009771BB /* OmniaPushSDKTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushSDKTest.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -565,6 +566,7 @@
 				F174B62C18CFB0E6009771BB /* OmniaPushBackEndRegistrationDataTest.h */,
 				F174B62D18CFB27D009771BB /* OmniaPushBackEndRegistrationRequestDataTest.h */,
 				F174B62E18D0F220009771BB /* OmniaPushBackEndRegistrationResponseDataTest.h */,
+				F174B62F18D0FF48009771BB /* OmniaPushSDKTest.h */,
 			);
 			name = "Test Headers";
 			path = "src/Test Headers";

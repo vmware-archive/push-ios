@@ -87,14 +87,14 @@ NSString *const kRegistrationToken   = @"registration_token";
 {
     *error = nil;
     
-    if (JSONData == nil || JSONData.length <= 0) {
-        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationRequestDataUnparseable localizedDescription:@"request data is empty"];
+    if (!JSONData || JSONData.length <= 0) {
+        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
         return nil;
     }
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:error];
     
-    if (*error != nil) {
+    if (error) {
         return nil;
     }
     

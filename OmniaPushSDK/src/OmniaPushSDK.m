@@ -37,20 +37,31 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
 #pragma mark - OmniaPushSDK
 
+static NSOperationQueue *_workerQueue;
+static dispatch_once_t onceToken;
+
 @implementation OmniaPushSDK
 
-+ (OmniaOperationQueue *)omniaPushOperationQueue {
-    static OmniaOperationQueue *workerQueue;
-    static dispatch_once_t onceToken;
++ (NSOperationQueue *)omniaPushOperationQueue {
     dispatch_once(&onceToken, ^{
-        workerQueue = [[OmniaOperationQueue alloc] init];
-        
-        //The UIApplication delegate will be deallocated unless it is strongly retained.
-        workerQueue.applicationDelegate = [[self sharedApplication] delegate];
-        workerQueue.maxConcurrentOperationCount = 1;
-        workerQueue.name = @"OmniaPushOperationQueue";
+        if (!_workerQueue) {
+            _workerQueue = [[OmniaOperationQueue alloc] init];
+            
+            if ([_workerQueue respondsToSelector:@selector(applicationDelegate)]) {
+                //The UIApplication delegate will be deallocated unless it is strongly retained.
+                [(OmniaOperationQueue *)_workerQueue setApplicationDelegate:[[self sharedApplication] delegate]];
+            }
+            _workerQueue.maxConcurrentOperationCount = 1;
+            _workerQueue.name = @"OmniaPushOperationQueue";
+        }
     });
-    return workerQueue;
+    return _workerQueue;
+}
+
++ (void)setWorkerQueue:(NSOperationQueue *)workerQueue
+{
+    onceToken = 0;
+    _workerQueue = workerQueue;
 }
 
 + (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
@@ -69,7 +80,7 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
     NSOperation *appDelegateOperation = [OmniaPushSDK APNSRegistrationOperationWithParameters:parameters
                                                                                  successBlock:success
                                                                                  failureBlock:failure];
-    [[self omniaPushOperationQueue] addOperation:appDelegateOperation];
+    [self.omniaPushOperationQueue addOperation:appDelegateOperation];
 }
 
 + (void)sendUnregisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters

@@ -58,12 +58,7 @@ typedef NS_ENUM(NSInteger, OmniaPushErrorCodes) {
     /**
      * The registration request JSON data object was badly formatted.
      */
-    OmniaPushBackEndRegistrationRequestDataUnparseable = 40,
-    
-    /**
-     * The registration response JSON data object was badly formatted.
-     */
-    OmniaPushBackEndRegistrationResponseDataUnparseable = 41,
+    OmniaPushBackEndRegistrationDataUnparseable = 40,
     
     
     /**

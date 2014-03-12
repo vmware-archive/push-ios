@@ -49,7 +49,10 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     context(@"constructing with valid arguments", ^{
         
         beforeEach(^{
-            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];
+            operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application
+                                                                       remoteNotificationTypes:helper.params.remoteNotificationTypes
+                                                                                       success:nil
+                                                                                       failure:nil];
         });
         
         it(@"should produce a valid instance", ^{

@@ -28,7 +28,7 @@
     
     if (params) {
         if (!releaseUUID) {
-            [NSException raise:NSInvalidArgumentException format:@"releaseUuid may not be nil"];
+            [NSException raise:NSInvalidArgumentException format:@"releaseUUID may not be nil"];
         }
         if (!releaseSecret) {
             [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be nil"];

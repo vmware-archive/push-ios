@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushSDK.h"
+#import "OmniaPushSDKTest.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
@@ -28,6 +28,7 @@ describe(@"OmniaPushSDK", ^{
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:testNotificationTypes];
         [helper setupQueues];
+        [OmniaPushSDK setWorkerQueue:helper.workerQueue];
         previousAppDelegate = helper.applicationDelegate;
     });
     
@@ -66,7 +67,7 @@ describe(@"OmniaPushSDK", ^{
             [OmniaPushSDK registerWithParameters:helper.params success:^(NSURLResponse *response, id responseObject) {
                 successBlockExecuted = YES;
             } failure:nil];
-            successBlockExecuted should be_truthy;
+            successBlockExecuted should be_truthy();
             
             [helper.workerQueue drain];
         });
