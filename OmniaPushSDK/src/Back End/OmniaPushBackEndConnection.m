@@ -47,6 +47,14 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                         success:(void (^)(NSURLResponse *response, NSData *data))success
                         failure:(void (^)(NSURLResponse *response, NSError *error))failure
 {
+    if (!success) {
+        [NSException raise:NSInvalidArgumentException format:@"success block may not be nil"];
+    }
+    
+    if (!failure) {
+        [NSException raise:NSInvalidArgumentException format:@"failure block may not be nil"];
+    }
+    
     void (^handler)(NSURLResponse *response, NSData *data, NSError *connectionError) = ^(NSURLResponse *response, NSData *data, NSError *connectionError)
     {
         if (connectionError) {
@@ -70,6 +78,14 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 + (NSMutableURLRequest *)registrationRequestForAPNSDeviceToken:(NSData *)apnsDeviceToken
                                                     parameters:(OmniaPushRegistrationParameters *)parameters
 {
+    if (!apnsDeviceToken) {
+        [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
+    }
+    
+    if (!parameters) {
+        [NSException raise:NSInvalidArgumentException format:@"OmniaPushRegistrationParameters may not be nil"];
+    }
+    
     NSURL *url = [NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL];
     NSTimeInterval timeout = BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS;
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:timeout];
