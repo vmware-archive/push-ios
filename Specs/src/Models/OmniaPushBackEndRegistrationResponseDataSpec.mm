@@ -8,6 +8,8 @@
 
 #import "OmniaPushBackEndRegistrationResponseData.h"
 #import "OmniaPushBackEndRegistrationRequestData.h"
+#import "OmniaPushBackEndRegistrationDataTest.h"
+#import "OmniaPushBackEndRegistrationResponseDataTest.h"
 #import "OmniaPushErrors.h"
 
 static NSString *const TEST_RELEASE_UUID         = @"123-456-789";
@@ -44,8 +46,8 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should start as nil", ^{
-            model.releaseUuid should be_nil;
-            model.deviceUuid should be_nil;
+            model.releaseUUID should be_nil;
+            model.deviceUUID should be_nil;
             model.deviceAlias should be_nil;
             model.deviceManufacturer should be_nil;
             model.deviceModel should be_nil;
@@ -54,14 +56,14 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             model.registrationToken should be_nil;
         });
         
-        it(@"should have a release_uuid", ^{
-            model.releaseUuid = TEST_RELEASE_UUID;
-            model.releaseUuid should equal(TEST_RELEASE_UUID);
+        it(@"should have a release_UUID", ^{
+            model.releaseUUID = TEST_RELEASE_UUID;
+            model.releaseUUID should equal(TEST_RELEASE_UUID);
         });
         
-        it(@"should have a deviceUuid", ^{
-            model.deviceUuid = TEST_DEVICE_UUID;
-            model.deviceUuid should equal(TEST_DEVICE_UUID);
+        it(@"should have a deviceUUID", ^{
+            model.deviceUUID = TEST_DEVICE_UUID;
+            model.deviceUUID should equal(TEST_DEVICE_UUID);
         });
         
         it(@"should have a device_alias", ^{
@@ -104,7 +106,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should handle a nil input", ^{
-            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:nil error:&error];
+            model = [OmniaPushBackEndRegistrationResponseData fromJSONData:nil error:&error];
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
@@ -112,7 +114,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should handle empty input", ^{
-            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:[NSData data] error:&error];
+            model = [OmniaPushBackEndRegistrationResponseData fromJSONData:[NSData data] error:&error];
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
@@ -120,8 +122,8 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should handle bad JSON", ^{
-            NSData *jsonData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:jsonData error:&error];
+            NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
+            model = [OmniaPushBackEndRegistrationResponseData fromJSONData:JSONData error:&error];
             model should be_nil;
             error should_not be_nil;
         });
@@ -140,14 +142,14 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             error should be_nil;
             data should_not be_nil;
-            model = [OmniaPushBackEndRegistrationResponseData fromJsonData:data error:&error];
+            model = [OmniaPushBackEndRegistrationResponseData fromJSONData:data error:&error];
             model.os should equal(TEST_OS);
             model.osVersion should equal(TEST_OS_VERSION);
-            model.deviceUuid should equal(TEST_DEVICE_UUID);
+            model.deviceUUID should equal(TEST_DEVICE_UUID);
             model.deviceAlias should equal(TEST_DEVICE_ALIAS);
             model.deviceManufacturer should equal(TEST_DEVICE_MANUFACTURER);
             model.deviceModel should equal(TEST_DEVICE_MODEL);
-            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.releaseUUID should equal(TEST_RELEASE_UUID);
             model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
         });
     });
@@ -167,8 +169,8 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
         context(@"populated object", ^{
             
             beforeEach(^{
-                model.releaseUuid = TEST_RELEASE_UUID;
-                model.deviceUuid = TEST_DEVICE_UUID;
+                model.releaseUUID = TEST_RELEASE_UUID;
+                model.deviceUUID = TEST_DEVICE_UUID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
                 model.deviceModel = TEST_DEVICE_MODEL;
@@ -193,11 +195,11 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
                 dict = [model toDictionary];
             });
             
-            it(@"should be jsonizable", ^{
-                NSData *jsonData = [model toJsonData];
-                jsonData should_not be_nil;
+            it(@"should be JSONizable", ^{
+                NSData *JSONData = [model toJSONData];
+                JSONData should_not be_nil;
                 NSError *error = nil;
-                dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+                dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
                 error should be_nil;
             });
         });
@@ -220,11 +222,11 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
                 dict = [model toDictionary];
             });
             
-            it(@"should be jsonizable", ^{
-                NSData *jsonData = [model toJsonData];
-                jsonData should_not be_nil;
+            it(@"should be JSONizable", ^{
+                NSData *JSONData = [model toJSONData];
+                JSONData should_not be_nil;
                 NSError *error = nil;
-                dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+                dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
                 error should be_nil;
             });
         });

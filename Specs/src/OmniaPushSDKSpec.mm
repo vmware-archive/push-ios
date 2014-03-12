@@ -11,7 +11,6 @@
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
-#import "OmniaRegistrationSpecHelper.h"
 
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
@@ -20,13 +19,11 @@ SPEC_BEGIN(OmniaPushSDKSpec)
 
 describe(@"OmniaPushSDK", ^{
     __block OmniaSpecHelper *helper = nil;
-    __block OmniaRegistrationSpecHelper *registrationHelper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
     __block UIRemoteNotificationType testNotificationTypes = TEST_NOTIFICATION_TYPES;
     
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
-        registrationHelper = [[OmniaRegistrationSpecHelper alloc] initWithSpecHelper:nil];
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:testNotificationTypes];
@@ -64,7 +61,6 @@ describe(@"OmniaPushSDK", ^{
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
-            [registrationHelper setupBackEndForSuccessfulRegistration];
 
             __block BOOL successBlockExecuted = NO;
             [OmniaPushSDK registerWithParameters:helper.params success:^(NSURLResponse *response, id responseObject) {

@@ -13,13 +13,13 @@
 #import "OmniaPushErrorUtil.h"
 #import "OmniaPushDebug.h"
 
-static NSString *const kReleaseUUID         = @"release_uuid";
-static NSString *const kDeviceAlias         = @"device_alias";
-static NSString *const kDeviceManufacturer  = @"device_manufacturer";
-static NSString *const kDeviceModel         = @"device_model";
-static NSString *const kDeviceOS            = @"os";
-static NSString *const kDeviceOSVersion     = @"os_version";
-static NSString *const kRegistrationToken   = @"registration_token";
+NSString *const kReleaseUUID         = @"release_uuid";
+NSString *const kDeviceAlias         = @"device_alias";
+NSString *const kDeviceManufacturer  = @"device_manufacturer";
+NSString *const kDeviceModel         = @"device_model";
+NSString *const kDeviceOS            = @"os";
+NSString *const kDeviceOSVersion     = @"os_version";
+NSString *const kRegistrationToken   = @"registration_token";
 
 @implementation OmniaPushBackEndRegistrationData
 

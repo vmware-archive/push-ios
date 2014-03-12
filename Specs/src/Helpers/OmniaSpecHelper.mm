@@ -8,17 +8,10 @@
 
 #import "OmniaSpecHelper.h"
 #import "OmniaPushSDK.h"
-#import "OmniaPushAppDelegateProxy.h"
 #import "OmniaPushDebug.h"
 #import "OmniaFakeOperationQueue.h"
-#import "OmniaPushOperationQueueProvider.h"
-#import "OmniaPushApplicationDelegateSwitcherProvider.h"
-#import "OmniaPushFakeApplicationDelegateSwitcher.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
-#import "OmniaPushRegistrationEngine.h"
-#import "OmniaPushFakeNSURLConnectionFactory.h"
-#import "OmniaPushNSURLConnectionProvider.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -66,8 +59,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.backEndDeviceId = nil;
     self.backEndDeviceId2 = nil;
     self.application = nil;
-    self.applicationDelegate = nil;
-    self.storage = nil;
 }
 
 #pragma mark - Application helpers

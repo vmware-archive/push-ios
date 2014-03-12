@@ -8,7 +8,7 @@
 
 #import "OmniaPushBackEndRegistrationRequestData.h"
 
-static NSString *const kReleaseSecret = @"secret";
+NSString *const kReleaseSecret = @"secret";
 
 @implementation OmniaPushBackEndRegistrationRequestData
 

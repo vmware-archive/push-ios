@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushBackEndRegistrationRequestData.h"
+#import "OmniaPushBackEndRegistrationRequestDataTest.h"
 #import "OmniaPushErrors.h"
 
 using namespace Cedar::Matchers;
@@ -43,7 +43,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should start as nil", ^{
-            model.releaseUuid should be_nil;
+            model.releaseUUID should be_nil;
             model.secret should be_nil;
             model.deviceAlias should be_nil;
             model.deviceManufacturer should be_nil;
@@ -54,8 +54,8 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should have a release_uuid", ^{
-            model.releaseUuid = TEST_RELEASE_UUID;
-            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.releaseUUID = TEST_RELEASE_UUID;
+            model.releaseUUID should equal(TEST_RELEASE_UUID);
         });
         
         it(@"should have a secret", ^{
@@ -103,7 +103,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should handle a nil input", ^{
-            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:nil error:&error];
+            model = [OmniaPushBackEndRegistrationRequestData fromJSONData:nil error:&error];
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
@@ -111,7 +111,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should handle empty input", ^{
-            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:[NSData data] error:&error];
+            model = [OmniaPushBackEndRegistrationRequestData fromJSONData:[NSData data] error:&error];
             model should be_nil;
             error should_not be_nil;
             error.domain should equal(OmniaPushErrorDomain);
@@ -119,8 +119,8 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should handle bad JSON", ^{
-            NSData *jsonData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:jsonData error:&error];
+            NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
+            model = [OmniaPushBackEndRegistrationRequestData fromJSONData:JSONData error:&error];
             model should be_nil;
             error should_not be_nil;
         });
@@ -139,13 +139,13 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             error should be_nil;
             data should_not be_nil;
-            model = [OmniaPushBackEndRegistrationRequestData fromJsonData:data error:&error];
+            model = [OmniaPushBackEndRegistrationRequestData fromJSONData:data error:&error];
             model.os should equal(TEST_OS);
             model.osVersion should equal(TEST_OS_VERSION);
             model.deviceAlias should equal(TEST_DEVICE_ALIAS);
             model.deviceManufacturer should equal(TEST_DEVICE_MANUFACTURER);
             model.deviceModel should equal(TEST_DEVICE_MODEL);
-            model.releaseUuid should equal(TEST_RELEASE_UUID);
+            model.releaseUUID should equal(TEST_RELEASE_UUID);
             model.secret should equal(TEST_SECRET);
             model.registrationToken should equal(TEST_REGISTRATION_TOKEN);
         });
@@ -166,7 +166,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         context(@"populated object", ^{
             
             beforeEach(^{
-                model.releaseUuid = TEST_RELEASE_UUID;
+                model.releaseUUID = TEST_RELEASE_UUID;
                 model.secret = TEST_SECRET;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
@@ -192,11 +192,11 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
                 dict = [model toDictionary];
             });
             
-            it(@"should be jsonizable", ^{
-                NSData *jsonData = [model toJsonData];
-                jsonData should_not be_nil;
+            it(@"should be JSONizable", ^{
+                NSData *JSONData = [model toJSONData];
+                JSONData should_not be_nil;
                 NSError *error = nil;
-                dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+                dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
                 error should be_nil;
             });
         });
@@ -219,11 +219,11 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
                 dict = [model toDictionary];
             });
             
-            it(@"should be jsonizable", ^{
-                NSData *jsonData = [model toJsonData];
-                jsonData should_not be_nil;
+            it(@"should be JSONizable", ^{
+                NSData *JSONData = [model toJSONData];
+                JSONData should_not be_nil;
                 NSError *error = nil;
-                dict = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
+                dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
                 error should be_nil;
             });
         });

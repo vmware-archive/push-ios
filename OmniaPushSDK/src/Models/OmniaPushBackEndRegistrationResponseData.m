@@ -8,7 +8,7 @@
 
 #import "OmniaPushBackEndRegistrationResponseData.h"
 
-static NSString *const kDeviceUUID = @"device_uuid";
+NSString *const kDeviceUUID = @"device_uuid";
 
 @implementation OmniaPushBackEndRegistrationResponseData
 

@@ -12,7 +12,6 @@
 
 @property (nonatomic, weak) UIApplication *application;
 
-@property (nonatomic) OmniaState state;
 @property (nonatomic) NSData *devToken;
 @property (nonatomic) NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (nonatomic) UIRemoteNotificationType remoteNotificationTypes;
