@@ -8,6 +8,7 @@
 
 #import "OmniaSpecHelper.h"
 #import "OmniaPushSDK.h"
+#import "JRSwizzle.h"
 #import "OmniaPushDebug.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushPersistentStorage.h"
@@ -168,6 +169,13 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
                                                                       releaseUUID:self.params.releaseUUID
                                                                     releaseSecret:self.params.releaseSecret
                                                                       deviceAlias:newDeviceAlias];
+}
+
+#pragma mark - NSURLConnection Helpers
+
+- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error
+{
+    return [NSURLConnection jr_swizzleClassMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) withClassMethod:selector error:error];
 }
 
 @end

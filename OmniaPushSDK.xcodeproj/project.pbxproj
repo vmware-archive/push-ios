@@ -88,6 +88,8 @@
 		F168B75918BBF6EB00455508 /* OmniaPushHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F168B75718BBF6EB00455508 /* OmniaPushHardwareUtil.h */; };
 		F168B75A18BBF6EB00455508 /* OmniaPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F168B75818BBF6EB00455508 /* OmniaPushHardwareUtil.m */; };
 		F168B75B18BBF6EB00455508 /* OmniaPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F168B75818BBF6EB00455508 /* OmniaPushHardwareUtil.m */; };
+		F174B6D618D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F174B6D518D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.m */; };
+		F174B6D918D24992009771BB /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F174B6D818D24992009771BB /* JRSwizzle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -194,6 +196,10 @@
 		F174B62D18CFB27D009771BB /* OmniaPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
 		F174B62E18D0F220009771BB /* OmniaPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
 		F174B62F18D0FF48009771BB /* OmniaPushSDKTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OmniaPushSDKTest.h; sourceTree = "<group>"; };
+		F174B6D418D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLConnection+OmniaAsync2Sync.h"; path = "src/Helpers/NSURLConnection+OmniaAsync2Sync.h"; sourceTree = "<group>"; };
+		F174B6D518D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+OmniaAsync2Sync.m"; path = "src/Helpers/NSURLConnection+OmniaAsync2Sync.m"; sourceTree = "<group>"; };
+		F174B6D718D24992009771BB /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JRSwizzle.h; path = src/Helpers/JRSwizzle.h; sourceTree = "<group>"; };
+		F174B6D818D24992009771BB /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JRSwizzle.m; path = src/Helpers/JRSwizzle.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -277,8 +283,12 @@
 		D4433F8D18735086005C100C /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				F174B6D718D24992009771BB /* JRSwizzle.h */,
+				F174B6D818D24992009771BB /* JRSwizzle.m */,
 				D4433F8A18735080005C100C /* OmniaSpecHelper.h */,
 				D4433F8B18735080005C100C /* OmniaSpecHelper.mm */,
+				F174B6D418D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.h */,
+				F174B6D518D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -773,7 +783,9 @@
 				D4601417188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */,
 				F110713318C66C47007EE7F1 /* OmniaPushBackEndConnection.m in Sources */,
 				D4433F871873147D005C100C /* OmniaPushSDK.m in Sources */,
+				F174B6D618D2497A009771BB /* NSURLConnection+OmniaAsync2Sync.m in Sources */,
 				D421713C18984466007A26A5 /* OmniaPushHexUtil.m in Sources */,
+				F174B6D918D24992009771BB /* JRSwizzle.m in Sources */,
 				D44BE7BA187F0A9E00971A2A /* OmniaPushAPNSRegistrationRequestOperationSpec.mm in Sources */,
 				D4871050188F185200AE1660 /* OmniaPushRegistrationParameters.m in Sources */,
 				D42171541898596A007A26A5 /* OmniaPushBackEndConnectionSpec.mm in Sources */,
@@ -976,6 +988,8 @@
 					"$(inherited)",
 					Specs/Frameworks,
 					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
+					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs",
+					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
@@ -1006,6 +1020,8 @@
 					"$(inherited)",
 					Specs/Frameworks,
 					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
+					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs",
+					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;

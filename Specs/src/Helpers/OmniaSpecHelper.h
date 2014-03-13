@@ -60,4 +60,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret;
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias;
 
+// NSURLConnectionHelpers
+- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error;
+
 @end;
