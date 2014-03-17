@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:OmniaPush"
+      name = "OmniaPush">
+      <Group
+         location = "group:App"
+         name = "App">
+         <FileRef
+            location = "group:OmniaPushAPNSRegistrationRequestOperation.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushAPNSRegistrationRequestOperation.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushApplicationDelegateSwitcherImpl.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushApplicationDelegateSwitcherImpl.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Back End"
+         name = "Back End">
+         <FileRef
+            location = "group:OmniaPushBackEndConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Models"
+         name = "Models">
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationData.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationData.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationRequestData.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationRequestData.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationResponseData.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushBackEndRegistrationResponseData.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushRegistrationParameters.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushRegistrationParameters.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:OmniaPushSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:OmniaPushSDK.m">
+      </FileRef>
+      <Group
+         location = "group:Persistent Storage"
+         name = "Persistent Storage">
+         <FileRef
+            location = "group:OmniaPushPersistentStorage.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushPersistentStorage.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Protocols"
+         name = "Protocols">
+         <FileRef
+            location = "group:OmniaPushApplicationDelegateSwitcherProtocol.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushDictionaryizable.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushJsonizable.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Public Headers"
+         name = "Public Headers">
+         <FileRef
+            location = "group:OmniaPushErrors.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Util"
+         name = "Util">
+         <FileRef
+            location = "group:OmniaPushDebug.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushDebug.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushErrorUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushErrorUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushHardwareUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushHardwareUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushHexUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:OmniaPushHexUtil.m">
+         </FileRef>
+      </Group>
+   </Group>
+   <FileRef
+      location = "group:Framework/OmniaPushSDK.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DemoApp/PushSDKDemo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Specs/OmniaPush Spec.xcodeproj">
+   </FileRef>
+</Workspace>
