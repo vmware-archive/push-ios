@@ -35,7 +35,6 @@
 		D4601415188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = D4601413188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.h */; };
 		D4601416188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = D4601414188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m */; };
 		D4601417188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = D4601414188488E600EF09FF /* OmniaPushApplicationDelegateSwitcherImpl.m */; };
-		D4615E3218B512BE00CA0D2B /* Cedar-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */; };
 		D487102E1889B8B400AE1660 /* OmniaPushPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D487102C1889B8B400AE1660 /* OmniaPushPersistentStorage.h */; };
 		D487102F1889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */; };
 		D48710301889B8B400AE1660 /* OmniaPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D487102D1889B8B400AE1660 /* OmniaPushPersistentStorage.m */; };
@@ -85,6 +84,7 @@
 		F147F49C18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F147F49A18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m */; };
 		F147F49D18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F147F49A18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m */; };
 		F147F49E18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F147F49A18CA66E600728D1D /* OmniaPushBackEndRegistrationData.m */; };
+		F15C6F2718D7491D007829BD /* Cedar-iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4615E3118B512BE00CA0D2B /* Cedar-iOS.framework */; };
 		F168B75918BBF6EB00455508 /* OmniaPushHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F168B75718BBF6EB00455508 /* OmniaPushHardwareUtil.h */; };
 		F168B75A18BBF6EB00455508 /* OmniaPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F168B75818BBF6EB00455508 /* OmniaPushHardwareUtil.m */; };
 		F168B75B18BBF6EB00455508 /* OmniaPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F168B75818BBF6EB00455508 /* OmniaPushHardwareUtil.m */; };
@@ -215,9 +215,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F15C6F2718D7491D007829BD /* Cedar-iOS.framework in Frameworks */,
 				D4E8A825185BAFE900A841EE /* CoreGraphics.framework in Frameworks */,
 				D4E8A822185BAFE900A841EE /* UIKit.framework in Frameworks */,
-				D4615E3218B512BE00CA0D2B /* Cedar-iOS.framework in Frameworks */,
 				D4E8A823185BAFE900A841EE /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -986,10 +986,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					Specs/Frameworks,
-					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
-					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs",
-					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs/Frameworks",
+					"$(PROJECT_DIR)/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
@@ -1018,10 +1015,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					Specs/Frameworks,
-					"/Users/rob/xl/omnia-pushsdk-ios/Specs/Frameworks",
-					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs",
-					"/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/Specs/Frameworks",
+					"$(PROJECT_DIR)/Specs/Frameworks",
 				);
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
