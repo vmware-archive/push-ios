@@ -132,4 +132,7 @@
    <FileRef
       location = "group:Specs/OmniaPush Spec.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Specs/Pods/Pods.xcodeproj">
+   </FileRef>
 </Workspace>

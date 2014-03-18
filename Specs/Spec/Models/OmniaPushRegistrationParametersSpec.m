@@ -6,10 +6,9 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushRegistrationParameters.h"
+#import "Kiwi.h"
 
-using namespace Cedar::Matchers;
-using namespace Cedar::Doubles;
+#import "OmniaPushRegistrationParameters.h"
 
 static NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
@@ -30,32 +29,32 @@ describe(@"OmniaPushRegistrationParameters", ^{
     context(@"initializing with bad arguments", ^{
         
         afterEach(^{
-            model should be_nil;
+            [[model should] beNil];
         });
-       
+        
         it(@"should require a non-nil releaseUuid", ^{
-            ^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
-            should raise_exception([NSException class]);
+            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
+              should] raise];
         });
         
         it(@"should require a non-empty releaseUuid", ^{
-            ^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
-            should raise_exception([NSException class]);
+            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
+              should] raise];
         });
         
         it(@"should require a non-nil releaseSecret", ^{
-            ^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];}
-            should raise_exception([NSException class]);
+            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];}
+              should] raise];
         });
         
         it(@"should require a non-empty releaseSecret", ^{
-            ^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];}
-            should raise_exception([NSException class]);
+            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];}
+              should] raise];
         });
         
         it(@"should require a non-nil deviceAlias", ^{
-            ^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];}
-            should raise_exception([NSException class]);
+            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];}
+              should] raise];
         });
     });
     
@@ -66,14 +65,14 @@ describe(@"OmniaPushRegistrationParameters", ^{
         });
         
         it(@"should be initialized successfully", ^{
-            model should_not be_nil;
+            [[model shouldNot] beNil];
         });
         
         it(@"should retain its arguments as properties", ^{
-            model.remoteNotificationTypes should equal(TEST_NOTIFICATION_TYPES);
-            model.releaseUUID should equal(TEST_RELEASE_UUID);
-            model.releaseSecret should equal(TEST_RELEASE_SECRET);
-            model.deviceAlias should be_empty;
+            [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
+            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+            [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
+            [[model.deviceAlias should] beEmpty];
         });
     });
 
@@ -84,14 +83,14 @@ describe(@"OmniaPushRegistrationParameters", ^{
         });
         
         it(@"should be initialized successfully", ^{
-            model should_not be_nil;
+            [[model shouldNot] beNil];
         });
         
         it(@"should retain its arguments as properties", ^{
-            model.remoteNotificationTypes should equal(TEST_NOTIFICATION_TYPES);
-            model.releaseUUID should equal(TEST_RELEASE_UUID);
-            model.releaseSecret should equal(TEST_RELEASE_SECRET);
-            model.deviceAlias should equal(TEST_DEVICE_ALIAS);
+            [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
+            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+            [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
+            [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
         });
     });
 });

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
+#import "Kiwi.h"
+
 #import "OmniaSpecHelper.h"
 #import "OmniaPushSDK.h"
 #import "JRSwizzle.h"
@@ -20,9 +22,6 @@
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
 #endif
-
-using namespace Cedar::Matchers;
-using namespace Cedar::Doubles;
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
@@ -66,7 +65,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (id) setupApplication
 {
-    self.application = fake_for([UIApplication class]);
+    self.application = [KWMock mockForClass:[UIApplication class]];
     return self.application;
 }
 
@@ -79,16 +78,18 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
                                                  withNewApnsDeviceToken:(NSData*)newApnsDeviceToken
 {
-    self.application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
+    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
-    });
+        return nil;
+    }];
 }
 
 - (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError *)error
 {
-    self.application stub_method("registerForRemoteNotificationTypes:").with(notificationTypes).and_do(^(NSInvocation*) {
+    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         [[self currentApplicationDelegate] application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
-    });
+        return nil;
+    }];
 }
 
 #pragma mark - App Delegate Helpers
@@ -100,11 +101,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
-    self.applicationDelegate = fake_for(@protocol(UIApplicationDelegate));
-    self.application stub_method("delegate").and_do(^(NSInvocation *invocation) {
-        id<UIApplicationDelegate> d = [self currentApplicationDelegate];
-        [invocation setReturnValue:&d];
-    });
+    id delegateMock = [KWMock mockForProtocol:@protocol(UIApplicationDelegate)];
+    [delegateMock stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, nil, nil];
+//    [[delegateMock should] conformsToProtocol:@protocol(UIApplicationDelegate)];
+    self.applicationDelegate = delegateMock;
+    [self.application stub:@selector(delegate) andReturn:[self currentApplicationDelegate]];
     return self.applicationDelegate;
 }
 
@@ -113,19 +114,20 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [self setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:self.apnsDeviceToken];
 }
 
-- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken
+- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData *)apnsDeviceToken
 {
-    self.applicationDelegate stub_method("application:didRegisterForRemoteNotificationsWithDeviceToken:").with(self.application, apnsDeviceToken);
+    [(id)self.applicationDelegate stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, apnsDeviceToken, nil];
+//    [stub stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguements:self.application, apnsDeviceToken, nil];
 }
 
-- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error
+- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error
 {
-    self.applicationDelegate stub_method("application:didFailToRegisterForRemoteNotificationsWithError:").with(self.application, error);
+    [(id)self.applicationDelegate stub:@selector(application:didFailToRegisterForRemoteNotificationsWithError:) withArguments:self.application, error, nil];
 }
 
-- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary*)userInfo
+- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary *)userInfo
 {
-    self.applicationDelegate stub_method("application:didReceiveRemoteNotification:").with(self.application, userInfo);
+    [(id)self.applicationDelegate stub:@selector(application:didReceiveRemoteNotification:) withArguments:self.application, userInfo, nil];
 }
 
 #pragma mark - Operation Queue helpers

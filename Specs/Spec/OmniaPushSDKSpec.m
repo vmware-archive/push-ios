@@ -6,14 +6,12 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
+#import "Kiwi.h"
 #import "OmniaPushSDKTest.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
-
-using namespace Cedar::Matchers;
-using namespace Cedar::Doubles;
 
 SPEC_BEGIN(OmniaPushSDKSpec)
 
@@ -47,13 +45,13 @@ describe(@"OmniaPushSDK", ^{
                    
         it(@"should require a parameters object", ^{
             __block BOOL blockExecuted = NO;
-            ^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
+            [[^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
                 blockExecuted = YES;
             } failure:^(NSURLResponse *response, NSError *error) {
                 blockExecuted = YES;
             }];}
-                should raise_exception([NSException class]);
-            blockExecuted should be_falsy;
+              should] raise];
+            [[theValue(blockExecuted) should] beFalse];
         });
     });
 
@@ -67,22 +65,22 @@ describe(@"OmniaPushSDK", ^{
             [OmniaPushSDK registerWithParameters:helper.params success:^(NSURLResponse *response, id responseObject) {
                 successBlockExecuted = YES;
             } failure:nil];
-            successBlockExecuted should be_truthy();
+            [[theValue(successBlockExecuted) should] beTrue];
             
             [helper.workerQueue drain];
         });
         
         it(@"should handle successful registrations from APNS", ^{
-            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-            helper.applicationDelegate should have_received("application:didRegisterForRemoteNotificationsWithDeviceToken:");
-            [OmniaPushPersistentStorage APNSDeviceToken] should equal(helper.apnsDeviceToken);
+            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate should] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
+            [[[OmniaPushPersistentStorage APNSDeviceToken] should] equal:helper.apnsDeviceToken];
         });
 
         it(@"should restore the application delegate after tearing down", ^{
             SEL teardownSelector = sel_registerName("teardown");
             [OmniaPushSDK performSelector:teardownSelector];
             UIApplication *app = (UIApplication*)(helper.application);
-            app.delegate should be_same_instance_as(previousAppDelegate);
+            [[(id)app.delegate should] equal:previousAppDelegate];
         });
     });
     
@@ -101,7 +99,7 @@ describe(@"OmniaPushSDK", ^{
                                          failure:^(NSURLResponse *response, NSError *error) {
                                              failureBlockExecuted = YES;
                                          }];
-            failureBlockExecuted should be_truthy;
+            [[theValue(failureBlockExecuted) should] beTrue];
 
             [helper.workerQueue drain];
         });
@@ -111,16 +109,16 @@ describe(@"OmniaPushSDK", ^{
         });
         
         it(@"should handle registration failures from APNS", ^{
-            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-            helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            [OmniaPushPersistentStorage APNSDeviceToken] should be_nil;
+            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate should] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
+            [[[OmniaPushPersistentStorage APNSDeviceToken] should] beNil];
         });
         
         it(@"should restore the application delegate after tearing down", ^{
             SEL teardownSelector = sel_registerName("teardown");
             [OmniaPushSDK performSelector:teardownSelector];
             UIApplication *app = (UIApplication*)(helper.application);
-            app.delegate should be_same_instance_as(previousAppDelegate);
+            [[(id)app.delegate should] equal:previousAppDelegate];
         });
     });
     
@@ -142,10 +140,10 @@ describe(@"OmniaPushSDK", ^{
             
             [helper.workerQueue drain];
 
-            helper.application should have_received(@selector(registerForRemoteNotificationTypes:));
-            helper.applicationDelegate should have_received("application:didFailToRegisterForRemoteNotificationsWithError:");
-            [OmniaPushPersistentStorage APNSDeviceToken] should be_nil;
-            failureBlockExecuted should be_truthy;
+            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate should] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
+            [[[OmniaPushPersistentStorage APNSDeviceToken] should] beNil];
+            [[theValue(failureBlockExecuted) should] beTrue];
         });
     });
 });

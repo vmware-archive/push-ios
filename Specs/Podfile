@@ -2,13 +2,8 @@ xcodeproj 'OmniaPush Spec'
 workspace '../OmniaPush'
 inhibit_all_warnings!
 
-def import_pods
-  pod 'Kiwi', 
+target :OmniaPushTests, :exclusive => true do
+  platform :ios, '6.0'
+  pod 'Kiwi/XCTest'
   pod 'OmniaPush', :path => '../'
-end
-
-target :ios do
-  platform :ios, '7.0'
-  link_with 'iOS Tests'
-  import_pods
 end

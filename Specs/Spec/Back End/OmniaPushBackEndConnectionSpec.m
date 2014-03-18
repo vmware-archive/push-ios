@@ -6,14 +6,13 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
+#import "Kiwi.h"
+
 #import "NSURLConnection+OmniaAsync2Sync.h"
 #import "OmniaPushBackEndConnection.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushErrors.h"
 #import "OmniaSpecHelper.h"
-
-using namespace Cedar::Matchers;
-using namespace Cedar::Doubles;
 
 SPEC_BEGIN(OmniaPushBackEndConnectionSpec)
 
@@ -34,40 +33,40 @@ describe(@"OmniaPushBackEndConnection", ^{
     
     context(@"bad object arguments", ^{
         
-        fit(@"should require an APNS device token", ^{
-            ^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+        it(@"should require an APNS device token", ^{
+            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                           withParameters:helper.params
                                                                 devToken:nil
                                                                  success:^(NSURLResponse *response, NSData *data) {}
                                                                  failure:^(NSURLResponse *response, NSError *error) {}];}
-            should raise_exception([NSException class]);
+              should] raise];
         });
-
+        
         it(@"should require a registration parameters", ^{
-            ^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                          withParameters:nil
-                                                                devToken:helper.apnsDeviceToken
-                                                                 success:^(NSURLResponse *response, NSData *data) {}
-                                                                 failure:^(NSURLResponse *response, NSError *error) {}];}
-            should raise_exception([NSException class]);
+            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+                                                           withParameters:nil
+                                                                 devToken:helper.apnsDeviceToken
+                                                                  success:^(NSURLResponse *response, NSData *data) {}
+                                                                  failure:^(NSURLResponse *response, NSError *error) {}];}
+             should] raise];
         });
         
         it(@"should require a success block", ^{
-            ^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                           withParameters:helper.params
                                                                 devToken:helper.apnsDeviceToken
                                                                  success:nil
                                                                  failure:^(NSURLResponse *response, NSError *error) {}];}
-            should raise_exception([NSException class]);
+            should] raise];
         });
         
         it(@"should require a failure block", ^{
-            ^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                          withParameters:helper.params
-                                                                devToken:helper.apnsDeviceToken
-                                                                 success:^(NSURLResponse *response, NSData *data) {}
-                                                                 failure:nil];}
-            should raise_exception([NSException class]);
+            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+                                                            withParameters:helper.params
+                                                                  devToken:helper.apnsDeviceToken
+                                                                   success:^(NSURLResponse *response, NSData *data) {}
+                                                                   failure:nil];}
+              should] raise];
         });
     });
     
@@ -80,7 +79,7 @@ describe(@"OmniaPushBackEndConnection", ^{
         });
         
         afterEach(^{
-            wasExpectedResult should be_truthy;
+            [[theValue(wasExpectedResult) should] beTrue];
         });
         
         it(@"should handle a failed request", ^{
@@ -93,7 +92,7 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [error domain] should equal(NSURLErrorDomain);
+                                                                   [[error.domain should] equal:NSURLErrorDomain];
                                                                    wasExpectedResult = YES;
                                                                }];
         });
@@ -109,8 +108,8 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                 }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   error.domain should equal(OmniaPushErrorDomain);
-                                                                   error.code should equal(OmniaPushBackEndRegistrationFailedHTTPStatusCode);
+                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationFailedHTTPStatusCode)];
                                                                    wasExpectedResult = YES;
                                                                }];
         });
@@ -126,8 +125,8 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   error.domain should equal(OmniaPushErrorDomain);
-                                                                   error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
+                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                                    wasExpectedResult = YES;
                                                                }];
             
@@ -144,8 +143,8 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   error.domain should equal(OmniaPushErrorDomain);
-                                                                   error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
+                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                                    wasExpectedResult = YES;
                                                                }];
         });
@@ -161,8 +160,8 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   error.domain should equal(OmniaPushErrorDomain);
-                                                                   error.code should equal(OmniaPushBackEndRegistrationEmptyResponseData);
+                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                                    wasExpectedResult = YES;
                                                                }];
         });
@@ -178,7 +177,7 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = NO;
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
-                                                                   error should_not be_nil;
+                                                                   [[error shouldNot] beNil];
                                                                    wasExpectedResult = YES;
                                                                }];
         });
@@ -195,8 +194,8 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                }
                                                                failure:^(NSURLResponse *response, NSError *error) {
                                                                    wasExpectedResult = YES;
-                                                                   error.domain should equal(OmniaPushErrorDomain);
-                                                                   error.code should equal(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid);
+                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid)];
                                                                }];
         });
             
