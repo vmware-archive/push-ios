@@ -11,15 +11,6 @@
 #import "OmniaPushBackEndRegistrationRequestDataTest.h"
 #import "OmniaPushErrors.h"
 
-static NSString *const TEST_RELEASE_UUID        = @"123-456-789";
-static NSString *const TEST_SECRET              =  @"My cat's breath smells like cat food";
-static NSString *const TEST_DEVICE_ALIAS        =  @"l33t devices of badness";
-static NSString *const TEST_DEVICE_MANUFACTURER = @"Commodore";
-static NSString *const TEST_DEVICE_MODEL        = @"64C";
-static NSString *const TEST_OS                  = @"BASIC";
-static NSString *const TEST_OS_VERSION          = @"2.0";
-static NSString *const TEST_REGISTRATION_TOKEN  = @"ABC-DEF-GHI";
-
 SPEC_BEGIN(OmniaPushBackEndRegistrationRequestDataSpec)
 
 describe(@"OmniaPushBackEndRegistrationRequestData", ^{
@@ -95,13 +86,8 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
     
     context(@"deserialization", ^{
         
-        __block NSError *error = nil;
-        
-        afterEach(^{
-            error = nil;
-        });
-        
         it(@"should handle a nil input", ^{
+            NSError *error;
             model = [OmniaPushBackEndRegistrationRequestData fromJSONData:nil error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
@@ -110,6 +96,7 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should handle empty input", ^{
+            NSError *error;
             model = [OmniaPushBackEndRegistrationRequestData fromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
@@ -118,13 +105,16 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
         });
         
         it(@"should handle bad JSON", ^{
+            NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
             model = [OmniaPushBackEndRegistrationRequestData fromJSONData:JSONData error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
         });
         
-        it(@"should construct a complete response object", ^{
+        it(@"should construct a complete request object", ^{
+            NSError *error;
+            
             id dict = @{
                         kDeviceOS : TEST_OS,
                         kDeviceOSVersion : TEST_OS_VERSION,
@@ -136,9 +126,11 @@ describe(@"OmniaPushBackEndRegistrationRequestData", ^{
                         kRegistrationToken : TEST_REGISTRATION_TOKEN,
                         };
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
-            [[error  should] beNil];
+            [[error should] beNil];
             [[data shouldNot] beNil];
+            
             model = [OmniaPushBackEndRegistrationRequestData fromJSONData:data error:&error];
+            [[error should] beNil];
             [[model.os should] equal:TEST_OS];
             [[model.osVersion should] equal:TEST_OS_VERSION ];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];

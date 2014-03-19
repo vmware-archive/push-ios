@@ -78,11 +78,6 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     return self;
 }
 
-- (void)dealloc
-{
-    NSLog(@"DEALLOC");
-}
-
 - (void)cleanup
 {
     if (self.application && self.originalApplicationDelegate) {

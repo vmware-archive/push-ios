@@ -23,7 +23,6 @@ describe(@"OmniaPushBackEndConnection", ^{
     beforeEach(^{
         helper = [[OmniaSpecHelper alloc] init];
         [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-        [helper setupQueues];
     });
     
     afterEach(^{
@@ -34,38 +33,38 @@ describe(@"OmniaPushBackEndConnection", ^{
     context(@"bad object arguments", ^{
         
         it(@"should require an APNS device token", ^{
-            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                           withParameters:helper.params
                                                                 devToken:nil
                                                                  success:^(NSURLResponse *response, NSData *data) {}
-                                                                 failure:^(NSURLResponse *response, NSError *error) {}];}
+                                                                 failure:^(NSURLResponse *response, NSError *error) {}];})
               should] raise];
         });
         
         it(@"should require a registration parameters", ^{
-            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                            withParameters:nil
                                                                  devToken:helper.apnsDeviceToken
                                                                   success:^(NSURLResponse *response, NSData *data) {}
-                                                                  failure:^(NSURLResponse *response, NSError *error) {}];}
+                                                                  failure:^(NSURLResponse *response, NSError *error) {}];})
              should] raise];
         });
         
         it(@"should require a success block", ^{
-            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                           withParameters:helper.params
                                                                 devToken:helper.apnsDeviceToken
                                                                  success:nil
-                                                                 failure:^(NSURLResponse *response, NSError *error) {}];}
+                                                                 failure:^(NSURLResponse *response, NSError *error) {}];})
             should] raise];
         });
         
         it(@"should require a failure block", ^{
-            [[^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
+            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
                                                             withParameters:helper.params
                                                                   devToken:helper.apnsDeviceToken
                                                                    success:^(NSURLResponse *response, NSData *data) {}
-                                                                   failure:nil];}
+                                                                   failure:nil];})
               should] raise];
         });
     });
@@ -96,109 +95,6 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    wasExpectedResult = YES;
                                                                }];
         });
-
-        it(@"should handle an HTTP status error", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(HTTPErrorResponseRequest:queue:completionHandler:) error:&error];
-
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                                }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
-                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationFailedHTTPStatusCode)];
-                                                                   wasExpectedResult = YES;
-                                                               }];
-        });
-        
-        it(@"should handle a successful response with empty data", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(emptyDataResponseRequest:queue:completionHandler:) error:&error];
-            
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
-                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
-                                                                   wasExpectedResult = YES;
-                                                               }];
-            
-        });
-        
-        it(@"should handle a successful response with nil data", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(nilDataResponseRequest:queue:completionHandler:) error:&error];
-            
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
-                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
-                                                                   wasExpectedResult = YES;
-                                                               }];
-        });
-        
-        it(@"should handle a successful response with zero-length", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(zeroLengthDataResponseRequest:queue:completionHandler:) error:&error];
-            
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
-                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
-                                                                   wasExpectedResult = YES;
-                                                               }];
-        });
-        
-        it(@"should handle a successful response that contains unparseable text", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(unparseableDataResponseRequest:queue:completionHandler:) error:&error];
-            
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error shouldNot] beNil];
-                                                                   wasExpectedResult = YES;
-                                                               }];
-        });
-        
-        it(@"should require a device_uuid in the server response", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(missingUUIDResponseRequest:queue:completionHandler:) error:&error];
-            
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   wasExpectedResult = YES;
-                                                                   [[error.domain should] equal:OmniaPushErrorDomain];
-                                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid)];
-                                                               }];
-        });
-            
     });
     
 });

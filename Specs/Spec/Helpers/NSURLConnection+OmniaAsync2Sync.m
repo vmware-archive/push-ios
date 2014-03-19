@@ -7,8 +7,30 @@
 //
 
 #import "NSURLConnection+OmniaAsync2Sync.h"
+#import "OmniaPushBackEndRegistrationResponseDataTest.h"
 
 @implementation NSURLConnection (OmniaAsync2Sync)
+
++ (void) successfulRequest:(NSURLRequest *)request
+                     queue:(NSOperationQueue *)queue
+         completionHandler:(void (^)(NSURLResponse *response, NSData *data, NSError *connectionError)) handler
+{
+    NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+    NSDictionary *dict = @{
+                           kDeviceOS : TEST_OS,
+                           kDeviceOSVersion : TEST_OS_VERSION,
+                           kDeviceUUID : TEST_DEVICE_UUID,
+                           kDeviceAlias : TEST_DEVICE_ALIAS,
+                           kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                           kDeviceModel : TEST_DEVICE_MODEL,
+                           kReleaseUUID : TEST_RELEASE_UUID,
+                           kRegistrationToken : TEST_REGISTRATION_TOKEN,
+                           };
+    NSError *error;
+    NSData *newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
+    handler(newResponse, newData, nil);
+}
+
 
 + (void) failedRequestRequest:(NSURLRequest *)request
                         queue:(NSOperationQueue *)queue

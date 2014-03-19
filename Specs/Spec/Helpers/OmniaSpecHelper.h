@@ -44,7 +44,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError*)error;
 
 // Application Delegate helpers
-- (id<UIApplicationDelegate>) currentApplicationDelegate;
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
 - (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken;

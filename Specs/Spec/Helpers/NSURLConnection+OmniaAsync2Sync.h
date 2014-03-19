@@ -10,6 +10,10 @@
 
 @interface NSURLConnection (OmniaAsync2Sync)
 
++ (void) successfulRequest:(NSURLRequest *)request
+                     queue:(NSOperationQueue *)queue
+         completionHandler:(void (^)(NSURLResponse *response, NSData *data, NSError *connectionError)) handler;
+
 + (void) failedRequestRequest:(NSURLRequest *)request
                          queue:(NSOperationQueue *)queue
              completionHandler:(void (^)(NSURLResponse* response, NSData* data, NSError* connectionError)) handler;

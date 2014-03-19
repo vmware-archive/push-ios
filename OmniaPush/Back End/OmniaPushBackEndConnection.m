@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
+#import "OmniaPushErrors.h"
 #import "OmniaPushBackEndConnection.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushHexUtil.h"
@@ -19,7 +20,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 @implementation OmniaPushBackEndConnection
 
-+ (void)sendUnregistrationRequestOnQueue:(NSOperationQueue *)queue
++ (void)sendUnregisterRequestOnQueue:(NSOperationQueue *)queue
                           withDeviceID:(NSString *)deviceID
                                success:(void (^)(NSURLResponse *response, NSData *data))success
                                failure:(void (^)(NSURLResponse *response, NSError *error))failure

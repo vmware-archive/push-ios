@@ -1,5 +1,5 @@
 //
-//  OmniaPushSDKSpec.mm
+//  OmniaPushSDKSpec.m
 //  OmniaPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-02-14.
@@ -7,11 +7,14 @@
 //
 
 #import "Kiwi.h"
+
 #import "OmniaPushSDKTest.h"
+#import "OmniaPushErrors.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
+#import "NSURLConnection+OmniaAsync2Sync.h"
 
 SPEC_BEGIN(OmniaPushSDKSpec)
 
@@ -45,11 +48,11 @@ describe(@"OmniaPushSDK", ^{
                    
         it(@"should require a parameters object", ^{
             __block BOOL blockExecuted = NO;
-            [[^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
+            [[theBlock(^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
                 blockExecuted = YES;
             } failure:^(NSURLResponse *response, NSError *error) {
                 blockExecuted = YES;
-            }];}
+            }];})
               should] raise];
             [[theValue(blockExecuted) should] beFalse];
         });
@@ -57,94 +60,183 @@ describe(@"OmniaPushSDK", ^{
 
     describe(@"successful registration", ^{
         
+        __block BOOL expectedResult = NO;
+        
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
-
-            __block BOOL successBlockExecuted = NO;
-            [OmniaPushSDK registerWithParameters:helper.params success:^(NSURLResponse *response, id responseObject) {
-                successBlockExecuted = YES;
-            } failure:nil];
-            [[theValue(successBlockExecuted) should] beTrue];
             
-            [helper.workerQueue drain];
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(successfulRequest:queue:completionHandler:) error:&error];
+            [[error should] beNil];
+            expectedResult = NO;
+        });
+        
+        afterEach(^{
+            [[theValue(expectedResult) should] beTrue];
+            expectedResult = NO;
         });
         
         it(@"should handle successful registrations from APNS", ^{
-            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate should] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
-            [[[OmniaPushPersistentStorage APNSDeviceToken] should] equal:helper.apnsDeviceToken];
-        });
 
-        it(@"should restore the application delegate after tearing down", ^{
-            SEL teardownSelector = sel_registerName("teardown");
-            [OmniaPushSDK performSelector:teardownSelector];
-            UIApplication *app = (UIApplication*)(helper.application);
-            [[(id)app.delegate should] equal:previousAppDelegate];
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
+            
+            [OmniaPushSDK registerWithParameters:helper.params
+                                         success:^(NSURLResponse *response, id responseObject) {
+                                             expectedResult = YES;
+                                         }
+                                         failure:^(NSURLResponse *response, NSError *error) {
+                                             expectedResult = NO;
+                                         }];
+
+            [[[OmniaPushPersistentStorage APNSDeviceToken] shouldEventually] equal:helper.apnsDeviceToken];
         });
     });
     
     describe(@"failed registration", ^{
 
         __block NSError *testError;
+        __block BOOL expectedResult = NO;
 
         beforeEach(^{
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-            
-            __block BOOL failureBlockExecuted = NO;
-            [OmniaPushSDK registerWithParameters:helper.params
-                                         success:nil
-                                         failure:^(NSURLResponse *response, NSError *error) {
-                                             failureBlockExecuted = YES;
-                                         }];
-            [[theValue(failureBlockExecuted) should] beTrue];
-
-            [helper.workerQueue drain];
+            expectedResult = NO;
         });
         
         afterEach(^{
+            [[theValue(expectedResult) should] beTrue];
+            [[[OmniaPushPersistentStorage APNSDeviceToken] should] beNil];
+            expectedResult = NO;
             testError = nil;
         });
         
         it(@"should handle registration failures from APNS", ^{
-            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate should] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
-            [[[OmniaPushPersistentStorage APNSDeviceToken] should] beNil];
-        });
-        
-        it(@"should restore the application delegate after tearing down", ^{
-            SEL teardownSelector = sel_registerName("teardown");
-            [OmniaPushSDK performSelector:teardownSelector];
-            UIApplication *app = (UIApplication*)(helper.application);
-            [[(id)app.delegate should] equal:previousAppDelegate];
-        });
-    });
-    
-    describe(@"failed registration with failure block", ^{
-        
-        __block NSError *testError;
-        
-        it(@"should call the listener after registration fails", ^{
-            testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
-            [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-            [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
 
-            __block BOOL failureBlockExecuted = NO;
             [OmniaPushSDK registerWithParameters:helper.params
                                          success:nil
                                          failure:^(NSURLResponse *response, NSError *error) {
-                                             failureBlockExecuted = YES;
+                                             expectedResult = YES;
                                          }];
-            
-            [helper.workerQueue drain];
-
-            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate should] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
-            [[[OmniaPushPersistentStorage APNSDeviceToken] should] beNil];
-            [[theValue(failureBlockExecuted) should] beTrue];
         });
+    });
+    
+    context(@"valid object arguements", ^{
+        __block BOOL wasExpectedResult = NO;
+        __block OmniaSpecHelper *helper;
+        
+        beforeEach(^{
+            helper = [[OmniaSpecHelper alloc] init];
+            [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+            wasExpectedResult = NO;
+        });
+        
+        afterEach(^{
+            [[theValue(wasExpectedResult) should] beTrue];
+            [helper reset];
+            helper = nil;
+        });
+        
+        it(@"should handle an HTTP status error", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(HTTPErrorResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationFailedHTTPStatusCode)];
+                                                   wasExpectedResult = YES;
+                                               }];
+        });
+
+        
+        it(@"should handle a successful response with empty data", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(emptyDataResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
+                                                   wasExpectedResult = YES;
+                                               }];
+        });
+        
+        it(@"should handle a successful response with nil data", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(nilDataResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
+                                                   wasExpectedResult = YES;
+                                               }];
+        });
+        
+        it(@"should handle a successful response with zero-length", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(zeroLengthDataResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
+                                                   wasExpectedResult = YES;
+                                               }];
+        });
+        
+        it(@"should handle a successful response that contains unparseable text", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(unparseableDataResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   [[error shouldNot] beNil];
+                                                   wasExpectedResult = YES;
+                                               }];
+        });
+        
+        it(@"should require a device_uuid in the server response", ^{
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(missingUUIDResponseRequest:queue:completionHandler:) error:&error];
+            
+            [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
+                                                   devToken:helper.apnsDeviceToken
+                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                                   wasExpectedResult = NO;
+                                               }
+                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                                   wasExpectedResult = YES;
+                                                   [[error.domain should] equal:OmniaPushErrorDomain];
+                                                   [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid)];
+                                               }];
+        });
+        
     });
 });
 

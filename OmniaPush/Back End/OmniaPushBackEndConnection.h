@@ -12,7 +12,7 @@
 
 @interface OmniaPushBackEndConnection : NSURLConnection
 
-+ (void)sendUnregistrationRequestOnQueue:(NSOperationQueue *)queue
++ (void)sendUnregisterRequestOnQueue:(NSOperationQueue *)queue
                             withDeviceID:(NSString *)deviceID
                                  success:(void (^)(NSURLResponse *response, NSData *data))success
                                  failure:(void (^)(NSURLResponse *response, NSError *error))failure;

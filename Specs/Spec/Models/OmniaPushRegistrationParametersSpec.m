@@ -33,27 +33,27 @@ describe(@"OmniaPushRegistrationParameters", ^{
         });
         
         it(@"should require a non-nil releaseUuid", ^{
-            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
+            [[theBlock(^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-empty releaseUuid", ^{
-            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];}
+            [[theBlock(^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-nil releaseSecret", ^{
-            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];}
+            [[theBlock(^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-empty releaseSecret", ^{
-            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];}
+            [[theBlock(^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-nil deviceAlias", ^{
-            [[^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];}
+            [[theBlock(^{model = [OmniaPushRegistrationParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];})
               should] raise];
         });
     });

@@ -83,10 +83,8 @@ NSString *const kRegistrationToken   = @"registration_token";
     return result;
 }
 
-+ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError**)error
++ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error
 {
-    *error = nil;
-    
     if (!JSONData || JSONData.length <= 0) {
         *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
         return nil;
@@ -94,7 +92,7 @@ NSString *const kRegistrationToken   = @"registration_token";
     
     NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:error];
     
-    if (error) {
+    if (*error) {
         return nil;
     }
     

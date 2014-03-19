@@ -88,7 +88,7 @@ static dispatch_once_t onceToken;
                                successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
                                failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    [OmniaPushBackEndConnection sendUnregistrationRequestOnQueue:[self omniaPushOperationQueue]
+    [OmniaPushBackEndConnection sendUnregisterRequestOnQueue:[self omniaPushOperationQueue]
                                                     withDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
                                                          success:^(NSURLResponse *response, NSData *data) {
                                                              OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
@@ -109,6 +109,12 @@ static dispatch_once_t onceToken;
     void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
         NSError *error;
         
+        if ([response isKindOfClass:[NSHTTPURLResponse class]] && ([(NSHTTPURLResponse *)response statusCode] < 200 || [(NSHTTPURLResponse *)response statusCode] >= 300)) {
+            error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:@"Failed HTTP Status Code"];
+            failureBlock(response, error);
+            return;
+        }
+        
         if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
             error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"];
             failureBlock(response, error);
@@ -118,6 +124,12 @@ static dispatch_once_t onceToken;
         OmniaPushBackEndRegistrationResponseData *parsedData = [OmniaPushBackEndRegistrationResponseData fromJSONData:responseData error:&error];
         
         if (error) {
+            failureBlock(response, error);
+            return;
+        }
+        
+        if (!parsedData.deviceUUID) {
+            error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationResponseDataNoDeviceUuid localizedDescription:@"Response body from registering with the back-end server does not contain an UUID "];
             failureBlock(response, error);
             return;
         }

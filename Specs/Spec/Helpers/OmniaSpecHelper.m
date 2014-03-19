@@ -66,6 +66,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (id) setupApplication
 {
     self.application = [KWMock mockForClass:[UIApplication class]];
+    [UIApplication stub:@selector(sharedApplication) andReturn:self.application];
     return self.application;
 }
 
@@ -79,7 +80,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
                                                  withNewApnsDeviceToken:(NSData*)newApnsDeviceToken
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
-        [[self currentApplicationDelegate] application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+        [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         return nil;
     }];
 }
@@ -87,25 +88,26 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError *)error
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
-        [[self currentApplicationDelegate] application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
+        [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
         return nil;
     }];
 }
 
 #pragma mark - App Delegate Helpers
 
-- (id<UIApplicationDelegate>) currentApplicationDelegate
-{
-    return self.applicationDelegate;
-}
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
     id delegateMock = [KWMock mockForProtocol:@protocol(UIApplicationDelegate)];
     [delegateMock stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, nil, nil];
-//    [[delegateMock should] conformsToProtocol:@protocol(UIApplicationDelegate)];
     self.applicationDelegate = delegateMock;
-    [self.application stub:@selector(delegate) andReturn:[self currentApplicationDelegate]];
+    [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
+    [self.application stub:@selector(setDelegate:) withBlock:^id(NSArray *params) {
+        if ([params[0] conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+            self.applicationDelegate = params[0];
+        }
+        return nil;
+    }];
     return self.applicationDelegate;
 }
 
@@ -117,7 +119,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData *)apnsDeviceToken
 {
     [(id)self.applicationDelegate stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, apnsDeviceToken, nil];
-//    [stub stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguements:self.application, apnsDeviceToken, nil];
 }
 
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error
@@ -135,6 +136,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (OmniaFakeOperationQueue*) setupQueues
 {
     self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
+    self.workerQueue.runSynchronously = YES;
     return self.workerQueue;
 }
 
