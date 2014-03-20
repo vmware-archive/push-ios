@@ -16,6 +16,8 @@
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
 
+#import "OmniaPushAPNSRegistrationRequestOperation.h"
+
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
 
@@ -77,18 +79,23 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 }
 
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                 withNewApnsDeviceToken:(NSData*)newApnsDeviceToken
+                                                 withNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
-        [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+        if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
+            [(OmniaPushAPNSRegistrationRequestOperation *)self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+        }
         return nil;
     }];
 }
 
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError *)error
+- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+                                                              error:(NSError *)error
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
-        [self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
+        if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
+            [(OmniaPushAPNSRegistrationRequestOperation *)self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
+        }
         return nil;
     }];
 }
@@ -133,7 +140,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - Operation Queue helpers
 
-- (OmniaFakeOperationQueue*) setupQueues
+- (OmniaFakeOperationQueue *) setupQueues
 {
     self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
     self.workerQueue.runSynchronously = YES;
@@ -177,7 +184,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - NSURLConnection Helpers
 
-- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error
+- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector
+                                   error:(NSError **)error
 {
     return [NSURLConnection jr_swizzleClassMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) withClassMethod:selector error:error];
 }

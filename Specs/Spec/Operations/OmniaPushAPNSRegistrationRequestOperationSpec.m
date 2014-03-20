@@ -15,12 +15,12 @@
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaFakeOperationQueue.h"
 #import "OmniaSpecHelper.h"
+#import "OmniaPushSDKTest.h"
 
 SPEC_BEGIN(OmniaPushAPNSRegistrationRequestOperationSpec)
 
 describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     
-    __block OmniaPushAPNSRegistrationRequestOperation *operation;
     __block OmniaSpecHelper *helper;
 
     beforeEach(^{
@@ -28,34 +28,37 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+        [helper setupQueues];
+        [OmniaPushSDK setWorkerQueue:helper.workerQueue];
     });
     
     afterEach(^{
         [helper reset];
         helper = nil;
-        operation = nil;
     });
 
     context(@"contructing with invalid arguments", ^{
         
         it(@"should require parameters", ^{
-            [[theBlock(^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:0 success:nil failure:nil];})
+            [[theBlock(^{NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:0 success:nil failure:nil];})
               should] raise];
         });
         
         it(@"should require an application", ^{
-            [[theBlock(^{operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];})
+            [[theBlock(^{NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];})
               should] raise];
         });
     });
     
     context(@"constructing with valid arguments", ^{
         
+        __block OmniaPushAPNSRegistrationRequestOperation *operation;
+        
         beforeEach(^{
             operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application
                                                                        remoteNotificationTypes:helper.params.remoteNotificationTypes
-                                                                                       success:nil
-                                                                                       failure:nil];
+                                                                                       success:^(NSData *devToken) {}
+                                                                                       failure:^(NSError *error) {}];
         });
         
         it(@"should produce a valid instance", ^{
@@ -66,39 +69,42 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
             [[theValue(operation.remoteNotificationTypes) should] equal:theValue(helper.params.remoteNotificationTypes)];
             [[operation.application should] beIdenticalTo:helper.application];
         });
+    });
+    
+    context(@"registration", ^{
         
-        context(@"registration", ^{
+        __block NSError *testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
+        
+        it(@"should be able to register successfully", ^{
+            [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+            [helper setupApplicationDelegateForSuccessfulRegistration];
+            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate should] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
             
-            __block NSError *testError = [NSError errorWithDomain:@"Some lame error" code:0 userInfo:nil];
+            NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application
+                                                                                    remoteNotificationTypes:helper.params.remoteNotificationTypes
+                                                                                                    success:^(NSData *devToken) {}
+                                                                                                    failure:^(NSError *error) {}];
+            [[OmniaPushSDK omniaPushOperationQueue] addOperation:operation];
+            [[theValue([[OmniaPushSDK omniaPushOperationQueue] operationCount]) should] beZero];
+        });
+        
+        it(@"should be able to fail registration", ^{
+            [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
+            [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
+            [[helper.application should] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate should] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
             
-            beforeEach(^{
-                [helper setupQueues];
-                [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
-            });
-            
-            it(@"should be able to register successfully", ^{
-                [[(NSObject *)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
-                [[(NSObject *)helper.applicationDelegate shouldNotEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
-                
-                [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES];
-                [helper setupApplicationDelegateForSuccessfulRegistration];
-                [helper.workerQueue addOperation:operation];
-                [[theValue([helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]]) should] beTrue];
-            });
-            
-            it(@"should be able to register successfully", ^{
-                [[(NSObject *)helper.applicationDelegate shouldNotEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
-                [[(NSObject *)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
-                
-                [helper setupApplicationForFailedRegistrationWithNotificationTypes:TEST_NOTIFICATION_TYPES error:testError];
-                [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
-                [helper.workerQueue addOperation:operation];
-                [helper.workerQueue drain];
-                [[theValue([helper.workerQueue didFinishOperation:[OmniaPushAPNSRegistrationRequestOperation class]]) should] beTrue];
+            NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:helper.application
+                                                                                    remoteNotificationTypes:helper.params.remoteNotificationTypes
+                                                                                                    success:^(NSData *devToken) {}
+                                                                                                    failure:^(NSError *error) {}];
 
-            });
+            [helper.workerQueue addOperation:operation];
+            [[theValue([[OmniaPushSDK omniaPushOperationQueue] operationCount]) should] beZero];
         });
     });
+
 });
 
 SPEC_END

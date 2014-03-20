@@ -10,6 +10,8 @@
 
 @interface OmniaPushSDK (TestingHeader)
 
++ (NSOperationQueue *)omniaPushOperationQueue;
+
 + (void)setWorkerQueue:(NSOperationQueue *)workerQueue;
 
 + (void)sendRegisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
