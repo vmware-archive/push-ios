@@ -17,7 +17,5 @@
 @property (nonatomic) UIRemoteNotificationType remoteNotificationTypes;
 @property (nonatomic) NSRecursiveLock *lock;
 
-- (void)cleanup;
-
 @end
 

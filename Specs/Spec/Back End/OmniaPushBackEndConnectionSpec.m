@@ -30,7 +30,7 @@ describe(@"OmniaPushBackEndConnection", ^{
         helper = nil;
     });
     
-    context(@"bad object arguments", ^{
+    context(@"registration bad object arguments", ^{
         
         it(@"should require an APNS device token", ^{
             [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
@@ -67,6 +67,33 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                                    failure:nil];})
               should] raise];
         });
+    });
+    
+    context(@"unregistration bad object arguments", ^{
+        it(@"should require a device ID", ^{
+            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
+                                                                     withDeviceID:nil
+                                                                          success:^(NSURLResponse *response, NSData *data) {}
+                                                                          failure:^(NSURLResponse *response, NSError *error) {}];})
+              should] raise];
+        });
+        
+        it(@"should require a success block", ^{
+            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
+                                                                     withDeviceID:@"Fake Device ID"
+                                                                          success:nil
+                                                                          failure:^(NSURLResponse *response, NSError *error) {}];})
+              should] raise];
+        });
+        
+        it(@"should require a failure block", ^{
+            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
+                                                                     withDeviceID:@"Fake Device ID"
+                                                                          success:^(NSURLResponse *response, NSData *data) {}
+                                                                          failure:nil];})
+              should] raise];
+        });
+
     });
     
     context(@"valid object arguments", ^{

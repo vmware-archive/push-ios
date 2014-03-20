@@ -78,15 +78,6 @@ static NSString * const kOmniaOperationLockName = @"OmniaPushOperation.Operation
     return self;
 }
 
-- (void)cleanup
-{
-    if (self.application && self.originalApplicationDelegate) {
-        [self restoreApplicationDelegate];
-    }
-    self.application = nil;
-    self.originalApplicationDelegate = nil;
-}
-
 - (void)replaceApplicationDelegate
 {
     [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self inApplication:self.application];
