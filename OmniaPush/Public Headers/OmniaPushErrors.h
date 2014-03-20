@@ -54,6 +54,11 @@ typedef NS_ENUM(NSInteger, OmniaPushErrorCodes) {
      * The back-end server returned a failure (i.e.: < 200 or >= 300) HTTP status code while attempting to unregister.
      */
     OmniaPushBackEndUnregistrationFailedHTTPStatusCode = 31,
+    
+    /**
+     * Failed to build a valid unregistration request.
+     */
+    OmniaPushBackEndUnregistrationFailedRequestStatusCode = 32,
 
     /**
      * The registration request JSON data object was badly formatted.

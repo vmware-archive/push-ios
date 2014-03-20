@@ -56,6 +56,12 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"failure block may not be nil"];
     }
     
+    if (!request) {
+        NSError *error = [NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushBackEndUnregistrationFailedRequestStatusCode userInfo:nil];
+        failure(nil, error);
+        return;
+    }
+    
     void (^handler)(NSURLResponse *response, NSData *data, NSError *connectionError) = ^(NSURLResponse *response, NSData *data, NSError *connectionError)
     {
         if (connectionError) {
@@ -131,9 +137,13 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 #pragma mark - Unregister
 
-+ (NSMutableURLRequest *)unregisterRequestForBackEndDeviceId:(NSString *)backEndDeviceUuid
++ (NSMutableURLRequest *)unregisterRequestForBackEndDeviceId:(NSString *)backEndDeviceUUID
 {
-    NSURL *url = [[NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL] URLByAppendingPathComponent:backEndDeviceUuid];
+    if (!backEndDeviceUUID) {
+        return nil;
+    }
+    
+    NSURL *url = [[NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL] URLByAppendingPathComponent:backEndDeviceUUID];
     NSTimeInterval timeout = BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS;
     NSMutableURLRequest *urlRequest = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:timeout];
     urlRequest.HTTPMethod = @"DELETE";

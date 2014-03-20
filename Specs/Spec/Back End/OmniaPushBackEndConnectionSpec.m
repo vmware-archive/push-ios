@@ -70,12 +70,12 @@ describe(@"OmniaPushBackEndConnection", ^{
     });
     
     context(@"unregistration bad object arguments", ^{
-        it(@"should require a device ID", ^{
+        it(@"should not require a device ID", ^{
             [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
                                                                      withDeviceID:nil
                                                                           success:^(NSURLResponse *response, NSData *data) {}
                                                                           failure:^(NSURLResponse *response, NSError *error) {}];})
-              should] raise];
+              shouldNot] raise];
         });
         
         it(@"should require a success block", ^{

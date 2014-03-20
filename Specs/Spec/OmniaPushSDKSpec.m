@@ -55,6 +55,9 @@ describe(@"OmniaPushSDK", ^{
             }];})
               should] raise];
             [[theValue(blockExecuted) should] beFalse];
+            
+            [[theBlock(^{[OmniaPushSDK registerWithParameters:nil];})
+              should] raise];
         });
     });
 
@@ -66,9 +69,13 @@ describe(@"OmniaPushSDK", ^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
+            
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(successfulRequest:queue:completionHandler:) error:&error];
             [[error should] beNil];
+            
             expectedResult = NO;
         });
         
@@ -78,9 +85,22 @@ describe(@"OmniaPushSDK", ^{
         });
         
         it(@"should handle successful registrations from APNS", ^{
-
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
+            [OmniaPushSDK registerWithParameters:helper.params
+                                         success:^(NSURLResponse *response, id responseObject) {
+                                             expectedResult = YES;
+                                         }
+                                         failure:^(NSURLResponse *response, NSError *error) {
+                                             expectedResult = NO;
+                                         }];
+        });
+        
+        it(@"should unregister from back end if APNSDeviceToken does not match locally stored version", ^{
+            NSData *deviceToken1 = [@"DIFFERENT TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
+            [OmniaPushPersistentStorage setAPNSDeviceToken:deviceToken1];
+            
+            NSError *error;
+            [helper swizzleAsyncRequestWithSelector:@selector(successfulRequest:queue:completionHandler:) error:&error];
+            [[error should] beNil];
             
             [OmniaPushSDK registerWithParameters:helper.params
                                          success:^(NSURLResponse *response, id responseObject) {
@@ -89,8 +109,6 @@ describe(@"OmniaPushSDK", ^{
                                          failure:^(NSURLResponse *response, NSError *error) {
                                              expectedResult = NO;
                                          }];
-
-            [[[OmniaPushPersistentStorage APNSDeviceToken] shouldEventually] equal:helper.apnsDeviceToken];
         });
     });
     

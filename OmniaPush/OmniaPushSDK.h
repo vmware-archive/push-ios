@@ -38,11 +38,11 @@
  *
  * @param parameters Provides the parameters required for registration.  May not be `nil`.
  *
- * @param listener Optional listener for receiving a callback after registration finishes. This callback will
+ * @param success block that will be executed if registration finishes successfully. This callback will
  *                 be called on the main thread.  May be `nil`.
  *
- * @note It is possible for APNS registration to fail silently and never call back.  These
- *       scenarios could be considered failures, but will never be reported.
+ * @param failure block that will be executed if registration fails. This callback will be called on the main
+ *                 thread.  May be `nil`.
  */
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
                        success:(void (^)(NSURLResponse *response, id responseObject))success
