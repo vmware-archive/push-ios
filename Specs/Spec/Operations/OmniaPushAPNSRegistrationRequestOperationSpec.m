@@ -40,14 +40,15 @@ describe(@"OmniaPushAPNSRegistrationRequestOperation", ^{
     context(@"contructing with invalid arguments", ^{
         
         it(@"should require parameters", ^{
-            [[theBlock(^{NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:0 success:nil failure:nil];})
+            [[theBlock(^{NSOperation *operation __unused = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:0 success:nil failure:nil];})
               should] raise];
         });
-        
+
         it(@"should require an application", ^{
-            [[theBlock(^{NSOperation *operation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];})
+            [[theBlock(^{NSOperation *operation __unused = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:nil remoteNotificationTypes:helper.params.remoteNotificationTypes success:nil failure:nil];})
               should] raise];
         });
+
     });
     
     context(@"constructing with valid arguments", ^{
