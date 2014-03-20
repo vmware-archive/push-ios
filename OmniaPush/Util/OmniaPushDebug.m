@@ -69,9 +69,7 @@ OmniaPushLogListener listener = nil;
     }
     
     va_list argList;
-    NSString *filePath, *formatStr;
-    
-    filePath = [[NSString alloc] initWithBytes:fileName length:strlen(fileName) encoding:NSUTF8StringEncoding ];
+    NSString *formatStr;
     
     va_start(argList, input);
     formatStr = [[NSString alloc] initWithFormat:input arguments:argList];

@@ -86,7 +86,9 @@ NSString *const kRegistrationToken   = @"registration_token";
 + (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error
 {
     if (!JSONData || JSONData.length <= 0) {
-        *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
+        if (error) {
+            *error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
+        }
         return nil;
     }
     
