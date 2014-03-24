@@ -44,6 +44,9 @@
  * @param failure block that will be executed if registration fails. This callback will be called on the main
  *                 thread.  May be `nil`.
  */
+
+#warning - TODO: remove nsurlresponse and responseobject potentially.
+#warning - Fix documentation
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
                        success:(void (^)(NSURLResponse *response, id responseObject))success
                        failure:(void (^)(NSURLResponse *response, NSError *error))failure;

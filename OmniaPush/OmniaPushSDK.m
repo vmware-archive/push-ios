@@ -8,58 +8,22 @@
 
 #import <objc/runtime.h>
 
+#import "NSURLConnection+OmniaPushBackEndConnection.h"
 #import "OmniaPushSDK.h"
-
-#import "OmniaPushBackEndConnection.h"
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
+#import "OmniaApplicationDelegate.h"
+#import "OmniaPushApplicationDelegateSwitcherImpl.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushDebug.h"
-
 #import "OmniaPushErrorUtil.h"
 #import "OmniaPushErrors.h"
-
 #import "OmniaPushBackEndRegistrationResponseData.h"
 
 NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
-#pragma mark - OmniaOperationQueue
-
-@interface OmniaOperationQueue : NSOperationQueue
-@property (nonatomic) NSObject<UIApplicationDelegate> *applicationDelegate;
-@end
-
-@implementation OmniaOperationQueue
-@end
-
 #pragma mark - OmniaPushSDK
 
-static NSOperationQueue *_workerQueue;
-static dispatch_once_t onceToken;
-
 @implementation OmniaPushSDK
-
-+ (NSOperationQueue *)omniaPushOperationQueue {
-    dispatch_once(&onceToken, ^{
-        if (!_workerQueue) {
-            _workerQueue = [[OmniaOperationQueue alloc] init];
-            
-            if ([_workerQueue respondsToSelector:@selector(applicationDelegate)]) {
-                //The UIApplication delegate will be deallocated unless it is strongly retained.
-                [(OmniaOperationQueue *)_workerQueue setApplicationDelegate:[[self sharedApplication] delegate]];
-            }
-            _workerQueue.maxConcurrentOperationCount = 1;
-            _workerQueue.name = @"OmniaPushOperationQueue";
-        }
-    });
-    return _workerQueue;
-}
-
-+ (void)setWorkerQueue:(NSOperationQueue *)workerQueue
-{
-    onceToken = 0;
-    _workerQueue = workerQueue;
-}
 
 + (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
 {
@@ -74,10 +38,9 @@ static dispatch_once_t onceToken;
         [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
     }
 
-    NSOperation *appDelegateOperation = [OmniaPushSDK APNSRegistrationOperationWithParameters:parameters
-                                                                                 successBlock:success
-                                                                                 failureBlock:failure];
-    [self.omniaPushOperationQueue addOperation:appDelegateOperation];
+    [OmniaPushSDK registerWithAPNSWithParameters:parameters
+                                    successBlock:success
+                                    failureBlock:failure];
 }
 
 + (void)sendUnregisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
@@ -85,17 +48,16 @@ static dispatch_once_t onceToken;
                                successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
                                failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
-    [OmniaPushBackEndConnection sendUnregisterRequestOnQueue:[self omniaPushOperationQueue]
-                                                withDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
-                                                     success:^(NSURLResponse *response, NSData *data) {
-                                                         OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
-                                                         [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
-                                                     }
-                                                     failure:^(NSURLResponse *response, NSError *error) {
-                                                         OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
-                                                         OmniaPushLog(@"Nevertheless, registration will be attempted.");
-                                                         [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
-                                                     }];
+    [NSURLConnection omnia_unregisterDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
+                                      success:^(NSURLResponse *response, NSData *data) {
+                                          OmniaPushCriticalLog(@"Unregistration with the back-end server succeeded.");
+                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                      }
+                                      failure:^(NSURLResponse *response, NSError *error) {
+                                          OmniaPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
+                                          OmniaPushLog(@"Nevertheless, registration will be attempted.");
+                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                      }];
 }
 
 + (void)sendRegisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
@@ -106,6 +68,7 @@ static dispatch_once_t onceToken;
     void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
         NSError *error;
         
+#warning - make more readable by extracting http error codes
         if ([response isKindOfClass:[NSHTTPURLResponse class]] && ([(NSHTTPURLResponse *)response statusCode] < 200 || [(NSHTTPURLResponse *)response statusCode] >= 300)) {
             error = [OmniaPushErrorUtil errorWithCode:OmniaPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:@"Failed HTTP Status Code"];
             failureBlock(response, error);
@@ -139,16 +102,15 @@ static dispatch_once_t onceToken;
         
         successBlock(response, parsedData);
     };
-    [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:[self omniaPushOperationQueue]
-                                                withParameters:parameters
-                                                      devToken:devToken
-                                                       success:registrationSuccessfulBlock
-                                                       failure:failureBlock];
+    [NSURLConnection omnia_registerWithParameters:parameters
+                                         devToken:devToken
+                                          success:registrationSuccessfulBlock
+                                          failure:failureBlock];
 }
 
-+ (OmniaPushAPNSRegistrationRequestOperation *)APNSRegistrationOperationWithParameters:(OmniaPushRegistrationParameters *)parameters
-                                                                          successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
-                                                                          failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
++ (void)registerWithAPNSWithParameters:(OmniaPushRegistrationParameters *)parameters
+                          successBlock:(void (^)(NSURLResponse *response, id responseObject))successBlock
+                          failureBlock:(void (^)(NSURLResponse *response, NSError *error))failureBlock
 {
     void (^success)(NSData *devToken) = ^(NSData *devToken) {
         if ([self unregistrationRequiredForDevToken:devToken parameters:parameters]) {
@@ -157,7 +119,7 @@ static dispatch_once_t onceToken;
                                                successBlock:successBlock
                                                failureBlock:failureBlock];
             
-        } else if([self registrationRequiredForDevToken:devToken parameters:parameters]) {
+        } else if ([self registrationRequiredForDevToken:devToken parameters:parameters]) {
             [self.class sendRegisterRequestWithParameters:parameters
                                                  devToken:devToken
                                              successBlock:successBlock
@@ -172,16 +134,10 @@ static dispatch_once_t onceToken;
         failureBlock(nil, error);
     };
     
-    OmniaPushAPNSRegistrationRequestOperation *appDelegateOperation = [[OmniaPushAPNSRegistrationRequestOperation alloc] initWithApplication:[self sharedApplication]
-                                                                                             remoteNotificationTypes:parameters.remoteNotificationTypes
-                                                                                                             success:success
-                                                                                                             failure:failure];
-    return appDelegateOperation;
-}
-
-+ (UIApplication *)sharedApplication
-{
-    return [UIApplication sharedApplication];
+    [[OmniaApplicationDelegate omniaApplicationDelegate] registerWithApplication:[UIApplication sharedApplication]
+                                                         remoteNotificationTypes:parameters.remoteNotificationTypes
+                                                                         success:success
+                                                                         failure:failure];
 }
 
 + (BOOL)unregistrationRequiredForDevToken:(NSData *)devToken
@@ -226,7 +182,7 @@ static dispatch_once_t onceToken;
 {
     // If any of the registration parameters are different then unregistration is required
     if (![parameters.releaseUUID isEqualToString:[OmniaPushPersistentStorage releaseUUID]]) {
-        OmniaPushLog(@"Parameters specify a different releaseUuid. Unregistration and re-registration will be required.");
+        OmniaPushLog(@"Parameters specify a different releaseUUID. Unregistration and re-registration will be required.");
         return NO;
     }
     

@@ -9,8 +9,7 @@
 #import "Kiwi.h"
 
 #import "NSURLConnection+OmniaAsync2Sync.h"
-#import "OmniaPushBackEndConnection.h"
-#import "OmniaFakeOperationQueue.h"
+#import "NSURLConnection+OmniaPushBackEndConnection.h"
 #import "OmniaPushErrors.h"
 #import "OmniaSpecHelper.h"
 
@@ -33,64 +32,57 @@ describe(@"OmniaPushBackEndConnection", ^{
     context(@"registration bad object arguments", ^{
         
         it(@"should require an APNS device token", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                          withParameters:helper.params
-                                                                devToken:nil
-                                                                 success:^(NSURLResponse *response, NSData *data) {}
-                                                                 failure:^(NSURLResponse *response, NSError *error) {}];})
+            [[theBlock(^{[NSURLConnection omnia_registerWithParameters:helper.params
+                                                        devToken:nil
+                                                         success:^(NSURLResponse *response, NSData *data) {}
+                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
               should] raise];
         });
         
         it(@"should require a registration parameters", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                           withParameters:nil
-                                                                 devToken:helper.apnsDeviceToken
-                                                                  success:^(NSURLResponse *response, NSData *data) {}
-                                                                  failure:^(NSURLResponse *response, NSError *error) {}];})
-             should] raise];
+            [[theBlock(^{[NSURLConnection omnia_registerWithParameters:nil
+                                                        devToken:helper.apnsDeviceToken
+                                                         success:^(NSURLResponse *response, NSData *data) {}
+                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
+              should] raise];
         });
         
         it(@"should require a success block", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                          withParameters:helper.params
-                                                                devToken:helper.apnsDeviceToken
-                                                                 success:nil
-                                                                 failure:^(NSURLResponse *response, NSError *error) {}];})
-            should] raise];
+            [[theBlock(^{[NSURLConnection omnia_registerWithParameters:helper.params
+                                                        devToken:helper.apnsDeviceToken
+                                                         success:nil
+                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
+              should] raise];
         });
         
         it(@"should require a failure block", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                            withParameters:helper.params
-                                                                  devToken:helper.apnsDeviceToken
-                                                                   success:^(NSURLResponse *response, NSData *data) {}
-                                                                   failure:nil];})
+            [[theBlock(^{[NSURLConnection omnia_registerWithParameters:helper.params
+                                                        devToken:helper.apnsDeviceToken
+                                                         success:^(NSURLResponse *response, NSData *data) {}
+                                                         failure:nil];})
               should] raise];
         });
     });
     
     context(@"unregistration bad object arguments", ^{
         it(@"should not require a device ID", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
-                                                                     withDeviceID:nil
-                                                                          success:^(NSURLResponse *response, NSData *data) {}
-                                                                          failure:^(NSURLResponse *response, NSError *error) {}];})
+            [[theBlock(^{[NSURLConnection omnia_unregisterDeviceID:nil
+                                                     success:^(NSURLResponse *response, NSData *data) {}
+                                                     failure:^(NSURLResponse *response, NSError *error) {}];})
               shouldNot] raise];
         });
         
         it(@"should require a success block", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
-                                                                     withDeviceID:@"Fake Device ID"
-                                                                          success:nil
-                                                                          failure:^(NSURLResponse *response, NSError *error) {}];})
+            [[theBlock(^{[NSURLConnection omnia_unregisterDeviceID:@"Fake Device ID"
+                                                     success:nil
+                                                     failure:^(NSURLResponse *response, NSError *error) {}];})
               should] raise];
         });
         
         it(@"should require a failure block", ^{
-            [[theBlock(^{[OmniaPushBackEndConnection sendUnregisterRequestOnQueue:helper.workerQueue
-                                                                     withDeviceID:@"Fake Device ID"
-                                                                          success:^(NSURLResponse *response, NSData *data) {}
-                                                                          failure:nil];})
+            [[theBlock(^{[NSURLConnection omnia_unregisterDeviceID:@"Fake Device ID"
+                                                     success:^(NSURLResponse *response, NSData *data) {}
+                                                     failure:nil];})
               should] raise];
         });
 
@@ -111,16 +103,15 @@ describe(@"OmniaPushBackEndConnection", ^{
         it(@"should handle a failed request", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(failedRequestRequest:queue:completionHandler:) error:&error];
-            [OmniaPushBackEndConnection sendRegistrationRequestOnQueue:helper.workerQueue
-                                                        withParameters:helper.params
-                                                              devToken:helper.apnsDeviceToken
-                                                               success:^(NSURLResponse *response, NSData *data) {
-                                                                   wasExpectedResult = NO;
-                                                               }
-                                                               failure:^(NSURLResponse *response, NSError *error) {
-                                                                   [[error.domain should] equal:NSURLErrorDomain];
-                                                                   wasExpectedResult = YES;
-                                                               }];
+            [NSURLConnection omnia_registerWithParameters:helper.params
+                                                 devToken:helper.apnsDeviceToken
+                                                  success:^(NSURLResponse *response, NSData *data) {
+                                                      wasExpectedResult = NO;
+                                                  }
+                                                  failure:^(NSURLResponse *response, NSError *error) {
+                                                      [[error.domain should] equal:NSURLErrorDomain];
+                                                      wasExpectedResult = YES;
+                                                  }];
         });
     });
     

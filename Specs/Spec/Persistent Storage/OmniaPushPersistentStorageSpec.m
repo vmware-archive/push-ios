@@ -41,18 +41,18 @@ describe(@"OmniaPushPersistentStorage", ^{
     });
     
     it(@"should be able to save the release UUID", ^{
-        [OmniaPushPersistentStorage setReleaseUUID:TEST_RELEASE_UUID];
-        [[[OmniaPushPersistentStorage releaseUUID] should] equal:TEST_RELEASE_UUID];
+        [OmniaPushPersistentStorage setReleaseUUID:TEST_RELEASE_UUID_1];
+        [[[OmniaPushPersistentStorage releaseUUID] should] equal:TEST_RELEASE_UUID_1];
     });
     
     it(@"should be able to save the release secret", ^{
-        [OmniaPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET];
-        [[[OmniaPushPersistentStorage releaseSecret] should] equal:(TEST_RELEASE_SECRET)];
+        [OmniaPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
+        [[[OmniaPushPersistentStorage releaseSecret] should] equal:(TEST_RELEASE_SECRET_1)];
     });
     
     it(@"should be able to save the device alias", ^{
-        [OmniaPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS];
-        [[[OmniaPushPersistentStorage deviceAlias] should] equal:TEST_DEVICE_ALIAS];
+        [OmniaPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+        [[[OmniaPushPersistentStorage deviceAlias] should] equal:TEST_DEVICE_ALIAS_1];
     });
     
     it(@"should clear values after being reset", ^{

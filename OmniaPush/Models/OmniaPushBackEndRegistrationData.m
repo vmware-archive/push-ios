@@ -60,6 +60,7 @@ NSString *const kRegistrationToken   = @"registration_token";
 {
     NSError *error = nil;
     NSData *JSONData = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:&error];
+#warning - FIX TODO
     if (error) {
         // TODO - should return error?
         OmniaPushCriticalLog(@"Error upon serializing object to JSON: %@", error);

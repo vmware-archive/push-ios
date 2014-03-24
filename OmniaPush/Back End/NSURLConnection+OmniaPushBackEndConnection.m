@@ -1,5 +1,5 @@
 //
-//  OmniaPushBackEndConnection.m
+//  NSURLConnection+OmniaPushBackEndConnection.m
 //  OmniaPushSDK
 //
 //  Created by DX123-XL on 3/4/2014.
@@ -7,7 +7,7 @@
 //
 
 #import "OmniaPushErrors.h"
-#import "OmniaPushBackEndConnection.h"
+#import "NSURLConnection+OmniaPushBackEndConnection.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushHexUtil.h"
 #import "OmniaPushHardwareUtil.h"
@@ -18,33 +18,28 @@
 static NSString *const BACK_END_REGISTRATION_REQUEST_URL = @"http://ec2-54-234-124-123.compute-1.amazonaws.com:8090/v1/registration";
 static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
-@implementation OmniaPushBackEndConnection
+@implementation NSURLConnection (OmniaPushBackEndConnection)
 
-+ (void)sendUnregisterRequestOnQueue:(NSOperationQueue *)queue
-                          withDeviceID:(NSString *)deviceID
-                               success:(void (^)(NSURLResponse *response, NSData *data))success
-                               failure:(void (^)(NSURLResponse *response, NSError *error))failure
++ (void)omnia_unregisterDeviceID:(NSString *)deviceID
+                   success:(void (^)(NSURLResponse *response, NSData *data))success
+                   failure:(void (^)(NSURLResponse *response, NSError *error))failure
 {
     [self sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceId:deviceID]
-                            queue:queue
                           success:success
                           failure:failure];
 }
 
-+ (void)sendRegistrationRequestOnQueue:(NSOperationQueue *)queue
-                        withParameters:(OmniaPushRegistrationParameters *)parameters
-                              devToken:(NSData *)devToken
-                               success:(void (^)(NSURLResponse *response, NSData *data))success
-                               failure:(void (^)(NSURLResponse *response, NSError *error))failure
++ (void)omnia_registerWithParameters:(OmniaPushRegistrationParameters *)parameters
+                      devToken:(NSData *)devToken
+                       success:(void (^)(NSURLResponse *response, NSData *data))success
+                       failure:(void (^)(NSURLResponse *response, NSError *error))failure
 {
     [self sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken parameters:parameters]
-                            queue:queue
                           success:success
                           failure:failure];
 }
 
 + (void)sendAsynchronousRequest:(NSURLRequest *)request
-                          queue:(NSOperationQueue *)queue
                         success:(void (^)(NSURLResponse *response, NSData *data))success
                         failure:(void (^)(NSURLResponse *response, NSError *error))failure
 {
@@ -75,9 +70,9 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
         }
     };
     
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:queue
-                           completionHandler:handler];
+    [self sendAsynchronousRequest:request
+                            queue:[NSOperationQueue mainQueue]
+                completionHandler:handler];
 }
 
 #pragma mark - Registration

@@ -12,8 +12,8 @@
 #import "OmniaPushErrors.h"
 #import "OmniaSpecHelper.h"
 #import "OmniaPushPersistentStorage.h"
-#import "OmniaFakeOperationQueue.h"
 #import "OmniaPushRegistrationParameters.h"
+#import "OmniaPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+OmniaAsync2Sync.h"
 
 SPEC_BEGIN(OmniaPushSDKSpec)
@@ -28,8 +28,6 @@ describe(@"OmniaPushSDK", ^{
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParametersWithNotificationTypes:testNotificationTypes];
-        [helper setupQueues];
-        [OmniaPushSDK setWorkerQueue:helper.workerQueue];
         previousAppDelegate = helper.applicationDelegate;
     });
     
@@ -60,55 +58,87 @@ describe(@"OmniaPushSDK", ^{
               should] raise];
         });
     });
+    
+    typedef void (^Handler)(NSURLResponse* response, NSData* data, NSError* connectionError);
 
     describe(@"successful registration", ^{
-        
-        __block BOOL expectedResult = NO;
+        __block NSInteger successCount = 0;
+        __block NSInteger registrationCount = 0;
+        __block NSInteger unregistrationCount = 0;
+        __block NSInteger selectorsCount = 0;
         
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
-            
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(successfulRequest:queue:completionHandler:) error:&error];
-            [[error should] beNil];
-            
-            expectedResult = NO;
+            successCount = 0;
         });
         
         afterEach(^{
-            [[theValue(expectedResult) should] beTrue];
-            expectedResult = NO;
+            [[theValue(successCount) should] equal:theValue(selectorsCount)];
+            [[theValue(registrationCount) should] equal:theValue(selectorsCount)];
+            [[theValue(unregistrationCount) should] equal:theValue(selectorsCount)];
         });
         
         it(@"should handle successful registrations from APNS", ^{
-            [OmniaPushSDK registerWithParameters:helper.params
-                                         success:^(NSURLResponse *response, id responseObject) {
-                                             expectedResult = YES;
-                                         }
-                                         failure:^(NSURLResponse *response, NSError *error) {
-                                             expectedResult = NO;
-                                         }];
-        });
+            SEL selectors[] = {
+                @selector(setAPNSDeviceToken:),
+                @selector(setBackEndDeviceID:),
+                @selector(setReleaseUUID:),
+                @selector(setReleaseSecret:),
+                @selector(setDeviceAlias:),
+            };
+            
+            selectorsCount = sizeof(selectors)/sizeof(selectors[0]);
+            
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:selectorsCount];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:selectorsCount];
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:selectorsCount];
+            
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                
+                __block NSData *newData;
+                __block NSHTTPURLResponse *newResponse;
+                
+                if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+                    unregistrationCount++;
+                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
+                    
+                } else if ([request.HTTPMethod isEqualToString:@"POST"]) {
+                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                    NSDictionary *dict = @{
+                                           kDeviceOS : TEST_OS,
+                                           kDeviceOSVersion : TEST_OS_VERSION,
+                                           kDeviceUUID : TEST_DEVICE_UUID,
+                                           kDeviceAlias : TEST_DEVICE_ALIAS,
+                                           kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                                           kDeviceModel : TEST_DEVICE_MODEL,
+                                           kReleaseUUID : TEST_RELEASE_UUID,
+                                           kRegistrationToken : TEST_REGISTRATION_TOKEN,
+                                           };
+                    newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+
+                    registrationCount++;
+                }
         
-        it(@"should unregister from back end if APNSDeviceToken does not match locally stored version", ^{
-            NSData *deviceToken1 = [@"DIFFERENT TEST DEVICE TOKEN" dataUsingEncoding:NSUTF8StringEncoding];
-            [OmniaPushPersistentStorage setAPNSDeviceToken:deviceToken1];
+                Handler handler = params[2];
+                handler(newResponse, newData, nil);
+                return nil;
+            }];
             
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(successfulRequest:queue:completionHandler:) error:&error];
-            [[error should] beNil];
-            
-            [OmniaPushSDK registerWithParameters:helper.params
-                                         success:^(NSURLResponse *response, id responseObject) {
-                                             expectedResult = YES;
-                                         }
-                                         failure:^(NSURLResponse *response, NSError *error) {
-                                             expectedResult = NO;
-                                         }];
+            for (NSInteger i = 0; i < selectorsCount; i++) {
+                [helper setupDefaultSavedParameters];
+                [OmniaPushPersistentStorage performSelector:selectors[i] withObject:@"DIFFERENT_VALUE"];
+                
+                [OmniaPushSDK registerWithParameters:helper.params
+                                             success:^(NSURLResponse *response, id responseObject) {
+                                                 successCount++;
+                                             }
+                                             failure:^(NSURLResponse *response, NSError *error) {
+                                                 fail(@"registration failure block executed");
+                                             }];
+            }
         });
     });
     

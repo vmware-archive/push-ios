@@ -9,14 +9,12 @@
 #import "Kiwi.h"
 
 #import "OmniaSpecHelper.h"
+#import "OmniaApplicationDelegate.h"
 #import "OmniaPushSDK.h"
 #import "JRSwizzle.h"
 #import "OmniaPushDebug.h"
-#import "OmniaFakeOperationQueue.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushRegistrationParameters.h"
-
-#import "OmniaPushAPNSRegistrationRequestOperation.h"
 
 #define DELAY_TIME_IN_SECONDS  1
 #define DELAY_TIME             (dispatch_time(DISPATCH_TIME_NOW, (int64_t)(DELAY_TIME_IN_SECONDS * NSEC_PER_SEC)))
@@ -27,9 +25,9 @@
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
-NSString *const TEST_RELEASE_UUID     = @"444-555-666-777";
-NSString *const TEST_RELEASE_SECRET   = @"No secret is as strong as its blabbiest keeper";
-NSString *const TEST_DEVICE_ALIAS     = @"Let's watch cat videos";
+NSString *const TEST_RELEASE_UUID_1   = @"444-555-666-777";
+NSString *const TEST_RELEASE_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
+NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
 NSString *const TEST_RELEASE_UUID_2   = @"222-444-999-ZZZ";
 NSString *const TEST_RELEASE_SECRET_2 = @"My cat's breath smells like cat food";
 NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
@@ -55,7 +53,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void) reset
 {
     self.params = nil;
-    self.workerQueue = nil;
     self.apnsDeviceToken = nil;
     self.apnsDeviceToken2 = nil;
     self.backEndDeviceId = nil;
@@ -83,7 +80,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-            [(OmniaPushAPNSRegistrationRequestOperation *)self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+            [(OmniaApplicationDelegate *)self.applicationDelegate application:self.application
+                             didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
     }];
@@ -94,7 +92,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
-            [(OmniaPushAPNSRegistrationRequestOperation *)self.applicationDelegate application:self.application didFailToRegisterForRemoteNotificationsWithError:error];
+            [(OmniaApplicationDelegate *)self.applicationDelegate application:self.application
+                             didFailToRegisterForRemoteNotificationsWithError:error];
         }
         return nil;
     }];
@@ -138,23 +137,14 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [(id)self.applicationDelegate stub:@selector(application:didReceiveRemoteNotification:) withArguments:self.application, userInfo, nil];
 }
 
-#pragma mark - Operation Queue helpers
-
-- (OmniaFakeOperationQueue *) setupQueues
-{
-    self.workerQueue = [[OmniaFakeOperationQueue alloc] init];
-    self.workerQueue.runSynchronously = YES;
-    return self.workerQueue;
-}
-
 #pragma mark - Parameters helpers
 
 - (OmniaPushRegistrationParameters *)setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
     self.params = [OmniaPushRegistrationParameters parametersForNotificationTypes:notificationTypes
-                                                                       releaseUUID:TEST_RELEASE_UUID
-                                                                     releaseSecret:TEST_RELEASE_SECRET
-                                                                       deviceAlias:TEST_DEVICE_ALIAS];
+                                                                       releaseUUID:TEST_RELEASE_UUID_1
+                                                                     releaseSecret:TEST_RELEASE_SECRET_1
+                                                                       deviceAlias:TEST_DEVICE_ALIAS_1];
     return self.params;
 }
 
@@ -180,6 +170,15 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
                                                                       releaseUUID:self.params.releaseUUID
                                                                     releaseSecret:self.params.releaseSecret
                                                                       deviceAlias:newDeviceAlias];
+}
+
+- (void)setupDefaultSavedParameters
+{
+    [OmniaPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
+    [OmniaPushPersistentStorage setReleaseUUID:TEST_RELEASE_UUID_1];
+    [OmniaPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+    [OmniaPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
+    [OmniaPushPersistentStorage setBackEndDeviceID:self.backEndDeviceId];
 }
 
 #pragma mark - NSURLConnection Helpers

@@ -9,15 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class OmniaPushAppDelegateProxy;
-@class OmniaFakeOperationQueue;
 @class OmniaPushPersistentStorage;
 @class OmniaPushRegistrationParameters;
 
 OBJC_EXPORT NSInteger TEST_NOTIFICATION_TYPES;
 
-OBJC_EXPORT NSString *const TEST_RELEASE_UUID;
-OBJC_EXPORT NSString *const TEST_RELEASE_SECRET;
-OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS;
+OBJC_EXPORT NSString *const TEST_RELEASE_UUID_1;
+OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_1;
+OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_1;
 OBJC_EXPORT NSString *const TEST_RELEASE_UUID_2;
 OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_2;
 OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
@@ -26,7 +25,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
 @property (nonatomic) id application;
 @property (nonatomic) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic) OmniaFakeOperationQueue *workerQueue;
 @property (nonatomic) NSData *apnsDeviceToken;
 @property (nonatomic) NSData *apnsDeviceToken2;
 @property (nonatomic) NSString *backEndDeviceId;
@@ -40,24 +38,22 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 // Application helpers
 - (id) setupApplication;
 - (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes withNewApnsDeviceToken:(NSData*)newApnsDeviceToken;
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError*)error;
+- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes withNewApnsDeviceToken:(NSData *)newApnsDeviceToken;
+- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError *)error;
 
 // Application Delegate helpers
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
 - (void) setupApplicationDelegateForSuccessfulRegistration;
-- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData*)apnsDeviceToken;
-- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError*)error;
-- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary*)userInfo;
-
-// Operation Queue helpers
-- (OmniaFakeOperationQueue*) setupQueues;
+- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData *)apnsDeviceToken;
+- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error;
+- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary *)userInfo;
 
 // Parameters helpers
 - (OmniaPushRegistrationParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-- (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid;
-- (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret;
-- (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias;
+- (void) changeReleaseUuidInParameters:(NSString *)newReleaseUuid;
+- (void) changeReleaseSecretInParameters:(NSString *)newReleaseSecret;
+- (void) changeDeviceAliasInParameters:(NSString *)newDeviceAlias;
+- (void) setupDefaultSavedParameters;
 
 // NSURLConnectionHelpers
 - (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error;
