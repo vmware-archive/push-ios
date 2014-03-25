@@ -18,6 +18,8 @@
 
 SPEC_BEGIN(OmniaPushSDKSpec)
 
+typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
+
 describe(@"OmniaPushSDK", ^{
     __block OmniaSpecHelper *helper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
@@ -55,13 +57,8 @@ describe(@"OmniaPushSDK", ^{
                                                       }];})
               should] raise];
             [[theValue(blockExecuted) should] beFalse];
-            
-            [[theBlock(^{[OmniaPushSDK registerWithParameters:nil];})
-              should] raise];
         });
     });
-    
-    typedef void (^Handler)(NSURLResponse* response, NSData* data, NSError* connectionError);
 
     describe(@"successful registration", ^{
         
@@ -286,8 +283,107 @@ describe(@"OmniaPushSDK", ^{
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid)];
                                                }];
         });
-        
     });
+    
+    describe(@"successful unregistration from push server", ^{
+        
+        beforeEach(^{
+            [helper setupDefaultSavedParameters];
+            
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                
+                __block NSHTTPURLResponse *newResponse;
+                
+                if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
+                }
+                
+                Handler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+        });
+        
+        it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID", ^{
+            __block BOOL successBlockExecuted = NO;
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            
+            [OmniaPushSDK unregisterSuccess:^{
+                successBlockExecuted = YES;
+                
+            } failure:^(NSError *error) {
+                fail(@"unregistration failure block executed");
+            }];
+            
+            [[theValue(successBlockExecuted) shouldEventually] beTrue];
+        });
+        
+        it(@"should removed all persisted parameters when unregister is successful", ^{
+            __block BOOL successBlockExecuted = NO;
+            
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            
+            [OmniaPushSDK unregisterSuccess:^{
+                successBlockExecuted = YES;
+                
+                SEL selectors[] = {
+                    @selector(APNSDeviceToken),
+                    @selector(backEndDeviceID),
+                    @selector(releaseUUID),
+                    @selector(deviceAlias),
+                };
+                
+                for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
+                    [[[OmniaPushPersistentStorage performSelector:selectors[i]] should] beNil];
+                }
+                
+            } failure:^(NSError *error) {
+                fail(@"unregistration failure block executed");
+            }];
+            
+            [[theValue(successBlockExecuted) shouldEventually] beTrue];
+        });
+    });
+    
+    describe(@"successful unregistration when not registered on push server", ^{
+        
+        beforeEach(^{
+            [helper setupDefaultSavedParameters];
+            
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                
+                __block NSHTTPURLResponse *newResponse;
+                
+                if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                }
+                
+                Handler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+        });
+        
+        it(@"should perform success block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
+            __block BOOL successBlockExecuted = NO;
+            
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            
+            [OmniaPushSDK unregisterSuccess:^{
+                successBlockExecuted = YES;
+            } failure:^(NSError *error) {
+                fail(@"unregistration failure block executed");
+            }];
+
+            [[theValue(successBlockExecuted) shouldEventually] beTrue];
+        });
+    });
+
+//    describe(@"unsuccessful unregistration when network connection fails", ^{
+//        <#code#>
+//    });
 });
 
 SPEC_END

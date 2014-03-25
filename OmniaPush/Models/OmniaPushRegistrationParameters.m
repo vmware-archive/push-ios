@@ -8,25 +8,25 @@
 
 #import "OmniaPushRegistrationParameters.h"
 
-@interface OmniaPushRegistrationParameters ()
-
-@property (readwrite) UIRemoteNotificationType remoteNotificationTypes;
-@property (readwrite) NSString *releaseUUID;
-@property (readwrite) NSString *releaseSecret;
-@property (readwrite) NSString *deviceAlias;
-
-@end
-
 @implementation OmniaPushRegistrationParameters
 
-+ (instancetype)parametersForNotificationTypes:(UIRemoteNotificationType)remoteNotificationTypes
++ (instancetype)parametersForNotificationTypes:(UIRemoteNotificationType)types
                                    releaseUUID:(NSString *)releaseUUID
                                  releaseSecret:(NSString *)releaseSecret
                                    deviceAlias:(NSString *)deviceAlias
 {
-    OmniaPushRegistrationParameters *params = [[OmniaPushRegistrationParameters alloc] init];
+    id registrationParams = [[OmniaPushRegistrationParameters alloc] initWithTypes:types releaseUUID:releaseUUID releaseSecret:releaseSecret deviceAlias:deviceAlias];
+    return registrationParams;
+}
+
+- (id)initWithTypes:(UIRemoteNotificationType)remoteNotificationTypes
+        releaseUUID:(NSString *)releaseUUID
+      releaseSecret:(NSString *)releaseSecret
+        deviceAlias:(NSString *)deviceAlias
+{
+    self = [super init];
     
-    if (params) {
+    if (self) {
         if (!releaseUUID) {
             [NSException raise:NSInvalidArgumentException format:@"releaseUUID may not be nil"];
         }
@@ -42,12 +42,13 @@
         if (!deviceAlias) {
             [NSException raise:NSInvalidArgumentException format:@"deviceAlias may not be nil"];
         }
-        params.remoteNotificationTypes = remoteNotificationTypes;
-        params.releaseUUID = releaseUUID;
-        params.releaseSecret = releaseSecret;
-        params.deviceAlias = deviceAlias;
+        _remoteNotificationTypes = remoteNotificationTypes;
+        _releaseUUID = releaseUUID;
+        _releaseSecret = releaseSecret;
+        _deviceAlias = deviceAlias;
     }
-    return params;
+    
+    return self;
 }
 
 @end

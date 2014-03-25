@@ -11,7 +11,6 @@
 #import "NSURLConnection+OmniaPushBackEndConnection.h"
 #import "OmniaPushSDK.h"
 #import "OmniaApplicationDelegate.h"
-#import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushDebug.h"
@@ -21,14 +20,9 @@
 
 NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 
-#pragma mark - OmniaPushSDK
-
 @implementation OmniaPushSDK
 
-+ (void) registerWithParameters:(OmniaPushRegistrationParameters *)parameters
-{
-    [self registerWithParameters:parameters success:nil failure:nil];
-}
+#pragma mark - Public Methods
 
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
                        success:(void (^)(void))success
@@ -42,6 +36,18 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
                                     successBlock:success
                                     failureBlock:failure];
 }
+
++ (void)unregisterSuccess:(void (^)(void))success
+                  failure:(void (^)(NSError *error))failure
+{
+    [NSURLConnection omnia_unregisterDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
+                                      success:^(NSURLResponse *response, NSData *data) {
+                                          success();
+                                      }
+                                      failure:failure];
+}
+
+#pragma mark - Private Methods
 
 + (void)sendUnregisterRequestWithParameters:(OmniaPushRegistrationParameters *)parameters
                                    devToken:(NSData *)devToken

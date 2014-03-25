@@ -24,9 +24,9 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                    success:(void (^)(NSURLResponse *response, NSData *data))success
                    failure:(void (^)(NSError *error))failure
 {
-    [self sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceId:deviceID]
-                          success:success
-                          failure:failure];
+    [self omnia_sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceId:deviceID]
+                                success:success
+                                failure:failure];
 }
 
 + (void)omnia_registerWithParameters:(OmniaPushRegistrationParameters *)parameters
@@ -34,13 +34,13 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                        success:(void (^)(NSURLResponse *response, NSData *data))success
                        failure:(void (^)(NSError *error))failure
 {
-    [self sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken
-                                                                   parameters:parameters]
-                          success:success
-                          failure:failure];
+    [self omnia_sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken
+                                                                         parameters:parameters]
+                                success:success
+                                failure:failure];
 }
 
-+ (void)sendAsynchronousRequest:(NSURLRequest *)request
++ (void)omnia_sendAsynchronousRequest:(NSURLRequest *)request
                         success:(void (^)(NSURLResponse *response, NSData *data))success
                         failure:(void (^)(NSError *error))failure
 {

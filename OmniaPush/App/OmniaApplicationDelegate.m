@@ -9,7 +9,6 @@
 #import <objc/runtime.h>
 
 #import "OmniaApplicationDelegate.h"
-#import "OmniaPushApplicationDelegateSwitcher.h"
 
 @interface OmniaApplicationDelegate ()
 
@@ -52,13 +51,22 @@ static OmniaApplicationDelegate *_applicationDelegate;
         [NSException raise:NSInvalidArgumentException format:@"success/failure blocks may not be nil"];
     }
     
-    self.originalApplicationDelegate = application.delegate;
-    [OmniaPushApplicationDelegateSwitcher switchApplicationDelegate:self inApplication:application];
+    if (application.delegate != self) {
+        [self swapDelegateForApplication:application];
+    }
     
     self.success = success;
     self.failure = failure;
     
     [application registerForRemoteNotificationTypes:types];
+}
+
+- (void)swapDelegateForApplication:(UIApplication *)application
+{
+    self.originalApplicationDelegate = application.delegate;
+    @synchronized(self) {
+        application.delegate = self;
+    }
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
