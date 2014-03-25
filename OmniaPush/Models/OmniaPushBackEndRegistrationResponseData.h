@@ -11,6 +11,6 @@
 
 @interface OmniaPushBackEndRegistrationResponseData : OmniaPushBackEndRegistrationData
 
-@property (nonatomic) NSString *deviceUUID;
+@property NSString *deviceUUID;
 
 @end

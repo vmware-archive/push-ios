@@ -11,6 +11,6 @@
 
 @interface OmniaPushBackEndRegistrationRequestData : OmniaPushBackEndRegistrationData
 
-@property (nonatomic) NSString *secret;
+@property NSString *secret;
 
 @end

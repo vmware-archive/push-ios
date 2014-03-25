@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "OmniaPushApplicationDelegateSwitcherImpl.h"
+#import "OmniaPushApplicationDelegateSwitcher.h"
 
-@implementation OmniaPushApplicationDelegateSwitcherImpl
+@implementation OmniaPushApplicationDelegateSwitcher
 
 + (void) switchApplicationDelegate:(NSObject<UIApplicationDelegate> *)applicationDelegate inApplication:(UIApplication *)application
 {

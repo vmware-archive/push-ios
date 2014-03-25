@@ -11,7 +11,7 @@
 #import "NSURLConnection+OmniaPushBackEndConnection.h"
 #import "OmniaPushSDK.h"
 #import "OmniaApplicationDelegate.h"
-#import "OmniaPushApplicationDelegateSwitcherImpl.h"
+#import "OmniaPushApplicationDelegateSwitcher.h"
 #import "OmniaPushRegistrationParameters.h"
 #import "OmniaPushPersistentStorage.h"
 #import "OmniaPushDebug.h"

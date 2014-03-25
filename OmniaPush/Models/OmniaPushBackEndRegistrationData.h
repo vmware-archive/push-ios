@@ -10,19 +10,19 @@
 #import "OmniaPushDictionaryizable.h"
 #import "OmniaPushJsonizable.h"
 
-#ifndef STR_PROP
-#define STR_PROP( prop ) NSStringFromSelector(@selector(prop))
+#ifndef OMNIA_STR_PROP
+#define OMNIA_STR_PROP( prop ) NSStringFromSelector(@selector(prop))
 #endif
 
 @interface OmniaPushBackEndRegistrationData : NSObject <OmniaPushJsonizable, OmniaPushDictionaryizable>
 
-@property (nonatomic) NSString *releaseUUID;
-@property (nonatomic) NSString *deviceAlias;
-@property (nonatomic) NSString *deviceManufacturer;
-@property (nonatomic) NSString *deviceModel;
-@property (nonatomic) NSString *os;
-@property (nonatomic) NSString *osVersion;
-@property (nonatomic) NSString *registrationToken;
+@property NSString *releaseUUID;
+@property NSString *deviceAlias;
+@property NSString *deviceManufacturer;
+@property NSString *deviceModel;
+@property NSString *os;
+@property NSString *osVersion;
+@property NSString *registrationToken;
 
 + (NSDictionary *)localToRemoteMapping;
 

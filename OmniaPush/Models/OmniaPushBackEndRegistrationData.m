@@ -29,13 +29,13 @@ NSString *const kRegistrationToken   = @"registration_token";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                                 STR_PROP(releaseUUID) : kReleaseUUID,
-                                 STR_PROP(deviceAlias) : kDeviceAlias,
-                                 STR_PROP(deviceManufacturer) : kDeviceManufacturer,
-                                 STR_PROP(deviceModel) : kDeviceModel,
-                                 STR_PROP(os) : kDeviceOS,
-                                 STR_PROP(osVersion) : kDeviceOSVersion,
-                                 STR_PROP(registrationToken) : kRegistrationToken,
+                                 OMNIA_STR_PROP(releaseUUID) : kReleaseUUID,
+                                 OMNIA_STR_PROP(deviceAlias) : kDeviceAlias,
+                                 OMNIA_STR_PROP(deviceManufacturer) : kDeviceManufacturer,
+                                 OMNIA_STR_PROP(deviceModel) : kDeviceModel,
+                                 OMNIA_STR_PROP(os) : kDeviceOS,
+                                 OMNIA_STR_PROP(osVersion) : kDeviceOSVersion,
+                                 OMNIA_STR_PROP(registrationToken) : kRegistrationToken,
                                  };
     });
     return localToRemoteMapping;

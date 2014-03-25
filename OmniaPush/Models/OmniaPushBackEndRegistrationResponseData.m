@@ -18,7 +18,7 @@ NSString *const kDeviceUUID = @"device_uuid";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary *mapping = [NSMutableDictionary dictionaryWithDictionary:[super localToRemoteMapping]];
-        [mapping setObject:kDeviceUUID forKey:STR_PROP(deviceUUID)];
+        [mapping setObject:kDeviceUUID forKey:OMNIA_STR_PROP(deviceUUID)];
         localToRemoteMapping = [NSDictionary dictionaryWithDictionary:mapping];
     });
     

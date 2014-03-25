@@ -9,13 +9,13 @@
 #import <objc/runtime.h>
 
 #import "OmniaApplicationDelegate.h"
-#import "OmniaPushApplicationDelegateSwitcherImpl.h"
+#import "OmniaPushApplicationDelegateSwitcher.h"
 
 @interface OmniaApplicationDelegate ()
 
 @property NSObject<UIApplicationDelegate> *originalApplicationDelegate;
-@property (nonatomic, copy) void (^success)(NSData *devToken);
-@property (nonatomic, copy) void (^failure)(NSError *error);
+@property (copy) void (^success)(NSData *devToken);
+@property (copy) void (^failure)(NSError *error);
 
 @end
 
@@ -53,7 +53,7 @@ static OmniaApplicationDelegate *_applicationDelegate;
     }
     
     self.originalApplicationDelegate = application.delegate;
-    [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self inApplication:application];
+    [OmniaPushApplicationDelegateSwitcher switchApplicationDelegate:self inApplication:application];
     
     self.success = success;
     self.failure = failure;

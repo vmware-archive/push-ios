@@ -14,10 +14,10 @@
  */
 @interface OmniaPushRegistrationParameters : NSObject
 
-@property (nonatomic, readonly) UIRemoteNotificationType remoteNotificationTypes;
-@property (nonatomic, readonly) NSString *releaseUUID;
-@property (nonatomic, readonly) NSString *releaseSecret;
-@property (nonatomic, readonly) NSString *deviceAlias;
+@property (readonly) UIRemoteNotificationType remoteNotificationTypes;
+@property (readonly) NSString *releaseUUID;
+@property (readonly) NSString *releaseSecret;
+@property (readonly) NSString *deviceAlias;
 
 /**
  * Initialize the parameters object.

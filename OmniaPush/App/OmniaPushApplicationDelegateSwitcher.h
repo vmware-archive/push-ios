@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OmniaPushApplicationDelegateSwitcherProtocol.h"
 
-@interface OmniaPushApplicationDelegateSwitcherImpl : NSObject<OmniaPushApplicationDelegateSwitcherProtocol>
+@interface OmniaPushApplicationDelegateSwitcher : NSObject
+
++ (void)switchApplicationDelegate:(NSObject<UIApplicationDelegate> *)applicationDelegate inApplication:(UIApplication *)application;
 
 @end
