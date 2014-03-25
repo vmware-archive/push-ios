@@ -48,6 +48,10 @@ static OmniaApplicationDelegate *_applicationDelegate;
         [NSException raise:NSInvalidArgumentException format:@"application may not be nil"];
     }
     
+    if (!success || !failure) {
+        [NSException raise:NSInvalidArgumentException format:@"success/failure blocks may not be nil"];
+    }
+    
     self.originalApplicationDelegate = application.delegate;
     [OmniaPushApplicationDelegateSwitcherImpl switchApplicationDelegate:self inApplication:application];
     

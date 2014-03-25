@@ -22,7 +22,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 + (void)omnia_unregisterDeviceID:(NSString *)deviceID
                    success:(void (^)(NSURLResponse *response, NSData *data))success
-                   failure:(void (^)(NSURLResponse *response, NSError *error))failure
+                   failure:(void (^)(NSError *error))failure
 {
     [self sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceId:deviceID]
                           success:success
@@ -32,16 +32,17 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 + (void)omnia_registerWithParameters:(OmniaPushRegistrationParameters *)parameters
                       devToken:(NSData *)devToken
                        success:(void (^)(NSURLResponse *response, NSData *data))success
-                       failure:(void (^)(NSURLResponse *response, NSError *error))failure
+                       failure:(void (^)(NSError *error))failure
 {
-    [self sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken parameters:parameters]
+    [self sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken
+                                                                   parameters:parameters]
                           success:success
                           failure:failure];
 }
 
 + (void)sendAsynchronousRequest:(NSURLRequest *)request
                         success:(void (^)(NSURLResponse *response, NSData *data))success
-                        failure:(void (^)(NSURLResponse *response, NSError *error))failure
+                        failure:(void (^)(NSError *error))failure
 {
     if (!success) {
         [NSException raise:NSInvalidArgumentException format:@"success block may not be nil"];
@@ -53,7 +54,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     
     if (!request) {
         NSError *error = [NSError errorWithDomain:OmniaPushErrorDomain code:OmniaPushBackEndUnregistrationFailedRequestStatusCode userInfo:nil];
-        failure(nil, error);
+        failure(error);
         return;
     }
     
@@ -61,7 +62,7 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     {
         if (connectionError) {
             if (failure) {
-                failure(response, connectionError);
+                failure(connectionError);
             }
         } else {
             if (success) {
@@ -101,8 +102,9 @@ static NSInteger BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 + (NSData *)requestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
                                       parameters:(OmniaPushRegistrationParameters *)parameters
 {
+    NSError *error = nil;
     OmniaPushBackEndRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
-    return [requestData toJSONData];
+    return [requestData toJSONData:&error];
 }
 
 + (OmniaPushBackEndRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken

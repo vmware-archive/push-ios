@@ -38,9 +38,9 @@ describe(@"OmniaApplicationDelegate", ^{
         
         it(@"should require parameters", ^{
             [[theBlock(^{[[OmniaApplicationDelegate omniaApplicationDelegate] registerWithApplication:[UIApplication sharedApplication]
-                                                                                                                remoteNotificationTypes:0
-                                                                                                                                success:nil
-                                                                                                                                failure:nil];})
+                                                                              remoteNotificationTypes:0
+                                                                                              success:nil
+                                                                                              failure:nil];})
               should] raise];
         });
 

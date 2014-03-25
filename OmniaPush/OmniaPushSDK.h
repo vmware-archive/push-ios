@@ -45,10 +45,9 @@
  *                 thread.  May be `nil`.
  */
 
-#warning - TODO: remove nsurlresponse and responseobject potentially.
 #warning - Fix documentation
 + (void)registerWithParameters:(OmniaPushRegistrationParameters *)parameters
-                       success:(void (^)(NSURLResponse *response, id responseObject))success
-                       failure:(void (^)(NSURLResponse *response, NSError *error))failure;
+                       success:(void (^)(void))success
+                       failure:(void (^)(NSError *error))failure;
 
 @end

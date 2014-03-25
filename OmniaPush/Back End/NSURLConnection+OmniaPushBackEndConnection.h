@@ -14,12 +14,12 @@
 
 + (void)omnia_unregisterDeviceID:(NSString *)deviceID
                    success:(void (^)(NSURLResponse *response, NSData *data))success
-                   failure:(void (^)(NSURLResponse *response, NSError *error))failure;
+                   failure:(void (^)(NSError *error))failure;
 
 + (void)omnia_registerWithParameters:(OmniaPushRegistrationParameters *)parameters
                       devToken:(NSData *)devToken
                        success:(void (^)(NSURLResponse *response, NSData *data))success
-                       failure:(void (^)(NSURLResponse *response, NSError *error))failure;
+                       failure:(void (^)(NSError *error))failure;
 
 
 @end

@@ -35,7 +35,7 @@ describe(@"OmniaPushBackEndConnection", ^{
             [[theBlock(^{[NSURLConnection omnia_registerWithParameters:helper.params
                                                         devToken:nil
                                                          success:^(NSURLResponse *response, NSData *data) {}
-                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
+                                                         failure:^(NSError *error) {}];})
               should] raise];
         });
         
@@ -43,7 +43,7 @@ describe(@"OmniaPushBackEndConnection", ^{
             [[theBlock(^{[NSURLConnection omnia_registerWithParameters:nil
                                                         devToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
-                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
+                                                         failure:^(NSError *error) {}];})
               should] raise];
         });
         
@@ -51,7 +51,7 @@ describe(@"OmniaPushBackEndConnection", ^{
             [[theBlock(^{[NSURLConnection omnia_registerWithParameters:helper.params
                                                         devToken:helper.apnsDeviceToken
                                                          success:nil
-                                                         failure:^(NSURLResponse *response, NSError *error) {}];})
+                                                         failure:^(NSError *error) {}];})
               should] raise];
         });
         
@@ -68,14 +68,14 @@ describe(@"OmniaPushBackEndConnection", ^{
         it(@"should not require a device ID", ^{
             [[theBlock(^{[NSURLConnection omnia_unregisterDeviceID:nil
                                                      success:^(NSURLResponse *response, NSData *data) {}
-                                                     failure:^(NSURLResponse *response, NSError *error) {}];})
+                                                     failure:^(NSError *error) {}];})
               shouldNot] raise];
         });
         
         it(@"should require a success block", ^{
             [[theBlock(^{[NSURLConnection omnia_unregisterDeviceID:@"Fake Device ID"
                                                      success:nil
-                                                     failure:^(NSURLResponse *response, NSError *error) {}];})
+                                                     failure:^(NSError *error) {}];})
               should] raise];
         });
         
@@ -108,7 +108,7 @@ describe(@"OmniaPushBackEndConnection", ^{
                                                   success:^(NSURLResponse *response, NSData *data) {
                                                       wasExpectedResult = NO;
                                                   }
-                                                  failure:^(NSURLResponse *response, NSError *error) {
+                                                  failure:^(NSError *error) {
                                                       [[error.domain should] equal:NSURLErrorDomain];
                                                       wasExpectedResult = YES;
                                                   }];

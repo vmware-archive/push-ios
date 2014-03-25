@@ -187,7 +187,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model toJSONData];
+                NSData *JSONData = [model toJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -214,7 +214,7 @@ describe(@"OmniaPushBackEndRegistrationResponseData", ^{
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model toJSONData];
+                NSData *JSONData = [model toJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];

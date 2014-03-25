@@ -33,7 +33,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 + (NSData *)APNSDeviceToken
 {
-    return [[NSUserDefaults standardUserDefaults] dataForKey:KEY_APNS_DEVICE_TOKEN];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
 + (void)setBackEndDeviceID:(NSString *)backEndDeviceID
@@ -43,7 +43,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 + (NSString *)backEndDeviceID
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_BACK_END_DEVICE_ID];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_BACK_END_DEVICE_ID];
 }
 
 + (void)setReleaseUUID:(NSString *)releaseUUID
@@ -53,7 +53,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 + (NSString *)releaseUUID
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_UUID];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_RELEASE_UUID];
 }
 
 + (void)setReleaseSecret:(NSString *)releaseSecret
@@ -63,7 +63,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 + (NSString *)releaseSecret
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_SECRET];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_RELEASE_SECRET];
 }
 
 + (void)setDeviceAlias:(NSString *)deviceAlias
@@ -73,7 +73,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
 
 + (NSString *)deviceAlias
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_DEVICE_ALIAS];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_DEVICE_ALIAS];
 }
 
 @end

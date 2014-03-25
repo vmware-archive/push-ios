@@ -7,7 +7,7 @@
 //
 
 #import "Kiwi.h"
-#import <OmniaPushHexUtil.h>
+#import "OmniaPushHexUtil.h"
 
 #define verifyHexDumpForData(data) [OmniaPushHexUtil hexDumpForData:(data)]
 

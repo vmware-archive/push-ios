@@ -46,11 +46,13 @@ describe(@"OmniaPushSDK", ^{
                    
         it(@"should require a parameters object", ^{
             __block BOOL blockExecuted = NO;
-            [[theBlock(^{[OmniaPushSDK registerWithParameters:nil success:^(NSURLResponse *response, id responseObject) {
-                blockExecuted = YES;
-            } failure:^(NSURLResponse *response, NSError *error) {
-                blockExecuted = YES;
-            }];})
+            [[theBlock(^{[OmniaPushSDK registerWithParameters:nil
+                                                      success:^{
+                                                          blockExecuted = YES;
+                                                      }
+                                                      failure:^(NSError *error) {
+                                                          blockExecuted = YES;
+                                                      }];})
               should] raise];
             [[theValue(blockExecuted) should] beFalse];
             
@@ -62,28 +64,20 @@ describe(@"OmniaPushSDK", ^{
     typedef void (^Handler)(NSURLResponse* response, NSData* data, NSError* connectionError);
 
     describe(@"successful registration", ^{
-        __block NSInteger successCount = 0;
-        __block NSInteger registrationCount = 0;
-        __block NSInteger unregistrationCount = 0;
-        __block NSInteger selectorsCount = 0;
         
         beforeEach(^{
             [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
             [helper setupApplicationDelegateForSuccessfulRegistration];
+        });
+        
+        it(@"should handle successfully unregister betfore registering against APNS", ^{
+            __block NSInteger successCount = 0;
+            __block NSInteger registrationCount = 0;
+            __block NSInteger unregistrationCount = 0;
+            __block NSInteger selectorsCount = 0;
             
-            successCount = 0;
-        });
-        
-        afterEach(^{
-            [[theValue(successCount) should] equal:theValue(selectorsCount)];
-            [[theValue(registrationCount) should] equal:theValue(selectorsCount)];
-            [[theValue(unregistrationCount) should] equal:theValue(selectorsCount)];
-        });
-        
-        it(@"should handle successful registrations from APNS", ^{
             SEL selectors[] = {
                 @selector(setAPNSDeviceToken:),
-                @selector(setBackEndDeviceID:),
                 @selector(setReleaseUUID:),
                 @selector(setReleaseSecret:),
                 @selector(setDeviceAlias:),
@@ -93,7 +87,7 @@ describe(@"OmniaPushSDK", ^{
             
             [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:selectorsCount];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:selectorsCount];
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:selectorsCount];
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:selectorsCount*2];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -132,13 +126,21 @@ describe(@"OmniaPushSDK", ^{
                 [OmniaPushPersistentStorage performSelector:selectors[i] withObject:@"DIFFERENT_VALUE"];
                 
                 [OmniaPushSDK registerWithParameters:helper.params
-                                             success:^(NSURLResponse *response, id responseObject) {
+                                             success:^ {
                                                  successCount++;
                                              }
-                                             failure:^(NSURLResponse *response, NSError *error) {
+                                             failure:^(NSError *error) {
                                                  fail(@"registration failure block executed");
                                              }];
             }
+            
+            [[theValue(successCount) shouldEventually] equal:theValue(selectorsCount)];
+            [[theValue(registrationCount) shouldEventually] equal:theValue(selectorsCount)];
+            [[theValue(unregistrationCount) shouldEventually] equal:theValue(selectorsCount)];
+        });
+        
+        it(@"should bypass unregistering if not required before registering against APNS", ^{
+            
         });
     });
     
@@ -167,7 +169,7 @@ describe(@"OmniaPushSDK", ^{
 
             [OmniaPushSDK registerWithParameters:helper.params
                                          success:nil
-                                         failure:^(NSURLResponse *response, NSError *error) {
+                                         failure:^(NSError *error) {
                                              expectedResult = YES;
                                          }];
         });
@@ -195,10 +197,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    [[error.domain should] equal:OmniaPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationFailedHTTPStatusCode)];
                                                    wasExpectedResult = YES;
@@ -212,10 +214,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    [[error.domain should] equal:OmniaPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -228,10 +230,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    [[error.domain should] equal:OmniaPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -244,10 +246,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    [[error.domain should] equal:OmniaPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -260,10 +262,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    [[error shouldNot] beNil];
                                                    wasExpectedResult = YES;
                                                }];
@@ -275,10 +277,10 @@ describe(@"OmniaPushSDK", ^{
             
             [OmniaPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^(NSURLResponse *response, id responseObject) {
+                                               successBlock:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSURLResponse *response, NSError *error) {
+                                               failureBlock:^(NSError *error) {
                                                    wasExpectedResult = YES;
                                                    [[error.domain should] equal:OmniaPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(OmniaPushBackEndRegistrationResponseDataNoDeviceUuid)];
