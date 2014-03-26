@@ -42,6 +42,7 @@ NSString *const OmniaPushErrorDomain = @"OmniaPushErrorDomain";
 {
     [NSURLConnection omnia_unregisterDeviceID:[OmniaPushPersistentStorage backEndDeviceID]
                                       success:^(NSURLResponse *response, NSData *data) {
+                                          [OmniaPushPersistentStorage reset];
                                           success();
                                       }
                                       failure:failure];
