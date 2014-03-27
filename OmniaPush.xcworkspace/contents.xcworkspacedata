@@ -2,135 +2,132 @@
 <Workspace
    version = "1.0">
    <Group
-      location = "group:OmniaPush"
-      name = "OmniaPush">
+      location = "group:CFPush"
+      name = "CFPush">
       <Group
          location = "group:App"
          name = "App">
          <FileRef
-            location = "group:OmniaPushAPNSRegistrationRequestOperation.h">
+            location = "group:CFAppDelegate.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushAPNSRegistrationRequestOperation.m">
+            location = "group:CFAppDelegate.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushApplicationDelegateSwitcherImpl.h">
+            location = "group:CFAppDelegateProxy.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushApplicationDelegateSwitcherImpl.m">
+            location = "group:CFAppDelegateProxy.m">
          </FileRef>
       </Group>
       <Group
          location = "group:Back End"
          name = "Back End">
          <FileRef
-            location = "group:OmniaPushBackEndConnection.h">
+            location = "group:NSURLConnection+CFPushBackEndConnection.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndConnection.m">
+            location = "group:NSURLConnection+CFPushBackEndConnection.m">
          </FileRef>
       </Group>
+      <FileRef
+         location = "group:CFPushSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:CFPushSDK.m">
+      </FileRef>
       <Group
          location = "group:Models"
          name = "Models">
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationData.h">
+            location = "group:CFPushParameters.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationData.m">
+            location = "group:CFPushParameters.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationRequestData.h">
+            location = "group:CFPushRegistrationData.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationRequestData.m">
+            location = "group:CFPushRegistrationData.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationResponseData.h">
+            location = "group:CFPushRegistrationRequestData.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushBackEndRegistrationResponseData.m">
+            location = "group:CFPushRegistrationRequestData.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushRegistrationParameters.h">
+            location = "group:CFPushRegistrationResponseData.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushRegistrationParameters.m">
+            location = "group:CFPushRegistrationResponseData.m">
          </FileRef>
       </Group>
-      <FileRef
-         location = "group:OmniaPushSDK.h">
-      </FileRef>
-      <FileRef
-         location = "group:OmniaPushSDK.m">
-      </FileRef>
       <Group
          location = "group:Persistent Storage"
          name = "Persistent Storage">
          <FileRef
-            location = "group:OmniaPushPersistentStorage.h">
+            location = "group:CFPushPersistentStorage.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushPersistentStorage.m">
+            location = "group:CFPushPersistentStorage.m">
          </FileRef>
       </Group>
       <Group
          location = "group:Protocols"
          name = "Protocols">
          <FileRef
-            location = "group:OmniaPushApplicationDelegateSwitcherProtocol.h">
+            location = "group:CFPushDictionaryizable.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushDictionaryizable.h">
-         </FileRef>
-         <FileRef
-            location = "group:OmniaPushJsonizable.h">
+            location = "group:CFPushJsonizable.h">
          </FileRef>
       </Group>
       <Group
          location = "group:Public Headers"
          name = "Public Headers">
          <FileRef
-            location = "group:OmniaPushErrors.h">
+            location = "group:CFPushErrors.h">
          </FileRef>
       </Group>
       <Group
          location = "group:Util"
          name = "Util">
          <FileRef
-            location = "group:OmniaPushDebug.h">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushDebug.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushDebug.m">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushDebug.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushErrorUtil.h">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushErrorUtil.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushErrorUtil.m">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushErrorUtil.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushHardwareUtil.h">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushHardwareUtil.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushHardwareUtil.m">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushHardwareUtil.m">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushHexUtil.h">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushHexUtil.h">
          </FileRef>
          <FileRef
-            location = "group:OmniaPushHexUtil.m">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/CFPush/Util/CFPushHexUtil.m">
          </FileRef>
       </Group>
    </Group>
    <FileRef
-      location = "group:Framework/OmniaPushSDK.xcodeproj">
+      location = "group:Framework/CFPushSDK.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:DemoApp/PushSDKDemo.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Specs/OmniaPush Spec.xcodeproj">
+      location = "group:Specs/CFPush Spec.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Specs/Pods/Pods.xcodeproj">

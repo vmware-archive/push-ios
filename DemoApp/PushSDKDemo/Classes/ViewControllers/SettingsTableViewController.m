@@ -1,13 +1,13 @@
 //
 //  SettingsTableViewController.m
-//  OmniaPushSDK
+//  CFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-31.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 #import "SettingsTableViewController.h"
-#import "OmniaPushPersistentStorage.h"
+#import "CFPushPersistentStorage.h"
 #import "Settings.h"
 
 @implementation SettingsTableViewController
@@ -41,11 +41,11 @@
 
 - (IBAction)clearRegistrationPressed:(id)sender
 {
-    [OmniaPushPersistentStorage setBackEndDeviceID:nil];
-    [OmniaPushPersistentStorage setAPNSDeviceToken:nil];
-    [OmniaPushPersistentStorage setReleaseUUID:nil];
-    [OmniaPushPersistentStorage setReleaseSecret:nil];
-    [OmniaPushPersistentStorage setDeviceAlias:nil];
+    [CFPushPersistentStorage setBackEndDeviceID:nil];
+    [CFPushPersistentStorage setAPNSDeviceToken:nil];
+    [CFPushPersistentStorage setReleaseUUID:nil];
+    [CFPushPersistentStorage setReleaseSecret:nil];
+    [CFPushPersistentStorage setDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
 }
 

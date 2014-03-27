@@ -1,9 +1,8 @@
-xcodeproj 'OmniaPush Spec'
-workspace '../OmniaPush'
+xcodeproj 'CFPush Spec'
+workspace '../CFPush'
 inhibit_all_warnings!
 
-target :OmniaPushTests, :exclusive => true do
+target :CFPushTests, :exclusive => true do
   platform :ios, '6.0'
   pod 'Kiwi/XCTest'
-  pod 'OmniaPush', :path => '../'
 end

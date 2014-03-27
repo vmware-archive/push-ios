@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Settings.h"
-#import "OmniaPushDebug.h"
+#import "CFPushDebug.h"
 
 @interface AppDelegate ()
 
@@ -32,7 +32,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    OmniaPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
+    CFPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

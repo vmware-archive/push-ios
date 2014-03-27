@@ -1,0 +1,597 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		380AF9A39A00411490090BD5 /* libPods-CFPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */; };
+		8E6F553171E142C78A67B3BC /* libPods-OmniaPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */; };
+		F112401518D9DD220077D0F0 /* CFPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292218D8D86E002FE233 /* CFPushBackEndConnectionSpec.m */; };
+		F112401718D9DD220077D0F0 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292818D8D86E002FE233 /* JRSwizzle.m */; };
+		F112401818D9DD220077D0F0 /* NSURLConnection+CFAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292A18D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.m */; };
+		F112401918D9DD220077D0F0 /* CFSpecHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292C18D8D86E002FE233 /* CFSpecHelper.m */; };
+		F112401A18D9DD220077D0F0 /* CFPushBackEndRegistrationRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292E18D8D86E002FE233 /* CFPushBackEndRegistrationRequestDataSpec.m */; };
+		F112401B18D9DD220077D0F0 /* CFPushBackEndRegistrationResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292F18D8D86E002FE233 /* CFPushBackEndRegistrationResponseDataSpec.m */; };
+		F112401C18D9DD220077D0F0 /* CFPushRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1293018D8D86E002FE233 /* CFPushRegistrationParametersSpec.m */; };
+		F112401D18D9DD220077D0F0 /* CFPushSDKSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1293118D8D86E002FE233 /* CFPushSDKSpec.m */; };
+		F112401F18D9DD220077D0F0 /* CFPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1293518D8D86E002FE233 /* CFPushPersistentStorageSpec.m */; };
+		F112402018D9DD220077D0F0 /* CFPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1293D18D8D86E002FE233 /* CFPushHexUtilSpec.m */; };
+		F1BCF21B18E4B724004F3684 /* CFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF1F918E4B724004F3684 /* CFAppDelegate.m */; };
+		F1BCF21C18E4B724004F3684 /* CFAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF1FB18E4B724004F3684 /* CFAppDelegateProxy.m */; };
+		F1BCF21E18E4B724004F3684 /* CFPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20018E4B724004F3684 /* CFPushSDK.m */; };
+		F1BCF21F18E4B724004F3684 /* CFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20318E4B724004F3684 /* CFPushParameters.m */; };
+		F1BCF22018E4B724004F3684 /* CFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20518E4B724004F3684 /* CFPushRegistrationData.m */; };
+		F1BCF22118E4B724004F3684 /* CFPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20718E4B724004F3684 /* CFPushRegistrationRequestData.m */; };
+		F1BCF22218E4B724004F3684 /* CFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20918E4B724004F3684 /* CFPushRegistrationResponseData.m */; };
+		F1BCF22318E4B724004F3684 /* CFPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF20C18E4B724004F3684 /* CFPushPersistentStorage.m */; };
+		F1BCF22418E4B724004F3684 /* CFPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF21418E4B724004F3684 /* CFPushDebug.m */; };
+		F1BCF22518E4B724004F3684 /* CFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF21618E4B724004F3684 /* CFPushErrorUtil.m */; };
+		F1BCF22618E4B724004F3684 /* CFPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF21818E4B724004F3684 /* CFPushHardwareUtil.m */; };
+		F1BCF22718E4B724004F3684 /* CFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF21A18E4B724004F3684 /* CFPushHexUtil.m */; };
+		F1BCF2A218E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2A018E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.m */; };
+		F1BCF2A818E4BC12004F3684 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1BCF2A418E4BC12004F3684 /* InfoPlist.strings */; };
+		F1BCF2A918E4BC12004F3684 /* CFPushTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1BCF2A618E4BC12004F3684 /* CFPushTests-Info.plist */; };
+		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
+		F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */; };
+		F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2B118D79A1B009EBE38 /* UIKit.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OmniaPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CFPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		418D7334D2334B77958F6252 /* Pods-OmniaPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OmniaPushTests.xcconfig"; path = "Pods/Pods-OmniaPushTests.xcconfig"; sourceTree = "<group>"; };
+		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CFPushTests.xcconfig"; path = "Pods/Pods-CFPushTests.xcconfig"; sourceTree = "<group>"; };
+		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1BCF1F818E4B724004F3684 /* CFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFAppDelegate.h; sourceTree = "<group>"; };
+		F1BCF1F918E4B724004F3684 /* CFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFAppDelegate.m; sourceTree = "<group>"; };
+		F1BCF1FA18E4B724004F3684 /* CFAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFAppDelegateProxy.h; sourceTree = "<group>"; };
+		F1BCF1FB18E4B724004F3684 /* CFAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFAppDelegateProxy.m; sourceTree = "<group>"; };
+		F1BCF1FF18E4B724004F3684 /* CFPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushSDK.h; sourceTree = "<group>"; };
+		F1BCF20018E4B724004F3684 /* CFPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushSDK.m; sourceTree = "<group>"; };
+		F1BCF20218E4B724004F3684 /* CFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushParameters.h; sourceTree = "<group>"; };
+		F1BCF20318E4B724004F3684 /* CFPushParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushParameters.m; sourceTree = "<group>"; };
+		F1BCF20418E4B724004F3684 /* CFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushRegistrationData.h; sourceTree = "<group>"; };
+		F1BCF20518E4B724004F3684 /* CFPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushRegistrationData.m; sourceTree = "<group>"; };
+		F1BCF20618E4B724004F3684 /* CFPushRegistrationRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushRegistrationRequestData.h; sourceTree = "<group>"; };
+		F1BCF20718E4B724004F3684 /* CFPushRegistrationRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushRegistrationRequestData.m; sourceTree = "<group>"; };
+		F1BCF20818E4B724004F3684 /* CFPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushRegistrationResponseData.h; sourceTree = "<group>"; };
+		F1BCF20918E4B724004F3684 /* CFPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushRegistrationResponseData.m; sourceTree = "<group>"; };
+		F1BCF20B18E4B724004F3684 /* CFPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushPersistentStorage.h; sourceTree = "<group>"; };
+		F1BCF20C18E4B724004F3684 /* CFPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushPersistentStorage.m; sourceTree = "<group>"; };
+		F1BCF20E18E4B724004F3684 /* CFPushDictionaryizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushDictionaryizable.h; sourceTree = "<group>"; };
+		F1BCF20F18E4B724004F3684 /* CFPushJsonizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushJsonizable.h; sourceTree = "<group>"; };
+		F1BCF21318E4B724004F3684 /* CFPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushDebug.h; sourceTree = "<group>"; };
+		F1BCF21418E4B724004F3684 /* CFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushDebug.m; sourceTree = "<group>"; };
+		F1BCF21518E4B724004F3684 /* CFPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushErrorUtil.h; sourceTree = "<group>"; };
+		F1BCF21618E4B724004F3684 /* CFPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushErrorUtil.m; sourceTree = "<group>"; };
+		F1BCF21718E4B724004F3684 /* CFPushHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushHardwareUtil.h; sourceTree = "<group>"; };
+		F1BCF21818E4B724004F3684 /* CFPushHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushHardwareUtil.m; sourceTree = "<group>"; };
+		F1BCF21918E4B724004F3684 /* CFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushHexUtil.h; sourceTree = "<group>"; };
+		F1BCF21A18E4B724004F3684 /* CFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushHexUtil.m; sourceTree = "<group>"; };
+		F1BCF29F18E4B8B2004F3684 /* CFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushErrors.h; sourceTree = "<group>"; };
+		F1BCF2A018E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+CFPushBackEndConnection.m"; sourceTree = "<group>"; };
+		F1BCF2A118E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+CFPushBackEndConnection.h"; sourceTree = "<group>"; };
+		F1BCF2A518E4BC12004F3684 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		F1BCF2A618E4BC12004F3684 /* CFPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "CFPushTests-Info.plist"; sourceTree = "<group>"; };
+		F1BCF2A718E4BC12004F3684 /* CFPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CFPushTests-Prefix.pch"; sourceTree = "<group>"; };
+		F1D1292218D8D86E002FE233 /* CFPushBackEndConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushBackEndConnectionSpec.m; sourceTree = "<group>"; };
+		F1D1292718D8D86E002FE233 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
+		F1D1292818D8D86E002FE233 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
+		F1D1292918D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+CFAsync2Sync.h"; sourceTree = "<group>"; };
+		F1D1292A18D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+CFAsync2Sync.m"; sourceTree = "<group>"; };
+		F1D1292B18D8D86E002FE233 /* CFSpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFSpecHelper.h; sourceTree = "<group>"; };
+		F1D1292C18D8D86E002FE233 /* CFSpecHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFSpecHelper.m; sourceTree = "<group>"; };
+		F1D1292E18D8D86E002FE233 /* CFPushBackEndRegistrationRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushBackEndRegistrationRequestDataSpec.m; sourceTree = "<group>"; };
+		F1D1292F18D8D86E002FE233 /* CFPushBackEndRegistrationResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushBackEndRegistrationResponseDataSpec.m; sourceTree = "<group>"; };
+		F1D1293018D8D86E002FE233 /* CFPushRegistrationParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushRegistrationParametersSpec.m; sourceTree = "<group>"; };
+		F1D1293118D8D86E002FE233 /* CFPushSDKSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushSDKSpec.m; sourceTree = "<group>"; };
+		F1D1293518D8D86E002FE233 /* CFPushPersistentStorageSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushPersistentStorageSpec.m; sourceTree = "<group>"; };
+		F1D1293818D8D86E002FE233 /* CFPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
+		F1D1293918D8D86E002FE233 /* CFPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
+		F1D1293A18D8D86E002FE233 /* CFPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
+		F1D1293B18D8D86E002FE233 /* CFPushSDKTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushSDKTest.h; sourceTree = "<group>"; };
+		F1D1293D18D8D86E002FE233 /* CFPushHexUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushHexUtilSpec.m; sourceTree = "<group>"; };
+		F1D1295C18D9DB35002FE233 /* CFPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CFPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		F1FDE2B118D79A1B009EBE38 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F1D1295918D9DB35002FE233 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */,
+				F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */,
+				F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */,
+				8E6F553171E142C78A67B3BC /* libPods-OmniaPushTests.a in Frameworks */,
+				380AF9A39A00411490090BD5 /* libPods-CFPushTests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F1BCF1F618E4B724004F3684 /* CFPush */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF1F718E4B724004F3684 /* App */,
+				F1BCF1FC18E4B724004F3684 /* Back End */,
+				F1BCF1FF18E4B724004F3684 /* CFPushSDK.h */,
+				F1BCF20018E4B724004F3684 /* CFPushSDK.m */,
+				F1BCF20118E4B724004F3684 /* Models */,
+				F1BCF20A18E4B724004F3684 /* Persistent Storage */,
+				F1BCF20D18E4B724004F3684 /* Protocols */,
+				F1BCF21018E4B724004F3684 /* Public Headers */,
+				F1BCF21218E4B724004F3684 /* Util */,
+			);
+			name = CFPush;
+			path = ../CFPush;
+			sourceTree = "<group>";
+		};
+		F1BCF1F718E4B724004F3684 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF1F818E4B724004F3684 /* CFAppDelegate.h */,
+				F1BCF1F918E4B724004F3684 /* CFAppDelegate.m */,
+				F1BCF1FA18E4B724004F3684 /* CFAppDelegateProxy.h */,
+				F1BCF1FB18E4B724004F3684 /* CFAppDelegateProxy.m */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F1BCF1FC18E4B724004F3684 /* Back End */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF2A018E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.m */,
+				F1BCF2A118E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.h */,
+			);
+			path = "Back End";
+			sourceTree = "<group>";
+		};
+		F1BCF20118E4B724004F3684 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF20218E4B724004F3684 /* CFPushParameters.h */,
+				F1BCF20318E4B724004F3684 /* CFPushParameters.m */,
+				F1BCF20418E4B724004F3684 /* CFPushRegistrationData.h */,
+				F1BCF20518E4B724004F3684 /* CFPushRegistrationData.m */,
+				F1BCF20618E4B724004F3684 /* CFPushRegistrationRequestData.h */,
+				F1BCF20718E4B724004F3684 /* CFPushRegistrationRequestData.m */,
+				F1BCF20818E4B724004F3684 /* CFPushRegistrationResponseData.h */,
+				F1BCF20918E4B724004F3684 /* CFPushRegistrationResponseData.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F1BCF20A18E4B724004F3684 /* Persistent Storage */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF20B18E4B724004F3684 /* CFPushPersistentStorage.h */,
+				F1BCF20C18E4B724004F3684 /* CFPushPersistentStorage.m */,
+			);
+			path = "Persistent Storage";
+			sourceTree = "<group>";
+		};
+		F1BCF20D18E4B724004F3684 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF20E18E4B724004F3684 /* CFPushDictionaryizable.h */,
+				F1BCF20F18E4B724004F3684 /* CFPushJsonizable.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		F1BCF21018E4B724004F3684 /* Public Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF29F18E4B8B2004F3684 /* CFPushErrors.h */,
+			);
+			path = "Public Headers";
+			sourceTree = "<group>";
+		};
+		F1BCF21218E4B724004F3684 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF21318E4B724004F3684 /* CFPushDebug.h */,
+				F1BCF21418E4B724004F3684 /* CFPushDebug.m */,
+				F1BCF21518E4B724004F3684 /* CFPushErrorUtil.h */,
+				F1BCF21618E4B724004F3684 /* CFPushErrorUtil.m */,
+				F1BCF21718E4B724004F3684 /* CFPushHardwareUtil.h */,
+				F1BCF21818E4B724004F3684 /* CFPushHardwareUtil.m */,
+				F1BCF21918E4B724004F3684 /* CFPushHexUtil.h */,
+				F1BCF21A18E4B724004F3684 /* CFPushHexUtil.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		F1BCF2A318E4BC12004F3684 /* CFPushTests */ = {
+			isa = PBXGroup;
+			children = (
+				F1BCF2A418E4BC12004F3684 /* InfoPlist.strings */,
+				F1BCF2A618E4BC12004F3684 /* CFPushTests-Info.plist */,
+				F1BCF2A718E4BC12004F3684 /* CFPushTests-Prefix.pch */,
+			);
+			path = CFPushTests;
+			sourceTree = "<group>";
+		};
+		F1D1292018D8D86E002FE233 /* Spec */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1292118D8D86E002FE233 /* Back End */,
+				F1D1292618D8D86E002FE233 /* Helpers */,
+				F1D1292D18D8D86E002FE233 /* Models */,
+				F1D1293118D8D86E002FE233 /* CFPushSDKSpec.m */,
+				F1D1293418D8D86E002FE233 /* Persistent Storage */,
+				F1D1293618D8D86E002FE233 /* Test Headers */,
+				F1D1293C18D8D86E002FE233 /* Util */,
+			);
+			path = Spec;
+			sourceTree = "<group>";
+		};
+		F1D1292118D8D86E002FE233 /* Back End */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1292218D8D86E002FE233 /* CFPushBackEndConnectionSpec.m */,
+			);
+			path = "Back End";
+			sourceTree = "<group>";
+		};
+		F1D1292618D8D86E002FE233 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1292718D8D86E002FE233 /* JRSwizzle.h */,
+				F1D1292818D8D86E002FE233 /* JRSwizzle.m */,
+				F1D1292918D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.h */,
+				F1D1292A18D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.m */,
+				F1D1292B18D8D86E002FE233 /* CFSpecHelper.h */,
+				F1D1292C18D8D86E002FE233 /* CFSpecHelper.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		F1D1292D18D8D86E002FE233 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1292E18D8D86E002FE233 /* CFPushBackEndRegistrationRequestDataSpec.m */,
+				F1D1292F18D8D86E002FE233 /* CFPushBackEndRegistrationResponseDataSpec.m */,
+				F1D1293018D8D86E002FE233 /* CFPushRegistrationParametersSpec.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		F1D1293418D8D86E002FE233 /* Persistent Storage */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1293518D8D86E002FE233 /* CFPushPersistentStorageSpec.m */,
+			);
+			path = "Persistent Storage";
+			sourceTree = "<group>";
+		};
+		F1D1293618D8D86E002FE233 /* Test Headers */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1293818D8D86E002FE233 /* CFPushBackEndRegistrationDataTest.h */,
+				F1D1293918D8D86E002FE233 /* CFPushBackEndRegistrationRequestDataTest.h */,
+				F1D1293A18D8D86E002FE233 /* CFPushBackEndRegistrationResponseDataTest.h */,
+				F1D1293B18D8D86E002FE233 /* CFPushSDKTest.h */,
+			);
+			path = "Test Headers";
+			sourceTree = "<group>";
+		};
+		F1D1293C18D8D86E002FE233 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1293D18D8D86E002FE233 /* CFPushHexUtilSpec.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		F1FDE29F18D799E4009EBE38 = {
+			isa = PBXGroup;
+			children = (
+				F1BCF2A318E4BC12004F3684 /* CFPushTests */,
+				F1BCF1F618E4B724004F3684 /* CFPush */,
+				F1D1292018D8D86E002FE233 /* Spec */,
+				F1FDE2AC18D79A1B009EBE38 /* Frameworks */,
+				F1FDE2AB18D79A1B009EBE38 /* Products */,
+				418D7334D2334B77958F6252 /* Pods-OmniaPushTests.xcconfig */,
+				974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */,
+			);
+			sourceTree = "<group>";
+		};
+		F1FDE2AB18D79A1B009EBE38 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F1D1295C18D9DB35002FE233 /* CFPushTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F1FDE2AC18D79A1B009EBE38 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */,
+				F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */,
+				F1FDE2B118D79A1B009EBE38 /* UIKit.framework */,
+				48E0BEE976B04ACBAB665052 /* libPods-ios.a */,
+				982406CD77B04192B6EA55BA /* libPods-iOSTests.a */,
+				0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */,
+				031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F1D1295B18D9DB35002FE233 /* CFPushTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "CFPushTests" */;
+			buildPhases = (
+				BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */,
+				F1D1295818D9DB35002FE233 /* Sources */,
+				F1D1295918D9DB35002FE233 /* Frameworks */,
+				F1D1295A18D9DB35002FE233 /* Resources */,
+				8971015423DB4043A8083210 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CFPushTests;
+			productName = OmniaPushTests;
+			productReference = F1D1295C18D9DB35002FE233 /* CFPushTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F1FDE2A018D799E4009EBE38 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+			};
+			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "CFPush Spec" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F1FDE29F18D799E4009EBE38;
+			productRefGroup = F1FDE2AB18D79A1B009EBE38 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F1D1295B18D9DB35002FE233 /* CFPushTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F1D1295A18D9DB35002FE233 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F1BCF2A818E4BC12004F3684 /* InfoPlist.strings in Resources */,
+				F1BCF2A918E4BC12004F3684 /* CFPushTests-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8971015423DB4043A8083210 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-CFPushTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F1D1295818D9DB35002FE233 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F112401518D9DD220077D0F0 /* CFPushBackEndConnectionSpec.m in Sources */,
+				F1BCF22018E4B724004F3684 /* CFPushRegistrationData.m in Sources */,
+				F1BCF22418E4B724004F3684 /* CFPushDebug.m in Sources */,
+				F112401718D9DD220077D0F0 /* JRSwizzle.m in Sources */,
+				F112401818D9DD220077D0F0 /* NSURLConnection+CFAsync2Sync.m in Sources */,
+				F1BCF22518E4B724004F3684 /* CFPushErrorUtil.m in Sources */,
+				F1BCF22318E4B724004F3684 /* CFPushPersistentStorage.m in Sources */,
+				F1BCF22218E4B724004F3684 /* CFPushRegistrationResponseData.m in Sources */,
+				F1BCF21E18E4B724004F3684 /* CFPushSDK.m in Sources */,
+				F1BCF21F18E4B724004F3684 /* CFPushParameters.m in Sources */,
+				F1BCF21B18E4B724004F3684 /* CFAppDelegate.m in Sources */,
+				F112401918D9DD220077D0F0 /* CFSpecHelper.m in Sources */,
+				F112401A18D9DD220077D0F0 /* CFPushBackEndRegistrationRequestDataSpec.m in Sources */,
+				F1BCF21C18E4B724004F3684 /* CFAppDelegateProxy.m in Sources */,
+				F112401B18D9DD220077D0F0 /* CFPushBackEndRegistrationResponseDataSpec.m in Sources */,
+				F112401C18D9DD220077D0F0 /* CFPushRegistrationParametersSpec.m in Sources */,
+				F1BCF22718E4B724004F3684 /* CFPushHexUtil.m in Sources */,
+				F1BCF22118E4B724004F3684 /* CFPushRegistrationRequestData.m in Sources */,
+				F1BCF22618E4B724004F3684 /* CFPushHardwareUtil.m in Sources */,
+				F112401D18D9DD220077D0F0 /* CFPushSDKSpec.m in Sources */,
+				F112401F18D9DD220077D0F0 /* CFPushPersistentStorageSpec.m in Sources */,
+				F112402018D9DD220077D0F0 /* CFPushHexUtilSpec.m in Sources */,
+				F1BCF2A218E4BACD004F3684 /* NSURLConnection+CFPushBackEndConnection.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F1BCF2A418E4BC12004F3684 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F1BCF2A518E4BC12004F3684 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F1D1296A18D9DB36002FE233 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OmniaPushTests/OmniaPushTests-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "OmniaPushTests/OmniaPushTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		F1D1296B18D9DB36002FE233 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OmniaPushTests/OmniaPushTests-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "OmniaPushTests/OmniaPushTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+		F1FDE2A418D799E4009EBE38 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		F1FDE2A518D799E4009EBE38 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "CFPushTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1D1296A18D9DB36002FE233 /* Debug */,
+				F1D1296B18D9DB36002FE233 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "CFPush Spec" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F1FDE2A418D799E4009EBE38 /* Debug */,
+				F1FDE2A518D799E4009EBE38 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F1FDE2A018D799E4009EBE38 /* Project object */;
+}
