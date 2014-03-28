@@ -12,7 +12,7 @@
 		F18D898218E5D26B0084D142 /* PCFPushAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D895D18E5D26B0084D142 /* PCFPushAppDelegateProxy.m */; };
 		F18D898318E5D26B0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896018E5D26B0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */; };
 		F18D898418E5D26B0084D142 /* PCFPushDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F18D896218E5D26B0084D142 /* PCFPushDataModel.xcdatamodeld */; };
-		F18D898518E5D26B0084D142 /* PCFPushDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896518E5D26B0084D142 /* PCFPushDBManager.m */; };
+		F18D898518E5D26B0084D142 /* PCFPushCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896518E5D26B0084D142 /* PCFPushCoreDataManager.m */; };
 		F18D898618E5D26B0084D142 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896718E5D26B0084D142 /* PCFPushParameters.m */; };
 		F18D898718E5D26B0084D142 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896918E5D26B0084D142 /* PCFPushRegistrationData.m */; };
 		F18D898818E5D26B0084D142 /* PCFPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D896B18E5D26B0084D142 /* PCFPushRegistrationRequestData.m */; };
@@ -50,8 +50,8 @@
 		F18D895F18E5D26B0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
 		F18D896018E5D26B0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
 		F18D896318E5D26B0084D142 /* CFPushDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CFPushDataModel.xcdatamodel; sourceTree = "<group>"; };
-		F18D896418E5D26B0084D142 /* PCFPushDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDBManager.h; sourceTree = "<group>"; };
-		F18D896518E5D26B0084D142 /* PCFPushDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDBManager.m; sourceTree = "<group>"; };
+		F18D896418E5D26B0084D142 /* PCFPushCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushCoreDataManager.h; sourceTree = "<group>"; };
+		F18D896518E5D26B0084D142 /* PCFPushCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushCoreDataManager.m; sourceTree = "<group>"; };
 		F18D896618E5D26B0084D142 /* PCFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushParameters.h; sourceTree = "<group>"; };
 		F18D896718E5D26B0084D142 /* PCFPushParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushParameters.m; sourceTree = "<group>"; };
 		F18D896818E5D26B0084D142 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
@@ -157,8 +157,8 @@
 			isa = PBXGroup;
 			children = (
 				F18D896218E5D26B0084D142 /* PCFPushDataModel.xcdatamodeld */,
-				F18D896418E5D26B0084D142 /* PCFPushDBManager.h */,
-				F18D896518E5D26B0084D142 /* PCFPushDBManager.m */,
+				F18D896418E5D26B0084D142 /* PCFPushCoreDataManager.h */,
+				F18D896518E5D26B0084D142 /* PCFPushCoreDataManager.m */,
 				F18D896618E5D26B0084D142 /* PCFPushParameters.h */,
 				F18D896718E5D26B0084D142 /* PCFPushParameters.m */,
 				F18D896818E5D26B0084D142 /* PCFPushRegistrationData.h */,
@@ -446,7 +446,7 @@
 				F18D898818E5D26B0084D142 /* PCFPushRegistrationRequestData.m in Sources */,
 				F1BCF2EB18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m in Sources */,
 				F18D898118E5D26B0084D142 /* PCFPushAppDelegate.m in Sources */,
-				F18D898518E5D26B0084D142 /* PCFPushDBManager.m in Sources */,
+				F18D898518E5D26B0084D142 /* PCFPushCoreDataManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

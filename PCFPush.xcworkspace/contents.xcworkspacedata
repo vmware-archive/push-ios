@@ -34,10 +34,10 @@
          location = "group:Models"
          name = "Models">
          <FileRef
-            location = "group:PCFPushDBManager.h">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/PCFPush/Models/PCFPushCoreDataManager.h">
          </FileRef>
          <FileRef
-            location = "group:PCFPushDBManager.m">
+            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/PCFPush/Models/PCFPushCoreDataManager.m">
          </FileRef>
          <FileRef
             location = "group:PCFPushParameters.h">
@@ -62,6 +62,12 @@
          </FileRef>
          <FileRef
             location = "group:PCFPushRegistrationResponseData.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFAnalyticEvent.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFAnalyticEvent.m">
          </FileRef>
       </Group>
       <FileRef

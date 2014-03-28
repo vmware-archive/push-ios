@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PCFPushDBManager : NSObject
+@interface PCFPushCoreDataManager : NSObject
+
++ (instancetype)shared;
 
 @end
