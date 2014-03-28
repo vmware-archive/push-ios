@@ -20,6 +20,8 @@
 		F1BCF25818E4B739004F3684 /* CFPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF24A18E4B739004F3684 /* CFPushHardwareUtil.m */; };
 		F1BCF25918E4B739004F3684 /* CFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF24C18E4B739004F3684 /* CFPushHexUtil.m */; };
 		F1BCF2B818E4C963004F3684 /* NSURLConnection+CFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2B618E4C963004F3684 /* NSURLConnection+CFPushBackEndConnection.m */; };
+		F1BCF2BD18E4DBC6004F3684 /* CFPushDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2B918E4DBC6004F3684 /* CFPushDataModel.xcdatamodeld */; };
+		F1BCF2BE18E4DBC6004F3684 /* CFPushDBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2BB18E4DBC6004F3684 /* CFPushDBManager.m */; };
 		F1FDE1A818D7806B009EBE38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A718D7806B009EBE38 /* Foundation.framework */; };
 		F1FDE1AA18D7806B009EBE38 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */; };
 		F1FDE1AC18D7806B009EBE38 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1AB18D7806B009EBE38 /* UIKit.framework */; };
@@ -67,6 +69,9 @@
 		F1BCF29C18E4B898004F3684 /* CFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushErrors.h; sourceTree = "<group>"; };
 		F1BCF2B618E4C963004F3684 /* NSURLConnection+CFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+CFPushBackEndConnection.m"; sourceTree = "<group>"; };
 		F1BCF2B718E4C963004F3684 /* NSURLConnection+CFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+CFPushBackEndConnection.h"; sourceTree = "<group>"; };
+		F1BCF2BA18E4DBC6004F3684 /* CFPushDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CFPushDataModel.xcdatamodel; sourceTree = "<group>"; };
+		F1BCF2BB18E4DBC6004F3684 /* CFPushDBManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFPushDBManager.m; sourceTree = "<group>"; };
+		F1BCF2BC18E4DBC6004F3684 /* CFPushDBManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFPushDBManager.h; sourceTree = "<group>"; };
 		F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FDE1A718D7806B009EBE38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -148,6 +153,9 @@
 		F1BCF23318E4B739004F3684 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F1BCF2B918E4DBC6004F3684 /* CFPushDataModel.xcdatamodeld */,
+				F1BCF2BB18E4DBC6004F3684 /* CFPushDBManager.m */,
+				F1BCF2BC18E4DBC6004F3684 /* CFPushDBManager.h */,
 				F1BCF23418E4B739004F3684 /* CFPushParameters.h */,
 				F1BCF23518E4B739004F3684 /* CFPushParameters.m */,
 				F1BCF23618E4B739004F3684 /* CFPushRegistrationData.h */,
@@ -385,9 +393,11 @@
 				F1FDE1F018D78115009EBE38 /* BackEndMessageRequest.m in Sources */,
 				F1BCF25518E4B739004F3684 /* CFPushPersistentStorage.m in Sources */,
 				F1BCF25918E4B739004F3684 /* CFPushHexUtil.m in Sources */,
+				F1BCF2BD18E4DBC6004F3684 /* CFPushDataModel.xcdatamodeld in Sources */,
 				F1BCF2B818E4C963004F3684 /* NSURLConnection+CFPushBackEndConnection.m in Sources */,
 				F1BCF25218E4B739004F3684 /* CFPushRegistrationData.m in Sources */,
 				F1BCF24D18E4B739004F3684 /* CFAppDelegate.m in Sources */,
+				F1BCF2BE18E4DBC6004F3684 /* CFPushDBManager.m in Sources */,
 				F1BCF25118E4B739004F3684 /* CFPushParameters.m in Sources */,
 				F1BCF25318E4B739004F3684 /* CFPushRegistrationRequestData.m in Sources */,
 				F1BCF25018E4B739004F3684 /* CFPushSDK.m in Sources */,
@@ -541,6 +551,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F1BCF2B918E4DBC6004F3684 /* CFPushDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F1BCF2BA18E4DBC6004F3684 /* CFPushDataModel.xcdatamodel */,
+			);
+			currentVersion = F1BCF2BA18E4DBC6004F3684 /* CFPushDataModel.xcdatamodel */;
+			path = CFPushDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F1FDE19C18D7806B009EBE38 /* Project object */;
 }

@@ -6,11 +6,11 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-static NSString *const KEY_APNS_DEVICE_TOKEN  = @"OMNIA_PUSH_APNS_DEVICE_TOKEN";
-static NSString *const KEY_BACK_END_DEVICE_ID = @"OMNIA_PUSH_BACK_END_DEVICE_ID";
-static NSString *const KEY_RELEASE_UUID       = @"OMNIA_PUSH_RELEASE_UUID";
-static NSString *const KEY_RELEASE_SECRET     = @"OMNIA_PUSH_RELEASE_SECRET";
-static NSString *const KEY_DEVICE_ALIAS       = @"OMNIA_PUSH_DEVICE_ALIAS";
+static NSString *const KEY_APNS_DEVICE_TOKEN  = @"CF_PUSH_APNS_DEVICE_TOKEN";
+static NSString *const KEY_BACK_END_DEVICE_ID = @"CF_PUSH_BACK_END_DEVICE_ID";
+static NSString *const KEY_RELEASE_UUID       = @"CF_PUSH_RELEASE_UUID";
+static NSString *const KEY_RELEASE_SECRET     = @"CF_PUSH_RELEASE_SECRET";
+static NSString *const KEY_DEVICE_ALIAS       = @"CF_PUSH_DEVICE_ALIAS";
 
 #import "CFPushPersistentStorage.h"
 #import "CFPushRegistrationResponseData.h"

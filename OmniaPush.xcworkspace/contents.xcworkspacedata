@@ -63,6 +63,15 @@
          <FileRef
             location = "group:CFPushRegistrationResponseData.m">
          </FileRef>
+         <FileRef
+            location = "group:CFPushDBManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:CFPushDBManager.m">
+         </FileRef>
+         <FileRef
+            location = "group:CFPushDataModel.xcdatamodeld">
+         </FileRef>
       </Group>
       <Group
          location = "group:Persistent Storage"

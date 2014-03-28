@@ -1,5 +1,5 @@
 //
-//  OmniaApplicationDelegate.m
+//  CFApplicationDelegate.m
 //  
 //
 //  Created by DX123-XL on 2014-03-24.

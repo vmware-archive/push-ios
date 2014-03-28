@@ -1,5 +1,5 @@
 //
-//  NSURLConnection+OmniaAsync2Sync.m
+//  NSURLConnection+CFAsync2Sync.m
 //  CFPushSDK
 //
 //  Created by DX123-XL on 3/13/2014.

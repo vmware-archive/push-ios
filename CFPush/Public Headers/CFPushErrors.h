@@ -10,12 +10,12 @@
 #define CFPushSDK_CFPushErrors_h
 
 /**
- * Defines the domain for errors that are specific to the Omnia Push SDK Client
+ * Defines the domain for errors that are specific to the CF Push SDK Client
  */
 OBJC_EXPORT NSString *const CFPushErrorDomain;
 
 /**
- * Defines the error codes that are specific to the Omnia Push SDK Client
+ * Defines the error codes that are specific to the CF Push SDK Client
  */
 
 typedef NS_ENUM(NSInteger, CFPushErrorCodes) {

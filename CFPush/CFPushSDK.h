@@ -11,7 +11,7 @@
 @class CFPushParameters;
 
 /**
- * Primary entry point for the Omnia Push Client SDK library.
+ * Primary entry point for the CF Push Client SDK library.
  *
  * Usage: see `README.md`
  *

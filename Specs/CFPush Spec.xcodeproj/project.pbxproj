@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		380AF9A39A00411490090BD5 /* libPods-CFPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */; };
-		8E6F553171E142C78A67B3BC /* libPods-OmniaPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */; };
 		F112401518D9DD220077D0F0 /* CFPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292218D8D86E002FE233 /* CFPushBackEndConnectionSpec.m */; };
 		F112401718D9DD220077D0F0 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292818D8D86E002FE233 /* JRSwizzle.m */; };
 		F112401818D9DD220077D0F0 /* NSURLConnection+CFAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D1292A18D8D86E002FE233 /* NSURLConnection+CFAsync2Sync.m */; };
@@ -40,9 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OmniaPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CFPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		418D7334D2334B77958F6252 /* Pods-OmniaPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OmniaPushTests.xcconfig"; path = "Pods/Pods-OmniaPushTests.xcconfig"; sourceTree = "<group>"; };
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CFPushTests.xcconfig"; path = "Pods/Pods-CFPushTests.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -109,7 +106,6 @@
 				F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */,
 				F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */,
 				F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */,
-				8E6F553171E142C78A67B3BC /* libPods-OmniaPushTests.a in Frameworks */,
 				380AF9A39A00411490090BD5 /* libPods-CFPushTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,7 +296,6 @@
 				F1D1292018D8D86E002FE233 /* Spec */,
 				F1FDE2AC18D79A1B009EBE38 /* Frameworks */,
 				F1FDE2AB18D79A1B009EBE38 /* Products */,
-				418D7334D2334B77958F6252 /* Pods-OmniaPushTests.xcconfig */,
 				974EC32673304904B741261C /* Pods-CFPushTests.xcconfig */,
 			);
 			sourceTree = "<group>";
@@ -321,7 +316,6 @@
 				F1FDE2B118D79A1B009EBE38 /* UIKit.framework */,
 				48E0BEE976B04ACBAB665052 /* libPods-ios.a */,
 				982406CD77B04192B6EA55BA /* libPods-iOSTests.a */,
-				0026D4B9721F4CF2BD56A359 /* libPods-OmniaPushTests.a */,
 				031A6D7AB82748139105BE8E /* libPods-CFPushTests.a */,
 			);
 			name = Frameworks;
@@ -493,7 +487,7 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OmniaPushTests/OmniaPushTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "CFPushTests/CFPushTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -505,7 +499,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "OmniaPushTests/OmniaPushTests-Info.plist";
+				INFOPLIST_FILE = "CFPushTests/CFPushTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -542,14 +536,14 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "OmniaPushTests/OmniaPushTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "CFPushTests/CFPushTests-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "OmniaPushTests/OmniaPushTests-Info.plist";
+				INFOPLIST_FILE = "CFPushTests/CFPushTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;

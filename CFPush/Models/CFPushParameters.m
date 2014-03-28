@@ -15,7 +15,10 @@
                                  releaseSecret:(NSString *)releaseSecret
                                    deviceAlias:(NSString *)deviceAlias
 {
-    id registrationParams = [[CFPushParameters alloc] initWithTypes:types releaseUUID:releaseUUID releaseSecret:releaseSecret deviceAlias:deviceAlias];
+    id registrationParams = [[CFPushParameters alloc] initWithTypes:types
+                                                        releaseUUID:releaseUUID
+                                                      releaseSecret:releaseSecret
+                                                        deviceAlias:deviceAlias];
     return registrationParams;
 }
 

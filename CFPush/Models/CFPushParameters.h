@@ -26,10 +26,10 @@
  *              push notifications are received while your application is
  *              not running.
  *
- * @param releaseUuid   The "release_uuid", as defined by Omnia Push Services for your release.
+ * @param releaseUuid   The "release_uuid", as defined by CF Push Services for your release.
  *                      May not be `nil` or empty.
  *
- * @param releaseSecret The "release secret", as defined by Omnia Push Services for your release.
+ * @param releaseSecret The "release secret", as defined by CF Push Services for your release.
  *                      May not be `nil` or empty.
  *
  * @param deviceAlias   A developer-defined "device alias" which can be used to designate this device, or class.

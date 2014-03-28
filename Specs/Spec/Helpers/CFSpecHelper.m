@@ -1,5 +1,5 @@
 //
-//  OmniaSpecHelper.mm
+//  CFSpecHelper.mm
 //  CFPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-31.
