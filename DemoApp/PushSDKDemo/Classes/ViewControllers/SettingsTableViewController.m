@@ -1,13 +1,13 @@
 //
 //  SettingsTableViewController.m
-//  CFPushSDK
+//  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-31.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 #import "SettingsTableViewController.h"
-#import "CFPushPersistentStorage.h"
+#import "PCFPushPersistentStorage.h"
 #import "Settings.h"
 
 @implementation SettingsTableViewController
@@ -41,11 +41,11 @@
 
 - (IBAction)clearRegistrationPressed:(id)sender
 {
-    [CFPushPersistentStorage setBackEndDeviceID:nil];
-    [CFPushPersistentStorage setAPNSDeviceToken:nil];
-    [CFPushPersistentStorage setReleaseUUID:nil];
-    [CFPushPersistentStorage setReleaseSecret:nil];
-    [CFPushPersistentStorage setDeviceAlias:nil];
+    [PCFPushPersistentStorage setBackEndDeviceID:nil];
+    [PCFPushPersistentStorage setAPNSDeviceToken:nil];
+    [PCFPushPersistentStorage setReleaseUUID:nil];
+    [PCFPushPersistentStorage setReleaseSecret:nil];
+    [PCFPushPersistentStorage setDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
 }
 

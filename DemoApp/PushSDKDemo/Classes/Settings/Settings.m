@@ -1,13 +1,13 @@
 //
 //  Settings.m
-//  CFPushSDK
+//  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-31.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 #import "Settings.h"
-#import "CFPushParameters.h"
+#import "PCFPushParameters.h"
 
 static NSString *const DEFAULT_RELEASE_UUID   = @"a5ca5693-f729-4e9a-8df2-65e02cebc852";
 static NSString *const DEFAULT_RELEASE_SECRET = @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3";
@@ -56,9 +56,9 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
     [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
-+ (CFPushParameters *)registrationParameters
++ (PCFPushParameters *)registrationParameters
 {
-    return [CFPushParameters parametersForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
+    return [PCFPushParameters parametersForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
                                                                releaseUUID:[Settings releaseUUID]
                                                              releaseSecret:[Settings releaseSecret]
                                                                deviceAlias:[Settings deviceAlias]];

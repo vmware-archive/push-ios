@@ -1,21 +1,21 @@
 //
 //  LogTableViewController.m
-//  CFPushSDK
+//  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-17.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
 #import "LogTableViewController.h"
-#import "CFPushParameters.h"
-#import "CFPushSDK.h"
-#import "CFPushDebug.h"
+#import "PCFPushParameters.h"
+#import "PCFPushSDK.h"
+#import "PCFPushDebug.h"
 #import "LogItem.h"
 #import "LogItemCell.h"
 #import "SettingsTableViewController.h"
 #import "Settings.h"
 #import "BackEndMessageRequest.h"
-#import "CFPushPersistentStorage.h"
+#import "PCFPushPersistentStorage.h"
 
 static NSString *const APP_UUID       = @"11623d1b-6a80-4a6f-9597-e5d0f320ade9";
 static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
@@ -41,7 +41,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    [CFPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
+    [PCFPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self addLogItem:message timestamp:timestamp];
         }];
@@ -66,7 +66,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
 - (void) sendButtonPressed
 {
     [self updateCurrentBaseRowColour];
-    NSString *backEndDeviceID = [CFPushPersistentStorage backEndDeviceID];
+    NSString *backEndDeviceID = [PCFPushPersistentStorage backEndDeviceID];
     
     if (backEndDeviceID == nil) {
         [self addLogItem:@"You must register with the back-end server before attempting to send a message" timestamp:[NSDate date]];
@@ -156,20 +156,20 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     @try {
-        CFPushParameters *parameters = [Settings registrationParameters];
+        PCFPushParameters *parameters = [Settings registrationParameters];
         NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
                              parameters.releaseUUID,
                              parameters.releaseSecret,
                              parameters.deviceAlias];
         [self addLogItem:message timestamp:[NSDate date]];
         
-        [CFPushSDK registerWithParameters:parameters success:^{
+        [PCFPushSDK registerWithParameters:parameters success:^{
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            CFPushLog(@"Application received callback \"registrationSucceeded\".");
+            PCFPushLog(@"Application received callback \"registrationSucceeded\".");
 
         } failure:^(NSError *error) {
             [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            CFPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
+            PCFPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
         }];
     }
     @catch (NSException *e) {

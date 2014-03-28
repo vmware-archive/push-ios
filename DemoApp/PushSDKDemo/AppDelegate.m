@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "Settings.h"
-#import "CFPushDebug.h"
+#import "PCFPushDebug.h"
 
 @interface AppDelegate ()
 
@@ -32,7 +32,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    CFPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
+    PCFPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:PCFPush"
+      name = "PCFPush">
+      <Group
+         location = "group:App"
+         name = "App">
+         <FileRef
+            location = "group:PCFPushAppDelegate.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushAppDelegate.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushAppDelegateProxy.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushAppDelegateProxy.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Back End"
+         name = "Back End">
+         <FileRef
+            location = "group:NSURLConnection+PCFPushBackEndConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSURLConnection+PCFPushBackEndConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Models"
+         name = "Models">
+         <FileRef
+            location = "group:PCFPushDBManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushDBManager.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushParameters.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushParameters.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationData.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationData.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationRequestData.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationRequestData.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationResponseData.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushRegistrationResponseData.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:PCFPushSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFPushSDK.m">
+      </FileRef>
+      <Group
+         location = "group:Persistent Storage"
+         name = "Persistent Storage">
+         <FileRef
+            location = "group:PCFPushPersistentStorage.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushPersistentStorage.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Protocols"
+         name = "Protocols">
+         <FileRef
+            location = "group:PCFPushDictionaryizable.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushJsonizable.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Public Headers"
+         name = "Public Headers">
+         <FileRef
+            location = "group:PCFPushErrors.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Util"
+         name = "Util">
+         <FileRef
+            location = "group:PCFPushDebug.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushDebug.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushErrorUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushErrorUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHardwareUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHardwareUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHexUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHexUtil.m">
+         </FileRef>
+      </Group>
+   </Group>
+   <FileRef
+      location = "group:Framework/PCFPushSDK.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DemoApp/PushSDKDemo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Specs/PCFPushSpec.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Specs/Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>
