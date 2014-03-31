@@ -99,14 +99,14 @@ describe(@"PCFPushSDK", ^{
                 } else if ([request.HTTPMethod isEqualToString:@"POST"]) {
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                     NSDictionary *dict = @{
-                                           kDeviceOS : TEST_OS,
-                                           kDeviceOSVersion : TEST_OS_VERSION,
+                                           RegistrationAttributes.deviceOS : TEST_OS,
+                                           RegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
+                                           RegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
+                                           RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                                           RegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,
+                                           RegistrationAttributes.releaseUUID : TEST_RELEASE_UUID,
+                                           RegistrationAttributes.registrationToken : TEST_REGISTRATION_TOKEN,
                                            kDeviceUUID : TEST_DEVICE_UUID,
-                                           kDeviceAlias : TEST_DEVICE_ALIAS,
-                                           kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                                           kDeviceModel : TEST_DEVICE_MODEL,
-                                           kReleaseUUID : TEST_RELEASE_UUID,
-                                           kRegistrationToken : TEST_REGISTRATION_TOKEN,
                                            };
                     newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
 

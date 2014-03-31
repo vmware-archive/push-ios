@@ -18,7 +18,7 @@ NSString *const kReleaseSecret = @"secret";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary *mapping = [NSMutableDictionary dictionaryWithDictionary:[super localToRemoteMapping]];
-        [mapping setObject:kReleaseSecret forKey:CF_STR_PROP(secret)];
+        [mapping setObject:kReleaseSecret forKey:PCF_STR_PROP(secret)];
         localToRemoteMapping = [NSDictionary dictionaryWithDictionary:mapping];
     });
     

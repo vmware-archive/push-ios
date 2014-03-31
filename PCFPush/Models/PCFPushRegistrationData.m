@@ -13,13 +13,25 @@
 #import "PCFPushErrorUtil.h"
 #import "PCFPushDebug.h"
 
-NSString *const kReleaseUUID         = @"release_uuid";
-NSString *const kDeviceAlias         = @"device_alias";
-NSString *const kDeviceManufacturer  = @"device_manufacturer";
-NSString *const kDeviceModel         = @"device_model";
-NSString *const kDeviceOS            = @"os";
-NSString *const kDeviceOSVersion     = @"os_version";
-NSString *const kRegistrationToken   = @"registration_token";
+const struct RegistrationAttributes {
+    PCF_STRUCT_STRING *releaseUUID;
+    PCF_STRUCT_STRING *deviceAlias;
+    PCF_STRUCT_STRING *deviceManufacturer;
+    PCF_STRUCT_STRING *deviceModel;
+    PCF_STRUCT_STRING *deviceOS;
+    PCF_STRUCT_STRING *deviceOSVersion;
+    PCF_STRUCT_STRING *registrationToken;
+} RegistrationAttributes;
+
+const struct RegistrationAttributes RegistrationAttributes = {
+    .releaseUUID         = @"release_uuid",
+    .deviceAlias         = @"device_alias",
+    .deviceManufacturer  = @"device_manufacturer",
+    .deviceModel         = @"device_model",
+    .deviceOS            = @"os",
+    .deviceOSVersion     = @"os_version",
+    .registrationToken   = @"registration_token",
+};
 
 @implementation PCFPushRegistrationData
 
@@ -29,75 +41,16 @@ NSString *const kRegistrationToken   = @"registration_token";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                                 CF_STR_PROP(releaseUUID) : kReleaseUUID,
-                                 CF_STR_PROP(deviceAlias) : kDeviceAlias,
-                                 CF_STR_PROP(deviceManufacturer) : kDeviceManufacturer,
-                                 CF_STR_PROP(deviceModel) : kDeviceModel,
-                                 CF_STR_PROP(os) : kDeviceOS,
-                                 CF_STR_PROP(osVersion) : kDeviceOSVersion,
-                                 CF_STR_PROP(registrationToken) : kRegistrationToken,
+                                 PCF_STR_PROP(releaseUUID) : RegistrationAttributes.releaseUUID,
+                                 PCF_STR_PROP(deviceAlias) : RegistrationAttributes.deviceAlias,
+                                 PCF_STR_PROP(deviceManufacturer) : RegistrationAttributes.deviceManufacturer,
+                                 PCF_STR_PROP(deviceModel) : RegistrationAttributes.deviceModel,
+                                 PCF_STR_PROP(os) : RegistrationAttributes.deviceOS,
+                                 PCF_STR_PROP(osVersion) : RegistrationAttributes.deviceOSVersion,
+                                 PCF_STR_PROP(registrationToken) : RegistrationAttributes.registrationToken,
                                  };
     });
     return localToRemoteMapping;
-}
-
-- (NSDictionary *)toDictionary
-{
-    NSDictionary *mapping = [self.class localToRemoteMapping];
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:mapping.allKeys.count];
-    
-    [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
-        id value = [self valueForKey:propertyName];
-        if (value) {
-            [dict setObject:value forKey:remoteKey];
-        }
-    }];
-    
-    return dict;
-}
-
-- (NSData *)toJSONData:(NSError **)error
-{
-    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:error];
-    if (!JSONData) {
-        PCFPushCriticalLog(@"Error upon serializing object to JSON: %@", error);
-        return nil;
-        
-    } else {
-        return JSONData;
-    }
-}
-
-+ (instancetype)fromDictionary:(NSDictionary *)dict
-{
-    NSDictionary *mapping = [self localToRemoteMapping];
-    id result = [[self alloc] init];
-    
-    [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
-        if (dict[remoteKey]) {
-            [result setValue:dict[remoteKey] forKey:propertyName];
-        }
-    }];
-    
-    return result;
-}
-
-+ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error
-{
-    if (!JSONData || JSONData.length <= 0) {
-        if (error) {
-            *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
-        }
-        return nil;
-    }
-    
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:error];
-    
-    if (*error) {
-        return nil;
-    }
-    
-    return [self fromDictionary:dict];
 }
 
 @end

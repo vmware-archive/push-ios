@@ -12,6 +12,7 @@
 #import "PCFPushRegistrationRequestData.h"
 #import "PCFPushBackEndRegistrationDataTest.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
+#import "NSObject+PCFPushJsonizable.h"
 #import "PCFPushErrors.h"
 
 
@@ -118,16 +119,17 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
         
         it(@"should construct a complete response object", ^{
             NSError *error;
-            id dict = @{
-                        kDeviceOS : TEST_OS,
-                        kDeviceOSVersion : TEST_OS_VERSION,
-                        kDeviceUUID : TEST_DEVICE_UUID,
-                        kDeviceAlias : TEST_DEVICE_ALIAS,
-                        kDeviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                        kDeviceModel : TEST_DEVICE_MODEL,
-                        kReleaseUUID : TEST_RELEASE_UUID,
-                        kRegistrationToken : TEST_REGISTRATION_TOKEN,
-                        };
+            NSDictionary *dict = @{
+                                   RegistrationAttributes.deviceOS : TEST_OS,
+                                   RegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
+                                   RegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
+                                   RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                                   RegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,
+                                   RegistrationAttributes.releaseUUID : TEST_RELEASE_UUID,
+                                   RegistrationAttributes.registrationToken : TEST_REGISTRATION_TOKEN,
+                                   kDeviceUUID : TEST_DEVICE_UUID,
+                                   };
+
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             [[error should] beNil];
             [[data shouldNot] beNil];
@@ -172,18 +174,18 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[kReleaseUUID] should] equal:TEST_RELEASE_UUID];
+                [[dict[RegistrationAttributes.releaseUUID] should] equal:TEST_RELEASE_UUID];
                 [[dict[kDeviceUUID] should] equal:TEST_DEVICE_UUID];
-                [[dict[kDeviceAlias] should] equal:TEST_DEVICE_ALIAS];
-                [[dict[kDeviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
-                [[dict[kDeviceModel] should] equal:TEST_DEVICE_MODEL];
-                [[dict[kDeviceOS] should] equal:TEST_OS];
-                [[dict[kDeviceOSVersion] should] equal:TEST_OS_VERSION];
-                [[dict[kRegistrationToken] should] equal:TEST_REGISTRATION_TOKEN];
+                [[dict[RegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
+                [[dict[RegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
+                [[dict[RegistrationAttributes.deviceModel] should] equal:TEST_DEVICE_MODEL];
+                [[dict[RegistrationAttributes.deviceOS] should] equal:TEST_OS];
+                [[dict[RegistrationAttributes.deviceOSVersion] should] equal:TEST_OS_VERSION];
+                [[dict[RegistrationAttributes.registrationToken] should] equal:TEST_REGISTRATION_TOKEN];
             });
             
             it(@"should be dictionaryizable", ^{
-                dict = [model toDictionary];
+                dict = [model toFoundationType];
             });
             
             it(@"should be JSONizable", ^{
@@ -199,18 +201,18 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[kReleaseUUID] should] beNil];
+                [[dict[RegistrationAttributes.releaseUUID] should] beNil];
                 [[dict[kDeviceUUID] should] beNil];
-                [[dict[kDeviceAlias] should] beNil];
-                [[dict[kDeviceManufacturer] should] beNil];
-                [[dict[kDeviceModel] should] beNil];
-                [[dict[kDeviceOS] should] beNil];
-                [[dict[kDeviceOSVersion] should] beNil];
-                [[dict[kRegistrationToken] should] beNil];
+                [[dict[RegistrationAttributes.deviceAlias] should] beNil];
+                [[dict[RegistrationAttributes.deviceManufacturer] should] beNil];
+                [[dict[RegistrationAttributes.deviceModel] should] beNil];
+                [[dict[RegistrationAttributes.deviceOS] should] beNil];
+                [[dict[RegistrationAttributes.deviceOSVersion] should] beNil];
+                [[dict[RegistrationAttributes.registrationToken] should] beNil];
             });
             
             it(@"should be dictionaryizable", ^{
-                dict = [model toDictionary];
+                dict = [model toFoundationType];
             });
             
             it(@"should be JSONizable", ^{

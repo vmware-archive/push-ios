@@ -58,4 +58,9 @@
     PCFPushLog(@"Received remote notification: %@", userInfo);
 }
 
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    PCFPushLog(@"Received local notification: %@", notification);
+}
+
 @end

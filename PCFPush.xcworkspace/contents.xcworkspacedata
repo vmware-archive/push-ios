@@ -69,6 +69,12 @@
          <FileRef
             location = "group:PCFAnalyticEvent.m">
          </FileRef>
+         <FileRef
+            location = "group:NSObject+PCFPushJsonizable.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSObject+PCFPushJsonizable.m">
+         </FileRef>
       </Group>
       <FileRef
          location = "group:PCFPushSDK.h">
@@ -90,10 +96,7 @@
          location = "group:Protocols"
          name = "Protocols">
          <FileRef
-            location = "group:PCFPushDictionaryizable.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushJsonizable.h">
+            location = "group:PCFPushMapping.h">
          </FileRef>
       </Group>
       <Group

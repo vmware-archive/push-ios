@@ -7,14 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PCFPushDictionaryizable.h"
-#import "PCFPushJsonizable.h"
+#import "PCFPushMapping.h"
 
-#ifndef CF_STR_PROP
-#define CF_STR_PROP( prop ) NSStringFromSelector(@selector(prop))
-#endif
-
-@interface PCFPushRegistrationData : NSObject <PCFPushJsonizable, PCFPushDictionaryizable>
+@interface PCFPushRegistrationData : NSObject <PCFPushMapping>
 
 @property NSString *releaseUUID;
 @property NSString *deviceAlias;

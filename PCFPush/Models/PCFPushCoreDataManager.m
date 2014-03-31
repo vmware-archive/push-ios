@@ -10,6 +10,7 @@
 
 #import "PCFPushCoreDataManager.h"
 #import "PCFPushDebug.h"
+#import "PCFAnalyticEvent.h"
 
 static NSString *const kDatabaseDirectoryName = @"PCFPushAnalyticsDB";
 static NSString *const kDatabaseFileName = @"PCFPushAnalyticsDB.sqlite";
@@ -28,6 +29,8 @@ static dispatch_once_t onceToken;
 
 @implementation PCFPushCoreDataManager
 
+#pragma mark - Class Methods
+
 + (instancetype)shared
 {
     dispatch_once(&onceToken, ^{
@@ -44,6 +47,8 @@ static dispatch_once_t onceToken;
     onceToken = 0;
     _sharedCoreDataManager = manager;
 }
+
+#pragma mark - Core Data Setup
 
 - (NSManagedObjectContext *)managedObjectContext
 {
@@ -84,32 +89,35 @@ static dispatch_once_t onceToken;
         return _managedObjectModel;
     }
     _managedObjectModel = [[NSManagedObjectModel alloc] init];
-    NSEntityDescription *analyticsEventEntity = [[NSEntityDescription alloc] init];
-    [analyticsEventEntity setName:@"UAInboxMessage"];
-    [analyticsEventEntity setManagedObjectClassName:@"UAInboxMessage"];
-    [_managedObjectModel setEntities:@[analyticsEventEntity]];
+    NSString *entityName = NSStringFromClass([PCFAnalyticEvent class]);
+    NSEntityDescription *analyticEventEntity = [[NSEntityDescription alloc] init];
+    [analyticEventEntity setName:entityName];
+    [analyticEventEntity setManagedObjectClassName:entityName];
+    [_managedObjectModel setEntities:@[analyticEventEntity]];
     
-    NSMutableArray *analyticsEventProperties = [NSMutableArray array];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"messageBodyURL" withType:NSTransformableAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"messageID" withType:NSStringAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"messageSent" withType:NSDateAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"title" withType:NSStringAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"unread" withType:NSBooleanAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"messageURL" withType:NSTransformableAttributeType setOptional:true]];
-    [analyticsEventProperties addObject:[self createAttributeDescription:@"messageExpiration" withType:NSDateAttributeType setOptional:true]];
+    NSArray *analyticEventProperties = @[
+                                         [self attributeDescriptionWithName:EventAttributes.eventID type:NSStringAttributeType optional:true],
+                                         [self attributeDescriptionWithName:EventAttributes.eventType type:NSStringAttributeType optional:true],
+                                         [self attributeDescriptionWithName:EventAttributes.eventTime type:NSDateAttributeType optional:true],
+                                         ];
     
-    NSAttributeDescription *extraDescription = [self createAttributeDescription:@"extra" withType:NSTransformableAttributeType setOptional:true];
-    [extraDescription setValueTransformerName:@"UAJSONValueTransformer"];
-    [analyticsEventProperties addObject:extraDescription];
-    
-    NSAttributeDescription *rawMessageObjectDescription = [self createAttributeDescription:@"rawMessageObject" withType:NSTransformableAttributeType setOptional:true];
-    [extraDescription setValueTransformerName:@"UAJSONValueTransformer"];
-    [analyticsEventProperties addObject:rawMessageObjectDescription];
-    
-    [analyticsEventEntity setProperties:analyticsEventProperties];
+    [analyticEventEntity setProperties:analyticEventProperties];
     
     return _managedObjectModel;
 }
+
+- (NSAttributeDescription *)attributeDescriptionWithName:(NSString *)name
+                                                type:(NSAttributeType)attributeType
+                                             optional:(BOOL)isOptional
+{
+    NSAttributeDescription *attribute = [[NSAttributeDescription alloc] init];
+    [attribute setName:name];
+    [attribute setAttributeType:attributeType];
+    [attribute setOptional:isOptional];
+    
+    return attribute;
+}
+
 
 - (NSURL *)databaseURL
 {

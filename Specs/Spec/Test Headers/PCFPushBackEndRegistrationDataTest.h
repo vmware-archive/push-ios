@@ -8,13 +8,15 @@
 
 #import "PCFPushRegistrationData.h"
 
-OBJC_EXTERN NSString *const kReleaseUUID;
-OBJC_EXTERN NSString *const kDeviceAlias;
-OBJC_EXTERN NSString *const kDeviceManufacturer;
-OBJC_EXTERN NSString *const kDeviceModel;
-OBJC_EXTERN NSString *const kDeviceOS;
-OBJC_EXTERN NSString *const kDeviceOSVersion;
-OBJC_EXTERN NSString *const kRegistrationToken;
+OBJC_EXTERN const struct RegistrationAttributes {
+    PCF_STRUCT_STRING *releaseUUID;
+    PCF_STRUCT_STRING *deviceAlias;
+    PCF_STRUCT_STRING *deviceManufacturer;
+    PCF_STRUCT_STRING *deviceModel;
+    PCF_STRUCT_STRING *deviceOS;
+    PCF_STRUCT_STRING *deviceOSVersion;
+    PCF_STRUCT_STRING *registrationToken;
+} RegistrationAttributes;
 
 static NSString *const TEST_RELEASE_UUID        = @"123-456-789";
 static NSString *const TEST_SECRET              = @"My cat's breath smells like cat food";

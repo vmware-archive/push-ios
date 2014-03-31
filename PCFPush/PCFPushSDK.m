@@ -9,6 +9,7 @@
 #import <objc/runtime.h>
 
 #import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSObject+PCFPushJsonizable.h"
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushParameters.h"
 #import "PCFPushPersistentStorage.h"
@@ -45,7 +46,7 @@ static PCFPushParameters *_registrationParameters;
                        failure:(void (^)(NSError *error))failure;
 {
     if (!parameters) {
-        [NSException raise:NSInvalidArgumentException format:@"parameters may not be nil"];
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
     
     void (^successBlock)(NSData *devToken) = ^(NSData *devToken) {
@@ -123,12 +124,6 @@ static PCFPushParameters *_registrationParameters;
     void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
         NSError *error;
         
-        if ([self successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response]) {
-            error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:@"Failed HTTP Status Code"];
-            failureBlock(error);
-            return;
-        }
-        
         if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
             error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"];
             failureBlock(error);
@@ -160,10 +155,6 @@ static PCFPushParameters *_registrationParameters;
                                          devToken:devToken
                                           success:registrationSuccessfulBlock
                                           failure:failureBlock];
-}
-
-+ (BOOL)successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response {
-    return [response isKindOfClass:[NSHTTPURLResponse class]] && ([response statusCode] < 200 || [response statusCode] >= 300);
 }
 
 + (void)registerForRemoteNotifications {

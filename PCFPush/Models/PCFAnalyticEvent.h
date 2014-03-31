@@ -7,12 +7,20 @@
 //
 
 #import <CoreData/CoreData.h>
+#import "PCFPushMapping.h"
 
-OBJC_EXTERN const struct AnalyticEventAttributes {
-	__unsafe_unretained NSString *canBuy;
-} AnalyticEventAttributes;
+const struct EventAttributes {
+    PCF_STRUCT_STRING *eventID;
+    PCF_STRUCT_STRING *eventType;
+    PCF_STRUCT_STRING *eventTime;
+} EventAttributes;
 
+@interface PCFAnalyticEvent : NSManagedObject <PCFPushMapping>
 
-@interface PCFAnalyticEvent : NSManagedObject
+@property (nonatomic, readonly) NSString *eventType;
+@property (nonatomic, readonly) NSString *eventID;
+@property (nonatomic, readonly) NSString *eventTime;
+
++ (void)addEventWithType:(NSString *)eventType;
 
 @end
