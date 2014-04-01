@@ -10,11 +10,25 @@
 #import "PCFPushDebug.h"
 #import "PCFPushCoreDataManager.h"
 
+static const struct EventRemoteAttributes {
+    PCF_STRUCT_STRING *eventID;
+    PCF_STRUCT_STRING *eventType;
+    PCF_STRUCT_STRING *eventTime;
+} EventRemoteAttributes;
+
+static const struct EventRemoteAttributes EventRemoteAttributes = {
+    .eventID    = @"event_id",
+    .eventType  = @"event_type",
+    .eventTime  = @"event_time",
+};
+
 @interface PCFAnalyticEvent ()
 
 @property (nonatomic, readwrite) NSString *eventType;
 @property (nonatomic, readwrite) NSString *eventID;
 @property (nonatomic, readwrite) NSString *eventTime;
+
++ (void)logEventWithType:(NSString *)eventType;
 
 @end
 
@@ -24,43 +38,71 @@
 @dynamic eventType;
 @dynamic eventTime;
 
-const struct EventAttributes EventAttributes = {
-    .eventID    = @"event_id",
-    .eventType  = @"event_type",
-    .eventTime  = @"event_time",
-};
-
 + (NSDictionary *)localToRemoteMapping
 {
     static NSDictionary *localToRemoteMapping;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                                 PCF_STR_PROP(eventID) : EventAttributes.eventID,
-                                 PCF_STR_PROP(eventType) : EventAttributes.eventType,
-                                 PCF_STR_PROP(eventTime) : EventAttributes.eventTime,
+                                 PCF_STR_PROP(eventID)   : EventRemoteAttributes.eventID,
+                                 PCF_STR_PROP(eventType) : EventRemoteAttributes.eventType,
+                                 PCF_STR_PROP(eventTime) : EventRemoteAttributes.eventTime,
                                  };
     });
     
     return localToRemoteMapping;
 }
 
-
-+ (void)addEventWithType:(NSString *)eventType
++ (void)logEventWithType:(NSString *)eventType
 {
     NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
     [context performBlock:^{
         NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(self.class) inManagedObjectContext:context];
-        PCFAnalyticEvent *event = [[self alloc] initWithEntity:self insertIntoManagedObjectContext:description];
+        PCFAnalyticEvent *event = [[self alloc] initWithEntity:description insertIntoManagedObjectContext:context];
         [event setEventID:[[NSUUID UUID] UUIDString]];
         [event setEventType:eventType];
-        [event setEventType:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
+        [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
         
         NSError *error;
         if (![context save:&error]) {
             PCFPushCriticalLog(@"Managed Object Context failed to save: %@ %@", error, error.userInfo);
         }
     }];
+}
+
++ (void)logEventInitialized
+{
+    [self logEventWithType:@"event_initialized"];
+}
+
++ (void)logEventAppActive
+{
+    [self logEventWithType:@"event_app_active"];
+}
+
++ (void)logEventAppInactive
+{
+    [self logEventWithType:@"event_app_inactive"];
+}
+
++ (void)logEventForeground
+{
+    [self logEventWithType:@"event_foregrounded"];
+}
+
++ (void)logEventBackground
+{
+    [self logEventWithType:@"event_backgrounded"];
+}
+
++ (void)logEventRegistered
+{
+    [self logEventWithType:@"event_registered"];
+}
+
++ (void)logEventPushReceived
+{
+    [self logEventWithType:@"event_push_received"];
 }
 
 @end

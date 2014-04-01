@@ -36,16 +36,16 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     return baseURL;
 }
 
-+ (void)cf_unregisterDeviceID:(NSString *)deviceID
++ (void)pcf_unregisterDeviceID:(NSString *)deviceID
                    success:(void (^)(NSURLResponse *response, NSData *data))success
                    failure:(void (^)(NSError *error))failure
 {
     [self cf_sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceID:deviceID]
-                                success:success
-                                failure:failure];
+                             success:success
+                             failure:failure];
 }
 
-+ (void)cf_registerWithParameters:(PCFPushParameters *)parameters
++ (void)pcf_registerWithParameters:(PCFPushParameters *)parameters
                       devToken:(NSData *)devToken
                        success:(void (^)(NSURLResponse *response, NSData *data))success
                        failure:(void (^)(NSError *error))failure
@@ -152,7 +152,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 #pragma mark - Sync Analytics
 
-+ (void)cf_syncAnalyicEvents:(NSArray *)events
++ (void)pcf_syncAnalyicEvents:(NSArray *)events
                  forDeviceID:(NSString *)deviceID
                      success:(void (^)(NSURLResponse *response, NSData *data))success
                      failure:(void (^)(NSError *error))failure
@@ -210,7 +210,8 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                 failure(connectionError);
             }
         } else if ([self unsuccessfulStatusForHTTPResponse:(NSHTTPURLResponse *)response]) {
-            NSError *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:@"Failed HTTP Status Code"];
+            NSString *description = [NSString stringWithFormat:@"Failed HTTP Status Code: %d", [(NSHTTPURLResponse *)response statusCode]];
+            NSError *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:description];
             PCFPushCriticalLog(@"NSURLRequest unsuccessful HTTP response code: %@ %@", error, error.userInfo);
             if (failure) {
                 failure(error);

@@ -9,18 +9,19 @@
 #import <CoreData/CoreData.h>
 #import "PCFPushMapping.h"
 
-const struct EventAttributes {
-    PCF_STRUCT_STRING *eventID;
-    PCF_STRUCT_STRING *eventType;
-    PCF_STRUCT_STRING *eventTime;
-} EventAttributes;
-
 @interface PCFAnalyticEvent : NSManagedObject <PCFPushMapping>
 
 @property (nonatomic, readonly) NSString *eventType;
 @property (nonatomic, readonly) NSString *eventID;
 @property (nonatomic, readonly) NSString *eventTime;
 
-+ (void)addEventWithType:(NSString *)eventType;
++ (void)logEventInitialized;
++ (void)logEventAppActive;
++ (void)logEventAppInactive;
++ (void)logEventForeground;
++ (void)logEventAppInactive;
++ (void)logEventBackground;
++ (void)logEventRegistered;
++ (void)logEventPushReceived;
 
 @end

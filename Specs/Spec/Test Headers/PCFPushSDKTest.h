@@ -12,13 +12,13 @@
 
 + (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
                                  devToken:(NSData *)devToken
-                             successBlock:(void (^)(void))successBlock
-                             failureBlock:(void (^)(NSError *error))failureBlock;
+                             success:(void (^)(void))successBlock
+                             failure:(void (^)(NSError *error))failureBlock;
 
 + (void)sendUnregisterRequestWithParameters:(PCFPushParameters *)parameters
                                    devToken:(NSData *)devToken
-                               successBlock:(void (^)(void))successBlock
-                               failureBlock:(void (^)(NSError *error))failureBlock;
+                               success:(void (^)(void))successBlock
+                               failure:(void (^)(NSError *error))failureBlock;
 
 
 @end

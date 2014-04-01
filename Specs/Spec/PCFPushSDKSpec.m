@@ -202,10 +202,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    [[error.domain should] equal:PCFPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationFailedHTTPStatusCode)];
                                                    wasExpectedResult = YES;
@@ -219,10 +219,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    [[error.domain should] equal:PCFPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -235,10 +235,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    [[error.domain should] equal:PCFPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -251,10 +251,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    [[error.domain should] equal:PCFPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
                                                    wasExpectedResult = YES;
@@ -267,10 +267,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    [[error shouldNot] beNil];
                                                    wasExpectedResult = YES;
                                                }];
@@ -282,10 +282,10 @@ describe(@"PCFPushSDK", ^{
             
             [PCFPushSDK sendRegisterRequestWithParameters:helper.params
                                                    devToken:helper.apnsDeviceToken
-                                               successBlock:^{
+                                               success:^{
                                                    wasExpectedResult = NO;
                                                }
-                                               failureBlock:^(NSError *error) {
+                                               failure:^(NSError *error) {
                                                    wasExpectedResult = YES;
                                                    [[error.domain should] equal:PCFPushErrorDomain];
                                                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationResponseDataNoDeviceUuid)];
@@ -364,20 +364,6 @@ describe(@"PCFPushSDK", ^{
                 return nil;
             }];
         });
-        
-        it(@"should perform success block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
-            
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            
-            [PCFPushSDK unregisterSuccess:^{
-                successBlockExecuted = YES;
-                
-            } failure:^(NSError *error) {
-                fail(@"unregistration failure block executed");
-            }];
-
-            [[theValue(successBlockExecuted) shouldEventually] beTrue];
-        });
     });
 
     describe(@"unsuccessful unregistration", ^{
@@ -408,6 +394,22 @@ describe(@"PCFPushSDK", ^{
             
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
         });
+        
+        it(@"should perform failure block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
+            
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            
+            [PCFPushSDK unregisterSuccess:^{
+                fail(@"unregistration success block executed");
+                
+            } failure:^(NSError *error) {
+                failureBlockExecuted = YES;
+                
+            }];
+            
+            [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+        });
+
     });
 });
 

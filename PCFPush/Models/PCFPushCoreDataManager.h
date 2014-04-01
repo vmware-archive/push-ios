@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@class PCFAnalyticEvent;
-
 @interface PCFPushCoreDataManager : NSObject
 
 + (instancetype)shared;
 
 - (NSManagedObjectContext *)managedObjectContext;
+
+- (void)deleteManagedObjects:(NSArray *)managedObjects;
 
 @end

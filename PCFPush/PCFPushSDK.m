@@ -51,16 +51,17 @@ static PCFPushParameters *_registrationParameters;
     
     void (^successBlock)(NSData *devToken) = ^(NSData *devToken) {
         if ([self unregistrationRequiredForDevToken:devToken parameters:parameters]) {
-            [self.class sendUnregisterRequestWithParameters:parameters
-                                                   devToken:devToken
-                                               successBlock:success
-                                               failureBlock:failure];
+            [self sendUnregisterRequestWithParameters:parameters
+                                             devToken:devToken
+                                              success:success
+                                              failure:failure];
             
         } else if ([self registrationRequiredForDevToken:devToken parameters:parameters]) {
-            [self.class sendRegisterRequestWithParameters:parameters
-                                                 devToken:devToken
-                                             successBlock:success
-                                             failureBlock:failure];
+            [self sendRegisterRequestWithParameters:parameters
+                                           devToken:devToken
+                                            success:success
+                                            failure:failure];
+            
         } else if (success) {
             success();
         }
@@ -89,7 +90,7 @@ static PCFPushParameters *_registrationParameters;
 + (void)unregisterSuccess:(void (^)(void))success
                   failure:(void (^)(NSError *error))failure
 {
-    [NSURLConnection cf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
+    [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
                                       success:^(NSURLResponse *response, NSData *data) {
                                           [PCFPushPersistentStorage reset];
                                           success();
@@ -101,25 +102,25 @@ static PCFPushParameters *_registrationParameters;
 
 + (void)sendUnregisterRequestWithParameters:(PCFPushParameters *)parameters
                                    devToken:(NSData *)devToken
-                               successBlock:(void (^)(void))successBlock
-                               failureBlock:(void (^)(NSError *error))failureBlock
+                               success:(void (^)(void))successBlock
+                               failure:(void (^)(NSError *error))failureBlock
 {
-    [NSURLConnection cf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
+    [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
                                       success:^(NSURLResponse *response, NSData *data) {
                                           PCFPushCriticalLog(@"Unregistration with the back-end server succeeded.");
-                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken success:successBlock failure:failureBlock];
                                       }
                                       failure:^(NSError *error) {
                                           PCFPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
                                           PCFPushLog(@"Nevertheless, registration will be attempted.");
-                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken successBlock:successBlock failureBlock:failureBlock];
+                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken success:successBlock failure:failureBlock];
                                       }];
 }
 
 + (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
                                  devToken:(NSData *)devToken
-                             successBlock:(void (^)(void))successBlock
-                             failureBlock:(void (^)(NSError *error))failureBlock
+                             success:(void (^)(void))successBlock
+                             failure:(void (^)(NSError *error))failureBlock
 {
     void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
         NSError *error;
@@ -151,10 +152,10 @@ static PCFPushParameters *_registrationParameters;
         
         successBlock();
     };
-    [NSURLConnection cf_registerWithParameters:parameters
-                                         devToken:devToken
-                                          success:registrationSuccessfulBlock
-                                          failure:failureBlock];
+    [NSURLConnection pcf_registerWithParameters:parameters
+                                      devToken:devToken
+                                       success:registrationSuccessfulBlock
+                                       failure:failureBlock];
 }
 
 + (void)registerForRemoteNotifications {

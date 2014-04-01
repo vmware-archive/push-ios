@@ -12,18 +12,18 @@
 
 @interface NSURLConnection (PCFPushBackEndConnection)
 
-+ (void)cf_unregisterDeviceID:(NSString *)deviceID
++ (void)pcf_unregisterDeviceID:(NSString *)deviceID
+                       success:(void (^)(NSURLResponse *response, NSData *data))success
+                       failure:(void (^)(NSError *error))failure;
+
++ (void)pcf_registerWithParameters:(PCFPushParameters *)parameters
+                          devToken:(NSData *)devToken
+                           success:(void (^)(NSURLResponse *response, NSData *data))success
+                           failure:(void (^)(NSError *error))failure;
+
+
++ (void)pcf_syncAnalyicEvents:(NSArray *)events
+                  forDeviceID:(NSString *)deviceID
                       success:(void (^)(NSURLResponse *response, NSData *data))success
                       failure:(void (^)(NSError *error))failure;
-
-+ (void)cf_registerWithParameters:(PCFPushParameters *)parameters
-                         devToken:(NSData *)devToken
-                          success:(void (^)(NSURLResponse *response, NSData *data))success
-                          failure:(void (^)(NSError *error))failure;
-
-
-+ (void)cf_syncAnalyicEvents:(NSArray *)events
-                 forDeviceID:(NSString *)deviceID
-                     success:(void (^)(NSURLResponse *response, NSData *data))success
-                     failure:(void (^)(NSError *error))failure;
 @end

@@ -96,9 +96,9 @@ static dispatch_once_t onceToken;
     [_managedObjectModel setEntities:@[analyticEventEntity]];
     
     NSArray *analyticEventProperties = @[
-                                         [self attributeDescriptionWithName:EventAttributes.eventID type:NSStringAttributeType optional:true],
-                                         [self attributeDescriptionWithName:EventAttributes.eventType type:NSStringAttributeType optional:true],
-                                         [self attributeDescriptionWithName:EventAttributes.eventTime type:NSDateAttributeType optional:true],
+                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventID)) type:NSStringAttributeType optional:true],
+                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true],
+                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true],
                                          ];
     
     [analyticEventEntity setProperties:analyticEventProperties];
@@ -114,7 +114,6 @@ static dispatch_once_t onceToken;
     [attribute setName:name];
     [attribute setAttributeType:attributeType];
     [attribute setOptional:isOptional];
-    
     return attribute;
 }
 
@@ -143,6 +142,20 @@ static dispatch_once_t onceToken;
     }
     _databaseURL = [directoryURL URLByAppendingPathComponent:kDatabaseFileName];
     return _databaseURL;
+}
+
+- (void)deleteManagedObjects:(NSArray *)managedObjects
+{
+    NSManagedObjectContext *context = self.managedObjectContext;
+    [context performBlock:^{
+        [managedObjects enumerateObjectsUsingBlock:^(NSManagedObject *managedObject, NSUInteger idx, BOOL *stop) {
+            [context deleteObject:managedObject];
+        }];
+        
+        if (context.deletedObjects.count > 0) {
+            [context save:nil];
+        }
+    }];
 }
 
 @end

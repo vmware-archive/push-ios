@@ -32,7 +32,7 @@ describe(@"PCFPushBackEndConnection", ^{
     context(@"registration bad object arguments", ^{
         
         it(@"should require an APNS device token", ^{
-            [[theBlock(^{[NSURLConnection cf_registerWithParameters:helper.params
+            [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
                                                         devToken:nil
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:^(NSError *error) {}];})
@@ -40,7 +40,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
         
         it(@"should require a registration parameters", ^{
-            [[theBlock(^{[NSURLConnection cf_registerWithParameters:nil
+            [[theBlock(^{[NSURLConnection pcf_registerWithParameters:nil
                                                         devToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:^(NSError *error) {}];})
@@ -48,7 +48,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
         
         it(@"should require a success block", ^{
-            [[theBlock(^{[NSURLConnection cf_registerWithParameters:helper.params
+            [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
                                                         devToken:helper.apnsDeviceToken
                                                          success:nil
                                                          failure:^(NSError *error) {}];})
@@ -56,7 +56,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
         
         it(@"should require a failure block", ^{
-            [[theBlock(^{[NSURLConnection cf_registerWithParameters:helper.params
+            [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
                                                         devToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:nil];})
@@ -66,21 +66,21 @@ describe(@"PCFPushBackEndConnection", ^{
     
     context(@"unregistration bad object arguments", ^{
         it(@"should not require a device ID", ^{
-            [[theBlock(^{[NSURLConnection cf_unregisterDeviceID:nil
+            [[theBlock(^{[NSURLConnection pcf_unregisterDeviceID:nil
                                                      success:^(NSURLResponse *response, NSData *data) {}
                                                      failure:^(NSError *error) {}];})
               shouldNot] raise];
         });
         
         it(@"should require a success block", ^{
-            [[theBlock(^{[NSURLConnection cf_unregisterDeviceID:@"Fake Device ID"
+            [[theBlock(^{[NSURLConnection pcf_unregisterDeviceID:@"Fake Device ID"
                                                      success:nil
                                                      failure:^(NSError *error) {}];})
               should] raise];
         });
         
         it(@"should require a failure block", ^{
-            [[theBlock(^{[NSURLConnection cf_unregisterDeviceID:@"Fake Device ID"
+            [[theBlock(^{[NSURLConnection pcf_unregisterDeviceID:@"Fake Device ID"
                                                      success:^(NSURLResponse *response, NSData *data) {}
                                                      failure:nil];})
               should] raise];
@@ -103,7 +103,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should handle a failed request", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(failedRequestRequest:queue:completionHandler:) error:&error];
-            [NSURLConnection cf_registerWithParameters:helper.params
+            [NSURLConnection pcf_registerWithParameters:helper.params
                                                  devToken:helper.apnsDeviceToken
                                                   success:^(NSURLResponse *response, NSData *data) {
                                                       wasExpectedResult = NO;

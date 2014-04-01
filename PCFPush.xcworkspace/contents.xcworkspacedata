@@ -5,6 +5,16 @@
       location = "group:PCFPush"
       name = "PCFPush">
       <Group
+         location = "group:Analytics"
+         name = "Analytics">
+         <FileRef
+            location = "group:PCFAnalytics.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFAnalytics.m">
+         </FileRef>
+      </Group>
+      <Group
          location = "group:App"
          name = "App">
          <FileRef
