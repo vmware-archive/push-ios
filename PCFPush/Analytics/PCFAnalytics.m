@@ -14,6 +14,7 @@
 #import "NSURLConnection+PCFPushBackEndConnection.h"
 
 static NSTimeInterval minSecondsBetweenSends = 15.0f;
+static NSUInteger maxEventsCount = 1000;
 
 @implementation PCFAnalytics
 
@@ -54,11 +55,31 @@ static NSTimeInterval minSecondsBetweenSends = 15.0f;
     [PCFAnalyticEvent logEventAppInactive];
 }
 
++ (void)pruneEvents
+{
+    NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
+    [context performBlockAndWait:^{
+        NSFetchRequest *eventsFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass(PCFAnalyticEvent.class)];
+        [eventsFetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:YES]]];
+        
+        NSError *error;
+        NSArray *events = [context executeFetchRequest:eventsFetchRequest error:&error];
+        if (error) {
+            PCFPushCriticalLog(@"Prune events request failed with error: %@ %@", error, error.userInfo);
+            return;
+        }
+        
+        if (events.count > maxEventsCount) {
+            events = [events subarrayWithRange:NSMakeRange(0, events.count - maxEventsCount)];
+            [[PCFPushCoreDataManager shared] deleteManagedObjects:events];
+        }
+    }];
+}
+
 + (void)sendAnalytics
 {
-    static CGFloat lastSendDate;
-    
-    CGFloat interval = ([[NSDate date] timeIntervalSince1970] - lastSendDate);
+    static CGFloat lastSendTime;
+    CGFloat interval = ([[NSDate date] timeIntervalSince1970] - lastSendTime);
     if (interval > minSecondsBetweenSends) {
         NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
         
@@ -67,10 +88,26 @@ static NSTimeInterval minSecondsBetweenSends = 15.0f;
             [eventsFetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:NO]]];
             
             NSError *error;
+            NSUInteger eventsCount = [context countForFetchRequest:eventsFetchRequest error:&error];
+            if (error) {
+                PCFPushCriticalLog(@"Events count request failed with error: %@ %@", error, error.userInfo);
+                return;
+            }
+            
+            if (eventsCount > maxEventsCount) {
+                [self pruneEvents];
+            }
+            
             NSArray *events = [context executeFetchRequest:eventsFetchRequest error:&error];
+            if (error) {
+                PCFPushCriticalLog(@"Events fetch request failed with error: %@ %@", error, error.userInfo);
+                return;
+            }
+            
             PCFPushLog(@"Events fetched from Core Data.");
             
             if (events.count > 0) {
+                lastSendTime = [[NSDate date] timeIntervalSince1970];
                 [NSURLConnection pcf_syncAnalyicEvents:events
                                            forDeviceID:[PCFPushPersistentStorage backEndDeviceID]
                                                success:^(NSURLResponse *response, NSData *data) {

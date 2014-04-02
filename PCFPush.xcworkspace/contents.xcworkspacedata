@@ -143,6 +143,12 @@
          <FileRef
             location = "group:PCFPushHexUtil.m">
          </FileRef>
+         <FileRef
+            location = "group:PCFJSONValueTransformer.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFJSONValueTransformer.m">
+         </FileRef>
       </Group>
    </Group>
    <FileRef

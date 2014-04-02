@@ -14,12 +14,14 @@ static const struct EventRemoteAttributes {
     PCF_STRUCT_STRING *eventID;
     PCF_STRUCT_STRING *eventType;
     PCF_STRUCT_STRING *eventTime;
+    PCF_STRUCT_STRING *eventData;
 } EventRemoteAttributes;
 
 static const struct EventRemoteAttributes EventRemoteAttributes = {
-    .eventID    = @"event_id",
-    .eventType  = @"event_type",
-    .eventTime  = @"event_time",
+    .eventID    = @"id",
+    .eventType  = @"type",
+    .eventTime  = @"time",
+    .eventData  = @"data",
 };
 
 @interface PCFAnalyticEvent ()
@@ -27,6 +29,7 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
 @property (nonatomic, readwrite) NSString *eventType;
 @property (nonatomic, readwrite) NSString *eventID;
 @property (nonatomic, readwrite) NSString *eventTime;
+@property (nonatomic, readwrite) NSDictionary *eventData;
 
 + (void)logEventWithType:(NSString *)eventType;
 
@@ -37,6 +40,7 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
 @dynamic eventID;
 @dynamic eventType;
 @dynamic eventTime;
+@dynamic eventData;
 
 + (NSDictionary *)localToRemoteMapping
 {
@@ -47,6 +51,7 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
                                  PCF_STR_PROP(eventID)   : EventRemoteAttributes.eventID,
                                  PCF_STR_PROP(eventType) : EventRemoteAttributes.eventType,
                                  PCF_STR_PROP(eventTime) : EventRemoteAttributes.eventTime,
+                                 PCF_STR_PROP(eventData) : EventRemoteAttributes.eventData,
                                  };
     });
     
@@ -55,6 +60,11 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventWithType:(NSString *)eventType
 {
+    [self logEventWithType:eventType eventData:nil];
+}
+
++ (void)logEventWithType:(NSString *)eventType eventData:(NSDictionary *)eventData
+{
     NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
     [context performBlock:^{
         NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(self.class) inManagedObjectContext:context];
@@ -62,6 +72,10 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
         [event setEventID:[[NSUUID UUID] UUIDString]];
         [event setEventType:eventType];
         [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
+        
+        if (eventData) {
+            [event setEventData:eventData];
+        }
         
         NSError *error;
         if (![context save:&error]) {
@@ -100,9 +114,9 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
     [self logEventWithType:@"event_registered"];
 }
 
-+ (void)logEventPushReceived
++ (void)logEventPushReceivedWithData:(NSDictionary *)eventData
 {
-    [self logEventWithType:@"event_push_received"];
+    [self logEventWithType:@"event_push_received" eventData:eventData];
 }
 
 @end

@@ -14,14 +14,14 @@
 @property (nonatomic, readonly) NSString *eventType;
 @property (nonatomic, readonly) NSString *eventID;
 @property (nonatomic, readonly) NSString *eventTime;
+@property (nonatomic, readonly) NSDictionary *eventData;
 
 + (void)logEventInitialized;
 + (void)logEventAppActive;
 + (void)logEventAppInactive;
 + (void)logEventForeground;
-+ (void)logEventAppInactive;
 + (void)logEventBackground;
 + (void)logEventRegistered;
-+ (void)logEventPushReceived;
++ (void)logEventPushReceivedWithData:(NSDictionary *)eventData;
 
 @end

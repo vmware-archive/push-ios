@@ -26,6 +26,7 @@
 		F18D8A1E18E9C4E40084D142 /* NSObject+PCFPushJsonizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A1D18E9C4E40084D142 /* NSObject+PCFPushJsonizable.m */; };
 		F18D8A2418EA14A20084D142 /* PCFAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2318EA14A20084D142 /* PCFAnalyticEvent.m */; };
 		F18D8A2818EB47EF0084D142 /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2718EB47EF0084D142 /* PCFAnalytics.m */; };
+		F18D8A2B18EC651E0084D142 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2918EC651E0084D142 /* PCFJSONValueTransformer.m */; };
 		F1BCF2E618E5CF46004F3684 /* PCFPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D018E5CF46004F3684 /* PCFPushBackEndConnectionSpec.m */; };
 		F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */; };
 		F1BCF2E818E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D518E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m */; };
@@ -83,6 +84,8 @@
 		F18D8A2318EA14A20084D142 /* PCFAnalyticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalyticEvent.m; sourceTree = "<group>"; };
 		F18D8A2618EB47EF0084D142 /* PCFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics.h; sourceTree = "<group>"; };
 		F18D8A2718EB47EF0084D142 /* PCFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalytics.m; sourceTree = "<group>"; };
+		F18D8A2918EC651E0084D142 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
+		F18D8A2A18EC651E0084D142 /* PCFJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFJSONValueTransformer.h; sourceTree = "<group>"; };
 		F1BCF2C918E5CD10004F3684 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1BCF2CA18E5CD10004F3684 /* PCFPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushTests-Info.plist"; sourceTree = "<group>"; };
 		F1BCF2CB18E5CD10004F3684 /* PCFPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushTests-Prefix.pch"; sourceTree = "<group>"; };
@@ -212,6 +215,8 @@
 		F18D897818E5D26B0084D142 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				F18D8A2918EC651E0084D142 /* PCFJSONValueTransformer.m */,
+				F18D8A2A18EC651E0084D142 /* PCFJSONValueTransformer.h */,
 				F18D897918E5D26B0084D142 /* PCFPushDebug.h */,
 				F18D897A18E5D26B0084D142 /* PCFPushDebug.m */,
 				F18D897B18E5D26B0084D142 /* PCFPushErrorUtil.h */,
@@ -467,6 +472,7 @@
 				F18D898F18E5D26B0084D142 /* PCFPushHexUtil.m in Sources */,
 				F18D898D18E5D26B0084D142 /* PCFPushErrorUtil.m in Sources */,
 				F18D898818E5D26B0084D142 /* PCFPushRegistrationRequestData.m in Sources */,
+				F18D8A2B18EC651E0084D142 /* PCFJSONValueTransformer.m in Sources */,
 				F18D8A2418EA14A20084D142 /* PCFAnalyticEvent.m in Sources */,
 				F1BCF2EB18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m in Sources */,
 				F18D898118E5D26B0084D142 /* PCFPushAppDelegate.m in Sources */,

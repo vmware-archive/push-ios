@@ -9,6 +9,7 @@
 #import <CoreData/CoreData.h>
 
 #import "PCFPushCoreDataManager.h"
+#import "PCFJSONValueTransformer.h"
 #import "PCFPushDebug.h"
 #import "PCFAnalyticEvent.h"
 
@@ -95,13 +96,18 @@ static dispatch_once_t onceToken;
     [analyticEventEntity setManagedObjectClassName:entityName];
     [_managedObjectModel setEntities:@[analyticEventEntity]];
     
-    NSArray *analyticEventProperties = @[
-                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventID)) type:NSStringAttributeType optional:true],
-                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true],
-                                         [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true],
-                                         ];
+    NSAttributeDescription *eventIDDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventID)) type:NSStringAttributeType optional:true];
+    NSAttributeDescription *eventTypeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true];
+    NSAttributeDescription *eventTimeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true];
+    NSAttributeDescription *eventDataDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventData)) type:NSTransformableAttributeType optional:true];
+    [eventDataDescription setValueTransformerName:NSStringFromClass([PCFJSONValueTransformer class])];
     
-    [analyticEventEntity setProperties:analyticEventProperties];
+    [analyticEventEntity setProperties:@[
+                                         eventIDDescription,
+                                         eventTypeDescription,
+                                         eventTimeDescription,
+                                         eventDataDescription,
+                                         ]];
     
     return _managedObjectModel;
 }
@@ -147,7 +153,7 @@ static dispatch_once_t onceToken;
 - (void)deleteManagedObjects:(NSArray *)managedObjects
 {
     NSManagedObjectContext *context = self.managedObjectContext;
-    [context performBlock:^{
+    [context performBlockAndWait:^{
         [managedObjects enumerateObjectsUsingBlock:^(NSManagedObject *managedObject, NSUInteger idx, BOOL *stop) {
             [context deleteObject:managedObject];
         }];
