@@ -14,7 +14,7 @@
 #import "PCFPushDebug.h"
 
 const struct RegistrationAttributes {
-    PCF_STRUCT_STRING *releaseUUID;
+    PCF_STRUCT_STRING *variantUUID;
     PCF_STRUCT_STRING *deviceAlias;
     PCF_STRUCT_STRING *deviceManufacturer;
     PCF_STRUCT_STRING *deviceModel;
@@ -24,7 +24,7 @@ const struct RegistrationAttributes {
 } RegistrationAttributes;
 
 const struct RegistrationAttributes RegistrationAttributes = {
-    .releaseUUID         = @"release_uuid",
+    .variantUUID         = @"variant_uuid",
     .deviceAlias         = @"device_alias",
     .deviceManufacturer  = @"device_manufacturer",
     .deviceModel         = @"device_model",
@@ -41,7 +41,7 @@ const struct RegistrationAttributes RegistrationAttributes = {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                                 PCF_STR_PROP(releaseUUID) : RegistrationAttributes.releaseUUID,
+                                 PCF_STR_PROP(variantUUID) : RegistrationAttributes.variantUUID,
                                  PCF_STR_PROP(deviceAlias) : RegistrationAttributes.deviceAlias,
                                  PCF_STR_PROP(deviceManufacturer) : RegistrationAttributes.deviceManufacturer,
                                  PCF_STR_PROP(deviceModel) : RegistrationAttributes.deviceModel,

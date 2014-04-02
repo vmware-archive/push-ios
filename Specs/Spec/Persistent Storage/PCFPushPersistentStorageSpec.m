@@ -25,7 +25,7 @@ describe(@"PCFPushPersistentStorage", ^{
     it(@"should start empty", ^{
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage backEndDeviceID] should] beNil];
-        [[[PCFPushPersistentStorage releaseUUID] should] beNil];
+        [[[PCFPushPersistentStorage variantUUID] should] beNil];
         [[[PCFPushPersistentStorage releaseSecret] should] beNil];
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
     });
@@ -41,8 +41,8 @@ describe(@"PCFPushPersistentStorage", ^{
     });
     
     it(@"should be able to save the release UUID", ^{
-        [PCFPushPersistentStorage setReleaseUUID:TEST_RELEASE_UUID_1];
-        [[[PCFPushPersistentStorage releaseUUID] should] equal:TEST_RELEASE_UUID_1];
+        [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+        [[[PCFPushPersistentStorage variantUUID] should] equal:TEST_VARIANT_UUID_1];
     });
     
     it(@"should be able to save the release secret", ^{

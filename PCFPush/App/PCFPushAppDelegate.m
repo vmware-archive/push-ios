@@ -7,6 +7,7 @@
 //
 
 #import "PCFPushAppDelegate.h"
+#import "PCFAnalytics.h"
 #import "PCFPushDebug.h"
 
 @interface PCFPushAppDelegate ()
@@ -51,16 +52,13 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     PCFPushLog(@"Received remote notification: %@", userInfo);
+    [PCFAnalytics logApplication:application didReceiveRemoteNotification:userInfo];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     PCFPushLog(@"Received remote notification: %@", userInfo);
-}
-
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    PCFPushLog(@"Received local notification: %@", notification);
+    [PCFAnalytics logApplication:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
 @end

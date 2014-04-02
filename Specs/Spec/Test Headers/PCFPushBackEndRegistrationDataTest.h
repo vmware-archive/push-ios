@@ -9,7 +9,7 @@
 #import "PCFPushRegistrationData.h"
 
 OBJC_EXTERN const struct RegistrationAttributes {
-    PCF_STRUCT_STRING *releaseUUID;
+    PCF_STRUCT_STRING *variantUUID;
     PCF_STRUCT_STRING *deviceAlias;
     PCF_STRUCT_STRING *deviceManufacturer;
     PCF_STRUCT_STRING *deviceModel;
@@ -18,7 +18,7 @@ OBJC_EXTERN const struct RegistrationAttributes {
     PCF_STRUCT_STRING *registrationToken;
 } RegistrationAttributes;
 
-static NSString *const TEST_RELEASE_UUID        = @"123-456-789";
+static NSString *const TEST_VARIANT_UUID        = @"123-456-789";
 static NSString *const TEST_SECRET              = @"My cat's breath smells like cat food";
 static NSString *const TEST_DEVICE_ALIAS        = @"l33t devices of badness";
 static NSString *const TEST_DEVICE_MANUFACTURER = @"Commodore";

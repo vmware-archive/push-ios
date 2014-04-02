@@ -43,7 +43,7 @@
 {
     [PCFPushPersistentStorage setBackEndDeviceID:nil];
     [PCFPushPersistentStorage setAPNSDeviceToken:nil];
-    [PCFPushPersistentStorage setReleaseUUID:nil];
+    [PCFPushPersistentStorage setVariantUUID:nil];
     [PCFPushPersistentStorage setReleaseSecret:nil];
     [PCFPushPersistentStorage setDeviceAlias:nil];
     [self showAlert:@"Registration cleared."];
@@ -58,14 +58,14 @@
 
 - (void) loadSettings
 {
-    self.releaseUuidTextField.text = [Settings releaseUUID];
+    self.releaseUuidTextField.text = [Settings variantUUID];
     self.releaseSecretTextField.text = [Settings releaseSecret];
     self.deviceAliasTextField.text = [Settings deviceAlias];
 }
 
 - (void) saveSettings
 {
-    [Settings setReleaseUUID:self.releaseUuidTextField.text];
+    [Settings setVariantUUID:self.releaseUuidTextField.text];
     [Settings setReleaseSecret:self.releaseSecretTextField.text];
     [Settings setDeviceAlias:self.deviceAliasTextField.text];
 }

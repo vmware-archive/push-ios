@@ -52,4 +52,9 @@
                   failure:(void (^)(NSError *error))failure;
 
 
+
++ (BOOL)analyticsEnabled;
+
++ (void)setAnalyticsEnabled:(BOOL)enabled;
+
 @end

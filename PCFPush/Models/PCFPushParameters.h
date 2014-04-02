@@ -15,7 +15,7 @@
 @interface PCFPushParameters : NSObject
 
 @property (readonly) UIRemoteNotificationType remoteNotificationTypes;
-@property (readonly) NSString *releaseUUID;
+@property (readonly) NSString *variantUUID;
 @property (readonly) NSString *releaseSecret;
 @property (readonly) NSString *deviceAlias;
 
@@ -26,18 +26,19 @@
  *              push notifications are received while your application is
  *              not running.
  *
- * @param releaseUuid   The "release_uuid", as defined by CF Push Services for your release.
+ * @param releaseUuid   The "variant_uuid", as defined by PCF Push Services for your release.
  *                      May not be `nil` or empty.
  *
- * @param releaseSecret The "release secret", as defined by CF Push Services for your release.
+ * @param releaseSecret The "release secret", as defined by PCF Push Services for your release.
  *                      May not be `nil` or empty.
  *
  * @param deviceAlias   A developer-defined "device alias" which can be used to designate this device, or class.
  *                      of devices, in push or notification campaigns. May not be `nil`. May be empty.
+ *
  */
-+ (instancetype)parametersForNotificationTypes:(UIRemoteNotificationType)types
-                                   releaseUUID:(NSString *)releaseUUID
-                                 releaseSecret:(NSString *)releaseSecret
-                                   deviceAlias:(NSString *)deviceAlias;
++ (instancetype)parametersWithNotificationTypes:(UIRemoteNotificationType)types
+                                    variantUUID:(NSString *)variantUUID
+                                  releaseSecret:(NSString *)releaseSecret
+                                    deviceAlias:(NSString *)deviceAlias;
 
 @end

@@ -12,8 +12,8 @@
 
 @interface Settings : NSObject
 
-+ (NSString *)releaseUUID;
-+ (void)setReleaseUUID:(NSString *)releaseUUID;
++ (NSString *)variantUUID;
++ (void)setVariantUUID:(NSString *)variantUUID;
 
 + (NSString *)releaseSecret;
 + (void)setReleaseSecret:(NSString *)releaseSecret;

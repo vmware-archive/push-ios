@@ -9,24 +9,24 @@
 #import "Settings.h"
 #import "PCFPushParameters.h"
 
-static NSString *const DEFAULT_RELEASE_UUID   = @"a5ca5693-f729-4e9a-8df2-65e02cebc852";
+static NSString *const DEFAULT_VARIANT_UUID   = @"a5ca5693-f729-4e9a-8df2-65e02cebc852";
 static NSString *const DEFAULT_RELEASE_SECRET = @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3";
 static NSString *const DEFAULT_DEVICE_ALIAS   = @"Default Device Alias";
 
-static NSString *const KEY_RELEASE_UUID    = @"KEY_RELEASE_UUID";
+static NSString *const KEY_VARIANT_UUID    = @"KEY_variant_uuid";
 static NSString *const KEY_RELEASE_SECRET  = @"KEY_RELEASE_SECRET";
 static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 @implementation Settings
 
-+ (NSString *)releaseUUID
++ (NSString *)variantUUID
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_RELEASE_UUID];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_variant_uuid];
 }
 
-+ (void)setReleaseUUID:(NSString *)releaseUUID
++ (void)setVariantUUID:(NSString *)variantUUID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:releaseUUID forKey:KEY_RELEASE_UUID];
+    [[NSUserDefaults standardUserDefaults] setObject:variantUUID forKey:KEY_variant_uuid];
 }
 
 + (NSString *)releaseSecret
@@ -51,15 +51,15 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 + (void)resetToDefaults
 {
-    [self setReleaseUUID:DEFAULT_RELEASE_UUID];
+    [self setVariantUUID:DEFAULT_VARIANT_UUID];
     [self setReleaseSecret:DEFAULT_RELEASE_SECRET];
     [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
 + (PCFPushParameters *)registrationParameters
 {
-    return [PCFPushParameters parametersForNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
-                                                               releaseUUID:[Settings releaseUUID]
+    return [PCFPushParameters parametersWithNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
+                                                               variantUUID:[Settings variantUUID]
                                                              releaseSecret:[Settings releaseSecret]
                                                                deviceAlias:[Settings deviceAlias]];
 }
@@ -67,7 +67,7 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 + (NSDictionary *)defaults
 {
     return @{
-             KEY_RELEASE_UUID : DEFAULT_RELEASE_UUID,
+             KEY_VARIANT_UUID : DEFAULT_VARIANT_UUID,
              KEY_RELEASE_SECRET : DEFAULT_RELEASE_SECRET,
              KEY_DEVICE_ALIAS : DEFAULT_DEVICE_ALIAS,
              };

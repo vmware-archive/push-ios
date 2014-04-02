@@ -75,7 +75,7 @@ describe(@"PCFPushSDK", ^{
             
             SEL selectors[] = {
                 @selector(setAPNSDeviceToken:),
-                @selector(setReleaseUUID:),
+                @selector(setVariantUUID:),
                 @selector(setReleaseSecret:),
                 @selector(setDeviceAlias:),
             };
@@ -99,14 +99,14 @@ describe(@"PCFPushSDK", ^{
                 } else if ([request.HTTPMethod isEqualToString:@"POST"]) {
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                     NSDictionary *dict = @{
-                                           RegistrationAttributes.deviceOS : TEST_OS,
-                                           RegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
-                                           RegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
+                                           RegistrationAttributes.deviceOS           : TEST_OS,
+                                           RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                           RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
                                            RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                                           RegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,
-                                           RegistrationAttributes.releaseUUID : TEST_RELEASE_UUID,
-                                           RegistrationAttributes.registrationToken : TEST_REGISTRATION_TOKEN,
-                                           kDeviceUUID : TEST_DEVICE_UUID,
+                                           RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                                           RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                                           RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                                           kDeviceUUID                               : TEST_DEVICE_UUID,
                                            };
                     newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
 
@@ -320,7 +320,7 @@ describe(@"PCFPushSDK", ^{
             SEL selectors[] = {
                 @selector(APNSDeviceToken),
                 @selector(backEndDeviceID),
-                @selector(releaseUUID),
+                @selector(variantUUID),
                 @selector(deviceAlias),
             };
             
@@ -344,8 +344,8 @@ describe(@"PCFPushSDK", ^{
         });
     });
     
-    describe(@"successful unregistration when not registered on push server", ^{
-        __block BOOL successBlockExecuted = NO;
+    describe(@"unsuccessful unregistration when device not registered on push server", ^{
+        __block BOOL failureBlockExecuted = NO;
         
         beforeEach(^{
             [helper setupDefaultSavedParameters];
@@ -364,6 +364,22 @@ describe(@"PCFPushSDK", ^{
                 return nil;
             }];
         });
+        
+        it(@"should perform failure block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
+            
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            
+            [PCFPushSDK unregisterSuccess:^{
+                fail(@"unregistration success block executed");
+                
+            } failure:^(NSError *error) {
+                failureBlockExecuted = YES;
+                
+            }];
+            
+            [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+        });
+
     });
 
     describe(@"unsuccessful unregistration", ^{
@@ -394,22 +410,6 @@ describe(@"PCFPushSDK", ^{
             
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
         });
-        
-        it(@"should perform failure block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
-            
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            
-            [PCFPushSDK unregisterSuccess:^{
-                fail(@"unregistration success block executed");
-                
-            } failure:^(NSError *error) {
-                failureBlockExecuted = YES;
-                
-            }];
-            
-            [[theValue(failureBlockExecuted) shouldEventually] beTrue];
-        });
-
     });
 });
 

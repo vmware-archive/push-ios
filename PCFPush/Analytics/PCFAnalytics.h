@@ -10,4 +10,8 @@
 
 @interface PCFAnalytics : NSObject
 
++ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
+
++ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
+
 @end

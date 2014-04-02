@@ -12,7 +12,7 @@
 
 static NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
-static NSString *const TEST_RELEASE_UUID   = @"SOS-WE-LIKE-IT-SPICY";
+static NSString *const TEST_variant_uuid   = @"SOS-WE-LIKE-IT-SPICY";
 static NSString *const TEST_RELEASE_SECRET = @"Put sweet chili sauce on everything";
 static NSString *const TEST_DEVICE_ALIAS   = @"Extreme spiciness classification";
 
@@ -33,27 +33,27 @@ describe(@"PCFPushRegistrationParameters", ^{
         });
         
         it(@"should require a non-nil releaseUuid", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
+            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-empty releaseUuid", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
+            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-nil releaseSecret", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];})
+            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-empty releaseSecret", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];})
+            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];})
               should] raise];
         });
         
         it(@"should require a non-nil deviceAlias", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];})
+            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];})
               should] raise];
         });
     });
@@ -61,7 +61,7 @@ describe(@"PCFPushRegistrationParameters", ^{
     context(@"initializing with valid arguments (empty device alias)", ^{
         
         beforeEach(^{
-            model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:@""];
+            model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:@""];
         });
         
         it(@"should be initialized successfully", ^{
@@ -70,7 +70,7 @@ describe(@"PCFPushRegistrationParameters", ^{
         
         it(@"should retain its arguments as properties", ^{
             [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
-            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+            [[model.variantUUID should] equal:TEST_variant_uuid];
             [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
             [[model.deviceAlias should] beEmpty];
         });
@@ -79,7 +79,7 @@ describe(@"PCFPushRegistrationParameters", ^{
     context(@"initializing with valid arguments (non-nil device alias)", ^{
        
         beforeEach(^{
-            model = [PCFPushParameters parametersForNotificationTypes:TEST_NOTIFICATION_TYPES releaseUUID:TEST_RELEASE_UUID releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
+            model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
         });
         
         it(@"should be initialized successfully", ^{
@@ -88,7 +88,7 @@ describe(@"PCFPushRegistrationParameters", ^{
         
         it(@"should retain its arguments as properties", ^{
             [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
-            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+            [[model.variantUUID should] equal:TEST_variant_uuid];
             [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
         });

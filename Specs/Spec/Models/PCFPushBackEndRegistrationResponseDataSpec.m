@@ -38,7 +38,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
         });
         
         it(@"should start as nil", ^{
-            [[model.releaseUUID should] beNil];
+            [[model.variantUUID should] beNil];
             [[model.deviceUUID should] beNil];
             [[model.deviceAlias should] beNil];
             [[model.deviceManufacturer should] beNil];
@@ -48,9 +48,9 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             [[model.registrationToken should] beNil];
         });
         
-        it(@"should have a release_UUID", ^{
-            model.releaseUUID = TEST_RELEASE_UUID;
-            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+        it(@"should have a variant_uuid", ^{
+            model.variantUUID = TEST_VARIANT_UUID;
+            [[model.variantUUID should] equal:TEST_VARIANT_UUID];
         });
         
         it(@"should have a deviceUUID", ^{
@@ -120,14 +120,14 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
         it(@"should construct a complete response object", ^{
             NSError *error;
             NSDictionary *dict = @{
-                                   RegistrationAttributes.deviceOS : TEST_OS,
-                                   RegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
-                                   RegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
+                                   RegistrationAttributes.deviceOS           : TEST_OS,
+                                   RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                   RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
                                    RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                                   RegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,
-                                   RegistrationAttributes.releaseUUID : TEST_RELEASE_UUID,
-                                   RegistrationAttributes.registrationToken : TEST_REGISTRATION_TOKEN,
-                                   kDeviceUUID : TEST_DEVICE_UUID,
+                                   RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                                   RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                                   RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                                   kDeviceUUID                               : TEST_DEVICE_UUID,
                                    };
 
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
@@ -142,7 +142,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
-            [[model.releaseUUID should] equal:TEST_RELEASE_UUID];
+            [[model.variantUUID should] equal:TEST_VARIANT_UUID];
             [[model.registrationToken should] equal:TEST_REGISTRATION_TOKEN];
         });
     });
@@ -162,7 +162,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
         context(@"populated object", ^{
             
             beforeEach(^{
-                model.releaseUUID = TEST_RELEASE_UUID;
+                model.variantUUID = TEST_VARIANT_UUID;
                 model.deviceUUID = TEST_DEVICE_UUID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
@@ -174,7 +174,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[RegistrationAttributes.releaseUUID] should] equal:TEST_RELEASE_UUID];
+                [[dict[RegistrationAttributes.variantUUID] should] equal:TEST_VARIANT_UUID];
                 [[dict[kDeviceUUID] should] equal:TEST_DEVICE_UUID];
                 [[dict[RegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
                 [[dict[RegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
@@ -201,7 +201,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[RegistrationAttributes.releaseUUID] should] beNil];
+                [[dict[RegistrationAttributes.variantUUID] should] beNil];
                 [[dict[kDeviceUUID] should] beNil];
                 [[dict[RegistrationAttributes.deviceAlias] should] beNil];
                 [[dict[RegistrationAttributes.deviceManufacturer] should] beNil];

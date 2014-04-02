@@ -22,10 +22,10 @@
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
-NSString *const TEST_RELEASE_UUID_1   = @"444-555-666-777";
+NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_RELEASE_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
-NSString *const TEST_RELEASE_UUID_2   = @"222-444-999-ZZZ";
+NSString *const TEST_VARIANT_UUID_2   = @"222-444-999-ZZZ";
 NSString *const TEST_RELEASE_SECRET_2 = @"My cat's breath smells like cat food";
 NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
@@ -138,33 +138,33 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (PCFPushParameters *)setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
-    self.params = [PCFPushParameters parametersForNotificationTypes:notificationTypes
-                                                                       releaseUUID:TEST_RELEASE_UUID_1
+    self.params = [PCFPushParameters parametersWithNotificationTypes:notificationTypes
+                                                                       variantUUID:TEST_VARIANT_UUID_1
                                                                      releaseSecret:TEST_RELEASE_SECRET_1
                                                                        deviceAlias:TEST_DEVICE_ALIAS_1];
     return self.params;
 }
 
-- (void) changeReleaseUuidInParameters:(NSString*)newReleaseUuid
+- (void) changeVariantUUIDInParameters:(NSString*)newVariantUUID
 {
-    self.params = [PCFPushParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
-                                                                      releaseUUID:newReleaseUuid
+    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
+                                                                      variantUUID:newVariantUUID
                                                                     releaseSecret:self.params.releaseSecret
                                                                       deviceAlias:self.params.deviceAlias];
 }
 
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
 {
-    self.params = [PCFPushParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
-                                                                      releaseUUID:self.params.releaseUUID
+    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
+                                                                      variantUUID:self.params.variantUUID
                                                                     releaseSecret:newReleaseSecret
                                                                       deviceAlias:self.params.deviceAlias];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
 {
-    self.params = [PCFPushParameters parametersForNotificationTypes:self.params.remoteNotificationTypes
-                                                                      releaseUUID:self.params.releaseUUID
+    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
+                                                                      variantUUID:self.params.variantUUID
                                                                     releaseSecret:self.params.releaseSecret
                                                                       deviceAlias:newDeviceAlias];
 }
@@ -172,7 +172,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void)setupDefaultSavedParameters
 {
     [PCFPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
-    [PCFPushPersistentStorage setReleaseUUID:TEST_RELEASE_UUID_1];
+    [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
     [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
     [PCFPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
     [PCFPushPersistentStorage setBackEndDeviceID:self.backEndDeviceId];

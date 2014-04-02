@@ -14,6 +14,7 @@
 @property (nonatomic, readonly) NSString *eventType;
 @property (nonatomic, readonly) NSString *eventID;
 @property (nonatomic, readonly) NSString *eventTime;
+@property (nonatomic, readonly) NSString *variantUUID;
 @property (nonatomic, readonly) NSDictionary *eventData;
 
 + (void)logEventInitialized;

@@ -158,7 +158,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     @try {
         PCFPushParameters *parameters = [Settings registrationParameters];
         NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
-                             parameters.releaseUUID,
+                             parameters.variantUUID,
                              parameters.releaseSecret,
                              parameters.deviceAlias];
         [self addLogItem:message timestamp:[NSDate date]];

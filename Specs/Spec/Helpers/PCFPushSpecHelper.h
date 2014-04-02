@@ -13,10 +13,10 @@
 
 OBJC_EXPORT NSInteger TEST_NOTIFICATION_TYPES;
 
-OBJC_EXPORT NSString *const TEST_RELEASE_UUID_1;
+OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
 OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_1;
 OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_1;
-OBJC_EXPORT NSString *const TEST_RELEASE_UUID_2;
+OBJC_EXPORT NSString *const TEST_VARIANT_UUID_2;
 OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_2;
 OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
@@ -49,7 +49,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
 // Parameters helpers
 - (PCFPushParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-- (void) changeReleaseUuidInParameters:(NSString *)newReleaseUuid;
+- (void) changeVariantUUIDInParameters:(NSString *)newVariantUUID;
 - (void) changeReleaseSecretInParameters:(NSString *)newReleaseSecret;
 - (void) changeDeviceAliasInParameters:(NSString *)newDeviceAlias;
 - (void) setupDefaultSavedParameters;

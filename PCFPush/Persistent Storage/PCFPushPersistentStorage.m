@@ -6,11 +6,12 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-static NSString *const KEY_APNS_DEVICE_TOKEN  = @"CF_PUSH_APNS_DEVICE_TOKEN";
-static NSString *const KEY_BACK_END_DEVICE_ID = @"CF_PUSH_BACK_END_DEVICE_ID";
-static NSString *const KEY_RELEASE_UUID       = @"CF_PUSH_RELEASE_UUID";
-static NSString *const KEY_RELEASE_SECRET     = @"CF_PUSH_RELEASE_SECRET";
-static NSString *const KEY_DEVICE_ALIAS       = @"CF_PUSH_DEVICE_ALIAS";
+static NSString *const KEY_APNS_DEVICE_TOKEN  = @"PCF_PUSH_APNS_DEVICE_TOKEN";
+static NSString *const KEY_BACK_END_DEVICE_ID = @"PCF_PUSH_BACK_END_DEVICE_ID";
+static NSString *const KEY_VARIANT_UUID       = @"PCF_PUSH_VARIANT_UUID";
+static NSString *const KEY_RELEASE_SECRET     = @"PCF_PUSH_RELEASE_SECRET";
+static NSString *const KEY_DEVICE_ALIAS       = @"PCF_PUSH_DEVICE_ALIAS";
+static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
 
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushRegistrationResponseData.h"
@@ -19,61 +20,100 @@ static NSString *const KEY_DEVICE_ALIAS       = @"CF_PUSH_DEVICE_ALIAS";
 
 + (void)reset
 {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_APNS_DEVICE_TOKEN];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_BACK_END_DEVICE_ID];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_RELEASE_UUID];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_RELEASE_SECRET];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:KEY_DEVICE_ALIAS];
+    NSArray *keys = @[
+                      KEY_APNS_DEVICE_TOKEN,
+                      KEY_BACK_END_DEVICE_ID,
+                      KEY_VARIANT_UUID,
+                      KEY_RELEASE_SECRET,
+                      KEY_DEVICE_ALIAS,
+                      KEY_ANALYTICS_ENABLED,
+                      ];
+    
+    [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
+        [self removeObjectForKey:key];
+    }];
 }
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken
 {
-    [[NSUserDefaults standardUserDefaults] setObject:apnsDeviceToken forKey:KEY_APNS_DEVICE_TOKEN];
+    [self persistValue:apnsDeviceToken forKey:KEY_APNS_DEVICE_TOKEN];
 }
 
 + (NSData *)APNSDeviceToken
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_APNS_DEVICE_TOKEN];
+    return [self persistedValueForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
 + (void)setBackEndDeviceID:(NSString *)backEndDeviceID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:backEndDeviceID forKey:KEY_BACK_END_DEVICE_ID];
+    [self persistValue:backEndDeviceID forKey:KEY_BACK_END_DEVICE_ID];
 }
 
 + (NSString *)backEndDeviceID
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_BACK_END_DEVICE_ID];
+    return [self persistedValueForKey:KEY_BACK_END_DEVICE_ID];
 }
 
-+ (void)setReleaseUUID:(NSString *)releaseUUID
++ (void)setVariantUUID:(NSString *)variantUUID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:releaseUUID forKey:KEY_RELEASE_UUID];
+    [self persistValue:variantUUID forKey:KEY_VARIANT_UUID];
 }
 
-+ (NSString *)releaseUUID
++ (NSString *)variantUUID
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_RELEASE_UUID];
+    return [self persistedValueForKey:KEY_VARIANT_UUID];
 }
 
 + (void)setReleaseSecret:(NSString *)releaseSecret
 {
-    [[NSUserDefaults standardUserDefaults] setObject:releaseSecret forKey:KEY_RELEASE_SECRET];
+    [self persistValue:releaseSecret forKey:KEY_RELEASE_SECRET];
 }
 
 + (NSString *)releaseSecret
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_RELEASE_SECRET];
+    return [self persistedValueForKey:KEY_RELEASE_SECRET];
 }
 
 + (void)setDeviceAlias:(NSString *)deviceAlias
 {
-    [[NSUserDefaults standardUserDefaults] setObject:deviceAlias forKey:KEY_DEVICE_ALIAS];
+    [self persistValue:deviceAlias forKey:KEY_DEVICE_ALIAS];
 }
 
 + (NSString *)deviceAlias
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:KEY_DEVICE_ALIAS];
+    return [self persistedValueForKey:KEY_DEVICE_ALIAS];
+}
+
++ (void)setAnalyticsEnabled:(BOOL)enabled
+{
+    [self persistValue:[NSNumber numberWithBool:enabled] forKey:KEY_ANALYTICS_ENABLED];
+}
+
++ (BOOL)analyticsEnabled
+{
+    NSNumber *enabled = [self persistedValueForKey:KEY_ANALYTICS_ENABLED];
+    if (!enabled) {
+        [self setAnalyticsEnabled:YES];
+        return YES;
+    }
+    return [enabled boolValue];
+}
+
+#pragma mark - Persistence Methods
+
++ (void)persistValue:(id)value forKey:(id)key
+{
+    [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
+}
+
++ (id)persistedValueForKey:(id)key
+{
+    return [[NSUserDefaults standardUserDefaults] valueForKey:key];
+}
+
++ (void)removeObjectForKey:(id)key
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
 }
 
 @end

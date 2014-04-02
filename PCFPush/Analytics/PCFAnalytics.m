@@ -13,8 +13,10 @@
 #import "PCFPushPersistentStorage.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
 
-static NSTimeInterval minSecondsBetweenSends = 15.0f;
-static NSUInteger maxEventsCount = 1000;
+static NSTimeInterval minSecondsBetweenSends = 60.0f;
+static NSUInteger maxStoredEventCount = 1000;
+
+static NSString *const kPushIDKey = @"push_id";
 
 @implementation PCFAnalytics
 
@@ -69,8 +71,8 @@ static NSUInteger maxEventsCount = 1000;
             return;
         }
         
-        if (events.count > maxEventsCount) {
-            events = [events subarrayWithRange:NSMakeRange(0, events.count - maxEventsCount)];
+        if (events.count > maxStoredEventCount) {
+            events = [events subarrayWithRange:NSMakeRange(0, events.count - maxStoredEventCount)];
             [[PCFPushCoreDataManager shared] deleteManagedObjects:events];
         }
     }];
@@ -79,6 +81,12 @@ static NSUInteger maxEventsCount = 1000;
 + (void)sendAnalytics
 {
     static CGFloat lastSendTime;
+    
+    if (![PCFPushPersistentStorage analyticsEnabled]) {
+        PCFPushLog(@"Analytics disabled. Events will not be sent.");
+        return;
+    }
+    
     CGFloat interval = ([[NSDate date] timeIntervalSince1970] - lastSendTime);
     if (interval > minSecondsBetweenSends) {
         NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
@@ -94,7 +102,7 @@ static NSUInteger maxEventsCount = 1000;
                 return;
             }
             
-            if (eventsCount > maxEventsCount) {
+            if (eventsCount > maxStoredEventCount) {
                 [self pruneEvents];
             }
             
@@ -108,6 +116,8 @@ static NSUInteger maxEventsCount = 1000;
             
             if (events.count > 0) {
                 lastSendTime = [[NSDate date] timeIntervalSince1970];
+                
+                PCFPushLog(@"Sync Analytic Events Started");
                 [NSURLConnection pcf_syncAnalyicEvents:events
                                            forDeviceID:[PCFPushPersistentStorage backEndDeviceID]
                                                success:^(NSURLResponse *response, NSData *data) {
@@ -124,6 +134,41 @@ static NSUInteger maxEventsCount = 1000;
             }
         }];
     }
+}
+
+#pragma mark - Remote Notification Logging
+
++ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    [self logApplication:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:nil];
+}
+
++ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSString *appState;
+    switch (application.applicationState) {
+        case UIApplicationStateActive:
+            appState = @"UIApplicationStateActive";
+            break;
+        case UIApplicationStateInactive:
+            appState = @"UIApplicationStateInactive";
+            break;
+        case UIApplicationStateBackground:
+            appState = @"UIApplicationStateBackground";
+            break;
+        default:
+            appState = @"unknown";
+            break;
+    }
+    
+    NSDictionary *pushReceivedData = [NSMutableDictionary dictionaryWithCapacity:2];
+    [pushReceivedData setValue:appState forKey:@"app_state"];
+    
+    id pushID = [userInfo objectForKey:kPushIDKey];
+    if (pushID) {
+        [pushReceivedData setValue:pushID forKey:kPushIDKey];
+    }
+    [PCFAnalyticEvent logEventPushReceivedWithData:pushReceivedData];
 }
 
 @end

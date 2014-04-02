@@ -11,7 +11,7 @@
 
 @interface PCFPushRegistrationData : NSObject <PCFPushMapping>
 
-@property NSString *releaseUUID;
+@property NSString *variantUUID;
 @property NSString *deviceAlias;
 @property NSString *deviceManufacturer;
 @property NSString *deviceModel;

@@ -125,7 +125,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     
     PCFPushRegistrationRequestData *requestData = [[PCFPushRegistrationRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
-    requestData.releaseUUID = parameters.releaseUUID;
+    requestData.variantUUID = parameters.variantUUID;
     requestData.secret = parameters.releaseSecret;
     requestData.deviceAlias = parameters.deviceAlias;
     requestData.deviceManufacturer = @"Apple";

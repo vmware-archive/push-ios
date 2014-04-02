@@ -18,13 +18,16 @@
 + (void)setBackEndDeviceID:(NSString *)backEndDeviceID;
 + (NSString *)backEndDeviceID;
 
-+ (void)setReleaseUUID:(NSString *)releaseUUID;
-+ (NSString *)releaseUUID;
++ (void)setVariantUUID:(NSString *)variantUUID;
++ (NSString *)variantUUID;
 
 + (void)setReleaseSecret:(NSString *)releaseSecret;
 + (NSString *)releaseSecret;
 
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;
+
++ (void)setAnalyticsEnabled:(BOOL)enabled;
++ (BOOL)analyticsEnabled;
 
 @end

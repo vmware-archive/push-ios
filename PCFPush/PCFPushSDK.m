@@ -146,7 +146,7 @@ static PCFPushParameters *_registrationParameters;
         
         PCFPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
         [PCFPushPersistentStorage setBackEndDeviceID:parsedData.deviceUUID];
-        [PCFPushPersistentStorage setReleaseUUID:parameters.releaseUUID];
+        [PCFPushPersistentStorage setVariantUUID:parameters.variantUUID];
         [PCFPushPersistentStorage setReleaseSecret:parameters.releaseSecret];
         [PCFPushPersistentStorage setDeviceAlias:parameters.deviceAlias];
         
@@ -205,8 +205,8 @@ static PCFPushParameters *_registrationParameters;
 + (BOOL)localParametersMatchNewParameters:(PCFPushParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
-    if (![parameters.releaseUUID isEqualToString:[PCFPushPersistentStorage releaseUUID]]) {
-        PCFPushLog(@"Parameters specify a different releaseUUID. Unregistration and re-registration will be required.");
+    if (![parameters.variantUUID isEqualToString:[PCFPushPersistentStorage variantUUID]]) {
+        PCFPushLog(@"Parameters specify a different variantUUID. Unregistration and re-registration will be required.");
         return NO;
     }
     
@@ -256,6 +256,16 @@ static PCFPushParameters *_registrationParameters;
             application.delegate = proxyDelegate.originalAppDelegate;
         }
     }
+}
+
++ (BOOL)analyticsEnabled
+{
+    return [PCFPushPersistentStorage analyticsEnabled];
+}
+
++ (void)setAnalyticsEnabled:(BOOL)enabled
+{
+    [PCFPushPersistentStorage setAnalyticsEnabled:enabled];
 }
 
 @end

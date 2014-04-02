@@ -10,7 +10,6 @@
 		F18D8A0218E5D66D0084D142 /* PCFPushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */; };
 		F18D8A0318E5D66D0084D142 /* PCFPushAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DE18E5D66D0084D142 /* PCFPushAppDelegateProxy.m */; };
 		F18D8A0418E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */; };
-		F18D8A0518E5D66D0084D142 /* PCFPushDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E318E5D66D0084D142 /* PCFPushDataModel.xcdatamodeld */; };
 		F18D8A0618E5D66D0084D142 /* PCFPushCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E618E5D66D0084D142 /* PCFPushCoreDataManager.m */; };
 		F18D8A0718E5D66D0084D142 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E818E5D66D0084D142 /* PCFPushParameters.m */; };
 		F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */; };
@@ -22,6 +21,8 @@
 		F18D8A0E18E5D66D0084D142 /* PCFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89FD18E5D66D0084D142 /* PCFPushErrorUtil.m */; };
 		F18D8A0F18E5D66D0084D142 /* PCFPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89FF18E5D66D0084D142 /* PCFPushHardwareUtil.m */; };
 		F18D8A1018E5D66D0084D142 /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A0118E5D66D0084D142 /* PCFPushHexUtil.m */; };
+		F18D8A3118EC89DB0084D142 /* PCFAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2D18EC89DB0084D142 /* PCFAnalyticEvent.m */; };
+		F18D8A3218EC89DB0084D142 /* NSObject+PCFPushJsonizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2F18EC89DB0084D142 /* NSObject+PCFPushJsonizable.m */; };
 		F1FDE1A818D7806B009EBE38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A718D7806B009EBE38 /* Foundation.framework */; };
 		F1FDE1AA18D7806B009EBE38 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */; };
 		F1FDE1AC18D7806B009EBE38 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1AB18D7806B009EBE38 /* UIKit.framework */; };
@@ -46,7 +47,6 @@
 		F18D89DE18E5D66D0084D142 /* PCFPushAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushAppDelegateProxy.m; sourceTree = "<group>"; };
 		F18D89E018E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
 		F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
-		F18D89E418E5D66D0084D142 /* CFPushDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CFPushDataModel.xcdatamodel; sourceTree = "<group>"; };
 		F18D89E518E5D66D0084D142 /* PCFPushCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushCoreDataManager.h; sourceTree = "<group>"; };
 		F18D89E618E5D66D0084D142 /* PCFPushCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushCoreDataManager.m; sourceTree = "<group>"; };
 		F18D89E718E5D66D0084D142 /* PCFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushParameters.h; sourceTree = "<group>"; };
@@ -61,8 +61,6 @@
 		F18D89F018E5D66D0084D142 /* PCFPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushSDK.m; sourceTree = "<group>"; };
 		F18D89F218E5D66D0084D142 /* PCFPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushPersistentStorage.h; sourceTree = "<group>"; };
 		F18D89F318E5D66D0084D142 /* PCFPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushPersistentStorage.m; sourceTree = "<group>"; };
-		F18D89F518E5D66D0084D142 /* PCFPushDictionaryizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDictionaryizable.h; sourceTree = "<group>"; };
-		F18D89F618E5D66D0084D142 /* PCFPushJsonizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushJsonizable.h; sourceTree = "<group>"; };
 		F18D89F818E5D66D0084D142 /* PCFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrors.h; sourceTree = "<group>"; };
 		F18D89FA18E5D66D0084D142 /* PCFPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDebug.h; sourceTree = "<group>"; };
 		F18D89FB18E5D66D0084D142 /* PCFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDebug.m; sourceTree = "<group>"; };
@@ -72,6 +70,11 @@
 		F18D89FF18E5D66D0084D142 /* PCFPushHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHardwareUtil.m; sourceTree = "<group>"; };
 		F18D8A0018E5D66D0084D142 /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
 		F18D8A0118E5D66D0084D142 /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
+		F18D8A2C18EC89C40084D142 /* PCFPushMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushMapping.h; sourceTree = "<group>"; };
+		F18D8A2D18EC89DB0084D142 /* PCFAnalyticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalyticEvent.m; sourceTree = "<group>"; };
+		F18D8A2E18EC89DB0084D142 /* PCFAnalyticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAnalyticEvent.h; sourceTree = "<group>"; };
+		F18D8A2F18EC89DB0084D142 /* NSObject+PCFPushJsonizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PCFPushJsonizable.m"; sourceTree = "<group>"; };
+		F18D8A3018EC89DB0084D142 /* NSObject+PCFPushJsonizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PCFPushJsonizable.h"; sourceTree = "<group>"; };
 		F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FDE1A718D7806B009EBE38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -153,7 +156,10 @@
 		F18D89E218E5D66D0084D142 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F18D89E318E5D66D0084D142 /* PCFPushDataModel.xcdatamodeld */,
+				F18D8A2D18EC89DB0084D142 /* PCFAnalyticEvent.m */,
+				F18D8A2E18EC89DB0084D142 /* PCFAnalyticEvent.h */,
+				F18D8A2F18EC89DB0084D142 /* NSObject+PCFPushJsonizable.m */,
+				F18D8A3018EC89DB0084D142 /* NSObject+PCFPushJsonizable.h */,
 				F18D89E518E5D66D0084D142 /* PCFPushCoreDataManager.h */,
 				F18D89E618E5D66D0084D142 /* PCFPushCoreDataManager.m */,
 				F18D89E718E5D66D0084D142 /* PCFPushParameters.h */,
@@ -180,8 +186,7 @@
 		F18D89F418E5D66D0084D142 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				F18D89F518E5D66D0084D142 /* PCFPushDictionaryizable.h */,
-				F18D89F618E5D66D0084D142 /* PCFPushJsonizable.h */,
+				F18D8A2C18EC89C40084D142 /* PCFPushMapping.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -389,9 +394,9 @@
 			files = (
 				F1FDE1F318D78115009EBE38 /* SettingsTableViewController.m in Sources */,
 				F18D8A0A18E5D66D0084D142 /* PCFPushRegistrationResponseData.m in Sources */,
+				F18D8A3118EC89DB0084D142 /* PCFAnalyticEvent.m in Sources */,
 				F18D8A0B18E5D66D0084D142 /* PCFPushSDK.m in Sources */,
 				F18D8A0E18E5D66D0084D142 /* PCFPushErrorUtil.m in Sources */,
-				F18D8A0518E5D66D0084D142 /* PCFPushDataModel.xcdatamodeld in Sources */,
 				F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */,
 				F18D8A0D18E5D66D0084D142 /* PCFPushDebug.m in Sources */,
 				F18D8A0318E5D66D0084D142 /* PCFPushAppDelegateProxy.m in Sources */,
@@ -407,6 +412,7 @@
 				F1FDE1F118D78115009EBE38 /* Settings.m in Sources */,
 				F18D8A0F18E5D66D0084D142 /* PCFPushHardwareUtil.m in Sources */,
 				F18D8A0618E5D66D0084D142 /* PCFPushCoreDataManager.m in Sources */,
+				F18D8A3218EC89DB0084D142 /* NSObject+PCFPushJsonizable.m in Sources */,
 				F1FDE1B418D7806B009EBE38 /* main.m in Sources */,
 				F1FDE1EF18D78115009EBE38 /* LogItem.m in Sources */,
 				F18D8A0718E5D66D0084D142 /* PCFPushParameters.m in Sources */,
@@ -551,19 +557,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		F18D89E318E5D66D0084D142 /* PCFPushDataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				F18D89E418E5D66D0084D142 /* CFPushDataModel.xcdatamodel */,
-			);
-			currentVersion = F18D89E418E5D66D0084D142 /* CFPushDataModel.xcdatamodel */;
-			path = PCFPushDataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = F1FDE19C18D7806B009EBE38 /* Project object */;
 }
