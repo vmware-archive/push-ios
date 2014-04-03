@@ -12,4 +12,10 @@
 
 + (BOOL)shouldSendAnalytics;
 
++ (NSUInteger)maxStoredEventCount;
++ (void)setMaxStoredEventCount:(NSUInteger)maxCount;
+
++ (NSUInteger)maxBatchSize;
++ (void)setMaxBatchSize:(NSUInteger)batchSize;
+
 @end

@@ -56,7 +56,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                              failure:failure];
 }
 
-+ (void)cf_sendAsynchronousRequest:(NSURLRequest *)request
++ (void)cf_sendAsynchronousRequest:(NSMutableURLRequest *)request
                         success:(void (^)(NSURLResponse *response, NSData *data))success
                         failure:(void (^)(NSError *error))failure
 {
@@ -73,6 +73,12 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
         failure(error);
         return;
     }
+    
+#warning - Complete GZIP code to compress HTTPBody on POST/PUT
+    if (request.HTTPBody) {
+        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+    }
+
     
     Handler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
     [self sendAsynchronousRequest:request

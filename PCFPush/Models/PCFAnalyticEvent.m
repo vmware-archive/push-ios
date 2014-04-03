@@ -11,6 +11,24 @@
 #import "PCFCoreDataManager.h"
 #import "PCFPushPersistentStorage.h"
 
+const struct EventTypes {
+    PCF_STRUCT_STRING *initialized;
+    PCF_STRUCT_STRING *active;
+    PCF_STRUCT_STRING *inactive;
+    PCF_STRUCT_STRING *foregrounded;
+    PCF_STRUCT_STRING *backgrounded;
+    PCF_STRUCT_STRING *registered;
+    PCF_STRUCT_STRING *received;
+} EventTypes;
+
+const struct EventRemoteAttributes {
+    PCF_STRUCT_STRING *eventID;
+    PCF_STRUCT_STRING *eventType;
+    PCF_STRUCT_STRING *eventTime;
+    PCF_STRUCT_STRING *variantUUID;
+    PCF_STRUCT_STRING *eventData;
+} EventRemoteAttributes;
+
 const struct EventTypes EventTypes = {
     .initialized  = @"event_initialized",
     .active       = @"event_app_active",
@@ -53,10 +71,10 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventWithType:(NSString *)eventType
 {
-    [self logEventWithType:eventType eventData:nil];
+    [self logEventWithType:eventType data:nil];
 }
 
-+ (void)logEventWithType:(NSString *)eventType eventData:(NSDictionary *)eventData
++ (void)logEventWithType:(NSString *)eventType data:(NSDictionary *)eventData
 {
     if (![PCFPushPersistentStorage analyticsEnabled]) {
         PCFPushLog(@"Analytics disabled. Event will not be logged.");
@@ -65,22 +83,28 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
     
     NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
     [context performBlock:^{
-        NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(self.class) inManagedObjectContext:context];
-        PCFAnalyticEvent *event = [[self alloc] initWithEntity:description insertIntoManagedObjectContext:context];
-        [event setEventID:[[NSUUID UUID] UUIDString]];
-        [event setEventType:eventType];
-        [event setVariantUUID:[PCFPushPersistentStorage variantUUID]];
-        [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
-        
-        if (eventData) {
-            [event setEventData:eventData];
-        }
-        
+        [self insertIntoContext:context eventWithType:eventType data:eventData];
         NSError *error;
         if (![context save:&error]) {
             PCFPushCriticalLog(@"Managed Object Context failed to save: %@ %@", error, error.userInfo);
         }
     }];
+}
+
++ (void)insertIntoContext:(NSManagedObjectContext *)context
+            eventWithType:(NSString *)eventType
+                     data:(NSDictionary *)eventData
+{
+    NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(self.class) inManagedObjectContext:context];
+    PCFAnalyticEvent *event = [[self alloc] initWithEntity:description insertIntoManagedObjectContext:context];
+    [event setEventID:[[NSUUID UUID] UUIDString]];
+    [event setEventType:eventType];
+    [event setVariantUUID:[PCFPushPersistentStorage variantUUID]];
+    [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
+    
+    if (eventData) {
+        [event setEventData:eventData];
+    }
 }
 
 + (void)logEventInitialized
@@ -115,7 +139,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventPushReceivedWithData:(NSDictionary *)eventData
 {
-    [self logEventWithType:EventTypes.received eventData:eventData];
+    [self logEventWithType:EventTypes.received data:eventData];
 }
 
 #pragma mark - PCFSortDescriptors Protocol

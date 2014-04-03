@@ -48,6 +48,7 @@
 		7A14F324231D471F8B8903F9 /* Pods-PCFPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushTests.xcconfig"; path = "Pods/Pods-PCFPushTests.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1319F0918EDE47700852A7F /* PCFAnalytics_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics_TestingHeader.h; sourceTree = "<group>"; };
+		F1319F0A18EDEF1F00852A7F /* PCFAnalyticEvent_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCFAnalyticEvent_TestingHeader.h; sourceTree = "<group>"; };
 		F18D895A18E5D26B0084D142 /* PCFPushAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushAppDelegate.h; sourceTree = "<group>"; };
 		F18D895B18E5D26B0084D142 /* PCFPushAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushAppDelegate.m; sourceTree = "<group>"; };
 		F18D895C18E5D26B0084D142 /* PCFPushAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushAppDelegateProxy.h; sourceTree = "<group>"; };
@@ -312,6 +313,7 @@
 				F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */,
 				F1BCF2E318E5CF46004F3684 /* PCFPushSDKTest.h */,
 				F1319F0918EDE47700852A7F /* PCFAnalytics_TestingHeader.h */,
+				F1319F0A18EDEF1F00852A7F /* PCFAnalyticEvent_TestingHeader.h */,
 			);
 			path = "Test Headers";
 			sourceTree = "<group>";

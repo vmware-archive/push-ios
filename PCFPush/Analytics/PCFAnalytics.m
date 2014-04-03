@@ -15,6 +15,7 @@
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
+static NSUInteger maxBatchSize = 100;
 static CGFloat lastSendTime;
 
 static NSString *const kAppStateKey = @"app_state";
@@ -38,6 +39,26 @@ static NSString *const kPushIDKey = @"push_id";
                                              selector:@selector(willResignActive)
                                                  name:UIApplicationWillResignActiveNotification
                                                object:nil];
+}
+
++ (NSUInteger)maxStoredEventCount
+{
+    return maxStoredEventCount;
+}
+
++ (void)setMaxStoredEventCount:(NSUInteger)maxCount
+{
+    maxStoredEventCount = maxCount;
+}
+
++ (NSUInteger)maxBatchSize
+{
+    return maxBatchSize;
+}
+
++ (void)setMaxBatchSize:(NSUInteger)batchSize
+{
+    maxBatchSize = batchSize;
 }
 
 #pragma mark - Notification selectors
@@ -92,6 +113,26 @@ static NSString *const kPushIDKey = @"push_id";
     return interval > minSecondsBetweenSends;
 }
 
++ (NSArray *)batchRequestsFromEvents:(NSArray *)events
+{
+    NSMutableArray *requestBatches = [NSMutableArray array];
+    
+    if (events.count > maxBatchSize) {
+        NSUInteger batchIndex = 0;
+        
+        while (batchIndex < events.count) {
+            NSUInteger rangeLength = MIN(events.count - batchIndex, maxBatchSize);
+            [requestBatches addObject:[events subarrayWithRange:NSMakeRange(batchIndex, rangeLength)]];
+            batchIndex += rangeLength;
+        }
+        
+    } else {
+        [requestBatches addObject:events];
+    }
+    
+    return [NSArray arrayWithArray:requestBatches];
+}
+
 + (void)sendAnalytics
 {
     if (![PCFPushPersistentStorage analyticsEnabled]) {
@@ -127,21 +168,24 @@ static NSString *const kPushIDKey = @"push_id";
             
             if (events.count > 0) {
                 lastSendTime = [[NSDate date] timeIntervalSince1970];
+                NSArray *requestBatches = [self batchRequestsFromEvents:events];
                 
                 PCFPushLog(@"Sync Analytic Events Started");
-                [NSURLConnection pcf_syncAnalyicEvents:events
-                                           forDeviceID:[PCFPushPersistentStorage backEndDeviceID]
-                                               success:^(NSURLResponse *response, NSData *data) {
-                                                   if ([(NSHTTPURLResponse *)response statusCode] == 200) {
-                                                       PCFPushLog(@"Events successfully synced.");
-                                                       [[PCFCoreDataManager shared] deleteManagedObjects:events];
-                                                   } else {
-                                                       PCFPushLog(@"Events failed to sync.");
+                [requestBatches enumerateObjectsUsingBlock:^(NSArray *batchedEvents, NSUInteger idx, BOOL *stop) {
+                    [NSURLConnection pcf_syncAnalyicEvents:batchedEvents
+                                               forDeviceID:[PCFPushPersistentStorage backEndDeviceID]
+                                                   success:^(NSURLResponse *response, NSData *data) {
+                                                       if ([(NSHTTPURLResponse *)response statusCode] == 200) {
+                                                           PCFPushLog(@"Events successfully synced.");
+                                                           [[PCFCoreDataManager shared] deleteManagedObjects:batchedEvents];
+                                                       } else {
+                                                           PCFPushLog(@"Events failed to sync.");
+                                                       }
                                                    }
-                                               }
-                                               failure:^(NSError *error) {
-                                                   PCFPushLog(@"Events failed to sync.");
-                                               }];
+                                                   failure:^(NSError *error) {
+                                                       PCFPushLog(@"Events failed to sync.");
+                                                   }];
+                }];
             }
         }];
     }

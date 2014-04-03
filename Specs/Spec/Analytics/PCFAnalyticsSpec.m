@@ -11,7 +11,7 @@
 #import "PCFPushSpecHelper.h"
 #import "PCFPushSDK.h"
 #import "PCFAnalytics_TestingHeader.h"
-#import "PCFAnalyticEvent.h"
+#import "PCFAnalyticEvent_TestingHeader.h"
 #import "PCFCoreDataManager.h"
 
 SPEC_BEGIN(PCFAnalyticsSpec)
@@ -20,6 +20,7 @@ describe(@"PCFAnalytics", ^{
     
     __block PCFPushSpecHelper *helper;
     __block UIRemoteNotificationType testNotificationTypes = TEST_NOTIFICATION_TYPES;
+    __block PCFCoreDataManager *manager;
     
     beforeEach(^{
         helper = [[PCFPushSpecHelper alloc] init];
@@ -28,11 +29,14 @@ describe(@"PCFAnalytics", ^{
         [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
         [helper setupDefaultSavedParameters];
         
-        [[[PCFCoreDataManager shared] managedObjectContext] stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
+        manager = [PCFCoreDataManager shared];
+        [[manager managedObjectContext] stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
             void (^block)() = params[0];
-            [[[PCFCoreDataManager shared] managedObjectContext] performBlockAndWait:block];
+            [[manager managedObjectContext] performBlockAndWait:block];
             return nil;
         }];
+        
+        [manager deleteManagedObjects:[manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])]];
     });
     
     context(@"UIApplicationNotifications", ^{
@@ -42,8 +46,6 @@ describe(@"PCFAnalytics", ^{
         __block NSInteger expectedCountOFEvents = -1;
         
         beforeEach(^{
-            PCFCoreDataManager *manager = [PCFCoreDataManager shared];
-            
             typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -64,7 +66,6 @@ describe(@"PCFAnalytics", ^{
             
             [PCFAnalytics stub:@selector(shouldSendAnalytics) andReturn:theValue(YES)];
             
-            [manager deleteManagedObjects:[manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])]];
             entityName = nil;
             eventType = nil;
             expectedCountOFEvents = -1;
@@ -99,19 +100,52 @@ describe(@"PCFAnalytics", ^{
             eventType = EventTypes.backgrounded;
             expectedCountOFEvents = 0;
         });
-});
+    });
     
     context(@"Maximum message body size.", ^{
         
         beforeEach(^{
-            //Load database with more than the maximum number of events.
+            typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                NSError *error;
+                NSArray *events = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
+                if (error) {
+                    fail(@"HTTP body data is not valid JSON.");
+                }
+                [[theValue(events.count) should] beLessThanOrEqualTo:theValue([PCFAnalytics maxBatchSize])];
+                
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                Handler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+            
+            [PCFAnalytics stub:@selector(shouldSendAnalytics) andReturn:theValue(YES)];
+            
+            NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
+            [context performBlockAndWait:^{
+                NSUInteger maxCount = [PCFAnalytics maxStoredEventCount];
+                for (int i = 0; i < maxCount + 1; i++) {
+                    [PCFAnalyticEvent insertIntoContext:context eventWithType:EventTypes.foregrounded data:nil];
+                }
+                
+                NSError *error;
+                if (![context save:&error]) {
+                    fail(@"Loading DB with events failed. %@ %@", error, error.userInfo);
+                }
+            }];
         });
         
-        it(@"should not send a POST with more than the maxiumum number of events.", ^{
-            fail(@"incomplete");
+        it(@"should not send a POST with more than the maxiumum batch size of events.", ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
         });
         
         it(@"should not store more than the maximum number of events in the DB", ^{
+            fail(@"incomplete");
+        });
+        
+        it(@"the POST request body should be gzipped", ^{
             fail(@"incomplete");
         });
     });
