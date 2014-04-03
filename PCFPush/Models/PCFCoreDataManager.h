@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PCFPushCoreDataManager : NSObject
+@interface PCFCoreDataManager : NSObject
 
 + (instancetype)shared;
 
 - (NSManagedObjectContext *)managedObjectContext;
+
+- (NSArray *)managedObjectsWithEntityName:(NSString *)entityName;
 
 - (void)deleteManagedObjects:(NSArray *)managedObjects;
 

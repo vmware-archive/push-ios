@@ -8,18 +8,20 @@
 
 #import "PCFAnalyticEvent.h"
 #import "PCFPushDebug.h"
-#import "PCFPushCoreDataManager.h"
+#import "PCFCoreDataManager.h"
 #import "PCFPushPersistentStorage.h"
 
-static const struct EventRemoteAttributes {
-    PCF_STRUCT_STRING *eventID;
-    PCF_STRUCT_STRING *eventType;
-    PCF_STRUCT_STRING *eventTime;
-    PCF_STRUCT_STRING *variantUUID;
-    PCF_STRUCT_STRING *eventData;
-} EventRemoteAttributes;
+const struct EventTypes EventTypes = {
+    .initialized  = @"event_initialized",
+    .active       = @"event_app_active",
+    .inactive     = @"event_app_inactive",
+    .foregrounded = @"event_foregrounded",
+    .backgrounded = @"event_backgrounded",
+    .registered   = @"event_registered",
+    .received     = @"event_push_received",
+};
 
-static const struct EventRemoteAttributes EventRemoteAttributes = {
+const struct EventRemoteAttributes EventRemoteAttributes = {
     .eventID      = @"id",
     .eventType    = @"type",
     .eventTime    = @"time",
@@ -47,22 +49,7 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
 @dynamic variantUUID;
 @dynamic eventData;
 
-+ (NSDictionary *)localToRemoteMapping
-{
-    static NSDictionary *localToRemoteMapping;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        localToRemoteMapping = @{
-                                 PCF_STR_PROP(eventID)     : EventRemoteAttributes.eventID,
-                                 PCF_STR_PROP(eventType)   : EventRemoteAttributes.eventType,
-                                 PCF_STR_PROP(eventTime)   : EventRemoteAttributes.eventTime,
-                                 PCF_STR_PROP(variantUUID) : EventRemoteAttributes.variantUUID,
-                                 PCF_STR_PROP(eventData)   : EventRemoteAttributes.eventData,
-                                 };
-    });
-    
-    return localToRemoteMapping;
-}
+#pragma mark - Event Database Logging
 
 + (void)logEventWithType:(NSString *)eventType
 {
@@ -76,7 +63,7 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
         return;
     }
     
-    NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
+    NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
     [context performBlock:^{
         NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(self.class) inManagedObjectContext:context];
         PCFAnalyticEvent *event = [[self alloc] initWithEntity:description insertIntoManagedObjectContext:context];
@@ -98,37 +85,63 @@ static const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventInitialized
 {
-    [self logEventWithType:@"event_initialized"];
+    [self logEventWithType:EventTypes.initialized];
 }
 
 + (void)logEventAppActive
 {
-    [self logEventWithType:@"event_app_active"];
+    [self logEventWithType:EventTypes.active];
 }
 
 + (void)logEventAppInactive
 {
-    [self logEventWithType:@"event_app_inactive"];
+    [self logEventWithType:EventTypes.inactive];
 }
 
 + (void)logEventForeground
 {
-    [self logEventWithType:@"event_foregrounded"];
+    [self logEventWithType:EventTypes.foregrounded];
 }
 
 + (void)logEventBackground
 {
-    [self logEventWithType:@"event_backgrounded"];
+    [self logEventWithType:EventTypes.backgrounded];
 }
 
 + (void)logEventRegistered
 {
-    [self logEventWithType:@"event_registered"];
+    [self logEventWithType:EventTypes.registered];
 }
 
 + (void)logEventPushReceivedWithData:(NSDictionary *)eventData
 {
-    [self logEventWithType:@"event_push_received" eventData:eventData];
+    [self logEventWithType:EventTypes.received eventData:eventData];
+}
+
+#pragma mark - PCFSortDescriptors Protocol
+
++ (NSArray *)defaultSortDescriptors
+{
+    return @[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:NO]];
+}
+
+#pragma mark - PCFPushMapping Protocol
+
++ (NSDictionary *)localToRemoteMapping
+{
+    static NSDictionary *localToRemoteMapping;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        localToRemoteMapping = @{
+                                 PCF_STR_PROP(eventID)     : EventRemoteAttributes.eventID,
+                                 PCF_STR_PROP(eventType)   : EventRemoteAttributes.eventType,
+                                 PCF_STR_PROP(eventTime)   : EventRemoteAttributes.eventTime,
+                                 PCF_STR_PROP(variantUUID) : EventRemoteAttributes.variantUUID,
+                                 PCF_STR_PROP(eventData)   : EventRemoteAttributes.eventData,
+                                 };
+    });
+    
+    return localToRemoteMapping;
 }
 
 @end

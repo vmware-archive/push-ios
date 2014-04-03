@@ -8,15 +8,16 @@
 
 #import <CoreData/CoreData.h>
 
-#import "PCFPushCoreDataManager.h"
+#import "PCFCoreDataManager.h"
 #import "PCFJSONValueTransformer.h"
+#import "PCFSortDescriptors.h"
 #import "PCFPushDebug.h"
 #import "PCFAnalyticEvent.h"
 
 static NSString *const kDatabaseDirectoryName = @"PCFPushAnalyticsDB";
 static NSString *const kDatabaseFileName = @"PCFPushAnalyticsDB.sqlite";
 
-@interface PCFPushCoreDataManager ()
+@interface PCFCoreDataManager ()
 
 @property (nonatomic) NSURL *databaseURL;
 @property (nonatomic) NSManagedObjectContext *managedObjectContext;
@@ -25,10 +26,10 @@ static NSString *const kDatabaseFileName = @"PCFPushAnalyticsDB.sqlite";
 
 @end
 
-static PCFPushCoreDataManager *_sharedCoreDataManager;
+static PCFCoreDataManager *_sharedCoreDataManager;
 static dispatch_once_t onceToken;
 
-@implementation PCFPushCoreDataManager
+@implementation PCFCoreDataManager
 
 #pragma mark - Class Methods
 
@@ -43,7 +44,7 @@ static dispatch_once_t onceToken;
     return _sharedCoreDataManager;
 }
 
-+ (void)setSharedManager:(PCFPushCoreDataManager *)manager
++ (void)setSharedManager:(PCFCoreDataManager *)manager
 {
     onceToken = 0;
     _sharedCoreDataManager = manager;
@@ -60,7 +61,7 @@ static dispatch_once_t onceToken;
     NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
     if (coordinator != nil) {
         dispatch_sync(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            _managedObjectContext = [[NSManagedObjectContext alloc] init];
+            _managedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
             [_managedObjectContext setPersistentStoreCoordinator:coordinator];
         });
     }
@@ -86,7 +87,7 @@ static dispatch_once_t onceToken;
 
 - (NSManagedObjectModel *)managedObjectModel
 {
-    if (!_managedObjectModel) {
+    if (_managedObjectModel) {
         return _managedObjectModel;
     }
     _managedObjectModel = [[NSManagedObjectModel alloc] init];
@@ -128,7 +129,7 @@ static dispatch_once_t onceToken;
 
 - (NSURL *)databaseURL
 {
-    if (!_databaseURL) {
+    if (_databaseURL) {
         return _databaseURL;
     }
     
@@ -164,6 +165,22 @@ static dispatch_once_t onceToken;
             [context save:nil];
         }
     }];
+}
+
+- (NSArray *)managedObjectsWithEntityName:(NSString *)entityName
+{
+    __block NSArray *managedObjects;
+    [self.managedObjectContext performBlockAndWait:^{
+        NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entityName];
+        
+        if ([NSClassFromString(entityName) conformsToProtocol:@protocol(PCFSortDescriptors)]) {
+            NSArray *sortDescriptors = [NSClassFromString(entityName) defaultSortDescriptors];
+            [request setSortDescriptors:sortDescriptors];
+        }
+        NSError *error;
+        managedObjects = [self.managedObjectContext executeFetchRequest:request error:&error];
+    }];
+    return managedObjects;
 }
 
 @end

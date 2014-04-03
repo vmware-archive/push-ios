@@ -9,13 +9,15 @@
 #import "PCFAnalytics.h"
 #import "PCFPushDebug.h"
 #import "PCFAnalyticEvent.h"
-#import "PCFPushCoreDataManager.h"
+#import "PCFCoreDataManager.h"
 #import "PCFPushPersistentStorage.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
+static CGFloat lastSendTime;
 
+static NSString *const kAppStateKey = @"app_state";
 static NSString *const kPushIDKey = @"push_id";
 
 @implementation PCFAnalytics
@@ -23,7 +25,7 @@ static NSString *const kPushIDKey = @"push_id";
 + (void)load
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(enterBackground)
+                                             selector:@selector(didEnterBackground)
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
     
@@ -38,7 +40,9 @@ static NSString *const kPushIDKey = @"push_id";
                                                object:nil];
 }
 
-+ (void)enterBackground
+#pragma mark - Notification selectors
+
++ (void)didEnterBackground
 {
     PCFPushLog(@"Enter Background - Event Logged.");
     [PCFAnalyticEvent logEventBackground];
@@ -57,9 +61,11 @@ static NSString *const kPushIDKey = @"push_id";
     [PCFAnalyticEvent logEventAppInactive];
 }
 
+#pragma mark - Database maintenance
+
 + (void)pruneEvents
 {
-    NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
+    NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
     [context performBlockAndWait:^{
         NSFetchRequest *eventsFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass(PCFAnalyticEvent.class)];
         [eventsFetchRequest setSortDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:YES]]];
@@ -73,23 +79,28 @@ static NSString *const kPushIDKey = @"push_id";
         
         if (events.count > maxStoredEventCount) {
             events = [events subarrayWithRange:NSMakeRange(0, events.count - maxStoredEventCount)];
-            [[PCFPushCoreDataManager shared] deleteManagedObjects:events];
+            [[PCFCoreDataManager shared] deleteManagedObjects:events];
         }
     }];
 }
 
+#pragma mark - Analytics Request
+
++ (BOOL)shouldSendAnalytics
+{
+    CGFloat interval = ([[NSDate date] timeIntervalSince1970] - lastSendTime);
+    return interval > minSecondsBetweenSends;
+}
+
 + (void)sendAnalytics
 {
-    static CGFloat lastSendTime;
-    
     if (![PCFPushPersistentStorage analyticsEnabled]) {
         PCFPushLog(@"Analytics disabled. Events will not be sent.");
         return;
     }
     
-    CGFloat interval = ([[NSDate date] timeIntervalSince1970] - lastSendTime);
-    if (interval > minSecondsBetweenSends) {
-        NSManagedObjectContext *context = [[PCFPushCoreDataManager shared] managedObjectContext];
+    if ([self shouldSendAnalytics]) {
+        NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
         
         [context performBlock:^{
             NSFetchRequest *eventsFetchRequest = [NSFetchRequest fetchRequestWithEntityName:NSStringFromClass(PCFAnalyticEvent.class)];
@@ -123,7 +134,7 @@ static NSString *const kPushIDKey = @"push_id";
                                                success:^(NSURLResponse *response, NSData *data) {
                                                    if ([(NSHTTPURLResponse *)response statusCode] == 200) {
                                                        PCFPushLog(@"Events successfully synced.");
-                                                       [[PCFPushCoreDataManager shared] deleteManagedObjects:events];
+                                                       [[PCFCoreDataManager shared] deleteManagedObjects:events];
                                                    } else {
                                                        PCFPushLog(@"Events failed to sync.");
                                                    }
@@ -162,7 +173,7 @@ static NSString *const kPushIDKey = @"push_id";
     }
     
     NSDictionary *pushReceivedData = [NSMutableDictionary dictionaryWithCapacity:2];
-    [pushReceivedData setValue:appState forKey:@"app_state"];
+    [pushReceivedData setValue:appState forKey:kAppStateKey];
     
     id pushID = [userInfo objectForKey:kPushIDKey];
     if (pushID) {
