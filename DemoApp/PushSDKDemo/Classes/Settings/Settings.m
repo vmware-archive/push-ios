@@ -21,12 +21,12 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 + (NSString *)variantUUID
 {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_variant_uuid];
+    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_VARIANT_UUID];
 }
 
 + (void)setVariantUUID:(NSString *)variantUUID
 {
-    [[NSUserDefaults standardUserDefaults] setObject:variantUUID forKey:KEY_variant_uuid];
+    [[NSUserDefaults standardUserDefaults] setObject:variantUUID forKey:KEY_VARIANT_UUID];
 }
 
 + (NSString *)releaseSecret
