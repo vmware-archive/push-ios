@@ -16,6 +16,8 @@
 
 SPEC_BEGIN(PCFAnalyticsSpec)
 
+typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
+
 describe(@"PCFAnalytics", ^{
     
     __block PCFPushSpecHelper *helper;
@@ -46,7 +48,6 @@ describe(@"PCFAnalytics", ^{
         __block NSInteger expectedCountOFEvents = -1;
         
         beforeEach(^{
-            typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -108,7 +109,6 @@ describe(@"PCFAnalytics", ^{
     context(@"Maximum message body size.", ^{
         __block NSInteger maxEventCount = 0;
         beforeEach(^{
-            typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -226,17 +226,13 @@ describe(@"PCFAnalytics", ^{
     context(@"Batch sending of analytic events.", ^{
         
         beforeEach(^{
-            typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
-                NSArray *events = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
+                [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
                 if (error) {
                     fail(@"HTTP body data is not valid JSON.");
                 }
-                [[theValue(events.count) should] equal:theValue(1)];
-                NSDictionary *event = events[0];
-                [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:EventTypes.backgrounded];
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 Handler handler = params[2];
@@ -257,6 +253,33 @@ describe(@"PCFAnalytics", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
             NSArray *events = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
             [[theValue(events.count) should] beZero];
+        });
+    });
+    
+    context(@"Batch send fails of analytic events.", ^{
+        beforeEach(^{
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                NSError *error;
+                [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
+                if (error) {
+                    fail(@"HTTP body data is not valid JSON.");
+                }
+                
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                Handler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+            
+            [PCFAnalytics setLastSendTime:[[NSDate date] timeIntervalSince1970] - [PCFAnalytics minSecondsBetweenSends]];
+        });
+        
+        it(@"should not delete events from the database if request fails.", ^{
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
+            NSArray *events = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(events.count) should] beGreaterThanOrEqualTo:theValue(1)];
         });
     });
 });
