@@ -11,6 +11,11 @@
 #import "PCFCoreDataManager.h"
 #import "PCFPushPersistentStorage.h"
 
+const struct PushNotificationKeys PushNotificationKeys = {
+  .pushID   = @"push_id",
+  .appState = @"app_state",
+};
+
 const struct EventTypes {
     PCF_STRUCT_STRING *initialized;
     PCF_STRUCT_STRING *active;
@@ -18,16 +23,8 @@ const struct EventTypes {
     PCF_STRUCT_STRING *foregrounded;
     PCF_STRUCT_STRING *backgrounded;
     PCF_STRUCT_STRING *registered;
-    PCF_STRUCT_STRING *received;
+    PCF_STRUCT_STRING *pushReceived;
 } EventTypes;
-
-const struct EventRemoteAttributes {
-    PCF_STRUCT_STRING *eventID;
-    PCF_STRUCT_STRING *eventType;
-    PCF_STRUCT_STRING *eventTime;
-    PCF_STRUCT_STRING *variantUUID;
-    PCF_STRUCT_STRING *eventData;
-} EventRemoteAttributes;
 
 const struct EventTypes EventTypes = {
     .initialized  = @"event_initialized",
@@ -36,8 +33,16 @@ const struct EventTypes EventTypes = {
     .foregrounded = @"event_foregrounded",
     .backgrounded = @"event_backgrounded",
     .registered   = @"event_registered",
-    .received     = @"event_push_received",
+    .pushReceived = @"event_push_received",
 };
+
+const struct EventRemoteAttributes {
+    PCF_STRUCT_STRING *eventID;
+    PCF_STRUCT_STRING *eventType;
+    PCF_STRUCT_STRING *eventTime;
+    PCF_STRUCT_STRING *variantUUID;
+    PCF_STRUCT_STRING *eventData;
+} EventRemoteAttributes;
 
 const struct EventRemoteAttributes EventRemoteAttributes = {
     .eventID      = @"id",
@@ -139,7 +144,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventPushReceivedWithData:(NSDictionary *)eventData
 {
-    [self logEventWithType:EventTypes.received data:eventData];
+    [self logEventWithType:EventTypes.pushReceived data:eventData];
 }
 
 #pragma mark - PCFSortDescriptors Protocol

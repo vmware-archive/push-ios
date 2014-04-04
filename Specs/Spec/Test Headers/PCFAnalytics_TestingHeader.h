@@ -18,4 +18,10 @@
 + (NSUInteger)maxBatchSize;
 + (void)setMaxBatchSize:(NSUInteger)batchSize;
 
++ (NSTimeInterval)minSecondsBetweenSends;
++ (void)setMinSecondsBetweenSends:(NSTimeInterval)minSeconds;
+
++ (NSTimeInterval)lastSendTime;
++ (void)setLastSendTime:(NSTimeInterval)sendTime;
+
 @end

@@ -10,6 +10,11 @@
 #import "PCFPushMapping.h"
 #import "PCFSortDescriptors.h"
 
+const struct PushNotificationKeys {
+    PCF_STRUCT_STRING *pushID;
+    PCF_STRUCT_STRING *appState;
+} PushNotificationKeys;
+
 @interface PCFAnalyticEvent : NSManagedObject <PCFPushMapping, PCFSortDescriptors>
 
 @property (nonatomic, readonly) NSString *eventType;

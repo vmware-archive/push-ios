@@ -76,8 +76,11 @@ describe(@"PCFAnalytics", ^{
             
             [[theValue(events.count) should] equal:theValue(expectedCountOFEvents)];
             PCFAnalyticEvent *event = [events lastObject];
-            [[event should] beKindOfClass:NSClassFromString(entityName)];
-            [[event.eventType should] equal:eventType];
+            
+            if (event) {
+                [[event should] beKindOfClass:NSClassFromString(entityName)];
+                [[event.eventType should] equal:eventType];
+            }
         });
         
         it(@"should add event to analytics DB when application becomes active.", ^{
@@ -103,7 +106,7 @@ describe(@"PCFAnalytics", ^{
     });
     
     context(@"Maximum message body size.", ^{
-        
+        __block NSInteger maxEventCount = 0;
         beforeEach(^{
             typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -114,6 +117,7 @@ describe(@"PCFAnalytics", ^{
                     fail(@"HTTP body data is not valid JSON.");
                 }
                 [[theValue(events.count) should] beLessThanOrEqualTo:theValue([PCFAnalytics maxBatchSize])];
+                maxEventCount += events.count;
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 Handler handler = params[2];
@@ -127,70 +131,132 @@ describe(@"PCFAnalytics", ^{
             [context performBlockAndWait:^{
                 NSUInteger maxCount = [PCFAnalytics maxStoredEventCount];
                 for (int i = 0; i < maxCount + 1; i++) {
-                    [PCFAnalyticEvent insertIntoContext:context eventWithType:EventTypes.foregrounded data:nil];
+                    [PCFAnalyticEvent insertIntoContext:context eventWithType:EventTypes.foregrounded data:@{@"event_count" : @(i)}];
                 }
-                
+
                 NSError *error;
                 if (![context save:&error]) {
                     fail(@"Loading DB with events failed. %@ %@", error, error.userInfo);
                 }
             }];
+            
+            maxEventCount = 0;
         });
         
         it(@"should not send a POST with more than the maxiumum batch size of events.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
         });
         
-        it(@"should not store more than the maximum number of events in the DB", ^{
-            fail(@"incomplete");
+        it(@"should prune events past the maximum number of events in the DB.", ^{
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(events.count) should] beGreaterThan:theValue([PCFAnalytics maxStoredEventCount])];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
+            
+            [[theValue(maxEventCount) should] beLessThanOrEqualTo:theValue([PCFAnalytics maxStoredEventCount])];
         });
         
-        it(@"the POST request body should be gzipped", ^{
-            fail(@"incomplete");
-        });
+#warning - Implement gzip HTTPbody.
+        
+//        it(@"the POST request body should be zipped", ^{
+//            fail(@"incomplete");
+//        });
     });
     
     context(@"Receive push notificiation without a push ID.", ^{
+        beforeEach(^{
+            [helper.application stub:@selector(applicationState) andReturn:UIApplicationStateActive];
+            [PCFAnalytics logApplication:helper.application didReceiveRemoteNotification:@{}];
+        });
         
         it(@"should record an event when the application receives a remote push notification", ^{
-            fail(@"incomplete");
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(events.count) should] equal:theValue(1)];
         });
 
         it(@"recorded event should be of type push received.", ^{
-            fail(@"incomplete");
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            PCFAnalyticEvent *event = [events lastObject];
+            [[event should] beKindOfClass:[PCFAnalyticEvent class]];
+            [[event.eventType should] equal:EventTypes.pushReceived];
         });
         
         it(@"recorded event should have a time stamp close to the current time.", ^{
-            fail(@"incomplete");
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            PCFAnalyticEvent *event = [events lastObject];
+            
+            NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
+            NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+            NSNumber *eventTime = [formatter numberFromString:event.eventTime];
+            [[theValue(eventTime.doubleValue - time) should] beBetween:theValue(-10.0f) and:theValue(10.0f)];
         });
         
         it(@"recorded event should have a data parameter with the application state.", ^{
-            fail(@"incomplete");
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            PCFAnalyticEvent *event = [events lastObject];
+            [[[event.eventData objectForKey:PushNotificationKeys.appState] shouldNot] beNil];
         });
         
         it(@"recorded event should not have a push ID if not included in the push message.", ^{
-            fail(@"incomplete");
+            NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            PCFAnalyticEvent *event = [events lastObject];
+            [[[event.eventData objectForKey:PushNotificationKeys.pushID] should] beNil];
         });
     });
 
     context(@"Receive push notificiation with a push ID.", ^{
+        __block NSArray *events;
+        
+        beforeEach(^{
+            [helper.application stub:@selector(applicationState) andReturn:UIApplicationStateActive];
+            [PCFAnalytics logApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
+            events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        });
         
         it(@"should record an event when the application receives a remote push notification.", ^{
-            fail(@"incomplete");
+            [[theValue(events.count) should] equal:theValue(1)];
         });
         
         it(@"recorded event should have a push ID if included in the push message.", ^{
-            fail(@"incomplete");
+            PCFAnalyticEvent *event = [events lastObject];
+            [[[event.eventData objectForKey:PushNotificationKeys.pushID] shouldNot] beNil];
         });
     });
     
     context(@"Batch sending of analytic events.", ^{
+        
+        beforeEach(^{
+            typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                NSError *error;
+                NSArray *events = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
+                if (error) {
+                    fail(@"HTTP body data is not valid JSON.");
+                }
+                [[theValue(events.count) should] equal:theValue(1)];
+                NSDictionary *event = events[0];
+                [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:EventTypes.backgrounded];
+                
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                Handler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+            
+            [PCFAnalytics setLastSendTime:[[NSDate date] timeIntervalSince1970] - [PCFAnalytics minSecondsBetweenSends]];
+        });
+
         it(@"should not send analytic events more requently than the min interval.", ^{
-            fail(@"incomplete");
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
         });
         
         it(@"events DB table should be empty after sync completes.", ^{
-            fail(@"incomplete");
+            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
+            NSArray *events = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(events.count) should] beZero];
         });
     });
 });

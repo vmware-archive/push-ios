@@ -16,10 +16,7 @@
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
 static NSUInteger maxBatchSize = 100;
-static CGFloat lastSendTime;
-
-static NSString *const kAppStateKey = @"app_state";
-static NSString *const kPushIDKey = @"push_id";
+static NSTimeInterval lastSendTime;
 
 @implementation PCFAnalytics
 
@@ -59,6 +56,26 @@ static NSString *const kPushIDKey = @"push_id";
 + (void)setMaxBatchSize:(NSUInteger)batchSize
 {
     maxBatchSize = batchSize;
+}
+
++ (NSTimeInterval)minSecondsBetweenSends
+{
+    return minSecondsBetweenSends;
+}
+
++ (void)setMinSecondsBetweenSends:(NSTimeInterval)minSeconds
+{
+    minSecondsBetweenSends = minSeconds;
+}
+
++ (NSTimeInterval)lastSendTime
+{
+    return lastSendTime;
+}
+
++ (void)setLastSendTime:(NSTimeInterval)sendTime
+{
+    lastSendTime = sendTime;
 }
 
 #pragma mark - Notification selectors
@@ -217,11 +234,11 @@ static NSString *const kPushIDKey = @"push_id";
     }
     
     NSDictionary *pushReceivedData = [NSMutableDictionary dictionaryWithCapacity:2];
-    [pushReceivedData setValue:appState forKey:kAppStateKey];
+    [pushReceivedData setValue:appState forKey:PushNotificationKeys.appState];
     
-    id pushID = [userInfo objectForKey:kPushIDKey];
+    id pushID = [userInfo objectForKey:PushNotificationKeys.pushID];
     if (pushID) {
-        [pushReceivedData setValue:pushID forKey:kPushIDKey];
+        [pushReceivedData setValue:pushID forKey:PushNotificationKeys.pushID];
     }
     [PCFAnalyticEvent logEventPushReceivedWithData:pushReceivedData];
 }
