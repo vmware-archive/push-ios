@@ -24,6 +24,7 @@
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 static PCFPushParameters *_registrationParameters;
+static PCFPushAppDelegateProxy *_appDelegateProxy;
 
 @implementation PCFPushSDK
 
@@ -68,14 +69,14 @@ static PCFPushParameters *_registrationParameters;
     };
     
     UIApplication *application = [UIApplication sharedApplication];
-    PCFPushAppDelegate *pushAppDelegate;
+    PCFPushAppDelegate *pushAppDelegate = [[PCFPushAppDelegate alloc] init];
+    _appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
+    
     if (![application.delegate isKindOfClass:[PCFPushAppDelegateProxy class]]) {
         @synchronized(application) {
-            PCFPushAppDelegateProxy *appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
-            pushAppDelegate = [[PCFPushAppDelegate alloc] init];
-            appDelegateProxy.pushAppDelegate = pushAppDelegate;
-            appDelegateProxy.originalAppDelegate = application.delegate;
-            application.delegate = appDelegateProxy;
+            _appDelegateProxy.originalAppDelegate = application.delegate;
+            _appDelegateProxy.pushAppDelegate = pushAppDelegate;
+            application.delegate = _appDelegateProxy;
         }
         
     } else {

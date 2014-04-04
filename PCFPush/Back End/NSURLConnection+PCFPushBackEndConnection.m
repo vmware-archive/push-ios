@@ -19,7 +19,7 @@
 
 typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
-static NSString *const BACK_END_REQUEST_URL = @"http://ec2-54-234-124-123.compute-1.amazonaws.com:8090/v1";
+static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-staging.one.pepsi.cf-app.com/v1/";
 static NSString *const BACK_END_REGISTRATION_REQUEST_URL = @"registration";
 static NSString *const BACK_END_ANALYTICS_REQUEST_URL = @"analytics";
 static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
@@ -75,10 +75,9 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     }
     
 #warning - Complete GZIP code to compress HTTPBody on POST/PUT
-    if (request.HTTPBody) {
-        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-    }
-
+//    if (request.HTTPBody) {
+//        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+//    }
     
     Handler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
     [self sendAsynchronousRequest:request

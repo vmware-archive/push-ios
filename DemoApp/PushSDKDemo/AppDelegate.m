@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "Settings.h"
 #import "PCFPushDebug.h"
+#import "PCFPushParameters.h"
+#import "PCFPushSDK.h"
 
 @interface AppDelegate ()
 
@@ -26,8 +28,29 @@
 {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[Settings defaults]];
     
-    // Override point for customization after application launch.
+    [self initializeSDK];
     return YES;
+}
+
+- (void)initializeSDK
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    
+    PCFPushParameters *parameters = [Settings registrationParameters];
+    NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
+                         parameters.variantUUID,
+                         parameters.releaseSecret,
+                         parameters.deviceAlias];
+    PCFPushLog(message);
+    
+    [PCFPushSDK registerWithParameters:parameters success:^{
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        PCFPushLog(@"Application received callback \"registrationSucceeded\".");
+        
+    } failure:^(NSError *error) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+        PCFPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
+    }];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
@@ -44,12 +67,12 @@
 
 - (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
 {
-
+    PCFPushLog(@"Received message: didRegisterForRemoteNotificationsWithDeviceToken:");
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    
+    PCFPushLog(@"Received message: didFailToRegisterForRemoteNotificationsWithError:");
 }
 
 @end

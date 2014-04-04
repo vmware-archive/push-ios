@@ -9,11 +9,11 @@
 #import "Settings.h"
 #import "PCFPushParameters.h"
 
-static NSString *const DEFAULT_VARIANT_UUID   = @"a5ca5693-f729-4e9a-8df2-65e02cebc852";
-static NSString *const DEFAULT_RELEASE_SECRET = @"46e3382b-4e74-41c3-9fb0-e6867a96d8f3";
+static NSString *const DEFAULT_VARIANT_UUID   = @"288866db-f631-4da2-8508-8385fc9c4880";
+static NSString *const DEFAULT_RELEASE_SECRET = @"1b1a4163-5ee5-4b69-813b-5530c9fcd395";
 static NSString *const DEFAULT_DEVICE_ALIAS   = @"Default Device Alias";
 
-static NSString *const KEY_VARIANT_UUID    = @"KEY_variant_uuid";
+static NSString *const KEY_VARIANT_UUID    = @"KEY_VARIANT_UUID";
 static NSString *const KEY_RELEASE_SECRET  = @"KEY_RELEASE_SECRET";
 static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 

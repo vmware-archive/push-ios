@@ -56,7 +56,9 @@
 - (BOOL)respondsToSelector:(SEL)sel
 {
     if ([NSStringFromSelector(sel) isEqualToString:@"application:didReceiveRemoteNotification:fetchCompletionHandler:"]) {
-        return [self.originalAppDelegate respondsToSelector:sel];
+        BOOL remoteNotificationSupported = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIBackgroundModes"] containsObject:@"remote-notification"];
+        BOOL iOS7orGreater = floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
+        return remoteNotificationSupported && iOS7orGreater;
     }
     
     return [self.originalAppDelegate respondsToSelector:sel] || [self pushDelegateRespondsToSelector:sel];

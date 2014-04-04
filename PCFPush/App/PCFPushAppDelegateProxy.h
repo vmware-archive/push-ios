@@ -11,8 +11,8 @@
 
 @interface PCFPushAppDelegateProxy : NSProxy<UIApplicationDelegate>
 
-@property NSObject<UIApplicationDelegate> *pushAppDelegate;
-@property NSObject<UIApplicationDelegate> *originalAppDelegate;
+@property (nonatomic, strong) NSObject<UIApplicationDelegate> *pushAppDelegate;
+@property (nonatomic, strong) NSObject<UIApplicationDelegate> *originalAppDelegate;
 
 - (id)init;
 

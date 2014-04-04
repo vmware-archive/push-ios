@@ -47,16 +47,14 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
         }];
     }];
     
-    UIBarButtonItem *registerButton = [[UIBarButtonItem alloc] initWithTitle:@"Register" style:UIBarButtonItemStylePlain target:self action:@selector(registerButtonPressed)];
     UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:@"Copy" style:UIBarButtonItemStylePlain target:self action:@selector(saveButtonPressed)];
     UIBarButtonItem *trashButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(trashButtonPressed)];
     UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemPlay target:self action:@selector(sendButtonPressed)];
     UIBarButtonItem *preferencesButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(preferencesButtonPressed)];
     UIBarButtonItem *space = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
 
-    [self setToolbarItems:@[registerButton, space, saveButton, space, preferencesButton, space, sendButton, space, trashButton] animated:NO];
+    [self setToolbarItems:@[space, saveButton, space, preferencesButton, space, sendButton, space, trashButton] animated:NO];
     
-    [self addLogItem:@"Press the \"Register\" button below to register the device for push notifications." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Copy\" button below to copy the log to the clipboard." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Settings\" button below to change the SDK settings." timestamp:[NSDate date]];
     [self addLogItem:@"Press the \"Play\" button below to send a push message via the back-end server." timestamp:[NSDate date]];
@@ -81,12 +79,6 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     request.targetPlatform = @"ios";
     request.targetDevices = @[backEndDeviceID];
     [request sendMessage];
-}
-
-- (void) registerButtonPressed
-{
-    [self updateCurrentBaseRowColour];
-    [self initializeSDK];
 }
 
 - (void) preferencesButtonPressed
@@ -149,32 +141,6 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
     [self.logItems addObject:logItem];
     [self.tableView reloadData];
     [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(self.logItems.count-1) inSection:0]  atScrollPosition:UITableViewScrollPositionBottom animated:YES];
-}
-
-- (void) initializeSDK
-{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    
-    @try {
-        PCFPushParameters *parameters = [Settings registrationParameters];
-        NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUuid: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
-                             parameters.variantUUID,
-                             parameters.releaseSecret,
-                             parameters.deviceAlias];
-        [self addLogItem:message timestamp:[NSDate date]];
-        
-        [PCFPushSDK registerWithParameters:parameters success:^{
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            PCFPushLog(@"Application received callback \"registrationSucceeded\".");
-
-        } failure:^(NSError *error) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-            PCFPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
-        }];
-    }
-    @catch (NSException *e) {
-        [self addLogItem:[NSString stringWithFormat:@"Caught exception while trying to register: \"%@\".", e] timestamp:[NSDate date]];
-    }
 }
 
 - (void)didReceiveMemoryWarning
