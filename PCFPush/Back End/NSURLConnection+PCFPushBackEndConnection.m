@@ -37,21 +37,41 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 }
 
 + (void)pcf_unregisterDeviceID:(NSString *)deviceID
-                   success:(void (^)(NSURLResponse *response, NSData *data))success
-                   failure:(void (^)(NSError *error))failure
+                       success:(void (^)(NSURLResponse *response, NSData *data))success
+                       failure:(void (^)(NSError *error))failure
 {
-    [self cf_sendAsynchronousRequest:[self unregisterRequestForBackEndDeviceID:deviceID]
+    PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
+    NSMutableURLRequest *request = [self unregisterRequestForBackEndDeviceID:deviceID];
+    [self cf_sendAsynchronousRequest:request
                              success:success
                              failure:failure];
 }
 
 + (void)pcf_registerWithParameters:(PCFPushParameters *)parameters
-                      devToken:(NSData *)devToken
-                       success:(void (^)(NSURLResponse *response, NSData *data))success
-                       failure:(void (^)(NSError *error))failure
+                       deviceToken:(NSData *)deviceToken
+                           success:(void (^)(NSURLResponse *response, NSData *data))success
+                           failure:(void (^)(NSError *error))failure
 {
-    [self cf_sendAsynchronousRequest:[self registrationRequestForAPNSDeviceToken:devToken
-                                                                      parameters:parameters]
+    PCFPushLog(@"Register with push server for device token: %@", deviceToken);
+    NSMutableURLRequest *request = [self registerRequestForAPNSDeviceToken:deviceToken
+                                                                parameters:parameters];
+    
+    [self cf_sendAsynchronousRequest:request
+                             success:success
+                             failure:failure];
+}
+
++ (void)pcf_updateRegistrationWithDeviceID:(NSString *)deviceID
+                                parameters:(PCFPushParameters *)parameters
+                               deviceToken:(NSData *)deviceToken
+                                   success:(void (^)(NSURLResponse *response, NSData *data))success
+                                   failure:(void (^)(NSError *error))failure
+{
+    PCFPushLog(@"Update Registration with push server for device ID: %@", deviceID);
+    NSMutableURLRequest *request = [self updateRequestForDeviceID:deviceID
+                                                  APNSDeviceToken:deviceToken
+                                                       parameters:parameters];
+    [self cf_sendAsynchronousRequest:request
                              success:success
                              failure:failure];
 }
@@ -68,7 +88,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"failure block may not be nil"];
     }
     
-    if (!request) {
+    if (!request || !request.URL) {
         NSError *error = [NSError errorWithDomain:PCFPushErrorDomain code:PCFPushBackEndUnregistrationFailedRequestStatusCode userInfo:nil];
         failure(error);
         return;
@@ -87,10 +107,32 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 #pragma mark - Registration
 
-+ (NSMutableURLRequest *)registrationRequestForAPNSDeviceToken:(NSData *)apnsDeviceToken
++ (NSMutableURLRequest *)updateRequestForDeviceID:(NSString *)deviceID
+                                  APNSDeviceToken:(NSData *)APNSDeviceToken
+                                       parameters:(PCFPushParameters *)parameters
+{
+    NSString *relativePath = [[NSString stringWithFormat:@"%@/%@", BACK_END_REGISTRATION_REQUEST_URL, deviceID] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    return [self requestWithAPNSDeviceToken:APNSDeviceToken
+                               relativePath:relativePath
+                                 HTTPMethod:@"PUT"
+                                 parameters:parameters];
+}
+
++ (NSMutableURLRequest *)registerRequestForAPNSDeviceToken:(NSData *)APNSDeviceToken
                                                     parameters:(PCFPushParameters *)parameters
 {
-    if (!apnsDeviceToken) {
+    return [self requestWithAPNSDeviceToken:APNSDeviceToken
+                               relativePath:BACK_END_REGISTRATION_REQUEST_URL
+                                 HTTPMethod:@"POST"
+                                 parameters:parameters];
+}
+
++ (NSMutableURLRequest *)requestWithAPNSDeviceToken:(NSData *)APNSDeviceToken
+                                       relativePath:(NSString *)path
+                                         HTTPMethod:(NSString *)method
+                                         parameters:(PCFPushParameters *)parameters
+{
+    if (!APNSDeviceToken) {
         [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
     }
     
@@ -98,10 +140,10 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"PCFPushRegistrationParameters may not be nil"];
     }
     
-    NSURL *registrationURL = [NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL relativeToURL:self.baseURL];
+    NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:self.baseURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS];
-    request.HTTPMethod = @"POST";
-    request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
+    request.HTTPMethod = method;
+    request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
@@ -111,7 +153,8 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                                       parameters:(PCFPushParameters *)parameters
 {
     NSError *error = nil;
-    PCFPushRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken parameters:parameters];
+    PCFPushRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
+                                                                           parameters:parameters];
     return [requestData toJSONData:&error];
 }
 
@@ -149,7 +192,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
     }
     
     NSURL *rootURL = [NSURL URLWithString:BACK_END_REGISTRATION_REQUEST_URL relativeToURL:self.baseURL];
-    NSURL *deviceURL = [NSURL URLWithString:backEndDeviceUUID relativeToURL:rootURL];
+    NSURL *deviceURL = [NSURL URLWithString:[backEndDeviceUUID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] relativeToURL:rootURL];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS];
     request.HTTPMethod = @"DELETE";
     return request;
@@ -201,8 +244,11 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 
 #pragma mark - Utility Methods
 
-+ (BOOL)unsuccessfulStatusForHTTPResponse:(NSHTTPURLResponse *)response {
-    return [response isKindOfClass:[NSHTTPURLResponse class]] && ([response statusCode] < 200 || [response statusCode] >= 300);
++ (BOOL)successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response {
+    if (![response isKindOfClass:[NSHTTPURLResponse class]]) {
+        return NO;
+    }
+    return [response statusCode] >= 200 && [response statusCode] < 300;
 }
 
 + (Handler)completionHandlerWithSuccessBlock:(void (^)(NSURLResponse *response, NSData *data))success
@@ -214,7 +260,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
             if (failure) {
                 failure(connectionError);
             }
-        } else if ([self unsuccessfulStatusForHTTPResponse:(NSHTTPURLResponse *)response]) {
+        } else if (![self successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response]) {
             NSString *description = [NSString stringWithFormat:@"Failed HTTP Status Code: %d", [(NSHTTPURLResponse *)response statusCode]];
             NSError *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:description];
             PCFPushCriticalLog(@"NSURLRequest unsuccessful HTTP response code: %@ %@", error, error.userInfo);

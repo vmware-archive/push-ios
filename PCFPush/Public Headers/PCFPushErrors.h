@@ -21,7 +21,7 @@ OBJC_EXPORT NSString *const PCFPushErrorDomain;
 typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
     
     /**
-     * The request for the Apple push devToken was cancelled.
+     * The request for the Apple push deviceToken was cancelled.
      */
     PCFPushBackEndRegistrationCancelled = 11,
     

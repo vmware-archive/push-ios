@@ -41,11 +41,7 @@
 
 - (IBAction)clearRegistrationPressed:(id)sender
 {
-    [PCFPushPersistentStorage setBackEndDeviceID:nil];
-    [PCFPushPersistentStorage setAPNSDeviceToken:nil];
-    [PCFPushPersistentStorage setVariantUUID:nil];
-    [PCFPushPersistentStorage setReleaseSecret:nil];
-    [PCFPushPersistentStorage setDeviceAlias:nil];
+    [PCFPushPersistentStorage reset];
     [self showAlert:@"Registration cleared."];
 }
 

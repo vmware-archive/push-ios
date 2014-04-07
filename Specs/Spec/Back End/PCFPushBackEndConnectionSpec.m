@@ -33,7 +33,7 @@ describe(@"PCFPushBackEndConnection", ^{
         
         it(@"should require an APNS device token", ^{
             [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
-                                                        devToken:nil
+                                                        deviceToken:nil
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:^(NSError *error) {}];})
               should] raise];
@@ -41,7 +41,7 @@ describe(@"PCFPushBackEndConnection", ^{
         
         it(@"should require a registration parameters", ^{
             [[theBlock(^{[NSURLConnection pcf_registerWithParameters:nil
-                                                        devToken:helper.apnsDeviceToken
+                                                        deviceToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:^(NSError *error) {}];})
               should] raise];
@@ -49,7 +49,7 @@ describe(@"PCFPushBackEndConnection", ^{
         
         it(@"should require a success block", ^{
             [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
-                                                        devToken:helper.apnsDeviceToken
+                                                        deviceToken:helper.apnsDeviceToken
                                                          success:nil
                                                          failure:^(NSError *error) {}];})
               should] raise];
@@ -57,7 +57,7 @@ describe(@"PCFPushBackEndConnection", ^{
         
         it(@"should require a failure block", ^{
             [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
-                                                        devToken:helper.apnsDeviceToken
+                                                        deviceToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:nil];})
               should] raise];
@@ -104,7 +104,7 @@ describe(@"PCFPushBackEndConnection", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(failedRequestRequest:queue:completionHandler:) error:&error];
             [NSURLConnection pcf_registerWithParameters:helper.params
-                                                 devToken:helper.apnsDeviceToken
+                                                 deviceToken:helper.apnsDeviceToken
                                                   success:^(NSURLResponse *response, NSData *data) {
                                                       wasExpectedResult = NO;
                                                   }

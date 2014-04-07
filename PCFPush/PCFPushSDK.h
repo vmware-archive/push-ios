@@ -18,10 +18,11 @@
  */
 @interface PCFPushSDK : NSObject
 
+#warning - Fix documentation
+
 /**
- * Asynchronously registers the device and application for receiving push notifications.  If the application
- * is already registered then this call will do nothing.  If some of the registration parameters are different
- * then the last successful registration then the device will be re-registered with the new parameters.
+ * Sets the registration parameters of the application for receiving push notifications. If some of the
+ * registration parameters are different then the last successful registration then the device will be re-registered with the new parameters.
  *
  * @param parameters Provides the parameters required for registration.  May not be `nil`.
  *
@@ -32,10 +33,9 @@
  *                queue.  May be `nil`.
  */
 
-#warning - Fix documentation
-+ (void)registerWithParameters:(PCFPushParameters *)parameters
-                       success:(void (^)(void))success
-                       failure:(void (^)(NSError *error))failure;
++ (void)setRegistrationParameters:(PCFPushParameters *)parameters
+                          success:(void (^)(void))success
+                          failure:(void (^)(NSError *error))failure;
 
 
 /**
@@ -50,7 +50,6 @@
  */
 + (void)unregisterSuccess:(void (^)(void))success
                   failure:(void (^)(NSError *error))failure;
-
 
 
 + (BOOL)analyticsEnabled;

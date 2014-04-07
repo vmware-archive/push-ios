@@ -43,7 +43,7 @@
                          parameters.deviceAlias];
     PCFPushLog(message);
     
-    [PCFPushSDK registerWithParameters:parameters success:^{
+    [PCFPushSDK setRegistrationParameters:parameters success:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         PCFPushLog(@"Application received callback \"registrationSucceeded\".");
         
@@ -65,7 +65,7 @@
 
 #pragma mark - UIApplicationDelegate Push Notification Callback
 
-- (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+- (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     PCFPushLog(@"Received message: didRegisterForRemoteNotificationsWithDeviceToken:");
 }

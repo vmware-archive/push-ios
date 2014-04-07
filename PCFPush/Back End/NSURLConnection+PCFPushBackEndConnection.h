@@ -12,15 +12,24 @@
 
 @interface NSURLConnection (PCFPushBackEndConnection)
 
+#pragma mark - Push Server
+
 + (void)pcf_unregisterDeviceID:(NSString *)deviceID
                        success:(void (^)(NSURLResponse *response, NSData *data))success
                        failure:(void (^)(NSError *error))failure;
 
 + (void)pcf_registerWithParameters:(PCFPushParameters *)parameters
-                          devToken:(NSData *)devToken
+                       deviceToken:(NSData *)deviceToken
                            success:(void (^)(NSURLResponse *response, NSData *data))success
                            failure:(void (^)(NSError *error))failure;
 
++ (void)pcf_updateRegistrationWithDeviceID:(NSString *)deviceID
+                                parameters:(PCFPushParameters *)parameters
+                               deviceToken:(NSData *)deviceToken
+                                   success:(void (^)(NSURLResponse *response, NSData *data))success
+                                   failure:(void (^)(NSError *error))failure;
+
+#pragma mark - Analytics
 
 + (void)pcf_syncAnalyicEvents:(NSArray *)events
                   forDeviceID:(NSString *)deviceID

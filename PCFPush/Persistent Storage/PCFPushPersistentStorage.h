@@ -15,8 +15,8 @@
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken;
 + (NSData *)APNSDeviceToken;
 
-+ (void)setBackEndDeviceID:(NSString *)backEndDeviceID;
-+ (NSString *)backEndDeviceID;
++ (void)setPushServerDeviceID:(NSString *)backEndDeviceID;
++ (NSString *)pushServerDeviceID;
 
 + (void)setVariantUUID:(NSString *)variantUUID;
 + (NSString *)variantUUID;

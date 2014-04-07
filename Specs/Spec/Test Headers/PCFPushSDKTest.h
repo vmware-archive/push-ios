@@ -11,14 +11,14 @@
 @interface PCFPushSDK (TestingHeader)
 
 + (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
-                                 devToken:(NSData *)devToken
-                             success:(void (^)(void))successBlock
-                             failure:(void (^)(NSError *error))failureBlock;
+                              deviceToken:(NSData *)deviceToken
+                                  success:(void (^)(void))successBlock
+                                  failure:(void (^)(NSError *error))failureBlock;
 
-+ (void)sendUnregisterRequestWithParameters:(PCFPushParameters *)parameters
-                                   devToken:(NSData *)devToken
-                               success:(void (^)(void))successBlock
-                               failure:(void (^)(NSError *error))failureBlock;
++ (void)sendUpdateRegistrationRequestWithParameters:(PCFPushParameters *)parameters
+                                deviceToken:(NSData *)deviceToken
+                                    success:(void (^)(void))successBlock
+                                    failure:(void (^)(NSError *error))failureBlock;
 
 
 @end

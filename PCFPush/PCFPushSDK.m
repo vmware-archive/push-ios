@@ -42,24 +42,31 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
                                                object:nil];
 }
 
-+ (void)registerWithParameters:(PCFPushParameters *)parameters
-                       success:(void (^)(void))success
-                       failure:(void (^)(NSError *error))failure;
++ (void)setRegistrationParameters:(PCFPushParameters *)parameters
+                          success:(void (^)(void))success
+                          failure:(void (^)(NSError *error))failure;
 {
     if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
     
-    void (^successBlock)(NSData *devToken) = ^(NSData *devToken) {
-        if ([self unregistrationRequiredForDevToken:devToken parameters:parameters]) {
-            [self sendUnregisterRequestWithParameters:parameters
-                                             devToken:devToken
-                                              success:success
-                                              failure:failure];
+    void (^successBlock)(NSData *deviceToken) = ^(NSData *deviceToken) {
+        if (!deviceToken) {
+            [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
+        }
+        if (![deviceToken isKindOfClass:[NSData class]]) {
+            [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
+        }
+        
+        if ([self updateRegistrationRequiredForDeviceToken:deviceToken parameters:parameters]) {
+            [self sendUpdateRegistrationRequestWithParameters:parameters
+                                                  deviceToken:deviceToken
+                                                      success:success
+                                                      failure:failure];
             
-        } else if ([self registrationRequiredForDevToken:devToken parameters:parameters]) {
+        } else if ([self registrationRequiredForDeviceToken:deviceToken parameters:parameters]) {
             [self sendRegisterRequestWithParameters:parameters
-                                           devToken:devToken
+                                        deviceToken:deviceToken
                                             success:success
                                             failure:failure];
             
@@ -69,11 +76,12 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     };
     
     UIApplication *application = [UIApplication sharedApplication];
-    PCFPushAppDelegate *pushAppDelegate = [[PCFPushAppDelegate alloc] init];
+    PCFPushAppDelegate *pushAppDelegate;
     _appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
     
     if (![application.delegate isKindOfClass:[PCFPushAppDelegateProxy class]]) {
         @synchronized(application) {
+            pushAppDelegate = [[PCFPushAppDelegate alloc] init];
             _appDelegateProxy.originalAppDelegate = application.delegate;
             _appDelegateProxy.pushAppDelegate = pushAppDelegate;
             application.delegate = _appDelegateProxy;
@@ -85,45 +93,55 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     
     [pushAppDelegate setRegistrationBlockWithSuccess:successBlock failure:failure];
     
+    // If the _registrationParameters, Back End Device ID, and APNS Device Token
+    // are set then immediately attempt to update parameters on Push Server.
+    if (_registrationParameters &&
+        [PCFPushPersistentStorage pushServerDeviceID] &&
+        [PCFPushPersistentStorage APNSDeviceToken])
+    {
+        successBlock([PCFPushPersistentStorage APNSDeviceToken]);
+    }
     _registrationParameters = parameters;
 }
 
 + (void)unregisterSuccess:(void (^)(void))success
                   failure:(void (^)(NSError *error))failure
 {
-    [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
-                                      success:^(NSURLResponse *response, NSData *data) {
-                                          [PCFPushPersistentStorage reset];
-                                          success();
-                                      }
-                                      failure:failure];
+    [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+                                    success:^(NSURLResponse *response, NSData *data) {
+                                        [PCFPushPersistentStorage reset];
+                                        success();
+                                    }
+                                    failure:failure];
 }
 
 #pragma mark - Private Methods
 
-+ (void)sendUnregisterRequestWithParameters:(PCFPushParameters *)parameters
-                                   devToken:(NSData *)devToken
-                               success:(void (^)(void))successBlock
-                               failure:(void (^)(NSError *error))failureBlock
+typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
+
++ (void)sendUpdateRegistrationRequestWithParameters:(PCFPushParameters *)parameters
+                                        deviceToken:(NSData *)deviceToken
+                                            success:(void (^)(void))successBlock
+                                            failure:(void (^)(NSError *error))failureBlock
 {
-    [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage backEndDeviceID]
-                                      success:^(NSURLResponse *response, NSData *data) {
-                                          PCFPushCriticalLog(@"Unregistration with the back-end server succeeded.");
-                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken success:successBlock failure:failureBlock];
-                                      }
-                                      failure:^(NSError *error) {
-                                          PCFPushCriticalLog(@"Unregistration with the back-end server failed. Error: \"%@\".", error.localizedDescription);
-                                          PCFPushLog(@"Nevertheless, registration will be attempted.");
-                                          [self sendRegisterRequestWithParameters:parameters devToken:devToken success:successBlock failure:failureBlock];
-                                      }];
+    RegistrationBlock registrationBlock = [self registrationBlockWithParameters:parameters
+                                                                    deviceToken:deviceToken
+                                                                        success:successBlock
+                                                                        failure:failureBlock];
+    
+    [NSURLConnection pcf_updateRegistrationWithDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+                                             parameters:parameters
+                                            deviceToken:deviceToken
+                                                success:registrationBlock
+                                                failure:failureBlock];
 }
 
-+ (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
-                                 devToken:(NSData *)devToken
-                             success:(void (^)(void))successBlock
-                             failure:(void (^)(NSError *error))failureBlock
++ (RegistrationBlock)registrationBlockWithParameters:(PCFPushParameters *)parameters
+                                         deviceToken:(NSData *)deviceToken
+                                             success:(void (^)(void))successBlock
+                                             failure:(void (^)(NSError *error))failureBlock
 {
-    void (^registrationSuccessfulBlock)(NSURLResponse *response, id responseData) = registrationSuccessfulBlock = ^(NSURLResponse *response, id responseData) {
+    RegistrationBlock registrationBlock = ^(NSURLResponse *response, id responseData) {
         NSError *error;
         
         if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
@@ -146,17 +164,31 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
         }
         
         PCFPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
-        [PCFPushPersistentStorage setBackEndDeviceID:parsedData.deviceUUID];
+        [PCFPushPersistentStorage setAPNSDeviceToken:deviceToken];
+        [PCFPushPersistentStorage setPushServerDeviceID:parsedData.deviceUUID];
         [PCFPushPersistentStorage setVariantUUID:parameters.variantUUID];
         [PCFPushPersistentStorage setReleaseSecret:parameters.releaseSecret];
         [PCFPushPersistentStorage setDeviceAlias:parameters.deviceAlias];
         
         successBlock();
     };
+    
+    return registrationBlock;
+}
+
++ (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
+                              deviceToken:(NSData *)deviceToken
+                                  success:(void (^)(void))successBlock
+                                  failure:(void (^)(NSError *error))failureBlock
+{
+    RegistrationBlock registrationBlock = [self registrationBlockWithParameters:parameters
+                                                                    deviceToken:deviceToken
+                                                                        success:successBlock
+                                                                        failure:failureBlock];
     [NSURLConnection pcf_registerWithParameters:parameters
-                                      devToken:devToken
-                                       success:registrationSuccessfulBlock
-                                       failure:failureBlock];
+                                    deviceToken:deviceToken
+                                        success:registrationBlock
+                                        failure:failureBlock];
 }
 
 + (void)registerForRemoteNotifications {
@@ -165,15 +197,15 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     }
 }
 
-+ (BOOL)unregistrationRequiredForDevToken:(NSData *)devToken
-                               parameters:(PCFPushParameters *)parameters
++ (BOOL)updateRegistrationRequiredForDeviceToken:(NSData *)deviceToken
+                                      parameters:(PCFPushParameters *)parameters
 {
-    // If not currently registered with the back-end then unregistration is not required
+    // If not currently registered with the back-end then update registration is not required
     if (![PCFPushPersistentStorage APNSDeviceToken]) {
         return NO;
     }
     
-    if (![self localDeviceTokenMatchesNewToken:devToken]) {
+    if (![self localDeviceTokenMatchesNewToken:deviceToken]) {
         return YES;
     }
     
@@ -184,15 +216,15 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     return NO;
 }
 
-+ (BOOL)registrationRequiredForDevToken:(NSData *)devToken
-                             parameters:(PCFPushParameters *)parameters
++ (BOOL)registrationRequiredForDeviceToken:(NSData *)deviceToken
+                                parameters:(PCFPushParameters *)parameters
 {
     // If not currently registered with the back-end then registration will be required
-    if (![PCFPushPersistentStorage backEndDeviceID]) {
+    if (![PCFPushPersistentStorage pushServerDeviceID]) {
         return YES;
     }
     
-    if (![self localDeviceTokenMatchesNewToken:devToken]) {
+    if (![self localDeviceTokenMatchesNewToken:deviceToken]) {
         return YES;
     }
     
@@ -224,8 +256,8 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     return YES;
 }
 
-+ (BOOL)localDeviceTokenMatchesNewToken:(NSData *)devToken {
-    if (![devToken isEqualToData:[PCFPushPersistentStorage APNSDeviceToken]]) {
++ (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken {
+    if (![deviceToken isEqualToData:[PCFPushPersistentStorage APNSDeviceToken]]) {
         PCFPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
         return NO;
     }

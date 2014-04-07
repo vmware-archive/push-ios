@@ -9,10 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface PCFPushAppDelegateProxy : NSProxy<UIApplicationDelegate>
+@interface PCFPushAppDelegateProxy : NSProxy <UIApplicationDelegate>
 
-@property (nonatomic, strong) NSObject<UIApplicationDelegate> *pushAppDelegate;
-@property (nonatomic, strong) NSObject<UIApplicationDelegate> *originalAppDelegate;
+@property NSObject<UIApplicationDelegate> *pushAppDelegate;
+@property NSObject<UIApplicationDelegate> *originalAppDelegate;
 
 - (id)init;
 

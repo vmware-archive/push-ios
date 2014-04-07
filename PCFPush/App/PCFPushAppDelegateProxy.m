@@ -6,6 +6,7 @@
 //
 //
 
+#import <objc/runtime.h>
 #import "PCFPushAppDelegateProxy.h"
 
 @implementation PCFPushAppDelegateProxy
@@ -28,7 +29,7 @@
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
     if (!self.originalAppDelegate) {
-        [NSException raise:@"PCFNilAppDelegate" format:@"PpushAppDelegateProxy originalApplicationDelegate was nil."];
+        [NSException raise:@"PCFNilAppDelegate" format:@"PCFPushAppDelegateProxy originalApplicationDelegate was nil."];
     }
     
     BOOL forwarded = NO;
@@ -55,7 +56,7 @@
 
 - (BOOL)respondsToSelector:(SEL)sel
 {
-    if ([NSStringFromSelector(sel) isEqualToString:@"application:didReceiveRemoteNotification:fetchCompletionHandler:"]) {
+    if (sel_isEqual(sel, @selector(application:didReceiveRemoteNotification:fetchCompletionHandler:))) {
         BOOL remoteNotificationSupported = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"UIBackgroundModes"] containsObject:@"remote-notification"];
         BOOL iOS7orGreater = floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1;
         return remoteNotificationSupported && iOS7orGreater;

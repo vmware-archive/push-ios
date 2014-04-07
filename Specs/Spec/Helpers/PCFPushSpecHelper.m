@@ -78,7 +78,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
             [(PCFPushAppDelegate *)self.applicationDelegate application:self.application
-                             didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+                       didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
     }];
@@ -175,7 +175,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
     [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
     [PCFPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
-    [PCFPushPersistentStorage setBackEndDeviceID:self.backEndDeviceId];
+    [PCFPushPersistentStorage setPushServerDeviceID:self.backEndDeviceId];
 }
 
 #pragma mark - NSURLConnection Helpers

@@ -24,7 +24,7 @@ describe(@"PCFPushPersistentStorage", ^{
                    
     it(@"should start empty", ^{
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
-        [[[PCFPushPersistentStorage backEndDeviceID] should] beNil];
+        [[[PCFPushPersistentStorage pushServerDeviceID] should] beNil];
         [[[PCFPushPersistentStorage variantUUID] should] beNil];
         [[[PCFPushPersistentStorage releaseSecret] should] beNil];
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
@@ -36,8 +36,8 @@ describe(@"PCFPushPersistentStorage", ^{
     });
     
     it(@"should be able to save the back-end device ID", ^{
-        [PCFPushPersistentStorage setBackEndDeviceID:helper.backEndDeviceId];
-        [[[PCFPushPersistentStorage backEndDeviceID] should] equal:helper.backEndDeviceId];
+        [PCFPushPersistentStorage setPushServerDeviceID:helper.backEndDeviceId];
+        [[[PCFPushPersistentStorage pushServerDeviceID] should] equal:helper.backEndDeviceId];
     });
     
     it(@"should be able to save the release UUID", ^{
@@ -57,10 +57,10 @@ describe(@"PCFPushPersistentStorage", ^{
     
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
-        [PCFPushPersistentStorage setBackEndDeviceID:helper.backEndDeviceId];
+        [PCFPushPersistentStorage setPushServerDeviceID:helper.backEndDeviceId];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
-        [[[PCFPushPersistentStorage backEndDeviceID] should] beNil];
+        [[[PCFPushPersistentStorage pushServerDeviceID] should] beNil];
     });
 });
 

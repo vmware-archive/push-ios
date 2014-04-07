@@ -64,7 +64,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
 - (void) sendButtonPressed
 {
     [self updateCurrentBaseRowColour];
-    NSString *backEndDeviceID = [PCFPushPersistentStorage backEndDeviceID];
+    NSString *backEndDeviceID = [PCFPushPersistentStorage pushServerDeviceID];
     
     if (backEndDeviceID == nil) {
         [self addLogItem:@"You must register with the back-end server before attempting to send a message" timestamp:[NSDate date]];

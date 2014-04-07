@@ -11,6 +11,6 @@
 
 @interface PCFPushAppDelegate : NSObject <UIApplicationDelegate>
 
-- (void)setRegistrationBlockWithSuccess:(void (^)(NSData *devToken))success
+- (void)setRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
                                 failure:(void (^)(NSError *error))failure;
 @end

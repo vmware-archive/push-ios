@@ -44,12 +44,12 @@ static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
     return [self persistedValueForKey:KEY_APNS_DEVICE_TOKEN];
 }
 
-+ (void)setBackEndDeviceID:(NSString *)backEndDeviceID
++ (void)setPushServerDeviceID:(NSString *)backEndDeviceID
 {
     [self persistValue:backEndDeviceID forKey:KEY_BACK_END_DEVICE_ID];
 }
 
-+ (NSString *)backEndDeviceID
++ (NSString *)pushServerDeviceID
 {
     return [self persistedValueForKey:KEY_BACK_END_DEVICE_ID];
 }

@@ -13,14 +13,14 @@
 @interface PCFPushAppDelegate ()
 
 @property NSObject<UIApplicationDelegate> *originalApplicationDelegate;
-@property (copy) void (^success)(NSData *devToken);
+@property (copy) void (^success)(NSData *deviceToken);
 @property (copy) void (^failure)(NSError *error);
 
 @end
 
 @implementation PCFPushAppDelegate
 
-- (void)setRegistrationBlockWithSuccess:(void (^)(NSData *devToken))success
+- (void)setRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
                                 failure:(void (^)(NSError *error))failure
 {
     if (!success || !failure) {
@@ -33,11 +33,11 @@
 
 #pragma mark - UIApplicationDelegate Push Notifications
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)devToken
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    PCFPushLog(@"Registration successful with APNS. DeviceToken: %@", devToken);
+    PCFPushLog(@"Registration successful with APNS. DeviceToken: %@", deviceToken);
     if (self.success) {
-        self.success(devToken);
+        self.success(deviceToken);
     }
 }
 
