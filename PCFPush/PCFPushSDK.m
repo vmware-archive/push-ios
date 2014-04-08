@@ -77,23 +77,24 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     
     UIApplication *application = [UIApplication sharedApplication];
     PCFPushAppDelegate *pushAppDelegate;
-    _appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
     
-    if (![application.delegate isKindOfClass:[PCFPushAppDelegateProxy class]]) {
+    if (application.delegate == _appDelegateProxy) {
+        pushAppDelegate = (PCFPushAppDelegate *)[_appDelegateProxy pushAppDelegate];
+        
+    } else {
+        _appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
+        
         @synchronized(application) {
             pushAppDelegate = [[PCFPushAppDelegate alloc] init];
             _appDelegateProxy.originalAppDelegate = application.delegate;
             _appDelegateProxy.pushAppDelegate = pushAppDelegate;
             application.delegate = _appDelegateProxy;
         }
-        
-    } else {
-        pushAppDelegate = (PCFPushAppDelegate *)[(PCFPushAppDelegateProxy *)application.delegate pushAppDelegate];
     }
     
     [pushAppDelegate setRegistrationBlockWithSuccess:successBlock failure:failure];
     
-    // If the _registrationParameters, Back End Device ID, and APNS Device Token
+    // If the _registrationParameters, BackEndDeviceID, and APNSDeviceToken
     // are set then immediately attempt to update parameters on Push Server.
     if (_registrationParameters &&
         [PCFPushPersistentStorage pushServerDeviceID] &&

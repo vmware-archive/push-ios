@@ -71,20 +71,23 @@ describe(@"PCFPushSDK", ^{
             __block NSInteger successCount = 0;
             __block NSInteger registerCount = 0;
             __block NSInteger updateRegistrationCount = 0;
-            __block NSInteger selectorsCount = 0;
             
-            SEL selectors[] = {
-                @selector(setAPNSDeviceToken:),
+            SEL stringSelectors[] = {
                 @selector(setVariantUUID:),
                 @selector(setReleaseSecret:),
                 @selector(setDeviceAlias:),
             };
             
-            selectorsCount = sizeof(selectors)/sizeof(selectors[0]);
+            SEL dataSelectors[] = {
+              @selector(setAPNSDeviceToken:),
+            };
             
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:selectorsCount];
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:selectorsCount];
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:selectorsCount*2];
+            __block NSInteger stringSelectorsCount = sizeof(stringSelectors)/sizeof(stringSelectors[0]);
+            __block NSInteger dataSelectorsCount = sizeof(dataSelectors)/sizeof(dataSelectors[0]);
+            
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:stringSelectorsCount + dataSelectorsCount];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -123,21 +126,26 @@ describe(@"PCFPushSDK", ^{
                 return nil;
             }];
             
-            [PCFPushSDK load];
-            __block BOOL setupComplete = NO;
-            [PCFPushSDK setRegistrationParameters:helper.params
-                                          success:^ {
-                                              setupComplete = YES;
-                                          }
-                                          failure:^(NSError *error) {
-                                              fail(@"registration failure block executed");
-                                          }];
-            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
-            [[theValue(setupComplete) should] beTrue];
+            NSString *differentValue = @"DIFFERENT_VALUE";
             
-            for (NSInteger i = 0; i < selectorsCount; i++) {
+            [PCFPushSDK load];
+            for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
-                [PCFPushPersistentStorage performSelector:selectors[i] withObject:@"DIFFERENT_VALUE"];
+
+                [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
+                [PCFPushSDK setRegistrationParameters:helper.params
+                                              success:^ {
+                                                  successCount++;
+                                              }
+                                              failure:^(NSError *error) {
+                                                  fail(@"registration failure block executed");
+                                              }];
+                [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
+            }
+            
+            for (NSInteger i = 0; i < stringSelectorsCount; i++) {
+                [helper setupDefaultSavedParameters];
+                [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
                 [PCFPushSDK setRegistrationParameters:helper.params
                                               success:^ {
                                                   successCount++;
@@ -147,9 +155,9 @@ describe(@"PCFPushSDK", ^{
                                               }];
             }
             
-            [[theValue(successCount) shouldEventually] equal:theValue(selectorsCount)];
-            [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(selectorsCount)];
-            [[theValue(registerCount) shouldEventually] equal:theValue(1)];
+            [[theValue(successCount) shouldEventually] equal:theValue(stringSelectorsCount + dataSelectorsCount)];
+            [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(stringSelectorsCount + dataSelectorsCount)];
+            [[theValue(registerCount) shouldEventually] equal:theValue(0)];
         });
     });
 
