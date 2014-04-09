@@ -59,9 +59,9 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 + (PCFPushParameters *)registrationParameters
 {
     return [PCFPushParameters parametersWithNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
-                                                               variantUUID:[Settings variantUUID]
-                                                             releaseSecret:[Settings releaseSecret]
-                                                               deviceAlias:[Settings deviceAlias]];
+                                                  variantUUID:[Settings variantUUID]
+                                                releaseSecret:[Settings releaseSecret]
+                                                  deviceAlias:[Settings deviceAlias]];
 }
 
 + (NSDictionary *)defaults

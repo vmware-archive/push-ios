@@ -93,8 +93,9 @@ static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
 {
     NSNumber *enabled = [self persistedValueForKey:KEY_ANALYTICS_ENABLED];
     if (!enabled) {
-        [self setAnalyticsEnabled:YES];
-        return YES;
+        BOOL defaultValue = NO;
+        [self setAnalyticsEnabled:defaultValue];
+        return defaultValue;
     }
     return [enabled boolValue];
 }

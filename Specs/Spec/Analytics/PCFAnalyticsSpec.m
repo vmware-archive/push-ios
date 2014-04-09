@@ -48,6 +48,8 @@ describe(@"PCFAnalytics", ^{
         __block NSInteger expectedCountOFEvents = -1;
         
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -109,6 +111,8 @@ describe(@"PCFAnalytics", ^{
     context(@"Maximum message body size.", ^{
         __block NSInteger maxEventCount = 0;
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -165,6 +169,8 @@ describe(@"PCFAnalytics", ^{
     
     context(@"Receive push notificiation without a push ID.", ^{
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [PCFAnalytics logApplication:helper.application didReceiveRemoteNotification:@{}];
         });
@@ -208,6 +214,8 @@ describe(@"PCFAnalytics", ^{
         __block NSArray *events;
         
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [PCFAnalytics logApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
             events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
@@ -226,6 +234,8 @@ describe(@"PCFAnalytics", ^{
     context(@"Batch sending of analytic events.", ^{
         
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -258,6 +268,8 @@ describe(@"PCFAnalytics", ^{
     
     context(@"Batch send fails of analytic events.", ^{
         beforeEach(^{
+            [PCFPushSDK setAnalyticsEnabled:YES];
+            
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
