@@ -1,5 +1,6 @@
 Pivotal CF Mobile Services Push Client SDK for iOS
 =============================================
+[![Build Status](https://magnum.travis-ci.com/xtremelabs/pivotalcf-pushsdk-ios.svg?token=qj1HN3SsspfPHBoxCQ4C&branch=master)](https://magnum.travis-ci.com/xtremelabs/pivotalcf-pushsdk-ios)
 
 Features
 --------
