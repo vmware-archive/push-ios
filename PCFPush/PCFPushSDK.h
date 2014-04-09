@@ -18,8 +18,6 @@
  */
 @interface PCFPushSDK : NSObject
 
-#warning - Fix documentation
-
 /**
  * Sets the registration parameters of the application for receiving push notifications. If some of the
  * registration parameters are different then the last successful registration then the device will be re-registered with the new parameters.

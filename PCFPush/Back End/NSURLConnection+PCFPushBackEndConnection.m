@@ -261,7 +261,7 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
                 failure(connectionError);
             }
         } else if (![self successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response]) {
-            NSString *description = [NSString stringWithFormat:@"Failed HTTP Status Code: %d", [(NSHTTPURLResponse *)response statusCode]];
+            NSString *description = [NSString stringWithFormat:@"Failed HTTP Status Code: %ld", (long)[(NSHTTPURLResponse *)response statusCode]];
             NSError *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:description];
             PCFPushCriticalLog(@"NSURLRequest unsuccessful HTTP response code: %@ %@", error, error.userInfo);
             if (failure) {
