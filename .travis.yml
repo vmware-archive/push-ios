@@ -1,0 +1,6 @@
+language: objective-c
+xcode_project: Specs/PCFPushSpec.xcodeproj
+xcode_scheme: PCFPushTests
+
+before_install:
+    - cd Specs && pod install

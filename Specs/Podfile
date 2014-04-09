@@ -5,4 +5,5 @@ inhibit_all_warnings!
 target :PCFPushTests, :exclusive => true do
   platform :ios, '6.0'
   pod 'Kiwi/XCTest'
+  pod 'PCFPush', :path => '../'
 end
