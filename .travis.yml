@@ -1,6 +1,13 @@
 language: objective-c
-xcode_project: Specs/PCFPushSpec.xcodeproj
+xcode_workspace: PCFPush.xcworkspace
 xcode_scheme: PCFPushTests
+xcode_sdk: iphonesimulator7.0
 
 before_install:
-    - cd Specs && pod install
+  - export LANG=en_US.UTF-8
+  - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
+  - cd Specs && pod install && cd $TRAVIS_BUILD_DIR
+
+before_script:
+  - brew update
+  - brew upgrade xctool

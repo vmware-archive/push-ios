@@ -165,7 +165,7 @@ describe(@"PCFAnalytics", ^{
     
     context(@"Receive push notificiation without a push ID.", ^{
         beforeEach(^{
-            [helper.application stub:@selector(applicationState) andReturn:UIApplicationStateActive];
+            [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [PCFAnalytics logApplication:helper.application didReceiveRemoteNotification:@{}];
         });
         
@@ -208,7 +208,7 @@ describe(@"PCFAnalytics", ^{
         __block NSArray *events;
         
         beforeEach(^{
-            [helper.application stub:@selector(applicationState) andReturn:UIApplicationStateActive];
+            [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [PCFAnalytics logApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
             events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
         });
