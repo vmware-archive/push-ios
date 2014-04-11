@@ -18,6 +18,13 @@
  */
 @interface PCFPushSDK : NSObject
 
++ (void)setProductionRegistrationParameters:(PCFPushParameters *)parameters;
+
++ (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)parameters;
+
++ (void)setCompletionBlockWithSuccess:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure;
+
 /**
  * Sets the registration parameters of the application for receiving push notifications. If some of the
  * registration parameters are different then the last successful registration then the device will be re-registered with the new parameters.
@@ -30,10 +37,6 @@
  * @param failure block that will be executed if registration fails. This callback will be called on the main
  *                queue.  May be `nil`.
  */
-
-+ (void)setRegistrationParameters:(PCFPushParameters *)parameters
-                          success:(void (^)(void))success
-                          failure:(void (^)(NSError *error))failure;
 
 
 /**

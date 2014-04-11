@@ -7,51 +7,63 @@
 //
 
 #import "PCFPushParameters.h"
+#import "PCFPushDebug.h"
+
+#ifdef DEBUG
+static BOOL inProduction = NO;
+#else
+static BOOL inProduction = YES;
+#endif
 
 @implementation PCFPushParameters
 
-+ (instancetype)parametersWithNotificationTypes:(UIRemoteNotificationType)types
-                                    variantUUID:(NSString *)variantUUID
-                                  releaseSecret:(NSString *)releaseSecret
-                                    deviceAlias:(NSString *)deviceAlias
++ (PCFPushParameters *)defaultParameters
 {
-    id registrationParams = [[PCFPushParameters alloc] initWithTypes:types
-                                                         variantUUID:variantUUID
-                                                       releaseSecret:releaseSecret
-                                                         deviceAlias:deviceAlias];
-    return registrationParams;
+    return [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"PCFPushParameters" ofType:@"plist"]];
 }
 
-- (id)initWithTypes:(UIRemoteNotificationType)remoteNotificationTypes
-        variantUUID:(NSString *)variantUUID
-      releaseSecret:(NSString *)releaseSecret
-        deviceAlias:(NSString *)deviceAlias
++ (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path
 {
-    self = [super init];
-    
-    if (self) {
-        if (!variantUUID) {
-            [NSException raise:NSInvalidArgumentException format:@"variantUUID may not be nil"];
-        }
-        if (!releaseSecret) {
-            [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be nil"];
-        }
-        if (variantUUID.length <= 0) {
-            [NSException raise:NSInvalidArgumentException format:@"releaseUuid may not be empty"];
-        }
-        if (releaseSecret.length <= 0) {
-            [NSException raise:NSInvalidArgumentException format:@"releaseSecret may not be empty"];
-        }
-        if (!deviceAlias) {
-            [NSException raise:NSInvalidArgumentException format:@"deviceAlias may not be nil"];
-        }
-        _remoteNotificationTypes = remoteNotificationTypes;
-        _variantUUID = variantUUID;
-        _releaseSecret = releaseSecret;
-        _deviceAlias = deviceAlias;
+    PCFPushParameters *params = [PCFPushParameters parameters];
+    if (path) {
+        NSDictionary *paramsDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
+        [params setValuesForKeysWithDictionary:paramsDictionary];
+    }
+    return params;
+}
+
++ (PCFPushParameters *)parameters
+{
+    return [[self alloc] init];
+}
+
+- (NSString *)variantUUID
+{
+    return inProduction ? self.productionVariantUUID : self.developmentVariantUUID;
+}
+
+- (NSString *)releaseSecret
+{
+    return inProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
+}
+
+- (BOOL)validate
+{
+    BOOL valid = YES;
+    if (!self.variantUUID || self.variantUUID.length <= 0) {
+        valid = NO;
+        PCFPushError(@"PCFPushParameters failed validation caused by an invalid variantUUID.");
+    }
+    if (!self.releaseSecret || self.releaseSecret.length <= 0) {
+        valid = NO;
+        PCFPushError(@"PCFPushParameters failed validation caused by an invalid releaseSecret.");
+    }
+    if (!self.deviceAlias) {
+        valid = NO;
+        PCFPushError(@"PCFPushParameters failed validation caused by an invalid deviceAlias.");
     }
     
-    return self;
+    return valid;
 }
 
 @end

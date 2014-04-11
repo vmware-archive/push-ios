@@ -23,12 +23,20 @@
 
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
-static PCFPushParameters *_registrationParameters;
-static PCFPushAppDelegateProxy *_appDelegateProxy;
+@interface PCFPushSDK ()
+
+@property PCFPushParameters *productionRegistrationParameters;
+@property PCFPushParameters *developmentRegistrationParameters;
+@property PCFPushAppDelegateProxy *appDelegateProxy;
+
+@property (copy) void (^APNSRegistrationSuccess)(NSData *deviceToken);
+
+@end
+
+static PCFPushSDK *_sharedPCFPushSDK;
+static dispatch_once_t _sharedPCFPushSDKToken;
 
 @implementation PCFPushSDK
-
-#pragma mark - Public Methods
 
 + (void)load
 {
@@ -42,14 +50,75 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
                                                object:nil];
 }
 
-+ (void)setRegistrationParameters:(PCFPushParameters *)parameters
-                          success:(void (^)(void))success
-                          failure:(void (^)(NSError *error))failure;
++ (instancetype)shared
+{
+    dispatch_once(&_sharedPCFPushSDKToken, ^{
+        if (!_sharedPCFPushSDK) {
+            _sharedPCFPushSDK = [[self alloc] init];
+        }
+    });
+    
+    return _sharedPCFPushSDK;
+}
+
++ (void)setSharedPushSDK:(PCFPushSDK *)pushSDK
+{
+    _sharedPCFPushSDKToken = 0;
+    _sharedPCFPushSDK = pushSDK;
+}
+
+- (void)setProductionRegistrationParameters:(PCFPushParameters *)productionRegistrationParameters
+{
+    if (_productionRegistrationParameters && [self isRegistered])
+    {
+        _productionRegistrationParameters = productionRegistrationParameters;
+        self.APNSRegistrationSuccess([PCFPushPersistentStorage APNSDeviceToken]);
+        
+    } else {
+        _productionRegistrationParameters = productionRegistrationParameters;
+    }
+}
+
+- (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)developmentRegistrationParameters
+{
+    if (_developmentRegistrationParameters && [self isRegistered]
+        )
+    {
+        _developmentRegistrationParameters = developmentRegistrationParameters;
+        self.APNSRegistrationSuccess([PCFPushPersistentStorage APNSDeviceToken]);
+        
+    } else {
+        _developmentRegistrationParameters = developmentRegistrationParameters;
+    }
+}
+
+- (BOOL)isRegistered
+{
+    return [PCFPushPersistentStorage pushServerDeviceID] && [PCFPushPersistentStorage APNSDeviceToken];
+}
+
+#pragma mark - Public Methods
+
++ (void)setProductionRegistrationParameters:(PCFPushParameters *)parameters
+{
+    if (!parameters) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    }
+    [[PCFPushSDK shared] setProductionRegistrationParameters:parameters];
+}
+
++ (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)parameters
 {
     if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
     
+    [[PCFPushSDK shared] setDevelopmentRegistrationParameters:parameters];
+}
+
++ (void)setCompletionBlockWithSuccess:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure
+{
     void (^successBlock)(NSData *deviceToken) = ^(NSData *deviceToken) {
         if (!deviceToken) {
             [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
@@ -93,6 +162,16 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     }
     
     [pushAppDelegate setRegistrationBlockWithSuccess:successBlock failure:failure];
+}
+
+
++ (void)setRegistrationParameters:(PCFPushParameters *)parameters
+                          success:(void (^)(void))success
+                          failure:(void (^)(NSError *error))failure;
+{
+    if (!parameters) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    }
     
     // If the _registrationParameters, BackEndDeviceID, and APNSDeviceToken
     // are set then immediately attempt to update parameters on Push Server.
@@ -102,6 +181,7 @@ static PCFPushAppDelegateProxy *_appDelegateProxy;
     {
         successBlock([PCFPushPersistentStorage APNSDeviceToken]);
     }
+    
     _registrationParameters = parameters;
 }
 
@@ -290,7 +370,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
             application.delegate = proxyDelegate.originalAppDelegate;
         }
     }
+    _sharedPCFPushSDK = nil;
+    _sharedPCFPushSDKToken = 0;
 }
+
+#warning - TODO: Extract into Analytics library
 
 + (BOOL)analyticsEnabled
 {

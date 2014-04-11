@@ -12,7 +12,6 @@
 
 @interface PCFPushAppDelegate ()
 
-@property NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (copy) void (^success)(NSData *deviceToken);
 @property (copy) void (^failure)(NSError *error);
 
