@@ -14,9 +14,9 @@
  */
 @interface PCFPushParameters : NSObject
 
-@property (assign) UIRemoteNotificationType remoteNotificationTypes;
 @property (copy) NSString *deviceAlias;
 @property (copy) NSString *deviceAPIURL;
+@property BOOL autoRegistrationEnabled;
 
 @property (copy) NSString *developmentVariantUUID;
 @property (copy) NSString *developmentReleaseSecret;
@@ -43,6 +43,21 @@
 /**
  * Validate the parameters
  */
-- (BOOL)validate;
+- (BOOL)isValid;
+
+/**
+ * The production state of the application
+ */
+- (BOOL)inProduction;
+
+/**
+ * The current variant UUID (resolved using the inProduction flag).
+ */
+- (NSString *)variantUUID;
+
+/**
+ * The current release Secret (resolved using the inProduction flag).
+ */
+- (NSString *)releaseSecret;
 
 @end

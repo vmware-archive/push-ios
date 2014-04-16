@@ -21,14 +21,13 @@ typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connecti
 describe(@"PCFAnalytics", ^{
     
     __block PCFPushSpecHelper *helper;
-    __block UIRemoteNotificationType testNotificationTypes = TEST_NOTIFICATION_TYPES;
     __block PCFCoreDataManager *manager;
     
     beforeEach(^{
         helper = [[PCFPushSpecHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
-        [helper setupApplicationForSuccessfulRegistrationWithNotificationTypes:testNotificationTypes];
+        [helper setupApplicationForSuccessfulRegistration];
         [helper setupDefaultSavedParameters];
         
         manager = [PCFCoreDataManager shared];

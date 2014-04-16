@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4E8A80B185BAFDC00A841EE /* Foundation.framework */; };
 		F146CBC418EF2DF600D73783 /* PCFAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F146CBC218EF2DF600D73783 /* PCFAnalytics.h */; };
 		F146CBC518EF2DF600D73783 /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBC318EF2DF600D73783 /* PCFAnalytics.m */; };
 		F146CBC818EF2E3100D73783 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBC618EF2E3100D73783 /* PCFJSONValueTransformer.m */; };
@@ -52,7 +51,6 @@
 
 /* Begin PBXFileReference section */
 		D4E8A808185BAFDC00A841EE /* PCFPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = PCFPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4E8A80B185BAFDC00A841EE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F146CBC218EF2DF600D73783 /* PCFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics.h; sourceTree = "<group>"; };
 		F146CBC318EF2DF600D73783 /* PCFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalytics.m; sourceTree = "<group>"; };
 		F146CBC618EF2E3100D73783 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
@@ -102,7 +100,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4E8A80C185BAFDC00A841EE /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +111,6 @@
 			children = (
 				F18D899018E5D6610084D142 /* PCFPush */,
 				F1BCF2BF18E5CA43004F3684 /* PCFPushSDK */,
-				D4E8A80A185BAFDC00A841EE /* Frameworks */,
 				D4E8A809185BAFDC00A841EE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -125,14 +121,6 @@
 				D4E8A808185BAFDC00A841EE /* PCFPushSDK.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		D4E8A80A185BAFDC00A841EE /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				D4E8A80B185BAFDC00A841EE /* Foundation.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		F146CBC118EF2DF600D73783 /* Analytics */ = {

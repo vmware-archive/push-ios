@@ -10,9 +10,9 @@
 #import "PCFPushDebug.h"
 
 #ifdef DEBUG
-static BOOL inProduction = NO;
+static BOOL _inProduction = NO;
 #else
-static BOOL inProduction = YES;
+static BOOL _inProduction = YES;
 #endif
 
 @implementation PCFPushParameters
@@ -39,31 +39,36 @@ static BOOL inProduction = YES;
 
 - (NSString *)variantUUID
 {
-    return inProduction ? self.productionVariantUUID : self.developmentVariantUUID;
+    return _inProduction ? self.productionVariantUUID : self.developmentVariantUUID;
 }
 
 - (NSString *)releaseSecret
 {
-    return inProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
+    return _inProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
 }
 
-- (BOOL)validate
+- (BOOL)isValid
 {
     BOOL valid = YES;
     if (!self.variantUUID || self.variantUUID.length <= 0) {
         valid = NO;
-        PCFPushError(@"PCFPushParameters failed validation caused by an invalid variantUUID.");
+        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid variantUUID.");
     }
     if (!self.releaseSecret || self.releaseSecret.length <= 0) {
         valid = NO;
-        PCFPushError(@"PCFPushParameters failed validation caused by an invalid releaseSecret.");
+        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid releaseSecret.");
     }
     if (!self.deviceAlias) {
         valid = NO;
-        PCFPushError(@"PCFPushParameters failed validation caused by an invalid deviceAlias.");
+        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid deviceAlias.");
     }
     
     return valid;
+}
+
+- (BOOL)inProduction
+{
+    return _inProduction;
 }
 
 @end

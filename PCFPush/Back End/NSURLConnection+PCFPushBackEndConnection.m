@@ -77,20 +77,15 @@ static CGFloat BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS = 60.0;
 }
 
 + (void)cf_sendAsynchronousRequest:(NSMutableURLRequest *)request
-                        success:(void (^)(NSURLResponse *response, NSData *data))success
-                        failure:(void (^)(NSError *error))failure
+                           success:(void (^)(NSURLResponse *response, NSData *data))success
+                           failure:(void (^)(NSError *error))failure
 {
-    if (!success) {
-        [NSException raise:NSInvalidArgumentException format:@"success block may not be nil"];
-    }
-    
-    if (!failure) {
-        [NSException raise:NSInvalidArgumentException format:@"failure block may not be nil"];
-    }
-    
     if (!request || !request.URL) {
+        PCFPushLog(@"Required URL request is nil.");
         NSError *error = [NSError errorWithDomain:PCFPushErrorDomain code:PCFPushBackEndUnregistrationFailedRequestStatusCode userInfo:nil];
-        failure(error);
+        if (failure) {
+            failure(error);
+        }
         return;
     }
     

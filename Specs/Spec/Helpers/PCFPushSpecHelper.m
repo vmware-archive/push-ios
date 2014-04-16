@@ -66,14 +66,12 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     return self.application;
 }
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (void) setupApplicationForSuccessfulRegistration
 {
-    [self setupApplicationForSuccessfulRegistrationWithNotificationTypes:notificationTypes
-                                                  withNewApnsDeviceToken:self.apnsDeviceToken];
+    [self setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:self.apnsDeviceToken];
 }
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                 withNewApnsDeviceToken:(NSData *)newApnsDeviceToken
+- (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
@@ -84,8 +82,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     }];
 }
 
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                              error:(NSError *)error
+- (void) setupApplicationForFailedRegistrationWithError:(NSError *)error
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
@@ -136,37 +133,29 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - Parameters helpers
 
-- (PCFPushParameters *)setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (PCFPushParameters *)setupParameters
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:notificationTypes
-                                                                       variantUUID:TEST_VARIANT_UUID_1
-                                                                     releaseSecret:TEST_RELEASE_SECRET_1
-                                                                       deviceAlias:TEST_DEVICE_ALIAS_1];
+    PCFPushParameters *params = [PCFPushParameters parameters];
+    params.developmentVariantUUID = TEST_VARIANT_UUID_1;
+    params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
+    params.deviceAlias = TEST_DEVICE_ALIAS_1;
+    self.params = params;
     return self.params;
 }
 
 - (void) changeVariantUUIDInParameters:(NSString*)newVariantUUID
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:newVariantUUID
-                                                                    releaseSecret:self.params.releaseSecret
-                                                                      deviceAlias:self.params.deviceAlias];
+    [self.params setDevelopmentVariantUUID:newVariantUUID];
 }
 
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:self.params.variantUUID
-                                                                    releaseSecret:newReleaseSecret
-                                                                      deviceAlias:self.params.deviceAlias];
+    [self.params setDevelopmentReleaseSecret:newReleaseSecret];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:self.params.variantUUID
-                                                                    releaseSecret:self.params.releaseSecret
-                                                                      deviceAlias:newDeviceAlias];
+    [self.params setDeviceAlias:newDeviceAlias];
 }
 
 - (void)setupDefaultSavedParameters

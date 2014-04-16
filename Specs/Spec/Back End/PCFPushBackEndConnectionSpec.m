@@ -21,7 +21,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
     beforeEach(^{
         helper = [[PCFPushSpecHelper alloc] init];
-        [helper setupParametersWithNotificationTypes:TEST_NOTIFICATION_TYPES];
+        [helper setupParameters];
     });
     
     afterEach(^{
@@ -47,12 +47,12 @@ describe(@"PCFPushBackEndConnection", ^{
               should] raise];
         });
         
-        it(@"should require a success block", ^{
+        it(@"should not require a success block", ^{
             [[theBlock(^{[NSURLConnection pcf_registerWithParameters:helper.params
                                                         deviceToken:helper.apnsDeviceToken
                                                          success:nil
                                                          failure:^(NSError *error) {}];})
-              should] raise];
+              shouldNot] raise];
         });
         
         it(@"should require a failure block", ^{
@@ -60,7 +60,7 @@ describe(@"PCFPushBackEndConnection", ^{
                                                         deviceToken:helper.apnsDeviceToken
                                                          success:^(NSURLResponse *response, NSData *data) {}
                                                          failure:nil];})
-              should] raise];
+              shouldNot] raise];
         });
     });
     
@@ -72,18 +72,18 @@ describe(@"PCFPushBackEndConnection", ^{
               shouldNot] raise];
         });
         
-        it(@"should require a success block", ^{
+        it(@"should not require a success block", ^{
             [[theBlock(^{[NSURLConnection pcf_unregisterDeviceID:@"Fake Device ID"
                                                      success:nil
                                                      failure:^(NSError *error) {}];})
-              should] raise];
+              shouldNot] raise];
         });
         
-        it(@"should require a failure block", ^{
+        it(@"should not require a failure block", ^{
             [[theBlock(^{[NSURLConnection pcf_unregisterDeviceID:@"Fake Device ID"
                                                      success:^(NSURLResponse *response, NSData *data) {}
                                                      failure:nil];})
-              should] raise];
+              shouldNot] raise];
         });
 
     });

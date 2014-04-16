@@ -25,9 +25,6 @@
 		F18D8A1018E5D66D0084D142 /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A0118E5D66D0084D142 /* PCFPushHexUtil.m */; };
 		F18D8A3118EC89DB0084D142 /* PCFAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2D18EC89DB0084D142 /* PCFAnalyticEvent.m */; };
 		F18D8A3218EC89DB0084D142 /* NSObject+PCFPushJsonizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D8A2F18EC89DB0084D142 /* NSObject+PCFPushJsonizable.m */; };
-		F1FDE1A818D7806B009EBE38 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A718D7806B009EBE38 /* Foundation.framework */; };
-		F1FDE1AA18D7806B009EBE38 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */; };
-		F1FDE1AC18D7806B009EBE38 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE1AB18D7806B009EBE38 /* UIKit.framework */; };
 		F1FDE1B218D7806B009EBE38 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1FDE1B018D7806B009EBE38 /* InfoPlist.strings */; };
 		F1FDE1B418D7806B009EBE38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FDE1B318D7806B009EBE38 /* main.m */; };
 		F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FDE1B718D7806B009EBE38 /* AppDelegate.m */; };
@@ -83,9 +80,6 @@
 		F18D8A3018EC89DB0084D142 /* NSObject+PCFPushJsonizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PCFPushJsonizable.h"; sourceTree = "<group>"; };
 		F1E5D1FB18EDAB9C007E8802 /* PCFSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFSortDescriptors.h; sourceTree = "<group>"; };
 		F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1FDE1A718D7806B009EBE38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		F1FDE1AB18D7806B009EBE38 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PushSDKDemo-Info.plist"; sourceTree = "<group>"; };
 		F1FDE1B118D7806B009EBE38 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1FDE1B318D7806B009EBE38 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -114,9 +108,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1FDE1AA18D7806B009EBE38 /* CoreGraphics.framework in Frameworks */,
-				F1FDE1AC18D7806B009EBE38 /* UIKit.framework in Frameworks */,
-				F1FDE1A818D7806B009EBE38 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +230,6 @@
 			children = (
 				F18D89D918E5D66D0084D142 /* PCFPush */,
 				F1FDE1AD18D7806B009EBE38 /* PushSDKDemo */,
-				F1FDE1A618D7806B009EBE38 /* Frameworks */,
 				F1FDE1A518D7806B009EBE38 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -250,16 +240,6 @@
 				F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		F1FDE1A618D7806B009EBE38 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				F1FDE1A718D7806B009EBE38 /* Foundation.framework */,
-				F1FDE1A918D7806B009EBE38 /* CoreGraphics.framework */,
-				F1FDE1AB18D7806B009EBE38 /* UIKit.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		F1FDE1AD18D7806B009EBE38 /* PushSDKDemo */ = {

@@ -36,9 +36,9 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
 // Application helpers
 - (id) setupApplication;
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes withNewApnsDeviceToken:(NSData *)newApnsDeviceToken;
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes error:(NSError *)error;
+- (void) setupApplicationForSuccessfulRegistration;
+- (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken;
+- (void) setupApplicationForFailedRegistrationWithError:(NSError *)error;
 
 // Application Delegate helpers
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
@@ -48,7 +48,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) setupApplicationDelegateToReceiveNotification:(NSDictionary *)userInfo;
 
 // Parameters helpers
-- (PCFPushParameters*) setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes;
+- (PCFPushParameters *)setupParameters;
 - (void) changeVariantUUIDInParameters:(NSString *)newVariantUUID;
 - (void) changeReleaseSecretInParameters:(NSString *)newReleaseSecret;
 - (void) changeDeviceAliasInParameters:(NSString *)newDeviceAlias;

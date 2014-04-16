@@ -10,6 +10,8 @@
 
 @class PCFPushParameters;
 
+#warning - TODO: Complete documentation
+
 /**
  * Primary entry point for the CF Push Client SDK library.
  *
@@ -18,12 +20,7 @@
  */
 @interface PCFPushSDK : NSObject
 
-+ (void)setProductionRegistrationParameters:(PCFPushParameters *)parameters;
-
-+ (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)parameters;
-
-+ (void)setCompletionBlockWithSuccess:(void (^)(void))success
-                              failure:(void (^)(NSError *error))failure;
++ (void)setRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 
 /**
  * Sets the registration parameters of the application for receiving push notifications. If some of the
@@ -31,12 +28,18 @@
  *
  * @param parameters Provides the parameters required for registration.  May not be `nil`.
  *
+ */
++ (void)setRegistrationParameters:(PCFPushParameters *)parameters;
+
+/**
  * @param success block that will be executed if registration finishes successfully. This callback will
  *                be called on the main queue.  May be `nil`.
  *
  * @param failure block that will be executed if registration fails. This callback will be called on the main
  *                queue.  May be `nil`.
  */
++ (void)setCompletionBlockWithSuccess:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure;
 
 
 /**
@@ -49,9 +52,11 @@
  * @param failure block that will be executed if unregistration fails. This callback will be called on the main
  *                queue. May be 'nil'.
  */
-+ (void)unregisterSuccess:(void (^)(void))success
-                  failure:(void (^)(NSError *error))failure;
++ (void)unregisterWithPushServerSuccess:(void (^)(void))success
+                                failure:(void (^)(NSError *error))failure;
 
+
+#warning - move to analytics library
 
 + (BOOL)analyticsEnabled;
 

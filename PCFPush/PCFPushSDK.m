@@ -25,11 +25,12 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 @interface PCFPushSDK ()
 
-@property PCFPushParameters *productionRegistrationParameters;
-@property PCFPushParameters *developmentRegistrationParameters;
+@property UIRemoteNotificationType notificationTypes;
+@property PCFPushParameters *registrationParameters;
 @property PCFPushAppDelegateProxy *appDelegateProxy;
 
-@property (copy) void (^APNSRegistrationSuccess)(NSData *deviceToken);
+@property (copy) void (^successBlock)(void);
+@property (copy) void (^failureBlock)(NSError *error);
 
 @end
 
@@ -67,131 +68,128 @@ static dispatch_once_t _sharedPCFPushSDKToken;
     _sharedPCFPushSDK = pushSDK;
 }
 
-- (void)setProductionRegistrationParameters:(PCFPushParameters *)productionRegistrationParameters
+- (id)init
 {
-    if (_productionRegistrationParameters && [self isRegistered])
-    {
-        _productionRegistrationParameters = productionRegistrationParameters;
-        self.APNSRegistrationSuccess([PCFPushPersistentStorage APNSDeviceToken]);
+    self = [super init];
+    if (self) {
+        self.notificationTypes = (UIRemoteNotificationTypeAlert
+                                  |UIRemoteNotificationTypeBadge
+                                  |UIRemoteNotificationTypeSound);
+        [self swapAppDelegate];
+    }
+    return self;
+}
+
+- (void)swapAppDelegate
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    PCFPushAppDelegate *pushAppDelegate;
+    
+    if (application.delegate == self.appDelegateProxy) {
+        pushAppDelegate = (PCFPushAppDelegate *)[self.appDelegateProxy pushAppDelegate];
         
     } else {
-        _productionRegistrationParameters = productionRegistrationParameters;
+        self.appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
+        
+        @synchronized(application) {
+            pushAppDelegate = [[PCFPushAppDelegate alloc] init];
+            self.appDelegateProxy.originalAppDelegate = application.delegate;
+            self.appDelegateProxy.pushAppDelegate = pushAppDelegate;
+            application.delegate = self.appDelegateProxy;
+        }
+    }
+
+    [pushAppDelegate setRegistrationBlockWithSuccess:^(NSData *deviceToken) {
+        [self APNSRegistrationSuccess:deviceToken];
+    } failure:^(NSError *error) {
+        if (self.failureBlock) {
+            self.failureBlock(error);
+        }
+    }];
+}
+
++ (void)setNotificationTypes:(UIRemoteNotificationType)notificationTypes
+{
+    [[self shared] setNotificationTypes:notificationTypes];
+}
+
++ (void)setRegistrationParameters:(PCFPushParameters *)parameters;
+{
+    if (!parameters) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    }
+
+    PCFPushSDK *pushSDK = [self shared];
+    if (pushSDK.registrationParameters && [self isRegistered]) {
+        pushSDK.registrationParameters = parameters;
+        [pushSDK APNSRegistrationSuccess:[PCFPushPersistentStorage APNSDeviceToken]];
+        
+    } else {
+        pushSDK.registrationParameters = parameters;
     }
 }
 
-- (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)developmentRegistrationParameters
-{
-    if (_developmentRegistrationParameters && [self isRegistered]
-        )
-    {
-        _developmentRegistrationParameters = developmentRegistrationParameters;
-        self.APNSRegistrationSuccess([PCFPushPersistentStorage APNSDeviceToken]);
-        
-    } else {
-        _developmentRegistrationParameters = developmentRegistrationParameters;
-    }
-}
-
-- (BOOL)isRegistered
++ (BOOL)isRegistered
 {
     return [PCFPushPersistentStorage pushServerDeviceID] && [PCFPushPersistentStorage APNSDeviceToken];
 }
 
-#pragma mark - Public Methods
-
-+ (void)setProductionRegistrationParameters:(PCFPushParameters *)parameters
+- (void)APNSRegistrationSuccess:(NSData *)deviceToken
 {
-    if (!parameters) {
-        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    if (!deviceToken) {
+        [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
     }
-    [[PCFPushSDK shared] setProductionRegistrationParameters:parameters];
-}
-
-+ (void)setDevelopmentRegistrationParameters:(PCFPushParameters *)parameters
-{
-    if (!parameters) {
-        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    if (![deviceToken isKindOfClass:[NSData class]]) {
+        [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
     }
     
-    [[PCFPushSDK shared] setDevelopmentRegistrationParameters:parameters];
+    if ([PCFPushSDK updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        [PCFPushSDK sendUpdateRegistrationRequestWithParameters:self.registrationParameters
+                                                    deviceToken:deviceToken
+                                                        success:self.successBlock
+                                                        failure:self.failureBlock];
+        
+    } else if ([PCFPushSDK registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        [PCFPushSDK sendRegisterRequestWithParameters:self.registrationParameters
+                                          deviceToken:deviceToken
+                                              success:self.successBlock
+                                              failure:self.failureBlock];
+        
+    } else if (self.successBlock) {
+        self.successBlock();
+    }
+}
+
++ (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
+    [[self shared] setNotificationTypes:types];
+}
+
+- (void)registerForRemoteNotifications
+{
+    if (self.notificationTypes != UIRemoteNotificationTypeNone) {
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:self.notificationTypes];
+    }
 }
 
 + (void)setCompletionBlockWithSuccess:(void (^)(void))success
                               failure:(void (^)(NSError *error))failure
 {
-    void (^successBlock)(NSData *deviceToken) = ^(NSData *deviceToken) {
-        if (!deviceToken) {
-            [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
-        }
-        if (![deviceToken isKindOfClass:[NSData class]]) {
-            [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
-        }
-        
-        if ([self updateRegistrationRequiredForDeviceToken:deviceToken parameters:parameters]) {
-            [self sendUpdateRegistrationRequestWithParameters:parameters
-                                                  deviceToken:deviceToken
-                                                      success:success
-                                                      failure:failure];
-            
-        } else if ([self registrationRequiredForDeviceToken:deviceToken parameters:parameters]) {
-            [self sendRegisterRequestWithParameters:parameters
-                                        deviceToken:deviceToken
-                                            success:success
-                                            failure:failure];
-            
-        } else if (success) {
-            success();
-        }
-    };
-    
-    UIApplication *application = [UIApplication sharedApplication];
-    PCFPushAppDelegate *pushAppDelegate;
-    
-    if (application.delegate == _appDelegateProxy) {
-        pushAppDelegate = (PCFPushAppDelegate *)[_appDelegateProxy pushAppDelegate];
-        
-    } else {
-        _appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
-        
-        @synchronized(application) {
-            pushAppDelegate = [[PCFPushAppDelegate alloc] init];
-            _appDelegateProxy.originalAppDelegate = application.delegate;
-            _appDelegateProxy.pushAppDelegate = pushAppDelegate;
-            application.delegate = _appDelegateProxy;
-        }
-    }
-    
-    [pushAppDelegate setRegistrationBlockWithSuccess:successBlock failure:failure];
+    PCFPushSDK *pushSDK = [PCFPushSDK shared];
+    pushSDK.successBlock = success;
+    pushSDK.failureBlock = failure;
 }
 
-
-+ (void)setRegistrationParameters:(PCFPushParameters *)parameters
-                          success:(void (^)(void))success
-                          failure:(void (^)(NSError *error))failure;
-{
-    if (!parameters) {
-        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
-    }
-    
-    // If the _registrationParameters, BackEndDeviceID, and APNSDeviceToken
-    // are set then immediately attempt to update parameters on Push Server.
-    if (_registrationParameters &&
-        [PCFPushPersistentStorage pushServerDeviceID] &&
-        [PCFPushPersistentStorage APNSDeviceToken])
-    {
-        successBlock([PCFPushPersistentStorage APNSDeviceToken]);
-    }
-    
-    _registrationParameters = parameters;
-}
-
-+ (void)unregisterSuccess:(void (^)(void))success
-                  failure:(void (^)(NSError *error))failure
++ (void)unregisterWithPushServerSuccess:(void (^)(void))success
+                                failure:(void (^)(NSError *error))failure
 {
     [NSURLConnection pcf_unregisterDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
                                     success:^(NSURLResponse *response, NSData *data) {
                                         [PCFPushPersistentStorage reset];
-                                        success();
+                                        
+                                        if (success) {
+                                            success();
+                                        }
                                     }
                                     failure:failure];
 }
@@ -244,7 +242,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
             return;
         }
         
-        PCFPushCriticalLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
+        PCFPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
         [PCFPushPersistentStorage setAPNSDeviceToken:deviceToken];
         [PCFPushPersistentStorage setPushServerDeviceID:parsedData.deviceUUID];
         [PCFPushPersistentStorage setVariantUUID:parameters.variantUUID];
@@ -270,12 +268,6 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                     deviceToken:deviceToken
                                         success:registrationBlock
                                         failure:failureBlock];
-}
-
-+ (void)registerForRemoteNotifications {
-    if (_registrationParameters.remoteNotificationTypes != UIRemoteNotificationTypeNone) {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:_registrationParameters.remoteNotificationTypes];
-    }
 }
 
 + (BOOL)updateRegistrationRequiredForDeviceToken:(NSData *)deviceToken
@@ -350,13 +342,21 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
+    PCFPushSDK *pushSDK = [self shared];
     
-    if (!_registrationParameters) {
-        PCFPushLog(@"registerWithParameters:success:failure: was not called in application:didFinishLaunchingWithOptions:");
-        return;
+    if (![pushSDK registrationParameters]) {
+        PCFPushParameters *params = [PCFPushParameters defaultParameters];
+        
+        if (!params) {
+            PCFPushLog(@"PCFPush registration parameters not set in application:didFinishLaunchingWithOptions:");
+            return;
+        }
+        [pushSDK setRegistrationParameters:params];
     }
     
-    [self registerForRemoteNotifications];
+    if (pushSDK.registrationParameters.autoRegistrationEnabled) {
+        [pushSDK registerForRemoteNotifications];
+    }
 }
 
 + (void)appWillTerminateNotification:(NSNotification *)notification
