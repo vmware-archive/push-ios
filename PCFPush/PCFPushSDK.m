@@ -58,14 +58,13 @@ static dispatch_once_t _sharedPCFPushSDKToken;
             _sharedPCFPushSDK = [[self alloc] init];
         }
     });
-    
     return _sharedPCFPushSDK;
 }
 
-+ (void)setSharedPushSDK:(PCFPushSDK *)pushSDK
++ (void)resetSharedPushSDK
 {
     _sharedPCFPushSDKToken = 0;
-    _sharedPCFPushSDK = pushSDK;
+    _sharedPCFPushSDK = nil;
 }
 
 - (id)init
@@ -101,6 +100,7 @@ static dispatch_once_t _sharedPCFPushSDKToken;
 
     [pushAppDelegate setRegistrationBlockWithSuccess:^(NSData *deviceToken) {
         [self APNSRegistrationSuccess:deviceToken];
+        
     } failure:^(NSError *error) {
         if (self.failureBlock) {
             self.failureBlock(error);
@@ -134,6 +134,11 @@ static dispatch_once_t _sharedPCFPushSDKToken;
     return [PCFPushPersistentStorage pushServerDeviceID] && [PCFPushPersistentStorage APNSDeviceToken];
 }
 
++ (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
+{
+    [[self shared] setNotificationTypes:types];
+}
+
 - (void)APNSRegistrationSuccess:(NSData *)deviceToken
 {
     if (!deviceToken) {
@@ -158,11 +163,6 @@ static dispatch_once_t _sharedPCFPushSDKToken;
     } else if (self.successBlock) {
         self.successBlock();
     }
-}
-
-+ (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
-{
-    [[self shared] setNotificationTypes:types];
 }
 
 - (void)registerForRemoteNotifications
@@ -342,7 +342,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
-    PCFPushSDK *pushSDK = [self shared];
+    PCFPushSDK *pushSDK = [PCFPushSDK shared];
     
     if (![pushSDK registrationParameters]) {
         PCFPushParameters *params = [PCFPushParameters defaultParameters];
@@ -355,7 +355,10 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     }
     
     if (pushSDK.registrationParameters.autoRegistrationEnabled) {
-        [pushSDK registerForRemoteNotifications];
+        if (pushSDK.notificationTypes != UIRemoteNotificationTypeNone) {
+            [[UIApplication sharedApplication] registerForRemoteNotificationTypes:pushSDK.notificationTypes];
+        }
+//        [pushSDK registerForRemoteNotifications];
     }
 }
 

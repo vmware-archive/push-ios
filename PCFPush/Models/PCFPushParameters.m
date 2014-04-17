@@ -6,14 +6,17 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
+#import <objc/runtime.h>
+
 #import "PCFPushParameters.h"
 #import "PCFPushDebug.h"
 
 #ifdef DEBUG
-static BOOL _inProduction = NO;
+static BOOL kInProduction = NO;
 #else
-static BOOL _inProduction = YES;
+static BOOL kInProduction = YES;
 #endif
+
 
 @implementation PCFPushParameters
 
@@ -34,41 +37,51 @@ static BOOL _inProduction = YES;
 
 + (PCFPushParameters *)parameters
 {
-    return [[self alloc] init];
+    PCFPushParameters *params = [[self alloc] init];
+    params.autoRegistrationEnabled = YES;
+    return params;
 }
 
 - (NSString *)variantUUID
 {
-    return _inProduction ? self.productionVariantUUID : self.developmentVariantUUID;
+    return kInProduction ? self.productionVariantUUID : self.developmentVariantUUID;
 }
 
 - (NSString *)releaseSecret
 {
-    return _inProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
+    return kInProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
 }
 
 - (BOOL)isValid
 {
     BOOL valid = YES;
-    if (!self.variantUUID || self.variantUUID.length <= 0) {
-        valid = NO;
-        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid variantUUID.");
+    
+    NSUInteger outCount, i;
+    objc_property_t *properties = class_copyPropertyList([self class], &outCount);
+    
+    for (i = 0; i < outCount; i++) {
+        objc_property_t property = properties[i];
+        const char *propName = property_getName(property);
+        
+        if (propName) {
+            NSString *propertyName = [NSString stringWithCString:propName encoding:[NSString defaultCStringEncoding]];
+            id value = [self valueForKey:propertyName];
+            
+            if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
+                valid = NO;
+                PCFPushLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
+                break;
+            }
+        }
     }
-    if (!self.releaseSecret || self.releaseSecret.length <= 0) {
-        valid = NO;
-        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid releaseSecret.");
-    }
-    if (!self.deviceAlias) {
-        valid = NO;
-        PCFPushLog(@"PCFPushParameters failed validation caused by an invalid deviceAlias.");
-    }
+    free(properties);
     
     return valid;
 }
 
 - (BOOL)inProduction
 {
-    return _inProduction;
+    return kInProduction;
 }
 
 @end

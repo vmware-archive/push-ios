@@ -123,6 +123,7 @@ describe(@"PCFPushSDK", ^{
             
             for (NSInteger i = 0; i < stringSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
+                
                 [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
                 [PCFPushSDK setRegistrationParameters:helper.params];
                 [PCFPushSDK setCompletionBlockWithSuccess:^{
@@ -141,6 +142,7 @@ describe(@"PCFPushSDK", ^{
     describe(@"successful registration", ^{
         
         beforeEach(^{
+            [PCFPushSDK performSelector:@selector(resetSharedPushSDK)];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
@@ -202,6 +204,8 @@ describe(@"PCFPushSDK", ^{
         __block BOOL expectedResult = NO;
 
         beforeEach(^{
+            [PCFPushSDK performSelector:@selector(resetSharedPushSDK)];
+            
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithError:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];

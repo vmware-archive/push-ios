@@ -139,6 +139,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     params.developmentVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
     params.deviceAlias = TEST_DEVICE_ALIAS_1;
+    params.autoRegistrationEnabled = YES;
     self.params = params;
     return self.params;
 }
