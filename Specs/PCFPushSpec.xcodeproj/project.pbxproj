@@ -52,7 +52,7 @@
 		F1BCF2E018E5CF46004F3684 /* PCFPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E118E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
-		F1BCF2E318E5CF46004F3684 /* PCFPushSDKTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushSDKTest.h; sourceTree = "<group>"; };
+		F1BCF2E318E5CF46004F3684 /* PCFPushClientTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClientTest.h; sourceTree = "<group>"; };
 		F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtilSpec.m; sourceTree = "<group>"; };
 		F1CD947C19004FE80086A590 /* PCFPushParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushParameters-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* PCFPushParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushParameters-Invalid.plist"; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 				F1BCF2E018E5CF46004F3684 /* PCFPushBackEndRegistrationDataTest.h */,
 				F1BCF2E118E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataTest.h */,
 				F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */,
-				F1BCF2E318E5CF46004F3684 /* PCFPushSDKTest.h */,
+				F1BCF2E318E5CF46004F3684 /* PCFPushClientTest.h */,
 				F1319F0918EDE47700852A7F /* PCFAnalytics_TestingHeader.h */,
 				F1319F0A18EDEF1F00852A7F /* PCFAnalyticEvent_TestingHeader.h */,
 			);

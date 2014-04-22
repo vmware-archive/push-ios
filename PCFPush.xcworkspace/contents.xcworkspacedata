@@ -39,15 +39,21 @@
          <FileRef
             location = "group:NSURLConnection+PCFPushBackEndConnection.m">
          </FileRef>
+         <FileRef
+            location = "group:PCFPushURLConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushURLConnection.m">
+         </FileRef>
       </Group>
       <Group
          location = "group:Models"
          name = "Models">
          <FileRef
-            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/PCFPush/Models/PCFCoreDataManager.h">
+            location = "group:PCFCoreDataManager.h">
          </FileRef>
          <FileRef
-            location = "group:/Users/dx123-xl/Documents/workspace/omnia-pushsdk-ios/PCFPush/Models/PCFCoreDataManager.m">
+            location = "group:PCFCoreDataManager.m">
          </FileRef>
          <FileRef
             location = "group:PCFPushParameters.h">
@@ -150,6 +156,12 @@
             location = "group:PCFJSONValueTransformer.m">
          </FileRef>
       </Group>
+      <FileRef
+         location = "group:PCFPushClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFPushClient.m">
+      </FileRef>
    </Group>
    <FileRef
       location = "group:Framework/PCFPushSDK.xcodeproj">

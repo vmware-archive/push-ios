@@ -45,15 +45,20 @@ describe(@"PCFPushRegistrationParameters", ^{
             
             NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFPushParameters class]];
             [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
-                id value = [model valueForKey:propertyName];
-                [model setValue:nil forKey:propertyName];
-                [[theValue([model isValid]) should] beFalse];
                 
-                [model setValue:@"" forKey:propertyName];
-                [[theValue([model isValid]) should] beFalse];
-                
-                [model setValue:value forKey:propertyName];
-                [[theValue([model isValid]) should] beTrue];
+                //Primatives use single character property types.
+                //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
+                if (propertyType.length > 1) {
+                    id value = [model valueForKey:propertyName];
+                    [model setValue:nil forKey:propertyName];
+                    [[theValue([model isValid]) should] beFalse];
+                    
+                    [model setValue:@"" forKey:propertyName];
+                    [[theValue([model isValid]) should] beFalse];
+                    
+                    [model setValue:value forKey:propertyName];
+                    [[theValue([model isValid]) should] beTrue];
+                }
             }];
         });
     });

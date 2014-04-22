@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F114D270190716C00008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D26E190716C00008BE3C /* PCFPushURLConnection.m */; };
+		F114D27B190866280008BE3C /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D27A190866280008BE3C /* PCFPushClient.m */; };
 		F146CBCD18EF2EBA00D73783 /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */; };
 		F146CBD018EF2EC300D73783 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */; };
 		F18D8A0218E5D66D0084D142 /* PCFPushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */; };
@@ -40,6 +42,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F114D26E190716C00008BE3C /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
+		F114D26F190716C00008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
+		F114D279190866280008BE3C /* PCFPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClient.h; sourceTree = "<group>"; };
+		F114D27A190866280008BE3C /* PCFPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushClient.m; sourceTree = "<group>"; };
 		F146CBCB18EF2EBA00D73783 /* PCFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics.h; sourceTree = "<group>"; };
 		F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalytics.m; sourceTree = "<group>"; };
 		F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
@@ -126,6 +132,8 @@
 		F18D89D918E5D66D0084D142 /* PCFPush */ = {
 			isa = PBXGroup;
 			children = (
+				F114D279190866280008BE3C /* PCFPushClient.h */,
+				F114D27A190866280008BE3C /* PCFPushClient.m */,
 				F146CBCA18EF2EBA00D73783 /* Analytics */,
 				F18D89DA18E5D66D0084D142 /* App */,
 				F18D89DF18E5D66D0084D142 /* Back End */,
@@ -155,6 +163,8 @@
 		F18D89DF18E5D66D0084D142 /* Back End */ = {
 			isa = PBXGroup;
 			children = (
+				F114D26E190716C00008BE3C /* PCFPushURLConnection.m */,
+				F114D26F190716C00008BE3C /* PCFPushURLConnection.h */,
 				F18D89E018E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */,
 				F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */,
 			);
@@ -395,8 +405,10 @@
 				F1FDE1F318D78115009EBE38 /* SettingsTableViewController.m in Sources */,
 				F18D8A0A18E5D66D0084D142 /* PCFPushRegistrationResponseData.m in Sources */,
 				F18D8A3118EC89DB0084D142 /* PCFAnalyticEvent.m in Sources */,
+				F114D270190716C00008BE3C /* PCFPushURLConnection.m in Sources */,
 				F18D8A0B18E5D66D0084D142 /* PCFPushSDK.m in Sources */,
 				F18D8A0E18E5D66D0084D142 /* PCFPushErrorUtil.m in Sources */,
+				F114D27B190866280008BE3C /* PCFPushClient.m in Sources */,
 				F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */,
 				F18D8A0D18E5D66D0084D142 /* PCFPushDebug.m in Sources */,
 				F18D8A0318E5D66D0084D142 /* PCFPushAppDelegateProxy.m in Sources */,
@@ -510,13 +522,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Robert Szumlakowski (TAAP59C578)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PushSDKDemo/PushSDKDemo-Prefix.pch";
 				INFOPLIST_FILE = "PushSDKDemo/PushSDKDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8DB32AD9-30D0-4204-91B7-79E8064BCA08";
+				PROVISIONING_PROFILE = "533B50D2-0E76-42C5-AD77-2F2701289078";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -526,13 +538,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Robert Szumlakowski (TAAP59C578)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PushSDKDemo/PushSDKDemo-Prefix.pch";
 				INFOPLIST_FILE = "PushSDKDemo/PushSDKDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "8DB32AD9-30D0-4204-91B7-79E8064BCA08";
+				PROVISIONING_PROFILE = "533B50D2-0E76-42C5-AD77-2F2701289078";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

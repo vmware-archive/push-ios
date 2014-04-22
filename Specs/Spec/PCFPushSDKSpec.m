@@ -8,7 +8,9 @@
 
 #import "Kiwi.h"
 
-#import "PCFPushSDKTest.h"
+#import "PCFPushSDK.h"
+#import "PCFPushClientTest.h"
+#import "PCFPushClient.h"
 #import "PCFPushErrors.h"
 #import "PCFPushSpecHelper.h"
 #import "PCFPushPersistentStorage.h"
@@ -41,6 +43,7 @@ describe(@"PCFPushSDK", ^{
     describe(@"updating registration", ^{
         
         beforeEach(^{
+            [PCFPushClient resetSharedPushClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
@@ -57,7 +60,7 @@ describe(@"PCFPushSDK", ^{
             };
             
             SEL dataSelectors[] = {
-              @selector(setAPNSDeviceToken:),
+                @selector(setAPNSDeviceToken:),
             };
             
             __block NSInteger stringSelectorsCount = sizeof(stringSelectors)/sizeof(stringSelectors[0]);
@@ -109,7 +112,7 @@ describe(@"PCFPushSDK", ^{
             [PCFPushSDK load];
             for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
-
+                
                 [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
                 [PCFPushSDK setRegistrationParameters:helper.params];
                 [PCFPushSDK setCompletionBlockWithSuccess:^{
@@ -117,7 +120,7 @@ describe(@"PCFPushSDK", ^{
                 } failure:^(NSError *error) {
                     fail(@"registration failure block executed");
                 }];
-
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             }
             
@@ -138,11 +141,11 @@ describe(@"PCFPushSDK", ^{
             [[theValue(registerCount) shouldEventually] equal:theValue(0)];
         });
     });
-
+    
     describe(@"successful registration", ^{
         
         beforeEach(^{
-            [PCFPushSDK performSelector:@selector(resetSharedPushSDK)];
+            [PCFPushClient resetSharedPushClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
@@ -182,11 +185,11 @@ describe(@"PCFPushSDK", ^{
             [PCFPushSDK load];
             [PCFPushSDK setRegistrationParameters:helper.params];
             [PCFPushSDK setCompletionBlockWithSuccess:^{
-                                              successBlockExecuted = YES;
-                                          }
-                                          failure:^(NSError *error) {
-                                              fail(@"registration failure block executed");
-                                          }];
+                successBlockExecuted = YES;
+            }
+                                              failure:^(NSError *error) {
+                                                  fail(@"registration failure block executed");
+                                              }];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
@@ -199,12 +202,12 @@ describe(@"PCFPushSDK", ^{
     });
     
     describe(@"failed registration", ^{
-
+        
         __block NSError *testError;
         __block BOOL expectedResult = NO;
-
+        
         beforeEach(^{
-            [PCFPushSDK performSelector:@selector(resetSharedPushSDK)];
+            [PCFPushClient resetSharedPushClient];
             
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithError:testError];
@@ -224,7 +227,7 @@ describe(@"PCFPushSDK", ^{
             
             [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
-
+            
             [PCFPushSDK setRegistrationParameters:helper.params];
             [PCFPushSDK setCompletionBlockWithSuccess:nil
                                               failure:^(NSError *error) {
@@ -255,96 +258,96 @@ describe(@"PCFPushSDK", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(HTTPErrorResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   [[error.domain should] equal:PCFPushErrorDomain];
-                                                   [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationFailedHTTPStatusCode)];
-                                                   wasExpectedResult = YES;
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         [[error.domain should] equal:PCFPushErrorDomain];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationFailedHTTPStatusCode)];
+                                                         wasExpectedResult = YES;
+                                                     }];
         });
-
+        
         
         it(@"should handle a successful response with empty data", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(emptyDataResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   [[error.domain should] equal:PCFPushErrorDomain];
-                                                   [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
-                                                   wasExpectedResult = YES;
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         [[error.domain should] equal:PCFPushErrorDomain];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         wasExpectedResult = YES;
+                                                     }];
         });
         
         it(@"should handle a successful response with nil data", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(nilDataResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   [[error.domain should] equal:PCFPushErrorDomain];
-                                                   [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
-                                                   wasExpectedResult = YES;
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         [[error.domain should] equal:PCFPushErrorDomain];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         wasExpectedResult = YES;
+                                                     }];
         });
         
         it(@"should handle a successful response with zero-length", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(zeroLengthDataResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   [[error.domain should] equal:PCFPushErrorDomain];
-                                                   [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
-                                                   wasExpectedResult = YES;
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         [[error.domain should] equal:PCFPushErrorDomain];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         wasExpectedResult = YES;
+                                                     }];
         });
         
         it(@"should handle a successful response that contains unparseable text", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(unparseableDataResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   [[error shouldNot] beNil];
-                                                   wasExpectedResult = YES;
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         [[error shouldNot] beNil];
+                                                         wasExpectedResult = YES;
+                                                     }];
         });
         
         it(@"should require a device_uuid in the server response", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(missingUUIDResponseRequest:queue:completionHandler:) error:&error];
             
-            [PCFPushSDK sendRegisterRequestWithParameters:helper.params
-                                                   deviceToken:helper.apnsDeviceToken
-                                               success:^{
-                                                   wasExpectedResult = NO;
-                                               }
-                                               failure:^(NSError *error) {
-                                                   wasExpectedResult = YES;
-                                                   [[error.domain should] equal:PCFPushErrorDomain];
-                                                   [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationResponseDataNoDeviceUuid)];
-                                               }];
+            [PCFPushClient sendRegisterRequestWithParameters:helper.params
+                                                 deviceToken:helper.apnsDeviceToken
+                                                     success:^{
+                                                         wasExpectedResult = NO;
+                                                     }
+                                                     failure:^(NSError *error) {
+                                                         wasExpectedResult = YES;
+                                                         [[error.domain should] equal:PCFPushErrorDomain];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationResponseDataNoDeviceUuid)];
+                                                     }];
         });
     });
     
@@ -434,9 +437,9 @@ describe(@"PCFPushSDK", ^{
             
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
         });
-
+        
     });
-
+    
     describe(@"unsuccessful unregistration", ^{
         __block BOOL failureBlockExecuted = NO;
         
@@ -460,7 +463,7 @@ describe(@"PCFPushSDK", ^{
                 
             } failure:^(NSError *error) {
                 failureBlockExecuted = YES;
-
+                
             }];
             
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];

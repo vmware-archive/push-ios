@@ -37,6 +37,11 @@
                BlueprintName = "PCFPushTests"
                ReferencedContainer = "container:PCFPushSpec.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "PCFAnalyticsSpec">
+               </Test>
+            </SkippedTests>
          </TestableReference>
       </Testables>
    </TestAction>

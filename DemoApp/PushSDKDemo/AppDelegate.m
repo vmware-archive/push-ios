@@ -43,7 +43,8 @@
                          parameters.deviceAlias];
     PCFPushLog(message);
     
-    [PCFPushSDK setRegistrationParameters:parameters success:^{
+    [PCFPushSDK setRegistrationParameters:parameters];
+    [PCFPushSDK setCompletionBlockWithSuccess:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         PCFPushLog(@"Application received callback \"registrationSucceeded\".");
         
