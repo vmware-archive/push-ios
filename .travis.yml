@@ -3,6 +3,10 @@ xcode_workspace: PCFPush.xcworkspace
 xcode_scheme: PCFPushTests
 xcode_sdk: iphonesimulator7.0
 
+notifications:
+    webhooks:
+      - http://pulse.pivotallabs.com/projects/ebfc1f38-8ae7-4469-a9d4-c924880e1bda/status
+
 before_install:
   - export LANG=en_US.UTF-8
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
