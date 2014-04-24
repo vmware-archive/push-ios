@@ -14,7 +14,7 @@
 #import "PCFPushErrors.h"
 #import "PCFPushSpecHelper.h"
 #import "PCFPushPersistentStorage.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 
@@ -43,7 +43,7 @@ describe(@"PCFPushSDK", ^{
     describe(@"updating registration", ^{
         
         beforeEach(^{
-            [PCFPushClient resetSharedPushClient];
+            [PCFPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
@@ -145,7 +145,7 @@ describe(@"PCFPushSDK", ^{
     describe(@"successful registration", ^{
         
         beforeEach(^{
-            [PCFPushClient resetSharedPushClient];
+            [PCFPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
@@ -207,7 +207,7 @@ describe(@"PCFPushSDK", ^{
         __block BOOL expectedResult = NO;
         
         beforeEach(^{
-            [PCFPushClient resetSharedPushClient];
+            [PCFPushClient resetSharedClient];
             
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithError:testError];

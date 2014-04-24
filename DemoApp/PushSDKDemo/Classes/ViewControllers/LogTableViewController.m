@@ -7,7 +7,7 @@
 //
 
 #import "LogTableViewController.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushSDK.h"
 #import "PCFPushDebug.h"
 #import "LogItem.h"

@@ -14,11 +14,20 @@
 
 typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
-static NSString *const BACK_END_ANALYTICS_REQUEST_URL = @"analytics";
-
 @implementation NSURLConnection (PCFPushBackEndConnection)
 
-+ (void)pcf_sendAsynchronousRequest:(NSMutableURLRequest *)request
++ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
+                            success:(void (^)(NSURLResponse *response, NSData *data))success
+                            failure:(void (^)(NSError *error))failure
+{
+    [self pcf_sendAsynchronousRequest:request
+                                queue:[NSOperationQueue mainQueue]
+                              success:success
+                              failure:failure];
+}
+
++ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
+                              queue:(NSOperationQueue *)queue
                             success:(void (^)(NSURLResponse *response, NSData *data))success
                             failure:(void (^)(NSError *error))failure
 {
@@ -32,60 +41,14 @@ static NSString *const BACK_END_ANALYTICS_REQUEST_URL = @"analytics";
     }
     
 #warning - Complete GZIP code to compress HTTPBody on POST/PUT
-//    if (request.HTTPBody) {
-//        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-//    }
+    //    if (request.HTTPBody) {
+    //        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
+    //    }
     
     Handler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
     [self sendAsynchronousRequest:request
-                            queue:[NSOperationQueue mainQueue]
+                            queue:queue
                 completionHandler:handler];
-}
-
-#pragma mark - Sync Analytics
-
-+ (void)pcf_syncAnalyicEvents:(NSArray *)events
-                 forDeviceID:(NSString *)deviceID
-                     success:(void (^)(NSURLResponse *response, NSData *data))success
-                     failure:(void (^)(NSError *error))failure
-{
-    if (!events) {
-        PCFPushCriticalLog(@"Analytic events is nil. Unable to sync analytics with server.");
-        return;
-    }
-    
-    if (events.count == 0) {
-        PCFPushCriticalLog(@"Analytic events is empty. Unable to sync analytics with server.");
-        return;
-    }
-    
-    NSMutableURLRequest *request = [self syncAnalyicEventsRequestWithDeviceID:deviceID];
-    NSError *error;
-    NSData *bodyData = [events toJSONData:&error];
-    if (error) {
-        PCFPushCriticalLog(@"Error while converting analytic event to JSON: %@ %@", error, error.userInfo);
-        return;
-    }
-    request.HTTPBody = bodyData;
-    
-    Handler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
-    [self sendAsynchronousRequest:request
-                            queue:[NSOperationQueue currentQueue]
-                completionHandler:handler];
-}
-
-+ (NSMutableURLRequest *)syncAnalyicEventsRequestWithDeviceID:(NSString *)backEndDeviceUUID
-{
-#warning - TODO: Extract analytics to its own library.
-//    if (!backEndDeviceUUID) {
-//        return nil;
-//    }
-//    
-//    NSURL *analyticsURL = [NSURL URLWithString:BACK_END_ANALYTICS_REQUEST_URL relativeToURL:[self pcf_pushBaseURL]];
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:analyticsURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:BACK_END_REGISTRATION_TIMEOUT_IN_SECONDS];
-//    request.HTTPMethod = @"POST";
-//    return request;
-    return nil;
 }
 
 #pragma mark - Utility Methods

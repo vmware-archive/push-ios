@@ -12,8 +12,8 @@
 		F114D27D190958030008BE3C /* PCFPushParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* PCFPushParameters.plist */; };
 		F146CBCD18EF2EBA00D73783 /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */; };
 		F146CBD018EF2EC300D73783 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */; };
-		F18D8A0218E5D66D0084D142 /* PCFPushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */; };
-		F18D8A0318E5D66D0084D142 /* PCFPushAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DE18E5D66D0084D142 /* PCFPushAppDelegateProxy.m */; };
+		F18D8A0218E5D66D0084D142 /* PCFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DC18E5D66D0084D142 /* PCFAppDelegate.m */; };
+		F18D8A0318E5D66D0084D142 /* PCFAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DE18E5D66D0084D142 /* PCFAppDelegateProxy.m */; };
 		F18D8A0418E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */; };
 		F18D8A0618E5D66D0084D142 /* PCFCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E618E5D66D0084D142 /* PCFCoreDataManager.m */; };
 		F18D8A0718E5D66D0084D142 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E818E5D66D0084D142 /* PCFPushParameters.m */; };
@@ -52,10 +52,10 @@
 		F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalytics.m; sourceTree = "<group>"; };
 		F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
 		F146CBCF18EF2EC300D73783 /* PCFJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFJSONValueTransformer.h; sourceTree = "<group>"; };
-		F18D89DB18E5D66D0084D142 /* PCFPushAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushAppDelegate.h; sourceTree = "<group>"; };
-		F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushAppDelegate.m; sourceTree = "<group>"; };
-		F18D89DD18E5D66D0084D142 /* PCFPushAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushAppDelegateProxy.h; sourceTree = "<group>"; };
-		F18D89DE18E5D66D0084D142 /* PCFPushAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushAppDelegateProxy.m; sourceTree = "<group>"; };
+		F18D89DB18E5D66D0084D142 /* PCFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegate.h; sourceTree = "<group>"; };
+		F18D89DC18E5D66D0084D142 /* PCFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAppDelegate.m; sourceTree = "<group>"; };
+		F18D89DD18E5D66D0084D142 /* PCFAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegateProxy.h; sourceTree = "<group>"; };
+		F18D89DE18E5D66D0084D142 /* PCFAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAppDelegateProxy.m; sourceTree = "<group>"; };
 		F18D89E018E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
 		F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
 		F18D89E518E5D66D0084D142 /* PCFCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFCoreDataManager.h; sourceTree = "<group>"; };
@@ -154,10 +154,10 @@
 		F18D89DA18E5D66D0084D142 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				F18D89DB18E5D66D0084D142 /* PCFPushAppDelegate.h */,
-				F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */,
-				F18D89DD18E5D66D0084D142 /* PCFPushAppDelegateProxy.h */,
-				F18D89DE18E5D66D0084D142 /* PCFPushAppDelegateProxy.m */,
+				F18D89DB18E5D66D0084D142 /* PCFAppDelegate.h */,
+				F18D89DC18E5D66D0084D142 /* PCFAppDelegate.m */,
+				F18D89DD18E5D66D0084D142 /* PCFAppDelegateProxy.h */,
+				F18D89DE18E5D66D0084D142 /* PCFAppDelegateProxy.m */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -415,13 +415,13 @@
 				F114D27B190866280008BE3C /* PCFPushClient.m in Sources */,
 				F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */,
 				F18D8A0D18E5D66D0084D142 /* PCFPushDebug.m in Sources */,
-				F18D8A0318E5D66D0084D142 /* PCFPushAppDelegateProxy.m in Sources */,
+				F18D8A0318E5D66D0084D142 /* PCFAppDelegateProxy.m in Sources */,
 				F18D8A0C18E5D66D0084D142 /* PCFPushPersistentStorage.m in Sources */,
 				F18D8A0918E5D66D0084D142 /* PCFPushRegistrationRequestData.m in Sources */,
 				F1FDE1F418D78115009EBE38 /* LogItemCell.m in Sources */,
 				F146CBCD18EF2EBA00D73783 /* PCFAnalytics.m in Sources */,
 				F1FDE1F018D78115009EBE38 /* BackEndMessageRequest.m in Sources */,
-				F18D8A0218E5D66D0084D142 /* PCFPushAppDelegate.m in Sources */,
+				F18D8A0218E5D66D0084D142 /* PCFAppDelegate.m in Sources */,
 				F18D8A0418E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */,
 				F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */,
 				F18D8A1018E5D66D0084D142 /* PCFPushHexUtil.m in Sources */,

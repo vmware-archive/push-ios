@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class PCFPushParameters;
+@class PCFParameters;
 
 @interface Settings : NSObject
 
@@ -23,7 +23,7 @@
 
 + (void)resetToDefaults;
 
-+ (PCFPushParameters *)registrationParameters;
++ (PCFParameters *)registrationParameters;
 + (NSDictionary *)defaults;
 
 @end

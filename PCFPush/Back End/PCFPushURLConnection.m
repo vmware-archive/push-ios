@@ -7,7 +7,7 @@
 //
 
 #import "PCFPushDebug.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushURLConnection.h"
 #import "PCFPushHardwareUtil.h"
 #import "PCFPushRegistrationRequestData.h"
@@ -23,12 +23,12 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 
 + (NSURL *)baseURL
 {
-    PCFPushParameters *params = [[PCFPushClient shared] registrationParameters];
-    if (!params || !params.deviceAPIURL) {
+    PCFParameters *params = [[PCFPushClient shared] registrationParameters];
+    if (!params || !params.pushAPIURL) {
         PCFPushLog(@"PCFPushURLConnection baseURL is nil");
         return nil;
     }
-    return [NSURL URLWithString:params.deviceAPIURL];
+    return [NSURL URLWithString:params.pushAPIURL];
 }
 
 + (void)unregisterDeviceID:(NSString *)deviceID
@@ -42,7 +42,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
                                          failure:failure];
 }
 
-+ (void)registerWithParameters:(PCFPushParameters *)parameters
++ (void)registerWithParameters:(PCFParameters *)parameters
                        deviceToken:(NSData *)deviceToken
                            success:(void (^)(NSURLResponse *response, NSData *data))success
                            failure:(void (^)(NSError *error))failure
@@ -57,7 +57,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
-                                parameters:(PCFPushParameters *)parameters
+                                parameters:(PCFParameters *)parameters
                                deviceToken:(NSData *)deviceToken
                                    success:(void (^)(NSURLResponse *response, NSData *data))success
                                    failure:(void (^)(NSError *error))failure
@@ -75,7 +75,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 
 + (NSMutableURLRequest *)updateRequestForDeviceID:(NSString *)deviceID
                                   APNSDeviceToken:(NSData *)APNSDeviceToken
-                                       parameters:(PCFPushParameters *)parameters
+                                       parameters:(PCFParameters *)parameters
 {
     NSString *relativePath = [[NSString stringWithFormat:@"%@/%@", kRegistrationRequestPath, deviceID] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     return [self requestWithAPNSDeviceToken:APNSDeviceToken
@@ -85,7 +85,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (NSMutableURLRequest *)registerRequestForAPNSDeviceToken:(NSData *)APNSDeviceToken
-                                                parameters:(PCFPushParameters *)parameters
+                                                parameters:(PCFParameters *)parameters
 {
     return [self requestWithAPNSDeviceToken:APNSDeviceToken
                                relativePath:kRegistrationRequestPath
@@ -96,7 +96,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 + (NSMutableURLRequest *)requestWithAPNSDeviceToken:(NSData *)APNSDeviceToken
                                        relativePath:(NSString *)path
                                          HTTPMethod:(NSString *)method
-                                         parameters:(PCFPushParameters *)parameters
+                                         parameters:(PCFParameters *)parameters
 {
     if (!APNSDeviceToken) {
         [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
@@ -116,7 +116,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (NSData *)requestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
-                                      parameters:(PCFPushParameters *)parameters
+                                      parameters:(PCFParameters *)parameters
 {
     NSError *error = nil;
     PCFPushRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
@@ -125,7 +125,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (PCFPushRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
-                                                       parameters:(PCFPushParameters *)parameters
+                                                       parameters:(PCFParameters *)parameters
 {
     static NSString *osVersion = nil;
     if (!osVersion) {

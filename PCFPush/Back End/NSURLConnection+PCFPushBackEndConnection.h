@@ -10,14 +10,13 @@
 
 @interface NSURLConnection (PCFPushBackEndConnection)
 
-+ (void)pcf_sendAsynchronousRequest:(NSMutableURLRequest *)request
++ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
                             success:(void (^)(NSURLResponse *response, NSData *data))success
                             failure:(void (^)(NSError *error))failure;
 
-#pragma mark - Analytics
++ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
+                              queue:(NSOperationQueue *)queue
+                            success:(void (^)(NSURLResponse *response, NSData *data))success
+                            failure:(void (^)(NSError *error))failure;
 
-+ (void)pcf_syncAnalyicEvents:(NSArray *)events
-                  forDeviceID:(NSString *)deviceID
-                      success:(void (^)(NSURLResponse *response, NSData *data))success
-                      failure:(void (^)(NSError *error))failure;
 @end

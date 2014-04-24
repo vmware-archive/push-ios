@@ -1,5 +1,5 @@
 //
-//  PCFPushRegistrationParameters.h
+//  PCFParameters.h
 //  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-21.
@@ -12,10 +12,11 @@
  * Defines the set of parameters used while registering the device for push notifications.
  * Pass to one of the `register` methods in the `PCFPushSDK` class.
  */
-@interface PCFPushParameters : NSObject
+@interface PCFParameters : NSObject
 
 @property (copy) NSString *deviceAlias;
-@property (copy) NSString *deviceAPIURL;
+@property (copy) NSString *pushAPIURL;
+@property (copy) NSString *analyticsAPIURL;
 @property BOOL autoRegistrationEnabled;
 
 @property (copy) NSString *developmentVariantUUID;
@@ -25,23 +26,23 @@
 @property (copy) NSString *productionReleaseSecret;
 
 /**
- * Creates an instance using the values set in the `PCFPushParameters.plist` file.
+ * Creates an instance using the values set in the `PCFParameters.plist` file.
  */
-+ (PCFPushParameters *)defaultParameters;
++ (PCFParameters *)defaultParameters;
 
 /**
  * Creates an instance using the values found in the specified `.plist` file.
  * @param path The path of the specified file.
  */
-+ (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path;
++ (PCFParameters *)parametersWithContentsOfFile:(NSString *)path;
 
 /**
  * Creates an instance with empty values.
  */
-+ (PCFPushParameters *)parameters;
++ (PCFParameters *)parameters;
 
 /**
- * Validate the parameters
+ * Validate all properties are populated
  */
 - (BOOL)isValid;
 

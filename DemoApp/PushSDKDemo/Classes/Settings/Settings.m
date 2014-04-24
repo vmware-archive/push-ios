@@ -7,7 +7,7 @@
 //
 
 #import "Settings.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 
 static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/";
 
@@ -57,10 +57,10 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
     [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
-+ (PCFPushParameters *)registrationParameters
++ (PCFParameters *)registrationParameters
 {
-    PCFPushParameters *params = [PCFPushParameters parameters];
-    [params setDeviceAPIURL:BACK_END_REQUEST_URL];
+    PCFParameters *params = [PCFParameters parameters];
+    [params setPushAPIURL:BACK_END_REQUEST_URL];
     [params setDevelopmentVariantUUID:[Settings variantUUID]];
     [params setDevelopmentReleaseSecret:[Settings releaseSecret]];
     [params setDeviceAlias:[Settings deviceAlias]];

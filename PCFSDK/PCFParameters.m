@@ -1,5 +1,5 @@
 //
-//  PCFPushRegistrationParameters.m
+//  PCFParameters.m
 //  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-21.
@@ -8,7 +8,7 @@
 
 #import <objc/runtime.h>
 
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushDebug.h"
 
 #ifdef DEBUG
@@ -18,16 +18,16 @@ static BOOL kInProduction = YES;
 #endif
 
 
-@implementation PCFPushParameters
+@implementation PCFParameters
 
-+ (PCFPushParameters *)defaultParameters
++ (PCFParameters *)defaultParameters
 {
-    return [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"PCFPushParameters" ofType:@"plist"]];
+    return [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"PCFParameters" ofType:@"plist"]];
 }
 
-+ (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path
++ (PCFParameters *)parametersWithContentsOfFile:(NSString *)path
 {
-    PCFPushParameters *params = [PCFPushParameters parameters];
+    PCFParameters *params = [PCFParameters parameters];
     if (path) {
         NSDictionary *paramsDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
         [params setValuesForKeysWithDictionary:paramsDictionary];
@@ -35,9 +35,9 @@ static BOOL kInProduction = YES;
     return params;
 }
 
-+ (PCFPushParameters *)parameters
++ (PCFParameters *)parameters
 {
-    PCFPushParameters *params = [[self alloc] init];
+    PCFParameters *params = [[self alloc] init];
     params.autoRegistrationEnabled = YES;
     return params;
 }
@@ -69,7 +69,7 @@ static BOOL kInProduction = YES;
             
             if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
                 valid = NO;
-                PCFPushLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
+                PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", propertyName);
                 break;
             }
         }

@@ -2,34 +2,122 @@
 <Workspace
    version = "1.0">
    <Group
-      location = "group:PCFPush"
-      name = "PCFPush">
+      location = "group:PCFSDK"
+      name = "PCFSDK">
       <Group
-         location = "group:Analytics"
-         name = "Analytics">
+         location = "group:Utils"
+         name = "Utils">
          <FileRef
-            location = "group:PCFAnalytics.h">
+            location = "group:PCFJSONValueTransformer.h">
          </FileRef>
          <FileRef
-            location = "group:PCFAnalytics.m">
+            location = "group:PCFJSONValueTransformer.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushDebug.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushDebug.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushErrorUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushErrorUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHardwareUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHardwareUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHexUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPushHexUtil.m">
          </FileRef>
       </Group>
+      <FileRef
+         location = "group:PCFAppDelegateProxy.m">
+      </FileRef>
+      <FileRef
+         location = "group:PCFAppDelegateProxy.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFAppDelegate.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFAppDelegate.m">
+      </FileRef>
+      <FileRef
+         location = "group:PCFParameters.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFParameters.m">
+      </FileRef>
+      <FileRef
+         location = "group:PCFClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFClient.m">
+      </FileRef>
+      <FileRef
+         location = "group:PCFSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFSDK.m">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:PCFAnalytics"
+      name = "PCFAnalytics">
       <Group
          location = "group:App"
          name = "App">
          <FileRef
-            location = "group:PCFPushAppDelegate.h">
+            location = "group:PCFPushAppDelegate+Analytics.h">
          </FileRef>
          <FileRef
-            location = "group:PCFPushAppDelegate.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushAppDelegateProxy.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushAppDelegateProxy.m">
+            location = "group:PCFPushAppDelegate+Analytics.m">
          </FileRef>
       </Group>
+      <Group
+         location = "group:BackEnd"
+         name = "BackEnd">
+         <FileRef
+            location = "group:PCFAnalyticsURLConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFAnalyticsURLConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Models"
+         name = "Models">
+         <FileRef
+            location = "group:PCFAnalyticEvent.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFAnalyticEvent.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFCoreDataManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFCoreDataManager.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:PCFAnalytics.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFAnalytics.m">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:PCFPush"
+      name = "PCFPush">
       <Group
          location = "group:Back End"
          name = "Back End">
@@ -50,18 +138,6 @@
          location = "group:Models"
          name = "Models">
          <FileRef
-            location = "group:PCFCoreDataManager.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFCoreDataManager.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushParameters.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushParameters.m">
-         </FileRef>
-         <FileRef
             location = "group:PCFPushRegistrationData.h">
          </FileRef>
          <FileRef
@@ -78,12 +154,6 @@
          </FileRef>
          <FileRef
             location = "group:PCFPushRegistrationResponseData.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFAnalyticEvent.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFAnalyticEvent.m">
          </FileRef>
          <FileRef
             location = "group:NSObject+PCFPushJsonizable.h">
@@ -120,40 +190,6 @@
          name = "Public Headers">
          <FileRef
             location = "group:PCFPushErrors.h">
-         </FileRef>
-      </Group>
-      <Group
-         location = "group:Util"
-         name = "Util">
-         <FileRef
-            location = "group:PCFPushDebug.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushDebug.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushErrorUtil.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushErrorUtil.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushHardwareUtil.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushHardwareUtil.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushHexUtil.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFPushHexUtil.m">
-         </FileRef>
-         <FileRef
-            location = "group:PCFJSONValueTransformer.h">
-         </FileRef>
-         <FileRef
-            location = "group:PCFJSONValueTransformer.m">
          </FileRef>
       </Group>
       <FileRef

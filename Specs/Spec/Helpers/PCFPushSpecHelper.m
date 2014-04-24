@@ -9,12 +9,12 @@
 #import "Kiwi.h"
 
 #import "PCFPushSpecHelper.h"
-#import "PCFPushAppDelegate.h"
+#import "PCFAppDelegate.h"
 #import "PCFPushSDK.h"
 #import "JRSwizzle.h"
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -75,7 +75,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-            [(PCFPushAppDelegate *)self.applicationDelegate application:self.application
+            [(PCFAppDelegate *)self.applicationDelegate application:self.application
                        didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
@@ -86,7 +86,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
-            [(PCFPushAppDelegate *)self.applicationDelegate application:self.application
+            [(PCFAppDelegate *)self.applicationDelegate application:self.application
                              didFailToRegisterForRemoteNotificationsWithError:error];
         }
         return nil;
@@ -133,9 +133,9 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - Parameters helpers
 
-- (PCFPushParameters *)setupParameters
+- (PCFParameters *)setupParameters
 {
-    PCFPushParameters *params = [PCFPushParameters parameters];
+    PCFParameters *params = [PCFParameters parameters];
     params.developmentVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
     params.deviceAlias = TEST_DEVICE_ALIAS_1;

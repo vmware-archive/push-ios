@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "Settings.h"
 #import "PCFPushDebug.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushSDK.h"
 
 @interface AppDelegate ()
@@ -33,13 +33,13 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     static BOOL usePlist = YES;
-    PCFPushParameters *parameters;
+    PCFParameters *parameters;
     
     if (usePlist) {
-        parameters = [PCFPushParameters defaultParameters];
+        parameters = [PCFParameters defaultParameters];
         
     } else {
-        //PCFPushParameters configured in code
+        //PCFParameters configured in code
         parameters = [Settings registrationParameters];
         NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
                              parameters.variantUUID,

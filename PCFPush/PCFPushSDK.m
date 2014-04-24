@@ -7,9 +7,9 @@
 //
 
 #import "PCFPushURLConnection.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushPersistentStorage.h"
-#import "PCFPushAppDelegateProxy.h"
+#import "PCFAppDelegateProxy.h"
 #import "PCFPushDebug.h"
 #import "PCFPushSDK.h"
 #import "PCFPushClient.h"
@@ -18,24 +18,12 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 @implementation PCFPushSDK
 
-+ (void)load
-{
-    [[NSNotificationCenter defaultCenter] addObserver:[self class]
-                                             selector:@selector(appDidFinishLaunchingNotification:)
-                                                 name:UIApplicationDidFinishLaunchingNotification
-                                               object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:[self class]
-                                             selector:@selector(appWillTerminateNotification:)
-                                                 name:UIApplicationWillTerminateNotification
-                                               object:nil];
-}
-
 + (void)setNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
     [[PCFPushClient shared] setNotificationTypes:notificationTypes];
 }
 
-+ (void)setRegistrationParameters:(PCFPushParameters *)parameters;
++ (void)setRegistrationParameters:(PCFParameters *)parameters;
 {
     if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
@@ -87,18 +75,9 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
-    PCFPushClient *pushClient = [PCFPushClient shared];
+    [super appDidFinishLaunchingNotification:notification];
     
-    if (![pushClient registrationParameters]) {
-        PCFPushParameters *params = [PCFPushParameters defaultParameters];
-        
-        if (!params) {
-            PCFPushLog(@"PCFPush registration parameters not set in application:didFinishLaunchingWithOptions:");
-            return;
-        }
-        [pushClient setRegistrationParameters:params];
-    }
+    PCFPushClient *pushClient = [PCFPushClient shared];
     
     if (pushClient.registrationParameters.autoRegistrationEnabled) {
         [pushClient registerForRemoteNotifications];
@@ -110,14 +89,14 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationWillTerminateNotification object:nil];
     
     UIApplication *application = [UIApplication sharedApplication];
-    if ([application.delegate isKindOfClass:[PCFPushAppDelegateProxy class]]) {
+    if ([application.delegate isKindOfClass:[PCFAppDelegateProxy class]]) {
         @synchronized (application) {
-            PCFPushAppDelegateProxy *proxyDelegate = application.delegate;
+            PCFAppDelegateProxy *proxyDelegate = application.delegate;
             application.delegate = proxyDelegate.originalAppDelegate;
         }
     }
     
-    [PCFPushClient resetSharedPushClient];
+    [PCFPushClient resetSharedClient];
 }
 
 #warning - TODO: Extract into Analytics library

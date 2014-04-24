@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class PCFPushParameters;
+@class PCFParameters;
 
 @interface PCFPushURLConnection : NSObject
 
@@ -16,13 +16,13 @@
                    success:(void (^)(NSURLResponse *response, NSData *data))success
                    failure:(void (^)(NSError *error))failure;
 
-+ (void)registerWithParameters:(PCFPushParameters *)parameters
++ (void)registerWithParameters:(PCFParameters *)parameters
                    deviceToken:(NSData *)deviceToken
                        success:(void (^)(NSURLResponse *response, NSData *data))success
                        failure:(void (^)(NSError *error))failure;
 
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
-                            parameters:(PCFPushParameters *)parameters
+                            parameters:(PCFParameters *)parameters
                            deviceToken:(NSData *)deviceToken
                                success:(void (^)(NSURLResponse *response, NSData *data))success
                                failure:(void (^)(NSError *error))failure;

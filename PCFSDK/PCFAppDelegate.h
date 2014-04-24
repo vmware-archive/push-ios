@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@interface PCFPushAppDelegate : NSObject <UIApplicationDelegate>
+@interface PCFAppDelegate : NSObject <UIApplicationDelegate>
 
 - (void)setRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
                                 failure:(void (^)(NSError *error))failure;

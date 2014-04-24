@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PCFSDK.h"
 
-@class PCFPushParameters;
+@class PCFParameters;
 
 #warning - TODO: Complete documentation
 
@@ -18,18 +19,9 @@
  * Usage: see `README.md`
  *
  */
-@interface PCFPushSDK : NSObject
+@interface PCFPushSDK : PCFSDK
 
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
-
-/**
- * Sets the registration parameters of the application for receiving push notifications. If some of the
- * registration parameters are different then the last successful registration then the device will be re-registered with the new parameters.
- *
- * @param parameters Provides the parameters required for registration.  May not be `nil`.
- *
- */
-+ (void)setRegistrationParameters:(PCFPushParameters *)parameters;
 
 /**
  * @param success block that will be executed if registration finishes successfully. This callback will
@@ -54,12 +46,5 @@
  */
 + (void)unregisterWithPushServerSuccess:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure;
-
-
-#warning - move to analytics library
-
-+ (BOOL)analyticsEnabled;
-
-+ (void)setAnalyticsEnabled:(BOOL)enabled;
 
 @end

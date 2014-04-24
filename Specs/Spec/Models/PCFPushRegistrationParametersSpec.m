@@ -8,10 +8,11 @@
 #import <objc/runtime.h>
 
 #import "Kiwi.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFClassPropertyUtility.h"
 
 static NSString *const TEST_DEVICE_API_URL = @"http://testURL.com";
+static NSString *const TEST_ANALYTICS_URL  = @"http://analyticsURL.com";
 static NSString *const TEST_VARIANT_UUID   = @"SOS-WE-LIKE-IT-SPICY";
 static NSString *const TEST_RELEASE_SECRET = @"Put sweet chili sauce on everything";
 static NSString *const TEST_DEVICE_ALIAS   = @"Extreme spiciness classification";
@@ -20,7 +21,7 @@ SPEC_BEGIN(PCFPushRegistrationParametersSpec)
 
 describe(@"PCFPushRegistrationParameters", ^{
     
-    __block PCFPushParameters *model;
+    __block PCFParameters *model;
 
     afterEach(^{
         model = nil;
@@ -29,9 +30,10 @@ describe(@"PCFPushRegistrationParameters", ^{
     context(@"initializing with bad arguments programatically", ^{
         
         beforeEach(^{
-            model = [PCFPushParameters parameters];
+            model = [PCFParameters parameters];
             [model setDeviceAlias:TEST_DEVICE_ALIAS];
-            [model setDeviceAPIURL:TEST_DEVICE_API_URL];
+            [model setPushAPIURL:TEST_DEVICE_API_URL];
+            [model setAnalyticsAPIURL:TEST_ANALYTICS_URL];
             
             [model setDevelopmentReleaseSecret:TEST_RELEASE_SECRET];
             [model setProductionReleaseSecret:TEST_RELEASE_SECRET];
@@ -43,7 +45,7 @@ describe(@"PCFPushRegistrationParameters", ^{
         it(@"should require all properties to be non-nil and non-empty", ^{
             [[theValue([model isValid]) should] beTrue];
             
-            NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFPushParameters class]];
+            NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFParameters class]];
             [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
                 
                 //Primatives use single character property types.
@@ -66,7 +68,7 @@ describe(@"PCFPushRegistrationParameters", ^{
     context(@"initializing with valid arguments from plist", ^{
         
         beforeEach(^{
-            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFPushParameters-Valid" ofType:@"plist"]];
+            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFParameters-Valid" ofType:@"plist"]];
         });
         
         it(@"should be initialized successfully and valid", ^{
@@ -78,7 +80,7 @@ describe(@"PCFPushRegistrationParameters", ^{
     context(@"initializing with invalid arguments from plist", ^{
        
         beforeEach(^{
-            model = [PCFPushParameters parametersWithContentsOfFile:@"PCFPushParameters-Invalid.plist"];
+            model = [PCFParameters parametersWithContentsOfFile:@"PCFParameters-Invalid.plist"];
         });
         
         it(@"should be initialized successfully and invalid", ^{

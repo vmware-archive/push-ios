@@ -7,20 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PCFClient.h"
 
-@class PCFPushParameters, PCFPushAppDelegateProxy;
+@class PCFAppDelegateProxy;
 
-@interface PCFPushClient : NSObject
+@interface PCFPushClient : PCFClient
 
 @property UIRemoteNotificationType notificationTypes;
-@property PCFPushParameters *registrationParameters;
-@property PCFPushAppDelegateProxy *appDelegateProxy;
 
 @property (copy) void (^successBlock)(void);
 @property (copy) void (^failureBlock)(NSError *error);
-
-+ (instancetype)shared;
-+ (void)resetSharedPushClient;
 
 - (void)APNSRegistrationSuccess:(NSData *)deviceToken;
 - (void)registerForRemoteNotifications;

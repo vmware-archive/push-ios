@@ -10,12 +10,12 @@
 
 @interface PCFPushClient (TestingHeader)
 
-+ (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
++ (void)sendRegisterRequestWithParameters:(PCFParameters *)parameters
                               deviceToken:(NSData *)deviceToken
                                   success:(void (^)(void))successBlock
                                   failure:(void (^)(NSError *error))failureBlock;
 
-+ (void)sendUpdateRegistrationRequestWithParameters:(PCFPushParameters *)parameters
++ (void)sendUpdateRegistrationRequestWithParameters:(PCFParameters *)parameters
                                 deviceToken:(NSData *)deviceToken
                                     success:(void (^)(void))successBlock
                                     failure:(void (^)(NSError *error))failureBlock;

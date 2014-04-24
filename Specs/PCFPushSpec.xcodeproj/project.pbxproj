@@ -18,8 +18,8 @@
 		F1BCF2ED18E5CF46004F3684 /* PCFPushSDKSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DC18E5CF46004F3684 /* PCFPushSDKSpec.m */; };
 		F1BCF2EE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m */; };
 		F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */; };
-		F1CD947D19004FE80086A590 /* PCFPushParameters-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* PCFPushParameters-Valid.plist */; };
-		F1CD94811900666F0086A590 /* PCFPushParameters-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* PCFPushParameters-Invalid.plist */; };
+		F1CD947D19004FE80086A590 /* PCFParameters-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */; };
+		F1CD94811900666F0086A590 /* PCFParameters-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */; };
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
 		F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */; };
 		F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2B118D79A1B009EBE38 /* UIKit.framework */; };
@@ -54,8 +54,8 @@
 		F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E318E5CF46004F3684 /* PCFPushClientTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClientTest.h; sourceTree = "<group>"; };
 		F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtilSpec.m; sourceTree = "<group>"; };
-		F1CD947C19004FE80086A590 /* PCFPushParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushParameters-Valid.plist"; sourceTree = "<group>"; };
-		F1CD94801900666F0086A590 /* PCFPushParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushParameters-Invalid.plist"; sourceTree = "<group>"; };
+		F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFParameters-Valid.plist"; sourceTree = "<group>"; };
+		F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFParameters-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* PCFPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PCFPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E5D1F718ECB3E9007E8802 /* PCFAnalyticsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalyticsSpec.m; sourceTree = "<group>"; };
 		F1E93B4D19006F410038F429 /* PCFClassPropertyUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFClassPropertyUtility.h; sourceTree = "<group>"; };
@@ -170,8 +170,8 @@
 		F1CD947B19004FC80086A590 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F1CD94801900666F0086A590 /* PCFPushParameters-Invalid.plist */,
-				F1CD947C19004FE80086A590 /* PCFPushParameters-Valid.plist */,
+				F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */,
+				F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -269,8 +269,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1CD94811900666F0086A590 /* PCFPushParameters-Invalid.plist in Resources */,
-				F1CD947D19004FE80086A590 /* PCFPushParameters-Valid.plist in Resources */,
+				F1CD94811900666F0086A590 /* PCFParameters-Invalid.plist in Resources */,
+				F1CD947D19004FE80086A590 /* PCFParameters-Valid.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

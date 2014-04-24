@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "PCFPushClient.h"
-#import "PCFPushParameters.h"
-#import "PCFPushAppDelegate.h"
-#import "PCFPushAppDelegateProxy.h"
+#import "PCFParameters.h"
+#import "PCFAppDelegate.h"
+#import "PCFAppDelegateProxy.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushURLConnection.h"
 #import "NSObject+PCFPushJsonizable.h"
@@ -21,26 +21,7 @@
 #import "PCFPushErrorUtil.h"
 #import "PCFPushErrors.h"
 
-static PCFPushClient *_sharedPCFPushClient;
-static dispatch_once_t _sharedPCFPushClientToken;
-
 @implementation PCFPushClient
-
-+ (instancetype)shared
-{
-    dispatch_once(&_sharedPCFPushClientToken, ^{
-        if (!_sharedPCFPushClient) {
-            _sharedPCFPushClient = [[self alloc] init];
-        }
-    });
-    return _sharedPCFPushClient;
-}
-
-+ (void)resetSharedPushClient
-{
-    _sharedPCFPushClientToken = 0;
-    _sharedPCFPushClient = nil;
-}
 
 - (id)init
 {
@@ -57,18 +38,18 @@ static dispatch_once_t _sharedPCFPushClientToken;
 - (void)swapAppDelegate
 {
     UIApplication *application = [UIApplication sharedApplication];
-    PCFPushAppDelegate *pushAppDelegate;
+    PCFAppDelegate *pushAppDelegate;
     
     if (application.delegate == self.appDelegateProxy) {
-        pushAppDelegate = (PCFPushAppDelegate *)[self.appDelegateProxy pushAppDelegate];
+        pushAppDelegate = (PCFAppDelegate *)[self.appDelegateProxy swappedAppDelegate];
         
     } else {
-        self.appDelegateProxy = [[PCFPushAppDelegateProxy alloc] init];
+        self.appDelegateProxy = [[PCFAppDelegateProxy alloc] init];
         
         @synchronized(application) {
-            pushAppDelegate = [[PCFPushAppDelegate alloc] init];
+            pushAppDelegate = [[PCFAppDelegate alloc] init];
             self.appDelegateProxy.originalAppDelegate = application.delegate;
-            self.appDelegateProxy.pushAppDelegate = pushAppDelegate;
+            self.appDelegateProxy.swappedAppDelegate = pushAppDelegate;
             application.delegate = self.appDelegateProxy;
         }
     }
@@ -92,7 +73,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
-+ (RegistrationBlock)registrationBlockWithParameters:(PCFPushParameters *)parameters
++ (RegistrationBlock)registrationBlockWithParameters:(PCFParameters *)parameters
                                          deviceToken:(NSData *)deviceToken
                                              success:(void (^)(void))successBlock
                                              failure:(void (^)(NSError *error))failureBlock
@@ -164,7 +145,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     }
 }
 
-+ (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
++ (void)sendRegisterRequestWithParameters:(PCFParameters *)parameters
                               deviceToken:(NSData *)deviceToken
                                   success:(void (^)(void))successBlock
                                   failure:(void (^)(NSError *error))failureBlock
@@ -180,7 +161,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)updateRegistrationRequiredForDeviceToken:(NSData *)deviceToken
-                                      parameters:(PCFPushParameters *)parameters
+                                      parameters:(PCFParameters *)parameters
 {
     // If not currently registered with the back-end then update registration is not required
     if (![PCFPushPersistentStorage APNSDeviceToken]) {
@@ -199,7 +180,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)registrationRequiredForDeviceToken:(NSData *)deviceToken
-                                parameters:(PCFPushParameters *)parameters
+                                parameters:(PCFParameters *)parameters
 {
     // If not currently registered with the back-end then registration will be required
     if (![PCFPushPersistentStorage pushServerDeviceID]) {
@@ -217,7 +198,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     return NO;
 }
 
-+ (BOOL)localParametersMatchNewParameters:(PCFPushParameters *)parameters
++ (BOOL)localParametersMatchNewParameters:(PCFParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
     if (![parameters.variantUUID isEqualToString:[PCFPushPersistentStorage variantUUID]]) {

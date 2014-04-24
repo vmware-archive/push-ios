@@ -11,7 +11,7 @@
 #import "PCFAnalyticEvent.h"
 #import "PCFCoreDataManager.h"
 #import "PCFPushPersistentStorage.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "PCFAnalyticsURLConnection.h"
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
@@ -189,19 +189,19 @@ static NSTimeInterval lastSendTime;
                 
                 PCFPushLog(@"Sync Analytic Events Started");
                 [requestBatches enumerateObjectsUsingBlock:^(NSArray *batchedEvents, NSUInteger idx, BOOL *stop) {
-                    [NSURLConnection pcf_syncAnalyicEvents:batchedEvents
-                                               forDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
-                                                   success:^(NSURLResponse *response, NSData *data) {
-                                                       if ([(NSHTTPURLResponse *)response statusCode] == 200) {
-                                                           PCFPushLog(@"Events successfully synced.");
-                                                           [[PCFCoreDataManager shared] deleteManagedObjects:batchedEvents];
-                                                       } else {
-                                                           PCFPushLog(@"Events failed to sync.");
-                                                       }
-                                                   }
-                                                   failure:^(NSError *error) {
-                                                       PCFPushLog(@"Events failed to sync.");
-                                                   }];
+                    [PCFAnalyticsURLConnection syncAnalyicEvents:batchedEvents
+                                                     forDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+                                                         success:^(NSURLResponse *response, NSData *data) {
+                                                             if ([(NSHTTPURLResponse *)response statusCode] == 200) {
+                                                                 PCFPushLog(@"Events successfully synced.");
+                                                                 [[PCFCoreDataManager shared] deleteManagedObjects:batchedEvents];
+                                                             } else {
+                                                                 PCFPushLog(@"Events failed to sync.");
+                                                             }
+                                                         }
+                                                         failure:^(NSError *error) {
+                                                             PCFPushLog(@"Events failed to sync.");
+                                                         }];
                 }];
             }
         }];
