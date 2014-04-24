@@ -20,10 +20,6 @@
 
 @implementation AppDelegate
 
-- (void)dealloc {
-    NSLog(@"dealloc");
-}
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[NSUserDefaults standardUserDefaults] registerDefaults:[Settings defaults]];
@@ -36,12 +32,21 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    PCFPushParameters *parameters = [Settings registrationParameters];
-    NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
-                         parameters.variantUUID,
-                         parameters.releaseSecret,
-                         parameters.deviceAlias];
-    PCFPushLog(message);
+    static BOOL usePlist = YES;
+    PCFPushParameters *parameters;
+    
+    if (usePlist) {
+        parameters = [PCFPushParameters defaultParameters];
+        
+    } else {
+        //PCFPushParameters configured in code
+        parameters = [Settings registrationParameters];
+        NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
+                             parameters.variantUUID,
+                             parameters.releaseSecret,
+                             parameters.deviceAlias];
+        PCFPushLog(message);
+    }
     
     [PCFPushSDK setRegistrationParameters:parameters];
     [PCFPushSDK setCompletionBlockWithSuccess:^{

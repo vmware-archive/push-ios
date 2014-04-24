@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F114D270190716C00008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D26E190716C00008BE3C /* PCFPushURLConnection.m */; };
 		F114D27B190866280008BE3C /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D27A190866280008BE3C /* PCFPushClient.m */; };
+		F114D27D190958030008BE3C /* PCFPushParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* PCFPushParameters.plist */; };
 		F146CBCD18EF2EBA00D73783 /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */; };
 		F146CBD018EF2EC300D73783 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */; };
 		F18D8A0218E5D66D0084D142 /* PCFPushAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89DC18E5D66D0084D142 /* PCFPushAppDelegate.m */; };
@@ -46,6 +47,7 @@
 		F114D26F190716C00008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
 		F114D279190866280008BE3C /* PCFPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClient.h; sourceTree = "<group>"; };
 		F114D27A190866280008BE3C /* PCFPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushClient.m; sourceTree = "<group>"; };
+		F114D27C190958030008BE3C /* PCFPushParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PCFPushParameters.plist; sourceTree = "<group>"; };
 		F146CBCB18EF2EBA00D73783 /* PCFAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics.h; sourceTree = "<group>"; };
 		F146CBCC18EF2EBA00D73783 /* PCFAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalytics.m; sourceTree = "<group>"; };
 		F146CBCE18EF2EC300D73783 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 		F1FDE1AE18D7806B009EBE38 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F114D27C190958030008BE3C /* PCFPushParameters.plist */,
 				F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */,
 				F1FDE1B018D7806B009EBE38 /* InfoPlist.strings */,
 				F1FDE1B318D7806B009EBE38 /* main.m */,
@@ -391,6 +394,7 @@
 				F1FDE29E18D795C0009EBE38 /* Main_iPhone.storyboard in Resources */,
 				F1FDE1F518D78115009EBE38 /* LogItemCell.xib in Resources */,
 				F1FDE1C018D7806B009EBE38 /* Images.xcassets in Resources */,
+				F114D27D190958030008BE3C /* PCFPushParameters.plist in Resources */,
 				F1FDE1B218D7806B009EBE38 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

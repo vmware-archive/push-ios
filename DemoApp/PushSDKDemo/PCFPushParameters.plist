@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoRegistrationEnabled</key>
+	<true/>
+	<key>deviceAPIURL</key>
+	<string>http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/</string>
+	<key>deviceAlias</key>
+	<string>Default Device Alias</string>
+	<key>productionReleaseSecret</key>
+	<string>1b1a4163-5ee5-4b69-813b-5530c9fcd395</string>
+	<key>productionVariantUUID</key>
+	<string>288866db-f631-4da2-8508-8385fc9c4880</string>
+	<key>developmentReleaseSecret</key>
+	<string>1b1a4163-5ee5-4b69-813b-5530c9fcd395</string>
+	<key>developmentVariantUUID</key>
+	<string>288866db-f631-4da2-8508-8385fc9c4880</string>
+</dict>
+</plist>

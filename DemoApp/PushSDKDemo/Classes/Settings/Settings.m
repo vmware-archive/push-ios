@@ -9,7 +9,7 @@
 #import "Settings.h"
 #import "PCFPushParameters.h"
 
-static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-staging.one.pepsi.cf-app.com/v1/";
+static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/";
 
 static NSString *const DEFAULT_VARIANT_UUID   = @"288866db-f631-4da2-8508-8385fc9c4880";
 static NSString *const DEFAULT_RELEASE_SECRET = @"1b1a4163-5ee5-4b69-813b-5530c9fcd395";
@@ -67,7 +67,8 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
     return params;
 }
 
-+ (NSDictionary *)defaults {
++ (NSDictionary *)defaults
+{
 	NSDictionary *defaults = @{
 		KEY_VARIANT_UUID : DEFAULT_VARIANT_UUID,
 		KEY_RELEASE_SECRET : DEFAULT_RELEASE_SECRET,
