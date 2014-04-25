@@ -8,7 +8,7 @@
 
 #import "PCFPushURLConnection.h"
 #import "PCFParameters.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Push.h"
 #import "PCFAppDelegateProxy.h"
 #import "PCFPushDebug.h"
 #import "PCFPushSDK.h"
@@ -32,7 +32,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     PCFPushClient *pushClient = [PCFPushClient shared];
     if (pushClient.registrationParameters && [self isRegistered]) {
         pushClient.registrationParameters = parameters;
-        [pushClient APNSRegistrationSuccess:[PCFPushPersistentStorage APNSDeviceToken]];
+        [pushClient APNSRegistrationSuccess:[PCFPersistentStorage APNSDeviceToken]];
         
     } else {
         pushClient.registrationParameters = parameters;
@@ -41,7 +41,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (BOOL)isRegistered
 {
-    return [PCFPushPersistentStorage pushServerDeviceID] && [PCFPushPersistentStorage APNSDeviceToken];
+    return [PCFPersistentStorage serverDeviceID] && [PCFPersistentStorage APNSDeviceToken];
 }
 
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
@@ -60,9 +60,9 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void)unregisterWithPushServerSuccess:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure
 {
-    [PCFPushURLConnection unregisterDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+    [PCFPushURLConnection unregisterDeviceID:[PCFPersistentStorage serverDeviceID]
                                      success:^(NSURLResponse *response, NSData *data) {
-                                         [PCFPushPersistentStorage reset];
+                                         [PCFPersistentStorage resetPushPersistedValues];
                                          
                                          if (success) {
                                              success();
@@ -86,7 +86,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (void)appWillTerminateNotification:(NSNotification *)notification
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationWillTerminateNotification object:nil];
+    [super appWillTerminateNotification:notification];
     
     UIApplication *application = [UIApplication sharedApplication];
     if ([application.delegate isKindOfClass:[PCFAppDelegateProxy class]]) {
@@ -95,20 +95,6 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
             application.delegate = proxyDelegate.originalAppDelegate;
         }
     }
-    
-    [PCFPushClient resetSharedClient];
-}
-
-#warning - TODO: Extract into Analytics library
-
-+ (BOOL)analyticsEnabled
-{
-    return [PCFPushPersistentStorage analyticsEnabled];
-}
-
-+ (void)setAnalyticsEnabled:(BOOL)enabled
-{
-    [PCFPushPersistentStorage setAnalyticsEnabled:enabled];
 }
 
 @end

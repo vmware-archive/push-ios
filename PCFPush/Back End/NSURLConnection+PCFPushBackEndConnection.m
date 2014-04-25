@@ -8,7 +8,7 @@
 
 #import "PCFPushErrors.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
-#import "NSObject+PCFPushJsonizable.h"
+#import "NSObject+PCFJsonizable.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 

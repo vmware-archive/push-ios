@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PCFPushMapping.h"
+#import "PCFMapping.h"
 
-@interface PCFPushRegistrationData : NSObject <PCFPushMapping>
+@interface PCFPushRegistrationData : NSObject <PCFMapping>
 
 @property NSString *variantUUID;
 @property NSString *deviceAlias;

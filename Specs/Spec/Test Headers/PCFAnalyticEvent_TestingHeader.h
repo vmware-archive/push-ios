@@ -22,7 +22,6 @@ const struct EventRemoteAttributes {
     PCF_STRUCT_STRING *eventID;
     PCF_STRUCT_STRING *eventType;
     PCF_STRUCT_STRING *eventTime;
-    PCF_STRUCT_STRING *variantUUID;
     PCF_STRUCT_STRING *eventData;
 } EventRemoteAttributes;
 

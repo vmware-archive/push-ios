@@ -13,7 +13,7 @@
 #import "PCFPushClient.h"
 #import "PCFPushErrors.h"
 #import "PCFPushSpecHelper.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Push.h"
 #import "PCFParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
@@ -113,7 +113,7 @@ describe(@"PCFPushSDK", ^{
             for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
-                [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
+                [PCFPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
                 [PCFPushSDK setRegistrationParameters:helper.params];
                 [PCFPushSDK setCompletionBlockWithSuccess:^{
                     successCount++;
@@ -127,7 +127,7 @@ describe(@"PCFPushSDK", ^{
             for (NSInteger i = 0; i < stringSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
-                [PCFPushPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
+                [PCFPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
                 [PCFPushSDK setRegistrationParameters:helper.params];
                 [PCFPushSDK setCompletionBlockWithSuccess:^{
                     successCount++;
@@ -217,7 +217,7 @@ describe(@"PCFPushSDK", ^{
         
         afterEach(^{
             [[theValue(expectedResult) should] beTrue];
-            [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
+            [[[PCFPersistentStorage APNSDeviceToken] should] beNil];
             expectedResult = NO;
             testError = nil;
         });
@@ -377,18 +377,18 @@ describe(@"PCFPushSDK", ^{
         afterEach(^{
             SEL selectors[] = {
                 @selector(APNSDeviceToken),
-                @selector(pushServerDeviceID),
+                @selector(serverDeviceID),
                 @selector(variantUUID),
                 @selector(deviceAlias),
             };
             
             for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
-                [[[PCFPushPersistentStorage performSelector:selectors[i]] should] beNil];
+                [[[PCFPersistentStorage performSelector:selectors[i]] should] beNil];
             }
         });
         
         it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID and should remove all persisted parameters when unregister is successful", ^{
-            [[[PCFPushPersistentStorage pushServerDeviceID] shouldNot] beNil];
+            [[[PCFPersistentStorage serverDeviceID] shouldNot] beNil];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
             
             [PCFPushSDK unregisterWithPushServerSuccess:^{

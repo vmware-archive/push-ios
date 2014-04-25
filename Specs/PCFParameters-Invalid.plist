@@ -4,7 +4,7 @@
 <dict>
 	<key>autoRegistrationEnabled</key>
 	<true/>
-	<key>deviceAPIURL</key>
+	<key>pushAPIURL</key>
 	<string></string>
 	<key>deviceAlias</key>
 	<string>Extreme spiciness classification</string>
@@ -16,5 +16,7 @@
 	<string>DEV Put sweet chili sauce on everything</string>
 	<key>developmentVariantUUID</key>
 	<string>DEV-SOS-WE-LIKE-IT-SPICY</string>
+	<key>analyticsAPIURL</key>
+	<string></string>
 </dict>
 </plist>

@@ -29,8 +29,13 @@ static BOOL kInProduction = YES;
 {
     PCFParameters *params = [PCFParameters parameters];
     if (path) {
-        NSDictionary *paramsDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
-        [params setValuesForKeysWithDictionary:paramsDictionary];
+        @try {
+            NSDictionary *plistDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
+            [params setValuesForKeysWithDictionary:plistDictionary];
+        } @catch (NSException *exception) {
+            PCFPushLog(@"Exception while populating PCFParameters object. %@", exception);
+            params = nil;
+        }
     }
     return params;
 }

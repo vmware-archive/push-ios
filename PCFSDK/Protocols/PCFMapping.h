@@ -1,5 +1,5 @@
 //
-//  PCFPushMapping.h
+//  PCFMapping.h
 //  
 //
 //  Created by DX123-XL on 2014-03-31.
@@ -13,7 +13,7 @@
 #define PCF_STRUCT_STRING __unsafe_unretained NSString
 #endif
 
-@protocol PCFPushMapping <NSObject>
+@protocol PCFMapping <NSObject>
 
 + (NSDictionary *)localToRemoteMapping;
 

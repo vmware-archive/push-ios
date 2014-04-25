@@ -13,7 +13,7 @@
 #import "PCFPushSDK.h"
 #import "JRSwizzle.h"
 #import "PCFPushDebug.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Push.h"
 #import "PCFParameters.h"
 
 #if !__has_feature(objc_arc)
@@ -42,7 +42,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.application = [UIApplication sharedApplication];
-        [PCFPushPersistentStorage reset];
+        [PCFPersistentStorage resetPushPersistedValues];
     }
     return self;
 }
@@ -161,11 +161,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void)setupDefaultSavedParameters
 {
-    [PCFPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
-    [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
-    [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
-    [PCFPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
-    [PCFPushPersistentStorage setPushServerDeviceID:self.backEndDeviceId];
+    [PCFPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
+    [PCFPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+    [PCFPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+    [PCFPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
+    [PCFPersistentStorage setServerDeviceID:self.backEndDeviceId];
 }
 
 #pragma mark - NSURLConnection Helpers

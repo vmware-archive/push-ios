@@ -5,6 +5,26 @@
       location = "group:PCFSDK"
       name = "PCFSDK">
       <Group
+         location = "group:Categories"
+         name = "Categories">
+         <FileRef
+            location = "group:NSObject+PCFJSONizable.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSObject+PCFJSONizable.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Protocols"
+         name = "Protocols">
+         <FileRef
+            location = "group:PCFMapping.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFSortDescriptors.h">
+         </FileRef>
+      </Group>
+      <Group
          location = "group:Utils"
          name = "Utils">
          <FileRef
@@ -36,6 +56,12 @@
          </FileRef>
          <FileRef
             location = "group:PCFPushHexUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPersistentStorage.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPersistentStorage.m">
          </FileRef>
       </Group>
       <FileRef
@@ -72,6 +98,16 @@
    <Group
       location = "group:PCFAnalytics"
       name = "PCFAnalytics">
+      <Group
+         location = "group:Persistent Storage"
+         name = "Persistent Storage">
+         <FileRef
+            location = "group:PCFPersistentStorage+Analytics.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFPersistentStorage+Analytics.m">
+         </FileRef>
+      </Group>
       <Group
          location = "group:App"
          name = "App">
@@ -114,6 +150,12 @@
       <FileRef
          location = "group:PCFAnalytics.m">
       </FileRef>
+      <FileRef
+         location = "group:PCFSDK+Analytics.h">
+      </FileRef>
+      <FileRef
+         location = "group:PCFSDK+Analytics.m">
+      </FileRef>
    </Group>
    <Group
       location = "group:PCFPush"
@@ -155,12 +197,6 @@
          <FileRef
             location = "group:PCFPushRegistrationResponseData.m">
          </FileRef>
-         <FileRef
-            location = "group:NSObject+PCFPushJsonizable.h">
-         </FileRef>
-         <FileRef
-            location = "group:NSObject+PCFPushJsonizable.m">
-         </FileRef>
       </Group>
       <FileRef
          location = "group:PCFPushSDK.h">
@@ -172,17 +208,10 @@
          location = "group:Persistent Storage"
          name = "Persistent Storage">
          <FileRef
-            location = "group:PCFPushPersistentStorage.h">
+            location = "group:PCFPersistentStorage+Push.h">
          </FileRef>
          <FileRef
-            location = "group:PCFPushPersistentStorage.m">
-         </FileRef>
-      </Group>
-      <Group
-         location = "group:Protocols"
-         name = "Protocols">
-         <FileRef
-            location = "group:PCFPushMapping.h">
+            location = "group:PCFPersistentStorage+Push.m">
          </FileRef>
       </Group>
       <Group

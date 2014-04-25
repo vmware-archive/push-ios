@@ -12,7 +12,7 @@
 #import "PCFPushRegistrationRequestData.h"
 #import "PCFPushBackEndRegistrationDataTest.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
-#import "NSObject+PCFPushJsonizable.h"
+#import "NSObject+PCFJsonizable.h"
 #import "PCFPushErrors.h"
 
 

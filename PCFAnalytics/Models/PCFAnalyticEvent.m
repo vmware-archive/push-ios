@@ -9,7 +9,8 @@
 #import "PCFAnalyticEvent.h"
 #import "PCFPushDebug.h"
 #import "PCFCoreDataManager.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Analytics.h"
+#import "PCFMapping.h"
 
 const struct PushNotificationKeys PushNotificationKeys = {
   .pushID   = @"push_id",
@@ -40,7 +41,6 @@ const struct EventRemoteAttributes {
     PCF_STRUCT_STRING *eventID;
     PCF_STRUCT_STRING *eventType;
     PCF_STRUCT_STRING *eventTime;
-    PCF_STRUCT_STRING *variantUUID;
     PCF_STRUCT_STRING *eventData;
 } EventRemoteAttributes;
 
@@ -48,7 +48,6 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
     .eventID      = @"id",
     .eventType    = @"type",
     .eventTime    = @"time",
-    .variantUUID  = @"variant_uuid",
     .eventData    = @"data",
 };
 
@@ -57,7 +56,6 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 @property (nonatomic, readwrite) NSString *eventType;
 @property (nonatomic, readwrite) NSString *eventID;
 @property (nonatomic, readwrite) NSString *eventTime;
-@property (nonatomic, readwrite) NSString *variantUUID;
 @property (nonatomic, readwrite) NSDictionary *eventData;
 
 + (void)logEventWithType:(NSString *)eventType;
@@ -69,7 +67,6 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 @dynamic eventID;
 @dynamic eventType;
 @dynamic eventTime;
-@dynamic variantUUID;
 @dynamic eventData;
 
 #pragma mark - Event Database Logging
@@ -81,7 +78,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (void)logEventWithType:(NSString *)eventType data:(NSDictionary *)eventData
 {
-    if (![PCFPushPersistentStorage analyticsEnabled]) {
+    if (![PCFPersistentStorage analyticsEnabled]) {
         PCFPushLog(@"Analytics disabled. Event will not be logged.");
         return;
     }
@@ -104,7 +101,6 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
     PCFAnalyticEvent *event = [[self alloc] initWithEntity:description insertIntoManagedObjectContext:context];
     [event setEventID:[[NSUUID UUID] UUIDString]];
     [event setEventType:eventType];
-    [event setVariantUUID:[PCFPushPersistentStorage variantUUID]];
     [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
     
     if (eventData) {
@@ -154,7 +150,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
     return @[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:NO]];
 }
 
-#pragma mark - PCFPushMapping Protocol
+#pragma mark - PCFMapping Protocol
 
 + (NSDictionary *)localToRemoteMapping
 {
@@ -165,7 +161,6 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
                                  PCF_STR_PROP(eventID)     : EventRemoteAttributes.eventID,
                                  PCF_STR_PROP(eventType)   : EventRemoteAttributes.eventType,
                                  PCF_STR_PROP(eventTime)   : EventRemoteAttributes.eventTime,
-                                 PCF_STR_PROP(variantUUID) : EventRemoteAttributes.variantUUID,
                                  PCF_STR_PROP(eventData)   : EventRemoteAttributes.eventData,
                                  };
     });

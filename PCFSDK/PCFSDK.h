@@ -21,10 +21,6 @@
  */
 + (void)setRegistrationParameters:(PCFParameters *)parameters;
 
-+ (BOOL)analyticsEnabled;
-
-+ (void)setAnalyticsEnabled:(BOOL)enabled;
-
 #pragma mark - App lifecycle notification
 
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification;

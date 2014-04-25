@@ -7,26 +7,22 @@
 //
 
 static NSString *const KEY_APNS_DEVICE_TOKEN  = @"PCF_PUSH_APNS_DEVICE_TOKEN";
-static NSString *const KEY_BACK_END_DEVICE_ID = @"PCF_PUSH_BACK_END_DEVICE_ID";
 static NSString *const KEY_VARIANT_UUID       = @"PCF_PUSH_VARIANT_UUID";
 static NSString *const KEY_RELEASE_SECRET     = @"PCF_PUSH_RELEASE_SECRET";
 static NSString *const KEY_DEVICE_ALIAS       = @"PCF_PUSH_DEVICE_ALIAS";
-static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
 
-#import "PCFPushPersistentStorage.h"
-#import "PCFPushRegistrationResponseData.h"
+#import "PCFPersistentStorage+Push.h"
 
-@implementation PCFPushPersistentStorage
+@implementation PCFPersistentStorage (Push)
 
-+ (void)reset
++ (void)resetPushPersistedValues
 {
+    [self reset];
     NSArray *keys = @[
                       KEY_APNS_DEVICE_TOKEN,
-                      KEY_BACK_END_DEVICE_ID,
                       KEY_VARIANT_UUID,
                       KEY_RELEASE_SECRET,
                       KEY_DEVICE_ALIAS,
-                      KEY_ANALYTICS_ENABLED,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -42,16 +38,6 @@ static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
 + (NSData *)APNSDeviceToken
 {
     return [self persistedValueForKey:KEY_APNS_DEVICE_TOKEN];
-}
-
-+ (void)setPushServerDeviceID:(NSString *)backEndDeviceID
-{
-    [self persistValue:backEndDeviceID forKey:KEY_BACK_END_DEVICE_ID];
-}
-
-+ (NSString *)pushServerDeviceID
-{
-    return [self persistedValueForKey:KEY_BACK_END_DEVICE_ID];
 }
 
 + (void)setVariantUUID:(NSString *)variantUUID
@@ -82,39 +68,6 @@ static NSString *const KEY_ANALYTICS_ENABLED  = @"PCF_KEY_ANALYTICS_ENABLED";
 + (NSString *)deviceAlias
 {
     return [self persistedValueForKey:KEY_DEVICE_ALIAS];
-}
-
-+ (void)setAnalyticsEnabled:(BOOL)enabled
-{
-    [self persistValue:[NSNumber numberWithBool:enabled] forKey:KEY_ANALYTICS_ENABLED];
-}
-
-+ (BOOL)analyticsEnabled
-{
-    NSNumber *enabled = [self persistedValueForKey:KEY_ANALYTICS_ENABLED];
-    if (!enabled) {
-        BOOL defaultValue = NO;
-        [self setAnalyticsEnabled:defaultValue];
-        return defaultValue;
-    }
-    return [enabled boolValue];
-}
-
-#pragma mark - Persistence Methods
-
-+ (void)persistValue:(id)value forKey:(id)key
-{
-    [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
-}
-
-+ (id)persistedValueForKey:(id)key
-{
-    return [[NSUserDefaults standardUserDefaults] valueForKey:key];
-}
-
-+ (void)removeObjectForKey:(id)key
-{
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
 }
 
 @end

@@ -1,5 +1,5 @@
 //
-//  NSObject+PCFPushJsonizable.h
+//  NSObject+PCFJsonizable.h
 //  
 //
 //  Created by DX123-XL on 2014-03-31.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (PCFPushJsonizable)
+@interface NSObject (PCFJSONizable)
 
 + (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error;
 - (NSData *)toJSONData:(NSError **)error;

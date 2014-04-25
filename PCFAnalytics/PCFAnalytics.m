@@ -10,7 +10,7 @@
 #import "PCFPushDebug.h"
 #import "PCFAnalyticEvent.h"
 #import "PCFCoreDataManager.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Analytics.h"
 #import "PCFAnalyticsURLConnection.h"
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
@@ -82,20 +82,20 @@ static NSTimeInterval lastSendTime;
 
 + (void)didEnterBackground
 {
-    PCFPushLog(@"Enter Background - Event Logged.");
+    PCFPushLog(@"Enter Background - Logging event.");
     [PCFAnalyticEvent logEventBackground];
     [self sendAnalytics];
 }
 
 + (void)didBecomeActive
 {
-    PCFPushLog(@"Did Become Active - Event Logged.");
+    PCFPushLog(@"Did Become Active - Logging event.");
     [PCFAnalyticEvent logEventAppActive];
 }
 
 + (void)willResignActive
 {
-    PCFPushLog(@"Will Resign Active - Event Logged.");
+    PCFPushLog(@"Will Resign Active - Logging event.");
     [PCFAnalyticEvent logEventAppInactive];
 }
 
@@ -152,7 +152,7 @@ static NSTimeInterval lastSendTime;
 
 + (void)sendAnalytics
 {
-    if (![PCFPushPersistentStorage analyticsEnabled]) {
+    if (![PCFPersistentStorage analyticsEnabled]) {
         PCFPushLog(@"Analytics disabled. Events will not be sent.");
         return;
     }
@@ -190,7 +190,7 @@ static NSTimeInterval lastSendTime;
                 PCFPushLog(@"Sync Analytic Events Started");
                 [requestBatches enumerateObjectsUsingBlock:^(NSArray *batchedEvents, NSUInteger idx, BOOL *stop) {
                     [PCFAnalyticsURLConnection syncAnalyicEvents:batchedEvents
-                                                     forDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+                                                     forDeviceID:[PCFPersistentStorage serverDeviceID]
                                                          success:^(NSURLResponse *response, NSData *data) {
                                                              if ([(NSHTTPURLResponse *)response statusCode] == 200) {
                                                                  PCFPushLog(@"Events successfully synced.");

@@ -4,7 +4,7 @@
 <dict>
 	<key>autoRegistrationEnabled</key>
 	<true/>
-	<key>deviceAPIURL</key>
+	<key>pushAPIURL</key>
 	<string>http://testURL.com</string>
 	<key>deviceAlias</key>
 	<string>Extreme spiciness classification</string>

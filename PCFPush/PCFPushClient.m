@@ -12,9 +12,9 @@
 #import "PCFParameters.h"
 #import "PCFAppDelegate.h"
 #import "PCFAppDelegateProxy.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Push.h"
 #import "PCFPushURLConnection.h"
-#import "NSObject+PCFPushJsonizable.h"
+#import "NSObject+PCFJsonizable.h"
 #import "PCFPushRegistrationResponseData.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
 #import "PCFPushDebug.h"
@@ -101,11 +101,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         }
         
         PCFPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
-        [PCFPushPersistentStorage setAPNSDeviceToken:deviceToken];
-        [PCFPushPersistentStorage setPushServerDeviceID:parsedData.deviceUUID];
-        [PCFPushPersistentStorage setVariantUUID:parameters.variantUUID];
-        [PCFPushPersistentStorage setReleaseSecret:parameters.releaseSecret];
-        [PCFPushPersistentStorage setDeviceAlias:parameters.deviceAlias];
+        [PCFPersistentStorage setAPNSDeviceToken:deviceToken];
+        [PCFPersistentStorage setServerDeviceID:parsedData.deviceUUID];
+        [PCFPersistentStorage setVariantUUID:parameters.variantUUID];
+        [PCFPersistentStorage setReleaseSecret:parameters.releaseSecret];
+        [PCFPersistentStorage setDeviceAlias:parameters.deviceAlias];
         
         successBlock();
     };
@@ -128,7 +128,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                                                             success:self.successBlock
                                                                             failure:self.failureBlock];
         
-        [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPushPersistentStorage pushServerDeviceID]
+        [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPersistentStorage serverDeviceID]
                                                   parameters:self.registrationParameters
                                                  deviceToken:deviceToken
                                                      success:registrationBlock
@@ -164,7 +164,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                       parameters:(PCFParameters *)parameters
 {
     // If not currently registered with the back-end then update registration is not required
-    if (![PCFPushPersistentStorage APNSDeviceToken]) {
+    if (![PCFPersistentStorage APNSDeviceToken]) {
         return NO;
     }
     
@@ -183,7 +183,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                 parameters:(PCFParameters *)parameters
 {
     // If not currently registered with the back-end then registration will be required
-    if (![PCFPushPersistentStorage pushServerDeviceID]) {
+    if (![PCFPersistentStorage serverDeviceID]) {
         return YES;
     }
     
@@ -201,17 +201,17 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 + (BOOL)localParametersMatchNewParameters:(PCFParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
-    if (![parameters.variantUUID isEqualToString:[PCFPushPersistentStorage variantUUID]]) {
+    if (![parameters.variantUUID isEqualToString:[PCFPersistentStorage variantUUID]]) {
         PCFPushLog(@"Parameters specify a different variantUUID. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    if (![parameters.releaseSecret isEqualToString:[PCFPushPersistentStorage releaseSecret]]) {
+    if (![parameters.releaseSecret isEqualToString:[PCFPersistentStorage releaseSecret]]) {
         PCFPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    if (![parameters.deviceAlias isEqualToString:[PCFPushPersistentStorage deviceAlias]]) {
+    if (![parameters.deviceAlias isEqualToString:[PCFPersistentStorage deviceAlias]]) {
         PCFPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
         return NO;
     }
@@ -220,7 +220,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken {
-    if (![deviceToken isEqualToData:[PCFPushPersistentStorage APNSDeviceToken]]) {
+    if (![deviceToken isEqualToData:[PCFPersistentStorage APNSDeviceToken]]) {
         PCFPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
         return NO;
     }

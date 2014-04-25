@@ -26,6 +26,16 @@
                                                object:nil];
 }
 
++ (void)setRegistrationParameters:(PCFParameters *)parameters;
+{
+    if (!parameters) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    }
+    
+    PCFClient *pushClient = [PCFClient shared];
+    pushClient.registrationParameters = parameters;
+}
+
 #pragma mark - Notification Handler Methods
 
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification
@@ -47,15 +57,6 @@
 + (void)appWillTerminateNotification:(NSNotification *)notification
 {
     [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationWillTerminateNotification object:nil];
-    
-    UIApplication *application = [UIApplication sharedApplication];
-    if ([application.delegate isKindOfClass:[PCFAppDelegateProxy class]]) {
-        @synchronized (application) {
-            PCFAppDelegateProxy *proxyDelegate = application.delegate;
-            application.delegate = proxyDelegate.originalAppDelegate;
-        }
-    }
-    
     [PCFClient resetSharedClient];
 }
 

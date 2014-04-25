@@ -8,7 +8,7 @@
 
 #import "PCFAnalyticsURLConnection.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
-#import "NSObject+PCFPushJsonizable.h"
+#import "NSObject+PCFJsonizable.h"
 #import "PCFPushDebug.h"
 #import "PCFParameters.h"
 #import "PCFClient.h"
@@ -51,7 +51,6 @@ static NSTimeInterval kAnalyticsSyncTimeout = 60.0;
 
 + (NSMutableURLRequest *)syncAnalyicEventsRequestWithDeviceID:(NSString *)backEndDeviceUUID
 {
-#warning - TODO: Extract analytics to its own library.
     if (!backEndDeviceUUID) {
         return nil;
     }
