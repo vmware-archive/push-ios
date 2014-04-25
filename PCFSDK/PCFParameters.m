@@ -61,7 +61,7 @@ static BOOL kInProduction = YES;
 {
     BOOL valid = YES;
     
-    NSUInteger outCount, i;
+    unsigned int outCount, i;
     objc_property_t *properties = class_copyPropertyList([self class], &outCount);
     
     for (i = 0; i < outCount; i++) {
