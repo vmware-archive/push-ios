@@ -18,10 +18,13 @@
 		F1BCF2ED18E5CF46004F3684 /* PCFPushSDKSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DC18E5CF46004F3684 /* PCFPushSDKSpec.m */; };
 		F1BCF2EE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m */; };
 		F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */; };
+		F1CD947D19004FE80086A590 /* PCFParameters-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */; };
+		F1CD94811900666F0086A590 /* PCFParameters-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */; };
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
 		F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */; };
 		F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2B118D79A1B009EBE38 /* UIKit.framework */; };
 		F1E5D1F818ECB3E9007E8802 /* PCFAnalyticsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E5D1F718ECB3E9007E8802 /* PCFAnalyticsSpec.m */; };
+		F1E93B4F19006F410038F429 /* PCFClassPropertyUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E93B4E19006F410038F429 /* PCFClassPropertyUtility.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,10 +52,14 @@
 		F1BCF2E018E5CF46004F3684 /* PCFPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E118E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
-		F1BCF2E318E5CF46004F3684 /* PCFPushSDKTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushSDKTest.h; sourceTree = "<group>"; };
+		F1BCF2E318E5CF46004F3684 /* PCFPushClientTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClientTest.h; sourceTree = "<group>"; };
 		F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtilSpec.m; sourceTree = "<group>"; };
+		F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFParameters-Valid.plist"; sourceTree = "<group>"; };
+		F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFParameters-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* PCFPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PCFPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E5D1F718ECB3E9007E8802 /* PCFAnalyticsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalyticsSpec.m; sourceTree = "<group>"; };
+		F1E93B4D19006F410038F429 /* PCFClassPropertyUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFClassPropertyUtility.h; sourceTree = "<group>"; };
+		F1E93B4E19006F410038F429 /* PCFClassPropertyUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFClassPropertyUtility.m; sourceTree = "<group>"; };
 		F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		F1FDE2B118D79A1B009EBE38 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -115,6 +122,8 @@
 				F1BCF2D518E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m */,
 				F1BCF2D618E5CF46004F3684 /* PCFPushSpecHelper.h */,
 				F1BCF2D718E5CF46004F3684 /* PCFPushSpecHelper.m */,
+				F1E93B4D19006F410038F429 /* PCFClassPropertyUtility.h */,
+				F1E93B4E19006F410038F429 /* PCFClassPropertyUtility.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -143,7 +152,7 @@
 				F1BCF2E018E5CF46004F3684 /* PCFPushBackEndRegistrationDataTest.h */,
 				F1BCF2E118E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataTest.h */,
 				F1BCF2E218E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataTest.h */,
-				F1BCF2E318E5CF46004F3684 /* PCFPushSDKTest.h */,
+				F1BCF2E318E5CF46004F3684 /* PCFPushClientTest.h */,
 				F1319F0918EDE47700852A7F /* PCFAnalytics_TestingHeader.h */,
 				F1319F0A18EDEF1F00852A7F /* PCFAnalyticEvent_TestingHeader.h */,
 			);
@@ -158,6 +167,15 @@
 			path = Util;
 			sourceTree = "<group>";
 		};
+		F1CD947B19004FC80086A590 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F1CD94801900666F0086A590 /* PCFParameters-Invalid.plist */,
+				F1CD947C19004FE80086A590 /* PCFParameters-Valid.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		F1E5D1F618ECB3CA007E8802 /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +187,7 @@
 		F1FDE29F18D799E4009EBE38 = {
 			isa = PBXGroup;
 			children = (
+				F1CD947B19004FC80086A590 /* Supporting Files */,
 				F1BCF2CE18E5CF46004F3684 /* Spec */,
 				F1BCF2C718E5CD10004F3684 /* PCFPushTests */,
 				F1FDE2AC18D79A1B009EBE38 /* Frameworks */,
@@ -250,6 +269,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1CD94811900666F0086A590 /* PCFParameters-Invalid.plist in Resources */,
+				F1CD947D19004FE80086A590 /* PCFParameters-Valid.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +318,7 @@
 				F1BCF2ED18E5CF46004F3684 /* PCFPushSDKSpec.m in Sources */,
 				F1BCF2EA18E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m in Sources */,
 				F1BCF2EC18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m in Sources */,
+				F1E93B4F19006F410038F429 /* PCFClassPropertyUtility.m in Sources */,
 				F1E5D1F818ECB3E9007E8802 /* PCFAnalyticsSpec.m in Sources */,
 				F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */,
 				F1BCF2EE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m in Sources */,

@@ -7,9 +7,9 @@
 //
 
 #import <objc/runtime.h>
-#import "PCFPushAppDelegateProxy.h"
+#import "PCFAppDelegateProxy.h"
 
-@implementation PCFPushAppDelegateProxy
+@implementation PCFAppDelegateProxy
 
 - (id)init
 {
@@ -18,7 +18,7 @@
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)sel
 {
-    NSMethodSignature *signature = [self.pushAppDelegate methodSignatureForSelector:sel];
+    NSMethodSignature *signature = [self.swappedAppDelegate methodSignatureForSelector:sel];
     if (signature) {
         return signature;
     }
@@ -29,14 +29,14 @@
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
     if (!self.originalAppDelegate) {
-        [NSException raise:@"PCFNilAppDelegate" format:@"PCFPushAppDelegateProxy originalApplicationDelegate was nil."];
+        [NSException raise:@"PCFNilAppDelegate" format:@"PCFAppDelegateProxy originalApplicationDelegate was nil."];
     }
     
     BOOL forwarded = NO;
     
-    if ([self.pushAppDelegate respondsToSelector:invocation.selector]) {
+    if ([self.swappedAppDelegate respondsToSelector:invocation.selector]) {
         forwarded = YES;
-        [invocation invokeWithTarget:self.pushAppDelegate];
+        [invocation invokeWithTarget:self.swappedAppDelegate];
     }
 
     if ([self.originalAppDelegate respondsToSelector:invocation.selector]) {
@@ -51,7 +51,7 @@
 
 - (BOOL)pushDelegateRespondsToSelector:(SEL)selector
 {
-    return [self.pushAppDelegate respondsToSelector:selector] && ![[NSObject class] instancesRespondToSelector:selector];
+    return [self.swappedAppDelegate respondsToSelector:selector] && ![[NSObject class] instancesRespondToSelector:selector];
 }
 
 - (BOOL)respondsToSelector:(SEL)sel

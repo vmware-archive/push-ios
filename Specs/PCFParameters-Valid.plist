@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoRegistrationEnabled</key>
+	<true/>
+	<key>pushAPIURL</key>
+	<string>http://testURL.com</string>
+	<key>deviceAlias</key>
+	<string>Extreme spiciness classification</string>
+	<key>productionReleaseSecret</key>
+	<string>PROD Put sweet chili sauce on everything</string>
+	<key>productionVariantUUID</key>
+	<string>PROD-SOS-WE-LIKE-IT-SPICY</string>
+	<key>developmentReleaseSecret</key>
+	<string>DEV Put sweet chili sauce on everything</string>
+	<key>analyticsAPIURL</key>
+	<string>http://analyticsURL.com</string>
+	<key>developmentVariantUUID</key>
+	<string>DEV-SOS-WE-LIKE-IT-SPICY</string>
+</dict>
+</plist>

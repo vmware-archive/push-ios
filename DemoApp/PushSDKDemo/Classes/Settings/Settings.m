@@ -7,7 +7,9 @@
 //
 
 #import "Settings.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
+
+static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/";
 
 static NSString *const DEFAULT_VARIANT_UUID   = @"288866db-f631-4da2-8508-8385fc9c4880";
 static NSString *const DEFAULT_RELEASE_SECRET = @"1b1a4163-5ee5-4b69-813b-5530c9fcd395";
@@ -19,9 +21,8 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 
 @implementation Settings
 
-+ (NSString *)variantUUID
-{
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_VARIANT_UUID];
++ (NSString *)variantUUID {
+  return [[NSUserDefaults standardUserDefaults] stringForKey:KEY_VARIANT_UUID];
 }
 
 + (void)setVariantUUID:(NSString *)variantUUID
@@ -56,21 +57,24 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
     [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
-+ (PCFPushParameters *)registrationParameters
++ (PCFParameters *)registrationParameters
 {
-    return [PCFPushParameters parametersWithNotificationTypes:UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeSound|UIRemoteNotificationTypeAlert
-                                                  variantUUID:[Settings variantUUID]
-                                                releaseSecret:[Settings releaseSecret]
-                                                  deviceAlias:[Settings deviceAlias]];
+    PCFParameters *params = [PCFParameters parameters];
+    [params setPushAPIURL:BACK_END_REQUEST_URL];
+    [params setDevelopmentVariantUUID:[Settings variantUUID]];
+    [params setDevelopmentReleaseSecret:[Settings releaseSecret]];
+    [params setDeviceAlias:[Settings deviceAlias]];
+    return params;
 }
 
 + (NSDictionary *)defaults
 {
-    return @{
-             KEY_VARIANT_UUID : DEFAULT_VARIANT_UUID,
-             KEY_RELEASE_SECRET : DEFAULT_RELEASE_SECRET,
-             KEY_DEVICE_ALIAS : DEFAULT_DEVICE_ALIAS,
-             };
+	NSDictionary *defaults = @{
+		KEY_VARIANT_UUID : DEFAULT_VARIANT_UUID,
+		KEY_RELEASE_SECRET : DEFAULT_RELEASE_SECRET,
+		KEY_DEVICE_ALIAS : DEFAULT_DEVICE_ALIAS,
+	};
+	return defaults;
 }
 
 @end

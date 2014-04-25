@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "Settings.h"
 #import "PCFPushDebug.h"
-#import "PCFPushParameters.h"
+#import "PCFParameters.h"
 #import "PCFPushSDK.h"
 
 @interface AppDelegate ()
@@ -19,10 +19,6 @@
 @end
 
 @implementation AppDelegate
-
-- (void)dealloc {
-    NSLog(@"dealloc");
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -36,14 +32,24 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
-    PCFPushParameters *parameters = [Settings registrationParameters];
-    NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
-                         parameters.variantUUID,
-                         parameters.releaseSecret,
-                         parameters.deviceAlias];
-    PCFPushLog(message);
+    static BOOL usePlist = YES;
+    PCFParameters *parameters;
     
-    [PCFPushSDK setRegistrationParameters:parameters success:^{
+    if (usePlist) {
+        parameters = [PCFParameters defaultParameters];
+        
+    } else {
+        //PCFParameters configured in code
+        parameters = [Settings registrationParameters];
+        NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
+                             parameters.variantUUID,
+                             parameters.releaseSecret,
+                             parameters.deviceAlias];
+        PCFPushLog(message);
+    }
+    
+    [PCFPushSDK setRegistrationParameters:parameters];
+    [PCFPushSDK setCompletionBlockWithSuccess:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         PCFPushLog(@"Application received callback \"registrationSucceeded\".");
         

@@ -100,7 +100,6 @@ static dispatch_once_t onceToken;
     NSAttributeDescription *eventIDDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventID)) type:NSStringAttributeType optional:true];
     NSAttributeDescription *eventTypeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true];
     NSAttributeDescription *eventTimeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *variantUUIDDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(variantUUID)) type:NSStringAttributeType optional:true];
     NSAttributeDescription *eventDataDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventData)) type:NSTransformableAttributeType optional:true];
     [eventDataDescription setValueTransformerName:NSStringFromClass([PCFJSONValueTransformer class])];
     
@@ -108,7 +107,6 @@ static dispatch_once_t onceToken;
                                          eventIDDescription,
                                          eventTypeDescription,
                                          eventTimeDescription,
-                                         variantUUIDDescription,
                                          eventDataDescription,
                                          ]];
     

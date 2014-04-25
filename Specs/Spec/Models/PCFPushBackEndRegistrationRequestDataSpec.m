@@ -9,7 +9,7 @@
 #import "Kiwi.h"
 
 #import "PCFPushBackEndRegistrationRequestDataTest.h"
-#import "NSObject+PCFPushJsonizable.h"
+#import "NSObject+PCFJsonizable.h"
 #import "PCFPushErrors.h"
 
 SPEC_BEGIN(PCFPushBackEndRegistrationRequestDataSpec)

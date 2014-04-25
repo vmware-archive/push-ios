@@ -7,7 +7,7 @@
 //
 
 #import <CoreData/CoreData.h>
-#import "PCFPushMapping.h"
+#import "PCFMapping.h"
 #import "PCFSortDescriptors.h"
 
 const struct PushNotificationKeys {
@@ -15,12 +15,11 @@ const struct PushNotificationKeys {
     PCF_STRUCT_STRING *appState;
 } PushNotificationKeys;
 
-@interface PCFAnalyticEvent : NSManagedObject <PCFPushMapping, PCFSortDescriptors>
+@interface PCFAnalyticEvent : NSManagedObject <PCFMapping, PCFSortDescriptors>
 
 @property (nonatomic, readonly) NSString *eventType;
 @property (nonatomic, readonly) NSString *eventID;
 @property (nonatomic, readonly) NSString *eventTime;
-@property (nonatomic, readonly) NSString *variantUUID;
 @property (nonatomic, readonly) NSDictionary *eventData;
 
 + (void)logEventInitialized;

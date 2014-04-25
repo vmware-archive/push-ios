@@ -1,18 +1,18 @@
 //
-//  NSObject+PCFPushJsonizable.m
+//  NSObject+PCFJsonizable.m
 //  
 //
 //  Created by DX123-XL on 2014-03-31.
 //
 //
 
-#import "NSObject+PCFPushJsonizable.h"
-#import "PCFPushMapping.h"
+#import "NSObject+PCFJsonizable.h"
+#import "PCFMapping.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrors.h"
 
-@implementation NSObject (PCFPushJsonizable)
+@implementation NSObject (PCFJSONizable)
 
 - (id)toFoundationType
 {
@@ -20,7 +20,7 @@
     if ([self isKindOfClass:[NSDictionary class]]) {
         foundationType = self;
         
-    } else if ([self conformsToProtocol:@protocol(PCFPushMapping)]) {
+    } else if ([self conformsToProtocol:@protocol(PCFMapping)]) {
         NSDictionary *mapping = [self.class localToRemoteMapping];
         foundationType = [NSMutableDictionary dictionaryWithCapacity:mapping.allKeys.count];
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
@@ -60,7 +60,7 @@
 {
     id result;
     
-    if ([self conformsToProtocol:@protocol(PCFPushMapping)]) {
+    if ([self conformsToProtocol:@protocol(PCFMapping)]) {
         NSDictionary *mapping = [self.class localToRemoteMapping];
         result = [[self alloc] init];
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {

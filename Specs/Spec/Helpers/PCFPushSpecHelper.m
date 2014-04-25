@@ -9,12 +9,12 @@
 #import "Kiwi.h"
 
 #import "PCFPushSpecHelper.h"
-#import "PCFPushAppDelegate.h"
+#import "PCFAppDelegate.h"
 #import "PCFPushSDK.h"
 #import "JRSwizzle.h"
 #import "PCFPushDebug.h"
-#import "PCFPushPersistentStorage.h"
-#import "PCFPushParameters.h"
+#import "PCFPersistentStorage+Push.h"
+#import "PCFParameters.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -42,7 +42,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.application = [UIApplication sharedApplication];
-        [PCFPushPersistentStorage reset];
+        [PCFPersistentStorage resetPushPersistedValues];
     }
     return self;
 }
@@ -66,30 +66,27 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     return self.application;
 }
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (void) setupApplicationForSuccessfulRegistration
 {
-    [self setupApplicationForSuccessfulRegistrationWithNotificationTypes:notificationTypes
-                                                  withNewApnsDeviceToken:self.apnsDeviceToken];
+    [self setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:self.apnsDeviceToken];
 }
 
-- (void) setupApplicationForSuccessfulRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                 withNewApnsDeviceToken:(NSData *)newApnsDeviceToken
+- (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-            [(PCFPushAppDelegate *)self.applicationDelegate application:self.application
+            [(PCFAppDelegate *)self.applicationDelegate application:self.application
                        didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
     }];
 }
 
-- (void) setupApplicationForFailedRegistrationWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
-                                                              error:(NSError *)error
+- (void) setupApplicationForFailedRegistrationWithError:(NSError *)error
 {
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
-            [(PCFPushAppDelegate *)self.applicationDelegate application:self.application
+            [(PCFAppDelegate *)self.applicationDelegate application:self.application
                              didFailToRegisterForRemoteNotificationsWithError:error];
         }
         return nil;
@@ -136,46 +133,39 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - Parameters helpers
 
-- (PCFPushParameters *)setupParametersWithNotificationTypes:(UIRemoteNotificationType)notificationTypes
+- (PCFParameters *)setupParameters
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:notificationTypes
-                                                                       variantUUID:TEST_VARIANT_UUID_1
-                                                                     releaseSecret:TEST_RELEASE_SECRET_1
-                                                                       deviceAlias:TEST_DEVICE_ALIAS_1];
+    PCFParameters *params = [PCFParameters parameters];
+    params.developmentVariantUUID = TEST_VARIANT_UUID_1;
+    params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
+    params.deviceAlias = TEST_DEVICE_ALIAS_1;
+    params.autoRegistrationEnabled = YES;
+    self.params = params;
     return self.params;
 }
 
 - (void) changeVariantUUIDInParameters:(NSString*)newVariantUUID
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:newVariantUUID
-                                                                    releaseSecret:self.params.releaseSecret
-                                                                      deviceAlias:self.params.deviceAlias];
+    [self.params setDevelopmentVariantUUID:newVariantUUID];
 }
 
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:self.params.variantUUID
-                                                                    releaseSecret:newReleaseSecret
-                                                                      deviceAlias:self.params.deviceAlias];
+    [self.params setDevelopmentReleaseSecret:newReleaseSecret];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
 {
-    self.params = [PCFPushParameters parametersWithNotificationTypes:self.params.remoteNotificationTypes
-                                                                      variantUUID:self.params.variantUUID
-                                                                    releaseSecret:self.params.releaseSecret
-                                                                      deviceAlias:newDeviceAlias];
+    [self.params setDeviceAlias:newDeviceAlias];
 }
 
 - (void)setupDefaultSavedParameters
 {
-    [PCFPushPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
-    [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
-    [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
-    [PCFPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
-    [PCFPushPersistentStorage setPushServerDeviceID:self.backEndDeviceId];
+    [PCFPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
+    [PCFPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+    [PCFPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+    [PCFPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
+    [PCFPersistentStorage setServerDeviceID:self.backEndDeviceId];
 }
 
 #pragma mark - NSURLConnection Helpers

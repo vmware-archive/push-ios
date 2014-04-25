@@ -6,19 +6,17 @@
 //
 //
 
-#import "PCFPushAppDelegate.h"
-#import "PCFAnalytics.h"
+#import "PCFAppDelegate.h"
 #import "PCFPushDebug.h"
 
-@interface PCFPushAppDelegate ()
+@interface PCFAppDelegate ()
 
-@property NSObject<UIApplicationDelegate> *originalApplicationDelegate;
 @property (copy) void (^success)(NSData *deviceToken);
 @property (copy) void (^failure)(NSError *error);
 
 @end
 
-@implementation PCFPushAppDelegate
+@implementation PCFAppDelegate
 
 - (void)setRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
                                 failure:(void (^)(NSError *error))failure
@@ -47,18 +45,6 @@
     if (self.failure) {
         self.failure(error);
     }
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    PCFPushLog(@"Received remote notification: %@", userInfo);
-    [PCFAnalytics logApplication:application didReceiveRemoteNotification:userInfo];
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    PCFPushLog(@"Received remote notification: %@", userInfo);
-    [PCFAnalytics logApplication:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
 }
 
 @end

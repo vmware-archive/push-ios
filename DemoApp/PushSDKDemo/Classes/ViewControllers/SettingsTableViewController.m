@@ -7,7 +7,7 @@
 //
 
 #import "SettingsTableViewController.h"
-#import "PCFPushPersistentStorage.h"
+#import "PCFPersistentStorage+Push.h"
 #import "Settings.h"
 
 @implementation SettingsTableViewController
@@ -41,7 +41,7 @@
 
 - (IBAction)clearRegistrationPressed:(id)sender
 {
-    [PCFPushPersistentStorage reset];
+    [PCFPersistentStorage resetPushPersistedValues];
     [self showAlert:@"Registration cleared."];
 }
 

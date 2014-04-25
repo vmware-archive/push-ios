@@ -5,14 +5,15 @@
 //  Created by Rob Szumlakowski on 2014-02-14.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
+#import <objc/runtime.h>
 
 #import "Kiwi.h"
+#import "PCFParameters.h"
+#import "PCFClassPropertyUtility.h"
 
-#import "PCFPushParameters.h"
-
-static NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
-
-static NSString *const TEST_variant_uuid   = @"SOS-WE-LIKE-IT-SPICY";
+static NSString *const TEST_DEVICE_API_URL = @"http://testURL.com";
+static NSString *const TEST_ANALYTICS_URL  = @"http://analyticsURL.com";
+static NSString *const TEST_VARIANT_UUID   = @"SOS-WE-LIKE-IT-SPICY";
 static NSString *const TEST_RELEASE_SECRET = @"Put sweet chili sauce on everything";
 static NSString *const TEST_DEVICE_ALIAS   = @"Extreme spiciness classification";
 
@@ -20,77 +21,71 @@ SPEC_BEGIN(PCFPushRegistrationParametersSpec)
 
 describe(@"PCFPushRegistrationParameters", ^{
     
-    __block PCFPushParameters *model;
+    __block PCFParameters *model;
 
     afterEach(^{
         model = nil;
     });
     
-    context(@"initializing with bad arguments", ^{
+    context(@"initializing with bad arguments programatically", ^{
         
-        afterEach(^{
-            [[model should] beNil];
+        beforeEach(^{
+            model = [PCFParameters parameters];
+            [model setDeviceAlias:TEST_DEVICE_ALIAS];
+            [model setPushAPIURL:TEST_DEVICE_API_URL];
+            [model setAnalyticsAPIURL:TEST_ANALYTICS_URL];
+            
+            [model setDevelopmentReleaseSecret:TEST_RELEASE_SECRET];
+            [model setProductionReleaseSecret:TEST_RELEASE_SECRET];
+            
+            [model setDevelopmentVariantUUID:TEST_VARIANT_UUID];
+            [model setProductionVariantUUID:TEST_VARIANT_UUID];
         });
         
-        it(@"should require a non-nil releaseUuid", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:nil releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
-              should] raise];
-        });
-        
-        it(@"should require a non-empty releaseUuid", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:@"" releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];})
-              should] raise];
-        });
-        
-        it(@"should require a non-nil releaseSecret", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:nil deviceAlias:TEST_DEVICE_ALIAS];})
-              should] raise];
-        });
-        
-        it(@"should require a non-empty releaseSecret", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:@"" deviceAlias:TEST_DEVICE_ALIAS];})
-              should] raise];
-        });
-        
-        it(@"should require a non-nil deviceAlias", ^{
-            [[theBlock(^{model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:nil];})
-              should] raise];
+        it(@"should require all properties to be non-nil and non-empty", ^{
+            [[theValue([model isValid]) should] beTrue];
+            
+            NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFParameters class]];
+            [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
+                
+                //Primatives use single character property types.
+                //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
+                if (propertyType.length > 1) {
+                    id value = [model valueForKey:propertyName];
+                    [model setValue:nil forKey:propertyName];
+                    [[theValue([model isValid]) should] beFalse];
+                    
+                    [model setValue:@"" forKey:propertyName];
+                    [[theValue([model isValid]) should] beFalse];
+                    
+                    [model setValue:value forKey:propertyName];
+                    [[theValue([model isValid]) should] beTrue];
+                }
+            }];
         });
     });
     
-    context(@"initializing with valid arguments (empty device alias)", ^{
+    context(@"initializing with valid arguments from plist", ^{
         
         beforeEach(^{
-            model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:@""];
+            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFParameters-Valid" ofType:@"plist"]];
         });
         
-        it(@"should be initialized successfully", ^{
+        it(@"should be initialized successfully and valid", ^{
             [[model shouldNot] beNil];
-        });
-        
-        it(@"should retain its arguments as properties", ^{
-            [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
-            [[model.variantUUID should] equal:TEST_variant_uuid];
-            [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
-            [[model.deviceAlias should] beEmpty];
+            [[theValue([model isValid]) should] beTrue];
         });
     });
 
-    context(@"initializing with valid arguments (non-nil device alias)", ^{
+    context(@"initializing with invalid arguments from plist", ^{
        
         beforeEach(^{
-            model = [PCFPushParameters parametersWithNotificationTypes:TEST_NOTIFICATION_TYPES variantUUID:TEST_variant_uuid releaseSecret:TEST_RELEASE_SECRET deviceAlias:TEST_DEVICE_ALIAS];
+            model = [PCFParameters parametersWithContentsOfFile:@"PCFParameters-Invalid.plist"];
         });
         
-        it(@"should be initialized successfully", ^{
+        it(@"should be initialized successfully and invalid", ^{
             [[model shouldNot] beNil];
-        });
-        
-        it(@"should retain its arguments as properties", ^{
-            [[theValue(model.remoteNotificationTypes) should] equal:theValue(TEST_NOTIFICATION_TYPES)];
-            [[model.variantUUID should] equal:TEST_variant_uuid];
-            [[model.releaseSecret should] equal:TEST_RELEASE_SECRET];
-            [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
+            [[theValue([model isValid]) should] beFalse];
         });
     });
 });

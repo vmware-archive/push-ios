@@ -1,22 +1,20 @@
 //
-//  PCFPushPersistentStorage.h
+//  PCFPersistentStorage+Push.h
 //  PCFPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-17.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "PCFPersistentStorage.h"
 
-@interface PCFPushPersistentStorage : NSObject
-
-+ (void)reset;
+@interface PCFPersistentStorage (Push)
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken;
 + (NSData *)APNSDeviceToken;
 
-+ (void)setPushServerDeviceID:(NSString *)backEndDeviceID;
-+ (NSString *)pushServerDeviceID;
++ (void)setServerDeviceID:(NSString *)backEndDeviceID;
++ (NSString *)serverDeviceID;
 
 + (void)setVariantUUID:(NSString *)variantUUID;
 + (NSString *)variantUUID;
@@ -27,7 +25,6 @@
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;
 
-+ (void)setAnalyticsEnabled:(BOOL)enabled;
-+ (BOOL)analyticsEnabled;
++ (void)resetPushPersistedValues;
 
 @end
