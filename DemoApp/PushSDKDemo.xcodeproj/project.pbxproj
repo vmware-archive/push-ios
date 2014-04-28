@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F114D270190716C00008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D26E190716C00008BE3C /* PCFPushURLConnection.m */; };
 		F114D27B190866280008BE3C /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D27A190866280008BE3C /* PCFPushClient.m */; };
-		F114D27D190958030008BE3C /* PCFPushParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* PCFPushParameters.plist */; };
+		F114D27D190958030008BE3C /* PCFParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* PCFParameters.plist */; };
 		F114D29B190AA8600008BE3C /* PCFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D283190AA8600008BE3C /* PCFAppDelegate.m */; };
 		F114D29C190AA8600008BE3C /* PCFAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D285190AA8600008BE3C /* PCFAppDelegateProxy.m */; };
 		F114D29D190AA8600008BE3C /* PCFClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D287190AA8600008BE3C /* PCFClient.m */; };
@@ -30,7 +29,8 @@
 		F114D311190AB24D0008BE3C /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D307190AB24D0008BE3C /* PCFAnalytics.m */; };
 		F114D312190AB24D0008BE3C /* PCFSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D309190AB24D0008BE3C /* PCFSDK+Analytics.m */; };
 		F114D313190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */; };
-		F18D8A0418E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */; };
+		F114D32F190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */; };
+		F114D338190EA7800008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D337190EA7800008BE3C /* PCFPushURLConnection.m */; };
 		F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */; };
 		F18D8A0918E5D66D0084D142 /* PCFPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EC18E5D66D0084D142 /* PCFPushRegistrationRequestData.m */; };
 		F18D8A0A18E5D66D0084D142 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EE18E5D66D0084D142 /* PCFPushRegistrationResponseData.m */; };
@@ -50,11 +50,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		F114D26E190716C00008BE3C /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
-		F114D26F190716C00008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
 		F114D279190866280008BE3C /* PCFPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClient.h; sourceTree = "<group>"; };
 		F114D27A190866280008BE3C /* PCFPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushClient.m; sourceTree = "<group>"; };
-		F114D27C190958030008BE3C /* PCFPushParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PCFPushParameters.plist; sourceTree = "<group>"; };
+		F114D27C190958030008BE3C /* PCFParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PCFParameters.plist; sourceTree = "<group>"; };
 		F114D282190AA8600008BE3C /* PCFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegate.h; sourceTree = "<group>"; };
 		F114D283190AA8600008BE3C /* PCFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAppDelegate.m; sourceTree = "<group>"; };
 		F114D284190AA8600008BE3C /* PCFAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegateProxy.h; sourceTree = "<group>"; };
@@ -97,8 +95,10 @@
 		F114D309190AB24D0008BE3C /* PCFSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFSDK+Analytics.m"; sourceTree = "<group>"; };
 		F114D30B190AB24D0008BE3C /* PCFPersistentStorage+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPersistentStorage+Analytics.h"; sourceTree = "<group>"; };
 		F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
-		F18D89E018E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
-		F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
+		F114D32D190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
+		F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
+		F114D336190EA7800008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
+		F114D337190EA7800008BE3C /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
 		F18D89E918E5D66D0084D142 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
 		F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationData.m; sourceTree = "<group>"; };
 		F18D89EB18E5D66D0084D142 /* PCFPushRegistrationRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationRequestData.h; sourceTree = "<group>"; };
@@ -146,6 +146,7 @@
 		F114D27E190AA8600008BE3C /* PCFSDK */ = {
 			isa = PBXGroup;
 			children = (
+				F114D32C190E9FD00008BE3C /* BackEnd */,
 				F114D27F190AA8600008BE3C /* Categories */,
 				F114D282190AA8600008BE3C /* PCFAppDelegate.h */,
 				F114D283190AA8600008BE3C /* PCFAppDelegate.m */,
@@ -255,12 +256,30 @@
 			path = "Persistent Storage";
 			sourceTree = "<group>";
 		};
+		F114D32C190E9FD00008BE3C /* BackEnd */ = {
+			isa = PBXGroup;
+			children = (
+				F114D32D190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.h */,
+				F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */,
+			);
+			path = BackEnd;
+			sourceTree = "<group>";
+		};
+		F114D335190EA7800008BE3C /* BackEnd */ = {
+			isa = PBXGroup;
+			children = (
+				F114D336190EA7800008BE3C /* PCFPushURLConnection.h */,
+				F114D337190EA7800008BE3C /* PCFPushURLConnection.m */,
+			);
+			path = BackEnd;
+			sourceTree = "<group>";
+		};
 		F18D89D918E5D66D0084D142 /* PCFPush */ = {
 			isa = PBXGroup;
 			children = (
+				F114D335190EA7800008BE3C /* BackEnd */,
 				F114D279190866280008BE3C /* PCFPushClient.h */,
 				F114D27A190866280008BE3C /* PCFPushClient.m */,
-				F18D89DF18E5D66D0084D142 /* Back End */,
 				F18D89E218E5D66D0084D142 /* Models */,
 				F18D89EF18E5D66D0084D142 /* PCFPushSDK.h */,
 				F18D89F018E5D66D0084D142 /* PCFPushSDK.m */,
@@ -269,17 +288,6 @@
 			);
 			name = PCFPush;
 			path = ../PCFPush;
-			sourceTree = "<group>";
-		};
-		F18D89DF18E5D66D0084D142 /* Back End */ = {
-			isa = PBXGroup;
-			children = (
-				F114D26E190716C00008BE3C /* PCFPushURLConnection.m */,
-				F114D26F190716C00008BE3C /* PCFPushURLConnection.h */,
-				F18D89E018E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.h */,
-				F18D89E118E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m */,
-			);
-			path = "Back End";
 			sourceTree = "<group>";
 		};
 		F18D89E218E5D66D0084D142 /* Models */ = {
@@ -347,7 +355,7 @@
 		F1FDE1AE18D7806B009EBE38 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F114D27C190958030008BE3C /* PCFPushParameters.plist */,
+				F114D27C190958030008BE3C /* PCFParameters.plist */,
 				F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */,
 				F1FDE1B018D7806B009EBE38 /* InfoPlist.strings */,
 				F1FDE1B318D7806B009EBE38 /* main.m */,
@@ -471,7 +479,7 @@
 				F1FDE29E18D795C0009EBE38 /* Main_iPhone.storyboard in Resources */,
 				F1FDE1F518D78115009EBE38 /* LogItemCell.xib in Resources */,
 				F1FDE1C018D7806B009EBE38 /* Images.xcassets in Resources */,
-				F114D27D190958030008BE3C /* PCFPushParameters.plist in Resources */,
+				F114D27D190958030008BE3C /* PCFParameters.plist in Resources */,
 				F1FDE1B218D7806B009EBE38 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -484,6 +492,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F114D29C190AA8600008BE3C /* PCFAppDelegateProxy.m in Sources */,
+				F114D32F190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m in Sources */,
 				F114D2A0190AA8600008BE3C /* PCFJSONValueTransformer.m in Sources */,
 				F114D30E190AB24D0008BE3C /* PCFAnalyticsURLConnection.m in Sources */,
 				F114D2A2190AA8600008BE3C /* PCFPushErrorUtil.m in Sources */,
@@ -491,7 +500,6 @@
 				F18D8A0A18E5D66D0084D142 /* PCFPushRegistrationResponseData.m in Sources */,
 				F114D310190AB24D0008BE3C /* PCFCoreDataManager.m in Sources */,
 				F114D2F3190AAF560008BE3C /* PCFPersistentStorage+Push.m in Sources */,
-				F114D270190716C00008BE3C /* PCFPushURLConnection.m in Sources */,
 				F18D8A0B18E5D66D0084D142 /* PCFPushSDK.m in Sources */,
 				F114D2A4190AA8600008BE3C /* PCFPushHexUtil.m in Sources */,
 				F114D313190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m in Sources */,
@@ -508,9 +516,9 @@
 				F1FDE1F418D78115009EBE38 /* LogItemCell.m in Sources */,
 				F1FDE1F018D78115009EBE38 /* BackEndMessageRequest.m in Sources */,
 				F114D29F190AA8600008BE3C /* PCFSDK.m in Sources */,
-				F18D8A0418E5D66D0084D142 /* NSURLConnection+PCFPushBackEndConnection.m in Sources */,
 				F114D2A1190AA8600008BE3C /* PCFPushDebug.m in Sources */,
 				F114D29D190AA8600008BE3C /* PCFClient.m in Sources */,
+				F114D338190EA7800008BE3C /* PCFPushURLConnection.m in Sources */,
 				F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */,
 				F1FDE1F218D78115009EBE38 /* LogTableViewController.m in Sources */,
 				F114D2F6190AAF6D0008BE3C /* PCFPersistentStorage.m in Sources */,

@@ -109,10 +109,23 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
     request.HTTPMethod = method;
+    NSString *authString = [NSString stringWithFormat:@"Basic %@:%@", parameters.variantUUID, parameters.releaseSecret];
+    [request setValue:[self base64String:authString] forHTTPHeaderField:@"Authorization"];
     request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
+}
+
++ (NSString *)base64String:(NSString *)normalString
+{
+    NSData *plainData = [normalString dataUsingEncoding:NSUTF8StringEncoding];
+    if ([plainData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
+        return [plainData base64EncodedStringWithOptions:0];
+        
+    } else {
+        return [plainData base64Encoding];
+    }
 }
 
 + (NSData *)requestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
@@ -139,8 +152,6 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     
     PCFPushRegistrationRequestData *requestData = [[PCFPushRegistrationRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
-    requestData.variantUUID = parameters.variantUUID;
-    requestData.secret = parameters.releaseSecret;
     requestData.deviceAlias = parameters.deviceAlias;
     requestData.deviceManufacturer = @"Apple";
     requestData.deviceModel = deviceModel;

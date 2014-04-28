@@ -33,6 +33,12 @@
 + (void)setCompletionBlockWithSuccess:(void (^)(void))success
                               failure:(void (^)(NSError *error))failure;
 
+/**
+ * Manual call to register device for push notifications
+ *
+ */
++ (void)registerForPushNotifications;
+
 
 /**
  * Asynchronously unregisters the device and application from receiving push notifications.  If the application

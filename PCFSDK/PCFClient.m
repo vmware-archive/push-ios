@@ -10,8 +10,6 @@
 
 #import "PCFClient.h"
 #import "PCFParameters.h"
-#import "PCFAppDelegate.h"
-#import "PCFAppDelegateProxy.h"
 
 static PCFClient *_sharedPCFClient;
 static dispatch_once_t _sharedPCFClientToken;
@@ -26,6 +24,15 @@ static dispatch_once_t _sharedPCFClientToken;
         }
     });
     return _sharedPCFClient;
+}
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.registrationParameters = [PCFParameters defaultParameters];
+    }
+    return self;
 }
 
 + (void)resetSharedClient

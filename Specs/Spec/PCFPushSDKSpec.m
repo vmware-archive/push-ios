@@ -109,7 +109,6 @@ describe(@"PCFPushSDK", ^{
             
             NSString *differentValue = @"DIFFERENT_VALUE";
             
-            [PCFPushSDK load];
             for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
@@ -121,7 +120,7 @@ describe(@"PCFPushSDK", ^{
                     fail(@"registration failure block executed");
                 }];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
+                [PCFPushSDK registerForPushNotifications];
             }
             
             for (NSInteger i = 0; i < stringSelectorsCount; i++) {

@@ -5,6 +5,16 @@
       location = "group:PCFSDK"
       name = "PCFSDK">
       <Group
+         location = "group:BackEnd"
+         name = "BackEnd">
+         <FileRef
+            location = "group:NSURLConnection+PCFPushBackEndConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSURLConnection+PCFPushBackEndConnection.m">
+         </FileRef>
+      </Group>
+      <Group
          location = "group:Categories"
          name = "Categories">
          <FileRef
@@ -161,14 +171,8 @@
       location = "group:PCFPush"
       name = "PCFPush">
       <Group
-         location = "group:Back End"
-         name = "Back End">
-         <FileRef
-            location = "group:NSURLConnection+PCFPushBackEndConnection.h">
-         </FileRef>
-         <FileRef
-            location = "group:NSURLConnection+PCFPushBackEndConnection.m">
-         </FileRef>
+         location = "group:BackEnd"
+         name = "BackEnd">
          <FileRef
             location = "group:PCFPushURLConnection.h">
          </FileRef>

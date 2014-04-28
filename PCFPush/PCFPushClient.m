@@ -83,20 +83,32 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         
         if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
             error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"];
-            failureBlock(error);
+            PCFPushLog(@"%@", error);
+            
+            if (failureBlock) {
+                failureBlock(error);
+            }
             return;
         }
         
         PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData pcf_fromJSONData:responseData error:&error];
         
         if (error) {
-            failureBlock(error);
+            PCFPushLog(@"%@", error);
+            
+            if (failureBlock) {
+                failureBlock(error);
+            }
             return;
         }
         
         if (!parsedData.deviceUUID) {
             error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationResponseDataNoDeviceUuid localizedDescription:@"Response body from registering with the back-end server does not contain an UUID "];
-            failureBlock(error);
+            PCFPushLog(@"%@", error);
+            
+            if (failureBlock) {
+                failureBlock(error);
+            }
             return;
         }
         
@@ -107,7 +119,9 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [PCFPersistentStorage setReleaseSecret:parameters.releaseSecret];
         [PCFPersistentStorage setDeviceAlias:parameters.deviceAlias];
         
-        successBlock();
+        if (successBlock) {
+            successBlock();
+        }
     };
     
     return registrationBlock;

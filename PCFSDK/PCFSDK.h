@@ -21,10 +21,4 @@
  */
 + (void)setRegistrationParameters:(PCFParameters *)parameters;
 
-#pragma mark - App lifecycle notification
-
-+ (void)appDidFinishLaunchingNotification:(NSNotification *)notification;
-
-+ (void)appWillTerminateNotification:(NSNotification *)notification;
-
 @end

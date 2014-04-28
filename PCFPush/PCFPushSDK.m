@@ -18,9 +18,26 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 @implementation PCFPushSDK
 
++ (void)load
+{
+    [[NSNotificationCenter defaultCenter] addObserver:[self class]
+                                             selector:@selector(appDidFinishLaunchingNotification:)
+                                                 name:UIApplicationDidFinishLaunchingNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:[self class]
+                                             selector:@selector(appWillTerminateNotification:)
+                                                 name:UIApplicationWillTerminateNotification
+                                               object:nil];
+}
+
 + (void)setNotificationTypes:(UIRemoteNotificationType)notificationTypes
 {
     [[PCFPushClient shared] setNotificationTypes:notificationTypes];
+}
+
++ (void)registerForPushNotifications
+{
+    [[PCFPushClient shared] registerForRemoteNotifications];
 }
 
 + (void)setRegistrationParameters:(PCFParameters *)parameters;
@@ -30,7 +47,10 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     }
 
     PCFPushClient *pushClient = [PCFPushClient shared];
-    if (pushClient.registrationParameters && [self isRegistered]) {
+    if (pushClient.registrationParameters &&
+        [self isRegistered] &&
+        pushClient.registrationParameters.autoRegistrationEnabled)
+    {
         pushClient.registrationParameters = parameters;
         [pushClient APNSRegistrationSuccess:[PCFPersistentStorage APNSDeviceToken]];
         
@@ -75,8 +95,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (void)appDidFinishLaunchingNotification:(NSNotification *)notification
 {
-    [super appDidFinishLaunchingNotification:notification];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
     PCFPushClient *pushClient = [PCFPushClient shared];
     
     if (pushClient.registrationParameters.autoRegistrationEnabled) {
@@ -86,8 +105,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (void)appWillTerminateNotification:(NSNotification *)notification
 {
-    [super appWillTerminateNotification:notification];
-    
+    [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationWillTerminateNotification object:nil];
     UIApplication *application = [UIApplication sharedApplication];
     if ([application.delegate isKindOfClass:[PCFAppDelegateProxy class]]) {
         @synchronized (application) {

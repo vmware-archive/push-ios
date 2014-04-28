@@ -22,6 +22,7 @@
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
+NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_RELEASE_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
@@ -138,6 +139,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     PCFParameters *params = [PCFParameters parameters];
     params.developmentVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
+    params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.deviceAlias = TEST_DEVICE_ALIAS_1;
     params.autoRegistrationEnabled = YES;
     self.params = params;
