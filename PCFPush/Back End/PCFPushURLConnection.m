@@ -121,7 +121,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     NSError *error = nil;
     PCFPushRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
                                                                            parameters:parameters];
-    return [requestData toJSONData:&error];
+    return [requestData pcf_toJSONData:&error];
 }
 
 + (PCFPushRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken

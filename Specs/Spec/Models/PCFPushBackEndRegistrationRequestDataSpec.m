@@ -89,7 +89,7 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
         
         it(@"should handle a nil input", ^{
             NSError *error;
-            model = [PCFPushRegistrationRequestData fromJSONData:nil error:&error];
+            model = [PCFPushRegistrationRequestData pcf_fromJSONData:nil error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -98,7 +98,7 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
         
         it(@"should handle empty input", ^{
             NSError *error;
-            model = [PCFPushRegistrationRequestData fromJSONData:[NSData data] error:&error];
+            model = [PCFPushRegistrationRequestData pcf_fromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -108,7 +108,7 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
         it(@"should handle bad JSON", ^{
             NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [PCFPushRegistrationRequestData fromJSONData:JSONData error:&error];
+            model = [PCFPushRegistrationRequestData pcf_fromJSONData:JSONData error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
         });
@@ -130,7 +130,7 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
             [[error should] beNil];
             [[data shouldNot] beNil];
             
-            model = [PCFPushRegistrationRequestData fromJSONData:data error:&error];
+            model = [PCFPushRegistrationRequestData pcf_fromJSONData:data error:&error];
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
             [[model.osVersion should] equal:TEST_OS_VERSION ];
@@ -181,11 +181,11 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
             });
 
             it(@"should be dictionaryizable", ^{
-                dict = [model toFoundationType];
+                dict = [model pcf_toFoundationType];
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model toJSONData:nil];
+                NSData *JSONData = [model pcf_toJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -208,11 +208,11 @@ describe(@"PCFPushBackEndRegistrationRequestData", ^{
             });
             
             it(@"should be dictionaryizable", ^{
-                dict = [model toFoundationType];
+                dict = [model pcf_toFoundationType];
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model toJSONData:nil];
+                NSData *JSONData = [model pcf_toJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];

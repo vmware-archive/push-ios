@@ -10,10 +10,10 @@
 
 @interface NSObject (PCFJSONizable)
 
-+ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error;
-- (NSData *)toJSONData:(NSError **)error;
++ (instancetype)pcf_fromJSONData:(NSData *)JSONData error:(NSError **)error;
+- (NSData *)pcf_toJSONData:(NSError **)error;
 
-+ (instancetype)fromDictionary:(NSDictionary *)dict;
-- (id)toFoundationType;
++ (instancetype)pcf_fromDictionary:(NSDictionary *)dict;
+- (id)pcf_toFoundationType;
 
 @end

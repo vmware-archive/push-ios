@@ -14,7 +14,7 @@
 
 @implementation NSObject (PCFJSONizable)
 
-- (id)toFoundationType
+- (id)pcf_toFoundationType
 {
     id foundationType;
     if ([self isKindOfClass:[NSDictionary class]]) {
@@ -33,7 +33,7 @@
     } else if ([self isKindOfClass:[NSArray class]]) {
         NSMutableArray *convertedArray = [[NSMutableArray alloc] initWithCapacity:[(NSArray *)self count]];
         [(NSArray *)self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            id newType = [obj toFoundationType];
+            id newType = [obj pcf_toFoundationType];
             if (newType) {
                 [convertedArray addObject:newType];
             }
@@ -44,9 +44,9 @@
     return foundationType;
 }
 
-- (NSData *)toJSONData:(NSError **)error
+- (NSData *)pcf_toJSONData:(NSError **)error
 {
-    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:[self toFoundationType] options:0 error:error];
+    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:[self pcf_toFoundationType] options:0 error:error];
     if (!JSONData) {
         PCFPushCriticalLog(@"Error upon serializing object to JSON: %@", error);
         return nil;
@@ -56,7 +56,7 @@
     }
 }
 
-+ (instancetype)fromDictionary:(NSDictionary *)dict
++ (instancetype)pcf_fromDictionary:(NSDictionary *)dict
 {
     id result;
     
@@ -73,7 +73,7 @@
     return result;
 }
 
-+ (instancetype)fromJSONData:(NSData *)JSONData error:(NSError **)error
++ (instancetype)pcf_fromJSONData:(NSData *)JSONData error:(NSError **)error
 {
     if (!JSONData || JSONData.length <= 0) {
         if (error) {
@@ -88,7 +88,7 @@
         return nil;
     }
     
-    return [self fromDictionary:dict];
+    return [self pcf_fromDictionary:dict];
 }
 
 @end

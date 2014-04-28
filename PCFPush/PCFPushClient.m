@@ -87,7 +87,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
             return;
         }
         
-        PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData fromJSONData:responseData error:&error];
+        PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData pcf_fromJSONData:responseData error:&error];
         
         if (error) {
             failureBlock(error);

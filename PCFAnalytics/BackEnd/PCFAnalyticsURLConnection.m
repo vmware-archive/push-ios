@@ -37,7 +37,7 @@ static NSTimeInterval kAnalyticsSyncTimeout = 60.0;
     
     NSMutableURLRequest *request = [self syncAnalyicEventsRequestWithDeviceID:deviceID];
     NSError *error;
-    NSData *bodyData = [events toJSONData:&error];
+    NSData *bodyData = [events pcf_toJSONData:&error];
     if (error) {
         PCFPushCriticalLog(@"Error while converting analytic event to JSON: %@ %@", error, error.userInfo);
         return;
