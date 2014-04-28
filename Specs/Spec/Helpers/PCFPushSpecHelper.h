@@ -28,7 +28,10 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 @property (nonatomic) NSData *apnsDeviceToken2;
 @property (nonatomic) NSString *backEndDeviceId;
 @property (nonatomic) NSString *backEndDeviceId2;
+@property (nonatomic) NSString *base64AuthString1;
+@property (nonatomic) NSString *base64AuthString2;
 @property (nonatomic) PCFParameters *params;
+
 
 // Spec Helper lifecycle
 - (instancetype) init;

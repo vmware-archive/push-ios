@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+typedef void (^CompletionHandler)(NSURLResponse *response, NSData *data, NSError *connectionError);
+
 @interface NSURLConnection (PCFPushBackEndConnection)
 
 + (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request

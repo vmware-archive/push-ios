@@ -13,10 +13,9 @@
 #import "PCFAnalytics_TestingHeader.h"
 #import "PCFAnalyticEvent_TestingHeader.h"
 #import "PCFCoreDataManager.h"
+#import "NSURLConnection+PCFPushBackEndConnection.h"
 
 SPEC_BEGIN(PCFAnalyticsSpec)
-
-typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
 describe(@"PCFAnalytics", ^{
     
@@ -61,7 +60,7 @@ describe(@"PCFAnalytics", ^{
                 [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:EventTypes.backgrounded];
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];
@@ -123,7 +122,7 @@ describe(@"PCFAnalytics", ^{
                 maxEventCount += events.count;
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];
@@ -244,7 +243,7 @@ describe(@"PCFAnalytics", ^{
                 }
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];
@@ -278,7 +277,7 @@ describe(@"PCFAnalytics", ^{
                 }
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];

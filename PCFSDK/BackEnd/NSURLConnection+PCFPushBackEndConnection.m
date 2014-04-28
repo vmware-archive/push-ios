@@ -12,8 +12,6 @@
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 
-typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
-
 @implementation NSURLConnection (PCFPushBackEndConnection)
 
 + (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
@@ -45,7 +43,7 @@ typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connecti
     //        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
     //    }
     
-    Handler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
+    CompletionHandler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
     [self sendAsynchronousRequest:request
                             queue:queue
                 completionHandler:handler];
@@ -60,10 +58,10 @@ typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connecti
     return [response statusCode] >= 200 && [response statusCode] < 300;
 }
 
-+ (Handler)completionHandlerWithSuccessBlock:(void (^)(NSURLResponse *response, NSData *data))success
++ (CompletionHandler)completionHandlerWithSuccessBlock:(void (^)(NSURLResponse *response, NSData *data))success
                                 failureBlock:(void (^)(NSError *error))failure
 {
-    Handler handler = ^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    CompletionHandler handler = ^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         if (connectionError) {
             PCFPushCriticalLog(@"NSURLRequest failed with error: %@ %@", connectionError, connectionError.userInfo);
             if (failure) {

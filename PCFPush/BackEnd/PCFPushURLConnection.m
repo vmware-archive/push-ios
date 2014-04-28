@@ -102,19 +102,24 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
     }
     
-    if (!parameters) {
+    if (!parameters || !parameters.variantUUID || !parameters.releaseSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushRegistrationParameters may not be nil"];
     }
     
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
     request.HTTPMethod = method;
-    NSString *authString = [NSString stringWithFormat:@"Basic %@:%@", parameters.variantUUID, parameters.releaseSecret];
-    [request setValue:[self base64String:authString] forHTTPHeaderField:@"Authorization"];
+    [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID releaseSecret:parameters.releaseSecret];
     request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
+}
+
++ (void)addBasicAuthToURLRequest:(NSMutableURLRequest *)request withVariantUUID:(NSString *)variantUUID releaseSecret:(NSString *)releaseSecret
+{
+    NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, releaseSecret]];
+    [request setValue:[NSString stringWithFormat:@"Basic  %@", authString] forHTTPHeaderField:@"Authorization"];
 }
 
 + (NSString *)base64String:(NSString *)normalString

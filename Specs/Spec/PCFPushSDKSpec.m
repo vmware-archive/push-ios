@@ -17,10 +17,9 @@
 #import "PCFParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
+#import "NSURLConnection+PCFPushBackEndConnection.h"
 
 SPEC_BEGIN(PCFPushSDKSpec)
-
-typedef void (^Handler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
 describe(@"PCFPushSDK", ^{
     __block PCFPushSpecHelper *helper = nil;
@@ -102,7 +101,7 @@ describe(@"PCFPushSDK", ^{
                     newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
                 }
                 
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
                 return nil;
             }];
@@ -176,7 +175,7 @@ describe(@"PCFPushSDK", ^{
                     newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
                 }
                 
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
                 return nil;
             }];
@@ -367,7 +366,7 @@ describe(@"PCFPushSDK", ^{
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
                 }
                 
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];
@@ -416,7 +415,7 @@ describe(@"PCFPushSDK", ^{
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
                 }
                 
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
             }];
@@ -448,7 +447,7 @@ describe(@"PCFPushSDK", ^{
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:nil];
-                Handler handler = params[2];
+                CompletionHandler handler = params[2];
                 handler(nil, nil, error);
                 return nil;
             }];

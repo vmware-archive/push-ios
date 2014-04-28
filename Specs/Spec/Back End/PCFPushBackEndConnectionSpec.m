@@ -9,7 +9,9 @@
 #import "Kiwi.h"
 
 #import "NSURLConnection+PCFPushAsync2Sync.h"
+#import "NSURLConnection+PCFPushBackEndConnection.h"
 #import "PCFPushURLConnection.h"
+#import "PCFParameters.h"
 #import "PCFPushErrors.h"
 #import "PCFPushSpecHelper.h"
 
@@ -53,7 +55,7 @@ describe(@"PCFPushBackEndConnection", ^{
               shouldNot] raise];
 		});
 
-        it(@"should require a failure block", ^{
+        it(@"should not require a failure block", ^{
             [[theBlock( ^{ [PCFPushURLConnection registerWithParameters:helper.params
                                                             deviceToken:helper.apnsDeviceToken
                                                                 success: ^(NSURLResponse *response, NSData *data) {}
@@ -95,6 +97,36 @@ describe(@"PCFPushBackEndConnection", ^{
         afterEach ( ^{
             [[theValue(wasExpectedResult) should] beTrue];
 		});
+        
+        it(@"should have basic auth headers in the request", ^{
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                NSString *authValue = request.allHTTPHeaderFields[@"Authorization"];
+                [[authValue shouldNot] beNil];
+                [[authValue should] startWithString:@"Basic "];
+                [[authValue should] endWithString:helper.base64AuthString1];
+                
+                __block NSHTTPURLResponse *newResponse;
+                
+                if ([request.HTTPMethod isEqualToString:@"POST"]) {
+                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                }
+                
+                CompletionHandler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+            
+            [PCFPushURLConnection registerWithParameters:helper.params
+                                             deviceToken:helper.apnsDeviceToken
+                                                 success: ^(NSURLResponse *response, NSData *data) {
+                                                     wasExpectedResult = YES;
+                                                 }
+             
+                                                 failure: ^(NSError *error) {
+                                                     wasExpectedResult = NO;
+                                                 }];
+        });
 
         it(@"should handle a failed request", ^{
             NSError *error;
