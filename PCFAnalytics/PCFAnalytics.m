@@ -18,6 +18,49 @@ static NSUInteger maxStoredEventCount = 1000;
 static NSUInteger maxBatchSize = 100;
 static NSTimeInterval lastSendTime;
 
+
+const struct EventTypes {
+    PCF_STRUCT_STRING *error;
+    PCF_STRUCT_STRING *active;
+    PCF_STRUCT_STRING *inactive;
+    PCF_STRUCT_STRING *backgrounded;
+    PCF_STRUCT_STRING *foregrounded;
+    PCF_STRUCT_STRING *registered;
+    PCF_STRUCT_STRING *unregistered;
+} EventTypes;
+
+const struct EventTypes EventTypes = {
+    .error        = @"event_error",
+    .active       = @"event_app_active",
+    .inactive     = @"event_app_inactive",
+    .backgrounded = @"event_backgrounded",
+    .foregrounded = @"event_foregrounded",
+    .registered   = @"event_registered",
+    .unregistered = @"event_unregistered",
+};
+
+
+static const struct ErrorEventKeys {
+    PCF_STRUCT_STRING *errorID;
+    PCF_STRUCT_STRING *errorMessage;
+} ErrorEventKeys;
+
+static const struct ErrorEventKeys ErrorEventKeys = {
+    .errorID        = @"id",
+    .errorMessage   = @"message",
+};
+
+
+static const struct ErrorType {
+    PCF_STRUCT_STRING *exception;
+    PCF_STRUCT_STRING *error;
+} ErrorType;
+
+static const struct ErrorType ErrorType = {
+    .exception = @"exception",
+    .error          = @"error",
+};
+
 @implementation PCFAnalytics
 
 + (void)load
@@ -25,6 +68,11 @@ static NSTimeInterval lastSendTime;
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didEnterBackground)
                                                  name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(willEnterForground)
+                                                 name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -37,6 +85,8 @@ static NSTimeInterval lastSendTime;
                                                  name:UIApplicationWillResignActiveNotification
                                                object:nil];
 }
+
+#pragma mark - static propery getters/setters
 
 + (NSUInteger)maxStoredEventCount
 {
@@ -83,20 +133,109 @@ static NSTimeInterval lastSendTime;
 + (void)didEnterBackground
 {
     PCFPushLog(@"Enter Background - Logging event.");
-    [PCFAnalyticEvent logEventBackground];
+    [self logEvent:EventTypes.backgrounded];
     [self sendAnalytics];
+}
+
++ (void)willEnterForground
+{
+    PCFPushLog(@"Will Enter Foreground - Logging event.");
+    [self logEvent:EventTypes.foregrounded];
 }
 
 + (void)didBecomeActive
 {
     PCFPushLog(@"Did Become Active - Logging event.");
-    [PCFAnalyticEvent logEventAppActive];
+    [self logEvent:EventTypes.active];
 }
 
 + (void)willResignActive
 {
     PCFPushLog(@"Will Resign Active - Logging event.");
-    [PCFAnalyticEvent logEventAppInactive];
+    [self logEvent:EventTypes.inactive];
+}
+
+#pragma mark - Event Database Logging
+
++ (void)logEvent:(NSString *)eventName
+{
+    [self logEvent:eventName withParameters:nil];
+}
+
++ (void)logError:(NSString *)errorID message:(NSString *)message exception:(NSException *)exception
+{
+    NSDictionary *exceptionDict;
+    
+    if (exception) {
+        exceptionDict = @{
+                          @"name" : exception.name,
+                          @"reason" : exception.reason,
+                          @"userInfo" : exception.userInfo,
+                          };
+    }
+    [self logError:EventTypes.error message:message parameters:exceptionDict errorType:ErrorType.exception];
+}
+
++ (void)logError:(NSString *)errorID message:(NSString *)message error:(NSError *)error
+{
+    NSDictionary *errorDict;
+    
+    if (error) {
+        errorDict = @{
+                      @"domain" : error.domain,
+                      @"code" : @(error.code),
+                      @"localizedDescription" : error.localizedDescription,
+                      @"userInfo" : error.userInfo,
+                      };
+    }
+    [self logError:EventTypes.error message:message parameters:errorDict errorType:ErrorType.error];
+}
+
++ (void)logError:(NSString *)errorID message:(NSString *)message parameters:(NSDictionary *)parameters errorType:(NSString *)type
+{
+    NSMutableDictionary *errorParams = [NSMutableDictionary dictionaryWithCapacity:3];
+    if (errorID) {
+        [errorParams setObject:errorID forKey:ErrorEventKeys.errorID];
+    }
+    if (message) {
+        [errorParams setObject:message forKey:ErrorEventKeys.errorMessage];
+    }
+    if (parameters) {
+        [errorParams setObject:parameters forKey:type];
+    }
+    [self logEvent:EventTypes.error withParameters:[NSDictionary dictionaryWithDictionary:errorParams]];
+}
+
++ (void)logEvent:(NSString *)eventName withParameters:(NSDictionary *)parameters
+{
+    if (![PCFPersistentStorage analyticsEnabled]) {
+        PCFPushLog(@"Analytics disabled. Event will not be logged.");
+        return;
+    }
+    
+    NSManagedObjectContext *context = [[PCFCoreDataManager shared] managedObjectContext];
+    [context performBlock:^{
+        [self insertIntoContext:context eventWithType:eventName data:parameters];
+        NSError *error;
+        if (![context save:&error]) {
+            PCFPushCriticalLog(@"Managed Object Context failed to save: %@ %@", error, error.userInfo);
+        }
+    }];
+}
+
++ (void)insertIntoContext:(NSManagedObjectContext *)context
+            eventWithType:(NSString *)eventType
+                     data:(NSDictionary *)eventData
+{
+    NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(PCFAnalyticEvent.class) inManagedObjectContext:context];
+    PCFAnalyticEvent *event = [[PCFAnalyticEvent alloc] initWithEntity:description insertIntoManagedObjectContext:context];
+    [event setEventID:[[NSUUID UUID] UUIDString]];
+    [event setEventType:eventType];
+    [event setEventTime:[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]]];
+    
+    if (eventData) {
+        [event setEventData:eventData];
+    }
 }
 
 #pragma mark - Database maintenance
@@ -206,41 +345,6 @@ static NSTimeInterval lastSendTime;
             }
         }];
     }
-}
-
-#pragma mark - Remote Notification Logging
-
-+ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    [self logApplication:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:nil];
-}
-
-+ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    NSString *appState;
-    switch (application.applicationState) {
-        case UIApplicationStateActive:
-            appState = @"UIApplicationStateActive";
-            break;
-        case UIApplicationStateInactive:
-            appState = @"UIApplicationStateInactive";
-            break;
-        case UIApplicationStateBackground:
-            appState = @"UIApplicationStateBackground";
-            break;
-        default:
-            appState = @"unknown";
-            break;
-    }
-    
-    NSDictionary *pushReceivedData = [NSMutableDictionary dictionaryWithCapacity:2];
-    [pushReceivedData setValue:appState forKey:PushNotificationKeys.appState];
-    
-    id pushID = [userInfo objectForKey:PushNotificationKeys.pushID];
-    if (pushID) {
-        [pushReceivedData setValue:pushID forKey:PushNotificationKeys.pushID];
-    }
-    [PCFAnalyticEvent logEventPushReceivedWithData:pushReceivedData];
 }
 
 @end

@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 
 @interface PCFAnalytics : NSObject
 
-+ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
-
-+ (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler;
++ (void)logEvent:(NSString *)eventName;
++ (void)logEvent:(NSString *)eventName withParameters:(NSDictionary *)parameters;
++ (void)logError:(NSString *)errorID message:(NSString *)message exception:(NSException *)exception;
++ (void)logError:(NSString *)errorID message:(NSString *)message error:(NSError *)error;
 
 @end

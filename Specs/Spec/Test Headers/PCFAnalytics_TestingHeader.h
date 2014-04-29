@@ -24,4 +24,8 @@
 + (NSTimeInterval)lastSendTime;
 + (void)setLastSendTime:(NSTimeInterval)sendTime;
 
++ (void)insertIntoContext:(NSManagedObjectContext *)context
+            eventWithType:(NSString *)eventType
+                     data:(NSDictionary *)eventData;
+
 @end

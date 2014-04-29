@@ -14,6 +14,7 @@
 #import "PCFAnalyticEvent_TestingHeader.h"
 #import "PCFCoreDataManager.h"
 #import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "PCFPushAppDelegate+Analytics.h"
 
 SPEC_BEGIN(PCFAnalyticsSpec)
 
@@ -42,7 +43,7 @@ describe(@"PCFAnalytics", ^{
     context(@"UIApplicationNotifications", ^{
         
         __block NSString *entityName;
-        __block NSString *eventType;
+        __block NSString *expectedEventType;
         __block NSInteger expectedCountOFEvents = -1;
         
         beforeEach(^{
@@ -57,7 +58,8 @@ describe(@"PCFAnalytics", ^{
                 }
                 [[theValue(events.count) should] equal:theValue(1)];
                 NSDictionary *event = events[0];
-                [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:EventTypes.backgrounded];
+                NSString *backgroundString =  EventTypes.backgrounded;
+                [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:backgroundString];
                 
                 NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 CompletionHandler handler = params[2];
@@ -68,7 +70,7 @@ describe(@"PCFAnalytics", ^{
             [PCFAnalytics stub:@selector(shouldSendAnalytics) andReturn:theValue(YES)];
             
             entityName = nil;
-            eventType = nil;
+            expectedEventType = nil;
             expectedCountOFEvents = -1;
         });
         
@@ -80,28 +82,28 @@ describe(@"PCFAnalytics", ^{
             
             if (event) {
                 [[event should] beKindOfClass:NSClassFromString(entityName)];
-                [[event.eventType should] equal:eventType];
+                [[event.eventType should] equal:expectedEventType];
             }
         });
         
         it(@"should add event to analytics DB when application becomes active.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:nil userInfo:nil];
             entityName = NSStringFromClass([PCFAnalyticEvent class]);
-            eventType = EventTypes.active;
+            expectedEventType = EventTypes.active;
             expectedCountOFEvents = 1;
         });
         
         it(@"should add event to analytics DB when application resigns active.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:nil userInfo:nil];
             entityName = NSStringFromClass([PCFAnalyticEvent class]);
-            eventType = EventTypes.inactive;
+            expectedEventType = EventTypes.inactive;
             expectedCountOFEvents = 1;
         });
         
         it(@"should add event to analytics DB and send to remote server when application enters background.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
             entityName = NSStringFromClass([PCFAnalyticEvent class]);
-            eventType = EventTypes.backgrounded;
+            expectedEventType = EventTypes.backgrounded;
             expectedCountOFEvents = 0;
         });
     });
@@ -133,7 +135,7 @@ describe(@"PCFAnalytics", ^{
             [context performBlockAndWait:^{
                 NSUInteger maxCount = [PCFAnalytics maxStoredEventCount];
                 for (int i = 0; i < maxCount + 1; i++) {
-                    [PCFAnalyticEvent insertIntoContext:context eventWithType:EventTypes.foregrounded data:@{@"event_count" : @(i)}];
+                    [PCFAnalytics insertIntoContext:context eventWithType:EventTypes.foregrounded data:@{@"event_count" : @(i)}];
                 }
 
                 NSError *error;
@@ -170,7 +172,7 @@ describe(@"PCFAnalytics", ^{
             [PCFSDK setAnalyticsEnabled:YES];
             
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
-            [PCFAnalytics logApplication:helper.application didReceiveRemoteNotification:@{}];
+            [helper.applicationDelegate application:helper.application didReceiveRemoteNotification:@{}];
         });
         
         it(@"should record an event when the application receives a remote push notification", ^{
@@ -182,7 +184,7 @@ describe(@"PCFAnalytics", ^{
             NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
             PCFAnalyticEvent *event = [events lastObject];
             [[event should] beKindOfClass:[PCFAnalyticEvent class]];
-            [[event.eventType should] equal:EventTypes.pushReceived];
+            [[event.eventType should] equal:PushNotificationEvents.pushReceived];
         });
         
         it(@"recorded event should have a time stamp close to the current time.", ^{
@@ -215,7 +217,7 @@ describe(@"PCFAnalytics", ^{
             [PCFSDK setAnalyticsEnabled:YES];
             
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
-            [PCFAnalytics logApplication:[UIApplication sharedApplication] didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
+            [helper.applicationDelegate application:helper.application didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
             events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
         });
         

@@ -101,9 +101,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
-    id delegateMock = [KWMock mockForProtocol:@protocol(UIApplicationDelegate)];
-    [delegateMock stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, nil, nil];
-    self.applicationDelegate = delegateMock;
+    self.applicationDelegate = [[PCFAppDelegate alloc] init];
     [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
     [self.application stub:@selector(setDelegate:) withBlock:^id(NSArray *params) {
         if ([params[0] conformsToProtocol:@protocol(UIApplicationDelegate)]) {
