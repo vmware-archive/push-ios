@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PCFSDK+Analytics.h"
 
 @interface PCFAnalytics : NSObject
 

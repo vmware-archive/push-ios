@@ -11,7 +11,6 @@
 @interface PCFAnalyticsURLConnection : NSObject
 
 + (void)syncAnalyicEvents:(NSArray *)events
-              forDeviceID:(NSString *)deviceID
                   success:(void (^)(NSURLResponse *response, NSData *data))success
                   failure:(void (^)(NSError *error))failure;
 

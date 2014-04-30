@@ -22,6 +22,10 @@
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
+NSString *const TEST_ANALYTICS_URL_1   = @"http://testAnalytics.url.com";
+NSString *const TEST_ANALYTICS_KEY     = @"TEST-ANALYTICS-KEY";
+
+
 NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_RELEASE_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
@@ -137,28 +141,30 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (PCFParameters *)setupParameters
 {
     PCFParameters *params = [PCFParameters parameters];
-    params.developmentVariantUUID = TEST_VARIANT_UUID_1;
-    params.developmentReleaseSecret = TEST_RELEASE_SECRET_1;
+    params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
+    params.developmentPushReleaseSecret = TEST_RELEASE_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
-    params.deviceAlias = TEST_DEVICE_ALIAS_1;
-    params.autoRegistrationEnabled = YES;
+    params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
+    params.pushAutoRegistrationEnabled = YES;
+    params.analyticsAPIURL = TEST_ANALYTICS_URL_1;
+    params.developmentAnalyticsKey = TEST_ANALYTICS_KEY;
     self.params = params;
     return self.params;
 }
 
 - (void) changeVariantUUIDInParameters:(NSString*)newVariantUUID
 {
-    [self.params setDevelopmentVariantUUID:newVariantUUID];
+    [self.params setDevelopmentPushVariantUUID:newVariantUUID];
 }
 
 - (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
 {
-    [self.params setDevelopmentReleaseSecret:newReleaseSecret];
+    [self.params setDevelopmentPushReleaseSecret:newReleaseSecret];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
 {
-    [self.params setDeviceAlias:newDeviceAlias];
+    [self.params setPushDeviceAlias:newDeviceAlias];
 }
 
 - (void)setupDefaultSavedParameters

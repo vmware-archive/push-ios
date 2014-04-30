@@ -14,7 +14,7 @@
 		F1BCF2E918E5CF46004F3684 /* PCFPushSpecHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D718E5CF46004F3684 /* PCFPushSpecHelper.m */; };
 		F1BCF2EA18E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D918E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m */; };
 		F1BCF2EB18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DA18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m */; };
-		F1BCF2EC18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DB18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m */; };
+		F1BCF2EC18E5CF46004F3684 /* PCFRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DB18E5CF46004F3684 /* PCFRegistrationParametersSpec.m */; };
 		F1BCF2ED18E5CF46004F3684 /* PCFPushSDKSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DC18E5CF46004F3684 /* PCFPushSDKSpec.m */; };
 		F1BCF2EE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m */; };
 		F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2E518E5CF46004F3684 /* PCFPushHexUtilSpec.m */; };
@@ -46,7 +46,7 @@
 		F1BCF2D718E5CF46004F3684 /* PCFPushSpecHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushSpecHelper.m; sourceTree = "<group>"; };
 		F1BCF2D918E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushBackEndRegistrationRequestDataSpec.m; sourceTree = "<group>"; };
 		F1BCF2DA18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushBackEndRegistrationResponseDataSpec.m; sourceTree = "<group>"; };
-		F1BCF2DB18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationParametersSpec.m; sourceTree = "<group>"; };
+		F1BCF2DB18E5CF46004F3684 /* PCFRegistrationParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFRegistrationParametersSpec.m; sourceTree = "<group>"; };
 		F1BCF2DC18E5CF46004F3684 /* PCFPushSDKSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushSDKSpec.m; sourceTree = "<group>"; };
 		F1BCF2DE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushPersistentStorageSpec.m; sourceTree = "<group>"; };
 		F1BCF2E018E5CF46004F3684 /* PCFPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
@@ -133,7 +133,7 @@
 			children = (
 				F1BCF2D918E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m */,
 				F1BCF2DA18E5CF46004F3684 /* PCFPushBackEndRegistrationResponseDataSpec.m */,
-				F1BCF2DB18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m */,
+				F1BCF2DB18E5CF46004F3684 /* PCFRegistrationParametersSpec.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -317,7 +317,7 @@
 				F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */,
 				F1BCF2ED18E5CF46004F3684 /* PCFPushSDKSpec.m in Sources */,
 				F1BCF2EA18E5CF46004F3684 /* PCFPushBackEndRegistrationRequestDataSpec.m in Sources */,
-				F1BCF2EC18E5CF46004F3684 /* PCFPushRegistrationParametersSpec.m in Sources */,
+				F1BCF2EC18E5CF46004F3684 /* PCFRegistrationParametersSpec.m in Sources */,
 				F1E93B4F19006F410038F429 /* PCFClassPropertyUtility.m in Sources */,
 				F1E5D1F818ECB3E9007E8802 /* PCFAnalyticsSpec.m in Sources */,
 				F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */,

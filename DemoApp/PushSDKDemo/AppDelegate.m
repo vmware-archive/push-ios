@@ -44,11 +44,13 @@
         NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
                              parameters.variantUUID,
                              parameters.releaseSecret,
-                             parameters.deviceAlias];
+                             parameters.pushDeviceAlias];
         PCFPushLog(message);
     }
     
     [PCFPushSDK setRegistrationParameters:parameters];
+#warning - TODO integrate analytics into demo app
+//    [PCFPushSDK setAnalyticsEnabled:YES];
     [PCFPushSDK setCompletionBlockWithSuccess:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         PCFPushLog(@"Application received callback \"registrationSucceeded\".");

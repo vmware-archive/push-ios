@@ -49,7 +49,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     PCFPushClient *pushClient = [PCFPushClient shared];
     if (pushClient.registrationParameters &&
         [self isRegistered] &&
-        pushClient.registrationParameters.autoRegistrationEnabled)
+        pushClient.registrationParameters.pushAutoRegistrationEnabled)
     {
         pushClient.registrationParameters = parameters;
         [pushClient APNSRegistrationSuccess:[PCFPersistentStorage APNSDeviceToken]];
@@ -98,7 +98,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
     PCFPushClient *pushClient = [PCFPushClient shared];
     
-    if (pushClient.registrationParameters.autoRegistrationEnabled) {
+    if (pushClient.registrationParameters.pushAutoRegistrationEnabled) {
         [pushClient registerForRemoteNotifications];
     }
 }

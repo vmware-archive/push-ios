@@ -12,9 +12,9 @@
 #import "PCFPushDebug.h"
 
 #ifdef DEBUG
-static BOOL kInProduction = NO;
+static BOOL kInDebug = YES;
 #else
-static BOOL kInProduction = YES;
+static BOOL kInDebug = NO;
 #endif
 
 
@@ -43,50 +43,70 @@ static BOOL kInProduction = YES;
 + (PCFParameters *)parameters
 {
     PCFParameters *params = [[self alloc] init];
-    params.autoRegistrationEnabled = YES;
+    params.pushAutoRegistrationEnabled = YES;
     return params;
 }
 
 - (NSString *)variantUUID
 {
-    return kInProduction ? self.productionVariantUUID : self.developmentVariantUUID;
+    return kInDebug ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
 }
 
 - (NSString *)releaseSecret
 {
-    return kInProduction ? self.productionReleaseSecret : self.developmentReleaseSecret;
+    return kInDebug ? self.developmentPushReleaseSecret : self.productionPushReleaseSecret;
 }
 
-- (BOOL)isValid
+- (NSString *)analyticsKey
 {
-    BOOL valid = YES;
-    
-    unsigned int outCount, i;
-    objc_property_t *properties = class_copyPropertyList([self class], &outCount);
-    
-    for (i = 0; i < outCount; i++) {
-        objc_property_t property = properties[i];
-        const char *propName = property_getName(property);
-        
-        if (propName) {
-            NSString *propertyName = [NSString stringWithCString:propName encoding:[NSString defaultCStringEncoding]];
-            id value = [self valueForKey:propertyName];
-            
-            if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
-                valid = NO;
-                PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", propertyName);
-                break;
-            }
+    return kInDebug ? self.developmentPushReleaseSecret : self.productionPushReleaseSecret;
+}
+
+- (BOOL)pushParametersValid;
+{
+    SEL selectors[] = {
+        @selector(pushDeviceAlias),
+        @selector(pushAPIURL),
+        @selector(pushAutoRegistrationEnabled),
+        @selector(developmentPushVariantUUID),
+        @selector(developmentPushReleaseSecret),
+        @selector(productionPushVariantUUID),
+        @selector(productionPushReleaseSecret),
+    };
+
+    for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
+        id value = [self valueForKey:NSStringFromSelector(selectors[i])];
+        if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
+            PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", NSStringFromSelector(selectors[i]));
+            return NO;
+            break;
         }
     }
-    free(properties);
-    
-    return valid;
+    return YES;
 }
 
-- (BOOL)inProduction
+- (BOOL)analyticsParametersValid
 {
-    return kInProduction;
+    SEL selectors[] = {
+        @selector(analyticsAPIURL),
+        @selector(developmentAnalyticsKey),
+        @selector(productionAnalyticsKey),
+    };
+
+    for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
+        id value = [self valueForKey:NSStringFromSelector(selectors[i])];
+        if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
+            PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", NSStringFromSelector(selectors[i]));
+            return NO;
+            break;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)inDebugMode
+{
+    return kInDebug;
 }
 
 @end

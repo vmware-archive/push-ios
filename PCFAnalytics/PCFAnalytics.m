@@ -329,7 +329,6 @@ static const struct ErrorType ErrorType = {
                 PCFPushLog(@"Sync Analytic Events Started");
                 [requestBatches enumerateObjectsUsingBlock:^(NSArray *batchedEvents, NSUInteger idx, BOOL *stop) {
                     [PCFAnalyticsURLConnection syncAnalyicEvents:batchedEvents
-                                                     forDeviceID:[PCFPersistentStorage serverDeviceID]
                                                          success:^(NSURLResponse *response, NSData *data) {
                                                              if ([(NSHTTPURLResponse *)response statusCode] == 200) {
                                                                  PCFPushLog(@"Events successfully synced.");

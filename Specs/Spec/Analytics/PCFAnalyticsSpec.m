@@ -29,6 +29,7 @@ describe(@"PCFAnalytics", ^{
         [helper setupApplicationDelegate];
         [helper setupApplicationForSuccessfulRegistration];
         [helper setupDefaultSavedParameters];
+        [helper setupParameters];
         
         manager = [PCFCoreDataManager shared];
         [[manager managedObjectContext] stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
@@ -48,7 +49,7 @@ describe(@"PCFAnalytics", ^{
         
         beforeEach(^{
             [PCFSDK setAnalyticsEnabled:YES];
-            
+            [PCFSDK setRegistrationParameters:helper.params];
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;

@@ -117,7 +117,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [PCFPersistentStorage setServerDeviceID:parsedData.deviceUUID];
         [PCFPersistentStorage setVariantUUID:parameters.variantUUID];
         [PCFPersistentStorage setReleaseSecret:parameters.releaseSecret];
-        [PCFPersistentStorage setDeviceAlias:parameters.deviceAlias];
+        [PCFPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
         
         if (successBlock) {
             successBlock();
@@ -225,7 +225,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     
-    if (![parameters.deviceAlias isEqualToString:[PCFPersistentStorage deviceAlias]]) {
+    if (![parameters.pushDeviceAlias isEqualToString:[PCFPersistentStorage deviceAlias]]) {
         PCFPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
         return NO;
     }

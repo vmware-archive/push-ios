@@ -9,21 +9,30 @@
 #import <UIKit/UIKit.h>
 
 /**
- * Defines the set of parameters used while registering the device for push notifications.
+ * Defines the set of parameters used while registering the device for push notifications or analyitcs.
  * Pass to one of the `register` methods in the `PCFPushSDK` class.
  */
 @interface PCFParameters : NSObject
 
-@property (copy) NSString *deviceAlias;
+/**
+ * Push Parameters
+ */
+@property BOOL pushAutoRegistrationEnabled;
+@property (copy) NSString *pushDeviceAlias;
 @property (copy) NSString *pushAPIURL;
+@property (copy) NSString *developmentPushVariantUUID;
+@property (copy) NSString *developmentPushReleaseSecret;
+@property (copy) NSString *productionPushVariantUUID;
+@property (copy) NSString *productionPushReleaseSecret;
+
+/**
+ * Analytics Parameters
+ */
 @property (copy) NSString *analyticsAPIURL;
-@property BOOL autoRegistrationEnabled;
+@property (copy) NSString *developmentAnalyticsKey;
+@property (copy) NSString *productionAnalyticsKey;
 
-@property (copy) NSString *developmentVariantUUID;
-@property (copy) NSString *developmentReleaseSecret;
 
-@property (copy) NSString *productionVariantUUID;
-@property (copy) NSString *productionReleaseSecret;
 
 /**
  * Creates an instance using the values set in the `PCFParameters.plist` file.
@@ -42,23 +51,33 @@
 + (PCFParameters *)parameters;
 
 /**
- * Validate all properties are populated
+ * Validate Push Parameter properties
  */
-- (BOOL)isValid;
+- (BOOL)pushParametersValid;
 
 /**
- * The production state of the application
+ * Validate Analytics Parameter properties
  */
-- (BOOL)inProduction;
+- (BOOL)analyticsParametersValid;
 
 /**
- * The current variant UUID (resolved using the inProduction flag).
+ * The Debug state of the application
+ */
+- (BOOL)inDebugMode;
+
+/**
+ * The variant UUID (resolved using the inProduction flag).
  */
 - (NSString *)variantUUID;
 
 /**
- * The current release Secret (resolved using the inProduction flag).
+ * The release Secret (resolved using the inProduction flag).
  */
 - (NSString *)releaseSecret;
+
+/**
+ * The analytics key (resolved using the inProduction flag).
+ */
+- (NSString *)analyticsKey;
 
 @end

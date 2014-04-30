@@ -157,7 +157,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     
     PCFPushRegistrationRequestData *requestData = [[PCFPushRegistrationRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
-    requestData.deviceAlias = parameters.deviceAlias;
+    requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = @"Apple";
     requestData.deviceModel = deviceModel;
     requestData.os = @"ios";

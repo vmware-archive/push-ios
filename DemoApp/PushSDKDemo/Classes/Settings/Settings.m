@@ -61,9 +61,9 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
 {
     PCFParameters *params = [PCFParameters parameters];
     [params setPushAPIURL:BACK_END_REQUEST_URL];
-    [params setDevelopmentVariantUUID:[Settings variantUUID]];
-    [params setDevelopmentReleaseSecret:[Settings releaseSecret]];
-    [params setDeviceAlias:[Settings deviceAlias]];
+    [params setDevelopmentPushVariantUUID:[Settings variantUUID]];
+    [params setDevelopmentPushReleaseSecret:[Settings releaseSecret]];
+    [params setPushDeviceAlias:[Settings deviceAlias]];
     return params;
 }
 
