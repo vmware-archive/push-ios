@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4F0000E1646E462990202401 /* libPods-PCFPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F303DBBC5F64D709BFF96D9 /* libPods-PCFPushTests.a */; };
+		F1899FB219119E7500327394 /* PCFAnalyticsURLConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1899FB119119E7500327394 /* PCFAnalyticsURLConnectionSpec.m */; };
 		F1BCF2E618E5CF46004F3684 /* PCFPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D018E5CF46004F3684 /* PCFPushBackEndConnectionSpec.m */; };
 		F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */; };
 		F1BCF2E818E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D518E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m */; };
@@ -34,6 +35,7 @@
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1319F0918EDE47700852A7F /* PCFAnalytics_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCFAnalytics_TestingHeader.h; sourceTree = "<group>"; };
 		F1319F0A18EDEF1F00852A7F /* PCFAnalyticEvent_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCFAnalyticEvent_TestingHeader.h; sourceTree = "<group>"; };
+		F1899FB119119E7500327394 /* PCFAnalyticsURLConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAnalyticsURLConnectionSpec.m; sourceTree = "<group>"; };
 		F1BCF2C918E5CD10004F3684 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1BCF2CA18E5CD10004F3684 /* PCFPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PCFPushTests-Info.plist"; sourceTree = "<group>"; };
 		F1BCF2CB18E5CD10004F3684 /* PCFPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushTests-Prefix.pch"; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			isa = PBXGroup;
 			children = (
 				F1E5D1F718ECB3E9007E8802 /* PCFAnalyticsSpec.m */,
+				F1899FB119119E7500327394 /* PCFAnalyticsURLConnectionSpec.m */,
 			);
 			path = Analytics;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				F1BCF2EC18E5CF46004F3684 /* PCFRegistrationParametersSpec.m in Sources */,
 				F1E93B4F19006F410038F429 /* PCFClassPropertyUtility.m in Sources */,
 				F1E5D1F818ECB3E9007E8802 /* PCFAnalyticsSpec.m in Sources */,
+				F1899FB219119E7500327394 /* PCFAnalyticsURLConnectionSpec.m in Sources */,
 				F1BCF2EF18E5CF46004F3684 /* PCFPushHexUtilSpec.m in Sources */,
 				F1BCF2EE18E5CF46004F3684 /* PCFPushPersistentStorageSpec.m in Sources */,
 				F1BCF2E818E5CF46004F3684 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */,

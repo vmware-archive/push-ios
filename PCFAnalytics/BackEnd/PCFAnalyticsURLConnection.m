@@ -7,15 +7,16 @@
 //
 
 #import "PCFAnalyticsURLConnection.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 #import "NSObject+PCFJsonizable.h"
 #import "PCFPushDebug.h"
 #import "PCFParameters.h"
 #import "PCFClient.h"
 
 static NSString *const BACK_END_ANALYTICS_REQUEST_URL = @"analytics";
-static NSString *const BACK_END_ANALYTICS_KEY_FIELD   = @"analyticsKey";
 static NSTimeInterval kAnalyticsSyncTimeout = 60.0;
+
+NSString *const BACK_END_ANALYTICS_KEY_FIELD = @"analyticsKey";
 
 @implementation PCFAnalyticsURLConnection
 
@@ -66,7 +67,7 @@ static NSTimeInterval kAnalyticsSyncTimeout = 60.0;
 {
     PCFParameters *params = [[PCFClient shared] registrationParameters];
     if (!params || !params.analyticsAPIURL) {
-        PCFPushLog(@"PCFPushURLConnection baseURL is nil");
+        PCFPushLog(@"PCFAnalyticsURLConnection baseURL is nil");
         return nil;
     }
     return [NSURL URLWithString:params.analyticsAPIURL];
@@ -76,7 +77,7 @@ static NSTimeInterval kAnalyticsSyncTimeout = 60.0;
 {
     PCFParameters *params = [[PCFClient shared] registrationParameters];
     if (!params || !params.analyticsKey) {
-        PCFPushLog(@"PCFPushURLConnection analytics key is nil");
+        PCFPushLog(@"PCFAnalyticsURLConnection analytics key is nil");
         return nil;
     }
     return params.analyticsKey;

@@ -16,5 +16,11 @@
 	<string>0b34d564-0033-4997-b4ca-2e3e759ee2a7</string>
 	<key>developmentPushVariantUUID</key>
 	<string>81c645e3-1e64-4858-b1fa-8358b672a072</string>
+	<key>analyticsAPIURL</key>
+	<string>http://ANALYTICSAPIURL.com</string>
+	<key>productionAnalyticsKey</key>
+	<string>ANALYTICS-KEY</string>
+	<key>developmentAnalyticsKey</key>
+	<string>ANALYTICS-KEY</string>
 </dict>
 </plist>

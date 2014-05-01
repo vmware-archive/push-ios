@@ -14,7 +14,9 @@
 #import "NSObject+PCFJsonizable.h"
 #import "PCFPushClient.h"
 #import "PCFPushHexUtil.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
+
+NSString *const kBasicAuthorizationKey = @"Authorization";
 
 static NSString *const kRegistrationRequestPath = @"registration";
 static NSTimeInterval kRegistrationTimeout = 60.0;

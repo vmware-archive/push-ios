@@ -11,6 +11,7 @@
 #import "PCFPushDebug.h"
 #import "PCFParameters.h"
 #import "PCFPushSDK.h"
+#import "PCFSDK+Analytics.h"
 
 @interface AppDelegate ()
 
@@ -34,7 +35,7 @@
     
     static BOOL usePlist = YES;
     PCFParameters *parameters;
-    
+    [PCFSDK setAnalyticsEnabled:YES];
     if (usePlist) {
         parameters = [PCFParameters defaultParameters];
         
@@ -50,7 +51,6 @@
     
     [PCFPushSDK setRegistrationParameters:parameters];
 #warning - TODO integrate analytics into demo app
-//    [PCFPushSDK setAnalyticsEnabled:YES];
     [PCFPushSDK setCompletionBlockWithSuccess:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
         PCFPushLog(@"Application received callback \"registrationSucceeded\".");

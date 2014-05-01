@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NSString *const BACK_END_ANALYTICS_KEY_FIELD;
+
 @interface PCFAnalyticsURLConnection : NSObject
 
 + (void)syncAnalyicEvents:(NSArray *)events

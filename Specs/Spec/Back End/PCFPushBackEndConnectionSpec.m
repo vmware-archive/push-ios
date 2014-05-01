@@ -9,7 +9,7 @@
 #import "Kiwi.h"
 
 #import "NSURLConnection+PCFPushAsync2Sync.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushURLConnection.h"
 #import "PCFParameters.h"
 #import "PCFPushErrors.h"
@@ -101,7 +101,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should have basic auth headers in the request", ^{
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
-                NSString *authValue = request.allHTTPHeaderFields[@"Authorization"];
+                NSString *authValue = request.allHTTPHeaderFields[kBasicAuthorizationKey];
                 [[authValue shouldNot] beNil];
                 [[authValue should] startWithString:@"Basic "];
                 [[authValue should] endWithString:helper.base64AuthString1];

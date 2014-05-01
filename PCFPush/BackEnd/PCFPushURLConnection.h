@@ -10,6 +10,8 @@
 
 @class PCFParameters;
 
+NSString *const kBasicAuthorizationKey;
+
 @interface PCFPushURLConnection : NSObject
 
 + (void)unregisterDeviceID:(NSString *)deviceID

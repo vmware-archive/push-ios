@@ -8,10 +8,10 @@
          location = "group:BackEnd"
          name = "BackEnd">
          <FileRef
-            location = "group:NSURLConnection+PCFPushBackEndConnection.h">
+            location = "group:NSURLConnection+PCFBackEndConnection.h">
          </FileRef>
          <FileRef
-            location = "group:NSURLConnection+PCFPushBackEndConnection.m">
+            location = "group:NSURLConnection+PCFBackEndConnection.m">
          </FileRef>
       </Group>
       <Group

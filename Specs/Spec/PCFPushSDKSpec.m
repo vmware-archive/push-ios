@@ -17,7 +17,7 @@
 #import "PCFParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 
 SPEC_BEGIN(PCFPushSDKSpec)
 

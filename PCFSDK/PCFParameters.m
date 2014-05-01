@@ -59,7 +59,7 @@ static BOOL kInDebug = NO;
 
 - (NSString *)analyticsKey
 {
-    return kInDebug ? self.developmentPushReleaseSecret : self.productionPushReleaseSecret;
+    return kInDebug ? self.developmentAnalyticsKey : self.productionAnalyticsKey;
 }
 
 - (BOOL)pushParametersValid;

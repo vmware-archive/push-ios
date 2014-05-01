@@ -13,7 +13,7 @@
 #import "PCFAnalytics_TestingHeader.h"
 #import "PCFAnalyticEvent_TestingHeader.h"
 #import "PCFCoreDataManager.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushAppDelegate+Analytics.h"
 
 SPEC_BEGIN(PCFAnalyticsSpec)

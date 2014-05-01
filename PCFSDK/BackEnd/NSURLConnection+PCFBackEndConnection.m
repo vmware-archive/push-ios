@@ -7,12 +7,12 @@
 //
 
 #import "PCFPushErrors.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 #import "NSObject+PCFJsonizable.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 
-@implementation NSURLConnection (PCFPushBackEndConnection)
+@implementation NSURLConnection (PCFBackEndConnection)
 
 + (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
                             success:(void (^)(NSURLResponse *response, NSData *data))success

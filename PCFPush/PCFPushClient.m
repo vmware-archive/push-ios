@@ -16,7 +16,7 @@
 #import "PCFPushURLConnection.h"
 #import "NSObject+PCFJsonizable.h"
 #import "PCFPushRegistrationResponseData.h"
-#import "NSURLConnection+PCFPushBackEndConnection.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushErrors.h"

@@ -1,5 +1,5 @@
 //
-//  NSURLConnection+PCFPushBackEndConnection.h
+//  NSURLConnection+PCFBackEndConnection.h
 //  PCFPushSDK
 //
 //  Created by DX123-XL on 3/4/2014.
@@ -10,7 +10,7 @@
 
 typedef void (^CompletionHandler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
-@interface NSURLConnection (PCFPushBackEndConnection)
+@interface NSURLConnection (PCFBackEndConnection)
 
 + (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
                             success:(void (^)(NSURLResponse *response, NSData *data))success

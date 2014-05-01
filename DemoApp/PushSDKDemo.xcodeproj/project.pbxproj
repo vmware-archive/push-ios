@@ -29,8 +29,8 @@
 		F114D311190AB24D0008BE3C /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D307190AB24D0008BE3C /* PCFAnalytics.m */; };
 		F114D312190AB24D0008BE3C /* PCFSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D309190AB24D0008BE3C /* PCFSDK+Analytics.m */; };
 		F114D313190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */; };
-		F114D32F190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */; };
 		F114D338190EA7800008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D337190EA7800008BE3C /* PCFPushURLConnection.m */; };
+		F1899FB91911A22500327394 /* NSURLConnection+PCFBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1899FB81911A22500327394 /* NSURLConnection+PCFBackEndConnection.m */; };
 		F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */; };
 		F18D8A0918E5D66D0084D142 /* PCFPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EC18E5D66D0084D142 /* PCFPushRegistrationRequestData.m */; };
 		F18D8A0A18E5D66D0084D142 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EE18E5D66D0084D142 /* PCFPushRegistrationResponseData.m */; };
@@ -95,10 +95,10 @@
 		F114D309190AB24D0008BE3C /* PCFSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFSDK+Analytics.m"; sourceTree = "<group>"; };
 		F114D30B190AB24D0008BE3C /* PCFPersistentStorage+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPersistentStorage+Analytics.h"; sourceTree = "<group>"; };
 		F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
-		F114D32D190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFPushBackEndConnection.h"; sourceTree = "<group>"; };
-		F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushBackEndConnection.m"; sourceTree = "<group>"; };
 		F114D336190EA7800008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
 		F114D337190EA7800008BE3C /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
+		F1899FB71911A22500327394 /* NSURLConnection+PCFBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFBackEndConnection.h"; sourceTree = "<group>"; };
+		F1899FB81911A22500327394 /* NSURLConnection+PCFBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFBackEndConnection.m"; sourceTree = "<group>"; };
 		F18D89E918E5D66D0084D142 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
 		F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationData.m; sourceTree = "<group>"; };
 		F18D89EB18E5D66D0084D142 /* PCFPushRegistrationRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationRequestData.h; sourceTree = "<group>"; };
@@ -259,8 +259,8 @@
 		F114D32C190E9FD00008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				F114D32D190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.h */,
-				F114D32E190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m */,
+				F1899FB71911A22500327394 /* NSURLConnection+PCFBackEndConnection.h */,
+				F1899FB81911A22500327394 /* NSURLConnection+PCFBackEndConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -492,7 +492,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F114D29C190AA8600008BE3C /* PCFAppDelegateProxy.m in Sources */,
-				F114D32F190E9FD00008BE3C /* NSURLConnection+PCFPushBackEndConnection.m in Sources */,
 				F114D2A0190AA8600008BE3C /* PCFJSONValueTransformer.m in Sources */,
 				F114D30E190AB24D0008BE3C /* PCFAnalyticsURLConnection.m in Sources */,
 				F114D2A2190AA8600008BE3C /* PCFPushErrorUtil.m in Sources */,
@@ -525,6 +524,7 @@
 				F114D2F9190AAF8A0008BE3C /* NSObject+PCFJSONizable.m in Sources */,
 				F1FDE1F118D78115009EBE38 /* Settings.m in Sources */,
 				F1FDE1B418D7806B009EBE38 /* main.m in Sources */,
+				F1899FB91911A22500327394 /* NSURLConnection+PCFBackEndConnection.m in Sources */,
 				F1FDE1EF18D78115009EBE38 /* LogItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
