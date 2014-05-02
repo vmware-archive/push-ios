@@ -65,5 +65,4 @@
     return [self.originalAppDelegate respondsToSelector:sel] || [self pushDelegateRespondsToSelector:sel];
 }
 
-
 @end

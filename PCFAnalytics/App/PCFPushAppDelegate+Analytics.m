@@ -24,10 +24,15 @@ const struct PushNotificationEvents PushNotificationEvents = {
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [self application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:nil];
+    [self logApplication:application didReceiveRemoteNotification:userInfo];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    [self logApplication:application didReceiveRemoteNotification:userInfo];
+}
+
+- (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
     PCFPushLog(@"Received remote notification: %@", userInfo);
     
@@ -46,7 +51,7 @@ const struct PushNotificationEvents PushNotificationEvents = {
             appState = @"unknown";
             break;
     }
-
+    
     NSMutableDictionary *pushReceivedData = [NSMutableDictionary dictionaryWithCapacity:2];
     [pushReceivedData setObject:appState forKey:PushNotificationKeys.appState];
     

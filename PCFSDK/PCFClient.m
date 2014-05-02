@@ -10,6 +10,8 @@
 
 #import "PCFClient.h"
 #import "PCFParameters.h"
+#import "PCFAppDelegate.h"
+#import "PCFAppDelegateProxy.h"
 
 static PCFClient *_sharedPCFClient;
 static dispatch_once_t _sharedPCFClientToken;
@@ -31,8 +33,30 @@ static dispatch_once_t _sharedPCFClientToken;
     self = [super init];
     if (self) {
         self.registrationParameters = [PCFParameters defaultParameters];
+        [self swapAppDelegate];
     }
     return self;
+}
+
+- (PCFAppDelegate *)swapAppDelegate
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    PCFAppDelegate *pushAppDelegate;
+    
+    if (application.delegate == self.appDelegateProxy) {
+        pushAppDelegate = (PCFAppDelegate *)[self.appDelegateProxy swappedAppDelegate];
+        
+    } else {
+        self.appDelegateProxy = [[PCFAppDelegateProxy alloc] init];
+        
+        @synchronized(application) {
+            pushAppDelegate = [[PCFAppDelegate alloc] init];
+            self.appDelegateProxy.originalAppDelegate = application.delegate;
+            self.appDelegateProxy.swappedAppDelegate = pushAppDelegate;
+            application.delegate = self.appDelegateProxy;
+        }
+    }
+    return pushAppDelegate;
 }
 
 + (void)resetSharedClient

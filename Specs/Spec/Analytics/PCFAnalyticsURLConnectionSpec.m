@@ -29,6 +29,10 @@ describe(@"PCFAnalyticsURLConnection", ^{
             [[authValue shouldNot] beNil];
             [[authValue should] equal:[PCFClient shared].registrationParameters.analyticsKey];
             
+            NSError *JSONError;
+            [[[NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&JSONError] should] beNonNil];
+            [[JSONError should] beNil];
+            
             __block NSHTTPURLResponse *newResponse;
             
             if ([request.HTTPMethod isEqualToString:@"POST"]) {

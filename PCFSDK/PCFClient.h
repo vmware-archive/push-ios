@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class PCFParameters, PCFAppDelegateProxy;
+@class PCFParameters, PCFAppDelegateProxy, PCFAppDelegate;
 
 @interface PCFClient : NSObject
 
@@ -17,5 +17,7 @@
 
 + (instancetype)shared;
 + (void)resetSharedClient;
+
+- (PCFAppDelegate *)swapAppDelegate;
 
 @end

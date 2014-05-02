@@ -35,8 +35,8 @@ const struct EventTypes EventTypes = {
     .inactive     = @"event_app_inactive",
     .backgrounded = @"event_backgrounded",
     .foregrounded = @"event_foregrounded",
-    .registered   = @"event_registered",
-    .unregistered = @"event_unregistered",
+    .registered   = @"event_push_registered",
+    .unregistered = @"event_push_unregistered",
 };
 
 

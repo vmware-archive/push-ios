@@ -30,31 +30,15 @@
         self.notificationTypes = (UIRemoteNotificationTypeAlert
                                   |UIRemoteNotificationTypeBadge
                                   |UIRemoteNotificationTypeSound);
-        [self swapAppDelegate];
     }
     return self;
 }
 
-- (void)swapAppDelegate
+- (PCFAppDelegate *)swapAppDelegate
 {
-    UIApplication *application = [UIApplication sharedApplication];
-    PCFAppDelegate *pushAppDelegate;
+    PCFAppDelegate *pushAppDelegate = [super swapAppDelegate];
     
-    if (application.delegate == self.appDelegateProxy) {
-        pushAppDelegate = (PCFAppDelegate *)[self.appDelegateProxy swappedAppDelegate];
-        
-    } else {
-        self.appDelegateProxy = [[PCFAppDelegateProxy alloc] init];
-        
-        @synchronized(application) {
-            pushAppDelegate = [[PCFAppDelegate alloc] init];
-            self.appDelegateProxy.originalAppDelegate = application.delegate;
-            self.appDelegateProxy.swappedAppDelegate = pushAppDelegate;
-            application.delegate = self.appDelegateProxy;
-        }
-    }
-    
-    [pushAppDelegate setRegistrationBlockWithSuccess:^(NSData *deviceToken) {
+    [pushAppDelegate setPushRegistrationBlockWithSuccess:^(NSData *deviceToken) {
         [self APNSRegistrationSuccess:deviceToken];
         
     } failure:^(NSError *error) {
@@ -62,6 +46,7 @@
             self.failureBlock(error);
         }
     }];
+    return pushAppDelegate;
 }
 
 - (void)registerForRemoteNotifications

@@ -18,8 +18,8 @@
 
 @implementation PCFAppDelegate
 
-- (void)setRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
-                                failure:(void (^)(NSError *error))failure
+- (void)setPushRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
+                                    failure:(void (^)(NSError *error))failure
 {
     if (!success || !failure) {
         [NSException raise:NSInvalidArgumentException format:@"success/failure blocks may not be nil"];
