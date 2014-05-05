@@ -17,7 +17,7 @@
 		F114D2A0190AA8600008BE3C /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D291190AA8600008BE3C /* PCFJSONValueTransformer.m */; };
 		F114D2A1190AA8600008BE3C /* PCFPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D293190AA8600008BE3C /* PCFPushDebug.m */; };
 		F114D2A2190AA8600008BE3C /* PCFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D295190AA8600008BE3C /* PCFPushErrorUtil.m */; };
-		F114D2A3190AA8600008BE3C /* PCFPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D297190AA8600008BE3C /* PCFPushHardwareUtil.m */; };
+		F114D2A3190AA8600008BE3C /* PCFHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D297190AA8600008BE3C /* PCFHardwareUtil.m */; };
 		F114D2A4190AA8600008BE3C /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D299190AA8600008BE3C /* PCFPushHexUtil.m */; };
 		F114D2F3190AAF560008BE3C /* PCFPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2F2190AAF560008BE3C /* PCFPersistentStorage+Push.m */; };
 		F114D2F6190AAF6D0008BE3C /* PCFPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2F4190AAF6D0008BE3C /* PCFPersistentStorage.m */; };
@@ -71,8 +71,8 @@
 		F114D293190AA8600008BE3C /* PCFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDebug.m; sourceTree = "<group>"; };
 		F114D294190AA8600008BE3C /* PCFPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrorUtil.h; sourceTree = "<group>"; };
 		F114D295190AA8600008BE3C /* PCFPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushErrorUtil.m; sourceTree = "<group>"; };
-		F114D296190AA8600008BE3C /* PCFPushHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHardwareUtil.h; sourceTree = "<group>"; };
-		F114D297190AA8600008BE3C /* PCFPushHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHardwareUtil.m; sourceTree = "<group>"; };
+		F114D296190AA8600008BE3C /* PCFHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFHardwareUtil.h; sourceTree = "<group>"; };
+		F114D297190AA8600008BE3C /* PCFHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFHardwareUtil.m; sourceTree = "<group>"; };
 		F114D298190AA8600008BE3C /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
 		F114D299190AA8600008BE3C /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
 		F114D2F1190AAF560008BE3C /* PCFPersistentStorage+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPersistentStorage+Push.h"; sourceTree = "<group>"; };
@@ -194,8 +194,8 @@
 				F114D293190AA8600008BE3C /* PCFPushDebug.m */,
 				F114D294190AA8600008BE3C /* PCFPushErrorUtil.h */,
 				F114D295190AA8600008BE3C /* PCFPushErrorUtil.m */,
-				F114D296190AA8600008BE3C /* PCFPushHardwareUtil.h */,
-				F114D297190AA8600008BE3C /* PCFPushHardwareUtil.m */,
+				F114D296190AA8600008BE3C /* PCFHardwareUtil.h */,
+				F114D297190AA8600008BE3C /* PCFHardwareUtil.m */,
 				F114D298190AA8600008BE3C /* PCFPushHexUtil.h */,
 				F114D299190AA8600008BE3C /* PCFPushHexUtil.m */,
 			);
@@ -506,7 +506,7 @@
 				F114D311190AB24D0008BE3C /* PCFAnalytics.m in Sources */,
 				F114D312190AB24D0008BE3C /* PCFSDK+Analytics.m in Sources */,
 				F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */,
-				F114D2A3190AA8600008BE3C /* PCFPushHardwareUtil.m in Sources */,
+				F114D2A3190AA8600008BE3C /* PCFHardwareUtil.m in Sources */,
 				F114D30F190AB24D0008BE3C /* PCFAnalyticEvent.m in Sources */,
 				F114D29B190AA8600008BE3C /* PCFAppDelegate.m in Sources */,
 				F18D8A0918E5D66D0084D142 /* PCFPushRegistrationRequestData.m in Sources */,

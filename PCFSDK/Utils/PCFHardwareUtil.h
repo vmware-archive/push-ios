@@ -8,8 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PCFPushHardwareUtil : NSObject
+@interface PCFHardwareUtil : NSObject
 
-+ (NSString *)hardwareSimpleDescription;
++ (NSString *)operatingSystem;
+
++ (NSString *)operatingSystemVersion;
+
++ (NSString *)deviceModel;
+
++ (NSString *)deviceManufacturer;
 
 @end

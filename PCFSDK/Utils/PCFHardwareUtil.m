@@ -6,11 +6,41 @@
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
-#import "PCFPushHardwareUtil.h"
+#import <UIKit/UIKit.h>
+
+#import "PCFHardwareUtil.h"
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-@implementation PCFPushHardwareUtil
+#define STATIC_VARIABLE(VARIABLENAME, VARIABLEVALUE)       \
+static NSString *VARIABLENAME;                             \
+static dispatch_once_t onceToken;                          \
+dispatch_once(&onceToken, ^{                               \
+    VARIABLENAME = VARIABLEVALUE;                          \
+});                                                        \
+return VARIABLENAME;                                       \
+
+@implementation PCFHardwareUtil
+
++ (NSString *)operatingSystem
+{
+    STATIC_VARIABLE(operatingSystem, @"ios");
+}
+
++ (NSString *)operatingSystemVersion
+{
+    STATIC_VARIABLE(operatingSystemVersion, [[UIDevice currentDevice] systemVersion]);
+}
+
++ (NSString *)deviceModel
+{
+    STATIC_VARIABLE(deviceModel, [PCFHardwareUtil hardwareSimpleDescription]);
+}
+
++ (NSString *)deviceManufacturer
+{
+    STATIC_VARIABLE(deviceManufacturer, @"Apple");
+}
 
 + (NSString *)hardwareString
 {

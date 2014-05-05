@@ -6,12 +6,15 @@
 //
 //
 
+#import <UIKit/UIKit.h>
+
 #import "PCFAnalytics.h"
 #import "PCFPushDebug.h"
 #import "PCFAnalyticEvent.h"
 #import "PCFCoreDataManager.h"
 #import "PCFPersistentStorage+Analytics.h"
 #import "PCFAnalyticsURLConnection.h"
+#import "PCFHardwareUtil.h"
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
@@ -146,7 +149,18 @@ static const struct ErrorType ErrorType = {
 + (void)didBecomeActive
 {
     PCFPushLog(@"Did Become Active - Logging event.");
-    [self logEvent:EventTypes.active];
+    static NSDictionary *params;
+    if (!params) {
+        NSString *shortVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        params = @{
+                   @"application_version" : shortVersion?:@"NA",
+                   @"os" : [PCFHardwareUtil operatingSystem],
+                   @"os_version" : [PCFHardwareUtil operatingSystemVersion],
+                   @"device_manufacturer" : [PCFHardwareUtil deviceManufacturer],
+                   @"device_model" : [PCFHardwareUtil deviceModel],
+                   };
+    }
+    [self logEvent:EventTypes.active withParameters:params];
 }
 
 + (void)willResignActive

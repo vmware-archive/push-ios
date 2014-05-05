@@ -28,8 +28,8 @@
 		F114D2E0190AA87A0008BE3C /* PCFPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2BA190AA87A0008BE3C /* PCFPushDebug.m */; };
 		F114D2E1190AA87A0008BE3C /* PCFPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BB190AA87A0008BE3C /* PCFPushErrorUtil.h */; };
 		F114D2E2190AA87A0008BE3C /* PCFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2BC190AA87A0008BE3C /* PCFPushErrorUtil.m */; };
-		F114D2E3190AA87A0008BE3C /* PCFPushHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BD190AA87A0008BE3C /* PCFPushHardwareUtil.h */; };
-		F114D2E4190AA87A0008BE3C /* PCFPushHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2BE190AA87A0008BE3C /* PCFPushHardwareUtil.m */; };
+		F114D2E3190AA87A0008BE3C /* PCFHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BD190AA87A0008BE3C /* PCFHardwareUtil.h */; };
+		F114D2E4190AA87A0008BE3C /* PCFHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2BE190AA87A0008BE3C /* PCFHardwareUtil.m */; };
 		F114D2E5190AA87A0008BE3C /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BF190AA87A0008BE3C /* PCFPushHexUtil.h */; };
 		F114D2E6190AA87A0008BE3C /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2C0190AA87A0008BE3C /* PCFPushHexUtil.m */; };
 		F114D2E7190AA87A0008BE3C /* PCFPushAppDelegate+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2C3190AA87A0008BE3C /* PCFPushAppDelegate+Analytics.h */; };
@@ -90,8 +90,8 @@
 		F114D2BA190AA87A0008BE3C /* PCFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDebug.m; sourceTree = "<group>"; };
 		F114D2BB190AA87A0008BE3C /* PCFPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrorUtil.h; sourceTree = "<group>"; };
 		F114D2BC190AA87A0008BE3C /* PCFPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushErrorUtil.m; sourceTree = "<group>"; };
-		F114D2BD190AA87A0008BE3C /* PCFPushHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHardwareUtil.h; sourceTree = "<group>"; };
-		F114D2BE190AA87A0008BE3C /* PCFPushHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHardwareUtil.m; sourceTree = "<group>"; };
+		F114D2BD190AA87A0008BE3C /* PCFHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFHardwareUtil.h; sourceTree = "<group>"; };
+		F114D2BE190AA87A0008BE3C /* PCFHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFHardwareUtil.m; sourceTree = "<group>"; };
 		F114D2BF190AA87A0008BE3C /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
 		F114D2C0190AA87A0008BE3C /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
 		F114D2C3190AA87A0008BE3C /* PCFPushAppDelegate+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushAppDelegate+Analytics.h"; sourceTree = "<group>"; };
@@ -212,8 +212,8 @@
 				F114D2BA190AA87A0008BE3C /* PCFPushDebug.m */,
 				F114D2BB190AA87A0008BE3C /* PCFPushErrorUtil.h */,
 				F114D2BC190AA87A0008BE3C /* PCFPushErrorUtil.m */,
-				F114D2BD190AA87A0008BE3C /* PCFPushHardwareUtil.h */,
-				F114D2BE190AA87A0008BE3C /* PCFPushHardwareUtil.m */,
+				F114D2BD190AA87A0008BE3C /* PCFHardwareUtil.h */,
+				F114D2BE190AA87A0008BE3C /* PCFHardwareUtil.m */,
 				F114D2BF190AA87A0008BE3C /* PCFPushHexUtil.h */,
 				F114D2C0190AA87A0008BE3C /* PCFPushHexUtil.m */,
 			);
@@ -371,7 +371,7 @@
 				F114D315190AF1050008BE3C /* PCFMapping.h in Headers */,
 				F114D2E1190AA87A0008BE3C /* PCFPushErrorUtil.h in Headers */,
 				F18D89C618E5D6610084D142 /* PCFPushRegistrationRequestData.h in Headers */,
-				F114D2E3190AA87A0008BE3C /* PCFPushHardwareUtil.h in Headers */,
+				F114D2E3190AA87A0008BE3C /* PCFHardwareUtil.h in Headers */,
 				F114D2E5190AA87A0008BE3C /* PCFPushHexUtil.h in Headers */,
 				F114D333190EA7700008BE3C /* PCFPushURLConnection.h in Headers */,
 				F1BCF2C618E5CA43004F3684 /* PCFPushSDK-Prefix.pch in Headers */,
@@ -478,7 +478,7 @@
 				F114D2EE190AA87A0008BE3C /* PCFCoreDataManager.m in Sources */,
 				F114D2E2190AA87A0008BE3C /* PCFPushErrorUtil.m in Sources */,
 				F114D2F0190AA87A0008BE3C /* PCFAnalytics.m in Sources */,
-				F114D2E4190AA87A0008BE3C /* PCFPushHardwareUtil.m in Sources */,
+				F114D2E4190AA87A0008BE3C /* PCFHardwareUtil.m in Sources */,
 				F114D2EC190AA87A0008BE3C /* PCFAnalyticEvent.m in Sources */,
 				F114D319190AF1110008BE3C /* PCFPersistentStorage.m in Sources */,
 				F114D2D0190AA87A0008BE3C /* NSObject+PCFJsonizable.m in Sources */,

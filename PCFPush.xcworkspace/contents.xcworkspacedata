@@ -56,10 +56,10 @@
             location = "group:PCFPushErrorUtil.m">
          </FileRef>
          <FileRef
-            location = "group:PCFPushHardwareUtil.h">
+            location = "group:PCFHardwareUtil.h">
          </FileRef>
          <FileRef
-            location = "group:PCFPushHardwareUtil.m">
+            location = "group:PCFHardwareUtil.m">
          </FileRef>
          <FileRef
             location = "group:PCFPushHexUtil.h">

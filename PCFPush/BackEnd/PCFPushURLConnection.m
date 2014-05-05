@@ -9,7 +9,7 @@
 #import "PCFPushDebug.h"
 #import "PCFParameters.h"
 #import "PCFPushURLConnection.h"
-#import "PCFPushHardwareUtil.h"
+#import "PCFHardwareUtil.h"
 #import "PCFPushRegistrationRequestData.h"
 #import "NSObject+PCFJsonizable.h"
 #import "PCFPushClient.h"
@@ -147,23 +147,13 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 + (PCFPushRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
                                                        parameters:(PCFParameters *)parameters
 {
-    static NSString *osVersion = nil;
-    if (!osVersion) {
-        osVersion = [[UIDevice currentDevice] systemVersion];
-    }
-    
-    static NSString *deviceModel = nil;
-    if (!deviceModel) {
-        deviceModel = [PCFPushHardwareUtil hardwareSimpleDescription];
-    }
-    
     PCFPushRegistrationRequestData *requestData = [[PCFPushRegistrationRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
     requestData.deviceAlias = parameters.pushDeviceAlias;
-    requestData.deviceManufacturer = @"Apple";
-    requestData.deviceModel = deviceModel;
-    requestData.os = @"ios";
-    requestData.osVersion = osVersion;
+    requestData.deviceManufacturer = [PCFHardwareUtil deviceManufacturer];
+    requestData.deviceModel = [PCFHardwareUtil deviceModel];
+    requestData.os = [PCFHardwareUtil operatingSystem];
+    requestData.osVersion = [PCFHardwareUtil operatingSystemVersion];
     return requestData;
 }
 

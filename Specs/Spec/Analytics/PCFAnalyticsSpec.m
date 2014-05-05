@@ -70,7 +70,7 @@ describe(@"PCFAnalytics", ^{
             
             [PCFAnalytics stub:@selector(shouldSendAnalytics) andReturn:theValue(YES)];
             
-            entityName = nil;
+            entityName = NSStringFromClass([PCFAnalyticEvent class]);
             expectedEventType = nil;
             expectedCountOFEvents = -1;
         });
@@ -89,21 +89,18 @@ describe(@"PCFAnalytics", ^{
         
         it(@"should add event to analytics DB when application becomes active.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidBecomeActiveNotification object:nil userInfo:nil];
-            entityName = NSStringFromClass([PCFAnalyticEvent class]);
             expectedEventType = EventTypes.active;
             expectedCountOFEvents = 1;
         });
         
         it(@"should add event to analytics DB when application resigns active.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationWillResignActiveNotification object:nil userInfo:nil];
-            entityName = NSStringFromClass([PCFAnalyticEvent class]);
             expectedEventType = EventTypes.inactive;
             expectedCountOFEvents = 1;
         });
         
         it(@"should add event to analytics DB and send to remote server when application enters background.", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
-            entityName = NSStringFromClass([PCFAnalyticEvent class]);
             expectedEventType = EventTypes.backgrounded;
             expectedCountOFEvents = 0;
         });
