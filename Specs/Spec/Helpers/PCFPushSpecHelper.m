@@ -10,6 +10,7 @@
 
 #import "PCFPushSpecHelper.h"
 #import "PCFAppDelegate.h"
+#import "PCFAppDelegateProxy.h"
 #import "PCFPushSDK.h"
 #import "JRSwizzle.h"
 #import "PCFPushDebug.h"
@@ -19,6 +20,24 @@
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
 #endif
+
+@interface TestAppDelegate : NSObject <UIApplicationDelegate>
+@end
+
+@interface TestAppDelegateRemotePush : TestAppDelegate
+@end
+
+@implementation TestAppDelegate
+@end
+
+@implementation TestAppDelegateRemotePush
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
+@end
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
@@ -62,6 +81,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.backEndDeviceId = nil;
     self.backEndDeviceId2 = nil;
     self.application = nil;
+    self.applicationDelegate = nil;
 }
 
 #pragma mark - Application helpers
@@ -71,6 +91,17 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.application = [KWMock mockForClass:[UIApplication class]];
     [UIApplication stub:@selector(sharedApplication) andReturn:self.application];
     return self.application;
+}
+
+- (void)stubApplication
+{
+    [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
+    [self.application stub:@selector(setDelegate:) withBlock:^id(NSArray *params) {
+        if ([params[0] conformsToProtocol:@protocol(UIApplicationDelegate)]) {
+            self.applicationDelegate = params[0];
+        }
+        return nil;
+    }];
 }
 
 - (void) setupApplicationForSuccessfulRegistration
@@ -102,17 +133,39 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 #pragma mark - App Delegate Helpers
 
+- (id<UIApplicationDelegate>) setupMockApplicationDelegateWithoutRemotePush
+{
+    self.applicationDelegate = [KWMock mockForClass:[TestAppDelegate class]];
+    [(NSObject *)self.applicationDelegate stub:@selector(conformsToProtocol:)
+                                     andReturn:@YES
+                                 withArguments:@protocol(UIApplicationDelegate)];
+    
+    [self stubApplication];
+    
+    return self.applicationDelegate;
+}
+
+- (id<UIApplicationDelegate>) setupMockApplicationDelegateWithRemotePush
+{
+    self.applicationDelegate = [KWMock mockForClass:[TestAppDelegateRemotePush class]];
+    [(NSObject *)self.applicationDelegate stub:@selector(conformsToProtocol:)
+                                     andReturn:@YES
+                                 withArguments:@protocol(UIApplicationDelegate)];
+    [(NSObject *)self.applicationDelegate stub:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:) withBlock:^id(NSArray *params) {
+        void (^completionHandler)(UIBackgroundFetchResult) = params[2];
+        completionHandler(UIBackgroundFetchResultNoData);
+        return nil;
+    }];
+    
+    [self stubApplication];
+    
+    return self.applicationDelegate;
+}
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
     self.applicationDelegate = [[PCFAppDelegate alloc] init];
-    [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
-    [self.application stub:@selector(setDelegate:) withBlock:^id(NSArray *params) {
-        if ([params[0] conformsToProtocol:@protocol(UIApplicationDelegate)]) {
-            self.applicationDelegate = params[0];
-        }
-        return nil;
-    }];
+    [self stubApplication];
     return self.applicationDelegate;
 }
 

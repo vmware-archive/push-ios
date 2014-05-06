@@ -134,13 +134,12 @@ describe(@"PCFPushBackEndConnection", ^{
             [PCFPushURLConnection registerWithParameters:helper.params
                                              deviceToken:helper.apnsDeviceToken
                                                  success: ^(NSURLResponse *response, NSData *data) {
-                wasExpectedResult = NO;
-			}
-
+                                                     wasExpectedResult = NO;
+                                                 }
                                                  failure: ^(NSError *error) {
-                [[error.domain should] equal:NSURLErrorDomain];
-                wasExpectedResult = YES;
-			}];
+                                                     [[error.domain should] equal:NSURLErrorDomain];
+                                                     wasExpectedResult = YES;
+                                                 }];
 		});
 	});
 });

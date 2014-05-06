@@ -66,6 +66,12 @@
     PCFPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
 }
 
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    PCFPushLog(@"FetchCompletionHandler Received message:");
+    completionHandler(UIBackgroundFetchResultNoData);
+}
+
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     application.applicationIconBadgeNumber = 0;

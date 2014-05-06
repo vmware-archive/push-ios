@@ -12,6 +12,8 @@
 
 + (instancetype)shared;
 
++ (void)setSharedManager:(PCFCoreDataManager *)manager;
+
 - (NSManagedObjectContext *)managedObjectContext;
 
 - (NSArray *)managedObjectsWithEntityName:(NSString *)entityName;

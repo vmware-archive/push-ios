@@ -9,6 +9,12 @@
 #import <objc/runtime.h>
 #import "PCFAppDelegateProxy.h"
 
+typedef void (^CompletionHandler)(UIBackgroundFetchResult);
+
+static NSUInteger expectedResultsCount = 2;
+NSUInteger fetchResult = UIBackgroundFetchResultNoData;
+
+
 @implementation PCFAppDelegateProxy
 
 - (id)init
@@ -26,6 +32,18 @@
     return [self.originalAppDelegate methodSignatureForSelector:sel];
 }
 
+- (void)fetchCompletionHandler:(UIBackgroundFetchResult)result original:(CompletionHandler)originalCompletionHandler
+{
+    @synchronized(self) {
+        expectedResultsCount--;
+        fetchResult = [PCFAppDelegateProxy mergeNewBackgroundFetchResult:result withOldFetchResult:fetchResult];
+        
+        if (expectedResultsCount == 0) {
+            originalCompletionHandler(fetchResult);
+        }
+    }
+}
+
 - (void)forwardInvocation:(NSInvocation *)invocation
 {
     if (!self.originalAppDelegate) {
@@ -33,6 +51,29 @@
     }
     
     BOOL forwarded = NO;
+    
+    //Handle multiple appDelegates calling the completionHandler block.
+    SEL pushSelector = @selector(application:didReceiveRemoteNotification:fetchCompletionHandler:);
+    if (sel_isEqual(invocation.selector, pushSelector) &&
+        [self.swappedAppDelegate respondsToSelector:pushSelector] &&
+        [self.originalAppDelegate respondsToSelector:pushSelector])
+    {
+        @synchronized(self) {
+            //Reset results counter
+            expectedResultsCount = 2;
+            fetchResult = UIBackgroundFetchResultNoData;
+            CompletionHandler originalCompletionHandler = nil;
+            [invocation getArgument:&originalCompletionHandler atIndex:4];
+            
+            if (originalCompletionHandler) {
+                CompletionHandler swappedCompletionHandler = ^(UIBackgroundFetchResult result) {
+                    [self fetchCompletionHandler:result original:originalCompletionHandler];
+                };
+                [invocation setArgument:&swappedCompletionHandler atIndex:4];
+                [invocation retainArguments];
+            }
+        }
+    }
     
     if ([self.swappedAppDelegate respondsToSelector:invocation.selector]) {
         forwarded = YES;
@@ -44,8 +85,23 @@
         [invocation invokeWithTarget:self.originalAppDelegate];
     }
     
+    //If no appDelegate responds to the selector, crash in the originalAppDelegate instead of the swappedAppDelegate
     if (!forwarded) {
         [invocation invokeWithTarget:self.originalAppDelegate];
+    }
+}
+
++ (UIBackgroundFetchResult)mergeNewBackgroundFetchResult:(UIBackgroundFetchResult)newResult
+                                      withOldFetchResult:(UIBackgroundFetchResult)oldResult
+{
+    if (oldResult == UIBackgroundFetchResultNewData || newResult == UIBackgroundFetchResultNewData) {
+        return UIBackgroundFetchResultNewData;
+        
+    } else if (oldResult == UIBackgroundFetchResultFailed || newResult == UIBackgroundFetchResultFailed) {
+        return UIBackgroundFetchResultFailed;
+        
+    } else {
+        return oldResult;
     }
 }
 

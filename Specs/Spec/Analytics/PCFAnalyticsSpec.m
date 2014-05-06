@@ -7,8 +7,12 @@
 //
 
 #import "Kiwi.h"
+#import <objc/runtime.h>
 
 #import "PCFPushSpecHelper.h"
+#import "PCFAppDelegateProxy.h"
+#import "PCFPushClient.h"
+#import "PCFPushSDK.h"
 #import "PCFSDK+Analytics.h"
 #import "PCFAnalytics_TestingHeader.h"
 #import "PCFAnalyticEvent_TestingHeader.h"
@@ -169,6 +173,9 @@ describe(@"PCFAnalytics", ^{
         beforeEach(^{
             [PCFSDK setAnalyticsEnabled:YES];
             
+            [PCFSDK load];
+            [PCFSDK setRegistrationParameters:helper.params];
+            
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [helper.applicationDelegate application:helper.application didReceiveRemoteNotification:@{}];
         });
@@ -290,6 +297,67 @@ describe(@"PCFAnalytics", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidEnterBackgroundNotification object:nil userInfo:nil];
             NSArray *events = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
             [[theValue(events.count) should] beGreaterThanOrEqualTo:theValue(1)];
+        });
+    });
+});
+
+describe(@"PCFAnalytics + PCFPush", ^{
+    context(@"BackgroundFetchResult processing with multiple appDelegates", ^{
+        __block PCFPushSpecHelper *helper;
+        __block NSInteger totalExecutionCount = -1;
+        
+        void(^forceLoadSDK)() = ^{
+            [PCFPushSDK load];
+            [PCFPushSDK setRegistrationParameters:helper.params];
+            [[[helper.applicationDelegate class] should] equal:[PCFAppDelegateProxy class]];
+        };
+        
+        void(^sendFakeRemotePush)() = ^{
+            [helper.applicationDelegate application:helper.application
+                       didReceiveRemoteNotification:@{@"alert" : @"Analytics Test"}
+                             fetchCompletionHandler:^(UIBackgroundFetchResult result) {
+                                 totalExecutionCount++;
+                             }];
+        };
+        
+        beforeEach(^{
+            helper = [[PCFPushSpecHelper alloc] init];
+            [helper setupApplication];
+            [helper setupParameters];
+            [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
+            
+            [PCFPushClient resetSharedClient];
+            [helper setupApplicationForSuccessfulRegistration];
+            [helper setupApplicationDelegateForSuccessfulRegistration];
+            
+            totalExecutionCount = 0;
+        });
+        
+        afterEach(^{
+            [[theValue(totalExecutionCount) should] equal:theValue(1)];
+            [helper reset];
+        });
+        
+        it(@"should call 'application:didReceiveRemoteNotification:fetchCompletionHandler:' only on swapped AppDelegate if original AppDelegate does not implement the method.", ^{
+            [helper setupMockApplicationDelegateWithoutRemotePush];
+            
+            forceLoadSDK();
+            
+            [[[(PCFAppDelegateProxy *)helper.applicationDelegate swappedAppDelegate] should] beKindOfClass:[PCFAppDelegate class]];
+            [[[(PCFAppDelegateProxy *)helper.applicationDelegate originalAppDelegate] shouldNot] receive:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
+            
+            sendFakeRemotePush();
+        });
+        
+        it(@"should call 'application:didReceiveRemoteNotification:fetchCompletionHandler:' on both original and swapped AppDelegate", ^{
+            [helper setupMockApplicationDelegateWithRemotePush];
+            
+            forceLoadSDK();
+            
+            [[[(PCFAppDelegateProxy *)helper.applicationDelegate swappedAppDelegate] should] beKindOfClass:[PCFAppDelegate class]];
+            [[[(PCFAppDelegateProxy *)helper.applicationDelegate originalAppDelegate] should] receive:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)];
+            
+            sendFakeRemotePush();
         });
     });
 });

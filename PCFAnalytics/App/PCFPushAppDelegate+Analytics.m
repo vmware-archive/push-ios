@@ -30,6 +30,7 @@ const struct PushNotificationEvents PushNotificationEvents = {
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     [self logApplication:application didReceiveRemoteNotification:userInfo];
+    completionHandler(UIBackgroundFetchResultNoData);
 }
 
 - (void)logApplication:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
