@@ -44,7 +44,18 @@ In order to receive push messages from PCF Push Server in your iOS application y
 
  3. Download the project framework and add it to your project.
 
- 4. Add the following lines of code to the initialization section of your application (probably your implementation of
+ 4. a) Import parameters using a plist. Create a PCFParameters.plist file in your projects root directory. The following keys are required.
+
+ Key | Type
+ --- | ---
+ pushDeviceAlias                  | String
+ pushAPIURL                       | String
+ developmentPushVariantUUID       | String
+ developmentPushReleaseSecret     | String
+ productionPushVariantUUID        | String
+ productionPushReleaseSecret      | String
+
+ b) Import parameters programmatically. Add the following lines of code to the initialization section of your application (probably your implementation of
     UIApplicationDelegate).
  
     Include the following header:
@@ -54,19 +65,13 @@ In order to receive push messages from PCF Push Server in your iOS application y
 
     In your `application:didFinishLaunchingWithOptions` method, please add the following lines:
    
-        PCFPushParameters *parameters = [PCFPushParameters parametersWithNotificationTypes:REQUESTED_REMOTE_NOTIFICATION_TYPES
-                                                                               variantUUID:YOUR_VARIANT_UUID
-                                                                             releaseSecret:YOUR_RELEASE_SECRET
-                                                                               deviceAlias:YOUR_DEVICE_ALIAS];
-        
-        [PCFPushSDK setRegistrationParameters:parameters success:^{
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        PCFPushLog(@"Application received callback \"registrationSucceeded\".");
-            YOUR_SUCCESS_CODE
-        } failure:^(NSError *error) {
-            YOUR_FAILURE_CODE
-        }];
+        PCFParameters *params = [PCFParameters parameters];
+        [params setPushAPIURL:YOUR_BACK_END_REQUEST_URL];
+        [params setDevelopmentPushVariantUUID:YOUR_VARIANT_UUID];
+        [params setDevelopmentPushReleaseSecret:YOUR_RELEASE_SECRET];
+        [params setPushDeviceAlias:YOUR_DEVICE_ALIAS];
 
+        [PCFPushSDK setRegistrationParameters:parameters];
    
 
     The `YOUR_VARIANT_UUID` and `YOUR_RELEASE_SECRET` are described above.  The `YOUR_DEVICE_ALIAS` is a custom field that
@@ -78,12 +83,9 @@ In order to receive push messages from PCF Push Server in your iOS application y
 
 	    https://developer.apple.com/library/ios/documentation/uikit/reference/UIApplication_Class/Reference/Reference.html#//apple_ref/doc/c_ref/UIRemoteNotificationType
 
-    You should call this method anytime the PCFPushParameters or success/failure blocks change in the application.
+    You should call this method anytime the PCFParameters or the success/failure blocks change in the application.
 
-    The `startRegistration` method is asynchronous and will return before registration is complete.  If you need to know
-    when registration is complete (or if it fails), then provide a `PCFPushRegistrationListener` as the second argument.
-
-    You do not need to call the UIApplication `registerForRemoteNotificationTypes:` method.  The library takes care of that
+    You do not need to call the UIApplication `registerForRemoteNotificationTypes:` method.  The library takes care of this
 	for you.
 
  6. The library is not set up, at this time, to receive push messages for you since Apple has provided straightforward
@@ -107,17 +109,14 @@ Framework` subdirectory.
 The source code of the project is divided into three projects:
 
  * PCFPushSDK - framework target
- 
      The redistributable portion of the framework.
 
  * PCFPushSpecs - iOS testing target
-
-     Unit tests.  Implemented using [Cedar](https://github.com/pivotal/cedar).
+     Unit tests.  Implemented using [Kiwi](https://github.com/kiwi-bdd/Kiwi).
+     Uses [cocoapods](http://cocoapods.org/) to manage dependencies.
 
 	 This target produces an application that links against the PCFPushSDK source code directly
-	 and runs the unit tests.  Watch the console window for the test results.  The application itself
-	 has no visible UI.  You can also run these tests by running the `run_specs.sh` script from the
-	 command line.
+	 and runs the unit tests.
 
  * PushSDKDemo - Application target
 
@@ -134,16 +133,6 @@ depends on the [iOS Universal Framework](https://github.com/kstenerud/iOS-Univer
 To build the framework, make sure the iOS Universal Framework is installed and load the PCFPushSDK project in Xcode.  Select
 the "PCFPushSDK" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a
 Finder window containing the resultant framework.
-
-Staging Server
---------------
-
-At this time, the library is hard coded to use the staging server on Amazon AWS.  You can confirm the current server
-by looking at the `BACK_END_REGISTRATION_REQUEST_URL` string value in `PCFPushConst.h`.  The intent is to change this value
-to point to a production server when it is available.
-
-Note that the existing staging server is currently hardcoded to use the Apple APNS "sandbox" server only and is
-not suitable for production use at this time.
 
 Simple Demo Application
 -----------------------
