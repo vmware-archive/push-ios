@@ -9,7 +9,6 @@
 #import "PCFPushAppDelegate+Analytics.h"
 #import "PCFPushDebug.h"
 #import "PCFAnalytics.h"
-#import "PCFMapping.h"
 
 const struct PushNotificationKeys PushNotificationKeys = {
     .pushID   = @"push_id",

@@ -15,6 +15,9 @@
 #import "PCFPersistentStorage+Analytics.h"
 #import "PCFAnalyticsURLConnection.h"
 #import "PCFHardwareUtil.h"
+#import "PCFNotifications.h"
+
+#define PCF_ADD_OBSERVER(observer_selector, notification_name) [[NSNotificationCenter defaultCenter] addObserver:self selector:observer_selector name:notification_name object:nil];
 
 static NSTimeInterval minSecondsBetweenSends = 60.0f;
 static NSUInteger maxStoredEventCount = 1000;
@@ -68,25 +71,12 @@ static const struct ErrorType ErrorType = {
 
 + (void)load
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didEnterBackground)
-                                                 name:UIApplicationDidEnterBackgroundNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willEnterForground)
-                                                 name:UIApplicationWillEnterForegroundNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(didBecomeActive)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(willResignActive)
-                                                 name:UIApplicationWillResignActiveNotification
-                                               object:nil];
+    PCF_ADD_OBSERVER(@selector(didEnterBackground), UIApplicationDidEnterBackgroundNotification);
+    PCF_ADD_OBSERVER(@selector(willEnterForground), UIApplicationWillEnterForegroundNotification);
+    PCF_ADD_OBSERVER(@selector(didBecomeActive), UIApplicationDidBecomeActiveNotification);
+    PCF_ADD_OBSERVER(@selector(willResignActive), UIApplicationWillResignActiveNotification);
+    PCF_ADD_OBSERVER(@selector(registrationSuccessful), PCFPushRegistrationSuccessNotification);
+    PCF_ADD_OBSERVER(@selector(unregisterSuccessful), PCFPushUnregisterNotification);
 }
 
 #pragma mark - static propery getters/setters
@@ -167,6 +157,18 @@ static const struct ErrorType ErrorType = {
 {
     PCFPushLog(@"Will Resign Active - Logging event.");
     [self logEvent:EventTypes.inactive];
+}
+
++ (void)registrationSuccessful
+{
+    PCFPushLog(@"Push Registration Successful - Logging event.");
+    [self logEvent:EventTypes.registered];
+}
+
++ (void)unregisterSuccessful
+{
+    PCFPushLog(@"Push Unregistration Successful - Logging event.");
+    [self logEvent:EventTypes.unregistered];
 }
 
 #pragma mark - Event Database Logging

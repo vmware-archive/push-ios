@@ -20,6 +20,7 @@
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushErrors.h"
+#import "PCFNotifications.h"
 
 @implementation PCFPushClient
 
@@ -107,6 +108,9 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         if (successBlock) {
             successBlock();
         }
+        
+        NSDictionary *userInfo = @{ @"URLResponse" : response };
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushRegistrationSuccessNotification object:self userInfo:userInfo];
     };
     
     return registrationBlock;
@@ -123,9 +127,9 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     
     if ([self.class updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
         RegistrationBlock registrationBlock = [self.class registrationBlockWithParameters:self.registrationParameters
-                                                                        deviceToken:deviceToken
-                                                                            success:self.successBlock
-                                                                            failure:self.failureBlock];
+                                                                              deviceToken:deviceToken
+                                                                                  success:self.successBlock
+                                                                                  failure:self.failureBlock];
         
         [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPersistentStorage serverDeviceID]
                                                   parameters:self.registrationParameters

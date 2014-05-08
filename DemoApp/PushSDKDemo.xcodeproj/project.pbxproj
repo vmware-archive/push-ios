@@ -30,6 +30,7 @@
 		F114D312190AB24D0008BE3C /* PCFSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D309190AB24D0008BE3C /* PCFSDK+Analytics.m */; };
 		F114D313190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */; };
 		F114D338190EA7800008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D337190EA7800008BE3C /* PCFPushURLConnection.m */; };
+		F18761E5191C03DA0069B9B2 /* PCFNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = F18761E4191C03DA0069B9B2 /* PCFNotifications.m */; };
 		F1899FB91911A22500327394 /* NSURLConnection+PCFBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F1899FB81911A22500327394 /* NSURLConnection+PCFBackEndConnection.m */; };
 		F18D8A0818E5D66D0084D142 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* PCFPushRegistrationData.m */; };
 		F18D8A0918E5D66D0084D142 /* PCFPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EC18E5D66D0084D142 /* PCFPushRegistrationRequestData.m */; };
@@ -97,6 +98,8 @@
 		F114D30C190AB24D0008BE3C /* PCFPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
 		F114D336190EA7800008BE3C /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
 		F114D337190EA7800008BE3C /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
+		F18761E3191C03DA0069B9B2 /* PCFNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFNotifications.h; sourceTree = "<group>"; };
+		F18761E4191C03DA0069B9B2 /* PCFNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFNotifications.m; sourceTree = "<group>"; };
 		F1899FB71911A22500327394 /* NSURLConnection+PCFBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFBackEndConnection.h"; sourceTree = "<group>"; };
 		F1899FB81911A22500327394 /* NSURLConnection+PCFBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFBackEndConnection.m"; sourceTree = "<group>"; };
 		F18D89E918E5D66D0084D142 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
@@ -186,6 +189,8 @@
 		F114D28F190AA8600008BE3C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F18761E3191C03DA0069B9B2 /* PCFNotifications.h */,
+				F18761E4191C03DA0069B9B2 /* PCFNotifications.m */,
 				F114D2F4190AAF6D0008BE3C /* PCFPersistentStorage.m */,
 				F114D2F5190AAF6D0008BE3C /* PCFPersistentStorage.h */,
 				F114D290190AA8600008BE3C /* PCFJSONValueTransformer.h */,
@@ -491,6 +496,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F18761E5191C03DA0069B9B2 /* PCFNotifications.m in Sources */,
 				F114D29C190AA8600008BE3C /* PCFAppDelegateProxy.m in Sources */,
 				F114D2A0190AA8600008BE3C /* PCFJSONValueTransformer.m in Sources */,
 				F114D30E190AB24D0008BE3C /* PCFAnalyticsURLConnection.m in Sources */,

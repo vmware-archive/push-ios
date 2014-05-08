@@ -73,6 +73,12 @@
          <FileRef
             location = "group:PCFPersistentStorage.m">
          </FileRef>
+         <FileRef
+            location = "group:PCFNotifications.h">
+         </FileRef>
+         <FileRef
+            location = "group:PCFNotifications.m">
+         </FileRef>
       </Group>
       <FileRef
          location = "group:PCFAppDelegateProxy.m">

@@ -14,6 +14,8 @@
 
 + (void)setSharedManager:(PCFCoreDataManager *)manager;
 
+- (void)flushDatabase;
+
 - (NSManagedObjectContext *)managedObjectContext;
 
 - (NSArray *)managedObjectsWithEntityName:(NSString *)entityName;

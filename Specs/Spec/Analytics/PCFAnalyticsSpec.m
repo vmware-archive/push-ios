@@ -57,12 +57,16 @@ describe(@"PCFAnalytics", ^{
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
-                NSArray *events = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
+                NSDictionary *eventsDictionary = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:NSJSONReadingAllowFragments error:&error];
                 if (error) {
                     fail(@"HTTP body data is not valid JSON.");
                 }
-                [[theValue(events.count) should] equal:theValue(1)];
-                NSDictionary *event = events[0];
+                
+                [[eventsDictionary should] beKindOfClass:[NSDictionary class]];
+                [[[eventsDictionary allKeys] should] containObjectsInArray:@[@"events", @"device_id"]];
+                
+                [[theValue([(NSArray *)eventsDictionary[@"events"] count]) should] equal:theValue(1)];
+                NSDictionary *event = eventsDictionary[@"events"][0];
                 NSString *backgroundString =  EventTypes.backgrounded;
                 [[[event objectForKey:EventRemoteAttributes.eventType] should] equal:backgroundString];
                 

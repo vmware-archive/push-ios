@@ -13,7 +13,9 @@
 #import "PCFPushDebug.h"
 #import "PCFPushSDK.h"
 #import "PCFPushClient.h"
+#import "PCFNotifications.h"
 
+// Error domain
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 @implementation PCFPushSDK
@@ -24,6 +26,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                              selector:@selector(appDidFinishLaunchingNotification:)
                                                  name:UIApplicationDidFinishLaunchingNotification
                                                object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:[self class]
                                              selector:@selector(appWillTerminateNotification:)
                                                  name:UIApplicationWillTerminateNotification
@@ -87,6 +90,9 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                          if (success) {
                                              success();
                                          }
+                                         
+                                         NSDictionary *userInfo = @{ @"URLResponse" : response };
+                                         [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushUnregisterNotification object:self userInfo:userInfo];
                                      }
                                      failure:failure];
 }

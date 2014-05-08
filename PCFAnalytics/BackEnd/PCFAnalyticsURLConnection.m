@@ -6,6 +6,8 @@
 //
 //
 
+#import <UIKit/UIKit.h>
+
 #import "PCFAnalyticsURLConnection.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "NSObject+PCFJsonizable.h"
@@ -49,18 +51,29 @@ NSString *const BACK_END_ANALYTICS_KEY_FIELD = @"analyticsKey";
     request.HTTPMethod = @"POST";
     [request setValue:analyticsKey forHTTPHeaderField:BACK_END_ANALYTICS_KEY_FIELD];
 
-    NSError *error;
-    NSData *bodyData = [events pcf_toJSONData:&error];
+    NSData *bodyData = [self createHTTPBodyForEvents:events];
     
-    if (error) {
-        PCFPushCriticalLog(@"Error while converting analytic event to JSON: %@ %@", error, error.userInfo);
-        return;
-    }
     request.HTTPBody = bodyData;
     [NSURLConnection pcf_sendAsynchronousRequest:request
                                            queue:[NSOperationQueue currentQueue]
                                          success:(void (^)(NSURLResponse *response, NSData *data))success
                                          failure:(void (^)(NSError *error))failure];
+}
+
++ (NSData *)createHTTPBodyForEvents:(NSArray *)events
+{
+    NSDictionary *payloadDictionary = @{
+                                        @"device_id": [[[UIDevice currentDevice] identifierForVendor] UUIDString],
+                                        @"events" : events,
+                                        };
+    NSError *error;
+    NSData *bodyData = [payloadDictionary pcf_toJSONData:&error];
+    if (!bodyData) {
+        PCFPushCriticalLog(@"Error while converting analytic event to JSON: %@ %@", error, error.userInfo);
+        return nil;
+    }
+    
+    return bodyData;
 }
 
 + (NSURL *)analyticsBaseURL

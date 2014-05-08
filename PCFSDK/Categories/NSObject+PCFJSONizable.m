@@ -18,7 +18,11 @@
 {
     id foundationType;
     if ([self isKindOfClass:[NSDictionary class]]) {
-        foundationType = self;
+        NSMutableArray *convertedDictionary = [NSMutableDictionary dictionaryWithCapacity:[(NSDictionary *)self count]];
+        [(NSDictionary *)self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            [convertedDictionary setValue:[obj pcf_toFoundationType] forKeyPath:key];
+        }];
+        foundationType = convertedDictionary;
         
     } else if ([self conformsToProtocol:@protocol(PCFMapping)]) {
         NSDictionary *mapping = [self.class localToRemoteMapping];
@@ -39,6 +43,9 @@
             }
         }];
         foundationType = [NSArray arrayWithArray:convertedArray];
+        
+    } else {
+        foundationType = self;
     }
     
     return foundationType;
