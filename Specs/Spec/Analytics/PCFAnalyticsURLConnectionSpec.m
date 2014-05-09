@@ -50,6 +50,8 @@ describe(@"PCFAnalyticsURLConnection", ^{
         __block NSUInteger expectedCount = 0;
         
         beforeEach ( ^{
+            [[PCFCoreDataManager shared] flushDatabase];
+            
             [PCFAnalytics setMinSecondsBetweenSends:0];
             manager = [PCFCoreDataManager shared];
             [[manager managedObjectContext] stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
@@ -66,6 +68,9 @@ describe(@"PCFAnalyticsURLConnection", ^{
         });
         
         it(@"should have analytic key header in the request", ^{
+            NSArray *storedEvents = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(storedEvents.count) should] beZero];
+            
             connectionResponse(200, nil);
             expectedCount = 0;
             
@@ -73,6 +78,9 @@ describe(@"PCFAnalyticsURLConnection", ^{
         });
         
         it(@"should handle a failed request", ^{
+            NSArray *storedEvents = [[PCFCoreDataManager shared] managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+            [[theValue(storedEvents.count) should] beZero];
+            
             connectionResponse(400, [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUnsupportedURL userInfo:nil]);
             expectedCount = 1;
             

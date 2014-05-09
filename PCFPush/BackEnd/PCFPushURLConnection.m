@@ -34,20 +34,26 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (void)unregisterDeviceID:(NSString *)deviceID
+                parameters:(PCFParameters *)parameters
                    success:(void (^)(NSURLResponse *response, NSData *data))success
                    failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
     NSMutableURLRequest *request = [self unregisterRequestForBackEndDeviceID:deviceID];
-    [NSURLConnection pcf_sendAsynchronousRequest:request
-                                         success:success
-                                         failure:failure];
+    
+    if (request) {
+        [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID releaseSecret:parameters.releaseSecret];
+        
+        [NSURLConnection pcf_sendAsynchronousRequest:request
+                                             success:success
+                                             failure:failure];
+    }
 }
 
 + (void)registerWithParameters:(PCFParameters *)parameters
-                       deviceToken:(NSData *)deviceToken
-                           success:(void (^)(NSURLResponse *response, NSData *data))success
-                           failure:(void (^)(NSError *error))failure
+                   deviceToken:(NSData *)deviceToken
+                       success:(void (^)(NSURLResponse *response, NSData *data))success
+                       failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Register with push server for device token: %@", deviceToken);
     NSMutableURLRequest *request = [self registerRequestForAPNSDeviceToken:deviceToken
@@ -118,7 +124,9 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     return request;
 }
 
-+ (void)addBasicAuthToURLRequest:(NSMutableURLRequest *)request withVariantUUID:(NSString *)variantUUID releaseSecret:(NSString *)releaseSecret
++ (void)addBasicAuthToURLRequest:(NSMutableURLRequest *)request
+                 withVariantUUID:(NSString *)variantUUID
+                   releaseSecret:(NSString *)releaseSecret
 {
     NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, releaseSecret]];
     [request setValue:[NSString stringWithFormat:@"Basic  %@", authString] forHTTPHeaderField:@"Authorization"];

@@ -83,18 +83,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void)unregisterWithPushServerSuccess:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure
 {
-    [PCFPushURLConnection unregisterDeviceID:[PCFPersistentStorage serverDeviceID]
-                                     success:^(NSURLResponse *response, NSData *data) {
-                                         [PCFPersistentStorage resetPushPersistedValues];
-                                         
-                                         if (success) {
-                                             success();
-                                         }
-                                         
-                                         NSDictionary *userInfo = @{ @"URLResponse" : response };
-                                         [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushUnregisterNotification object:self userInfo:userInfo];
-                                     }
-                                     failure:failure];
+    [[PCFPushClient shared] unregisterForRemoteNotificationsWithSuccess:success failure:failure];
 }
 
 #pragma mark - Notification Handler Methods

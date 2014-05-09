@@ -57,6 +57,24 @@
     }
 }
 
+- (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
+                                            failure:(void (^)(NSError *error))failure
+{
+    [PCFPushURLConnection unregisterDeviceID:[PCFPersistentStorage serverDeviceID]
+                                  parameters:self.registrationParameters
+                                     success:^(NSURLResponse *response, NSData *data) {
+                                         [PCFPersistentStorage resetPushPersistedValues];
+                                         
+                                         if (success) {
+                                             success();
+                                         }
+                                         
+                                         NSDictionary *userInfo = @{ @"URLResponse" : response };
+                                         [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushUnregisterNotification object:self userInfo:userInfo];
+                                     }
+                                     failure:failure];
+}
+
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
 + (RegistrationBlock)registrationBlockWithParameters:(PCFParameters *)parameters

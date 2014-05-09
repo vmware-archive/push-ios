@@ -9,7 +9,10 @@
 #import "Kiwi.h"
 #import <objc/runtime.h>
 
+#import "PCFPushURLConnection.h"
 #import "PCFPushSpecHelper.h"
+#import "PCFPushBackEndRegistrationDataTest.h"
+#import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "PCFAppDelegateProxy.h"
 #import "PCFPushClient.h"
 #import "PCFPushSDK.h"
@@ -306,15 +309,32 @@ describe(@"PCFAnalytics", ^{
 });
 
 describe(@"PCFAnalytics + PCFPush", ^{
-    context(@"BackgroundFetchResult processing with multiple appDelegates", ^{
-        __block PCFPushSpecHelper *helper;
-        __block NSInteger totalExecutionCount = -1;
+    __block PCFPushSpecHelper *helper;
+    
+    void(^forceLoadSDK)() = ^{
+        [PCFPushSDK load];
+        [PCFPushSDK setRegistrationParameters:helper.params];
+        [[[helper.applicationDelegate class] should] equal:[PCFAppDelegateProxy class]];
+    };
+    
+    beforeEach(^{
+        helper = [[PCFPushSpecHelper alloc] init];
+        [helper setupApplication];
+        [helper setupParameters];
+        [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
         
-        void(^forceLoadSDK)() = ^{
-            [PCFPushSDK load];
-            [PCFPushSDK setRegistrationParameters:helper.params];
-            [[[helper.applicationDelegate class] should] equal:[PCFAppDelegateProxy class]];
-        };
+        [PCFPushClient resetSharedClient];
+        [helper setupApplicationForSuccessfulRegistration];
+        [helper setupApplicationDelegateForSuccessfulRegistration];
+        
+    });
+    
+    afterEach(^{
+        [helper reset];
+    });
+    
+    context(@"BackgroundFetchResult processing with multiple appDelegates", ^{
+        __block NSInteger totalExecutionCount = -1;
         
         void(^sendFakeRemotePush)() = ^{
             [helper.applicationDelegate application:helper.application
@@ -325,21 +345,11 @@ describe(@"PCFAnalytics + PCFPush", ^{
         };
         
         beforeEach(^{
-            helper = [[PCFPushSpecHelper alloc] init];
-            [helper setupApplication];
-            [helper setupParameters];
-            [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
-            
-            [PCFPushClient resetSharedClient];
-            [helper setupApplicationForSuccessfulRegistration];
-            [helper setupApplicationDelegateForSuccessfulRegistration];
-            
             totalExecutionCount = 0;
         });
         
         afterEach(^{
             [[theValue(totalExecutionCount) should] equal:theValue(1)];
-            [helper reset];
         });
         
         it(@"should call 'application:didReceiveRemoteNotification:fetchCompletionHandler:' only on swapped AppDelegate if original AppDelegate does not implement the method.", ^{
@@ -363,6 +373,104 @@ describe(@"PCFAnalytics + PCFPush", ^{
             
             sendFakeRemotePush();
         });
+    });
+});
+
+context(@"Tracking analytic events when push events occur", ^{
+    __block PCFCoreDataManager *manager;
+    __block PCFPushSpecHelper *helper;
+    
+    void(^stubURLConnection)() = ^{
+        [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+            NSURLRequest *request = params[0];
+            NSString *authValue = request.allHTTPHeaderFields[kBasicAuthorizationKey];
+            [[authValue shouldNot] beNil];
+            [[authValue should] startWithString:@"Basic "];
+            [[authValue should] endWithString:helper.base64AuthString1];
+            
+            __block NSHTTPURLResponse *newResponse;
+            __block NSData *newData;
+            
+            if ([request.HTTPMethod isEqualToString:@"PUT"] || [request.HTTPMethod isEqualToString:@"POST"]) {
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSDictionary *dict = @{
+                                       RegistrationAttributes.deviceOS           : TEST_OS,
+                                       RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                       RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
+                                       RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                                       RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                                       RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                                       RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                                       kDeviceUUID                               : TEST_DEVICE_UUID,
+                                       };
+                newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+                
+            } else if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
+            }
+
+            
+            CompletionHandler handler = params[2];
+            handler(newResponse, newData, nil);
+            return nil;
+        }];
+    };
+    
+    BOOL(^containsEventType)(NSArray *, NSString *) = ^BOOL(NSArray *events, NSString *eventType) {
+        __block BOOL containsEvent = NO;
+        [events enumerateObjectsUsingBlock:^(PCFAnalyticEvent *analyticEvent, NSUInteger idx, BOOL *stop) {
+            if([analyticEvent.eventType isEqualToString:eventType]) {
+                containsEvent = YES;
+                *stop = YES;
+            }
+        }];
+        return containsEvent;
+    };
+    
+    beforeEach(^{
+        [[PCFCoreDataManager shared] flushDatabase];
+        NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        [[theValue(events.count) should] beZero];
+        
+        [PCFCoreDataManager setSharedManager:nil];
+        
+        manager = [PCFCoreDataManager shared];
+        [[manager managedObjectContext] stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
+            void (^block)() = params[0];
+            [[manager managedObjectContext] performBlockAndWait:block];
+            return nil;
+        }];
+        
+        helper = [[PCFPushSpecHelper alloc] init];
+        [helper setupApplication];
+        [helper setupParameters];
+        
+        stubURLConnection();
+    });
+    
+    it(@"should add a registration successful event to the events database when push registration is successful", ^{
+        NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        [[theValue(containsEventType(events, EventTypes.registered)) should] beFalse];
+        
+        [[PCFPushClient shared] APNSRegistrationSuccess:helper.apnsDeviceToken];
+        
+        events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        [[theValue(containsEventType(events, EventTypes.registered)) should] beTrue];
+    });
+    
+    it(@"should add a unregistration successful event to the events database when push unregistration is successful", ^{
+        [helper setupDefaultSavedParameters];
+        
+        NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        [[theValue(containsEventType(events, EventTypes.unregistered)) should] beFalse];
+        
+        [PCFPushSDK unregisterWithPushServerSuccess:^{
+        } failure:^(NSError *error) {
+            fail(@"Unregistration call should not have failed.");
+        }];
+        
+        events = [manager managedObjectsWithEntityName:NSStringFromClass([PCFAnalyticEvent class])];
+        [[theValue(containsEventType(events, EventTypes.unregistered)) should] beTrue];
     });
 });
 

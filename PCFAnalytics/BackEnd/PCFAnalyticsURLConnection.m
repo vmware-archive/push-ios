@@ -62,8 +62,9 @@ NSString *const BACK_END_ANALYTICS_KEY_FIELD = @"analyticsKey";
 
 + (NSData *)createHTTPBodyForEvents:(NSArray *)events
 {
+    NSString *vendorID = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
     NSDictionary *payloadDictionary = @{
-                                        @"device_id": [[[UIDevice currentDevice] identifierForVendor] UUIDString],
+                                        @"device_id": vendorID ?: @"NA",
                                         @"events" : events,
                                         };
     NSError *error;

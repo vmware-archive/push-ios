@@ -67,6 +67,7 @@ describe(@"PCFPushBackEndConnection", ^{
     context(@"unregistration bad object arguments", ^{
         it(@"should not require a device ID", ^{
             [[theBlock( ^{ [PCFPushURLConnection unregisterDeviceID:nil
+                                                         parameters:nil
                                                             success: ^(NSURLResponse *response, NSData *data) {}
                                                             failure: ^(NSError *error) {}]; })
               shouldNot] raise];
@@ -74,6 +75,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should not require a success block", ^{
             [[theBlock( ^{ [PCFPushURLConnection unregisterDeviceID:@"Fake Device ID"
+                                                         parameters:nil
                                                             success:nil
                                                             failure: ^(NSError *error) {}]; })
               shouldNot] raise];
@@ -81,6 +83,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should not require a failure block", ^{
             [[theBlock( ^{ [PCFPushURLConnection unregisterDeviceID:@"Fake Device ID"
+                                                         parameters:nil
                                                             success: ^(NSURLResponse *response, NSData *data) {}
                                                             failure:nil]; })
               shouldNot] raise];

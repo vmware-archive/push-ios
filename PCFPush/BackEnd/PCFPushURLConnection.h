@@ -15,6 +15,7 @@ NSString *const kBasicAuthorizationKey;
 @interface PCFPushURLConnection : NSObject
 
 + (void)unregisterDeviceID:(NSString *)deviceID
+                parameters:(PCFParameters *)parameters
                    success:(void (^)(NSURLResponse *response, NSData *data))success
                    failure:(void (^)(NSError *error))failure;
 

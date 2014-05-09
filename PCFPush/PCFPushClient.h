@@ -20,5 +20,7 @@
 
 - (void)APNSRegistrationSuccess:(NSData *)deviceToken;
 - (void)registerForRemoteNotifications;
+- (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
+                                            failure:(void (^)(NSError *error))failure;
 
 @end
