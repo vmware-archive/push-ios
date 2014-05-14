@@ -18,7 +18,7 @@
 {
     id foundationType;
     if ([self isKindOfClass:[NSDictionary class]]) {
-        NSMutableArray *convertedDictionary = [NSMutableDictionary dictionaryWithCapacity:[(NSDictionary *)self count]];
+        NSMutableDictionary *convertedDictionary = [NSMutableDictionary dictionaryWithCapacity:[(NSDictionary *)self count]];
         [(NSDictionary *)self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             [convertedDictionary setValue:[obj pcf_toFoundationType] forKeyPath:key];
         }];

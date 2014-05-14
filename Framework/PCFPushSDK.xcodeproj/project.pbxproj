@@ -43,13 +43,13 @@
 		F114D2EF190AA87A0008BE3C /* PCFAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2CD190AA87A0008BE3C /* PCFAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F114D2F0190AA87A0008BE3C /* PCFAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2CE190AA87A0008BE3C /* PCFAnalytics.m */; };
 		F114D315190AF1050008BE3C /* PCFMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D314190AF1050008BE3C /* PCFMapping.h */; };
-		F114D318190AF1110008BE3C /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; };
+		F114D318190AF1110008BE3C /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F114D319190AF1110008BE3C /* PCFPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D317190AF1110008BE3C /* PCFPersistentStorage.m */; };
-		F114D31C190AF13E0008BE3C /* PCFPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31A190AF13E0008BE3C /* PCFPersistentStorage+Push.h */; };
+		F114D31C190AF13E0008BE3C /* PCFPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31A190AF13E0008BE3C /* PCFPersistentStorage+Push.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F114D31D190AF13E0008BE3C /* PCFPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D31B190AF13E0008BE3C /* PCFPersistentStorage+Push.m */; };
-		F114D321190AF2440008BE3C /* PCFPersistentStorage+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31F190AF2440008BE3C /* PCFPersistentStorage+Analytics.h */; };
+		F114D321190AF2440008BE3C /* PCFPersistentStorage+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31F190AF2440008BE3C /* PCFPersistentStorage+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F114D322190AF2440008BE3C /* PCFPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D320190AF2440008BE3C /* PCFPersistentStorage+Analytics.m */; };
-		F114D325190AF24B0008BE3C /* PCFSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D323190AF24B0008BE3C /* PCFSDK+Analytics.h */; };
+		F114D325190AF24B0008BE3C /* PCFSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D323190AF24B0008BE3C /* PCFSDK+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F114D326190AF24B0008BE3C /* PCFSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D324190AF24B0008BE3C /* PCFSDK+Analytics.m */; };
 		F114D333190EA7700008BE3C /* PCFPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D331190EA7700008BE3C /* PCFPushURLConnection.h */; };
 		F114D334190EA7700008BE3C /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D332190EA7700008BE3C /* PCFPushURLConnection.m */; };
@@ -86,7 +86,7 @@
 		F1B601121922A0A300B65371 /* PCFClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2AE190AA87A0008BE3C /* PCFClient.m */; };
 		F1B601131922A0A300B65371 /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2711908429E0008BE3C /* PCFPushClient.m */; };
 		F1B601141922A0A300B65371 /* PCFSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2B2190AA87A0008BE3C /* PCFSDK.m */; };
-		F1B601171922A0A300B65371 /* PCFSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D323190AF24B0008BE3C /* PCFSDK+Analytics.h */; };
+		F1B601171922A0A300B65371 /* PCFSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D323190AF24B0008BE3C /* PCFSDK+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B6011A1922A0A300B65371 /* PCFAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2CD190AA87A0008BE3C /* PCFAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B6011B1922A0A300B65371 /* PCFClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2AD190AA87A0008BE3C /* PCFClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B6011C1922A0A300B65371 /* PCFParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2AF190AA87A0008BE3C /* PCFParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,14 +100,13 @@
 		F1B601241922A0A300B65371 /* PCFMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D314190AF1050008BE3C /* PCFMapping.h */; };
 		F1B601251922A0A300B65371 /* PCFPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BB190AA87A0008BE3C /* PCFPushErrorUtil.h */; };
 		F1B601281922A0A300B65371 /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BF190AA87A0008BE3C /* PCFPushHexUtil.h */; };
-		F1B6012B1922A0A300B65371 /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; };
+		F1B6012B1922A0A300B65371 /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B6012C1922A0A300B65371 /* PCFAnalyticEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2C9190AA87A0008BE3C /* PCFAnalyticEvent.h */; };
 		F1B6012D1922A0A300B65371 /* PCFAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2A9190AA87A0008BE3C /* PCFAppDelegate.h */; };
-		F1B6012F1922A0A300B65371 /* PCFPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31A190AF13E0008BE3C /* PCFPersistentStorage+Push.h */; };
 		F1B601301922A0A300B65371 /* PCFCoreDataManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2CB190AA87A0008BE3C /* PCFCoreDataManager.h */; };
 		F1B601311922A0A300B65371 /* PCFSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2B5190AA87A0008BE3C /* PCFSortDescriptors.h */; };
 		F1B601321922A0A300B65371 /* PCFNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = F18761DF191C03CF0069B9B2 /* PCFNotifications.h */; };
-		F1B601331922A0A300B65371 /* PCFPersistentStorage+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31F190AF2440008BE3C /* PCFPersistentStorage+Analytics.h */; };
+		F1B601331922A0A300B65371 /* PCFPersistentStorage+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31F190AF2440008BE3C /* PCFPersistentStorage+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B601341922A0A300B65371 /* PCFAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2AB190AA87A0008BE3C /* PCFAppDelegateProxy.h */; };
 		F1B601351922A0A300B65371 /* PCFPushAppDelegate+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2C3190AA87A0008BE3C /* PCFPushAppDelegate+Analytics.h */; };
 		F1B601421922A12500B65371 /* PCFPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89A718E5D6610084D142 /* PCFPushSDK.m */; };
@@ -146,10 +145,10 @@
 		F1B6016F1922A12500B65371 /* PCFHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BD190AA87A0008BE3C /* PCFHardwareUtil.h */; };
 		F1B601701922A12500B65371 /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2BF190AA87A0008BE3C /* PCFPushHexUtil.h */; };
 		F1B601711922A12500B65371 /* PCFPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D331190EA7700008BE3C /* PCFPushURLConnection.h */; };
-		F1B601731922A12500B65371 /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; };
+		F1B601731922A12500B65371 /* PCFPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D316190AF1110008BE3C /* PCFPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B601751922A12500B65371 /* PCFAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2A9190AA87A0008BE3C /* PCFAppDelegate.h */; };
 		F1B601761922A12500B65371 /* PCFPushRegistrationData.h in Headers */ = {isa = PBXBuildFile; fileRef = F18D89A018E5D6610084D142 /* PCFPushRegistrationData.h */; };
-		F1B601771922A12500B65371 /* PCFPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31A190AF13E0008BE3C /* PCFPersistentStorage+Push.h */; };
+		F1B601771922A12500B65371 /* PCFPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D31A190AF13E0008BE3C /* PCFPersistentStorage+Push.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F1B601791922A12500B65371 /* PCFSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2B5190AA87A0008BE3C /* PCFSortDescriptors.h */; };
 		F1B6017A1922A12500B65371 /* PCFNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = F18761DF191C03CF0069B9B2 /* PCFNotifications.h */; };
 		F1B6017C1922A12500B65371 /* PCFAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = F114D2AB190AA87A0008BE3C /* PCFAppDelegateProxy.h */; };
@@ -470,13 +469,16 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F114D325190AF24B0008BE3C /* PCFSDK+Analytics.h in Headers */,
 				F18D89CA18E5D6610084D142 /* PCFPushSDK.h in Headers */,
 				F114D2EF190AA87A0008BE3C /* PCFAnalytics.h in Headers */,
 				F114D2D5190AA87A0008BE3C /* PCFClient.h in Headers */,
 				F114D2D7190AA87A0008BE3C /* PCFParameters.h in Headers */,
 				F114D2D9190AA87A0008BE3C /* PCFSDK.h in Headers */,
 				F1899FB51911A21100327394 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
+				F114D31C190AF13E0008BE3C /* PCFPersistentStorage+Push.h in Headers */,
+				F114D321190AF2440008BE3C /* PCFPersistentStorage+Analytics.h in Headers */,
+				F114D318190AF1110008BE3C /* PCFPersistentStorage.h in Headers */,
+				F114D325190AF24B0008BE3C /* PCFSDK+Analytics.h in Headers */,
 				F114D2741908429E0008BE3C /* PCFPushClient.h in Headers */,
 				F114D2DF190AA87A0008BE3C /* PCFPushDebug.h in Headers */,
 				F114D2CF190AA87A0008BE3C /* NSObject+PCFJsonizable.h in Headers */,
@@ -489,16 +491,13 @@
 				F114D2E5190AA87A0008BE3C /* PCFPushHexUtil.h in Headers */,
 				F1B601A41923B6EA00B65371 /* PCFCompleteSDK-Prefix.pch in Headers */,
 				F114D333190EA7700008BE3C /* PCFPushURLConnection.h in Headers */,
-				F114D318190AF1110008BE3C /* PCFPersistentStorage.h in Headers */,
 				F114D2EB190AA87A0008BE3C /* PCFAnalyticEvent.h in Headers */,
 				F114D2D1190AA87A0008BE3C /* PCFAppDelegate.h in Headers */,
 				F18D89C418E5D6610084D142 /* PCFPushRegistrationData.h in Headers */,
-				F114D31C190AF13E0008BE3C /* PCFPersistentStorage+Push.h in Headers */,
 				F114D2ED190AA87A0008BE3C /* PCFCoreDataManager.h in Headers */,
 				F114D2DC190AA87A0008BE3C /* PCFSortDescriptors.h in Headers */,
 				F18761E1191C03D00069B9B2 /* PCFNotifications.h in Headers */,
 				F1B601961923B29100B65371 /* PCFPushErrors.h in Headers */,
-				F114D321190AF2440008BE3C /* PCFPersistentStorage+Analytics.h in Headers */,
 				F114D2D3190AA87A0008BE3C /* PCFAppDelegateProxy.h in Headers */,
 				F114D2E7190AA87A0008BE3C /* PCFPushAppDelegate+Analytics.h in Headers */,
 				F18D89C818E5D6610084D142 /* PCFPushRegistrationResponseData.h in Headers */,
@@ -509,12 +508,14 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1B601171922A0A300B65371 /* PCFSDK+Analytics.h in Headers */,
 				F1B601971923B29100B65371 /* PCFPushErrors.h in Headers */,
 				F1B6011A1922A0A300B65371 /* PCFAnalytics.h in Headers */,
 				F1B601A51923B6EA00B65371 /* PCFCompleteSDK-Prefix.pch in Headers */,
+				F1B6012B1922A0A300B65371 /* PCFPersistentStorage.h in Headers */,
 				F1B6011B1922A0A300B65371 /* PCFClient.h in Headers */,
 				F1B6011C1922A0A300B65371 /* PCFParameters.h in Headers */,
+				F1B601331922A0A300B65371 /* PCFPersistentStorage+Analytics.h in Headers */,
+				F1B601171922A0A300B65371 /* PCFSDK+Analytics.h in Headers */,
 				F1B6011D1922A0A300B65371 /* PCFSDK.h in Headers */,
 				F1B6011E1922A0A300B65371 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
 				F1B6011F1922A0A300B65371 /* PCFPushClient.h in Headers */,
@@ -525,14 +526,11 @@
 				F1B601241922A0A300B65371 /* PCFMapping.h in Headers */,
 				F1B601251922A0A300B65371 /* PCFPushErrorUtil.h in Headers */,
 				F1B601281922A0A300B65371 /* PCFPushHexUtil.h in Headers */,
-				F1B6012B1922A0A300B65371 /* PCFPersistentStorage.h in Headers */,
 				F1B6012C1922A0A300B65371 /* PCFAnalyticEvent.h in Headers */,
 				F1B6012D1922A0A300B65371 /* PCFAppDelegate.h in Headers */,
-				F1B6012F1922A0A300B65371 /* PCFPersistentStorage+Push.h in Headers */,
 				F1B601301922A0A300B65371 /* PCFCoreDataManager.h in Headers */,
 				F1B601311922A0A300B65371 /* PCFSortDescriptors.h in Headers */,
 				F1B601321922A0A300B65371 /* PCFNotifications.h in Headers */,
-				F1B601331922A0A300B65371 /* PCFPersistentStorage+Analytics.h in Headers */,
 				F1B601341922A0A300B65371 /* PCFAppDelegateProxy.h in Headers */,
 				F1B601351922A0A300B65371 /* PCFPushAppDelegate+Analytics.h in Headers */,
 			);
@@ -548,6 +546,8 @@
 				F1B601651922A12500B65371 /* PCFSDK.h in Headers */,
 				F1B601661922A12500B65371 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
 				F1B601671922A12500B65371 /* PCFPushClient.h in Headers */,
+				F1B601771922A12500B65371 /* PCFPersistentStorage+Push.h in Headers */,
+				F1B601731922A12500B65371 /* PCFPersistentStorage.h in Headers */,
 				F1B601681922A12500B65371 /* PCFPushDebug.h in Headers */,
 				F1B601691922A12500B65371 /* NSObject+PCFJsonizable.h in Headers */,
 				F1B6016B1922A12500B65371 /* PCFJSONValueTransformer.h in Headers */,
@@ -558,10 +558,8 @@
 				F1B601701922A12500B65371 /* PCFPushHexUtil.h in Headers */,
 				F1B601711922A12500B65371 /* PCFPushURLConnection.h in Headers */,
 				F1B601A61923B6EA00B65371 /* PCFCompleteSDK-Prefix.pch in Headers */,
-				F1B601731922A12500B65371 /* PCFPersistentStorage.h in Headers */,
 				F1B601751922A12500B65371 /* PCFAppDelegate.h in Headers */,
 				F1B601761922A12500B65371 /* PCFPushRegistrationData.h in Headers */,
-				F1B601771922A12500B65371 /* PCFPersistentStorage+Push.h in Headers */,
 				F1B601791922A12500B65371 /* PCFSortDescriptors.h in Headers */,
 				F1B601981923B29100B65371 /* PCFPushErrors.h in Headers */,
 				F1B6017A1922A12500B65371 /* PCFNotifications.h in Headers */,
