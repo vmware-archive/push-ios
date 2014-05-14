@@ -38,6 +38,9 @@
          location = "group:Utils"
          name = "Utils">
          <FileRef
+            location = "group:PCFPushErrors.h">
+         </FileRef>
+         <FileRef
             location = "group:PCFJSONValueTransformer.h">
          </FileRef>
          <FileRef
@@ -222,13 +225,6 @@
          </FileRef>
          <FileRef
             location = "group:PCFPersistentStorage+Push.m">
-         </FileRef>
-      </Group>
-      <Group
-         location = "group:Public Headers"
-         name = "Public Headers">
-         <FileRef
-            location = "group:PCFPushErrors.h">
          </FileRef>
       </Group>
       <FileRef
