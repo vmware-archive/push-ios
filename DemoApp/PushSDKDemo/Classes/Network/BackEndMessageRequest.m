@@ -9,7 +9,7 @@
 #import "BackEndMessageRequest.h"
 #import "PCFPushDebug.h"
 
-static NSString *const BACK_END_PUSH_MESSAGE_API          = @"http://ec2-54-234-124-123.compute-1.amazonaws.com:8090/v1/push";
+static NSString *const BACK_END_PUSH_MESSAGE_API          = @"http://push-admin.main.vchs.cfms-apps.com//v1/push";
 static CGFloat BACK_END_PUSH_MESSAGE_TIMEOUT_IN_SECONDS   = 60.0;
 
 @interface BackEndMessageRequest ()
@@ -35,6 +35,7 @@ static CGFloat BACK_END_PUSH_MESSAGE_TIMEOUT_IN_SECONDS   = 60.0;
     urlRequest.HTTPMethod = @"POST";
     urlRequest.HTTPBody = [self getURLRequestBodyData];
     [urlRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [urlRequest setValue:[self getAuthorizationValue] forHTTPHeaderField:@"Authorization"];
     return urlRequest;
 }
 
@@ -55,11 +56,27 @@ static CGFloat BACK_END_PUSH_MESSAGE_TIMEOUT_IN_SECONDS   = 60.0;
 - (NSDictionary*) getRequestDictionary
 {
     return @{
-             @"app_uuid":self.appUuid,
-             @"app_secret_key":self.appSecretKey,
-             @"message":@{ @"title":self.messageTitle, @"body":self.messageBody },
+             @"message":@{ @"body":self.messageBody },
              @"target":@{ @"platforms":self.targetPlatform, @"devices": self.targetDevices },
              };
+}
+
+- (NSString*) getAuthorizationValue
+{
+    NSString *encoded = [self base64String:[NSString stringWithFormat:@"%@:%@", self.envUuid, self.envSecretKey]];
+    return [@"Basic " stringByAppendingString:encoded];
+}
+
+
+- (NSString*)base64String:(NSString *)normalString
+{
+    NSData *plainData = [normalString dataUsingEncoding:NSUTF8StringEncoding];
+    if ([plainData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
+        return [plainData base64EncodedStringWithOptions:0];
+        
+    } else {
+        return [plainData base64Encoding];
+    }
 }
 
 - (void)connection:(NSURLConnection*)connection didFailWithError:(NSError*)error

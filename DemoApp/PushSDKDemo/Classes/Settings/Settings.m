@@ -11,8 +11,8 @@
 
 static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/";
 
-static NSString *const DEFAULT_VARIANT_UUID   = @"288866db-f631-4da2-8508-8385fc9c4880";
-static NSString *const DEFAULT_RELEASE_SECRET = @"1b1a4163-5ee5-4b69-813b-5530c9fcd395";
+static NSString *const DEFAULT_VARIANT_UUID   = @"ada50420-640d-43a3-8bb0-6fd0e0b212ba";
+static NSString *const DEFAULT_RELEASE_SECRET = @"603ebaf5-3ef6-4465-a119-5f0b80cc7443";
 static NSString *const DEFAULT_DEVICE_ALIAS   = @"Default Device Alias";
 
 static NSString *const KEY_VARIANT_UUID    = @"KEY_VARIANT_UUID";
