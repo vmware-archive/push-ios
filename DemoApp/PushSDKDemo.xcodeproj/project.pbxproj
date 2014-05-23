@@ -110,6 +110,7 @@
 		F18D89EE18E5D66D0084D142 /* PCFPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationResponseData.m; sourceTree = "<group>"; };
 		F18D89EF18E5D66D0084D142 /* PCFPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushSDK.h; sourceTree = "<group>"; };
 		F18D89F018E5D66D0084D142 /* PCFPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushSDK.m; sourceTree = "<group>"; };
+		F1EF4619192F88B300CB8930 /* PCFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrors.h; sourceTree = "<group>"; };
 		F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PushSDKDemo-Info.plist"; sourceTree = "<group>"; };
 		F1FDE1B118D7806B009EBE38 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -188,6 +189,7 @@
 		F114D28F190AA8600008BE3C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F1EF4619192F88B300CB8930 /* PCFPushErrors.h */,
 				F18761E3191C03DA0069B9B2 /* PCFNotifications.h */,
 				F18761E4191C03DA0069B9B2 /* PCFNotifications.m */,
 				F114D2F4190AAF6D0008BE3C /* PCFPersistentStorage.m */,
