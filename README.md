@@ -26,7 +26,7 @@ Testing Requirements
 The library is dependent on Cocoapods (https://github.com/allending/Kiwi) for dependency management.
 The library is dependent on Kiwi (https://github.com/allending/Kiwi) for BDD testing.
 
-Instructions for Integrating the PCF Mobile Push Services Push Client SDK for Android
+Instructions for Integrating the PCF Mobile Push Services Push Client SDK for iOS
 ---------------------------------------------------------------------------------------
 
 In order to receive push messages from PCF Push Server in your iOS application you will need to follow these steps:
