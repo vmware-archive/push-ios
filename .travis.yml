@@ -1,6 +1,6 @@
 language: objective-c
-xcode_workspace: PCFPush.xcworkspace
-xcode_scheme: PCFPushTests
+xcode_workspace: PMSSPush.xcworkspace
+xcode_scheme: PMSSPushTests
 xcode_sdk: iphonesimulator7.0
 
 notifications:
