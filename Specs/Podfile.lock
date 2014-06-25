@@ -4,26 +4,26 @@ PODS:
   - Kiwi/XCTest (2.2.4):
     - Kiwi/ARC
     - Kiwi/NonARC
-  - PCFPush (0.4.0):
-    - PCFPush/All
-  - PCFPush/All (0.4.0):
-    - PCFPush/Analytics
-    - PCFPush/Push
-  - PCFPush/Analytics (0.4.0)
-  - PCFPush/Push (0.4.0):
-    - PCFPush/SDK
-  - PCFPush/SDK (0.4.0)
+  - PMSSPush (0.4):
+    - PMSSPush/All
+  - PMSSPush/All (0.4):
+    - PMSSPush/Analytics
+    - PMSSPush/Push
+  - PMSSPush/Analytics (0.4)
+  - PMSSPush/Push (0.4):
+    - PMSSPush/SDK
+  - PMSSPush/SDK (0.4)
 
 DEPENDENCIES:
   - Kiwi/XCTest
-  - PCFPush (from `../`)
+  - PMSSPush (from `../`)
 
 EXTERNAL SOURCES:
-  PCFPush:
+  PMSSPush:
     :path: ../
 
 SPEC CHECKSUMS:
   Kiwi: c73667f2b84cbf36f1a3830267c5a4ae8dcbd8ba
-  PCFPush: b43be42560e2644ca760b8bef5ce557a5e3b197c
+  PMSSPush: 7935333e1fb8652d13b57456739b4fcd1c07dc9c
 
 COCOAPODS: 0.33.1

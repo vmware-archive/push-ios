@@ -1,13 +1,13 @@
 //
 //  Settings.m
-//  PCFPushSDK
+//  PMSSPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-31.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
 //
 
 #import "Settings.h"
-#import "PCFParameters.h"
+#import "PMSSParameters.h"
 
 static NSString *const BACK_END_REQUEST_URL = @"http://cfms-push-service-dev.main.vchs.cfms-apps.com/v1/";
 
@@ -57,9 +57,9 @@ static NSString *const KEY_DEVICE_ALIAS    = @"KEY_DEVICE_ALIAS";
     [self setDeviceAlias:DEFAULT_DEVICE_ALIAS];
 }
 
-+ (PCFParameters *)registrationParameters
++ (PMSSParameters *)registrationParameters
 {
-    PCFParameters *params = [PCFParameters parameters];
+    PMSSParameters *params = [PMSSParameters parameters];
     [params setPushAPIURL:BACK_END_REQUEST_URL];
     [params setDevelopmentPushVariantUUID:[Settings variantUUID]];
     [params setDevelopmentPushReleaseSecret:[Settings releaseSecret]];

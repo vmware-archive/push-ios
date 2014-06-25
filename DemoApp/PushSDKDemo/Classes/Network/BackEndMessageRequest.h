@@ -1,6 +1,6 @@
 //
 //  BackEndMessageRequest.h
-//  PCFPushSDK
+//  PMSSPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-02-13.
 //  Copyright (c) 2014 Pivotal. All rights reserved.

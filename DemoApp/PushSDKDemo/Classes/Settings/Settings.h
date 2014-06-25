@@ -1,6 +1,6 @@
 //
 //  Settings.h
-//  PCFPushSDK
+//  PMSSPushSDK
 //
 //  Created by Rob Szumlakowski on 2014-01-31.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class PCFParameters;
+@class PMSSParameters;
 
 @interface Settings : NSObject
 
@@ -23,7 +23,7 @@
 
 + (void)resetToDefaults;
 
-+ (PCFParameters *)registrationParameters;
++ (PMSSParameters *)registrationParameters;
 + (NSDictionary *)defaults;
 
 @end

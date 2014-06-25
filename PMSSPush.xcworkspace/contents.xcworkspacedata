@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:PMSSSDK"
+      name = "PMSSSDK">
+      <Group
+         location = "group:BackEnd"
+         name = "BackEnd">
+         <FileRef
+            location = "group:NSURLConnection+PMSSBackEndConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSURLConnection+PMSSBackEndConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Categories"
+         name = "Categories">
+         <FileRef
+            location = "group:NSObject+PMSSJSONizable.h">
+         </FileRef>
+         <FileRef
+            location = "group:NSObject+PMSSJSONizable.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Protocols"
+         name = "Protocols">
+         <FileRef
+            location = "group:PMSSMapping.h">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSSortDescriptors.h">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Utils"
+         name = "Utils">
+         <FileRef
+            location = "group:PMSSNotifications.m">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSNotifications.h">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSPushErrors.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSJSONValueTransformer.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSJSONValueTransformer.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushDebug.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushDebug.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushErrorUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushErrorUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSHardwareUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSHardwareUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushHexUtil.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPushHexUtil.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPersistentStorage.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/Utils/PMSSPersistentStorage.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSAppDelegate.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSAppDelegate.m">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSAppDelegateProxy.m">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSAppDelegateProxy.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSParameters.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSParameters.m">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSClient.m">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSSDK/PMSSSDK.m">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:PMSSAnalytics"
+      name = "PMSSAnalytics">
+      <Group
+         location = "group:Persistent Storage"
+         name = "Persistent Storage">
+         <FileRef
+            location = "group:PMSSPersistentStorage+Analytics.h">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSPersistentStorage+Analytics.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:App"
+         name = "App">
+         <FileRef
+            location = "group:PMSSPushAppDelegate+Analytics.h">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSPushAppDelegate+Analytics.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:BackEnd"
+         name = "BackEnd">
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/BackEnd/PMSSAnalyticsURLConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/BackEnd/PMSSAnalyticsURLConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Models"
+         name = "Models">
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/Models/PMSSAnalyticEvent.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/Models/PMSSAnalyticEvent.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/Models/PMSSCoreDataManager.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/Models/PMSSCoreDataManager.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/PMSSAnalytics.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSAnalytics/PMSSAnalytics.m">
+      </FileRef>
+      <FileRef
+         location = "group:PMSSSDK+Analytics.h">
+      </FileRef>
+      <FileRef
+         location = "group:PMSSSDK+Analytics.m">
+      </FileRef>
+   </Group>
+   <Group
+      location = "group:PMSSPush"
+      name = "PMSSPush">
+      <Group
+         location = "group:BackEnd"
+         name = "BackEnd">
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/BackEnd/PMSSPushURLConnection.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/BackEnd/PMSSPushURLConnection.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Models"
+         name = "Models">
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationData.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationData.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationRequestData.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationRequestData.m">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationResponseData.h">
+         </FileRef>
+         <FileRef
+            location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/Models/PMSSPushRegistrationResponseData.m">
+         </FileRef>
+      </Group>
+      <Group
+         location = "group:Persistent Storage"
+         name = "Persistent Storage">
+         <FileRef
+            location = "group:PMSSPersistentStorage+Push.h">
+         </FileRef>
+         <FileRef
+            location = "group:PMSSPersistentStorage+Push.m">
+         </FileRef>
+      </Group>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/PMSSPushSDK.h">
+      </FileRef>
+      <FileRef
+         location = "group:/Users/rob/cfmobile/p/push-ios/PMSSPush/PMSSPushSDK.m">
+      </FileRef>
+      <FileRef
+         location = "group:PMSSPushClient.h">
+      </FileRef>
+      <FileRef
+         location = "group:PMSSPushClient.m">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:Framework/PMSSPushSDK.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:DemoApp/PushSDKDemo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Specs/PMSSPushSpec.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Specs/Pods/Pods.xcodeproj">
+   </FileRef>
+</Workspace>
