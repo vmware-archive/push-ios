@@ -7,35 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D41D290D195B351700251F25 /* PMSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290C195B351700251F25 /* PMSSPushAppDelegate+Analytics.m */; };
-		D41D2910195B352B00251F25 /* PMSSAnalyticsURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290F195B352B00251F25 /* PMSSAnalyticsURLConnection.m */; };
-		D41D2913195B36FE00251F25 /* PMSSSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2912195B36FE00251F25 /* PMSSSDK+Analytics.m */; };
-		D41D2916195B371D00251F25 /* PMSSPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2915195B371D00251F25 /* PMSSPersistentStorage+Analytics.m */; };
-		D41D2919195B373F00251F25 /* NSObject+PMSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2918195B373F00251F25 /* NSObject+PMSSJSONizable.m */; };
-		D41D291C195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D291B195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.m */; };
-		D41D2922195B378000251F25 /* PMSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2920195B378000251F25 /* PMSSNotifications.m */; };
-		D41D2925195B379200251F25 /* PMSSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2924195B379200251F25 /* PMSSPushClient.m */; };
-		D41D2928195B37A600251F25 /* PMSSPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2927195B37A600251F25 /* PMSSPersistentStorage+Push.m */; };
-		F114D27D190958030008BE3C /* PMSSParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* PMSSParameters.plist */; };
-		F114D29B190AA8600008BE3C /* PMSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D283190AA8600008BE3C /* PMSSAppDelegate.m */; };
-		F114D29C190AA8600008BE3C /* PMSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D285190AA8600008BE3C /* PMSSAppDelegateProxy.m */; };
-		F114D29D190AA8600008BE3C /* PMSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D287190AA8600008BE3C /* PMSSClient.m */; };
-		F114D29E190AA8600008BE3C /* PMSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D289190AA8600008BE3C /* PMSSParameters.m */; };
-		F114D29F190AA8600008BE3C /* PMSSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D28B190AA8600008BE3C /* PMSSSDK.m */; };
-		F114D2A0190AA8600008BE3C /* PMSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D291190AA8600008BE3C /* PMSSJSONValueTransformer.m */; };
-		F114D2A1190AA8600008BE3C /* PMSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D293190AA8600008BE3C /* PMSSPushDebug.m */; };
-		F114D2A2190AA8600008BE3C /* PMSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D295190AA8600008BE3C /* PMSSPushErrorUtil.m */; };
-		F114D2A3190AA8600008BE3C /* PMSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D297190AA8600008BE3C /* PMSSHardwareUtil.m */; };
-		F114D2A4190AA8600008BE3C /* PMSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D299190AA8600008BE3C /* PMSSPushHexUtil.m */; };
-		F114D2F6190AAF6D0008BE3C /* PMSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2F4190AAF6D0008BE3C /* PMSSPersistentStorage.m */; };
-		F114D30F190AB24D0008BE3C /* PMSSAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D303190AB24D0008BE3C /* PMSSAnalyticEvent.m */; };
-		F114D310190AB24D0008BE3C /* PMSSCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D305190AB24D0008BE3C /* PMSSCoreDataManager.m */; };
-		F114D311190AB24D0008BE3C /* PMSSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D307190AB24D0008BE3C /* PMSSAnalytics.m */; };
-		F114D338190EA7800008BE3C /* PMSSPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D337190EA7800008BE3C /* PMSSPushURLConnection.m */; };
-		F18D8A0818E5D66D0084D142 /* PMSSPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* PMSSPushRegistrationData.m */; };
-		F18D8A0918E5D66D0084D142 /* PMSSPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EC18E5D66D0084D142 /* PMSSPushRegistrationRequestData.m */; };
-		F18D8A0A18E5D66D0084D142 /* PMSSPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EE18E5D66D0084D142 /* PMSSPushRegistrationResponseData.m */; };
-		F18D8A0B18E5D66D0084D142 /* PMSSPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89F018E5D66D0084D142 /* PMSSPushSDK.m */; };
+		D41D290D195B351700251F25 /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */; };
+		D41D2910195B352B00251F25 /* MSSAnalyticsURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */; };
+		D41D2913195B36FE00251F25 /* MSSSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */; };
+		D41D2916195B371D00251F25 /* MSSPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2915195B371D00251F25 /* MSSPersistentStorage+Analytics.m */; };
+		D41D2919195B373F00251F25 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2918195B373F00251F25 /* NSObject+MSSJSONizable.m */; };
+		D41D291C195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D291B195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m */; };
+		D41D2922195B378000251F25 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2920195B378000251F25 /* MSSNotifications.m */; };
+		D41D2925195B379200251F25 /* MSSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2924195B379200251F25 /* MSSPushClient.m */; };
+		D41D2928195B37A600251F25 /* MSSPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2927195B37A600251F25 /* MSSPersistentStorage+Push.m */; };
+		F114D27D190958030008BE3C /* MSSParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* MSSParameters.plist */; };
+		F114D29B190AA8600008BE3C /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D283190AA8600008BE3C /* MSSAppDelegate.m */; };
+		F114D29C190AA8600008BE3C /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D285190AA8600008BE3C /* MSSAppDelegateProxy.m */; };
+		F114D29D190AA8600008BE3C /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D287190AA8600008BE3C /* MSSClient.m */; };
+		F114D29E190AA8600008BE3C /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D289190AA8600008BE3C /* MSSParameters.m */; };
+		F114D29F190AA8600008BE3C /* MSSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D28B190AA8600008BE3C /* MSSSDK.m */; };
+		F114D2A0190AA8600008BE3C /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D291190AA8600008BE3C /* MSSJSONValueTransformer.m */; };
+		F114D2A1190AA8600008BE3C /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D293190AA8600008BE3C /* MSSPushDebug.m */; };
+		F114D2A2190AA8600008BE3C /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D295190AA8600008BE3C /* MSSPushErrorUtil.m */; };
+		F114D2A3190AA8600008BE3C /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D297190AA8600008BE3C /* MSSHardwareUtil.m */; };
+		F114D2A4190AA8600008BE3C /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D299190AA8600008BE3C /* MSSPushHexUtil.m */; };
+		F114D2F6190AAF6D0008BE3C /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D2F4190AAF6D0008BE3C /* MSSPersistentStorage.m */; };
+		F114D30F190AB24D0008BE3C /* MSSAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D303190AB24D0008BE3C /* MSSAnalyticEvent.m */; };
+		F114D310190AB24D0008BE3C /* MSSCoreDataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D305190AB24D0008BE3C /* MSSCoreDataManager.m */; };
+		F114D311190AB24D0008BE3C /* MSSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D307190AB24D0008BE3C /* MSSAnalytics.m */; };
+		F114D338190EA7800008BE3C /* MSSPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D337190EA7800008BE3C /* MSSPushURLConnection.m */; };
+		F18D8A0818E5D66D0084D142 /* MSSPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EA18E5D66D0084D142 /* MSSPushRegistrationData.m */; };
+		F18D8A0918E5D66D0084D142 /* MSSPushRegistrationRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EC18E5D66D0084D142 /* MSSPushRegistrationRequestData.m */; };
+		F18D8A0A18E5D66D0084D142 /* MSSPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89EE18E5D66D0084D142 /* MSSPushRegistrationResponseData.m */; };
+		F18D8A0B18E5D66D0084D142 /* MSSPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F18D89F018E5D66D0084D142 /* MSSPushSDK.m */; };
 		F1FDE1B218D7806B009EBE38 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1FDE1B018D7806B009EBE38 /* InfoPlist.strings */; };
 		F1FDE1B418D7806B009EBE38 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FDE1B318D7806B009EBE38 /* main.m */; };
 		F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F1FDE1B718D7806B009EBE38 /* AppDelegate.m */; };
@@ -51,66 +51,66 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D41D290B195B351700251F25 /* PMSSPushAppDelegate+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PMSSPushAppDelegate+Analytics.h"; path = "../../PMSSAnalytics/App/PMSSPushAppDelegate+Analytics.h"; sourceTree = "<group>"; };
-		D41D290C195B351700251F25 /* PMSSPushAppDelegate+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMSSPushAppDelegate+Analytics.m"; path = "../../PMSSAnalytics/App/PMSSPushAppDelegate+Analytics.m"; sourceTree = "<group>"; };
-		D41D290E195B352B00251F25 /* PMSSAnalyticsURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMSSAnalyticsURLConnection.h; path = ../../PMSSAnalytics/BackEnd/PMSSAnalyticsURLConnection.h; sourceTree = "<group>"; };
-		D41D290F195B352B00251F25 /* PMSSAnalyticsURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMSSAnalyticsURLConnection.m; path = ../../PMSSAnalytics/BackEnd/PMSSAnalyticsURLConnection.m; sourceTree = "<group>"; };
-		D41D2911195B36FE00251F25 /* PMSSSDK+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PMSSSDK+Analytics.h"; sourceTree = "<group>"; };
-		D41D2912195B36FE00251F25 /* PMSSSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PMSSSDK+Analytics.m"; sourceTree = "<group>"; };
-		D41D2914195B371D00251F25 /* PMSSPersistentStorage+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PMSSPersistentStorage+Analytics.h"; sourceTree = "<group>"; };
-		D41D2915195B371D00251F25 /* PMSSPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PMSSPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
-		D41D2917195B373F00251F25 /* NSObject+PMSSJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PMSSJSONizable.h"; sourceTree = "<group>"; };
-		D41D2918195B373F00251F25 /* NSObject+PMSSJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PMSSJSONizable.m"; sourceTree = "<group>"; };
-		D41D291A195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PMSSBackEndConnection.h"; sourceTree = "<group>"; };
-		D41D291B195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PMSSBackEndConnection.m"; sourceTree = "<group>"; };
-		D41D291D195B376E00251F25 /* PMSSMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSMapping.h; sourceTree = "<group>"; };
-		D41D291E195B376E00251F25 /* PMSSSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSSortDescriptors.h; sourceTree = "<group>"; };
-		D41D291F195B378000251F25 /* PMSSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSNotifications.h; sourceTree = "<group>"; };
-		D41D2920195B378000251F25 /* PMSSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSNotifications.m; sourceTree = "<group>"; };
-		D41D2921195B378000251F25 /* PMSSPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushErrors.h; sourceTree = "<group>"; };
-		D41D2923195B379200251F25 /* PMSSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushClient.h; sourceTree = "<group>"; };
-		D41D2924195B379200251F25 /* PMSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushClient.m; sourceTree = "<group>"; };
-		D41D2926195B37A600251F25 /* PMSSPersistentStorage+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PMSSPersistentStorage+Push.h"; sourceTree = "<group>"; };
-		D41D2927195B37A600251F25 /* PMSSPersistentStorage+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PMSSPersistentStorage+Push.m"; sourceTree = "<group>"; };
-		F114D27C190958030008BE3C /* PMSSParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PMSSParameters.plist; sourceTree = "<group>"; };
-		F114D282190AA8600008BE3C /* PMSSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSAppDelegate.h; sourceTree = "<group>"; };
-		F114D283190AA8600008BE3C /* PMSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSAppDelegate.m; sourceTree = "<group>"; };
-		F114D284190AA8600008BE3C /* PMSSAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSAppDelegateProxy.h; sourceTree = "<group>"; };
-		F114D285190AA8600008BE3C /* PMSSAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSAppDelegateProxy.m; sourceTree = "<group>"; };
-		F114D286190AA8600008BE3C /* PMSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSClient.h; sourceTree = "<group>"; };
-		F114D287190AA8600008BE3C /* PMSSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSClient.m; sourceTree = "<group>"; };
-		F114D288190AA8600008BE3C /* PMSSParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSParameters.h; sourceTree = "<group>"; };
-		F114D289190AA8600008BE3C /* PMSSParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSParameters.m; sourceTree = "<group>"; };
-		F114D28A190AA8600008BE3C /* PMSSSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSSDK.h; sourceTree = "<group>"; };
-		F114D28B190AA8600008BE3C /* PMSSSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSSDK.m; sourceTree = "<group>"; };
-		F114D290190AA8600008BE3C /* PMSSJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSJSONValueTransformer.h; sourceTree = "<group>"; };
-		F114D291190AA8600008BE3C /* PMSSJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSJSONValueTransformer.m; sourceTree = "<group>"; };
-		F114D292190AA8600008BE3C /* PMSSPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushDebug.h; sourceTree = "<group>"; };
-		F114D293190AA8600008BE3C /* PMSSPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushDebug.m; sourceTree = "<group>"; };
-		F114D294190AA8600008BE3C /* PMSSPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushErrorUtil.h; sourceTree = "<group>"; };
-		F114D295190AA8600008BE3C /* PMSSPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushErrorUtil.m; sourceTree = "<group>"; };
-		F114D296190AA8600008BE3C /* PMSSHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSHardwareUtil.h; sourceTree = "<group>"; };
-		F114D297190AA8600008BE3C /* PMSSHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSHardwareUtil.m; sourceTree = "<group>"; };
-		F114D298190AA8600008BE3C /* PMSSPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushHexUtil.h; sourceTree = "<group>"; };
-		F114D299190AA8600008BE3C /* PMSSPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushHexUtil.m; sourceTree = "<group>"; };
-		F114D2F4190AAF6D0008BE3C /* PMSSPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPersistentStorage.m; sourceTree = "<group>"; };
-		F114D2F5190AAF6D0008BE3C /* PMSSPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPersistentStorage.h; sourceTree = "<group>"; };
-		F114D302190AB24D0008BE3C /* PMSSAnalyticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSAnalyticEvent.h; sourceTree = "<group>"; };
-		F114D303190AB24D0008BE3C /* PMSSAnalyticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSAnalyticEvent.m; sourceTree = "<group>"; };
-		F114D304190AB24D0008BE3C /* PMSSCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSCoreDataManager.h; sourceTree = "<group>"; };
-		F114D305190AB24D0008BE3C /* PMSSCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSCoreDataManager.m; sourceTree = "<group>"; };
-		F114D306190AB24D0008BE3C /* PMSSAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSAnalytics.h; sourceTree = "<group>"; };
-		F114D307190AB24D0008BE3C /* PMSSAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSAnalytics.m; sourceTree = "<group>"; };
-		F114D336190EA7800008BE3C /* PMSSPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushURLConnection.h; sourceTree = "<group>"; };
-		F114D337190EA7800008BE3C /* PMSSPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushURLConnection.m; sourceTree = "<group>"; };
-		F18D89E918E5D66D0084D142 /* PMSSPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushRegistrationData.h; sourceTree = "<group>"; };
-		F18D89EA18E5D66D0084D142 /* PMSSPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushRegistrationData.m; sourceTree = "<group>"; };
-		F18D89EB18E5D66D0084D142 /* PMSSPushRegistrationRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushRegistrationRequestData.h; sourceTree = "<group>"; };
-		F18D89EC18E5D66D0084D142 /* PMSSPushRegistrationRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushRegistrationRequestData.m; sourceTree = "<group>"; };
-		F18D89ED18E5D66D0084D142 /* PMSSPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushRegistrationResponseData.h; sourceTree = "<group>"; };
-		F18D89EE18E5D66D0084D142 /* PMSSPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushRegistrationResponseData.m; sourceTree = "<group>"; };
-		F18D89EF18E5D66D0084D142 /* PMSSPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSSPushSDK.h; sourceTree = "<group>"; };
-		F18D89F018E5D66D0084D142 /* PMSSPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSSPushSDK.m; sourceTree = "<group>"; };
+		D41D290B195B351700251F25 /* MSSPushAppDelegate+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MSSPushAppDelegate+Analytics.h"; path = "../../PMSSAnalytics/App/MSSPushAppDelegate+Analytics.h"; sourceTree = "<group>"; };
+		D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MSSPushAppDelegate+Analytics.m"; path = "../../PMSSAnalytics/App/MSSPushAppDelegate+Analytics.m"; sourceTree = "<group>"; };
+		D41D290E195B352B00251F25 /* MSSAnalyticsURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAnalyticsURLConnection.h; path = ../../PMSSAnalytics/BackEnd/MSSAnalyticsURLConnection.h; sourceTree = "<group>"; };
+		D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAnalyticsURLConnection.m; path = ../../PMSSAnalytics/BackEnd/MSSAnalyticsURLConnection.m; sourceTree = "<group>"; };
+		D41D2911195B36FE00251F25 /* MSSSDK+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSSDK+Analytics.h"; sourceTree = "<group>"; };
+		D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSSDK+Analytics.m"; sourceTree = "<group>"; };
+		D41D2914195B371D00251F25 /* MSSPersistentStorage+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPersistentStorage+Analytics.h"; sourceTree = "<group>"; };
+		D41D2915195B371D00251F25 /* MSSPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
+		D41D2917195B373F00251F25 /* NSObject+MSSJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MSSJSONizable.h"; sourceTree = "<group>"; };
+		D41D2918195B373F00251F25 /* NSObject+MSSJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MSSJSONizable.m"; sourceTree = "<group>"; };
+		D41D291A195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+MSSBackEndConnection.h"; sourceTree = "<group>"; };
+		D41D291B195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+MSSBackEndConnection.m"; sourceTree = "<group>"; };
+		D41D291D195B376E00251F25 /* MSSMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSMapping.h; sourceTree = "<group>"; };
+		D41D291E195B376E00251F25 /* MSSSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSSortDescriptors.h; sourceTree = "<group>"; };
+		D41D291F195B378000251F25 /* MSSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSNotifications.h; sourceTree = "<group>"; };
+		D41D2920195B378000251F25 /* MSSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSNotifications.m; sourceTree = "<group>"; };
+		D41D2921195B378000251F25 /* MSSPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushErrors.h; sourceTree = "<group>"; };
+		D41D2923195B379200251F25 /* MSSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushClient.h; sourceTree = "<group>"; };
+		D41D2924195B379200251F25 /* MSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushClient.m; sourceTree = "<group>"; };
+		D41D2926195B37A600251F25 /* MSSPersistentStorage+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPersistentStorage+Push.h"; sourceTree = "<group>"; };
+		D41D2927195B37A600251F25 /* MSSPersistentStorage+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSPersistentStorage+Push.m"; sourceTree = "<group>"; };
+		F114D27C190958030008BE3C /* MSSParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MSSParameters.plist; sourceTree = "<group>"; };
+		F114D282190AA8600008BE3C /* MSSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegate.h; sourceTree = "<group>"; };
+		F114D283190AA8600008BE3C /* MSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegate.m; sourceTree = "<group>"; };
+		F114D284190AA8600008BE3C /* MSSAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegateProxy.h; sourceTree = "<group>"; };
+		F114D285190AA8600008BE3C /* MSSAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegateProxy.m; sourceTree = "<group>"; };
+		F114D286190AA8600008BE3C /* MSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSClient.h; sourceTree = "<group>"; };
+		F114D287190AA8600008BE3C /* MSSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSClient.m; sourceTree = "<group>"; };
+		F114D288190AA8600008BE3C /* MSSParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSParameters.h; sourceTree = "<group>"; };
+		F114D289190AA8600008BE3C /* MSSParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSParameters.m; sourceTree = "<group>"; };
+		F114D28A190AA8600008BE3C /* MSSSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSSDK.h; sourceTree = "<group>"; };
+		F114D28B190AA8600008BE3C /* MSSSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSSDK.m; sourceTree = "<group>"; };
+		F114D290190AA8600008BE3C /* MSSJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSJSONValueTransformer.h; sourceTree = "<group>"; };
+		F114D291190AA8600008BE3C /* MSSJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSJSONValueTransformer.m; sourceTree = "<group>"; };
+		F114D292190AA8600008BE3C /* MSSPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushDebug.h; sourceTree = "<group>"; };
+		F114D293190AA8600008BE3C /* MSSPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushDebug.m; sourceTree = "<group>"; };
+		F114D294190AA8600008BE3C /* MSSPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushErrorUtil.h; sourceTree = "<group>"; };
+		F114D295190AA8600008BE3C /* MSSPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushErrorUtil.m; sourceTree = "<group>"; };
+		F114D296190AA8600008BE3C /* MSSHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSHardwareUtil.h; sourceTree = "<group>"; };
+		F114D297190AA8600008BE3C /* MSSHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSHardwareUtil.m; sourceTree = "<group>"; };
+		F114D298190AA8600008BE3C /* MSSPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushHexUtil.h; sourceTree = "<group>"; };
+		F114D299190AA8600008BE3C /* MSSPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushHexUtil.m; sourceTree = "<group>"; };
+		F114D2F4190AAF6D0008BE3C /* MSSPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPersistentStorage.m; sourceTree = "<group>"; };
+		F114D2F5190AAF6D0008BE3C /* MSSPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPersistentStorage.h; sourceTree = "<group>"; };
+		F114D302190AB24D0008BE3C /* MSSAnalyticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAnalyticEvent.h; sourceTree = "<group>"; };
+		F114D303190AB24D0008BE3C /* MSSAnalyticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticEvent.m; sourceTree = "<group>"; };
+		F114D304190AB24D0008BE3C /* MSSCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSCoreDataManager.h; sourceTree = "<group>"; };
+		F114D305190AB24D0008BE3C /* MSSCoreDataManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSCoreDataManager.m; sourceTree = "<group>"; };
+		F114D306190AB24D0008BE3C /* MSSAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAnalytics.h; sourceTree = "<group>"; };
+		F114D307190AB24D0008BE3C /* MSSAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalytics.m; sourceTree = "<group>"; };
+		F114D336190EA7800008BE3C /* MSSPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushURLConnection.h; sourceTree = "<group>"; };
+		F114D337190EA7800008BE3C /* MSSPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushURLConnection.m; sourceTree = "<group>"; };
+		F18D89E918E5D66D0084D142 /* MSSPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushRegistrationData.h; sourceTree = "<group>"; };
+		F18D89EA18E5D66D0084D142 /* MSSPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushRegistrationData.m; sourceTree = "<group>"; };
+		F18D89EB18E5D66D0084D142 /* MSSPushRegistrationRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushRegistrationRequestData.h; sourceTree = "<group>"; };
+		F18D89EC18E5D66D0084D142 /* MSSPushRegistrationRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushRegistrationRequestData.m; sourceTree = "<group>"; };
+		F18D89ED18E5D66D0084D142 /* MSSPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushRegistrationResponseData.h; sourceTree = "<group>"; };
+		F18D89EE18E5D66D0084D142 /* MSSPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushRegistrationResponseData.m; sourceTree = "<group>"; };
+		F18D89EF18E5D66D0084D142 /* MSSPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushSDK.h; sourceTree = "<group>"; };
+		F18D89F018E5D66D0084D142 /* MSSPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushSDK.m; sourceTree = "<group>"; };
 		F1FDE1A418D7806B009EBE38 /* PushSDKDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PushSDKDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PushSDKDemo-Info.plist"; sourceTree = "<group>"; };
 		F1FDE1B118D7806B009EBE38 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -149,20 +149,20 @@
 		F114D27E190AA8600008BE3C /* PMSSSDK */ = {
 			isa = PBXGroup;
 			children = (
-				F114D32C190E9FD00008BE3C /* BackEnd */,
-				F114D27F190AA8600008BE3C /* Categories */,
-				F114D282190AA8600008BE3C /* PMSSAppDelegate.h */,
-				F114D283190AA8600008BE3C /* PMSSAppDelegate.m */,
-				F114D284190AA8600008BE3C /* PMSSAppDelegateProxy.h */,
-				F114D285190AA8600008BE3C /* PMSSAppDelegateProxy.m */,
-				F114D286190AA8600008BE3C /* PMSSClient.h */,
-				F114D287190AA8600008BE3C /* PMSSClient.m */,
-				F114D288190AA8600008BE3C /* PMSSParameters.h */,
-				F114D289190AA8600008BE3C /* PMSSParameters.m */,
-				F114D28A190AA8600008BE3C /* PMSSSDK.h */,
-				F114D28B190AA8600008BE3C /* PMSSSDK.m */,
 				F114D28C190AA8600008BE3C /* Protocols */,
 				F114D28F190AA8600008BE3C /* Utils */,
+				F114D32C190E9FD00008BE3C /* BackEnd */,
+				F114D27F190AA8600008BE3C /* Categories */,
+				F114D282190AA8600008BE3C /* MSSAppDelegate.h */,
+				F114D283190AA8600008BE3C /* MSSAppDelegate.m */,
+				F114D284190AA8600008BE3C /* MSSAppDelegateProxy.h */,
+				F114D285190AA8600008BE3C /* MSSAppDelegateProxy.m */,
+				F114D286190AA8600008BE3C /* MSSClient.h */,
+				F114D287190AA8600008BE3C /* MSSClient.m */,
+				F114D288190AA8600008BE3C /* MSSParameters.h */,
+				F114D289190AA8600008BE3C /* MSSParameters.m */,
+				F114D28A190AA8600008BE3C /* MSSSDK.h */,
+				F114D28B190AA8600008BE3C /* MSSSDK.m */,
 			);
 			name = PMSSSDK;
 			path = ../PMSSSDK;
@@ -171,8 +171,8 @@
 		F114D27F190AA8600008BE3C /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				D41D2917195B373F00251F25 /* NSObject+PMSSJSONizable.h */,
-				D41D2918195B373F00251F25 /* NSObject+PMSSJSONizable.m */,
+				D41D2917195B373F00251F25 /* NSObject+MSSJSONizable.h */,
+				D41D2918195B373F00251F25 /* NSObject+MSSJSONizable.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -180,8 +180,8 @@
 		F114D28C190AA8600008BE3C /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				D41D291D195B376E00251F25 /* PMSSMapping.h */,
-				D41D291E195B376E00251F25 /* PMSSSortDescriptors.h */,
+				D41D291D195B376E00251F25 /* MSSMapping.h */,
+				D41D291E195B376E00251F25 /* MSSSortDescriptors.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -189,21 +189,21 @@
 		F114D28F190AA8600008BE3C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				D41D291F195B378000251F25 /* PMSSNotifications.h */,
-				D41D2920195B378000251F25 /* PMSSNotifications.m */,
-				D41D2921195B378000251F25 /* PMSSPushErrors.h */,
-				F114D2F4190AAF6D0008BE3C /* PMSSPersistentStorage.m */,
-				F114D2F5190AAF6D0008BE3C /* PMSSPersistentStorage.h */,
-				F114D290190AA8600008BE3C /* PMSSJSONValueTransformer.h */,
-				F114D291190AA8600008BE3C /* PMSSJSONValueTransformer.m */,
-				F114D292190AA8600008BE3C /* PMSSPushDebug.h */,
-				F114D293190AA8600008BE3C /* PMSSPushDebug.m */,
-				F114D294190AA8600008BE3C /* PMSSPushErrorUtil.h */,
-				F114D295190AA8600008BE3C /* PMSSPushErrorUtil.m */,
-				F114D296190AA8600008BE3C /* PMSSHardwareUtil.h */,
-				F114D297190AA8600008BE3C /* PMSSHardwareUtil.m */,
-				F114D298190AA8600008BE3C /* PMSSPushHexUtil.h */,
-				F114D299190AA8600008BE3C /* PMSSPushHexUtil.m */,
+				D41D291F195B378000251F25 /* MSSNotifications.h */,
+				D41D2920195B378000251F25 /* MSSNotifications.m */,
+				D41D2921195B378000251F25 /* MSSPushErrors.h */,
+				F114D2F4190AAF6D0008BE3C /* MSSPersistentStorage.m */,
+				F114D2F5190AAF6D0008BE3C /* MSSPersistentStorage.h */,
+				F114D290190AA8600008BE3C /* MSSJSONValueTransformer.h */,
+				F114D291190AA8600008BE3C /* MSSJSONValueTransformer.m */,
+				F114D292190AA8600008BE3C /* MSSPushDebug.h */,
+				F114D293190AA8600008BE3C /* MSSPushDebug.m */,
+				F114D294190AA8600008BE3C /* MSSPushErrorUtil.h */,
+				F114D295190AA8600008BE3C /* MSSPushErrorUtil.m */,
+				F114D296190AA8600008BE3C /* MSSHardwareUtil.h */,
+				F114D297190AA8600008BE3C /* MSSHardwareUtil.m */,
+				F114D298190AA8600008BE3C /* MSSPushHexUtil.h */,
+				F114D299190AA8600008BE3C /* MSSPushHexUtil.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -215,10 +215,10 @@
 				F114D2FE190AB24D0008BE3C /* BackEnd */,
 				F114D301190AB24D0008BE3C /* Models */,
 				F114D30A190AB24D0008BE3C /* Persistent Storage */,
-				F114D306190AB24D0008BE3C /* PMSSAnalytics.h */,
-				F114D307190AB24D0008BE3C /* PMSSAnalytics.m */,
-				D41D2911195B36FE00251F25 /* PMSSSDK+Analytics.h */,
-				D41D2912195B36FE00251F25 /* PMSSSDK+Analytics.m */,
+				F114D306190AB24D0008BE3C /* MSSAnalytics.h */,
+				F114D307190AB24D0008BE3C /* MSSAnalytics.m */,
+				D41D2911195B36FE00251F25 /* MSSSDK+Analytics.h */,
+				D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */,
 			);
 			name = PMSSAnalytics;
 			path = ../PMSSAnalytics;
@@ -227,8 +227,8 @@
 		F114D2FB190AB24D0008BE3C /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D41D290B195B351700251F25 /* PMSSPushAppDelegate+Analytics.h */,
-				D41D290C195B351700251F25 /* PMSSPushAppDelegate+Analytics.m */,
+				D41D290B195B351700251F25 /* MSSPushAppDelegate+Analytics.h */,
+				D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -236,8 +236,8 @@
 		F114D2FE190AB24D0008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				D41D290E195B352B00251F25 /* PMSSAnalyticsURLConnection.h */,
-				D41D290F195B352B00251F25 /* PMSSAnalyticsURLConnection.m */,
+				D41D290E195B352B00251F25 /* MSSAnalyticsURLConnection.h */,
+				D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -245,10 +245,10 @@
 		F114D301190AB24D0008BE3C /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F114D302190AB24D0008BE3C /* PMSSAnalyticEvent.h */,
-				F114D303190AB24D0008BE3C /* PMSSAnalyticEvent.m */,
-				F114D304190AB24D0008BE3C /* PMSSCoreDataManager.h */,
-				F114D305190AB24D0008BE3C /* PMSSCoreDataManager.m */,
+				F114D302190AB24D0008BE3C /* MSSAnalyticEvent.h */,
+				F114D303190AB24D0008BE3C /* MSSAnalyticEvent.m */,
+				F114D304190AB24D0008BE3C /* MSSCoreDataManager.h */,
+				F114D305190AB24D0008BE3C /* MSSCoreDataManager.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -256,8 +256,8 @@
 		F114D30A190AB24D0008BE3C /* Persistent Storage */ = {
 			isa = PBXGroup;
 			children = (
-				D41D2914195B371D00251F25 /* PMSSPersistentStorage+Analytics.h */,
-				D41D2915195B371D00251F25 /* PMSSPersistentStorage+Analytics.m */,
+				D41D2914195B371D00251F25 /* MSSPersistentStorage+Analytics.h */,
+				D41D2915195B371D00251F25 /* MSSPersistentStorage+Analytics.m */,
 			);
 			path = "Persistent Storage";
 			sourceTree = "<group>";
@@ -265,8 +265,8 @@
 		F114D32C190E9FD00008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				D41D291A195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.h */,
-				D41D291B195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.m */,
+				D41D291A195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.h */,
+				D41D291B195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -274,8 +274,8 @@
 		F114D335190EA7800008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				F114D336190EA7800008BE3C /* PMSSPushURLConnection.h */,
-				F114D337190EA7800008BE3C /* PMSSPushURLConnection.m */,
+				F114D336190EA7800008BE3C /* MSSPushURLConnection.h */,
+				F114D337190EA7800008BE3C /* MSSPushURLConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -286,10 +286,10 @@
 				F114D335190EA7800008BE3C /* BackEnd */,
 				F18D89E218E5D66D0084D142 /* Models */,
 				F18D89F118E5D66D0084D142 /* Persistent Storage */,
-				D41D2923195B379200251F25 /* PMSSPushClient.h */,
-				D41D2924195B379200251F25 /* PMSSPushClient.m */,
-				F18D89EF18E5D66D0084D142 /* PMSSPushSDK.h */,
-				F18D89F018E5D66D0084D142 /* PMSSPushSDK.m */,
+				D41D2923195B379200251F25 /* MSSPushClient.h */,
+				D41D2924195B379200251F25 /* MSSPushClient.m */,
+				F18D89EF18E5D66D0084D142 /* MSSPushSDK.h */,
+				F18D89F018E5D66D0084D142 /* MSSPushSDK.m */,
 			);
 			name = PMSSPush;
 			path = ../PMSSPush;
@@ -298,12 +298,12 @@
 		F18D89E218E5D66D0084D142 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F18D89E918E5D66D0084D142 /* PMSSPushRegistrationData.h */,
-				F18D89EA18E5D66D0084D142 /* PMSSPushRegistrationData.m */,
-				F18D89EB18E5D66D0084D142 /* PMSSPushRegistrationRequestData.h */,
-				F18D89EC18E5D66D0084D142 /* PMSSPushRegistrationRequestData.m */,
-				F18D89ED18E5D66D0084D142 /* PMSSPushRegistrationResponseData.h */,
-				F18D89EE18E5D66D0084D142 /* PMSSPushRegistrationResponseData.m */,
+				F18D89E918E5D66D0084D142 /* MSSPushRegistrationData.h */,
+				F18D89EA18E5D66D0084D142 /* MSSPushRegistrationData.m */,
+				F18D89EB18E5D66D0084D142 /* MSSPushRegistrationRequestData.h */,
+				F18D89EC18E5D66D0084D142 /* MSSPushRegistrationRequestData.m */,
+				F18D89ED18E5D66D0084D142 /* MSSPushRegistrationResponseData.h */,
+				F18D89EE18E5D66D0084D142 /* MSSPushRegistrationResponseData.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -311,8 +311,8 @@
 		F18D89F118E5D66D0084D142 /* Persistent Storage */ = {
 			isa = PBXGroup;
 			children = (
-				D41D2926195B37A600251F25 /* PMSSPersistentStorage+Push.h */,
-				D41D2927195B37A600251F25 /* PMSSPersistentStorage+Push.m */,
+				D41D2926195B37A600251F25 /* MSSPersistentStorage+Push.h */,
+				D41D2927195B37A600251F25 /* MSSPersistentStorage+Push.m */,
 			);
 			path = "Persistent Storage";
 			sourceTree = "<group>";
@@ -352,7 +352,7 @@
 		F1FDE1AE18D7806B009EBE38 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				F114D27C190958030008BE3C /* PMSSParameters.plist */,
+				F114D27C190958030008BE3C /* MSSParameters.plist */,
 				F1FDE1AF18D7806B009EBE38 /* PushSDKDemo-Info.plist */,
 				F1FDE1B018D7806B009EBE38 /* InfoPlist.strings */,
 				F1FDE1B318D7806B009EBE38 /* main.m */,
@@ -476,7 +476,7 @@
 				F1FDE29E18D795C0009EBE38 /* Main_iPhone.storyboard in Resources */,
 				F1FDE1F518D78115009EBE38 /* LogItemCell.xib in Resources */,
 				F1FDE1C018D7806B009EBE38 /* Images.xcassets in Resources */,
-				F114D27D190958030008BE3C /* PMSSParameters.plist in Resources */,
+				F114D27D190958030008BE3C /* MSSParameters.plist in Resources */,
 				F1FDE1B218D7806B009EBE38 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -488,39 +488,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F114D29C190AA8600008BE3C /* PMSSAppDelegateProxy.m in Sources */,
-				F114D2A0190AA8600008BE3C /* PMSSJSONValueTransformer.m in Sources */,
-				F114D2A2190AA8600008BE3C /* PMSSPushErrorUtil.m in Sources */,
-				D41D291C195B374F00251F25 /* NSURLConnection+PMSSBackEndConnection.m in Sources */,
+				F114D29C190AA8600008BE3C /* MSSAppDelegateProxy.m in Sources */,
+				F114D2A0190AA8600008BE3C /* MSSJSONValueTransformer.m in Sources */,
+				F114D2A2190AA8600008BE3C /* MSSPushErrorUtil.m in Sources */,
+				D41D291C195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
 				F1FDE1F318D78115009EBE38 /* SettingsTableViewController.m in Sources */,
-				D41D2910195B352B00251F25 /* PMSSAnalyticsURLConnection.m in Sources */,
-				F18D8A0A18E5D66D0084D142 /* PMSSPushRegistrationResponseData.m in Sources */,
-				F114D310190AB24D0008BE3C /* PMSSCoreDataManager.m in Sources */,
-				F18D8A0B18E5D66D0084D142 /* PMSSPushSDK.m in Sources */,
-				F114D2A4190AA8600008BE3C /* PMSSPushHexUtil.m in Sources */,
-				D41D290D195B351700251F25 /* PMSSPushAppDelegate+Analytics.m in Sources */,
-				D41D2913195B36FE00251F25 /* PMSSSDK+Analytics.m in Sources */,
-				D41D2925195B379200251F25 /* PMSSPushClient.m in Sources */,
-				F114D311190AB24D0008BE3C /* PMSSAnalytics.m in Sources */,
-				F18D8A0818E5D66D0084D142 /* PMSSPushRegistrationData.m in Sources */,
-				F114D2A3190AA8600008BE3C /* PMSSHardwareUtil.m in Sources */,
-				F114D30F190AB24D0008BE3C /* PMSSAnalyticEvent.m in Sources */,
-				F114D29B190AA8600008BE3C /* PMSSAppDelegate.m in Sources */,
-				F18D8A0918E5D66D0084D142 /* PMSSPushRegistrationRequestData.m in Sources */,
-				D41D2928195B37A600251F25 /* PMSSPersistentStorage+Push.m in Sources */,
-				D41D2916195B371D00251F25 /* PMSSPersistentStorage+Analytics.m in Sources */,
-				F114D29E190AA8600008BE3C /* PMSSParameters.m in Sources */,
+				D41D2910195B352B00251F25 /* MSSAnalyticsURLConnection.m in Sources */,
+				F18D8A0A18E5D66D0084D142 /* MSSPushRegistrationResponseData.m in Sources */,
+				F114D310190AB24D0008BE3C /* MSSCoreDataManager.m in Sources */,
+				F18D8A0B18E5D66D0084D142 /* MSSPushSDK.m in Sources */,
+				F114D2A4190AA8600008BE3C /* MSSPushHexUtil.m in Sources */,
+				D41D290D195B351700251F25 /* MSSPushAppDelegate+Analytics.m in Sources */,
+				D41D2913195B36FE00251F25 /* MSSSDK+Analytics.m in Sources */,
+				D41D2925195B379200251F25 /* MSSPushClient.m in Sources */,
+				F114D311190AB24D0008BE3C /* MSSAnalytics.m in Sources */,
+				F18D8A0818E5D66D0084D142 /* MSSPushRegistrationData.m in Sources */,
+				F114D2A3190AA8600008BE3C /* MSSHardwareUtil.m in Sources */,
+				F114D30F190AB24D0008BE3C /* MSSAnalyticEvent.m in Sources */,
+				F114D29B190AA8600008BE3C /* MSSAppDelegate.m in Sources */,
+				F18D8A0918E5D66D0084D142 /* MSSPushRegistrationRequestData.m in Sources */,
+				D41D2928195B37A600251F25 /* MSSPersistentStorage+Push.m in Sources */,
+				D41D2916195B371D00251F25 /* MSSPersistentStorage+Analytics.m in Sources */,
+				F114D29E190AA8600008BE3C /* MSSParameters.m in Sources */,
 				F1FDE1F418D78115009EBE38 /* LogItemCell.m in Sources */,
 				F1FDE1F018D78115009EBE38 /* BackEndMessageRequest.m in Sources */,
-				F114D29F190AA8600008BE3C /* PMSSSDK.m in Sources */,
-				F114D2A1190AA8600008BE3C /* PMSSPushDebug.m in Sources */,
-				F114D29D190AA8600008BE3C /* PMSSClient.m in Sources */,
-				D41D2922195B378000251F25 /* PMSSNotifications.m in Sources */,
-				F114D338190EA7800008BE3C /* PMSSPushURLConnection.m in Sources */,
+				F114D29F190AA8600008BE3C /* MSSSDK.m in Sources */,
+				F114D2A1190AA8600008BE3C /* MSSPushDebug.m in Sources */,
+				F114D29D190AA8600008BE3C /* MSSClient.m in Sources */,
+				D41D2922195B378000251F25 /* MSSNotifications.m in Sources */,
+				F114D338190EA7800008BE3C /* MSSPushURLConnection.m in Sources */,
 				F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */,
 				F1FDE1F218D78115009EBE38 /* LogTableViewController.m in Sources */,
-				F114D2F6190AAF6D0008BE3C /* PMSSPersistentStorage.m in Sources */,
-				D41D2919195B373F00251F25 /* NSObject+PMSSJSONizable.m in Sources */,
+				F114D2F6190AAF6D0008BE3C /* MSSPersistentStorage.m in Sources */,
+				D41D2919195B373F00251F25 /* NSObject+MSSJSONizable.m in Sources */,
 				F1FDE1F118D78115009EBE38 /* Settings.m in Sources */,
 				F1FDE1B418D7806B009EBE38 /* main.m in Sources */,
 				F1FDE1EF18D78115009EBE38 /* LogItem.m in Sources */,

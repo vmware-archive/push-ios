@@ -8,10 +8,10 @@
 
 #import "AppDelegate.h"
 #import "Settings.h"
-#import "PMSSPushDebug.h"
-#import "PMSSParameters.h"
-#import "PMSSPushSDK.h"
-#import "PMSSSDK+Analytics.h"
+#import "MSSPushDebug.h"
+#import "MSSParameters.h"
+#import "MSSPushSDK.h"
+#import "MSSSDK+Analytics.h"
 
 @interface AppDelegate ()
 
@@ -34,41 +34,41 @@
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     
     static BOOL usePlist = YES;
-    PMSSParameters *parameters;
-    [PMSSSDK setAnalyticsEnabled:YES];
+    MSSParameters *parameters;
+    [MSSSDK setAnalyticsEnabled:YES];
     if (usePlist) {
-        parameters = [PMSSParameters defaultParameters];
+        parameters = [MSSParameters defaultParameters];
         
     } else {
-        //PMSSParameters configured in code
+        //MSSParameters configured in code
         parameters = [Settings registrationParameters];
         NSString *message = [NSString stringWithFormat:@"Initializing library with parameters: releaseUUID: \"%@\" releaseSecret: \"%@\" deviceAlias: \"%@\".",
                              parameters.variantUUID,
                              parameters.releaseSecret,
                              parameters.pushDeviceAlias];
-        PMSSPushLog(message);
+        MSSPushLog(message);
     }
     
-    [PMSSPushSDK setRegistrationParameters:parameters];
+    [MSSPushSDK setRegistrationParameters:parameters];
 #warning - TODO integrate analytics into demo app
-    [PMSSPushSDK setCompletionBlockWithSuccess:^{
+    [MSSPushSDK setCompletionBlockWithSuccess:^{
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        PMSSPushLog(@"Application received callback \"registrationSucceeded\".");
+        MSSPushLog(@"Application received callback \"registrationSucceeded\".");
         
     } failure:^(NSError *error) {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-        PMSSPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
+        MSSPushLog(@"Application received callback \"registrationFailedWithError:\". Error: \"%@\"", error.localizedDescription);
     }];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    PMSSPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
+    MSSPushLog(@"Received message: %@", userInfo[@"aps"][@"alert"]);
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    PMSSPushLog(@"FetchCompletionHandler Received message:");
+    MSSPushLog(@"FetchCompletionHandler Received message:");
     completionHandler(UIBackgroundFetchResultNoData);
 }
 
@@ -81,12 +81,12 @@
 
 - (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    PMSSPushLog(@"Received message: didRegisterForRemoteNotificationsWithDeviceToken:");
+    MSSPushLog(@"Received message: didRegisterForRemoteNotificationsWithDeviceToken:");
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err
 {
-    PMSSPushLog(@"Received message: didFailToRegisterForRemoteNotificationsWithError:");
+    MSSPushLog(@"Received message: didFailToRegisterForRemoteNotificationsWithError:");
 }
 
 @end

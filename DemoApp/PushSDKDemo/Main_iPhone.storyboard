@@ -42,7 +42,7 @@
                         <sections/>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" title="PMSS Push SDK" id="zGW-sw-fAM"/>
+                    <navigationItem key="navigationItem" title="Pivotal MSS Push SDK" id="zGW-sw-fAM"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="awY-Vp-biX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

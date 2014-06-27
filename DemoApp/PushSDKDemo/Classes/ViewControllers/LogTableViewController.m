@@ -1,21 +1,21 @@
 //
 //  LogTableViewController.m
-//  PMSSPushSDK
+//  MSSPushSDK
 //
 //  Created by Rob Szumlakowski on 2013-12-17.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
 #import "LogTableViewController.h"
-#import "PMSSParameters.h"
-#import "PMSSPushSDK.h"
-#import "PMSSPushDebug.h"
+#import "MSSParameters.h"
+#import "MSSPushSDK.h"
+#import "MSSPushDebug.h"
 #import "LogItem.h"
 #import "LogItemCell.h"
 #import "SettingsTableViewController.h"
 #import "Settings.h"
 #import "BackEndMessageRequest.h"
-#import "PMSSPersistentStorage+Push.h"
+#import "MSSPersistentStorage+Push.h"
 
 static NSString *const APP_UUID       = @"11623d1b-6a80-4a6f-9597-e5d0f320ade9";
 static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
@@ -41,7 +41,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
-    [PMSSPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
+    [MSSPushDebug setLogListener:^(NSString *message, NSDate *timestamp) {
         [[NSOperationQueue mainQueue] addOperationWithBlock:^{
             [self addLogItem:message timestamp:timestamp];
         }];
@@ -64,7 +64,7 @@ static NSString *const APP_SECRET_KEY = @"8c18277b-1b41-453b-b1a2-9f600c9e0d8e";
 - (void) sendButtonPressed
 {
     [self updateCurrentBaseRowColour];
-    NSString *backEndDeviceID = [PMSSPersistentStorage serverDeviceID];
+    NSString *backEndDeviceID = [MSSPersistentStorage serverDeviceID];
     
     if (backEndDeviceID == nil) {
         [self addLogItem:@"You must register with the back-end server before attempting to send a message" timestamp:[NSDate date]];
