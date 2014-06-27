@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4F0000E1646E462990202401 /* libPods-PMSSPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F303DBBC5F64D709BFF96D9 /* libPods-PMSSPushTests.a */; };
+		4F0000E1646E462990202401 /* libPods-MSSPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F303DBBC5F64D709BFF96D9 /* libPods-MSSPushTests.a */; };
 		F1899FB219119E7500327394 /* MSSAnalyticsURLConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1899FB119119E7500327394 /* MSSAnalyticsURLConnectionSpec.m */; };
 		F1BCF2E618E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D018E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m */; };
 		F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */; };
@@ -29,16 +29,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2F303DBBC5F64D709BFF96D9 /* libPods-PMSSPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PMSSPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2F303DBBC5F64D709BFF96D9 /* libPods-MSSPushTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MSSPushTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7A14F324231D471F8B8903F9 /* Pods-PMSSPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PMSSPushTests.xcconfig"; path = "Pods/Pods-PMSSPushTests.xcconfig"; sourceTree = "<group>"; };
+		7A14F324231D471F8B8903F9 /* Pods-MSSPushTests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MSSPushTests.xcconfig"; path = "Pods/Pods-MSSPushTests.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1319F0918EDE47700852A7F /* MSSAnalytics_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSAnalytics_TestingHeader.h; sourceTree = "<group>"; };
 		F1319F0A18EDEF1F00852A7F /* MSSAnalyticEvent_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSAnalyticEvent_TestingHeader.h; sourceTree = "<group>"; };
 		F1899FB119119E7500327394 /* MSSAnalyticsURLConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticsURLConnectionSpec.m; sourceTree = "<group>"; };
 		F1BCF2C918E5CD10004F3684 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F1BCF2CA18E5CD10004F3684 /* PMSSPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "PMSSPushTests-Info.plist"; sourceTree = "<group>"; };
-		F1BCF2CB18E5CD10004F3684 /* PMSSPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PMSSPushTests-Prefix.pch"; sourceTree = "<group>"; };
+		F1BCF2CA18E5CD10004F3684 /* MSSPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSPushTests-Info.plist"; sourceTree = "<group>"; };
+		F1BCF2CB18E5CD10004F3684 /* MSSPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPushTests-Prefix.pch"; sourceTree = "<group>"; };
 		F1BCF2D018E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndConnectionSpec.m; sourceTree = "<group>"; };
 		F1BCF2D218E5CF46004F3684 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
@@ -58,7 +58,7 @@
 		F1BCF2E518E5CF46004F3684 /* MSSPushHexUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushHexUtilSpec.m; sourceTree = "<group>"; };
 		F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* MSSParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Invalid.plist"; sourceTree = "<group>"; };
-		F1D1295C18D9DB35002FE233 /* PMSSPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMSSPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1D1295C18D9DB35002FE233 /* MSSPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSSPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1E5D1F718ECB3E9007E8802 /* MSSAnalyticsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticsSpec.m; sourceTree = "<group>"; };
 		F1E93B4D19006F410038F429 /* MSSClassPropertyUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSClassPropertyUtility.h; sourceTree = "<group>"; };
 		F1E93B4E19006F410038F429 /* MSSClassPropertyUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSClassPropertyUtility.m; sourceTree = "<group>"; };
@@ -75,21 +75,21 @@
 				F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */,
 				F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */,
 				F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */,
-				4F0000E1646E462990202401 /* libPods-PMSSPushTests.a in Frameworks */,
+				4F0000E1646E462990202401 /* libPods-MSSPushTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F1BCF2C718E5CD10004F3684 /* PMSSPushTests */ = {
+		F1BCF2C718E5CD10004F3684 /* MSSPushTests */ = {
 			isa = PBXGroup;
 			children = (
 				F1BCF2C818E5CD10004F3684 /* InfoPlist.strings */,
-				F1BCF2CA18E5CD10004F3684 /* PMSSPushTests-Info.plist */,
-				F1BCF2CB18E5CD10004F3684 /* PMSSPushTests-Prefix.pch */,
+				F1BCF2CA18E5CD10004F3684 /* MSSPushTests-Info.plist */,
+				F1BCF2CB18E5CD10004F3684 /* MSSPushTests-Prefix.pch */,
 			);
-			path = PMSSPushTests;
+			path = MSSPushTests;
 			sourceTree = "<group>";
 		};
 		F1BCF2CE18E5CF46004F3684 /* Spec */ = {
@@ -192,17 +192,17 @@
 			children = (
 				F1CD947B19004FC80086A590 /* Supporting Files */,
 				F1BCF2CE18E5CF46004F3684 /* Spec */,
-				F1BCF2C718E5CD10004F3684 /* PMSSPushTests */,
+				F1BCF2C718E5CD10004F3684 /* MSSPushTests */,
 				F1FDE2AC18D79A1B009EBE38 /* Frameworks */,
 				F1FDE2AB18D79A1B009EBE38 /* Products */,
-				7A14F324231D471F8B8903F9 /* Pods-PMSSPushTests.xcconfig */,
+				7A14F324231D471F8B8903F9 /* Pods-MSSPushTests.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
 		F1FDE2AB18D79A1B009EBE38 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F1D1295C18D9DB35002FE233 /* PMSSPushTests.xctest */,
+				F1D1295C18D9DB35002FE233 /* MSSPushTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -215,7 +215,7 @@
 				F1FDE2B118D79A1B009EBE38 /* UIKit.framework */,
 				48E0BEE976B04ACBAB665052 /* libPods-ios.a */,
 				982406CD77B04192B6EA55BA /* libPods-iOSTests.a */,
-				2F303DBBC5F64D709BFF96D9 /* libPods-PMSSPushTests.a */,
+				2F303DBBC5F64D709BFF96D9 /* libPods-MSSPushTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -223,9 +223,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		F1D1295B18D9DB35002FE233 /* PMSSPushTests */ = {
+		F1D1295B18D9DB35002FE233 /* MSSPushTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "PMSSPushTests" */;
+			buildConfigurationList = F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "MSSPushTests" */;
 			buildPhases = (
 				BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */,
 				F1D1295818D9DB35002FE233 /* Sources */,
@@ -237,9 +237,9 @@
 			);
 			dependencies = (
 			);
-			name = PMSSPushTests;
+			name = MSSPushTests;
 			productName = OmniaPushTests;
-			productReference = F1D1295C18D9DB35002FE233 /* PMSSPushTests.xctest */;
+			productReference = F1D1295C18D9DB35002FE233 /* MSSPushTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -250,7 +250,7 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 			};
-			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "PMSSPushSpec" */;
+			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpec" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -262,7 +262,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1D1295B18D9DB35002FE233 /* PMSSPushTests */,
+				F1D1295B18D9DB35002FE233 /* MSSPushTests */,
 			);
 		};
 /* End PBXProject section */
@@ -292,7 +292,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-PMSSPushTests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-MSSPushTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */ = {
@@ -349,7 +349,7 @@
 /* Begin XCBuildConfiguration section */
 		F1D1296A18D9DB36002FE233 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A14F324231D471F8B8903F9 /* Pods-PMSSPushTests.xcconfig */;
+			baseConfigurationReference = 7A14F324231D471F8B8903F9 /* Pods-MSSPushTests.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -376,7 +376,7 @@
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PMSSPushTests/PMSSPushTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "MSSPushTests/MSSPushTests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -388,7 +388,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "PMSSPushTests/PMSSPushTests-Info.plist";
+				INFOPLIST_FILE = "MSSPushTests/MSSPushTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -399,7 +399,7 @@
 		};
 		F1D1296B18D9DB36002FE233 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7A14F324231D471F8B8903F9 /* Pods-PMSSPushTests.xcconfig */;
+			baseConfigurationReference = 7A14F324231D471F8B8903F9 /* Pods-MSSPushTests.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
@@ -425,14 +425,14 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PMSSPushTests/PMSSPushTests-Prefix.pch";
+				GCC_PREFIX_HEADER = "MSSPushTests/MSSPushTests-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "PMSSPushTests/PMSSPushTests-Info.plist";
+				INFOPLIST_FILE = "MSSPushTests/MSSPushTests-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -456,7 +456,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "PMSSPushTests" */ = {
+		F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "MSSPushTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1D1296A18D9DB36002FE233 /* Debug */,
@@ -465,7 +465,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "PMSSPushSpec" */ = {
+		F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpec" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1FDE2A418D799E4009EBE38 /* Debug */,

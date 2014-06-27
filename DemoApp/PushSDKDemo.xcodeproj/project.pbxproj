@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D41D290D195B351700251F25 /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */; };
-		D41D2910195B352B00251F25 /* MSSAnalyticsURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */; };
 		D41D2913195B36FE00251F25 /* MSSSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */; };
 		D41D2916195B371D00251F25 /* MSSPersistentStorage+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2915195B371D00251F25 /* MSSPersistentStorage+Analytics.m */; };
 		D41D2919195B373F00251F25 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2918195B373F00251F25 /* NSObject+MSSJSONizable.m */; };
@@ -16,6 +14,8 @@
 		D41D2922195B378000251F25 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2920195B378000251F25 /* MSSNotifications.m */; };
 		D41D2925195B379200251F25 /* MSSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2924195B379200251F25 /* MSSPushClient.m */; };
 		D41D2928195B37A600251F25 /* MSSPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = D41D2927195B37A600251F25 /* MSSPersistentStorage+Push.m */; };
+		D4FB9B66195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4FB9B65195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.m */; };
+		D4FB9B69195DEA8A00DEB936 /* MSSAnalyticsURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4FB9B68195DEA8A00DEB936 /* MSSAnalyticsURLConnection.m */; };
 		F114D27D190958030008BE3C /* MSSParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = F114D27C190958030008BE3C /* MSSParameters.plist */; };
 		F114D29B190AA8600008BE3C /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D283190AA8600008BE3C /* MSSAppDelegate.m */; };
 		F114D29C190AA8600008BE3C /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = F114D285190AA8600008BE3C /* MSSAppDelegateProxy.m */; };
@@ -51,10 +51,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D41D290B195B351700251F25 /* MSSPushAppDelegate+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MSSPushAppDelegate+Analytics.h"; path = "../../PMSSAnalytics/App/MSSPushAppDelegate+Analytics.h"; sourceTree = "<group>"; };
-		D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MSSPushAppDelegate+Analytics.m"; path = "../../PMSSAnalytics/App/MSSPushAppDelegate+Analytics.m"; sourceTree = "<group>"; };
-		D41D290E195B352B00251F25 /* MSSAnalyticsURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAnalyticsURLConnection.h; path = ../../PMSSAnalytics/BackEnd/MSSAnalyticsURLConnection.h; sourceTree = "<group>"; };
-		D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAnalyticsURLConnection.m; path = ../../PMSSAnalytics/BackEnd/MSSAnalyticsURLConnection.m; sourceTree = "<group>"; };
 		D41D2911195B36FE00251F25 /* MSSSDK+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSSDK+Analytics.h"; sourceTree = "<group>"; };
 		D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSSDK+Analytics.m"; sourceTree = "<group>"; };
 		D41D2914195B371D00251F25 /* MSSPersistentStorage+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPersistentStorage+Analytics.h"; sourceTree = "<group>"; };
@@ -72,6 +68,10 @@
 		D41D2924195B379200251F25 /* MSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushClient.m; sourceTree = "<group>"; };
 		D41D2926195B37A600251F25 /* MSSPersistentStorage+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPersistentStorage+Push.h"; sourceTree = "<group>"; };
 		D41D2927195B37A600251F25 /* MSSPersistentStorage+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSPersistentStorage+Push.m"; sourceTree = "<group>"; };
+		D4FB9B64195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPushAppDelegate+Analytics.h"; sourceTree = "<group>"; };
+		D4FB9B65195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSPushAppDelegate+Analytics.m"; sourceTree = "<group>"; };
+		D4FB9B67195DEA8A00DEB936 /* MSSAnalyticsURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAnalyticsURLConnection.h; sourceTree = "<group>"; };
+		D4FB9B68195DEA8A00DEB936 /* MSSAnalyticsURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticsURLConnection.m; sourceTree = "<group>"; };
 		F114D27C190958030008BE3C /* MSSParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MSSParameters.plist; sourceTree = "<group>"; };
 		F114D282190AA8600008BE3C /* MSSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegate.h; sourceTree = "<group>"; };
 		F114D283190AA8600008BE3C /* MSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegate.m; sourceTree = "<group>"; };
@@ -146,7 +146,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		F114D27E190AA8600008BE3C /* PMSSSDK */ = {
+		F114D27E190AA8600008BE3C /* MSSSDK */ = {
 			isa = PBXGroup;
 			children = (
 				F114D28C190AA8600008BE3C /* Protocols */,
@@ -164,8 +164,8 @@
 				F114D28A190AA8600008BE3C /* MSSSDK.h */,
 				F114D28B190AA8600008BE3C /* MSSSDK.m */,
 			);
-			name = PMSSSDK;
-			path = ../PMSSSDK;
+			name = MSSSDK;
+			path = ../MSSSDK;
 			sourceTree = "<group>";
 		};
 		F114D27F190AA8600008BE3C /* Categories */ = {
@@ -208,7 +208,7 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
-		F114D2FA190AB24D0008BE3C /* PMSSAnalytics */ = {
+		F114D2FA190AB24D0008BE3C /* MSSAnalytics */ = {
 			isa = PBXGroup;
 			children = (
 				F114D2FB190AB24D0008BE3C /* App */,
@@ -220,15 +220,15 @@
 				D41D2911195B36FE00251F25 /* MSSSDK+Analytics.h */,
 				D41D2912195B36FE00251F25 /* MSSSDK+Analytics.m */,
 			);
-			name = PMSSAnalytics;
-			path = ../PMSSAnalytics;
+			name = MSSAnalytics;
+			path = ../MSSAnalytics;
 			sourceTree = "<group>";
 		};
 		F114D2FB190AB24D0008BE3C /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D41D290B195B351700251F25 /* MSSPushAppDelegate+Analytics.h */,
-				D41D290C195B351700251F25 /* MSSPushAppDelegate+Analytics.m */,
+				D4FB9B64195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.h */,
+				D4FB9B65195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.m */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -236,8 +236,8 @@
 		F114D2FE190AB24D0008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				D41D290E195B352B00251F25 /* MSSAnalyticsURLConnection.h */,
-				D41D290F195B352B00251F25 /* MSSAnalyticsURLConnection.m */,
+				D4FB9B67195DEA8A00DEB936 /* MSSAnalyticsURLConnection.h */,
+				D4FB9B68195DEA8A00DEB936 /* MSSAnalyticsURLConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -280,7 +280,7 @@
 			path = BackEnd;
 			sourceTree = "<group>";
 		};
-		F18D89D918E5D66D0084D142 /* PMSSPush */ = {
+		F18D89D918E5D66D0084D142 /* MSSPush */ = {
 			isa = PBXGroup;
 			children = (
 				F114D335190EA7800008BE3C /* BackEnd */,
@@ -291,8 +291,8 @@
 				F18D89EF18E5D66D0084D142 /* MSSPushSDK.h */,
 				F18D89F018E5D66D0084D142 /* MSSPushSDK.m */,
 			);
-			name = PMSSPush;
-			path = ../PMSSPush;
+			name = MSSPush;
+			path = ../MSSPush;
 			sourceTree = "<group>";
 		};
 		F18D89E218E5D66D0084D142 /* Models */ = {
@@ -320,9 +320,9 @@
 		F1FDE19B18D7806B009EBE38 = {
 			isa = PBXGroup;
 			children = (
-				F114D2FA190AB24D0008BE3C /* PMSSAnalytics */,
-				F114D27E190AA8600008BE3C /* PMSSSDK */,
-				F18D89D918E5D66D0084D142 /* PMSSPush */,
+				F114D2FA190AB24D0008BE3C /* MSSAnalytics */,
+				F114D27E190AA8600008BE3C /* MSSSDK */,
+				F18D89D918E5D66D0084D142 /* MSSPush */,
 				F1FDE1AD18D7806B009EBE38 /* PushSDKDemo */,
 				F1FDE1A518D7806B009EBE38 /* Products */,
 			);
@@ -493,12 +493,11 @@
 				F114D2A2190AA8600008BE3C /* MSSPushErrorUtil.m in Sources */,
 				D41D291C195B374F00251F25 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
 				F1FDE1F318D78115009EBE38 /* SettingsTableViewController.m in Sources */,
-				D41D2910195B352B00251F25 /* MSSAnalyticsURLConnection.m in Sources */,
 				F18D8A0A18E5D66D0084D142 /* MSSPushRegistrationResponseData.m in Sources */,
 				F114D310190AB24D0008BE3C /* MSSCoreDataManager.m in Sources */,
 				F18D8A0B18E5D66D0084D142 /* MSSPushSDK.m in Sources */,
+				D4FB9B69195DEA8A00DEB936 /* MSSAnalyticsURLConnection.m in Sources */,
 				F114D2A4190AA8600008BE3C /* MSSPushHexUtil.m in Sources */,
-				D41D290D195B351700251F25 /* MSSPushAppDelegate+Analytics.m in Sources */,
 				D41D2913195B36FE00251F25 /* MSSSDK+Analytics.m in Sources */,
 				D41D2925195B379200251F25 /* MSSPushClient.m in Sources */,
 				F114D311190AB24D0008BE3C /* MSSAnalytics.m in Sources */,
@@ -516,6 +515,7 @@
 				F114D2A1190AA8600008BE3C /* MSSPushDebug.m in Sources */,
 				F114D29D190AA8600008BE3C /* MSSClient.m in Sources */,
 				D41D2922195B378000251F25 /* MSSNotifications.m in Sources */,
+				D4FB9B66195DEA8000DEB936 /* MSSPushAppDelegate+Analytics.m in Sources */,
 				F114D338190EA7800008BE3C /* MSSPushURLConnection.m in Sources */,
 				F1FDE1B818D7806B009EBE38 /* AppDelegate.m in Sources */,
 				F1FDE1F218D78115009EBE38 /* LogTableViewController.m in Sources */,

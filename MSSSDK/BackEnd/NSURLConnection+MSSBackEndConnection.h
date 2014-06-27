@@ -1,6 +1,6 @@
 //
-//  NSURLConnection+PMSSBackEndConnection.h
-//  PMSSPushSDK
+//  NSURLConnection+MSSBackEndConnection.h
+//  MSSPushSDK
 //
 //  Created by DX123-XL on 3/4/2014.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
@@ -10,7 +10,7 @@
 
 typedef void (^CompletionHandler)(NSURLResponse *response, NSData *data, NSError *connectionError);
 
-@interface NSURLConnection (PMSSBackEndConnection)
+@interface NSURLConnection (MSSBackEndConnection)
 
 + (void)mss_sendAsynchronousRequest:(NSURLRequest *)request
                             success:(void (^)(NSURLResponse *response, NSData *data))success

@@ -1,9 +1,9 @@
-xcodeproj 'PMSSPushSpec'
-workspace '../PMSSPush'
+xcodeproj 'MSSPushSpec'
+workspace '../MSSPush'
 inhibit_all_warnings!
 
-target :PMSSPushTests, :exclusive => true do
+target :MSSPushTests, :exclusive => true do
   platform :ios, '6.0'
   pod 'Kiwi/XCTest'
-  pod 'PMSSPush', :path => '../'
+  pod 'MSSPush', :path => '../'
 end

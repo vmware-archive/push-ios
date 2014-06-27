@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1D1295B18D9DB35002FE233"
-               BuildableName = "PMSSPushTests.xctest"
-               BlueprintName = "PMSSPushTests"
-               ReferencedContainer = "container:PMSSPushSpec.xcodeproj">
+               BuildableName = "MSSPushTests.xctest"
+               BlueprintName = "MSSPushTests"
+               ReferencedContainer = "container:MSSPushSpec.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F1D1295B18D9DB35002FE233"
-               BuildableName = "PMSSPushTests.xctest"
-               BlueprintName = "PMSSPushTests"
-               ReferencedContainer = "container:PMSSPushSpec.xcodeproj">
+               BuildableName = "MSSPushTests.xctest"
+               BlueprintName = "MSSPushTests"
+               ReferencedContainer = "container:MSSPushSpec.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
