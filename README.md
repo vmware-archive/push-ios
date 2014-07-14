@@ -16,29 +16,23 @@ Framework` subdirectory.
 
 The source code of the project is divided into three projects:
 
- * PCFPushSDK - framework target
+ * MSSPushSDK - framework target
      The redistributable portion of the framework.
 
- * PCFPushSpecs - iOS testing target
+ * MSSPushSpecs - iOS testing target
      Unit tests.  Implemented using [Kiwi](https://github.com/kiwi-bdd/Kiwi).
      Uses [cocoapods](http://cocoapods.org/) to manage dependencies.
 
-	 This target produces an application that links against the PCFPushSDK source code directly
+	 This target produces an application that links against the MSSPushSDK source code directly
 	 and runs the unit tests.
-
- * PushSDKDemo - Application target
-
-     Demo application.
-
-	 More information below in the "Demo Application" section"
 
 Building the Framework
 ----------------------
 
-The "PCFPushSDK" target produces a universal framework suitable for building against arm and simulator platforms.  This target
+The "MSSPushSDK" target produces a universal framework suitable for building against arm and simulator platforms.  This target
 depends on the [iOS Universal Framework](https://github.com/kstenerud/iOS-Universal-Framework) build system to produce this framework.
 
-To build the framework, make sure the iOS Universal Framework is installed and load the PCFPushSDK project in Xcode.  Select
-the "PCFPushSDK" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a
+To build the framework, make sure the iOS Universal Framework is installed and load the MSSPushSDK project in Xcode.  Select
+the "MSSPushSDK" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a
 Finder window containing the resultant framework.
 

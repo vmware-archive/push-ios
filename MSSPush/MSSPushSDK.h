@@ -11,7 +11,7 @@
 
 @class MSSParameters;
 
-#warning - TODO: Complete documentation
+//TODO: Complete documentation
 
 /**
  * Primary entry point for the CF Push Client SDK library.

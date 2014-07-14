@@ -38,7 +38,7 @@
         return;
     }
     
-#warning - Complete GZIP code to compress HTTPBody on POST/PUT
+    //TODO Complete GZIP code to compress HTTPBody on POST/PUT
     //    if (request.HTTPBody) {
     //        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
     //    }
