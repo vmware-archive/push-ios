@@ -1,16 +1,16 @@
 //
-//  MSSSDK.m
+//  MSSBase.m
 //  
 //
 //  Created by DX123-XL on 2014-04-24.
 //
 //
 
-#import "MSSSDK.h"
+#import "MSSBase.h"
 #import "MSSClient.h"
 #import "MSSParameters.h"
 
-@implementation MSSSDK
+@implementation MSSBase
 
 + (void)setRegistrationParameters:(MSSParameters *)parameters;
 {

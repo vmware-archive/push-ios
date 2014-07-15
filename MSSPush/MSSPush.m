@@ -1,6 +1,6 @@
 //
-//  MSSPushSDK.m
-//  MSSPushSDK
+//  MSSPush.m
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2013-12-31.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
@@ -11,14 +11,14 @@
 #import "MSSPersistentStorage+Push.h"
 #import "MSSAppDelegateProxy.h"
 #import "MSSPushDebug.h"
-#import "MSSPushSDK.h"
+#import "MSSPush.h"
 #import "MSSPushClient.h"
 #import "MSSNotifications.h"
 
 // Error domain
 NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
 
-@implementation MSSPushSDK
+@implementation MSSPush
 
 + (void)load
 {

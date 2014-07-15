@@ -24,12 +24,12 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Push' do |push|
-    push.dependency 'MSSPush/SDK'
+    push.dependency 'MSSPush/Base'
     push.source_files = 'MSSPush/**/*.{h,m}'
   end
 
-  s.subspec 'SDK' do |sdk|
-    sdk.source_files = 'MSSSDK/**/*.{h,m}'
+  s.subspec 'Base' do |sdk|
+    sdk.source_files = 'MSSBase/**/*.{h,m}'
   end
 
 end

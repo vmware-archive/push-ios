@@ -1,5 +1,5 @@
 //
-//  MSSSDK.h
+//  MSSBase.h
 //  
 //
 //  Created by DX123-XL on 2014-04-24.
@@ -10,7 +10,7 @@
 
 @class MSSParameters;
 
-@interface MSSSDK : NSObject
+@interface MSSBase : NSObject
 
 /**
  * Sets the registration parameters of the application for receiving push notifications. If some of the

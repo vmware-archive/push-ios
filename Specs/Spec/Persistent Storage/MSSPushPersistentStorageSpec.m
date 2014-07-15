@@ -1,6 +1,6 @@
 //
 //  MSSPushPersistentStorageSpec.mm
-//  MSSPushSDK
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2014-02-14.
 //  Copyright (c) 2014 Pivotal. All rights reserved.

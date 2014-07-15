@@ -1,13 +1,13 @@
 //
-//  MSSPushSDK.h
-//  MSSPushSDK
+//  MSSPush.h
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2013-12-31.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "MSSSDK.h"
+#import "MSSBase.h"
 
 @class MSSParameters;
 
@@ -19,7 +19,7 @@
  * Usage: see `README.md`
  *
  */
-@interface MSSPushSDK : MSSSDK
+@interface MSSPush : MSSBase
 
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 

@@ -1,6 +1,6 @@
 //
-//  MSSPushSDKSpec.m
-//  MSSPushSDK
+//  MSSPushSpec.m
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2014-02-14.
 //  Copyright (c) 2014 Pivotal. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "Kiwi.h"
 
-#import "MSSPushSDK.h"
+#import "MSSPush.h"
 #import "MSSPushClientTest.h"
 #import "MSSPushClient.h"
 #import "MSSPushErrors.h"
@@ -19,9 +19,9 @@
 #import "NSURLConnection+MSSPushAsync2Sync.h"
 #import "NSURLConnection+MSSBackEndConnection.h"
 
-SPEC_BEGIN(MSSPushSDKSpec)
+SPEC_BEGIN(MSSPushSpec)
 
-describe(@"MSSPushSDK", ^{
+describe(@"MSSPush", ^{
     __block MSSPushSpecHelper *helper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
     
@@ -112,22 +112,22 @@ describe(@"MSSPushSDK", ^{
                 [helper setupDefaultSavedParameters];
                 
                 [MSSPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
-                [MSSPushSDK setRegistrationParameters:helper.params];
-                [MSSPushSDK setCompletionBlockWithSuccess:^{
+                [MSSPush setRegistrationParameters:helper.params];
+                [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;
                 } failure:^(NSError *error) {
                     fail(@"registration failure block executed");
                 }];
                 
-                [MSSPushSDK registerForPushNotifications];
+                [MSSPush registerForPushNotifications];
             }
             
             for (NSInteger i = 0; i < stringSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
                 [MSSPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
-                [MSSPushSDK setRegistrationParameters:helper.params];
-                [MSSPushSDK setCompletionBlockWithSuccess:^{
+                [MSSPush setRegistrationParameters:helper.params];
+                [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;
                 } failure:^(NSError *error) {
                     fail(@"registration failure block executed");
@@ -180,9 +180,9 @@ describe(@"MSSPushSDK", ^{
                 return nil;
             }];
             
-            [MSSPushSDK load];
-            [MSSPushSDK setRegistrationParameters:helper.params];
-            [MSSPushSDK setCompletionBlockWithSuccess:^{
+            [MSSPush load];
+            [MSSPush setRegistrationParameters:helper.params];
+            [MSSPush setCompletionBlockWithSuccess:^{
                 successBlockExecuted = YES;
             }
                                               failure:^(NSError *error) {
@@ -192,7 +192,7 @@ describe(@"MSSPushSDK", ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
             successBlockExecuted = NO;
-            [MSSPushSDK load];
+            [MSSPush load];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
@@ -221,13 +221,13 @@ describe(@"MSSPushSDK", ^{
         });
         
         it(@"should handle registration failures from APNS", ^{
-            [MSSPushSDK load];
+            [MSSPush load];
             
             [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
             
-            [MSSPushSDK setRegistrationParameters:helper.params];
-            [MSSPushSDK setCompletionBlockWithSuccess:nil
+            [MSSPush setRegistrationParameters:helper.params];
+            [MSSPush setCompletionBlockWithSuccess:nil
                                               failure:^(NSError *error) {
                                                   expectedResult = YES;
                                               }];
@@ -389,7 +389,7 @@ describe(@"MSSPushSDK", ^{
             [[[MSSPersistentStorage serverDeviceID] shouldNot] beNil];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
             
-            [MSSPushSDK unregisterWithPushServerSuccess:^{
+            [MSSPush unregisterWithPushServerSuccess:^{
                 successBlockExecuted = YES;
                 
             } failure:^(NSError *error) {
@@ -425,7 +425,7 @@ describe(@"MSSPushSDK", ^{
             
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
             
-            [MSSPushSDK unregisterWithPushServerSuccess:^{
+            [MSSPush unregisterWithPushServerSuccess:^{
                 fail(@"unregistration success block executed");
                 
             } failure:^(NSError *error) {
@@ -456,7 +456,7 @@ describe(@"MSSPushSDK", ^{
         it(@"should perform failure block if server request returns error", ^{
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
             
-            [MSSPushSDK unregisterWithPushServerSuccess:^{
+            [MSSPush unregisterWithPushServerSuccess:^{
                 fail(@"unregistration success block executed incorrectly");
                 
             } failure:^(NSError *error) {

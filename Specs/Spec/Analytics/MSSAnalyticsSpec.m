@@ -15,8 +15,8 @@
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
 #import "MSSAppDelegateProxy.h"
 #import "MSSPushClient.h"
-#import "MSSPushSDK.h"
-#import "MSSSDK+Analytics.h"
+#import "MSSPush.h"
+#import "MSSBase+Analytics.h"
 #import "MSSAnalytics_TestingHeader.h"
 #import "MSSAnalyticEvent_TestingHeader.h"
 #import "MSSCoreDataManager.h"
@@ -55,8 +55,8 @@ describe(@"MSSAnalytics", ^{
         __block NSInteger expectedCountOFEvents = -1;
         
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
-            [MSSSDK setRegistrationParameters:helper.params];
+            [MSSBase setAnalyticsEnabled:YES];
+            [MSSBase setRegistrationParameters:helper.params];
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSError *error;
@@ -120,7 +120,7 @@ describe(@"MSSAnalytics", ^{
     context(@"Maximum message body size.", ^{
         __block NSInteger maxEventCount = 0;
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
+            [MSSBase setAnalyticsEnabled:YES];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -178,10 +178,10 @@ describe(@"MSSAnalytics", ^{
     
     context(@"Receive push notificiation without a push ID.", ^{
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
+            [MSSBase setAnalyticsEnabled:YES];
             
-            [MSSSDK load];
-            [MSSSDK setRegistrationParameters:helper.params];
+            [MSSBase load];
+            [MSSBase setRegistrationParameters:helper.params];
             
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [helper.applicationDelegate application:helper.application didReceiveRemoteNotification:@{}];
@@ -226,7 +226,7 @@ describe(@"MSSAnalytics", ^{
         __block NSArray *events;
         
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
+            [MSSBase setAnalyticsEnabled:YES];
             
             [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
             [helper.applicationDelegate application:helper.application didReceiveRemoteNotification:@{PushNotificationKeys.pushID : @"PUSH_ID"}];
@@ -246,7 +246,7 @@ describe(@"MSSAnalytics", ^{
     context(@"Batch sending of analytic events.", ^{
         
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
+            [MSSBase setAnalyticsEnabled:YES];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -280,7 +280,7 @@ describe(@"MSSAnalytics", ^{
     
     context(@"Batch send fails of analytic events.", ^{
         beforeEach(^{
-            [MSSSDK setAnalyticsEnabled:YES];
+            [MSSBase setAnalyticsEnabled:YES];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -312,8 +312,8 @@ describe(@"MSSAnalytics + MSSPush", ^{
     __block MSSPushSpecHelper *helper;
     
     void(^forceLoadSDK)() = ^{
-        [MSSPushSDK load];
-        [MSSPushSDK setRegistrationParameters:helper.params];
+        [MSSPush load];
+        [MSSPush setRegistrationParameters:helper.params];
         [[[helper.applicationDelegate class] should] equal:[MSSAppDelegateProxy class]];
     };
     
@@ -464,7 +464,7 @@ context(@"Tracking analytic events when push events occur", ^{
         NSArray *events = [manager managedObjectsWithEntityName:NSStringFromClass([MSSAnalyticEvent class])];
         [[theValue(containsEventType(events, EventTypes.unregistered)) should] beFalse];
         
-        [MSSPushSDK unregisterWithPushServerSuccess:^{
+        [MSSPush unregisterWithPushServerSuccess:^{
         } failure:^(NSError *error) {
             fail(@"Unregistration call should not have failed.");
         }];

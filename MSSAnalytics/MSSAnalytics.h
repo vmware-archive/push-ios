@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MSSSDK+Analytics.h"
+#import "MSSBase+Analytics.h"
 
 @interface MSSAnalytics : NSObject
 

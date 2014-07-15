@@ -16,7 +16,7 @@
 		F1BCF2EA18E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D918E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m */; };
 		F1BCF2EB18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DA18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m */; };
 		F1BCF2EC18E5CF46004F3684 /* MSSRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DB18E5CF46004F3684 /* MSSRegistrationParametersSpec.m */; };
-		F1BCF2ED18E5CF46004F3684 /* MSSPushSDKSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DC18E5CF46004F3684 /* MSSPushSDKSpec.m */; };
+		F1BCF2ED18E5CF46004F3684 /* MSSPushSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DC18E5CF46004F3684 /* MSSPushSpec.m */; };
 		F1BCF2EE18E5CF46004F3684 /* MSSPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DE18E5CF46004F3684 /* MSSPushPersistentStorageSpec.m */; };
 		F1BCF2EF18E5CF46004F3684 /* MSSPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2E518E5CF46004F3684 /* MSSPushHexUtilSpec.m */; };
 		F1CD947D19004FE80086A590 /* MSSParameters-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */; };
@@ -49,7 +49,7 @@
 		F1BCF2D918E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationRequestDataSpec.m; sourceTree = "<group>"; };
 		F1BCF2DA18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationResponseDataSpec.m; sourceTree = "<group>"; };
 		F1BCF2DB18E5CF46004F3684 /* MSSRegistrationParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSRegistrationParametersSpec.m; sourceTree = "<group>"; };
-		F1BCF2DC18E5CF46004F3684 /* MSSPushSDKSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushSDKSpec.m; sourceTree = "<group>"; };
+		F1BCF2DC18E5CF46004F3684 /* MSSPushSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushSpec.m; sourceTree = "<group>"; };
 		F1BCF2DE18E5CF46004F3684 /* MSSPushPersistentStorageSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushPersistentStorageSpec.m; sourceTree = "<group>"; };
 		F1BCF2E018E5CF46004F3684 /* MSSPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
 		F1BCF2E118E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
@@ -99,7 +99,7 @@
 				F1BCF2CF18E5CF46004F3684 /* Back End */,
 				F1BCF2D118E5CF46004F3684 /* Helpers */,
 				F1BCF2D818E5CF46004F3684 /* Models */,
-				F1BCF2DC18E5CF46004F3684 /* MSSPushSDKSpec.m */,
+				F1BCF2DC18E5CF46004F3684 /* MSSPushSpec.m */,
 				F1BCF2DD18E5CF46004F3684 /* Persistent Storage */,
 				F1BCF2DF18E5CF46004F3684 /* Test Headers */,
 				F1BCF2E418E5CF46004F3684 /* Util */,
@@ -318,7 +318,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */,
-				F1BCF2ED18E5CF46004F3684 /* MSSPushSDKSpec.m in Sources */,
+				F1BCF2ED18E5CF46004F3684 /* MSSPushSpec.m in Sources */,
 				F1BCF2EA18E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */,
 				F1BCF2EC18E5CF46004F3684 /* MSSRegistrationParametersSpec.m in Sources */,
 				F1E93B4F19006F410038F429 /* MSSClassPropertyUtility.m in Sources */,

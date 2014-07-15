@@ -1,6 +1,6 @@
 //
 //  MSSPushSpecHelper.mm
-//  MSSPushSDK
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2013-12-31.
 //  Copyright (c) 2013 Pivotal. All rights reserved.
@@ -11,7 +11,7 @@
 #import "MSSPushSpecHelper.h"
 #import "MSSAppDelegate.h"
 #import "MSSAppDelegateProxy.h"
-#import "MSSPushSDK.h"
+#import "MSSPush.h"
 #import "JRSwizzle.h"
 #import "MSSPushDebug.h"
 #import "MSSPersistentStorage+Push.h"

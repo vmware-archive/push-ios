@@ -1,15 +1,15 @@
 //
-//  MSSSDK+Analytics.m
+//  MSSBase+Analytics.m
 //  
 //
 //  Created by DX123-XL on 2014-04-25.
 //
 //
 
-#import "MSSSDK+Analytics.h"
+#import "MSSBase+Analytics.h"
 #import "MSSPersistentStorage+Analytics.h"
 
-@implementation MSSSDK (Analytics)
+@implementation MSSBase (Analytics)
 
 + (BOOL)analyticsEnabled
 {

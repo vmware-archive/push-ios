@@ -7,110 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D4B319AA195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D4B319A8195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4B319AB195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D4B319A8195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4B319AC195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D4B319A8195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4B319AD195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319A9195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m */; };
-		D4B319AE195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319A9195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m */; };
-		D4B319AF195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319A9195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m */; };
 		D4B319B1195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
 		D4B319B2195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
 		D4B319B3195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
-		D4F35ABF195B27B800858839 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB5195B27B800858839 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC0195B27B800858839 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB5195B27B800858839 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC1195B27B800858839 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB5195B27B800858839 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC2195B27B800858839 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB6195B27B800858839 /* MSSAppDelegate.m */; };
-		D4F35AC3195B27B800858839 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB6195B27B800858839 /* MSSAppDelegate.m */; };
-		D4F35AC4195B27B800858839 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB6195B27B800858839 /* MSSAppDelegate.m */; };
-		D4F35AC5195B27B800858839 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB7195B27B800858839 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC6195B27B800858839 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB7195B27B800858839 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC7195B27B800858839 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB7195B27B800858839 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AC8195B27B800858839 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB8195B27B800858839 /* MSSAppDelegateProxy.m */; };
-		D4F35AC9195B27B800858839 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB8195B27B800858839 /* MSSAppDelegateProxy.m */; };
-		D4F35ACA195B27B800858839 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AB8195B27B800858839 /* MSSAppDelegateProxy.m */; };
-		D4F35ACB195B27B800858839 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB9195B27B800858839 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35ACC195B27B800858839 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB9195B27B800858839 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35ACD195B27B800858839 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AB9195B27B800858839 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35ACE195B27B800858839 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABA195B27B800858839 /* MSSClient.m */; };
-		D4F35ACF195B27B800858839 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABA195B27B800858839 /* MSSClient.m */; };
-		D4F35AD0195B27B800858839 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABA195B27B800858839 /* MSSClient.m */; };
-		D4F35AD1195B27B800858839 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABB195B27B800858839 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AD2195B27B800858839 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABB195B27B800858839 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AD3195B27B800858839 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABB195B27B800858839 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AD4195B27B800858839 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABC195B27B800858839 /* MSSParameters.m */; };
-		D4F35AD5195B27B800858839 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABC195B27B800858839 /* MSSParameters.m */; };
-		D4F35AD6195B27B800858839 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABC195B27B800858839 /* MSSParameters.m */; };
-		D4F35AD7195B27B800858839 /* MSSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABD195B27B800858839 /* MSSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AD8195B27B800858839 /* MSSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABD195B27B800858839 /* MSSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AD9195B27B800858839 /* MSSSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ABD195B27B800858839 /* MSSSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35ADA195B27B800858839 /* MSSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABE195B27B800858839 /* MSSSDK.m */; };
-		D4F35ADB195B27B800858839 /* MSSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABE195B27B800858839 /* MSSSDK.m */; };
-		D4F35ADC195B27B800858839 /* MSSSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ABE195B27B800858839 /* MSSSDK.m */; };
-		D4F35AEC195B28A600858839 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADD195B28A600858839 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AED195B28A600858839 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADD195B28A600858839 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AEE195B28A600858839 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADD195B28A600858839 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AEF195B28A600858839 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ADE195B28A600858839 /* MSSHardwareUtil.m */; };
-		D4F35AF0195B28A600858839 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ADE195B28A600858839 /* MSSHardwareUtil.m */; };
-		D4F35AF1195B28A600858839 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35ADE195B28A600858839 /* MSSHardwareUtil.m */; };
-		D4F35AF2195B28A600858839 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADF195B28A600858839 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AF3195B28A600858839 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADF195B28A600858839 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AF4195B28A600858839 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35ADF195B28A600858839 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AF5195B28A600858839 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE0195B28A600858839 /* MSSJSONValueTransformer.m */; };
-		D4F35AF6195B28A600858839 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE0195B28A600858839 /* MSSJSONValueTransformer.m */; };
-		D4F35AF7195B28A600858839 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE0195B28A600858839 /* MSSJSONValueTransformer.m */; };
-		D4F35AF8195B28A600858839 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE1195B28A600858839 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AF9195B28A600858839 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE1195B28A600858839 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AFA195B28A600858839 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE1195B28A600858839 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AFB195B28A600858839 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE2195B28A600858839 /* MSSNotifications.m */; };
-		D4F35AFC195B28A600858839 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE2195B28A600858839 /* MSSNotifications.m */; };
-		D4F35AFD195B28A600858839 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE2195B28A600858839 /* MSSNotifications.m */; };
-		D4F35AFE195B28A600858839 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE3195B28A600858839 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35AFF195B28A600858839 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE3195B28A600858839 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B00195B28A600858839 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE3195B28A600858839 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B01195B28A600858839 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE4195B28A600858839 /* MSSPersistentStorage.m */; };
-		D4F35B02195B28A600858839 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE4195B28A600858839 /* MSSPersistentStorage.m */; };
-		D4F35B03195B28A600858839 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE4195B28A600858839 /* MSSPersistentStorage.m */; };
-		D4F35B04195B28A600858839 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE5195B28A600858839 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B05195B28A600858839 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE5195B28A600858839 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B06195B28A600858839 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE5195B28A600858839 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B07195B28A600858839 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE6195B28A600858839 /* MSSPushDebug.m */; };
-		D4F35B08195B28A600858839 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE6195B28A600858839 /* MSSPushDebug.m */; };
-		D4F35B09195B28A600858839 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE6195B28A600858839 /* MSSPushDebug.m */; };
-		D4F35B0A195B28A600858839 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE7195B28A600858839 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B0B195B28A600858839 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE7195B28A600858839 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B0C195B28A600858839 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE7195B28A600858839 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B0D195B28A600858839 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE8195B28A600858839 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B0E195B28A600858839 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE8195B28A600858839 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B0F195B28A600858839 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AE8195B28A600858839 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B10195B28A600858839 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE9195B28A600858839 /* MSSPushErrorUtil.m */; };
-		D4F35B11195B28A600858839 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE9195B28A600858839 /* MSSPushErrorUtil.m */; };
-		D4F35B12195B28A600858839 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AE9195B28A600858839 /* MSSPushErrorUtil.m */; };
-		D4F35B13195B28A600858839 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AEA195B28A600858839 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B14195B28A600858839 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AEA195B28A600858839 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B15195B28A600858839 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35AEA195B28A600858839 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B16195B28A600858839 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AEB195B28A600858839 /* MSSPushHexUtil.m */; };
-		D4F35B17195B28A600858839 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AEB195B28A600858839 /* MSSPushHexUtil.m */; };
-		D4F35B18195B28A600858839 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35AEB195B28A600858839 /* MSSPushHexUtil.m */; };
-		D4F35B1B195B28C000858839 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B19195B28C000858839 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B1C195B28C000858839 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B19195B28C000858839 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B1D195B28C000858839 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B19195B28C000858839 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B1E195B28C000858839 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B1A195B28C000858839 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B1F195B28C000858839 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B1A195B28C000858839 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B20195B28C000858839 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B1A195B28C000858839 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B23195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B21195B28D600858839 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B24195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B21195B28D600858839 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B25195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B21195B28D600858839 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B26195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B22195B28D600858839 /* NSObject+MSSJSONizable.m */; };
-		D4F35B27195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B22195B28D600858839 /* NSObject+MSSJSONizable.m */; };
-		D4F35B28195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B22195B28D600858839 /* NSObject+MSSJSONizable.m */; };
 		D4F35B35195B297200858839 /* MSSAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B31195B297200858839 /* MSSAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B36195B297200858839 /* MSSAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B31195B297200858839 /* MSSAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B37195B297200858839 /* MSSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B32195B297200858839 /* MSSAnalytics.m */; };
 		D4F35B38195B297200858839 /* MSSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B32195B297200858839 /* MSSAnalytics.m */; };
-		D4F35B39195B297200858839 /* MSSSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B33195B297200858839 /* MSSSDK+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B3A195B297200858839 /* MSSSDK+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B33195B297200858839 /* MSSSDK+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B3B195B297200858839 /* MSSSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B34195B297200858839 /* MSSSDK+Analytics.m */; };
-		D4F35B3C195B297200858839 /* MSSSDK+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B34195B297200858839 /* MSSSDK+Analytics.m */; };
 		D4F35B41195B299C00858839 /* MSSAnalyticEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B3D195B299C00858839 /* MSSAnalyticEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B42195B299C00858839 /* MSSAnalyticEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B3D195B299C00858839 /* MSSAnalyticEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B43195B299C00858839 /* MSSAnalyticEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B3E195B299C00858839 /* MSSAnalyticEvent.m */; };
@@ -133,10 +36,10 @@
 		D4F35B60195B2A2800858839 /* MSSPushClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B5B195B2A2800858839 /* MSSPushClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B61195B2A2800858839 /* MSSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5C195B2A2800858839 /* MSSPushClient.m */; };
 		D4F35B62195B2A2800858839 /* MSSPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5C195B2A2800858839 /* MSSPushClient.m */; };
-		D4F35B63195B2A2800858839 /* MSSPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B5D195B2A2800858839 /* MSSPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B64195B2A2800858839 /* MSSPushSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B5D195B2A2800858839 /* MSSPushSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4F35B65195B2A2800858839 /* MSSPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5E195B2A2800858839 /* MSSPushSDK.m */; };
-		D4F35B66195B2A2800858839 /* MSSPushSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5E195B2A2800858839 /* MSSPushSDK.m */; };
+		D4F35B63195B2A2800858839 /* MSSPush.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B5D195B2A2800858839 /* MSSPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4F35B64195B2A2800858839 /* MSSPush.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B5D195B2A2800858839 /* MSSPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D4F35B65195B2A2800858839 /* MSSPush.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5E195B2A2800858839 /* MSSPush.m */; };
+		D4F35B66195B2A2800858839 /* MSSPush.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B5E195B2A2800858839 /* MSSPush.m */; };
 		D4F35B69195B2A3F00858839 /* MSSPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B67195B2A3F00858839 /* MSSPersistentStorage+Push.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B6A195B2A3F00858839 /* MSSPersistentStorage+Push.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B67195B2A3F00858839 /* MSSPersistentStorage+Push.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B6B195B2A3F00858839 /* MSSPersistentStorage+Push.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B68195B2A3F00858839 /* MSSPersistentStorage+Push.m */; };
@@ -157,52 +60,116 @@
 		D4F35B82195B2A6D00858839 /* MSSPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B7F195B2A6D00858839 /* MSSPushURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B83195B2A6D00858839 /* MSSPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B80195B2A6D00858839 /* MSSPushURLConnection.m */; };
 		D4F35B84195B2A6D00858839 /* MSSPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B80195B2A6D00858839 /* MSSPushURLConnection.m */; };
+		E789571019758E58008CDCE9 /* MSSBase+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = E789570E19758E58008CDCE9 /* MSSBase+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789571119758E58008CDCE9 /* MSSBase+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = E789570F19758E58008CDCE9 /* MSSBase+Analytics.m */; };
+		E789573619759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571419759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789573719759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571519759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m */; };
+		E789573819759017008CDCE9 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571719759017008CDCE9 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789573919759017008CDCE9 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571819759017008CDCE9 /* NSObject+MSSJSONizable.m */; };
+		E789573A19759017008CDCE9 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571919759017008CDCE9 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789573B19759017008CDCE9 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571A19759017008CDCE9 /* MSSAppDelegate.m */; };
+		E789573C19759017008CDCE9 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571B19759017008CDCE9 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789573D19759017008CDCE9 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571C19759017008CDCE9 /* MSSAppDelegateProxy.m */; };
+		E789573E19759017008CDCE9 /* MSSBase.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571D19759017008CDCE9 /* MSSBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789573F19759017008CDCE9 /* MSSBase.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571E19759017008CDCE9 /* MSSBase.m */; };
+		E789574019759017008CDCE9 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571F19759017008CDCE9 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574119759017008CDCE9 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572019759017008CDCE9 /* MSSClient.m */; };
+		E789574219759017008CDCE9 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572119759017008CDCE9 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574319759017008CDCE9 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572219759017008CDCE9 /* MSSParameters.m */; };
+		E789574419759017008CDCE9 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572419759017008CDCE9 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574519759017008CDCE9 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572519759017008CDCE9 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574619759017008CDCE9 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572719759017008CDCE9 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574719759017008CDCE9 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572819759017008CDCE9 /* MSSHardwareUtil.m */; };
+		E789574819759017008CDCE9 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572919759017008CDCE9 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574919759017008CDCE9 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572A19759017008CDCE9 /* MSSJSONValueTransformer.m */; };
+		E789574A19759017008CDCE9 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572B19759017008CDCE9 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574B19759017008CDCE9 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572C19759017008CDCE9 /* MSSNotifications.m */; };
+		E789574C19759017008CDCE9 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572D19759017008CDCE9 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574D19759017008CDCE9 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572E19759017008CDCE9 /* MSSPersistentStorage.m */; };
+		E789574E19759017008CDCE9 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572F19759017008CDCE9 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789574F19759017008CDCE9 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573019759017008CDCE9 /* MSSPushDebug.m */; };
+		E789575019759017008CDCE9 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573119759017008CDCE9 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789575119759017008CDCE9 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573219759017008CDCE9 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789575219759017008CDCE9 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573319759017008CDCE9 /* MSSPushErrorUtil.m */; };
+		E789575319759017008CDCE9 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573419759017008CDCE9 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789575419759017008CDCE9 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573519759017008CDCE9 /* MSSPushHexUtil.m */; };
+		E789576C1975A2DE008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571519759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m */; };
+		E789576D1975A2DE008CDCE9 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571819759017008CDCE9 /* NSObject+MSSJSONizable.m */; };
+		E789576E1975A2DE008CDCE9 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571A19759017008CDCE9 /* MSSAppDelegate.m */; };
+		E789576F1975A2DE008CDCE9 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571C19759017008CDCE9 /* MSSAppDelegateProxy.m */; };
+		E78957701975A2DE008CDCE9 /* MSSBase.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571E19759017008CDCE9 /* MSSBase.m */; };
+		E78957711975A2DE008CDCE9 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572019759017008CDCE9 /* MSSClient.m */; };
+		E78957721975A2DE008CDCE9 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572219759017008CDCE9 /* MSSParameters.m */; };
+		E78957731975A2DE008CDCE9 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572819759017008CDCE9 /* MSSHardwareUtil.m */; };
+		E78957741975A2DE008CDCE9 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572A19759017008CDCE9 /* MSSJSONValueTransformer.m */; };
+		E78957751975A2DE008CDCE9 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572C19759017008CDCE9 /* MSSNotifications.m */; };
+		E78957761975A2DE008CDCE9 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572E19759017008CDCE9 /* MSSPersistentStorage.m */; };
+		E78957771975A2DE008CDCE9 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573019759017008CDCE9 /* MSSPushDebug.m */; };
+		E78957781975A2DE008CDCE9 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573319759017008CDCE9 /* MSSPushErrorUtil.m */; };
+		E78957791975A2DE008CDCE9 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573519759017008CDCE9 /* MSSPushHexUtil.m */; };
+		E789577A1975A304008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571419759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789577B1975A304008CDCE9 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571719759017008CDCE9 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789577C1975A304008CDCE9 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571919759017008CDCE9 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789577D1975A304008CDCE9 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571B19759017008CDCE9 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789577E1975A304008CDCE9 /* MSSBase.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571D19759017008CDCE9 /* MSSBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789577F1975A304008CDCE9 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571F19759017008CDCE9 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957801975A304008CDCE9 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572119759017008CDCE9 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957811975A304008CDCE9 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572419759017008CDCE9 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957821975A304008CDCE9 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572519759017008CDCE9 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957831975A304008CDCE9 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572719759017008CDCE9 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957841975A304008CDCE9 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572919759017008CDCE9 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957851975A304008CDCE9 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572B19759017008CDCE9 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957861975A304008CDCE9 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572D19759017008CDCE9 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957871975A304008CDCE9 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572F19759017008CDCE9 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957881975A304008CDCE9 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573119759017008CDCE9 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957891975A304008CDCE9 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573219759017008CDCE9 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789578A1975A304008CDCE9 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573419759017008CDCE9 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789578D1975A376008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571519759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m */; };
+		E789578E1975A376008CDCE9 /* NSObject+MSSJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571819759017008CDCE9 /* NSObject+MSSJSONizable.m */; };
+		E789578F1975A376008CDCE9 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571A19759017008CDCE9 /* MSSAppDelegate.m */; };
+		E78957901975A376008CDCE9 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571C19759017008CDCE9 /* MSSAppDelegateProxy.m */; };
+		E78957911975A376008CDCE9 /* MSSBase.m in Sources */ = {isa = PBXBuildFile; fileRef = E789571E19759017008CDCE9 /* MSSBase.m */; };
+		E78957921975A376008CDCE9 /* MSSClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572019759017008CDCE9 /* MSSClient.m */; };
+		E78957931975A376008CDCE9 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572219759017008CDCE9 /* MSSParameters.m */; };
+		E78957941975A376008CDCE9 /* MSSHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572819759017008CDCE9 /* MSSHardwareUtil.m */; };
+		E78957951975A376008CDCE9 /* MSSJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572A19759017008CDCE9 /* MSSJSONValueTransformer.m */; };
+		E78957961975A376008CDCE9 /* MSSNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572C19759017008CDCE9 /* MSSNotifications.m */; };
+		E78957971975A376008CDCE9 /* MSSPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = E789572E19759017008CDCE9 /* MSSPersistentStorage.m */; };
+		E78957981975A376008CDCE9 /* MSSPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573019759017008CDCE9 /* MSSPushDebug.m */; };
+		E78957991975A376008CDCE9 /* MSSPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573319759017008CDCE9 /* MSSPushErrorUtil.m */; };
+		E789579A1975A376008CDCE9 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = E789573519759017008CDCE9 /* MSSPushHexUtil.m */; };
+		E789579B1975A394008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571419759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789579C1975A394008CDCE9 /* NSObject+MSSJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571719759017008CDCE9 /* NSObject+MSSJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789579D1975A394008CDCE9 /* MSSAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571919759017008CDCE9 /* MSSAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789579E1975A394008CDCE9 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571B19759017008CDCE9 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E789579F1975A394008CDCE9 /* MSSBase.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571D19759017008CDCE9 /* MSSBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A01975A394008CDCE9 /* MSSClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E789571F19759017008CDCE9 /* MSSClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A11975A394008CDCE9 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572119759017008CDCE9 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A21975A394008CDCE9 /* MSSMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572419759017008CDCE9 /* MSSMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A31975A394008CDCE9 /* MSSSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572519759017008CDCE9 /* MSSSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A41975A394008CDCE9 /* MSSHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572719759017008CDCE9 /* MSSHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A51975A394008CDCE9 /* MSSJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572919759017008CDCE9 /* MSSJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A61975A394008CDCE9 /* MSSNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572B19759017008CDCE9 /* MSSNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A71975A394008CDCE9 /* MSSPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572D19759017008CDCE9 /* MSSPersistentStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A81975A394008CDCE9 /* MSSPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = E789572F19759017008CDCE9 /* MSSPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957A91975A394008CDCE9 /* MSSPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573119759017008CDCE9 /* MSSPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957AA1975A394008CDCE9 /* MSSPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573219759017008CDCE9 /* MSSPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957AB1975A394008CDCE9 /* MSSPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = E789573419759017008CDCE9 /* MSSPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957AC1975B43D008CDCE9 /* MSSBase+Analytics.h in Headers */ = {isa = PBXBuildFile; fileRef = E789570E19758E58008CDCE9 /* MSSBase+Analytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E78957AD1975B447008CDCE9 /* MSSBase+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = E789570F19758E58008CDCE9 /* MSSBase+Analytics.m */; };
 		F1B6019E1923B6EA00B65371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B6019A1923B6EA00B65371 /* InfoPlist.strings */; };
 		F1B6019F1923B6EA00B65371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B6019A1923B6EA00B65371 /* InfoPlist.strings */; };
 		F1B601A01923B6EA00B65371 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F1B6019A1923B6EA00B65371 /* InfoPlist.strings */; };
-		F1B601A41923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
-		F1B601A51923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
-		F1B601A61923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
+		F1B601A41923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSComplete-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
+		F1B601A51923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSComplete-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
+		F1B601A61923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F1B6019D1923B6EA00B65371 /* MSSComplete-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D4B319A8195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLConnection+MSSBackEndConnection.h"; path = "../../MSSSDK/BackEnd/NSURLConnection+MSSBackEndConnection.h"; sourceTree = "<group>"; };
-		D4B319A9195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+MSSBackEndConnection.m"; path = "../../MSSSDK/BackEnd/NSURLConnection+MSSBackEndConnection.m"; sourceTree = "<group>"; };
 		D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSPushAppDelegate+Analytics.m"; sourceTree = "<group>"; };
-		D4E8A808185BAFDC00A841EE /* MSSCompleteSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSCompleteSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D4F35AB5195B27B800858839 /* MSSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAppDelegate.h; path = ../MSSSDK/MSSAppDelegate.h; sourceTree = "<group>"; };
-		D4F35AB6195B27B800858839 /* MSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAppDelegate.m; path = ../MSSSDK/MSSAppDelegate.m; sourceTree = "<group>"; };
-		D4F35AB7195B27B800858839 /* MSSAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAppDelegateProxy.h; path = ../MSSSDK/MSSAppDelegateProxy.h; sourceTree = "<group>"; };
-		D4F35AB8195B27B800858839 /* MSSAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAppDelegateProxy.m; path = ../MSSSDK/MSSAppDelegateProxy.m; sourceTree = "<group>"; };
-		D4F35AB9195B27B800858839 /* MSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSClient.h; path = ../MSSSDK/MSSClient.h; sourceTree = "<group>"; };
-		D4F35ABA195B27B800858839 /* MSSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSClient.m; path = ../MSSSDK/MSSClient.m; sourceTree = "<group>"; };
-		D4F35ABB195B27B800858839 /* MSSParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSParameters.h; path = ../MSSSDK/MSSParameters.h; sourceTree = "<group>"; };
-		D4F35ABC195B27B800858839 /* MSSParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSParameters.m; path = ../MSSSDK/MSSParameters.m; sourceTree = "<group>"; };
-		D4F35ABD195B27B800858839 /* MSSSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSSDK.h; path = ../MSSSDK/MSSSDK.h; sourceTree = "<group>"; };
-		D4F35ABE195B27B800858839 /* MSSSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSSDK.m; path = ../MSSSDK/MSSSDK.m; sourceTree = "<group>"; };
-		D4F35ADD195B28A600858839 /* MSSHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSHardwareUtil.h; path = ../../MSSSDK/Utils/MSSHardwareUtil.h; sourceTree = "<group>"; };
-		D4F35ADE195B28A600858839 /* MSSHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSHardwareUtil.m; path = ../../MSSSDK/Utils/MSSHardwareUtil.m; sourceTree = "<group>"; };
-		D4F35ADF195B28A600858839 /* MSSJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSJSONValueTransformer.h; path = ../../MSSSDK/Utils/MSSJSONValueTransformer.h; sourceTree = "<group>"; };
-		D4F35AE0195B28A600858839 /* MSSJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSJSONValueTransformer.m; path = ../../MSSSDK/Utils/MSSJSONValueTransformer.m; sourceTree = "<group>"; };
-		D4F35AE1195B28A600858839 /* MSSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSNotifications.h; path = ../../MSSSDK/Utils/MSSNotifications.h; sourceTree = "<group>"; };
-		D4F35AE2195B28A600858839 /* MSSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSNotifications.m; path = ../../MSSSDK/Utils/MSSNotifications.m; sourceTree = "<group>"; };
-		D4F35AE3195B28A600858839 /* MSSPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPersistentStorage.h; path = ../../MSSSDK/Utils/MSSPersistentStorage.h; sourceTree = "<group>"; };
-		D4F35AE4195B28A600858839 /* MSSPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPersistentStorage.m; path = ../../MSSSDK/Utils/MSSPersistentStorage.m; sourceTree = "<group>"; };
-		D4F35AE5195B28A600858839 /* MSSPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushDebug.h; path = ../../MSSSDK/Utils/MSSPushDebug.h; sourceTree = "<group>"; };
-		D4F35AE6195B28A600858839 /* MSSPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushDebug.m; path = ../../MSSSDK/Utils/MSSPushDebug.m; sourceTree = "<group>"; };
-		D4F35AE7195B28A600858839 /* MSSPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushErrors.h; path = ../../MSSSDK/Utils/MSSPushErrors.h; sourceTree = "<group>"; };
-		D4F35AE8195B28A600858839 /* MSSPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushErrorUtil.h; path = ../../MSSSDK/Utils/MSSPushErrorUtil.h; sourceTree = "<group>"; };
-		D4F35AE9195B28A600858839 /* MSSPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushErrorUtil.m; path = ../../MSSSDK/Utils/MSSPushErrorUtil.m; sourceTree = "<group>"; };
-		D4F35AEA195B28A600858839 /* MSSPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushHexUtil.h; path = ../../MSSSDK/Utils/MSSPushHexUtil.h; sourceTree = "<group>"; };
-		D4F35AEB195B28A600858839 /* MSSPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushHexUtil.m; path = ../../MSSSDK/Utils/MSSPushHexUtil.m; sourceTree = "<group>"; };
-		D4F35B19195B28C000858839 /* MSSMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSMapping.h; path = ../../MSSSDK/Protocols/MSSMapping.h; sourceTree = "<group>"; };
-		D4F35B1A195B28C000858839 /* MSSSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSSortDescriptors.h; path = ../../MSSSDK/Protocols/MSSSortDescriptors.h; sourceTree = "<group>"; };
-		D4F35B21195B28D600858839 /* NSObject+MSSJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+MSSJSONizable.h"; path = "../../MSSSDK/Categories/NSObject+MSSJSONizable.h"; sourceTree = "<group>"; };
-		D4F35B22195B28D600858839 /* NSObject+MSSJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+MSSJSONizable.m"; path = "../../MSSSDK/Categories/NSObject+MSSJSONizable.m"; sourceTree = "<group>"; };
+		D4E8A808185BAFDC00A841EE /* MSSComplete.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSComplete.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D4F35B31195B297200858839 /* MSSAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAnalytics.h; path = ../MSSAnalytics/MSSAnalytics.h; sourceTree = "<group>"; };
 		D4F35B32195B297200858839 /* MSSAnalytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAnalytics.m; path = ../MSSAnalytics/MSSAnalytics.m; sourceTree = "<group>"; };
-		D4F35B33195B297200858839 /* MSSSDK+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MSSSDK+Analytics.h"; path = "../MSSAnalytics/MSSSDK+Analytics.h"; sourceTree = "<group>"; };
-		D4F35B34195B297200858839 /* MSSSDK+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MSSSDK+Analytics.m"; path = "../MSSAnalytics/MSSSDK+Analytics.m"; sourceTree = "<group>"; };
 		D4F35B3D195B299C00858839 /* MSSAnalyticEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSAnalyticEvent.h; path = ../../MSSAnalytics/Models/MSSAnalyticEvent.h; sourceTree = "<group>"; };
 		D4F35B3E195B299C00858839 /* MSSAnalyticEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSAnalyticEvent.m; path = ../../MSSAnalytics/Models/MSSAnalyticEvent.m; sourceTree = "<group>"; };
 		D4F35B3F195B299C00858839 /* MSSCoreDataManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSCoreDataManager.h; path = ../../MSSAnalytics/Models/MSSCoreDataManager.h; sourceTree = "<group>"; };
@@ -214,8 +181,8 @@
 		D4F35B56195B29D600858839 /* MSSPersistentStorage+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MSSPersistentStorage+Analytics.m"; path = "../../MSSAnalytics/Persistent Storage/MSSPersistentStorage+Analytics.m"; sourceTree = "<group>"; };
 		D4F35B5B195B2A2800858839 /* MSSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushClient.h; path = ../MSSPush/MSSPushClient.h; sourceTree = "<group>"; };
 		D4F35B5C195B2A2800858839 /* MSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushClient.m; path = ../MSSPush/MSSPushClient.m; sourceTree = "<group>"; };
-		D4F35B5D195B2A2800858839 /* MSSPushSDK.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushSDK.h; path = ../MSSPush/MSSPushSDK.h; sourceTree = "<group>"; };
-		D4F35B5E195B2A2800858839 /* MSSPushSDK.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushSDK.m; path = ../MSSPush/MSSPushSDK.m; sourceTree = "<group>"; };
+		D4F35B5D195B2A2800858839 /* MSSPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPush.h; sourceTree = "<group>"; };
+		D4F35B5E195B2A2800858839 /* MSSPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPush.m; sourceTree = "<group>"; };
 		D4F35B67195B2A3F00858839 /* MSSPersistentStorage+Push.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MSSPersistentStorage+Push.h"; path = "../../MSSPush/Persistent Storage/MSSPersistentStorage+Push.h"; sourceTree = "<group>"; };
 		D4F35B68195B2A3F00858839 /* MSSPersistentStorage+Push.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MSSPersistentStorage+Push.m"; path = "../../MSSPush/Persistent Storage/MSSPersistentStorage+Push.m"; sourceTree = "<group>"; };
 		D4F35B6D195B2A5500858839 /* MSSPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushRegistrationData.h; path = ../../MSSPush/Models/MSSPushRegistrationData.h; sourceTree = "<group>"; };
@@ -226,11 +193,44 @@
 		D4F35B72195B2A5500858839 /* MSSPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushRegistrationResponseData.m; path = ../../MSSPush/Models/MSSPushRegistrationResponseData.m; sourceTree = "<group>"; };
 		D4F35B7F195B2A6D00858839 /* MSSPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushURLConnection.h; path = ../../MSSPush/BackEnd/MSSPushURLConnection.h; sourceTree = "<group>"; };
 		D4F35B80195B2A6D00858839 /* MSSPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushURLConnection.m; path = ../../MSSPush/BackEnd/MSSPushURLConnection.m; sourceTree = "<group>"; };
-		F1B6013D1922A0A300B65371 /* MSSAnalyticsSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSAnalyticsSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1B601851922A12500B65371 /* MSSPushSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSPushSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E789570E19758E58008CDCE9 /* MSSBase+Analytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSBase+Analytics.h"; sourceTree = "<group>"; };
+		E789570F19758E58008CDCE9 /* MSSBase+Analytics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MSSBase+Analytics.m"; sourceTree = "<group>"; };
+		E789571419759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+MSSBackEndConnection.h"; sourceTree = "<group>"; };
+		E789571519759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+MSSBackEndConnection.m"; sourceTree = "<group>"; };
+		E789571719759017008CDCE9 /* NSObject+MSSJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MSSJSONizable.h"; sourceTree = "<group>"; };
+		E789571819759017008CDCE9 /* NSObject+MSSJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MSSJSONizable.m"; sourceTree = "<group>"; };
+		E789571919759017008CDCE9 /* MSSAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegate.h; sourceTree = "<group>"; };
+		E789571A19759017008CDCE9 /* MSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegate.m; sourceTree = "<group>"; };
+		E789571B19759017008CDCE9 /* MSSAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegateProxy.h; sourceTree = "<group>"; };
+		E789571C19759017008CDCE9 /* MSSAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegateProxy.m; sourceTree = "<group>"; };
+		E789571D19759017008CDCE9 /* MSSBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSBase.h; sourceTree = "<group>"; };
+		E789571E19759017008CDCE9 /* MSSBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSBase.m; sourceTree = "<group>"; };
+		E789571F19759017008CDCE9 /* MSSClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSClient.h; sourceTree = "<group>"; };
+		E789572019759017008CDCE9 /* MSSClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSClient.m; sourceTree = "<group>"; };
+		E789572119759017008CDCE9 /* MSSParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSParameters.h; sourceTree = "<group>"; };
+		E789572219759017008CDCE9 /* MSSParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSParameters.m; sourceTree = "<group>"; };
+		E789572419759017008CDCE9 /* MSSMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSMapping.h; sourceTree = "<group>"; };
+		E789572519759017008CDCE9 /* MSSSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSSortDescriptors.h; sourceTree = "<group>"; };
+		E789572719759017008CDCE9 /* MSSHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSHardwareUtil.h; sourceTree = "<group>"; };
+		E789572819759017008CDCE9 /* MSSHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSHardwareUtil.m; sourceTree = "<group>"; };
+		E789572919759017008CDCE9 /* MSSJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSJSONValueTransformer.h; sourceTree = "<group>"; };
+		E789572A19759017008CDCE9 /* MSSJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSJSONValueTransformer.m; sourceTree = "<group>"; };
+		E789572B19759017008CDCE9 /* MSSNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSNotifications.h; sourceTree = "<group>"; };
+		E789572C19759017008CDCE9 /* MSSNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSNotifications.m; sourceTree = "<group>"; };
+		E789572D19759017008CDCE9 /* MSSPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPersistentStorage.h; sourceTree = "<group>"; };
+		E789572E19759017008CDCE9 /* MSSPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPersistentStorage.m; sourceTree = "<group>"; };
+		E789572F19759017008CDCE9 /* MSSPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushDebug.h; sourceTree = "<group>"; };
+		E789573019759017008CDCE9 /* MSSPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushDebug.m; sourceTree = "<group>"; };
+		E789573119759017008CDCE9 /* MSSPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushErrors.h; sourceTree = "<group>"; };
+		E789573219759017008CDCE9 /* MSSPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushErrorUtil.h; sourceTree = "<group>"; };
+		E789573319759017008CDCE9 /* MSSPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushErrorUtil.m; sourceTree = "<group>"; };
+		E789573419759017008CDCE9 /* MSSPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushHexUtil.h; sourceTree = "<group>"; };
+		E789573519759017008CDCE9 /* MSSPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushHexUtil.m; sourceTree = "<group>"; };
+		F1B6013D1922A0A300B65371 /* MSSAnalytics.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSAnalytics.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F1B601851922A12500B65371 /* MSSPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1B6019B1923B6EA00B65371 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		F1B6019C1923B6EA00B65371 /* MSSCompleteSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSCompleteSDK-Info.plist"; sourceTree = "<group>"; };
-		F1B6019D1923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSCompleteSDK-Prefix.pch"; sourceTree = "<group>"; };
+		F1B6019C1923B6EA00B65371 /* MSSComplete-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSComplete-Info.plist"; sourceTree = "<group>"; };
+		F1B6019D1923B6EA00B65371 /* MSSComplete-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSComplete-Prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -262,7 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				F1B601991923B6EA00B65371 /* MSSFramework */,
-				F114D2A5190AA87A0008BE3C /* MSSSDK */,
+				E789571219759017008CDCE9 /* MSSBase */,
 				F114D2C1190AA87A0008BE3C /* MSSAnalytics */,
 				F18D899018E5D6610084D142 /* MSSPush */,
 				D4E8A809185BAFDC00A841EE /* Products */,
@@ -272,71 +272,79 @@
 		D4E8A809185BAFDC00A841EE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D4E8A808185BAFDC00A841EE /* MSSCompleteSDK.framework */,
-				F1B6013D1922A0A300B65371 /* MSSAnalyticsSDK.framework */,
-				F1B601851922A12500B65371 /* MSSPushSDK.framework */,
+				D4E8A808185BAFDC00A841EE /* MSSComplete.framework */,
+				F1B6013D1922A0A300B65371 /* MSSAnalytics.framework */,
+				F1B601851922A12500B65371 /* MSSPush.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		F114D2A5190AA87A0008BE3C /* MSSSDK */ = {
+		E789571219759017008CDCE9 /* MSSBase */ = {
 			isa = PBXGroup;
 			children = (
-				F114D327190E9FB60008BE3C /* BackEnd */,
-				F114D2A6190AA87A0008BE3C /* Categories */,
-				F114D2B3190AA87A0008BE3C /* Protocols */,
-				F114D2B6190AA87A0008BE3C /* Utils */,
-				D4F35AB5195B27B800858839 /* MSSAppDelegate.h */,
-				D4F35AB6195B27B800858839 /* MSSAppDelegate.m */,
-				D4F35AB7195B27B800858839 /* MSSAppDelegateProxy.h */,
-				D4F35AB8195B27B800858839 /* MSSAppDelegateProxy.m */,
-				D4F35ABB195B27B800858839 /* MSSParameters.h */,
-				D4F35ABC195B27B800858839 /* MSSParameters.m */,
-				D4F35AB9195B27B800858839 /* MSSClient.h */,
-				D4F35ABA195B27B800858839 /* MSSClient.m */,
-				D4F35ABD195B27B800858839 /* MSSSDK.h */,
-				D4F35ABE195B27B800858839 /* MSSSDK.m */,
+				E789571319759017008CDCE9 /* BackEnd */,
+				E789571619759017008CDCE9 /* Categories */,
+				E789571919759017008CDCE9 /* MSSAppDelegate.h */,
+				E789571A19759017008CDCE9 /* MSSAppDelegate.m */,
+				E789571B19759017008CDCE9 /* MSSAppDelegateProxy.h */,
+				E789571C19759017008CDCE9 /* MSSAppDelegateProxy.m */,
+				E789571D19759017008CDCE9 /* MSSBase.h */,
+				E789571E19759017008CDCE9 /* MSSBase.m */,
+				E789571F19759017008CDCE9 /* MSSClient.h */,
+				E789572019759017008CDCE9 /* MSSClient.m */,
+				E789572119759017008CDCE9 /* MSSParameters.h */,
+				E789572219759017008CDCE9 /* MSSParameters.m */,
+				E789572319759017008CDCE9 /* Protocols */,
+				E789572619759017008CDCE9 /* Utils */,
 			);
-			name = MSSSDK;
-			path = ../MSSSDK;
+			path = MSSBase;
 			sourceTree = "<group>";
 		};
-		F114D2A6190AA87A0008BE3C /* Categories */ = {
+		E789571319759017008CDCE9 /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				D4F35B21195B28D600858839 /* NSObject+MSSJSONizable.h */,
-				D4F35B22195B28D600858839 /* NSObject+MSSJSONizable.m */,
+				E789571419759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h */,
+				E789571519759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m */,
+			);
+			path = BackEnd;
+			sourceTree = "<group>";
+		};
+		E789571619759017008CDCE9 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				E789571719759017008CDCE9 /* NSObject+MSSJSONizable.h */,
+				E789571819759017008CDCE9 /* NSObject+MSSJSONizable.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		F114D2B3190AA87A0008BE3C /* Protocols */ = {
+		E789572319759017008CDCE9 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				D4F35B19195B28C000858839 /* MSSMapping.h */,
-				D4F35B1A195B28C000858839 /* MSSSortDescriptors.h */,
+				E789572419759017008CDCE9 /* MSSMapping.h */,
+				E789572519759017008CDCE9 /* MSSSortDescriptors.h */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
 		};
-		F114D2B6190AA87A0008BE3C /* Utils */ = {
+		E789572619759017008CDCE9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				D4F35ADD195B28A600858839 /* MSSHardwareUtil.h */,
-				D4F35ADE195B28A600858839 /* MSSHardwareUtil.m */,
-				D4F35ADF195B28A600858839 /* MSSJSONValueTransformer.h */,
-				D4F35AE0195B28A600858839 /* MSSJSONValueTransformer.m */,
-				D4F35AE1195B28A600858839 /* MSSNotifications.h */,
-				D4F35AE2195B28A600858839 /* MSSNotifications.m */,
-				D4F35AE3195B28A600858839 /* MSSPersistentStorage.h */,
-				D4F35AE4195B28A600858839 /* MSSPersistentStorage.m */,
-				D4F35AE5195B28A600858839 /* MSSPushDebug.h */,
-				D4F35AE6195B28A600858839 /* MSSPushDebug.m */,
-				D4F35AE7195B28A600858839 /* MSSPushErrors.h */,
-				D4F35AE8195B28A600858839 /* MSSPushErrorUtil.h */,
-				D4F35AE9195B28A600858839 /* MSSPushErrorUtil.m */,
-				D4F35AEA195B28A600858839 /* MSSPushHexUtil.h */,
-				D4F35AEB195B28A600858839 /* MSSPushHexUtil.m */,
+				E789572719759017008CDCE9 /* MSSHardwareUtil.h */,
+				E789572819759017008CDCE9 /* MSSHardwareUtil.m */,
+				E789572919759017008CDCE9 /* MSSJSONValueTransformer.h */,
+				E789572A19759017008CDCE9 /* MSSJSONValueTransformer.m */,
+				E789572B19759017008CDCE9 /* MSSNotifications.h */,
+				E789572C19759017008CDCE9 /* MSSNotifications.m */,
+				E789572D19759017008CDCE9 /* MSSPersistentStorage.h */,
+				E789572E19759017008CDCE9 /* MSSPersistentStorage.m */,
+				E789572F19759017008CDCE9 /* MSSPushDebug.h */,
+				E789573019759017008CDCE9 /* MSSPushDebug.m */,
+				E789573119759017008CDCE9 /* MSSPushErrors.h */,
+				E789573219759017008CDCE9 /* MSSPushErrorUtil.h */,
+				E789573319759017008CDCE9 /* MSSPushErrorUtil.m */,
+				E789573419759017008CDCE9 /* MSSPushHexUtil.h */,
+				E789573519759017008CDCE9 /* MSSPushHexUtil.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -350,8 +358,8 @@
 				F114D2C8190AA87A0008BE3C /* Models */,
 				D4F35B31195B297200858839 /* MSSAnalytics.h */,
 				D4F35B32195B297200858839 /* MSSAnalytics.m */,
-				D4F35B33195B297200858839 /* MSSSDK+Analytics.h */,
-				D4F35B34195B297200858839 /* MSSSDK+Analytics.m */,
+				E789570E19758E58008CDCE9 /* MSSBase+Analytics.h */,
+				E789570F19758E58008CDCE9 /* MSSBase+Analytics.m */,
 			);
 			name = MSSAnalytics;
 			path = ../MSSAnalytics;
@@ -395,15 +403,6 @@
 			path = "Persistent Storage";
 			sourceTree = "<group>";
 		};
-		F114D327190E9FB60008BE3C /* BackEnd */ = {
-			isa = PBXGroup;
-			children = (
-				D4B319A8195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h */,
-				D4B319A9195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m */,
-			);
-			path = BackEnd;
-			sourceTree = "<group>";
-		};
 		F114D330190EA7700008BE3C /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
@@ -421,8 +420,8 @@
 				F18D89A818E5D6610084D142 /* Persistent Storage */,
 				D4F35B5B195B2A2800858839 /* MSSPushClient.h */,
 				D4F35B5C195B2A2800858839 /* MSSPushClient.m */,
-				D4F35B5D195B2A2800858839 /* MSSPushSDK.h */,
-				D4F35B5E195B2A2800858839 /* MSSPushSDK.m */,
+				D4F35B5D195B2A2800858839 /* MSSPush.h */,
+				D4F35B5E195B2A2800858839 /* MSSPush.m */,
 			);
 			name = MSSPush;
 			path = ../MSSPush;
@@ -454,8 +453,8 @@
 			isa = PBXGroup;
 			children = (
 				F1B6019A1923B6EA00B65371 /* InfoPlist.strings */,
-				F1B6019C1923B6EA00B65371 /* MSSCompleteSDK-Info.plist */,
-				F1B6019D1923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch */,
+				F1B6019C1923B6EA00B65371 /* MSSComplete-Info.plist */,
+				F1B6019D1923B6EA00B65371 /* MSSComplete-Prefix.pch */,
 			);
 			path = MSSFramework;
 			sourceTree = "<group>";
@@ -467,38 +466,38 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E789573A19759017008CDCE9 /* MSSAppDelegate.h in Headers */,
+				E789575119759017008CDCE9 /* MSSPushErrorUtil.h in Headers */,
+				E789574019759017008CDCE9 /* MSSClient.h in Headers */,
+				E789574219759017008CDCE9 /* MSSParameters.h in Headers */,
+				E789573C19759017008CDCE9 /* MSSAppDelegateProxy.h in Headers */,
+				E789573E19759017008CDCE9 /* MSSBase.h in Headers */,
+				E789574419759017008CDCE9 /* MSSMapping.h in Headers */,
+				E789574E19759017008CDCE9 /* MSSPushDebug.h in Headers */,
+				E789574A19759017008CDCE9 /* MSSNotifications.h in Headers */,
+				E789574C19759017008CDCE9 /* MSSPersistentStorage.h in Headers */,
+				E789573619759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */,
+				E789573819759017008CDCE9 /* NSObject+MSSJSONizable.h in Headers */,
+				E789574519759017008CDCE9 /* MSSSortDescriptors.h in Headers */,
+				E789574619759017008CDCE9 /* MSSHardwareUtil.h in Headers */,
+				E789575019759017008CDCE9 /* MSSPushErrors.h in Headers */,
+				E789571019758E58008CDCE9 /* MSSBase+Analytics.h in Headers */,
+				E789574819759017008CDCE9 /* MSSJSONValueTransformer.h in Headers */,
+				E789575319759017008CDCE9 /* MSSPushHexUtil.h in Headers */,
 				D4F35B4B195B29AE00858839 /* MSSAnalyticsURLConnection.h in Headers */,
-				D4F35B39195B297200858839 /* MSSSDK+Analytics.h in Headers */,
-				D4F35AFE195B28A600858839 /* MSSPersistentStorage.h in Headers */,
 				D4F35B41195B299C00858839 /* MSSAnalyticEvent.h in Headers */,
-				D4F35ABF195B27B800858839 /* MSSAppDelegate.h in Headers */,
 				D4F35B35195B297200858839 /* MSSAnalytics.h in Headers */,
 				D4F35B69195B2A3F00858839 /* MSSPersistentStorage+Push.h in Headers */,
 				D4F35B51195B29C100858839 /* MSSPushAppDelegate+Analytics.h in Headers */,
 				D4F35B77195B2A5500858839 /* MSSPushRegistrationRequestData.h in Headers */,
-				D4F35B63195B2A2800858839 /* MSSPushSDK.h in Headers */,
-				D4F35AD7195B27B800858839 /* MSSSDK.h in Headers */,
-				D4F35B23195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */,
-				D4F35B1E195B28C000858839 /* MSSSortDescriptors.h in Headers */,
+				D4F35B63195B2A2800858839 /* MSSPush.h in Headers */,
 				D4F35B45195B299C00858839 /* MSSCoreDataManager.h in Headers */,
 				D4F35B73195B2A5500858839 /* MSSPushRegistrationData.h in Headers */,
 				D4F35B5F195B2A2800858839 /* MSSPushClient.h in Headers */,
-				D4F35B0D195B28A600858839 /* MSSPushErrorUtil.h in Headers */,
-				D4F35AC5195B27B800858839 /* MSSAppDelegateProxy.h in Headers */,
 				D4F35B81195B2A6D00858839 /* MSSPushURLConnection.h in Headers */,
-				D4F35AEC195B28A600858839 /* MSSHardwareUtil.h in Headers */,
-				D4F35B13195B28A600858839 /* MSSPushHexUtil.h in Headers */,
-				D4F35B0A195B28A600858839 /* MSSPushErrors.h in Headers */,
-				D4B319AA195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */,
-				D4F35ACB195B27B800858839 /* MSSClient.h in Headers */,
-				D4F35B04195B28A600858839 /* MSSPushDebug.h in Headers */,
-				D4F35AD1195B27B800858839 /* MSSParameters.h in Headers */,
-				D4F35AF2195B28A600858839 /* MSSJSONValueTransformer.h in Headers */,
 				D4F35B57195B29D600858839 /* MSSPersistentStorage+Analytics.h in Headers */,
 				D4F35B7B195B2A5500858839 /* MSSPushRegistrationResponseData.h in Headers */,
-				F1B601A41923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */,
-				D4F35AF8195B28A600858839 /* MSSNotifications.h in Headers */,
-				D4F35B1B195B28C000858839 /* MSSMapping.h in Headers */,
+				F1B601A41923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,31 +505,31 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4F35AF9195B28A600858839 /* MSSNotifications.h in Headers */,
-				D4F35B1C195B28C000858839 /* MSSMapping.h in Headers */,
-				D4F35B1F195B28C000858839 /* MSSSortDescriptors.h in Headers */,
-				D4F35B0E195B28A600858839 /* MSSPushErrorUtil.h in Headers */,
+				E789579B1975A394008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */,
+				E789579C1975A394008CDCE9 /* NSObject+MSSJSONizable.h in Headers */,
+				E789579D1975A394008CDCE9 /* MSSAppDelegate.h in Headers */,
+				E789579E1975A394008CDCE9 /* MSSAppDelegateProxy.h in Headers */,
+				E789579F1975A394008CDCE9 /* MSSBase.h in Headers */,
+				E78957A01975A394008CDCE9 /* MSSClient.h in Headers */,
+				E78957A11975A394008CDCE9 /* MSSParameters.h in Headers */,
+				E78957A21975A394008CDCE9 /* MSSMapping.h in Headers */,
+				E78957A31975A394008CDCE9 /* MSSSortDescriptors.h in Headers */,
+				E78957A41975A394008CDCE9 /* MSSHardwareUtil.h in Headers */,
+				E78957A51975A394008CDCE9 /* MSSJSONValueTransformer.h in Headers */,
+				E78957A61975A394008CDCE9 /* MSSNotifications.h in Headers */,
+				E78957A71975A394008CDCE9 /* MSSPersistentStorage.h in Headers */,
+				E78957A81975A394008CDCE9 /* MSSPushDebug.h in Headers */,
+				E78957A91975A394008CDCE9 /* MSSPushErrors.h in Headers */,
+				E78957AA1975A394008CDCE9 /* MSSPushErrorUtil.h in Headers */,
+				E78957AB1975A394008CDCE9 /* MSSPushHexUtil.h in Headers */,
 				D4F35B4C195B29AE00858839 /* MSSAnalyticsURLConnection.h in Headers */,
-				D4F35AF3195B28A600858839 /* MSSJSONValueTransformer.h in Headers */,
 				D4F35B42195B299C00858839 /* MSSAnalyticEvent.h in Headers */,
 				D4F35B46195B299C00858839 /* MSSCoreDataManager.h in Headers */,
-				D4F35AC0195B27B800858839 /* MSSAppDelegate.h in Headers */,
 				D4F35B58195B29D600858839 /* MSSPersistentStorage+Analytics.h in Headers */,
-				D4F35AED195B28A600858839 /* MSSHardwareUtil.h in Headers */,
-				F1B601A51923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */,
+				F1B601A51923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */,
 				D4F35B36195B297200858839 /* MSSAnalytics.h in Headers */,
-				D4B319AB195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */,
-				D4F35B24195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */,
-				D4F35AD2195B27B800858839 /* MSSParameters.h in Headers */,
-				D4F35AD8195B27B800858839 /* MSSSDK.h in Headers */,
 				D4F35B52195B29C100858839 /* MSSPushAppDelegate+Analytics.h in Headers */,
-				D4F35B0B195B28A600858839 /* MSSPushErrors.h in Headers */,
-				D4F35B05195B28A600858839 /* MSSPushDebug.h in Headers */,
-				D4F35B14195B28A600858839 /* MSSPushHexUtil.h in Headers */,
-				D4F35ACC195B27B800858839 /* MSSClient.h in Headers */,
-				D4F35AC6195B27B800858839 /* MSSAppDelegateProxy.h in Headers */,
-				D4F35AFF195B28A600858839 /* MSSPersistentStorage.h in Headers */,
-				D4F35B3A195B297200858839 /* MSSSDK+Analytics.h in Headers */,
+				E78957AC1975B43D008CDCE9 /* MSSBase+Analytics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -538,40 +537,40 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E789577A1975A304008CDCE9 /* NSURLConnection+MSSBackEndConnection.h in Headers */,
+				E789577B1975A304008CDCE9 /* NSObject+MSSJSONizable.h in Headers */,
+				E789577C1975A304008CDCE9 /* MSSAppDelegate.h in Headers */,
+				E789577D1975A304008CDCE9 /* MSSAppDelegateProxy.h in Headers */,
+				E789577E1975A304008CDCE9 /* MSSBase.h in Headers */,
+				E789577F1975A304008CDCE9 /* MSSClient.h in Headers */,
+				E78957801975A304008CDCE9 /* MSSParameters.h in Headers */,
+				E78957811975A304008CDCE9 /* MSSMapping.h in Headers */,
+				E78957821975A304008CDCE9 /* MSSSortDescriptors.h in Headers */,
+				E78957831975A304008CDCE9 /* MSSHardwareUtil.h in Headers */,
+				E78957841975A304008CDCE9 /* MSSJSONValueTransformer.h in Headers */,
+				E78957851975A304008CDCE9 /* MSSNotifications.h in Headers */,
+				E78957861975A304008CDCE9 /* MSSPersistentStorage.h in Headers */,
+				E78957871975A304008CDCE9 /* MSSPushDebug.h in Headers */,
+				E78957881975A304008CDCE9 /* MSSPushErrors.h in Headers */,
+				E78957891975A304008CDCE9 /* MSSPushErrorUtil.h in Headers */,
+				E789578A1975A304008CDCE9 /* MSSPushHexUtil.h in Headers */,
 				D4F35B60195B2A2800858839 /* MSSPushClient.h in Headers */,
-				D4F35B1D195B28C000858839 /* MSSMapping.h in Headers */,
-				D4F35AFA195B28A600858839 /* MSSNotifications.h in Headers */,
-				D4F35B25195B28D600858839 /* NSObject+MSSJSONizable.h in Headers */,
-				D4F35AC1195B27B800858839 /* MSSAppDelegate.h in Headers */,
-				D4F35B06195B28A600858839 /* MSSPushDebug.h in Headers */,
-				D4F35B15195B28A600858839 /* MSSPushHexUtil.h in Headers */,
-				D4F35AD3195B27B800858839 /* MSSParameters.h in Headers */,
-				D4F35AD9195B27B800858839 /* MSSSDK.h in Headers */,
 				D4F35B74195B2A5500858839 /* MSSPushRegistrationData.h in Headers */,
 				D4F35B6A195B2A3F00858839 /* MSSPersistentStorage+Push.h in Headers */,
-				D4F35B0F195B28A600858839 /* MSSPushErrorUtil.h in Headers */,
-				D4F35B64195B2A2800858839 /* MSSPushSDK.h in Headers */,
-				D4B319AC195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.h in Headers */,
-				F1B601A61923B6EA00B65371 /* MSSCompleteSDK-Prefix.pch in Headers */,
-				D4F35ACD195B27B800858839 /* MSSClient.h in Headers */,
+				D4F35B64195B2A2800858839 /* MSSPush.h in Headers */,
+				F1B601A61923B6EA00B65371 /* MSSComplete-Prefix.pch in Headers */,
 				D4F35B82195B2A6D00858839 /* MSSPushURLConnection.h in Headers */,
 				D4F35B7C195B2A5500858839 /* MSSPushRegistrationResponseData.h in Headers */,
 				D4F35B78195B2A5500858839 /* MSSPushRegistrationRequestData.h in Headers */,
-				D4F35AF4195B28A600858839 /* MSSJSONValueTransformer.h in Headers */,
-				D4F35B20195B28C000858839 /* MSSSortDescriptors.h in Headers */,
-				D4F35B00195B28A600858839 /* MSSPersistentStorage.h in Headers */,
-				D4F35AC7195B27B800858839 /* MSSAppDelegateProxy.h in Headers */,
-				D4F35B0C195B28A600858839 /* MSSPushErrors.h in Headers */,
-				D4F35AEE195B28A600858839 /* MSSHardwareUtil.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		D4E8A807185BAFDC00A841EE /* MSSCompleteSDK */ = {
+		D4E8A807185BAFDC00A841EE /* MSSComplete */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D4E8A819185BAFDC00A841EE /* Build configuration list for PBXNativeTarget "MSSCompleteSDK" */;
+			buildConfigurationList = D4E8A819185BAFDC00A841EE /* Build configuration list for PBXNativeTarget "MSSComplete" */;
 			buildPhases = (
 				D4E8A802185BAFDC00A841EE /* Sources */,
 				D4E8A803185BAFDC00A841EE /* Frameworks */,
@@ -583,14 +582,14 @@
 			);
 			dependencies = (
 			);
-			name = MSSCompleteSDK;
+			name = MSSComplete;
 			productName = OmniaPushSDK;
-			productReference = D4E8A808185BAFDC00A841EE /* MSSCompleteSDK.framework */;
+			productReference = D4E8A808185BAFDC00A841EE /* MSSComplete.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
-		F1B600F71922A0A300B65371 /* MSSAnalyticsSDK */ = {
+		F1B600F71922A0A300B65371 /* MSSAnalytics */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1B601391922A0A300B65371 /* Build configuration list for PBXNativeTarget "MSSAnalyticsSDK" */;
+			buildConfigurationList = F1B601391922A0A300B65371 /* Build configuration list for PBXNativeTarget "MSSAnalytics" */;
 			buildPhases = (
 				F1B600F81922A0A300B65371 /* Sources */,
 				F1B601151922A0A300B65371 /* Frameworks */,
@@ -602,14 +601,14 @@
 			);
 			dependencies = (
 			);
-			name = MSSAnalyticsSDK;
+			name = MSSAnalytics;
 			productName = OmniaPushSDK;
-			productReference = F1B6013D1922A0A300B65371 /* MSSAnalyticsSDK.framework */;
+			productReference = F1B6013D1922A0A300B65371 /* MSSAnalytics.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
-		F1B6013F1922A12500B65371 /* MSSPushSDK */ = {
+		F1B6013F1922A12500B65371 /* MSSPush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "MSSPushSDK" */;
+			buildConfigurationList = F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "MSSPush" */;
 			buildPhases = (
 				F1B601401922A12500B65371 /* Sources */,
 				F1B6015D1922A12500B65371 /* Frameworks */,
@@ -621,9 +620,9 @@
 			);
 			dependencies = (
 			);
-			name = MSSPushSDK;
+			name = MSSPush;
 			productName = OmniaPushSDK;
-			productReference = F1B601851922A12500B65371 /* MSSPushSDK.framework */;
+			productReference = F1B601851922A12500B65371 /* MSSPush.framework */;
 			productType = "com.apple.product-type.framework.static";
 		};
 /* End PBXNativeTarget section */
@@ -635,7 +634,7 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = Pivotal;
 			};
-			buildConfigurationList = D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "MSSPushSDK" */;
+			buildConfigurationList = D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "MSSPush" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -648,9 +647,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D4E8A807185BAFDC00A841EE /* MSSCompleteSDK */,
-				F1B600F71922A0A300B65371 /* MSSAnalyticsSDK */,
-				F1B6013F1922A12500B65371 /* MSSPushSDK */,
+				D4E8A807185BAFDC00A841EE /* MSSComplete */,
+				F1B600F71922A0A300B65371 /* MSSAnalytics */,
+				F1B6013F1922A12500B65371 /* MSSPush */,
 			);
 		};
 /* End PBXProject section */
@@ -729,34 +728,34 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E789573B19759017008CDCE9 /* MSSAppDelegate.m in Sources */,
 				D4F35B7D195B2A5500858839 /* MSSPushRegistrationResponseData.m in Sources */,
+				E789571119758E58008CDCE9 /* MSSBase+Analytics.m in Sources */,
+				E789574719759017008CDCE9 /* MSSHardwareUtil.m in Sources */,
+				E789574D19759017008CDCE9 /* MSSPersistentStorage.m in Sources */,
+				E789575219759017008CDCE9 /* MSSPushErrorUtil.m in Sources */,
 				D4F35B79195B2A5500858839 /* MSSPushRegistrationRequestData.m in Sources */,
-				D4F35AF5195B28A600858839 /* MSSJSONValueTransformer.m in Sources */,
-				D4F35B3B195B297200858839 /* MSSSDK+Analytics.m in Sources */,
-				D4F35AFB195B28A600858839 /* MSSNotifications.m in Sources */,
+				E789574119759017008CDCE9 /* MSSClient.m in Sources */,
+				E789573719759017008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
+				E789575419759017008CDCE9 /* MSSPushHexUtil.m in Sources */,
 				D4F35B47195B299C00858839 /* MSSCoreDataManager.m in Sources */,
-				D4F35AD4195B27B800858839 /* MSSParameters.m in Sources */,
 				D4F35B43195B299C00858839 /* MSSAnalyticEvent.m in Sources */,
 				D4F35B75195B2A5500858839 /* MSSPushRegistrationData.m in Sources */,
 				D4F35B6B195B2A3F00858839 /* MSSPersistentStorage+Push.m in Sources */,
-				D4F35B10195B28A600858839 /* MSSPushErrorUtil.m in Sources */,
+				E789573F19759017008CDCE9 /* MSSBase.m in Sources */,
+				E789573D19759017008CDCE9 /* MSSAppDelegateProxy.m in Sources */,
 				D4B319B1195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */,
 				D4F35B37195B297200858839 /* MSSAnalytics.m in Sources */,
-				D4F35B16195B28A600858839 /* MSSPushHexUtil.m in Sources */,
-				D4F35ADA195B27B800858839 /* MSSSDK.m in Sources */,
+				E789573919759017008CDCE9 /* NSObject+MSSJSONizable.m in Sources */,
 				D4F35B83195B2A6D00858839 /* MSSPushURLConnection.m in Sources */,
-				D4F35B07195B28A600858839 /* MSSPushDebug.m in Sources */,
-				D4F35B26195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */,
 				D4F35B4D195B29AE00858839 /* MSSAnalyticsURLConnection.m in Sources */,
-				D4F35AEF195B28A600858839 /* MSSHardwareUtil.m in Sources */,
-				D4F35AC8195B27B800858839 /* MSSAppDelegateProxy.m in Sources */,
+				E789574B19759017008CDCE9 /* MSSNotifications.m in Sources */,
+				E789574319759017008CDCE9 /* MSSParameters.m in Sources */,
+				E789574F19759017008CDCE9 /* MSSPushDebug.m in Sources */,
 				D4F35B59195B29D600858839 /* MSSPersistentStorage+Analytics.m in Sources */,
-				D4F35AC2195B27B800858839 /* MSSAppDelegate.m in Sources */,
-				D4F35B01195B28A600858839 /* MSSPersistentStorage.m in Sources */,
+				E789574919759017008CDCE9 /* MSSJSONValueTransformer.m in Sources */,
 				D4F35B61195B2A2800858839 /* MSSPushClient.m in Sources */,
-				D4F35ACE195B27B800858839 /* MSSClient.m in Sources */,
-				D4F35B65195B2A2800858839 /* MSSPushSDK.m in Sources */,
-				D4B319AD195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */,
+				D4F35B65195B2A2800858839 /* MSSPush.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -764,27 +763,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D4F35AD5195B27B800858839 /* MSSParameters.m in Sources */,
-				D4F35B3C195B297200858839 /* MSSSDK+Analytics.m in Sources */,
-				D4F35B27195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */,
-				D4F35B02195B28A600858839 /* MSSPersistentStorage.m in Sources */,
+				E789578D1975A376008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
+				E789578E1975A376008CDCE9 /* NSObject+MSSJSONizable.m in Sources */,
+				E789578F1975A376008CDCE9 /* MSSAppDelegate.m in Sources */,
+				E78957901975A376008CDCE9 /* MSSAppDelegateProxy.m in Sources */,
+				E78957911975A376008CDCE9 /* MSSBase.m in Sources */,
+				E78957921975A376008CDCE9 /* MSSClient.m in Sources */,
+				E78957931975A376008CDCE9 /* MSSParameters.m in Sources */,
+				E78957941975A376008CDCE9 /* MSSHardwareUtil.m in Sources */,
+				E78957951975A376008CDCE9 /* MSSJSONValueTransformer.m in Sources */,
+				E78957961975A376008CDCE9 /* MSSNotifications.m in Sources */,
+				E78957971975A376008CDCE9 /* MSSPersistentStorage.m in Sources */,
+				E78957981975A376008CDCE9 /* MSSPushDebug.m in Sources */,
+				E78957991975A376008CDCE9 /* MSSPushErrorUtil.m in Sources */,
+				E789579A1975A376008CDCE9 /* MSSPushHexUtil.m in Sources */,
 				D4F35B5A195B29D600858839 /* MSSPersistentStorage+Analytics.m in Sources */,
 				D4F35B38195B297200858839 /* MSSAnalytics.m in Sources */,
-				D4B319AE195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */,
-				D4F35AC3195B27B800858839 /* MSSAppDelegate.m in Sources */,
-				D4F35AFC195B28A600858839 /* MSSNotifications.m in Sources */,
-				D4F35B11195B28A600858839 /* MSSPushErrorUtil.m in Sources */,
 				D4F35B48195B299C00858839 /* MSSCoreDataManager.m in Sources */,
-				D4F35AC9195B27B800858839 /* MSSAppDelegateProxy.m in Sources */,
-				D4F35AF0195B28A600858839 /* MSSHardwareUtil.m in Sources */,
-				D4F35ADB195B27B800858839 /* MSSSDK.m in Sources */,
-				D4F35B08195B28A600858839 /* MSSPushDebug.m in Sources */,
 				D4F35B44195B299C00858839 /* MSSAnalyticEvent.m in Sources */,
-				D4F35B17195B28A600858839 /* MSSPushHexUtil.m in Sources */,
-				D4F35ACF195B27B800858839 /* MSSClient.m in Sources */,
 				D4B319B2195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */,
-				D4F35AF6195B28A600858839 /* MSSJSONValueTransformer.m in Sources */,
 				D4F35B4E195B29AE00858839 /* MSSAnalyticsURLConnection.m in Sources */,
+				E78957AD1975B447008CDCE9 /* MSSBase+Analytics.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -792,28 +791,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E789576C1975A2DE008CDCE9 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
+				E789576D1975A2DE008CDCE9 /* NSObject+MSSJSONizable.m in Sources */,
+				E789576E1975A2DE008CDCE9 /* MSSAppDelegate.m in Sources */,
+				E789576F1975A2DE008CDCE9 /* MSSAppDelegateProxy.m in Sources */,
+				E78957701975A2DE008CDCE9 /* MSSBase.m in Sources */,
+				E78957711975A2DE008CDCE9 /* MSSClient.m in Sources */,
+				E78957721975A2DE008CDCE9 /* MSSParameters.m in Sources */,
+				E78957731975A2DE008CDCE9 /* MSSHardwareUtil.m in Sources */,
+				E78957741975A2DE008CDCE9 /* MSSJSONValueTransformer.m in Sources */,
+				E78957751975A2DE008CDCE9 /* MSSNotifications.m in Sources */,
+				E78957761975A2DE008CDCE9 /* MSSPersistentStorage.m in Sources */,
+				E78957771975A2DE008CDCE9 /* MSSPushDebug.m in Sources */,
+				E78957781975A2DE008CDCE9 /* MSSPushErrorUtil.m in Sources */,
+				E78957791975A2DE008CDCE9 /* MSSPushHexUtil.m in Sources */,
 				D4F35B7E195B2A5500858839 /* MSSPushRegistrationResponseData.m in Sources */,
-				D4F35B28195B28D600858839 /* NSObject+MSSJSONizable.m in Sources */,
-				D4F35AF7195B28A600858839 /* MSSJSONValueTransformer.m in Sources */,
-				D4F35B66195B2A2800858839 /* MSSPushSDK.m in Sources */,
-				D4F35AF1195B28A600858839 /* MSSHardwareUtil.m in Sources */,
-				D4F35AFD195B28A600858839 /* MSSNotifications.m in Sources */,
-				D4B319AF195DD34C00EB78BD /* NSURLConnection+MSSBackEndConnection.m in Sources */,
+				D4F35B66195B2A2800858839 /* MSSPush.m in Sources */,
 				D4F35B7A195B2A5500858839 /* MSSPushRegistrationRequestData.m in Sources */,
 				D4F35B76195B2A5500858839 /* MSSPushRegistrationData.m in Sources */,
 				D4B319B3195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */,
 				D4F35B84195B2A6D00858839 /* MSSPushURLConnection.m in Sources */,
 				D4F35B6C195B2A3F00858839 /* MSSPersistentStorage+Push.m in Sources */,
-				D4F35AD6195B27B800858839 /* MSSParameters.m in Sources */,
-				D4F35B18195B28A600858839 /* MSSPushHexUtil.m in Sources */,
-				D4F35AC4195B27B800858839 /* MSSAppDelegate.m in Sources */,
-				D4F35B09195B28A600858839 /* MSSPushDebug.m in Sources */,
-				D4F35ACA195B27B800858839 /* MSSAppDelegateProxy.m in Sources */,
-				D4F35B03195B28A600858839 /* MSSPersistentStorage.m in Sources */,
-				D4F35ADC195B27B800858839 /* MSSSDK.m in Sources */,
-				D4F35AD0195B27B800858839 /* MSSClient.m in Sources */,
 				D4F35B62195B2A2800858839 /* MSSPushClient.m in Sources */,
-				D4F35B12195B28A600858839 /* MSSPushErrorUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -864,7 +863,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = MSSPushSDK;
+				PRODUCT_NAME = MSSPush;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -895,7 +894,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				PRODUCT_NAME = MSSPushSDK;
+				PRODUCT_NAME = MSSPush;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -910,9 +909,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSCompleteSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSComplete;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -927,9 +926,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSCompleteSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSComplete;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -944,9 +943,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSAnalyticsSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSAnalytics;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -961,9 +960,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSAnalyticsSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSAnalytics;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -978,9 +977,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSAnalyticsSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSAnalytics;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -995,9 +994,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSPushSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSPush;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1012,9 +1011,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSPushSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSPush;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1029,9 +1028,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSPushSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSPush;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1070,7 +1069,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = MSSPushSDK;
+				PRODUCT_NAME = MSSPush;
 				SDKROOT = iphoneos;
 			};
 			name = Coverage;
@@ -1084,9 +1083,9 @@
 				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
 				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MSSFramework/MSSCompleteSDK-Prefix.pch";
-				INFOPLIST_FILE = "MSSFramework/MSSCompleteSDK-Info.plist";
-				PRODUCT_NAME = MSSCompleteSDK;
+				GCC_PREFIX_HEADER = "MSSFramework/MSSComplete-Prefix.pch";
+				INFOPLIST_FILE = "MSSFramework/MSSComplete-Info.plist";
+				PRODUCT_NAME = MSSComplete;
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1095,7 +1094,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "MSSPushSDK" */ = {
+		D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "MSSPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4E8A817185BAFDC00A841EE /* Debug */,
@@ -1105,7 +1104,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D4E8A819185BAFDC00A841EE /* Build configuration list for PBXNativeTarget "MSSCompleteSDK" */ = {
+		D4E8A819185BAFDC00A841EE /* Build configuration list for PBXNativeTarget "MSSComplete" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D4E8A81A185BAFDC00A841EE /* Debug */,
@@ -1115,7 +1114,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1B601391922A0A300B65371 /* Build configuration list for PBXNativeTarget "MSSAnalyticsSDK" */ = {
+		F1B601391922A0A300B65371 /* Build configuration list for PBXNativeTarget "MSSAnalytics" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1B6013A1922A0A300B65371 /* Debug */,
@@ -1125,7 +1124,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "MSSPushSDK" */ = {
+		F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "MSSPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1B601821922A12500B65371 /* Debug */,

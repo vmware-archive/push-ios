@@ -1,6 +1,6 @@
 //
 //  MSSPushBackEndRegistrationRequestDataTest.h
-//  MSSPushSDK
+//  MSSPush
 //
 //  Created by DX123-XL on 3/11/2014.
 //  Copyright (c) 2014 Pivotal. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  MSSPushSpecHelper.h
-//  MSSPushSDK
+//  MSSPush
 //
 //  Created by Rob Szumlakowski on 2013-12-31.
 //  Copyright (c) 2013 Pivotal. All rights reserved.

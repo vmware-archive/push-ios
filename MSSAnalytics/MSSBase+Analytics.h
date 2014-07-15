@@ -1,14 +1,14 @@
 //
-//  MSSSDK+Analytics.h
+//  MSSBase+Analytics.h
 //  
 //
 //  Created by DX123-XL on 2014-04-25.
 //
-//
+//al
 
-#import "MSSSDK.h"
+#import "MSSBase.h"
 
-@interface MSSSDK (Analytics)
+@interface MSSBase (Analytics)
 
 + (BOOL)analyticsEnabled;
 
