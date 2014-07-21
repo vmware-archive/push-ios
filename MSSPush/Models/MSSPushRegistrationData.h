@@ -18,6 +18,7 @@
 @property NSString *os;
 @property NSString *osVersion;
 @property NSString *registrationToken;
+@property NSArray *tags;
 
 + (NSDictionary *)localToRemoteMapping;
 

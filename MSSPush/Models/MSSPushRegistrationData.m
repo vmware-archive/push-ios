@@ -21,6 +21,7 @@ const struct RegistrationAttributes {
     MSS_STRUCT_STRING *deviceOS;
     MSS_STRUCT_STRING *deviceOSVersion;
     MSS_STRUCT_STRING *registrationToken;
+    MSS_STRUCT_STRING *tags;
 } RegistrationAttributes;
 
 const struct RegistrationAttributes RegistrationAttributes = {
@@ -31,6 +32,7 @@ const struct RegistrationAttributes RegistrationAttributes = {
     .deviceOS            = @"os",
     .deviceOSVersion     = @"os_version",
     .registrationToken   = @"registration_token",
+    .tags                = @"tags",
 };
 
 @implementation MSSPushRegistrationData
@@ -48,6 +50,7 @@ const struct RegistrationAttributes RegistrationAttributes = {
                                  MSS_STR_PROP(os) : RegistrationAttributes.deviceOS,
                                  MSS_STR_PROP(osVersion) : RegistrationAttributes.deviceOSVersion,
                                  MSS_STR_PROP(registrationToken) : RegistrationAttributes.registrationToken,
+                                 MSS_STR_PROP(tags) : RegistrationAttributes.tags,
                                  };
     });
     return localToRemoteMapping;

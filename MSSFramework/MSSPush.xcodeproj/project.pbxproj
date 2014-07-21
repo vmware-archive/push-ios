@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		D4B319B1195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
 		D4B319B2195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
-		D4B319B3195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B319B0195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m */; };
 		D4F35B35195B297200858839 /* MSSAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B31195B297200858839 /* MSSAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B36195B297200858839 /* MSSAnalytics.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F35B31195B297200858839 /* MSSAnalytics.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D4F35B37195B297200858839 /* MSSAnalytics.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F35B32195B297200858839 /* MSSAnalytics.m */; };
@@ -809,7 +808,6 @@
 				D4F35B66195B2A2800858839 /* MSSPush.m in Sources */,
 				D4F35B7A195B2A5500858839 /* MSSPushRegistrationRequestData.m in Sources */,
 				D4F35B76195B2A5500858839 /* MSSPushRegistrationData.m in Sources */,
-				D4B319B3195DD43900EB78BD /* MSSPushAppDelegate+Analytics.m in Sources */,
 				D4F35B84195B2A6D00858839 /* MSSPushURLConnection.m in Sources */,
 				D4F35B6C195B2A3F00858839 /* MSSPersistentStorage+Push.m in Sources */,
 				D4F35B62195B2A2800858839 /* MSSPushClient.m in Sources */,

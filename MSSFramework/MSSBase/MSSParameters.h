@@ -24,6 +24,7 @@
 @property (copy) NSString *developmentPushReleaseSecret;
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushReleaseSecret;
+@property (copy) NSArray *tags;
 
 /**
  * Analytics Parameters

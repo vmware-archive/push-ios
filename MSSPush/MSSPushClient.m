@@ -216,6 +216,10 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return YES;
     }
     
+    if (parameters.tags) {
+        return YES;
+    }
+    
     return NO;
 }
 

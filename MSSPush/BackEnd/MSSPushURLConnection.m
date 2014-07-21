@@ -162,6 +162,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     requestData.deviceModel = [MSSHardwareUtil deviceModel];
     requestData.os = [MSSHardwareUtil operatingSystem];
     requestData.osVersion = [MSSHardwareUtil operatingSystemVersion];
+    requestData.tags = parameters.tags;
     return requestData;
 }
 
