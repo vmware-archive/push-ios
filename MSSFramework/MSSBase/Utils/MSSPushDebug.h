@@ -1,10 +1,7 @@
 //
-//  MSSPushDebug.h
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
-//  Created by Rob Szumlakowski on 2013-08-22.
-//  Copyright (c) 2013 Xtreme Labs. All rights reserved.
-//
-// Based on XLDebug by Christopher Larsen, see license below:
+//  Based on XLDebug by Christopher Larsen, see license below:
 
 /* Copyright (c) 2013 Xtreme Labs Inc.
  *

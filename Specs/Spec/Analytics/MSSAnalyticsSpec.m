@@ -1,9 +1,5 @@
 //
-//  MSSAnalyticsSpec.m
-//  MSSPushSpec
-//
-//  Created by DX123-XL on 2014-04-02.
-//
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
 #import "Kiwi.h"

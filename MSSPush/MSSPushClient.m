@@ -1,9 +1,5 @@
 //
-//  MSSPushClient.m
-//  
-//
-//  Created by DX123-XL on 2014-04-23.
-//
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

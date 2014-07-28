@@ -1,9 +1,5 @@
 //
-//  MSSAppDelegateProxy.m
-//  
-//
-//  Created by DX123-XL on 2014-03-27.
-//
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
 #import <objc/runtime.h>

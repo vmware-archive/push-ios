@@ -1,9 +1,5 @@
 //
-//  MSSClassPropertyUtility.h
-//  MSSPushSpec
-//
-//  Created by DX123-XL on 2014-04-17.
-//
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

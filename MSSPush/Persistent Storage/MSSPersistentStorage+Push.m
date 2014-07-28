@@ -1,9 +1,5 @@
 //
-//  MSSPushPersistentStorage.m
-//  MSSPush
-//
-//  Created by Rob Szumlakowski on 2014-01-17.
-//  Copyright (c) 2014 Pivotal. All rights reserved.
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
 static NSString *const KEY_APNS_DEVICE_TOKEN  = @"MSS_PUSH_APNS_DEVICE_TOKEN";

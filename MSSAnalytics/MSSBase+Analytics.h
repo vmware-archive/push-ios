@@ -1,10 +1,6 @@
 //
-//  MSSBase+Analytics.h
-//  
+//  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
-//  Created by DX123-XL on 2014-04-25.
-//
-//al
 
 #import "MSSBase.h"
 
