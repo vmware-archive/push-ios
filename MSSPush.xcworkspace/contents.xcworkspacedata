@@ -2,12 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:MSSFramework/MSSPush.xcodeproj">
+      location = "group:MSSPush.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Specs/MSSPushSpecs.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Specs/Pods/Pods.xcodeproj">
+      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
