@@ -8,21 +8,21 @@
 #import "MSSPushClientTest.h"
 #import "MSSPushClient.h"
 #import "MSSPushErrors.h"
-#import "MSSPushSpecHelper.h"
+#import "MSSPushSpecsHelper.h"
 #import "MSSPersistentStorage+Push.h"
 #import "MSSParameters.h"
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+MSSPushAsync2Sync.h"
 #import "NSURLConnection+MSSBackEndConnection.h"
 
-SPEC_BEGIN(MSSPushSpec)
+SPEC_BEGIN(MSSPushSpecs)
 
 describe(@"MSSPush", ^{
-    __block MSSPushSpecHelper *helper = nil;
+    __block MSSPushSpecsHelper *helper = nil;
     __block id<UIApplicationDelegate> previousAppDelegate;
     
     beforeEach(^{
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupParameters];
@@ -234,10 +234,10 @@ describe(@"MSSPush", ^{
     
     context(@"valid object arguements", ^{
         __block BOOL wasExpectedResult = NO;
-        __block MSSPushSpecHelper *helper;
+        __block MSSPushSpecsHelper *helper;
         
         beforeEach(^{
-            helper = [[MSSPushSpecHelper alloc] init];
+            helper = [[MSSPushSpecsHelper alloc] init];
             [helper setupParameters];
             wasExpectedResult = NO;
         });

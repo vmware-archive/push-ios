@@ -1,9 +1,5 @@
 PODS:
-  - Kiwi/ARC (2.2.4)
-  - Kiwi/NonARC (2.2.4)
-  - Kiwi/XCTest (2.2.4):
-    - Kiwi/ARC
-    - Kiwi/NonARC
+  - Kiwi (2.3.0)
   - MSSPush (0.4):
     - MSSPush/All
   - MSSPush/All (0.4):
@@ -15,7 +11,7 @@ PODS:
     - MSSPush/Base
 
 DEPENDENCIES:
-  - Kiwi/XCTest
+  - Kiwi
   - MSSPush (from `../`)
 
 EXTERNAL SOURCES:
@@ -23,7 +19,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Kiwi: c73667f2b84cbf36f1a3830267c5a4ae8dcbd8ba
+  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
   MSSPush: c978433ae2f6566e350f81b710fbd202bd520dd0
 
 COCOAPODS: 0.33.1

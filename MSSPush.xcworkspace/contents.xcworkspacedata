@@ -5,7 +5,7 @@
       location = "group:MSSFramework/MSSPush.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Specs/MSSPushSpec.xcodeproj">
+      location = "group:Specs/MSSPushSpecs.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Specs/Pods/Pods.xcodeproj">

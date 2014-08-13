@@ -16,7 +16,7 @@ OBJC_EXPORT NSString *const TEST_VARIANT_UUID_2;
 OBJC_EXPORT NSString *const TEST_RELEASE_SECRET_2;
 OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 
-@interface MSSPushSpecHelper : NSObject
+@interface MSSPushSpecsHelper : NSObject
 
 @property (nonatomic) id application;
 @property (nonatomic) id<UIApplicationDelegate> applicationDelegate;

@@ -4,7 +4,7 @@
 
 #import "Kiwi.h"
 
-#import "MSSPushSpecHelper.h"
+#import "MSSPushSpecsHelper.h"
 #import "MSSAppDelegate.h"
 #import "MSSAppDelegateProxy.h"
 #import "MSSPush.h"
@@ -49,7 +49,7 @@ NSString *const TEST_VARIANT_UUID_2   = @"222-444-999-ZZZ";
 NSString *const TEST_RELEASE_SECRET_2 = @"My cat's breath smells like cat food";
 NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
-@implementation MSSPushSpecHelper
+@implementation MSSPushSpecsHelper
 
 # pragma mark - Spec Helper lifecycle
 

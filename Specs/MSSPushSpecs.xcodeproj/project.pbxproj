@@ -12,7 +12,7 @@
 		F1BCF2E618E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D018E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m */; };
 		F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */; };
 		F1BCF2E818E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D518E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m */; };
-		F1BCF2E918E5CF46004F3684 /* MSSPushSpecHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D718E5CF46004F3684 /* MSSPushSpecHelper.m */; };
+		F1BCF2E918E5CF46004F3684 /* MSSPushSpecsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D718E5CF46004F3684 /* MSSPushSpecsHelper.m */; };
 		F1BCF2EA18E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D918E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m */; };
 		F1BCF2EB18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DA18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m */; };
 		F1BCF2EC18E5CF46004F3684 /* MSSRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2DB18E5CF46004F3684 /* MSSRegistrationParametersSpec.m */; };
@@ -44,8 +44,8 @@
 		F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
 		F1BCF2D418E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+MSSPushAsync2Sync.h"; sourceTree = "<group>"; };
 		F1BCF2D518E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+MSSPushAsync2Sync.m"; sourceTree = "<group>"; };
-		F1BCF2D618E5CF46004F3684 /* MSSPushSpecHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushSpecHelper.h; sourceTree = "<group>"; };
-		F1BCF2D718E5CF46004F3684 /* MSSPushSpecHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushSpecHelper.m; sourceTree = "<group>"; };
+		F1BCF2D618E5CF46004F3684 /* MSSPushSpecsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushSpecsHelper.h; sourceTree = "<group>"; };
+		F1BCF2D718E5CF46004F3684 /* MSSPushSpecsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushSpecsHelper.m; sourceTree = "<group>"; };
 		F1BCF2D918E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationRequestDataSpec.m; sourceTree = "<group>"; };
 		F1BCF2DA18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationResponseDataSpec.m; sourceTree = "<group>"; };
 		F1BCF2DB18E5CF46004F3684 /* MSSRegistrationParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSRegistrationParametersSpec.m; sourceTree = "<group>"; };
@@ -122,8 +122,8 @@
 				F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */,
 				F1BCF2D418E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.h */,
 				F1BCF2D518E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m */,
-				F1BCF2D618E5CF46004F3684 /* MSSPushSpecHelper.h */,
-				F1BCF2D718E5CF46004F3684 /* MSSPushSpecHelper.m */,
+				F1BCF2D618E5CF46004F3684 /* MSSPushSpecsHelper.h */,
+				F1BCF2D718E5CF46004F3684 /* MSSPushSpecsHelper.m */,
 				F1E93B4D19006F410038F429 /* MSSClassPropertyUtility.h */,
 				F1E93B4E19006F410038F429 /* MSSClassPropertyUtility.m */,
 			);
@@ -250,7 +250,7 @@
 			attributes = {
 				LastUpgradeCheck = 0510;
 			};
-			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpec" */;
+			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpecs" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -327,7 +327,7 @@
 				F1BCF2EF18E5CF46004F3684 /* MSSPushHexUtilSpec.m in Sources */,
 				F1BCF2EE18E5CF46004F3684 /* MSSPushPersistentStorageSpec.m in Sources */,
 				F1BCF2E818E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m in Sources */,
-				F1BCF2E918E5CF46004F3684 /* MSSPushSpecHelper.m in Sources */,
+				F1BCF2E918E5CF46004F3684 /* MSSPushSpecsHelper.m in Sources */,
 				F1BCF2E618E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m in Sources */,
 				F1BCF2EB18E5CF46004F3684 /* MSSPushBackEndRegistrationResponseDataSpec.m in Sources */,
 			);
@@ -465,7 +465,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpec" */ = {
+		F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpecs" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				F1FDE2A418D799E4009EBE38 /* Debug */,

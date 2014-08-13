@@ -1,9 +1,9 @@
-xcodeproj 'MSSPushSpec'
+xcodeproj 'MSSPushSpecs'
 workspace '../MSSPush'
 inhibit_all_warnings!
 
 target :MSSPushTests, :exclusive => true do
   platform :ios, '6.0'
-  pod 'Kiwi/XCTest'
+  pod 'Kiwi'
   pod 'MSSPush', :path => '../'
 end

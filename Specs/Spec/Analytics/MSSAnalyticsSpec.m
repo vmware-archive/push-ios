@@ -6,7 +6,7 @@
 #import <objc/runtime.h>
 
 #import "MSSPushURLConnection.h"
-#import "MSSPushSpecHelper.h"
+#import "MSSPushSpecsHelper.h"
 #import "MSSPushBackEndRegistrationDataTest.h"
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
 #import "MSSAppDelegateProxy.h"
@@ -23,11 +23,11 @@ SPEC_BEGIN(MSSAnalyticsSpec)
 
 describe(@"MSSAnalytics", ^{
     
-    __block MSSPushSpecHelper *helper;
+    __block MSSPushSpecsHelper *helper;
     __block MSSCoreDataManager *manager;
     
     beforeEach(^{
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
         [helper setupApplicationForSuccessfulRegistration];
@@ -305,7 +305,7 @@ describe(@"MSSAnalytics", ^{
 });
 
 describe(@"MSSAnalytics + MSSPush", ^{
-    __block MSSPushSpecHelper *helper;
+    __block MSSPushSpecsHelper *helper;
     
     void(^forceLoadSDK)() = ^{
         [MSSPush load];
@@ -314,7 +314,7 @@ describe(@"MSSAnalytics + MSSPush", ^{
     };
     
     beforeEach(^{
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupApplication];
         [helper setupParameters];
         [helper.application stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
@@ -374,7 +374,7 @@ describe(@"MSSAnalytics + MSSPush", ^{
 
 context(@"Tracking analytic events when push events occur", ^{
     __block MSSCoreDataManager *manager;
-    __block MSSPushSpecHelper *helper;
+    __block MSSPushSpecsHelper *helper;
     
     void(^stubURLConnection)() = ^{
         [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -437,7 +437,7 @@ context(@"Tracking analytic events when push events occur", ^{
             return nil;
         }];
         
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupApplication];
         [helper setupParameters];
         

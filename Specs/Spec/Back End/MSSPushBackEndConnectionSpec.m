@@ -9,15 +9,15 @@
 #import "MSSPushURLConnection.h"
 #import "MSSParameters.h"
 #import "MSSPushErrors.h"
-#import "MSSPushSpecHelper.h"
+#import "MSSPushSpecsHelper.h"
 
 SPEC_BEGIN(MSSPushBackEndConnectionSpec)
 
 describe(@"MSSPushBackEndConnection", ^{
-    __block MSSPushSpecHelper *helper;
+    __block MSSPushSpecsHelper *helper;
 
     beforeEach ( ^{
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupParameters];
 	});
 

@@ -5,16 +5,16 @@
 #import "Kiwi.h"
 
 #import "MSSPersistentStorage+Push.h"
-#import "MSSPushSpecHelper.h"
+#import "MSSPushSpecsHelper.h"
 
 SPEC_BEGIN(MSSPushPersistentStorageSpec)
 
 describe(@"MSSPushPersistentStorage", ^{
 
-    __block MSSPushSpecHelper *helper;
+    __block MSSPushSpecsHelper *helper;
 
     beforeEach(^{
-        helper = [[MSSPushSpecHelper alloc] init];
+        helper = [[MSSPushSpecsHelper alloc] init];
         [MSSPersistentStorage resetPushPersistedValues];
     });
                    
