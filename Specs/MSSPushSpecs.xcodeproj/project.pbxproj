@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F0000E1646E462990202401 /* libPods-MSSPushTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F303DBBC5F64D709BFF96D9 /* libPods-MSSPushTests.a */; };
-		F1899FB219119E7500327394 /* MSSAnalyticsURLConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1899FB119119E7500327394 /* MSSAnalyticsURLConnectionSpec.m */; };
 		F1BCF2E618E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D018E5CF46004F3684 /* MSSPushBackEndConnectionSpec.m */; };
 		F1BCF2E718E5CF46004F3684 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D318E5CF46004F3684 /* JRSwizzle.m */; };
 		F1BCF2E818E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = F1BCF2D518E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m */; };
@@ -24,7 +23,6 @@
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
 		F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */; };
 		F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2B118D79A1B009EBE38 /* UIKit.framework */; };
-		F1E5D1F818ECB3E9007E8802 /* MSSAnalyticsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E5D1F718ECB3E9007E8802 /* MSSAnalyticsSpec.m */; };
 		F1E93B4F19006F410038F429 /* MSSClassPropertyUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = F1E93B4E19006F410038F429 /* MSSClassPropertyUtility.m */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +33,6 @@
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1319F0918EDE47700852A7F /* MSSAnalytics_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSAnalytics_TestingHeader.h; sourceTree = "<group>"; };
 		F1319F0A18EDEF1F00852A7F /* MSSAnalyticEvent_TestingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MSSAnalyticEvent_TestingHeader.h; sourceTree = "<group>"; };
-		F1899FB119119E7500327394 /* MSSAnalyticsURLConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticsURLConnectionSpec.m; sourceTree = "<group>"; };
 		F1BCF2C918E5CD10004F3684 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F1BCF2CA18E5CD10004F3684 /* MSSPushTests-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSPushTests-Info.plist"; sourceTree = "<group>"; };
 		F1BCF2CB18E5CD10004F3684 /* MSSPushTests-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MSSPushTests-Prefix.pch"; sourceTree = "<group>"; };
@@ -59,7 +56,6 @@
 		F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* MSSParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* MSSPushTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSSPushTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F1E5D1F718ECB3E9007E8802 /* MSSAnalyticsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAnalyticsSpec.m; sourceTree = "<group>"; };
 		F1E93B4D19006F410038F429 /* MSSClassPropertyUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSClassPropertyUtility.h; sourceTree = "<group>"; };
 		F1E93B4E19006F410038F429 /* MSSClassPropertyUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSClassPropertyUtility.m; sourceTree = "<group>"; };
 		F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -95,7 +91,6 @@
 		F1BCF2CE18E5CF46004F3684 /* Spec */ = {
 			isa = PBXGroup;
 			children = (
-				F1E5D1F618ECB3CA007E8802 /* Analytics */,
 				F1BCF2CF18E5CF46004F3684 /* Back End */,
 				F1BCF2D118E5CF46004F3684 /* Helpers */,
 				F1BCF2D818E5CF46004F3684 /* Models */,
@@ -176,15 +171,6 @@
 				F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		F1E5D1F618ECB3CA007E8802 /* Analytics */ = {
-			isa = PBXGroup;
-			children = (
-				F1E5D1F718ECB3E9007E8802 /* MSSAnalyticsSpec.m */,
-				F1899FB119119E7500327394 /* MSSAnalyticsURLConnectionSpec.m */,
-			);
-			path = Analytics;
 			sourceTree = "<group>";
 		};
 		F1FDE29F18D799E4009EBE38 = {
@@ -322,8 +308,6 @@
 				F1BCF2EA18E5CF46004F3684 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */,
 				F1BCF2EC18E5CF46004F3684 /* MSSRegistrationParametersSpec.m in Sources */,
 				F1E93B4F19006F410038F429 /* MSSClassPropertyUtility.m in Sources */,
-				F1E5D1F818ECB3E9007E8802 /* MSSAnalyticsSpec.m in Sources */,
-				F1899FB219119E7500327394 /* MSSAnalyticsURLConnectionSpec.m in Sources */,
 				F1BCF2EF18E5CF46004F3684 /* MSSPushHexUtilSpec.m in Sources */,
 				F1BCF2EE18E5CF46004F3684 /* MSSPushPersistentStorageSpec.m in Sources */,
 				F1BCF2E818E5CF46004F3684 /* NSURLConnection+MSSPushAsync2Sync.m in Sources */,

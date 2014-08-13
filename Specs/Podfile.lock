@@ -1,14 +1,6 @@
 PODS:
   - Kiwi (2.3.0)
-  - MSSPush (0.4):
-    - MSSPush/All
-  - MSSPush/All (0.4):
-    - MSSPush/Analytics
-    - MSSPush/Push
-  - MSSPush/Analytics (0.4)
-  - MSSPush/Base (0.4)
-  - MSSPush/Push (0.4):
-    - MSSPush/Base
+  - MSSPush (0.4)
 
 DEPENDENCIES:
   - Kiwi
@@ -20,6 +12,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
-  MSSPush: c978433ae2f6566e350f81b710fbd202bd520dd0
+  MSSPush: 29811480c109633ba7877a90bd1bfce7632fd71c
 
 COCOAPODS: 0.33.1
