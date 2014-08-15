@@ -14,7 +14,7 @@
 
 NSString *const kBasicAuthorizationKey = @"Authorization";
 
-static NSString *const kRegistrationRequestPath = @"registration";
+static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSTimeInterval kRegistrationTimeout = 60.0;
 
 @implementation MSSPushURLConnection
