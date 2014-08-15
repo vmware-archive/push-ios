@@ -5,7 +5,7 @@
 #import "MSSPushBackEndRegistrationDataTest.h"
 #import "MSSPushRegistrationRequestData.h"
 
-OBJC_EXTERN NSString *const kReleaseSecret;
+OBJC_EXTERN NSString *const kVariantSecret;
 
 @interface MSSPushRegistrationRequestData (TestingHeader)
 

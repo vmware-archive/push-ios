@@ -116,7 +116,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [MSSPersistentStorage setAPNSDeviceToken:deviceToken];
         [MSSPersistentStorage setServerDeviceID:parsedData.deviceUUID];
         [MSSPersistentStorage setVariantUUID:parameters.variantUUID];
-        [MSSPersistentStorage setReleaseSecret:parameters.releaseSecret];
+        [MSSPersistentStorage setVariantSecret:parameters.variantSecret];
         [MSSPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
         
         if (successBlock) {
@@ -227,8 +227,8 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     
-    if (![parameters.releaseSecret isEqualToString:[MSSPersistentStorage releaseSecret]]) {
-        MSSPushLog(@"Parameters specify a different releaseSecret. Unregistration and re-registration will be required.");
+    if (![parameters.variantSecret isEqualToString:[MSSPersistentStorage variantSecret]]) {
+        MSSPushLog(@"Parameters specify a different variantSecret. Unregistration and re-registration will be required.");
         return NO;
     }
     

@@ -4,7 +4,7 @@
 
 #import "MSSPushRegistrationRequestData.h"
 
-NSString *const kReleaseSecret = @"secret";
+NSString *const kVariantSecret = @"secret";
 
 @implementation MSSPushRegistrationRequestData
 
@@ -14,7 +14,7 @@ NSString *const kReleaseSecret = @"secret";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary *mapping = [NSMutableDictionary dictionaryWithDictionary:[super localToRemoteMapping]];
-        [mapping setObject:kReleaseSecret forKey:MSS_STR_PROP(secret)];
+        [mapping setObject:kVariantSecret forKey:MSS_STR_PROP(secret)];
         localToRemoteMapping = [NSDictionary dictionaryWithDictionary:mapping];
     });
     

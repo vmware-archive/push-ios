@@ -43,10 +43,10 @@ NSString *const TEST_ANALYTICS_KEY     = @"TEST-ANALYTICS-KEY";
 
 NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
-NSString *const TEST_RELEASE_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
+NSString *const TEST_VARIANT_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
 NSString *const TEST_VARIANT_UUID_2   = @"222-444-999-ZZZ";
-NSString *const TEST_RELEASE_SECRET_2 = @"My cat's breath smells like cat food";
+NSString *const TEST_VARIANT_SECRET_2 = @"My cat's breath smells like cat food";
 NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 @implementation MSSPushSpecsHelper
@@ -61,8 +61,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.apnsDeviceToken2 = [@"TEST DEVICE TOKEN 2" dataUsingEncoding:NSUTF8StringEncoding];
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
-        self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";//TEST_VARIANT_UUID_1:TEST_RELEASE_SECRET_1
-        self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";//TEST_VARIANT_UUID_2:TEST_RELEASE_SECRET_2
+        self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
+        self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";
         self.application = [UIApplication sharedApplication];
         [MSSPersistentStorage resetPushPersistedValues];
     }
@@ -191,7 +191,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 {
     MSSParameters *params = [MSSParameters parameters];
     params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
-    params.developmentPushReleaseSecret = TEST_RELEASE_SECRET_1;
+    params.developmentPushVariantSecret = TEST_VARIANT_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushAutoRegistrationEnabled = YES;
@@ -206,9 +206,9 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [self.params setDevelopmentPushVariantUUID:newVariantUUID];
 }
 
-- (void) changeReleaseSecretInParameters:(NSString*)newReleaseSecret
+- (void) changeVariantSecretInParameters:(NSString*)newVariantSecret
 {
-    [self.params setDevelopmentPushReleaseSecret:newReleaseSecret];
+    [self.params setDevelopmentPushVariantSecret:newVariantSecret];
 }
 
 - (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
@@ -218,7 +218,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void)setupDefaultSavedParameters
 {
-    [MSSPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
+    [MSSPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
     [MSSPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
     [MSSPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
     [MSSPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];

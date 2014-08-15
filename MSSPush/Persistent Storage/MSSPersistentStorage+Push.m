@@ -4,7 +4,7 @@
 
 static NSString *const KEY_APNS_DEVICE_TOKEN  = @"MSS_PUSH_APNS_DEVICE_TOKEN";
 static NSString *const KEY_VARIANT_UUID       = @"MSS_PUSH_VARIANT_UUID";
-static NSString *const KEY_RELEASE_SECRET     = @"MSS_PUSH_RELEASE_SECRET";
+static NSString *const KEY_VARIANT_SECRET     = @"MSS_PUSH_VARIANT_SECRET";
 static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
 
 #import "MSSPersistentStorage+Push.h"
@@ -17,7 +17,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
     NSArray *keys = @[
                       KEY_APNS_DEVICE_TOKEN,
                       KEY_VARIANT_UUID,
-                      KEY_RELEASE_SECRET,
+                      KEY_VARIANT_SECRET,
                       KEY_DEVICE_ALIAS,
                       ];
     
@@ -46,14 +46,14 @@ static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
     return [self persistedValueForKey:KEY_VARIANT_UUID];
 }
 
-+ (void)setReleaseSecret:(NSString *)releaseSecret
++ (void)setVariantSecret:(NSString *)variantSecret
 {
-    [self persistValue:releaseSecret forKey:KEY_RELEASE_SECRET];
+    [self persistValue:variantSecret forKey:KEY_VARIANT_SECRET];
 }
 
-+ (NSString *)releaseSecret
++ (NSString *)variantSecret
 {
-    return [self persistedValueForKey:KEY_RELEASE_SECRET];
+    return [self persistedValueForKey:KEY_VARIANT_SECRET];
 }
 
 + (void)setDeviceAlias:(NSString *)deviceAlias

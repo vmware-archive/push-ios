@@ -22,7 +22,7 @@ describe(@"MSSPushPersistentStorage", ^{
         [[[MSSPersistentStorage APNSDeviceToken] should] beNil];
         [[[MSSPersistentStorage serverDeviceID] should] beNil];
         [[[MSSPersistentStorage variantUUID] should] beNil];
-        [[[MSSPersistentStorage releaseSecret] should] beNil];
+        [[[MSSPersistentStorage variantSecret] should] beNil];
         [[[MSSPersistentStorage deviceAlias] should] beNil];
     });
     
@@ -36,14 +36,14 @@ describe(@"MSSPushPersistentStorage", ^{
         [[[MSSPersistentStorage serverDeviceID] should] equal:helper.backEndDeviceId];
     });
     
-    it(@"should be able to save the release UUID", ^{
+    it(@"should be able to save the variant UUID", ^{
         [MSSPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
         [[[MSSPersistentStorage variantUUID] should] equal:TEST_VARIANT_UUID_1];
     });
     
-    it(@"should be able to save the release secret", ^{
-        [MSSPersistentStorage setReleaseSecret:TEST_RELEASE_SECRET_1];
-        [[[MSSPersistentStorage releaseSecret] should] equal:(TEST_RELEASE_SECRET_1)];
+    it(@"should be able to save the variant secret", ^{
+        [MSSPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
+        [[[MSSPersistentStorage variantSecret] should] equal:(TEST_VARIANT_SECRET_1)];
     });
     
     it(@"should be able to save the device alias", ^{

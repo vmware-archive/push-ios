@@ -48,10 +48,9 @@ static BOOL kInDebug = NO;
     return kInDebug ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
 }
 
-#pragma warning - rename this property to be 'variantSecret'
-- (NSString *)releaseSecret
+- (NSString *)variantSecret
 {
-    return kInDebug ? self.developmentPushReleaseSecret : self.productionPushReleaseSecret;
+    return kInDebug ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
 
 - (NSString *)analyticsKey
@@ -66,9 +65,9 @@ static BOOL kInDebug = NO;
         @selector(pushAPIURL),
         @selector(pushAutoRegistrationEnabled),
         @selector(developmentPushVariantUUID),
-        @selector(developmentPushReleaseSecret),
+        @selector(developmentPushVariantSecret),
         @selector(productionPushVariantUUID),
-        @selector(productionPushReleaseSecret),
+        @selector(productionPushVariantSecret),
     };
 
     for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {

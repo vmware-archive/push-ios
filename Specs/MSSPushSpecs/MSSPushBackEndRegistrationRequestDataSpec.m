@@ -119,7 +119,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
                                    RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
                                    RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
                                    RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
-                                   kReleaseSecret                            : TEST_SECRET,
+                                   kVariantSecret                            : TEST_SECRET,
                                    };
             
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
@@ -167,7 +167,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[RegistrationAttributes.variantUUID] should] equal:TEST_VARIANT_UUID];
-                [[dict[kReleaseSecret] should] equal:TEST_SECRET];
+                [[dict[kVariantSecret] should] equal:TEST_SECRET];
                 [[dict[RegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
                 [[dict[RegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
                 [[dict[RegistrationAttributes.deviceModel] should] equal:TEST_DEVICE_MODEL];
@@ -194,7 +194,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[RegistrationAttributes.variantUUID]  should] beNil];
-                [[dict[kReleaseSecret]  should] beNil];
+                [[dict[kVariantSecret]  should] beNil];
                 [[dict[RegistrationAttributes.deviceAlias]  should] beNil];
                 [[dict[RegistrationAttributes.deviceManufacturer]  should] beNil];
                 [[dict[RegistrationAttributes.deviceModel]  should] beNil];

@@ -38,7 +38,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     NSMutableURLRequest *request = [self unregisterRequestForBackEndDeviceID:deviceID];
     
     if (request) {
-        [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID releaseSecret:parameters.releaseSecret];
+        [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
         
         [NSURLConnection mss_sendAsynchronousRequest:request
                                              success:success
@@ -106,14 +106,14 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
     }
     
-    if (!parameters || !parameters.variantUUID || !parameters.releaseSecret) {
+    if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"MSSPushRegistrationParameters may not be nil"];
     }
     
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
     request.HTTPMethod = method;
-    [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID releaseSecret:parameters.releaseSecret];
+    [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     MSSPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
@@ -122,9 +122,9 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 
 + (void)addBasicAuthToURLRequest:(NSMutableURLRequest *)request
                  withVariantUUID:(NSString *)variantUUID
-                   releaseSecret:(NSString *)releaseSecret
+                   variantSecret:(NSString *)variantSecret
 {
-    NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, releaseSecret]];
+    NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
     [request setValue:[NSString stringWithFormat:@"Basic  %@", authString] forHTTPHeaderField:@"Authorization"];
 }
 

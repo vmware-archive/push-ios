@@ -12,8 +12,8 @@
 + (void)setVariantUUID:(NSString *)variantUUID;
 + (NSString *)variantUUID;
 
-+ (void)setReleaseSecret:(NSString *)releaseSecret;
-+ (NSString *)releaseSecret;
++ (void)setVariantSecret:(NSString *)variantSecret;
++ (NSString *)variantSecret;
 
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;

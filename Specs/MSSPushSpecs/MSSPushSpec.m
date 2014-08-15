@@ -50,7 +50,7 @@ describe(@"MSSPush", ^{
             
             SEL stringSelectors[] = {
                 @selector(setVariantUUID:),
-                @selector(setReleaseSecret:),
+                @selector(setVariantSecret:),
                 @selector(setDeviceAlias:),
             };
             

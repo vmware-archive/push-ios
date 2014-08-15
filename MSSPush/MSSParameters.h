@@ -17,9 +17,9 @@
 @property (copy) NSString *pushDeviceAlias;
 @property (copy) NSString *pushAPIURL;
 @property (copy) NSString *developmentPushVariantUUID;
-@property (copy) NSString *developmentPushReleaseSecret;
+@property (copy) NSString *developmentPushVariantSecret;
 @property (copy) NSString *productionPushVariantUUID;
-@property (copy) NSString *productionPushReleaseSecret;
+@property (copy) NSString *productionPushVariantSecret;
 @property (copy) NSArray *tags;
 
 /**
@@ -68,10 +68,9 @@
 - (NSString *)variantUUID;
 
 /**
- * The release Secret (resolved using the inProduction flag).
+ * The variant Secret (resolved using the inProduction flag).
  */
-#pragma warning - rename this property to be 'variantSecret'
-- (NSString *)releaseSecret;
+- (NSString *)variantSecret;
 
 /**
  * The analytics key (resolved using the inProduction flag).

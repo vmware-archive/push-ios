@@ -11,7 +11,7 @@
 static NSString *const TEST_DEVICE_API_URL = @"http://testURL.com";
 static NSString *const TEST_ANALYTICS_URL  = @"http://analyticsURL.com";
 static NSString *const TEST_VARIANT_UUID   = @"SOS-WE-LIKE-IT-SPICY";
-static NSString *const TEST_RELEASE_SECRET = @"Put sweet chili sauce on everything";
+static NSString *const TEST_VARIANT_SECRET = @"Put sweet chili sauce on everything";
 static NSString *const TEST_DEVICE_ALIAS   = @"Extreme spiciness classification";
 
 static NSString *const TEST_ANALYTICS_KEY   = @"TEST_ANALYTICS_KEY";
@@ -57,8 +57,8 @@ describe(@"MSSRegistrationParameters", ^{
             [model setPushAPIURL:TEST_DEVICE_API_URL];
             [model setAnalyticsAPIURL:TEST_ANALYTICS_URL];
             
-            [model setDevelopmentPushReleaseSecret:TEST_RELEASE_SECRET];
-            [model setProductionPushReleaseSecret:TEST_RELEASE_SECRET];
+            [model setDevelopmentPushVariantSecret:TEST_VARIANT_SECRET];
+            [model setProductionPushVariantSecret:TEST_VARIANT_SECRET];
             
             [model setDevelopmentPushVariantUUID:TEST_VARIANT_UUID];
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
