@@ -222,17 +222,20 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 + (BOOL)localParametersMatchNewParameters:(MSSParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
-    if (![parameters.variantUUID isEqualToString:[MSSPersistentStorage variantUUID]]) {
+    NSString *savedVariantUUID = [MSSPersistentStorage variantUUID];
+    if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
         MSSPushLog(@"Parameters specify a different variantUUID. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    if (![parameters.variantSecret isEqualToString:[MSSPersistentStorage variantSecret]]) {
+    NSString *savedVariantSecret = [MSSPersistentStorage variantSecret];
+    if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
         MSSPushLog(@"Parameters specify a different variantSecret. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    if (![parameters.pushDeviceAlias isEqualToString:[MSSPersistentStorage deviceAlias]]) {
+    NSString *savedDeviceAlias = [MSSPersistentStorage deviceAlias];
+    if ((parameters.pushDeviceAlias == nil && savedDeviceAlias != nil) || (parameters.pushDeviceAlias != nil && ![parameters.pushDeviceAlias isEqualToString:savedDeviceAlias])) {
         MSSPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
         return NO;
     }
