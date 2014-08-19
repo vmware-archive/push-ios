@@ -8,46 +8,47 @@
 #import "NSObject+MSSJsonizable.h"
 #import "MSSPushErrors.h"
 
-SPEC_BEGIN(MSSPushBackEndRegistrationRequestDataSpec)
+static NSArray *TEST_TAGS;
 
-describe(@"MSSPushBackEndRegistrationRequestData", ^{
+SPEC_BEGIN(MSSPushBackEndRegistrationPostRequestDataSpec)
+
+describe(@"MSSPushBackEndRegistrationPostRequestData", ^{
     
-    __block MSSPushRegistrationRequestData *model;
+    __block MSSPushRegistrationPostRequestData *model;
+    
+    beforeEach(^{
+        TEST_TAGS = @[ @"TACO TAG", @"TAMALE TAG", @"TOASTY TAG" ];
+    });
     
     afterEach(^{
         model = nil;
     });
     
     it(@"should be initializable", ^{
-        model = [[MSSPushRegistrationRequestData alloc] init];
+        model = [[MSSPushRegistrationPostRequestData alloc] init];
         [[model shouldNot] beNil];
     });
     
     context(@"fields", ^{
         
         beforeEach(^{
-            model = [[MSSPushRegistrationRequestData alloc] init];
+            model = [[MSSPushRegistrationPostRequestData alloc] init];
         });
         
         it(@"should start as nil", ^{
             [[model.variantUUID should] beNil];
-            [[model.secret should] beNil];
             [[model.deviceAlias should] beNil];
             [[model.deviceManufacturer should] beNil];
             [[model.deviceModel should] beNil];
             [[model.os should] beNil];
             [[model.osVersion should] beNil];
             [[model.registrationToken should] beNil];
+            [[model.tags should] beNil];
         });
         
         it(@"should have a variant_uuid", ^{
             model.variantUUID = TEST_VARIANT_UUID;
             [[model.variantUUID should] equal:TEST_VARIANT_UUID];
-        });
-        
-        it(@"should have a secret", ^{
-            model.secret = TEST_SECRET;
-            [[model.secret should] equal:TEST_SECRET];
         });
         
         it(@"should have a device_alias", ^{
@@ -79,13 +80,18 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             model.registrationToken = TEST_REGISTRATION_TOKEN;
             [[model.registrationToken should] equal:TEST_REGISTRATION_TOKEN];
         });
+
+        it(@"should have a list of tags", ^{
+            model.tags = TEST_TAGS;
+            [[model.tags should] equal:TEST_TAGS];
+        });
     });
     
     context(@"deserialization", ^{
         
         it(@"should handle a nil input", ^{
             NSError *error;
-            model = [MSSPushRegistrationRequestData mss_fromJSONData:nil error:&error];
+            model = [MSSPushRegistrationPostRequestData mss_fromJSONData:nil error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:MSSPushErrorDomain];
@@ -94,7 +100,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
         
         it(@"should handle empty input", ^{
             NSError *error;
-            model = [MSSPushRegistrationRequestData mss_fromJSONData:[NSData data] error:&error];
+            model = [MSSPushRegistrationPostRequestData mss_fromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:MSSPushErrorDomain];
@@ -104,7 +110,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
         it(@"should handle bad JSON", ^{
             NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [MSSPushRegistrationRequestData mss_fromJSONData:JSONData error:&error];
+            model = [MSSPushRegistrationPostRequestData mss_fromJSONData:JSONData error:&error];
             [[model  should] beNil];
             [[error shouldNot] beNil];
         });
@@ -119,14 +125,14 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
                                    RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
                                    RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
                                    RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
-                                   kVariantSecret                            : TEST_SECRET,
+                                   kTags : TEST_TAGS
                                    };
             
             NSData *data = [NSJSONSerialization dataWithJSONObject:dict options:0 error:&error];
             [[error should] beNil];
             [[data shouldNot] beNil];
             
-            model = [MSSPushRegistrationRequestData mss_fromJSONData:data error:&error];
+            model = [MSSPushRegistrationPostRequestData mss_fromJSONData:data error:&error];
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
             [[model.osVersion should] equal:TEST_OS_VERSION ];
@@ -134,8 +140,8 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
             [[model.variantUUID should] equal:TEST_VARIANT_UUID];
-            [[model.secret should] equal:TEST_SECRET];
             [[model.registrationToken should] equal:TEST_REGISTRATION_TOKEN];
+            [[model.tags should] equal:TEST_TAGS];
         });
     });
 
@@ -144,7 +150,7 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
         __block NSDictionary *dict = nil;
         
         beforeEach(^{
-            model = [[MSSPushRegistrationRequestData alloc] init];
+            model = [[MSSPushRegistrationPostRequestData alloc] init];
         });
         
         afterEach(^{
@@ -155,25 +161,25 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             
             beforeEach(^{
                 model.variantUUID = TEST_VARIANT_UUID;
-                model.secret = TEST_SECRET;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
                 model.deviceModel = TEST_DEVICE_MODEL;
                 model.os = TEST_OS;
                 model.osVersion = TEST_OS_VERSION;
                 model.registrationToken = TEST_REGISTRATION_TOKEN;
+                model.tags = TEST_TAGS;
             });
             
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[RegistrationAttributes.variantUUID] should] equal:TEST_VARIANT_UUID];
-                [[dict[kVariantSecret] should] equal:TEST_SECRET];
                 [[dict[RegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
                 [[dict[RegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
                 [[dict[RegistrationAttributes.deviceModel] should] equal:TEST_DEVICE_MODEL];
                 [[dict[RegistrationAttributes.deviceOS] should] equal:TEST_OS];
                 [[dict[RegistrationAttributes.deviceOSVersion] should] equal:TEST_OS_VERSION];
                 [[dict[RegistrationAttributes.registrationToken] should] equal:TEST_REGISTRATION_TOKEN];
+                [[dict[kTags] should] equal:TEST_TAGS];
             });
 
             it(@"should be dictionaryizable", ^{
@@ -194,13 +200,13 @@ describe(@"MSSPushBackEndRegistrationRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[RegistrationAttributes.variantUUID]  should] beNil];
-                [[dict[kVariantSecret]  should] beNil];
                 [[dict[RegistrationAttributes.deviceAlias]  should] beNil];
                 [[dict[RegistrationAttributes.deviceManufacturer]  should] beNil];
                 [[dict[RegistrationAttributes.deviceModel]  should] beNil];
                 [[dict[RegistrationAttributes.deviceOS]  should] beNil];
                 [[dict[RegistrationAttributes.deviceOSVersion]  should] beNil];
                 [[dict[RegistrationAttributes.registrationToken]  should] beNil];
+                [[dict[kTags]  should] beNil];
             });
             
             it(@"should be dictionaryizable", ^{

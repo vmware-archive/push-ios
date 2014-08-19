@@ -5,7 +5,7 @@
 #import "Kiwi.h"
 
 #import "MSSPushRegistrationResponseData.h"
-#import "MSSPushRegistrationRequestData.h"
+#import "MSSPushRegistrationPostRequestData.h"
 #import "MSSPushBackEndRegistrationDataTest.h"
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
 #import "NSObject+MSSJsonizable.h"

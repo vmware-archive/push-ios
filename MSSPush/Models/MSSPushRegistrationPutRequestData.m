@@ -2,11 +2,10 @@
 //  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
-#import "MSSPushRegistrationRequestData.h"
+#import "MSSPushRegistrationPutRequestData.h"
+#import "MSSPushRegistrationPostRequestData.h"
 
-NSString *const kVariantSecret = @"secret";
-
-@implementation MSSPushRegistrationRequestData
+@implementation MSSPushRegistrationPutRequestData
 
 + (NSDictionary *)localToRemoteMapping
 {
@@ -14,7 +13,8 @@ NSString *const kVariantSecret = @"secret";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary *mapping = [NSMutableDictionary dictionaryWithDictionary:[super localToRemoteMapping]];
-        [mapping setObject:kVariantSecret forKey:MSS_STR_PROP(secret)];
+        mapping[MSS_STR_PROP(subscribeTags)] = [NSString stringWithFormat:@"%@.%@", kTags, kSubscribeTags];
+        mapping[MSS_STR_PROP(unsubscribeTags)] = [NSString stringWithFormat:@"%@.%@", kTags, kUnsubscribeTags];
         localToRemoteMapping = [NSDictionary dictionaryWithDictionary:mapping];
     });
     

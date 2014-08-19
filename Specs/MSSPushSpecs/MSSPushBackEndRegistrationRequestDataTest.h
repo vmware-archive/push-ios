@@ -3,10 +3,13 @@
 //
 
 #import "MSSPushBackEndRegistrationDataTest.h"
-#import "MSSPushRegistrationRequestData.h"
+#import "MSSPushRegistrationPostRequestData.h"
+#import "MSSPushRegistrationPutRequestData.h"
 
-OBJC_EXTERN NSString *const kVariantSecret;
+@interface MSSPushRegistrationPostRequestData (TestingHeader)
 
-@interface MSSPushRegistrationRequestData (TestingHeader)
+@end
+
+@interface MSSPushRegistrationPutRequestData (TestingHeader)
 
 @end

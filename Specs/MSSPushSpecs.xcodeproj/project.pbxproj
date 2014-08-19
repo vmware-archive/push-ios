@@ -11,7 +11,7 @@
 		235BB252199C085200B9EE63 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23D199C085200B9EE63 /* JRSwizzle.m */; };
 		235BB253199C085200B9EE63 /* MSSClassPropertyUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23F199C085200B9EE63 /* MSSClassPropertyUtility.m */; };
 		235BB254199C085200B9EE63 /* MSSPushBackEndConnectionSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB240199C085200B9EE63 /* MSSPushBackEndConnectionSpec.m */; };
-		235BB255199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataSpec.m */; };
+		235BB255199C085200B9EE63 /* MSSPushBackEndRegistrationPostRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationPostRequestDataSpec.m */; };
 		235BB256199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB244199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataSpec.m */; };
 		235BB257199C085200B9EE63 /* MSSPushHexUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB247199C085200B9EE63 /* MSSPushHexUtilSpec.m */; };
 		235BB258199C085200B9EE63 /* MSSPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB248199C085200B9EE63 /* MSSPushPersistentStorageSpec.m */; };
@@ -20,6 +20,7 @@
 		235BB25B199C085200B9EE63 /* MSSPushSpecs-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 235BB24C199C085200B9EE63 /* MSSPushSpecs-Info.plist */; };
 		235BB25C199C085200B9EE63 /* MSSRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* MSSRegistrationParametersSpec.m */; };
 		235BB25D199C085200B9EE63 /* NSURLConnection+MSSPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB250199C085200B9EE63 /* NSURLConnection+MSSPushAsync2Sync.m */; };
+		D4F3AC4C19A2A120005E84FF /* MSSPushBackEndRegistrationPutRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC4B19A2A120005E84FF /* MSSPushBackEndRegistrationPutRequestDataSpec.m */; };
 		F1CD947D19004FE80086A590 /* MSSParameters-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */; };
 		F1CD94811900666F0086A590 /* MSSParameters-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* MSSParameters-Invalid.plist */; };
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
@@ -37,7 +38,7 @@
 		235BB23F199C085200B9EE63 /* MSSClassPropertyUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSClassPropertyUtility.m; sourceTree = "<group>"; };
 		235BB240199C085200B9EE63 /* MSSPushBackEndConnectionSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndConnectionSpec.m; sourceTree = "<group>"; };
 		235BB241199C085200B9EE63 /* MSSPushBackEndRegistrationDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushBackEndRegistrationDataTest.h; sourceTree = "<group>"; };
-		235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationRequestDataSpec.m; sourceTree = "<group>"; };
+		235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationPostRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationPostRequestDataSpec.m; sourceTree = "<group>"; };
 		235BB243199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushBackEndRegistrationRequestDataTest.h; sourceTree = "<group>"; };
 		235BB244199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationResponseDataSpec.m; sourceTree = "<group>"; };
 		235BB245199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushBackEndRegistrationResponseDataTest.h; sourceTree = "<group>"; };
@@ -55,6 +56,7 @@
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		52B4F77F0A4647269B082C04 /* libPods-MSSPushSpecs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MSSPushSpecs.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D4F3AC4B19A2A120005E84FF /* MSSPushBackEndRegistrationPutRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushBackEndRegistrationPutRequestDataSpec.m; sourceTree = "<group>"; };
 		F1CD947C19004FE80086A590 /* MSSParameters-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* MSSParameters-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSParameters-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* MSSPushSpecs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSSPushSpecs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,7 +90,8 @@
 				235BB23F199C085200B9EE63 /* MSSClassPropertyUtility.m */,
 				235BB240199C085200B9EE63 /* MSSPushBackEndConnectionSpec.m */,
 				235BB241199C085200B9EE63 /* MSSPushBackEndRegistrationDataTest.h */,
-				235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataSpec.m */,
+				235BB242199C085200B9EE63 /* MSSPushBackEndRegistrationPostRequestDataSpec.m */,
+				D4F3AC4B19A2A120005E84FF /* MSSPushBackEndRegistrationPutRequestDataSpec.m */,
 				235BB243199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataTest.h */,
 				235BB244199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataSpec.m */,
 				235BB245199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataTest.h */,
@@ -249,10 +252,11 @@
 			files = (
 				235BB253199C085200B9EE63 /* MSSClassPropertyUtility.m in Sources */,
 				235BB258199C085200B9EE63 /* MSSPushPersistentStorageSpec.m in Sources */,
+				D4F3AC4C19A2A120005E84FF /* MSSPushBackEndRegistrationPutRequestDataSpec.m in Sources */,
 				235BB25A199C085200B9EE63 /* MSSPushSpecsHelper.m in Sources */,
 				235BB25C199C085200B9EE63 /* MSSRegistrationParametersSpec.m in Sources */,
 				235BB254199C085200B9EE63 /* MSSPushBackEndConnectionSpec.m in Sources */,
-				235BB255199C085200B9EE63 /* MSSPushBackEndRegistrationRequestDataSpec.m in Sources */,
+				235BB255199C085200B9EE63 /* MSSPushBackEndRegistrationPostRequestDataSpec.m in Sources */,
 				235BB256199C085200B9EE63 /* MSSPushBackEndRegistrationResponseDataSpec.m in Sources */,
 				235BB257199C085200B9EE63 /* MSSPushHexUtilSpec.m in Sources */,
 				235BB259199C085200B9EE63 /* MSSPushSpec.m in Sources */,

@@ -64,6 +64,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
         self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";
         self.application = [UIApplication sharedApplication];
+        
         [MSSPersistentStorage resetPushPersistedValues];
     }
     return self;

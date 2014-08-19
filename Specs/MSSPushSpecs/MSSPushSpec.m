@@ -107,7 +107,7 @@ describe(@"MSSPush", ^{
             for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
-                [MSSPersistentStorage performSelector:stringSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
+                [MSSPersistentStorage performSelector:dataSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
                 [MSSPush setRegistrationParameters:helper.params];
                 [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;

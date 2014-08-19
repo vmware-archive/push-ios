@@ -26,7 +26,27 @@
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
             id value = [self valueForKey:propertyName];
             if (value) {
-                [foundationType setObject:value forKey:remoteKey];
+                NSArray *components = [remoteKey componentsSeparatedByString:@"."];
+                if (components.count == 1) {
+                    // Handle simple items
+                    foundationType[remoteKey] = value;
+                } else if (components.count > 1) {
+                    // Handle nested items
+                    NSUInteger componentIndex = 0;
+                    id currentItem = foundationType;
+                    while (componentIndex < components.count) {
+                        id componentName = components[componentIndex];
+                        if (componentIndex == components.count - 1) {
+                            currentItem[componentName] = value;
+                        } else {
+                            if (!currentItem[componentName]) {
+                                currentItem[componentName] = [NSMutableDictionary dictionary];
+                            }
+                            currentItem = currentItem[componentName];
+                        }
+                        componentIndex += 1;
+                    }
+                }
             }
         }];
         
@@ -67,8 +87,9 @@
         NSDictionary *mapping = [self.class localToRemoteMapping];
         result = [[self alloc] init];
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
-            if (dict[remoteKey]) {
-                [result setValue:dict[remoteKey] forKey:propertyName];
+            id value = [dict valueForKeyPath:remoteKey];
+            if (value) {
+                [result setValue:value forKey:propertyName];
             }
         }];
     }

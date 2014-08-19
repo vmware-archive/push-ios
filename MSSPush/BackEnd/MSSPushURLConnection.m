@@ -6,7 +6,7 @@
 #import "MSSParameters.h"
 #import "MSSPushURLConnection.h"
 #import "MSSHardwareUtil.h"
-#import "MSSPushRegistrationRequestData.h"
+#import "MSSPushRegistrationPostRequestData.h"
 #import "NSObject+MSSJsonizable.h"
 #import "MSSPushClient.h"
 #import "MSSPushHexUtil.h"
@@ -125,7 +125,8 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
                    variantSecret:(NSString *)variantSecret
 {
     NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
-    [request setValue:[NSString stringWithFormat:@"Basic  %@", authString] forHTTPHeaderField:@"Authorization"];
+    NSString *authToken = [NSString stringWithFormat:@"Basic  %@", authString];
+    [request setValue:authToken forHTTPHeaderField:@"Authorization"];
 }
 
 + (NSString *)base64String:(NSString *)normalString
@@ -143,22 +144,22 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
                                       parameters:(MSSParameters *)parameters
 {
     NSError *error = nil;
-    MSSPushRegistrationRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
+    MSSPushRegistrationPostRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
                                                                            parameters:parameters];
     return [requestData mss_toJSONData:&error];
 }
 
-+ (MSSPushRegistrationRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
++ (MSSPushRegistrationPostRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
                                                        parameters:(MSSParameters *)parameters
 {
-    MSSPushRegistrationRequestData *requestData = [[MSSPushRegistrationRequestData alloc] init];
+    MSSPushRegistrationPostRequestData *requestData = [[MSSPushRegistrationPostRequestData alloc] init];
     requestData.registrationToken = [MSSPushHexUtil hexDumpForData:apnsDeviceToken];
     requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = [MSSHardwareUtil deviceManufacturer];
     requestData.deviceModel = [MSSHardwareUtil deviceModel];
     requestData.os = [MSSHardwareUtil operatingSystem];
     requestData.osVersion = [MSSHardwareUtil operatingSystemVersion];
-    requestData.tags = parameters.tags;
+//    requestData.tags = parameters.tags;
     return requestData;
 }
 

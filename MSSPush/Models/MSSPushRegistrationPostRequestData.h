@@ -5,8 +5,10 @@
 #import <UIKit/UIKit.h>
 #import "MSSPushRegistrationData.h"
 
-@interface MSSPushRegistrationRequestData : MSSPushRegistrationData
+#define kTags @"tags"
 
-@property NSString *secret;
+@interface MSSPushRegistrationPostRequestData : MSSPushRegistrationData
+
+@property NSArray *tags;
 
 @end
