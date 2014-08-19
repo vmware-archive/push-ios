@@ -28,7 +28,7 @@ void (^checkPramatersAreValid)(NSString *, MSSParameters *) = ^(NSString *pramTy
             [model setValue:nil forKey:propertyName];
             
             BOOL (^valid)(MSSParameters *) = ^BOOL(MSSParameters *model) {
-                return [pramType isEqualToString:@"push"] ? [model pushParametersValid] : [model analyticsParametersValid];
+                return [model pushParametersValid];
             };
             [[theValue(valid(model)) should] beFalse];
             
@@ -55,27 +55,17 @@ describe(@"MSSRegistrationParameters", ^{
             model = [MSSParameters parameters];
             [model setPushDeviceAlias:TEST_DEVICE_ALIAS];
             [model setPushAPIURL:TEST_DEVICE_API_URL];
-            [model setAnalyticsAPIURL:TEST_ANALYTICS_URL];
             
             [model setDevelopmentPushVariantSecret:TEST_VARIANT_SECRET];
             [model setProductionPushVariantSecret:TEST_VARIANT_SECRET];
             
             [model setDevelopmentPushVariantUUID:TEST_VARIANT_UUID];
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
-            
-            [model setAnalyticsAPIURL:TEST_DEVICE_API_URL];
-            [model setDevelopmentAnalyticsKey:TEST_ANALYTICS_KEY];
-            [model setProductionAnalyticsKey:TEST_ANALYTICS_KEY];
         });
         
         it(@"should require all push properties to be non-nil and non-empty", ^{
             [[theValue([model pushParametersValid]) should] beTrue];
             checkPramatersAreValid(@"push", model);
-        });
-        
-        it(@"should require all analytics properties to be non-nil and non-empty", ^{
-            [[theValue([model pushParametersValid]) should] beTrue];
-            checkPramatersAreValid(@"analytics", model);
         });
     });
     
@@ -89,11 +79,6 @@ describe(@"MSSRegistrationParameters", ^{
             [[model shouldNot] beNil];
             [[theValue([model pushParametersValid]) should] beTrue];
         });
-        
-        it(@"analytics Parameters should be initialized successfully and valid", ^{
-            [[model shouldNot] beNil];
-            [[theValue([model analyticsParametersValid]) should] beTrue];
-        });
     });
 
     context(@"initializing with invalid arguments from plist", ^{
@@ -105,11 +90,6 @@ describe(@"MSSRegistrationParameters", ^{
         it(@"push Parameters should be initialized successfully and invalid", ^{
             [[model shouldNot] beNil];
             [[theValue([model pushParametersValid]) should] beFalse];
-        });
-        
-        it(@"analytics Parameters should be initialized successfully and invalid", ^{
-            [[model shouldNot] beNil];
-            [[theValue([model analyticsParametersValid]) should] beFalse];
         });
     });
 });

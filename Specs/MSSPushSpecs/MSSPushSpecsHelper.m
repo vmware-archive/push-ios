@@ -37,10 +37,6 @@
 
 NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
 
-NSString *const TEST_ANALYTICS_URL_1   = @"http://testAnalytics.url.com";
-NSString *const TEST_ANALYTICS_KEY     = @"TEST-ANALYTICS-KEY";
-
-
 NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_VARIANT_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
@@ -196,8 +192,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushAutoRegistrationEnabled = YES;
-    params.analyticsAPIURL = TEST_ANALYTICS_URL_1;
-    params.developmentAnalyticsKey = TEST_ANALYTICS_KEY;
     self.params = params;
     return self.params;
 }

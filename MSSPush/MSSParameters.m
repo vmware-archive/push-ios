@@ -53,11 +53,6 @@ static BOOL kInDebug = NO;
     return kInDebug ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
 
-- (NSString *)analyticsKey
-{
-    return kInDebug ? self.developmentAnalyticsKey : self.productionAnalyticsKey;
-}
-
 - (BOOL)pushParametersValid;
 {
     SEL selectors[] = {
@@ -68,25 +63,6 @@ static BOOL kInDebug = NO;
         @selector(developmentPushVariantSecret),
         @selector(productionPushVariantUUID),
         @selector(productionPushVariantSecret),
-    };
-
-    for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
-        id value = [self valueForKey:NSStringFromSelector(selectors[i])];
-        if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
-            MSSPushLog(@"MSSParameters failed validation caused by an invalid parameter %@.", NSStringFromSelector(selectors[i]));
-            return NO;
-            break;
-        }
-    }
-    return YES;
-}
-
-- (BOOL)analyticsParametersValid
-{
-    SEL selectors[] = {
-        @selector(analyticsAPIURL),
-        @selector(developmentAnalyticsKey),
-        @selector(productionAnalyticsKey),
     };
 
     for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {

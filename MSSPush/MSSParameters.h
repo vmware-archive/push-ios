@@ -23,15 +23,6 @@
 @property (copy) NSArray *tags;
 
 /**
- * Analytics Parameters
- */
-@property (copy) NSString *analyticsAPIURL;
-@property (copy) NSString *developmentAnalyticsKey;
-@property (copy) NSString *productionAnalyticsKey;
-
-
-
-/**
  * Creates an instance using the values set in the `MSSParameters.plist` file.
  */
 + (MSSParameters *)defaultParameters;
@@ -53,11 +44,6 @@
 - (BOOL)pushParametersValid;
 
 /**
- * Validate Analytics Parameter properties
- */
-- (BOOL)analyticsParametersValid;
-
-/**
  * The Debug state of the application
  */
 - (BOOL)inDebugMode;
@@ -71,10 +57,5 @@
  * The variant Secret (resolved using the inProduction flag).
  */
 - (NSString *)variantSecret;
-
-/**
- * The analytics key (resolved using the inProduction flag).
- */
-- (NSString *)analyticsKey;
 
 @end

@@ -16,11 +16,5 @@
 	<string>DEV Put sweet chili sauce on everything</string>
 	<key>developmentPushVariantUUID</key>
 	<string>DEV-SOS-WE-LIKE-IT-SPICY</string>
-	<key>analyticsAPIURL</key>
-	<string>http://analyticsURL.com</string>
-	<key>productionAnalyticsKey</key>
-	<string>ANALYTICS-KEY</string>
-	<key>developmentAnalyticsKey</key>
-	<string>ANALYTICS-KEY</string>
 </dict>
 </plist>
