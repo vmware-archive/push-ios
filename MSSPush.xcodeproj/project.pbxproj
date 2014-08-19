@@ -56,6 +56,8 @@
 		2318E6B6199C039A0054C274 /* MSSPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E687199C039A0054C274 /* MSSPushHexUtil.m */; };
 		D45B1D7A19A2944000F57230 /* MSSPushRegistrationPutRequestData.h in Headers */ = {isa = PBXBuildFile; fileRef = D45B1D7819A2944000F57230 /* MSSPushRegistrationPutRequestData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D45B1D7B19A2944000F57230 /* MSSPushRegistrationPutRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = D45B1D7919A2944000F57230 /* MSSPushRegistrationPutRequestData.m */; };
+		D4F3AC4F19A3A25F005E84FF /* MSSTagsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F3AC4D19A3A25F005E84FF /* MSSTagsHelper.h */; };
+		D4F3AC5019A3A25F005E84FF /* MSSTagsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC4E19A3A25F005E84FF /* MSSTagsHelper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -108,6 +110,8 @@
 		2318E687199C039A0054C274 /* MSSPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushHexUtil.m; sourceTree = "<group>"; };
 		D45B1D7819A2944000F57230 /* MSSPushRegistrationPutRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushRegistrationPutRequestData.h; sourceTree = "<group>"; };
 		D45B1D7919A2944000F57230 /* MSSPushRegistrationPutRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushRegistrationPutRequestData.m; sourceTree = "<group>"; };
+		D4F3AC4D19A3A25F005E84FF /* MSSTagsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSTagsHelper.h; sourceTree = "<group>"; };
+		D4F3AC4E19A3A25F005E84FF /* MSSTagsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSTagsHelper.m; sourceTree = "<group>"; };
 		F1B601851922A12500B65371 /* MSSPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -222,6 +226,8 @@
 				2318E685199C039A0054C274 /* MSSPushErrorUtil.m */,
 				2318E686199C039A0054C274 /* MSSPushHexUtil.h */,
 				2318E687199C039A0054C274 /* MSSPushHexUtil.m */,
+				D4F3AC4D19A3A25F005E84FF /* MSSTagsHelper.h */,
+				D4F3AC4E19A3A25F005E84FF /* MSSTagsHelper.m */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -264,6 +270,7 @@
 				2318E6AC199C039A0054C274 /* MSSNotifications.h in Headers */,
 				2318E69C199C039A0054C274 /* MSSParameters.h in Headers */,
 				2318E696199C039A0054C274 /* MSSAppDelegateProxy.h in Headers */,
+				D4F3AC4F19A3A25F005E84FF /* MSSTagsHelper.h in Headers */,
 				2318E6A4199C039A0054C274 /* MSSPersistentStorage+Push.h in Headers */,
 				2318E6AE199C039A0054C274 /* MSSPersistentStorage.h in Headers */,
 				2318E688199C039A0054C274 /* MSSPushURLConnection.h in Headers */,
@@ -374,6 +381,7 @@
 				2318E69B199C039A0054C274 /* MSSClient.m in Sources */,
 				2318E689199C039A0054C274 /* MSSPushURLConnection.m in Sources */,
 				2318E6A1199C039A0054C274 /* MSSPush.m in Sources */,
+				D4F3AC5019A3A25F005E84FF /* MSSTagsHelper.m in Sources */,
 				2318E6B1199C039A0054C274 /* MSSPushDebug.m in Sources */,
 				2318E693199C039A0054C274 /* MSSPushRegistrationResponseData.m in Sources */,
 				2318E68B199C039A0054C274 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
