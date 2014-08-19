@@ -4,7 +4,7 @@
 
 #import "MSSPushURLConnection.h"
 #import "MSSParameters.h"
-#import "MSSPersistentStorage+Push.h"
+#import "MSSPushPersistentStorage.h"
 #import "MSSAppDelegateProxy.h"
 #import "MSSPushDebug.h"
 #import "MSSPush.h"
@@ -51,7 +51,7 @@ NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
         pushClient.registrationParameters.pushAutoRegistrationEnabled)
     {
         pushClient.registrationParameters = parameters;
-        [pushClient APNSRegistrationSuccess:[MSSPersistentStorage APNSDeviceToken]];
+        [pushClient APNSRegistrationSuccess:[MSSPushPersistentStorage APNSDeviceToken]];
         
     } else {
         pushClient.registrationParameters = parameters;
@@ -60,7 +60,7 @@ NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
 
 + (BOOL)isRegistered
 {
-    return [MSSPersistentStorage serverDeviceID] && [MSSPersistentStorage APNSDeviceToken];
+    return [MSSPushPersistentStorage serverDeviceID] && [MSSPushPersistentStorage APNSDeviceToken];
 }
 
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types

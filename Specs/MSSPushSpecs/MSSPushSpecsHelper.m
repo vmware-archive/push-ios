@@ -10,7 +10,7 @@
 #import "MSSPush.h"
 #import "JRSwizzle.h"
 #import "MSSPushDebug.h"
-#import "MSSPersistentStorage+Push.h"
+#import "MSSPushPersistentStorage.h"
 #import "MSSParameters.h"
 
 #if !__has_feature(objc_arc)
@@ -65,7 +65,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";
         self.application = [UIApplication sharedApplication];
         
-        [MSSPersistentStorage resetPushPersistedValues];
+        [MSSPushPersistentStorage reset];
     }
     return self;
 }
@@ -219,11 +219,11 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void)setupDefaultSavedParameters
 {
-    [MSSPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
-    [MSSPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
-    [MSSPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
-    [MSSPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
-    [MSSPersistentStorage setServerDeviceID:self.backEndDeviceId];
+    [MSSPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
+    [MSSPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+    [MSSPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+    [MSSPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
+    [MSSPushPersistentStorage setServerDeviceID:self.backEndDeviceId];
 }
 
 #pragma mark - NSURLConnection Helpers

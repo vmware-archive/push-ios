@@ -9,7 +9,7 @@
 #import "MSSPushClient.h"
 #import "MSSPushErrors.h"
 #import "MSSPushSpecsHelper.h"
-#import "MSSPersistentStorage+Push.h"
+#import "MSSPushPersistentStorage.h"
 #import "MSSParameters.h"
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+MSSPushAsync2Sync.h"
@@ -107,7 +107,7 @@ describe(@"MSSPush", ^{
             for (NSInteger i = 0; i < dataSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
-                [MSSPersistentStorage performSelector:dataSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
+                [MSSPushPersistentStorage performSelector:dataSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
                 [MSSPush setRegistrationParameters:helper.params];
                 [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;
@@ -121,7 +121,7 @@ describe(@"MSSPush", ^{
             for (NSInteger i = 0; i < stringSelectorsCount; i++) {
                 [helper setupDefaultSavedParameters];
                 
-                [MSSPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
+                [MSSPushPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
                 [MSSPush setRegistrationParameters:helper.params];
                 [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;
@@ -211,7 +211,7 @@ describe(@"MSSPush", ^{
         
         afterEach(^{
             [[theValue(expectedResult) should] beTrue];
-            [[[MSSPersistentStorage APNSDeviceToken] should] beNil];
+            [[[MSSPushPersistentStorage APNSDeviceToken] should] beNil];
             expectedResult = NO;
             testError = nil;
         });
@@ -377,12 +377,12 @@ describe(@"MSSPush", ^{
             };
             
             for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
-                [[[MSSPersistentStorage performSelector:selectors[i]] should] beNil];
+                [[[MSSPushPersistentStorage performSelector:selectors[i]] should] beNil];
             }
         });
         
         it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID and should remove all persisted parameters when unregister is successful", ^{
-            [[[MSSPersistentStorage serverDeviceID] shouldNot] beNil];
+            [[[MSSPushPersistentStorage serverDeviceID] shouldNot] beNil];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
             
             [MSSPush unregisterWithPushServerSuccess:^{

@@ -2,9 +2,9 @@
 //  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
-#import "MSSPersistentStorage.h"
+#import <Foundation/Foundation.h>
 
-@interface MSSPersistentStorage (Push)
+@interface MSSPushPersistentStorage : NSObject
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken;
 + (NSData *)APNSDeviceToken;
@@ -18,6 +18,13 @@
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;
 
-+ (void)resetPushPersistedValues;
++ (void)setServerDeviceID:(NSString *)backEndDeviceID;
++ (NSString *)serverDeviceID;
+
++ (void)reset;
+
++ (void)persistValue:(id)value forKey:(id)key;
++ (id)persistedValueForKey:(id)key;
++ (void)removeObjectForKey:(id)key;
 
 @end

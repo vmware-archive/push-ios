@@ -8,7 +8,7 @@
 #import "MSSParameters.h"
 #import "MSSAppDelegate.h"
 #import "MSSAppDelegateProxy.h"
-#import "MSSPersistentStorage+Push.h"
+#import "MSSPushPersistentStorage.h"
 #import "MSSPushURLConnection.h"
 #import "NSObject+MSSJsonizable.h"
 #import "MSSPushRegistrationResponseData.h"
@@ -56,10 +56,10 @@
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure
 {
-    [MSSPushURLConnection unregisterDeviceID:[MSSPersistentStorage serverDeviceID]
+    [MSSPushURLConnection unregisterDeviceID:[MSSPushPersistentStorage serverDeviceID]
                                   parameters:self.registrationParameters
                                      success:^(NSURLResponse *response, NSData *data) {
-                                         [MSSPersistentStorage resetPushPersistedValues];
+                                         [MSSPushPersistentStorage reset];
                                          
                                          if (success) {
                                              success();
@@ -113,11 +113,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         }
         
         MSSPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
-        [MSSPersistentStorage setAPNSDeviceToken:deviceToken];
-        [MSSPersistentStorage setServerDeviceID:parsedData.deviceUUID];
-        [MSSPersistentStorage setVariantUUID:parameters.variantUUID];
-        [MSSPersistentStorage setVariantSecret:parameters.variantSecret];
-        [MSSPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
+        [MSSPushPersistentStorage setAPNSDeviceToken:deviceToken];
+        [MSSPushPersistentStorage setServerDeviceID:parsedData.deviceUUID];
+        [MSSPushPersistentStorage setVariantUUID:parameters.variantUUID];
+        [MSSPushPersistentStorage setVariantSecret:parameters.variantSecret];
+        [MSSPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
         
         if (successBlock) {
             successBlock();
@@ -145,7 +145,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                                                                   success:self.successBlock
                                                                                   failure:self.failureBlock];
         
-        [MSSPushURLConnection updateRegistrationWithDeviceID:[MSSPersistentStorage serverDeviceID]
+        [MSSPushURLConnection updateRegistrationWithDeviceID:[MSSPushPersistentStorage serverDeviceID]
                                                   parameters:self.registrationParameters
                                                  deviceToken:deviceToken
                                                      success:registrationBlock
@@ -181,7 +181,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                       parameters:(MSSParameters *)parameters
 {
     // If not currently registered with the back-end then update registration is not required
-    if (![MSSPersistentStorage APNSDeviceToken]) {
+    if (![MSSPushPersistentStorage APNSDeviceToken]) {
         return NO;
     }
     
@@ -200,7 +200,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                 parameters:(MSSParameters *)parameters
 {
     // If not currently registered with the back-end then registration will be required
-    if (![MSSPersistentStorage serverDeviceID]) {
+    if (![MSSPushPersistentStorage serverDeviceID]) {
         return YES;
     }
     
@@ -222,19 +222,19 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 + (BOOL)localParametersMatchNewParameters:(MSSParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
-    NSString *savedVariantUUID = [MSSPersistentStorage variantUUID];
+    NSString *savedVariantUUID = [MSSPushPersistentStorage variantUUID];
     if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
         MSSPushLog(@"Parameters specify a different variantUUID. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    NSString *savedVariantSecret = [MSSPersistentStorage variantSecret];
+    NSString *savedVariantSecret = [MSSPushPersistentStorage variantSecret];
     if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
         MSSPushLog(@"Parameters specify a different variantSecret. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    NSString *savedDeviceAlias = [MSSPersistentStorage deviceAlias];
+    NSString *savedDeviceAlias = [MSSPushPersistentStorage deviceAlias];
     if ((parameters.pushDeviceAlias == nil && savedDeviceAlias != nil) || (parameters.pushDeviceAlias != nil && ![parameters.pushDeviceAlias isEqualToString:savedDeviceAlias])) {
         MSSPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
         return NO;
@@ -244,7 +244,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken {
-    if (![deviceToken isEqualToData:[MSSPersistentStorage APNSDeviceToken]]) {
+    if (![deviceToken isEqualToData:[MSSPushPersistentStorage APNSDeviceToken]]) {
         MSSPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
         return NO;
     }
