@@ -14,11 +14,11 @@ describe(@"MSSTagsHelper", ^{
     context(@"nil arguments", ^{
         
         it(@"should take a nil list for the saved items", ^{
-            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:nil newTags:@[]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:nil newTags:[NSSet set]];
         });
         
         it(@"should take a nil list for the new items", ^{
-            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[] newTags:nil];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet set] newTags:nil];
         });
 
         it(@"should take a nil list for the all items", ^{
@@ -32,7 +32,7 @@ describe(@"MSSTagsHelper", ^{
     });
     
     it(@"should return empty lists when given empty lists", ^{
-        tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[] newTags:@[]];
+        tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet set] newTags:[NSSet set]];
         [[tagsHelper.subscribeTags should] beEmpty];
         [[tagsHelper.unsubscribeTags should] beEmpty];
     });
@@ -41,10 +41,10 @@ describe(@"MSSTagsHelper", ^{
        
         it(@"should always return when the new tags list", ^{
             
-            NSMutableArray *newTags = [NSMutableArray array];
+            NSMutableSet *newTags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
                 [newTags addObject:[NSString stringWithFormat:@"%d", i]];
-                tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[] newTags:newTags];
+                tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet set] newTags:newTags];
                 [[tagsHelper.subscribeTags should] equal:newTags];
                 [[tagsHelper.unsubscribeTags should] beEmpty];
             }
@@ -55,10 +55,10 @@ describe(@"MSSTagsHelper", ^{
         
         it(@"should always return when the saved tags list", ^{
             
-            NSMutableArray *savedTags = [NSMutableArray array];
+            NSMutableSet *savedTags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
                 [savedTags addObject:[NSString stringWithFormat:@"%d", i]];
-                tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:savedTags newTags:@[]];
+                tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:savedTags newTags:[NSSet set]];
                 [[tagsHelper.subscribeTags should] beEmpty];
                 [[tagsHelper.unsubscribeTags should] equal:savedTags];
             }
@@ -69,11 +69,11 @@ describe(@"MSSTagsHelper", ^{
        
         it(@"should unsubscribe from all the old items and subscribe to all the new items", ^{
             
-            NSMutableArray *savedTags = [NSMutableArray array];
+            NSMutableSet *savedTags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
                 [savedTags addObject:[NSString stringWithFormat:@"%d", i]];
                 
-                NSMutableArray *newTags = [NSMutableArray array];
+                NSMutableSet *newTags = [NSMutableSet set];
                 for (int j = 10; j < 20; j += 1) {
                     [newTags addObject:[NSString stringWithFormat:@"%d", j]];
                     tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:savedTags newTags:newTags];
@@ -88,7 +88,7 @@ describe(@"MSSTagsHelper", ^{
        
         it(@"should have empty subscribe and unsubscribe lists", ^{
             
-            NSMutableArray *tags = [NSMutableArray array];
+            NSMutableSet *tags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
                 [tags addObject:[NSString stringWithFormat:@"%d", i]];
                 tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:tags newTags:tags];
@@ -101,21 +101,21 @@ describe(@"MSSTagsHelper", ^{
     context(@"other scenarios where the lists somewhat overlap", ^{
        
         it(@"overlap scenario 1", ^{
-            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[@1, @2, @3] newTags:@[@2, @3, @4]];
-            [[tagsHelper.subscribeTags should] equal:@[@4]];
-            [[tagsHelper.unsubscribeTags should] equal:@[@1]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet setWithArray:@[@1, @2, @3]] newTags:[NSSet setWithArray:@[@2, @3, @4]]];
+            [[tagsHelper.subscribeTags should] equal:[NSSet setWithArray:@[@4]]];
+            [[tagsHelper.unsubscribeTags should] equal:[NSSet setWithArray:@[@1]]];
         });
         
         it(@"overlap scenario 2", ^{
-            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[@1, @2] newTags:@[@2, @3, @4]];
-            [[tagsHelper.subscribeTags should] equal:@[@3, @4]];
-            [[tagsHelper.unsubscribeTags should] equal:@[@1]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet setWithArray:@[@1, @2]] newTags:[NSSet setWithArray:@[@2, @3, @4]]];
+            [[tagsHelper.subscribeTags should] equal:[NSSet setWithArray:@[@3, @4]]];
+            [[tagsHelper.unsubscribeTags should] equal:[NSSet setWithArray:@[@1]]];
         });
         
         it(@"overlap scenario 2", ^{
-            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:@[@1, @2, @3] newTags:@[@3, @4]];
-            [[tagsHelper.subscribeTags should] equal:@[@4]];
-            [[tagsHelper.unsubscribeTags should] equal:@[@1, @2]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:[NSSet setWithArray:@[@1, @2, @3]] newTags:[NSSet setWithArray:@[@3, @4]]];
+            [[tagsHelper.subscribeTags should] equal:[NSSet setWithArray:@[@4]]];
+            [[tagsHelper.unsubscribeTags should] equal:[NSSet setWithArray:@[@1, @2]]];
         });
     });
 

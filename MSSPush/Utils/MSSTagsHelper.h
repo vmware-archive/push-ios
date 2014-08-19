@@ -6,9 +6,9 @@
 
 @interface MSSTagsHelper : NSObject
 
-@property (nonatomic) NSArray *subscribeTags;
-@property (nonatomic) NSArray *unsubscribeTags;
+@property (nonatomic) NSSet *subscribeTags;
+@property (nonatomic) NSSet *unsubscribeTags;
 
-+ (instancetype) tagsHelperWithSavedTags:(NSArray*)savedTags newTags:(NSArray*)newTags;
++ (instancetype) tagsHelperWithSavedTags:(NSSet*)savedTags newTags:(NSSet*)newTags;
 
 @end
