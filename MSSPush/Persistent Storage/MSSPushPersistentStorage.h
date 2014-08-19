@@ -21,6 +21,9 @@
 + (void)setServerDeviceID:(NSString *)backEndDeviceID;
 + (NSString *)serverDeviceID;
 
++ (void)setTags:(NSSet *)tags;
++ (NSSet *)tags;
+
 + (void)reset;
 
 + (void)persistValue:(id)value forKey:(id)key;

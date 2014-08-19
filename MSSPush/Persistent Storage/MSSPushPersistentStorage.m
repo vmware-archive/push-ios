@@ -5,11 +5,11 @@
 #import "MSSPushPersistentStorage.h"
 
 static NSString *const KEY_BACK_END_DEVICE_ID = @"MSS_PUSH_BACK_END_DEVICE_ID";
-
 static NSString *const KEY_APNS_DEVICE_TOKEN  = @"MSS_PUSH_APNS_DEVICE_TOKEN";
 static NSString *const KEY_VARIANT_UUID       = @"MSS_PUSH_VARIANT_UUID";
 static NSString *const KEY_VARIANT_SECRET     = @"MSS_PUSH_VARIANT_SECRET";
 static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
+static NSString *const KEY_TAGS               = @"MSS_PUSH_TAGS";
 
 @implementation MSSPushPersistentStorage
 
@@ -21,6 +21,7 @@ static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
                       KEY_VARIANT_UUID,
                       KEY_VARIANT_SECRET,
                       KEY_DEVICE_ALIAS,
+                      KEY_TAGS,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -76,6 +77,21 @@ static NSString *const KEY_DEVICE_ALIAS       = @"MSS_PUSH_DEVICE_ALIAS";
 + (NSString *)serverDeviceID
 {
     return [self persistedValueForKey:KEY_BACK_END_DEVICE_ID];
+}
+
++ (void)setTags:(NSSet *)tags
+{
+    [self persistValue:tags.allObjects forKey:KEY_TAGS];
+}
+
++ (NSSet *)tags
+{
+    NSArray *tagsArray = [self persistedValueForKey:KEY_TAGS];
+    if (tagsArray) {
+        return [NSSet setWithArray:tagsArray];
+    } else {
+        return nil;
+    }
 }
 
 + (void)persistValue:(id)value forKey:(id)key

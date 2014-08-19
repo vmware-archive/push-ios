@@ -24,6 +24,7 @@ describe(@"MSSPushPersistentStorage", ^{
         [[[MSSPushPersistentStorage variantUUID] should] beNil];
         [[[MSSPushPersistentStorage variantSecret] should] beNil];
         [[[MSSPushPersistentStorage deviceAlias] should] beNil];
+        [[[MSSPushPersistentStorage tags] should] beNil];
     });
     
     it(@"should be able to save the APNS device token", ^{
@@ -49,6 +50,16 @@ describe(@"MSSPushPersistentStorage", ^{
     it(@"should be able to save the device alias", ^{
         [MSSPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
         [[[MSSPushPersistentStorage deviceAlias] should] equal:TEST_DEVICE_ALIAS_1];
+    });
+    
+    it(@"should be able to save populated tags", ^{
+        [MSSPushPersistentStorage setTags:[NSSet setWithObjects:@1, @2, nil]];
+        [[[MSSPushPersistentStorage tags] should] equal:[NSSet setWithObjects:@1, @2, nil]];
+    });
+    
+    it(@"should be able to save nil tags", ^{
+        [MSSPushPersistentStorage setTags:nil];
+        [[[MSSPushPersistentStorage tags] should] beNil];
     });
     
     it(@"should clear values after being reset", ^{
