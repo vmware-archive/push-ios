@@ -23,8 +23,6 @@
 		2318E695199C039A0054C274 /* MSSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E663199C039A0054C274 /* MSSAppDelegate.m */; };
 		2318E696199C039A0054C274 /* MSSAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E664199C039A0054C274 /* MSSAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E697199C039A0054C274 /* MSSAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E665199C039A0054C274 /* MSSAppDelegateProxy.m */; };
-		2318E698199C039A0054C274 /* MSSBase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E666199C039A0054C274 /* MSSBase.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E699199C039A0054C274 /* MSSBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E667199C039A0054C274 /* MSSBase.m */; };
 		2318E69C199C039A0054C274 /* MSSParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66A199C039A0054C274 /* MSSParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E69D199C039A0054C274 /* MSSParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66B199C039A0054C274 /* MSSParameters.m */; };
 		2318E69E199C039A0054C274 /* MSSPush-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2318E66C199C039A0054C274 /* MSSPush-Info.plist */; };
@@ -73,8 +71,6 @@
 		2318E663199C039A0054C274 /* MSSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegate.m; sourceTree = "<group>"; };
 		2318E664199C039A0054C274 /* MSSAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSAppDelegateProxy.h; sourceTree = "<group>"; };
 		2318E665199C039A0054C274 /* MSSAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSAppDelegateProxy.m; sourceTree = "<group>"; };
-		2318E666199C039A0054C274 /* MSSBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSBase.h; sourceTree = "<group>"; };
-		2318E667199C039A0054C274 /* MSSBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSBase.m; sourceTree = "<group>"; };
 		2318E66A199C039A0054C274 /* MSSParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSParameters.h; sourceTree = "<group>"; };
 		2318E66B199C039A0054C274 /* MSSParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSParameters.m; sourceTree = "<group>"; };
 		2318E66C199C039A0054C274 /* MSSPush-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "MSSPush-Info.plist"; sourceTree = "<group>"; };
@@ -100,8 +96,8 @@
 		D45B1D7919A2944000F57230 /* MSSPushRegistrationPutRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushRegistrationPutRequestData.m; sourceTree = "<group>"; };
 		D4B9FF2119A3CD950070A429 /* MSSPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushPersistentStorage.h; sourceTree = "<group>"; };
 		D4B9FF2219A3CD950070A429 /* MSSPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushPersistentStorage.m; sourceTree = "<group>"; };
-		D4B9FF2519A511370070A429 /* MSSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MSSPushClient.h; path = ../MSSPushClient.h; sourceTree = "<group>"; };
-		D4B9FF2619A511370070A429 /* MSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MSSPushClient.m; path = ../MSSPushClient.m; sourceTree = "<group>"; };
+		D4B9FF2519A511370070A429 /* MSSPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSPushClient.h; sourceTree = "<group>"; };
+		D4B9FF2619A511370070A429 /* MSSPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSPushClient.m; sourceTree = "<group>"; };
 		D4F3AC4D19A3A25F005E84FF /* MSSTagsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSSTagsHelper.h; sourceTree = "<group>"; };
 		D4F3AC4E19A3A25F005E84FF /* MSSTagsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSSTagsHelper.m; sourceTree = "<group>"; };
 		F1B601851922A12500B65371 /* MSSPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = MSSPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,12 +129,12 @@
 				2318E663199C039A0054C274 /* MSSAppDelegate.m */,
 				2318E664199C039A0054C274 /* MSSAppDelegateProxy.h */,
 				2318E665199C039A0054C274 /* MSSAppDelegateProxy.m */,
-				2318E666199C039A0054C274 /* MSSBase.h */,
-				2318E667199C039A0054C274 /* MSSBase.m */,
 				2318E66A199C039A0054C274 /* MSSParameters.h */,
 				2318E66B199C039A0054C274 /* MSSParameters.m */,
 				2318E66E199C039A0054C274 /* MSSPush.h */,
 				2318E66F199C039A0054C274 /* MSSPush.m */,
+				D4B9FF2519A511370070A429 /* MSSPushClient.h */,
+				D4B9FF2619A511370070A429 /* MSSPushClient.m */,
 			);
 			path = MSSPush;
 			sourceTree = "<group>";
@@ -205,8 +201,6 @@
 				2318E67C199C039A0054C274 /* MSSJSONValueTransformer.m */,
 				2318E67D199C039A0054C274 /* MSSNotifications.h */,
 				2318E67E199C039A0054C274 /* MSSNotifications.m */,
-				D4B9FF2519A511370070A429 /* MSSPushClient.h */,
-				D4B9FF2619A511370070A429 /* MSSPushClient.m */,
 				2318E681199C039A0054C274 /* MSSPushDebug.h */,
 				2318E682199C039A0054C274 /* MSSPushDebug.m */,
 				2318E683199C039A0054C274 /* MSSPushErrors.h */,
@@ -263,7 +257,6 @@
 				2318E688199C039A0054C274 /* MSSPushURLConnection.h in Headers */,
 				2318E68E199C039A0054C274 /* MSSPushRegistrationData.h in Headers */,
 				2318E6B3199C039A0054C274 /* MSSPushErrorUtil.h in Headers */,
-				2318E698199C039A0054C274 /* MSSBase.h in Headers */,
 				2318E6AA199C039A0054C274 /* MSSJSONValueTransformer.h in Headers */,
 				2318E6B5199C039A0054C274 /* MSSPushHexUtil.h in Headers */,
 				D4B9FF2719A511370070A429 /* MSSPushClient.h in Headers */,
@@ -370,7 +363,6 @@
 				2318E68B199C039A0054C274 /* NSURLConnection+MSSBackEndConnection.m in Sources */,
 				D45B1D7B19A2944000F57230 /* MSSPushRegistrationPutRequestData.m in Sources */,
 				2318E6A9199C039A0054C274 /* MSSHardwareUtil.m in Sources */,
-				2318E699199C039A0054C274 /* MSSBase.m in Sources */,
 				D4B9FF2819A511370070A429 /* MSSPushClient.m in Sources */,
 				2318E68D199C039A0054C274 /* NSObject+MSSJSONizable.m in Sources */,
 			);

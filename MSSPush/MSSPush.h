@@ -3,7 +3,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MSSBase.h"
 
 @class MSSParameters;
 
@@ -15,7 +14,16 @@
  * Usage: see `README.md`
  *
  */
-@interface MSSPush : MSSBase
+@interface MSSPush : NSObject
+
+/**
+ * Sets the registration parameters of the application for receiving push notifications. If some of the
+ * registration parameters are different then the last successful registration then the device will be re-registered with the new parameters.
+ *
+ * @param parameters Provides the parameters required for registration.  May not be `nil`.
+ *
+ */
++ (void)setRegistrationParameters:(MSSParameters *)parameters;
 
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
 
