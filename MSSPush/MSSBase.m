@@ -3,7 +3,7 @@
 //
 
 #import "MSSBase.h"
-#import "MSSClient.h"
+#import "MSSPushClient.h"
 #import "MSSParameters.h"
 
 @implementation MSSBase
@@ -14,7 +14,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
     
-    MSSClient *pushClient = [MSSClient shared];
+    MSSPushClient *pushClient = [MSSPushClient shared];
     pushClient.registrationParameters = parameters;
 }
 

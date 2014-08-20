@@ -2,23 +2,36 @@
 //  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <objc/runtime.h>
 
 #import "MSSPushClient.h"
+
+#import "MSSPushDebug.h"
+#import "MSSPushErrors.h"
 #import "MSSParameters.h"
 #import "MSSAppDelegate.h"
+#import "MSSNotifications.h"
+#import "MSSPushErrorUtil.h"
 #import "MSSAppDelegateProxy.h"
-#import "MSSPushPersistentStorage.h"
 #import "MSSPushURLConnection.h"
 #import "NSObject+MSSJsonizable.h"
+#import "MSSPushPersistentStorage.h"
 #import "MSSPushRegistrationResponseData.h"
-#import "NSURLConnection+MSSBackEndConnection.h"
-#import "MSSPushDebug.h"
-#import "MSSPushErrorUtil.h"
-#import "MSSPushErrors.h"
-#import "MSSNotifications.h"
+
+static MSSPushClient *_sharedMSSPushClient;
+static dispatch_once_t _sharedMSSPushClientToken;
 
 @implementation MSSPushClient
+
++ (instancetype)shared
+{
+    dispatch_once(&_sharedMSSPushClientToken, ^{
+        if (!_sharedMSSPushClient) {
+            _sharedMSSPushClient = [[self alloc] init];
+        }
+    });
+    return _sharedMSSPushClient;
+}
 
 - (id)init
 {
@@ -27,13 +40,30 @@
         self.notificationTypes = (UIRemoteNotificationTypeAlert
                                   |UIRemoteNotificationTypeBadge
                                   |UIRemoteNotificationTypeSound);
+        self.registrationParameters = [MSSParameters defaultParameters];
+        [self swapAppDelegate];
     }
     return self;
 }
 
 - (MSSAppDelegate *)swapAppDelegate
 {
-    MSSAppDelegate *pushAppDelegate = [super swapAppDelegate];
+    UIApplication *application = [UIApplication sharedApplication];
+    MSSAppDelegate *pushAppDelegate;
+    
+    if (application.delegate == self.appDelegateProxy) {
+        pushAppDelegate = (MSSAppDelegate *)[self.appDelegateProxy swappedAppDelegate];
+        
+    } else {
+        self.appDelegateProxy = [[MSSAppDelegateProxy alloc] init];
+        
+        @synchronized(application) {
+            pushAppDelegate = [[MSSAppDelegate alloc] init];
+            self.appDelegateProxy.originalAppDelegate = application.delegate;
+            self.appDelegateProxy.swappedAppDelegate = pushAppDelegate;
+            application.delegate = self.appDelegateProxy;
+        }
+    }
     
     [pushAppDelegate setPushRegistrationBlockWithSuccess:^(NSData *deviceToken) {
         [self APNSRegistrationSuccess:deviceToken];
@@ -43,7 +73,14 @@
             self.failureBlock(error);
         }
     }];
+    
     return pushAppDelegate;
+}
+
++ (void)resetSharedClient
+{
+    _sharedMSSPushClientToken = 0;
+    _sharedMSSPushClient = nil;
 }
 
 - (void)registerForRemoteNotifications
@@ -172,9 +209,9 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                                                         success:successBlock
                                                                         failure:failureBlock];
     [MSSPushURLConnection registerWithParameters:parameters
-                                    deviceToken:deviceToken
-                                        success:registrationBlock
-                                        failure:failureBlock];
+                                     deviceToken:deviceToken
+                                         success:registrationBlock
+                                         failure:failureBlock];
 }
 
 + (BOOL)updateRegistrationRequiredForDeviceToken:(NSData *)deviceToken
