@@ -48,7 +48,7 @@ NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
     MSSPushClient *pushClient = [MSSPushClient shared];
     if (pushClient.registrationParameters &&
         [self isRegistered] &&
-        pushClient.registrationParameters.pushAutoRegistrationEnabled)
+        parameters.pushAutoRegistrationEnabled)
     {
         pushClient.registrationParameters = parameters;
         [pushClient APNSRegistrationSuccess:[MSSPushPersistentStorage APNSDeviceToken]];
@@ -90,6 +90,7 @@ NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
     MSSPushClient *pushClient = [MSSPushClient shared];
     
     if (pushClient.registrationParameters.pushAutoRegistrationEnabled) {
+        MSSPushLog(@"App launch detected. Initiating automatic registration.");
         [pushClient registerForRemoteNotifications];
     }
 }

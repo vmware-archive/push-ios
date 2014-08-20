@@ -29,6 +29,8 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 @property (nonatomic) NSString *backEndDeviceId2;
 @property (nonatomic) NSString *base64AuthString1;
 @property (nonatomic) NSString *base64AuthString2;
+@property (nonatomic) NSSet *tags1;
+@property (nonatomic) NSSet *tags2;
 @property (nonatomic) MSSParameters *params;
 
 
@@ -55,7 +57,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_2;
 - (void) changeVariantUUIDInParameters:(NSString *)newVariantUUID;
 - (void) changeVariantSecretInParameters:(NSString *)newVariantSecret;
 - (void) changeDeviceAliasInParameters:(NSString *)newDeviceAlias;
-- (void) setupDefaultSavedParameters;
+- (void) setupDefaultPersistedParameters;
 
 // NSURLConnectionHelpers
 - (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error;

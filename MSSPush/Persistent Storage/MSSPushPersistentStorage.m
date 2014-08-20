@@ -69,9 +69,9 @@ static NSString *const KEY_TAGS               = @"MSS_PUSH_TAGS";
     return [self persistedValueForKey:KEY_DEVICE_ALIAS];
 }
 
-+ (void)setServerDeviceID:(NSString *)backEndDeviceID
++ (void)setServerDeviceID:(NSString *)serverDeviceID
 {
-    [self persistValue:backEndDeviceID forKey:KEY_BACK_END_DEVICE_ID];
+    [self persistValue:serverDeviceID forKey:KEY_BACK_END_DEVICE_ID];
 }
 
 + (NSString *)serverDeviceID

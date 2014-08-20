@@ -53,8 +53,8 @@ describe(@"MSSPushPersistentStorage", ^{
     });
     
     it(@"should be able to save populated tags", ^{
-        [MSSPushPersistentStorage setTags:[NSSet setWithObjects:@1, @2, nil]];
-        [[[MSSPushPersistentStorage tags] should] equal:[NSSet setWithObjects:@1, @2, nil]];
+        [MSSPushPersistentStorage setTags:helper.tags1];
+        [[[MSSPushPersistentStorage tags] should] equal:helper.tags1];
     });
     
     it(@"should be able to save nil tags", ^{
@@ -65,9 +65,17 @@ describe(@"MSSPushPersistentStorage", ^{
     it(@"should clear values after being reset", ^{
         [MSSPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
         [MSSPushPersistentStorage setServerDeviceID:helper.backEndDeviceId];
+        [MSSPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
+        [MSSPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+        [MSSPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
+        [MSSPushPersistentStorage setTags:helper.tags2];
         [MSSPushPersistentStorage reset];
         [[[MSSPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[MSSPushPersistentStorage serverDeviceID] should] beNil];
+        [[[MSSPushPersistentStorage deviceAlias] should] beNil];
+        [[[MSSPushPersistentStorage variantUUID] should] beNil];
+        [[[MSSPushPersistentStorage variantSecret] should] beNil];
+        [[[MSSPushPersistentStorage tags] should] beNil];
     });
 });
 

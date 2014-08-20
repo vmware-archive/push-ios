@@ -20,7 +20,7 @@
 @property (copy) NSString *developmentPushVariantSecret;
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushVariantSecret;
-@property (copy) NSArray *tags;
+@property (copy) NSSet *tags;
 
 /**
  * Creates an instance using the values set in the `MSSParameters.plist` file.

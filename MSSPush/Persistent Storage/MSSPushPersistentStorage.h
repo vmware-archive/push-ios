@@ -18,7 +18,7 @@
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;
 
-+ (void)setServerDeviceID:(NSString *)backEndDeviceID;
++ (void)setServerDeviceID:(NSString *)serverDeviceID;
 + (NSString *)serverDeviceID;
 
 + (void)setTags:(NSSet *)tags;

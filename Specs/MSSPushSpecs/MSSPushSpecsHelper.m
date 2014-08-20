@@ -59,6 +59,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
         self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
         self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";
+        self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
+        self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
         self.application = [UIApplication sharedApplication];
         
         [MSSPushPersistentStorage reset];
@@ -73,6 +75,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self.apnsDeviceToken2 = nil;
     self.backEndDeviceId = nil;
     self.backEndDeviceId2 = nil;
+    self.tags1 = nil;
+    self.tags2 = nil;
     self.application = nil;
     self.applicationDelegate = nil;
 }
@@ -192,6 +196,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushAutoRegistrationEnabled = YES;
+    params.tags = self.tags1;
     self.params = params;
     return self.params;
 }
@@ -211,13 +216,14 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [self.params setPushDeviceAlias:newDeviceAlias];
 }
 
-- (void)setupDefaultSavedParameters
+- (void)setupDefaultPersistedParameters
 {
     [MSSPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
     [MSSPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
     [MSSPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
     [MSSPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
     [MSSPushPersistentStorage setServerDeviceID:self.backEndDeviceId];
+    [MSSPushPersistentStorage setTags:self.tags1];
 }
 
 #pragma mark - NSURLConnection Helpers

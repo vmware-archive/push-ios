@@ -36,34 +36,24 @@ describe(@"MSSPush", ^{
     });
     
     describe(@"updating registration", ^{
-        
+
+        __block NSInteger successCount;
+        __block NSInteger registerCount;
+        __block NSInteger updateRegistrationCount;
+        __block void (^testBlock)(SEL sel, id newPersistedValue);
+
         beforeEach(^{
+            successCount = 0;
+            registerCount = 0;
+            updateRegistrationCount = 0;
+            
             [MSSPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
-        });
-        
-        it(@"should handle updating record on the push server when parameters or APNS token change", ^{
-            __block NSInteger successCount = 0;
-            __block NSInteger registerCount = 0;
-            __block NSInteger updateRegistrationCount = 0;
-            
-            SEL stringSelectors[] = {
-                @selector(setVariantUUID:),
-                @selector(setVariantSecret:),
-                @selector(setDeviceAlias:),
-            };
-            
-            SEL dataSelectors[] = {
-                @selector(setAPNSDeviceToken:),
-            };
-            
-            __block NSInteger stringSelectorsCount = sizeof(stringSelectors)/sizeof(stringSelectors[0]);
-            __block NSInteger dataSelectorsCount = sizeof(dataSelectors)/sizeof(dataSelectors[0]);
-            
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)];
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:stringSelectorsCount + dataSelectorsCount];
+
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:1];
+            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:1];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -102,38 +92,57 @@ describe(@"MSSPush", ^{
                 return nil;
             }];
             
-            NSString *differentValue = @"DIFFERENT_VALUE";
-            
-            for (NSInteger i = 0; i < dataSelectorsCount; i++) {
-                [helper setupDefaultSavedParameters];
+            testBlock = ^(SEL sel, id newPersistedValue) {
                 
-                [MSSPushPersistentStorage performSelector:dataSelectors[i] withObject:[differentValue dataUsingEncoding:NSUTF8StringEncoding]];
-                [MSSPush setRegistrationParameters:helper.params];
+                [helper setupDefaultPersistedParameters];
+                
+                [MSSPushPersistentStorage performSelector:sel withObject:newPersistedValue];
+                
                 [MSSPush setCompletionBlockWithSuccess:^{
                     successCount++;
                 } failure:^(NSError *error) {
                     fail(@"registration failure block executed");
                 }];
-                
+
+                helper.params.pushAutoRegistrationEnabled = NO;
+                [MSSPush setRegistrationParameters:helper.params];
                 [MSSPush registerForPushNotifications];
-            }
-            
-            for (NSInteger i = 0; i < stringSelectorsCount; i++) {
-                [helper setupDefaultSavedParameters];
-                
-                [MSSPushPersistentStorage performSelector:stringSelectors[i] withObject:differentValue];
-                [MSSPush setRegistrationParameters:helper.params];
-                [MSSPush setCompletionBlockWithSuccess:^{
-                    successCount++;
-                } failure:^(NSError *error) {
-                    fail(@"registration failure block executed");
-                }];
-            }
-            
-            [[theValue(successCount) shouldEventually] equal:theValue(stringSelectorsCount + dataSelectorsCount)];
-            [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(stringSelectorsCount + dataSelectorsCount)];
+            };
+        });
+        
+        afterEach(^{
+            [[theValue(successCount) shouldEventually] equal:theValue(1)];
+            [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
             [[theValue(registerCount) shouldEventually] equal:theValue(0)];
         });
+
+        it(@"should handle updating after the variantUuid changes", ^{
+            testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+        });
+        
+        it(@"should handle updating after the variantSecret changes", ^{
+            testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+        });
+        
+        it(@"should handle updating after the deviceAlias changes", ^{
+            testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+        });
+        
+        it(@"should handle updating after the APNSDeviceToken changes", ^{
+            testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT DATA" dataUsingEncoding:NSUTF8StringEncoding]);
+        });
+
+        it(@"should handle updating after the tags change to a different value", ^{
+            testBlock(@selector(setTags:), [NSSet setWithArray:@[ @"DIFFERENT TAG" ]]);
+            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+        });
+        
+        it(@"should handle updating after tags initially set", ^{
+            testBlock(@selector(setTags:), nil);
+            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+        });
+        
+        // TODO - more tests to test more scenarios of parameters changing (especially going from nil/changing to nil)
     });
     
     describe(@"successful registration", ^{
@@ -156,7 +165,7 @@ describe(@"MSSPush", ^{
                 __block NSData *newData;
                 __block NSHTTPURLResponse *newResponse;
                 
-                if ([request.HTTPMethod isEqualToString:@"PUT"] || [request.HTTPMethod isEqualToString:@"POST"]) {
+                if (/*[request.HTTPMethod isEqualToString:@"PUT"] || */[request.HTTPMethod isEqualToString:@"POST"]) {
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                     NSDictionary *dict = @{
                                            RegistrationAttributes.deviceOS           : TEST_OS,
@@ -169,6 +178,8 @@ describe(@"MSSPush", ^{
                                            kDeviceUUID                               : TEST_DEVICE_UUID,
                                            };
                     newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+                } else {
+                    fail(@"Request must be a POST");
                 }
                 
                 CompletionHandler handler = params[2];
@@ -180,15 +191,15 @@ describe(@"MSSPush", ^{
             [MSSPush setRegistrationParameters:helper.params];
             [MSSPush setCompletionBlockWithSuccess:^{
                 successBlockExecuted = YES;
-            }
-                                              failure:^(NSError *error) {
-                                                  fail(@"registration failure block executed");
-                                              }];
+            } failure:^(NSError *error) {
+                fail(@"registration failure block executed");
+            }];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
             successBlockExecuted = NO;
             [MSSPush load];
+            // TODO - confirm that the request body has the correct subscribe list of tags
             
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
@@ -224,9 +235,9 @@ describe(@"MSSPush", ^{
             
             [MSSPush setRegistrationParameters:helper.params];
             [MSSPush setCompletionBlockWithSuccess:nil
-                                              failure:^(NSError *error) {
-                                                  expectedResult = YES;
-                                              }];
+                                           failure:^(NSError *error) {
+                                               expectedResult = YES;
+                                           }];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
         });
@@ -350,7 +361,7 @@ describe(@"MSSPush", ^{
         __block BOOL successBlockExecuted = NO;
         
         beforeEach(^{
-            [helper setupDefaultSavedParameters];
+            [helper setupDefaultPersistedParameters];
             successBlockExecuted = NO;
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -400,7 +411,7 @@ describe(@"MSSPush", ^{
         __block BOOL failureBlockExecuted = NO;
         
         beforeEach(^{
-            [helper setupDefaultSavedParameters];
+            [helper setupDefaultPersistedParameters];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -438,7 +449,7 @@ describe(@"MSSPush", ^{
         __block BOOL failureBlockExecuted = NO;
         
         beforeEach(^{
-            [helper setupDefaultSavedParameters];
+            [helper setupDefaultPersistedParameters];
             failureBlockExecuted = NO;
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {

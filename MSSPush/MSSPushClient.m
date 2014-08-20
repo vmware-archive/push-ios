@@ -77,8 +77,18 @@ static dispatch_once_t _sharedMSSPushClientToken;
     return pushAppDelegate;
 }
 
+- (void)resetInstance
+{
+    self.registrationParameters = nil;
+    
+}
+
 + (void)resetSharedClient
 {
+    if (_sharedMSSPushClient) {
+        [_sharedMSSPushClient resetInstance];
+    }
+    
     _sharedMSSPushClientToken = 0;
     _sharedMSSPushClient = nil;
 }
@@ -155,6 +165,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [MSSPushPersistentStorage setVariantUUID:parameters.variantUUID];
         [MSSPushPersistentStorage setVariantSecret:parameters.variantSecret];
         [MSSPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
+        [MSSPushPersistentStorage setTags:parameters.tags];
         
         if (successBlock) {
             successBlock();
@@ -249,10 +260,6 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return YES;
     }
     
-    if (parameters.tags) {
-        return YES;
-    }
-    
     return NO;
 }
 
@@ -277,6 +284,14 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     
+    NSSet *savedTags = [MSSPushPersistentStorage tags];
+    BOOL areSavedTagsNilOrEmpty = savedTags == nil || savedTags.count == 0;
+    BOOL areNewTagsNilOrEmpty = parameters.tags == nil || parameters.tags.count == 0;
+    if ((areNewTagsNilOrEmpty && !areSavedTagsNilOrEmpty) || (!areNewTagsNilOrEmpty && ![parameters.tags isEqualToSet:savedTags])) {
+        MSSPushLog(@"Parameters specify a different set of tags. Update registration will be required.");
+        return NO;
+    }
+
     return YES;
 }
 
