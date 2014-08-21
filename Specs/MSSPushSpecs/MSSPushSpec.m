@@ -12,8 +12,11 @@
 #import "MSSPushPersistentStorage.h"
 #import "MSSParameters.h"
 #import "MSSPushBackEndRegistrationResponseDataTest.h"
+#import "MSSPushRegistrationPutRequestData.h"
+#import "MSSPushRegistrationPostRequestData.h"
 #import "NSURLConnection+MSSPushAsync2Sync.h"
 #import "NSURLConnection+MSSBackEndConnection.h"
+#import "NSObject+MSSJsonizable.h"
 
 SPEC_BEGIN(MSSPushSpecs)
 
@@ -61,14 +64,16 @@ describe(@"MSSPush", ^{
     describe(@"updating registration", ^{
 
         __block NSInteger successCount;
-        __block NSInteger registerCount;
         __block NSInteger updateRegistrationCount;
         __block void (^testBlock)(SEL sel, id newPersistedValue);
+        __block NSSet *expectedSubscribeTags;
+        __block NSSet *expectedUnsubscribeTags;
 
         beforeEach(^{
             successCount = 0;
-            registerCount = 0;
             updateRegistrationCount = 0;
+            expectedSubscribeTags = nil;
+            expectedUnsubscribeTags = nil;
             
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
@@ -88,11 +93,29 @@ describe(@"MSSPush", ^{
                 }
                 
                 if ([request.HTTPMethod isEqualToString:@"PUT"] || [request.HTTPMethod isEqualToString:@"POST"]) {
-                    if ([request.HTTPMethod isEqualToString:@"POST"]) {
-                        registerCount++;
-                        
-                    } else if ([request.HTTPMethod isEqualToString:@"PUT"]) {
+                    
+                    if ([request.HTTPMethod isEqualToString:@"PUT"]) {
                         updateRegistrationCount++;
+                    } else {
+                        fail(@"PUT update expected.");
+                    }
+                    
+                    NSError *error;
+                    MSSPushRegistrationPutRequestData *requestBody = [MSSPushRegistrationPutRequestData mss_fromJSONData:request.HTTPBody error:&error];
+                    if (error) {
+                        fail(@"Could not parse HTTP request body");
+                    }
+                    
+                    [[requestBody shouldNot] beNil];
+                    if (expectedSubscribeTags) {
+                        [[[NSSet setWithArray:requestBody.subscribeTags] should] equal:expectedSubscribeTags];
+                    } else {
+                        [[requestBody.subscribeTags should] beNil];
+                    }
+                    if (expectedUnsubscribeTags) {
+                        [[[NSSet setWithArray:requestBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
+                    } else {
+                        [[requestBody.unsubscribeTags should] beNil];
                     }
                     
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
@@ -135,7 +158,6 @@ describe(@"MSSPush", ^{
         afterEach(^{
             [[theValue(successCount) shouldEventually] equal:theValue(1)];
             [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
-            [[theValue(registerCount) shouldEventually] equal:theValue(0)];
         });
 
         it(@"should update after the variantUuid changes", ^{
@@ -167,33 +189,32 @@ describe(@"MSSPush", ^{
         });
         
         it(@"should update after the tags change to a different value", ^{
-            testBlock(@selector(setTags:), [NSSet setWithArray:@[ @"DIFFERENT TAG" ]]);
-            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+            expectedSubscribeTags = helper.tags1;
+            expectedUnsubscribeTags = [NSSet setWithArray:@[ @"DIFFERENT TAG" ]];
+            testBlock(@selector(setTags:), expectedUnsubscribeTags);
         });
         
         it(@"should update after tags initially set from nil", ^{
+            expectedSubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), nil);
-            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
         
         it(@"should update after tags initially set from empty", ^{
+            expectedSubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), [NSSet set]);
-            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
         
         it(@"should update after tags change to nil", ^{
             helper.params.pushTags = nil;
+            expectedUnsubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), helper.tags1);
-            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
         
         it(@"should update after tags change to empty", ^{
             helper.params.pushTags = [NSSet set];
+            expectedUnsubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), helper.tags1);
-            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
-        
-        // TODO - more tests to test more scenarios of parameters changing (especially going from nil/changing to nil)
     });
     
     describe(@"successful registration", ^{
@@ -205,7 +226,10 @@ describe(@"MSSPush", ^{
         });
         
         it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
+            
             __block BOOL successBlockExecuted = NO;
+            __block NSSet *expectedTags;
+            
             [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:2];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:2];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
@@ -216,28 +240,41 @@ describe(@"MSSPush", ^{
                 __block NSData *newData;
                 __block NSHTTPURLResponse *newResponse;
                 
-                if ([request.HTTPMethod isEqualToString:@"POST"]) {
-                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                    NSDictionary *dict = @{
-                                           RegistrationAttributes.deviceOS           : TEST_OS,
-                                           RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
-                                           RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
-                                           RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                                           RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
-                                           RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
-                                           RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
-                                           kDeviceUUID                               : TEST_DEVICE_UUID,
-                                           };
-                    newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
-                } else {
+                if (![request.HTTPMethod isEqualToString:@"POST"]) {
                     fail(@"Request must be a POST");
                 }
                 
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSDictionary *dict = @{
+                                       RegistrationAttributes.deviceOS           : TEST_OS,
+                                       RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                       RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
+                                       RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                                       RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                                       RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                                       RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                                       kDeviceUUID                               : TEST_DEVICE_UUID,
+                                       };
+                newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+                
+                NSError *error;
+                MSSPushRegistrationPostRequestData *requestBody = [MSSPushRegistrationPostRequestData mss_fromJSONData:request.HTTPBody error:&error];
+                if (error) {
+                    fail(@"Could not parse HTTP request body");
+                }
+                [[requestBody shouldNot] beNil];
+                if (expectedTags) {
+                    [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
+                } else {
+                    [[requestBody.tags should] beNil];
+                }
+             
                 CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
                 return nil;
             }];
             
+            expectedTags = helper.tags1;
             [MSSPush load];
             [MSSPush setRegistrationParameters:helper.params];
             [MSSPush setCompletionBlockWithSuccess:^{
@@ -422,6 +459,8 @@ describe(@"MSSPush", ^{
                 
                 if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
+                } else {
+                    fail(@"Request method must be DELETE");
                 }
                 
                 CompletionHandler handler = params[2];

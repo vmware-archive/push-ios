@@ -7,10 +7,13 @@
 #import "MSSPushURLConnection.h"
 #import "MSSHardwareUtil.h"
 #import "MSSPushRegistrationPostRequestData.h"
+#import "MSSPushRegistrationPutRequestData.h"
 #import "NSObject+MSSJsonizable.h"
 #import "MSSPushClient.h"
 #import "MSSPushHexUtil.h"
 #import "NSURLConnection+MSSBackEndConnection.h"
+#import "MSSTagsHelper.h"
+#import "MSSPushPersistentStorage.h"
 
 NSString *const kBasicAuthorizationKey = @"Authorization";
 
@@ -114,7 +117,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
     request.HTTPMethod = method;
     [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
-    request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken parameters:parameters];
+    request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     MSSPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
@@ -141,15 +144,27 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
 }
 
 + (NSData *)requestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
+                                          method:(NSString *)method
                                       parameters:(MSSParameters *)parameters
 {
     NSError *error = nil;
-    MSSPushRegistrationPostRequestData *requestData = [self requestDataForAPNSDeviceToken:apnsDeviceToken
-                                                                           parameters:parameters];
-    return [requestData mss_toJSONData:&error];
+    if ([method isEqualToString:@"POST"]) {
+
+        MSSPushRegistrationPostRequestData *requestData = [self pushRequestDataForAPNSDeviceToken:apnsDeviceToken
+                                                                                       parameters:parameters];
+        return [requestData mss_toJSONData:&error];
+    } else if ([method isEqualToString:@"PUT"]) {
+        
+        MSSPushRegistrationPutRequestData *requestData = [self putRequestDataForAPNSDeviceToken:apnsDeviceToken
+                                                                                       parameters:parameters];
+        return [requestData mss_toJSONData:&error];
+    } else {
+        [NSException raise:NSInvalidArgumentException format:@"Unknown method type"];
+    }
+    return nil;
 }
 
-+ (MSSPushRegistrationPostRequestData *)requestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
++ (MSSPushRegistrationPostRequestData *)pushRequestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
                                                        parameters:(MSSParameters *)parameters
 {
     MSSPushRegistrationPostRequestData *requestData = [[MSSPushRegistrationPostRequestData alloc] init];
@@ -159,7 +174,31 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     requestData.deviceModel = [MSSHardwareUtil deviceModel];
     requestData.os = [MSSHardwareUtil operatingSystem];
     requestData.osVersion = [MSSHardwareUtil operatingSystemVersion];
-//    requestData.tags = parameters.tags;
+    if (parameters.pushTags && parameters.pushTags.count > 0) {
+        requestData.tags = parameters.pushTags.allObjects;
+    }
+    return requestData;
+}
+
++ (MSSPushRegistrationPutRequestData *)putRequestDataForAPNSDeviceToken:(NSData *)apnsDeviceToken
+                                                              parameters:(MSSParameters *)parameters
+{
+    MSSPushRegistrationPutRequestData *requestData = [[MSSPushRegistrationPutRequestData alloc] init];
+    requestData.registrationToken = [MSSPushHexUtil hexDumpForData:apnsDeviceToken];
+    requestData.deviceAlias = parameters.pushDeviceAlias;
+    requestData.deviceManufacturer = [MSSHardwareUtil deviceManufacturer];
+    requestData.deviceModel = [MSSHardwareUtil deviceModel];
+    requestData.os = [MSSHardwareUtil operatingSystem];
+    requestData.osVersion = [MSSHardwareUtil operatingSystemVersion];
+    
+    NSSet *savedTags = [MSSPushPersistentStorage tags];
+    MSSTagsHelper *tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:savedTags newTags:parameters.pushTags];
+    if (tagsHelper.subscribeTags && tagsHelper.subscribeTags.count > 0) {
+        requestData.subscribeTags = tagsHelper.subscribeTags.allObjects;
+    }
+    if (tagsHelper.unsubscribeTags && tagsHelper.unsubscribeTags.count > 0) {
+        requestData.unsubscribeTags = tagsHelper.unsubscribeTags.allObjects;
+    }
     return requestData;
 }
 

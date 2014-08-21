@@ -10,6 +10,9 @@
 
 @interface MSSPushRegistrationPutRequestData : MSSPushRegistrationData
 
+// Note - these properties need to be NSArrays since the iOS built-in JSON
+// serializer can't seem to handle NSSet objects.
+
 @property NSArray *subscribeTags;
 @property NSArray *unsubscribeTags;
 

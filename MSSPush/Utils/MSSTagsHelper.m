@@ -15,21 +15,25 @@
 {
     self = [super init];
     if (self) {
-        self.subscribeTags = [NSSet set];
-        self.unsubscribeTags = [NSSet set];
-        if (savedTags && newTags) {
-            [self generateListsWithSavedTags:savedTags newTags:newTags];
-        }
+        [self generateListsWithSavedTags:savedTags newTags:newTags];
     }
     return self;
 }
 
 - (void) generateListsWithSavedTags:(NSSet*)savedTags newTags:(NSSet*)newTags
 {
-    if (savedTags.count <= 0) {
+    if (!savedTags && !newTags) {
+        self.unsubscribeTags = [NSSet set];
+        self.subscribeTags = [NSSet set];
+        
+    } else if (!savedTags || savedTags.count <= 0) {
+        self.unsubscribeTags = [NSSet set];
         self.subscribeTags = [NSSet setWithSet:newTags];
-    } else if (newTags.count <= 0) {
+
+    } else if (!newTags || newTags.count <= 0) {
+        self.subscribeTags = [NSSet set];
         self.unsubscribeTags = [NSSet setWithSet:savedTags];
+    
     } else {
         self.subscribeTags = [NSMutableSet setWithSet:newTags];
         self.unsubscribeTags = [NSMutableSet setWithSet:savedTags];

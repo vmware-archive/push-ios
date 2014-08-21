@@ -51,9 +51,26 @@ describe(@"MSSTagsHelper", ^{
         });
     });
     
+    context(@"mixed nil not-nil arguments", ^{
+       
+        it(@"should return the saved tags list in the unsubscribe list if the new tags list is nil", ^{
+            NSSet *savedTags = [NSSet setWithArray:@[ @1, @2, @3]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:savedTags newTags:nil];
+            [[tagsHelper.subscribeTags should] beEmpty];
+            [[tagsHelper.unsubscribeTags should] equal:savedTags];
+        });
+        
+        it(@"should return the new tags list in the subscribe list if the saved tags list is nil", ^{
+            NSSet *newTags = [NSSet setWithArray:@[ @1, @2, @3]];
+            tagsHelper = [MSSTagsHelper tagsHelperWithSavedTags:nil newTags:newTags];
+            [[tagsHelper.subscribeTags should] equal:newTags];
+            [[tagsHelper.unsubscribeTags should] beEmpty];
+        });
+    });
+    
     context(@"when the new tags list is empty", ^{
         
-        it(@"should always return when the saved tags list", ^{
+        it(@"should always return the saved tags list in the unsubscrine list", ^{
             
             NSMutableSet *savedTags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
