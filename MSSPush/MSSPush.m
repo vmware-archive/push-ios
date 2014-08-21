@@ -44,6 +44,10 @@ NSString *const MSSPushErrorDomain = @"MSSPushErrorDomain";
     if (!parameters) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
+    
+    if (![parameters arePushParametersValid]) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
+    }
 
     MSSPushClient *pushClient = [MSSPushClient shared];
     if (pushClient.registrationParameters &&

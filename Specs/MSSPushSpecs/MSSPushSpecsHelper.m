@@ -193,10 +193,12 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     MSSParameters *params = [MSSParameters parameters];
     params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentPushVariantSecret = TEST_VARIANT_SECRET_1;
+    params.productionPushVariantUUID = TEST_VARIANT_UUID_1;
+    params.productionPushVariantSecret = TEST_VARIANT_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushAutoRegistrationEnabled = YES;
-    params.tags = self.tags1;
+    params.pushTags = self.tags1;
     self.params = params;
     return self.params;
 }

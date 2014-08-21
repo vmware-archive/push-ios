@@ -10,6 +10,7 @@
 #import "MSSParameters.h"
 #import "MSSPushErrors.h"
 #import "MSSPushSpecsHelper.h"
+#import "MSSPushClient.h"
 
 SPEC_BEGIN(MSSPushBackEndConnectionSpec)
 
@@ -17,6 +18,7 @@ describe(@"MSSPushBackEndConnection", ^{
     __block MSSPushSpecsHelper *helper;
 
     beforeEach ( ^{
+        [MSSPushClient resetSharedClient];
         helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupParameters];
 	});

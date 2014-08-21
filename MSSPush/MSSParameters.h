@@ -20,7 +20,7 @@
 @property (copy) NSString *developmentPushVariantSecret;
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushVariantSecret;
-@property (copy) NSSet *tags;
+@property (copy) NSSet *pushTags;
 
 /**
  * Creates an instance using the values set in the `MSSParameters.plist` file.
@@ -41,7 +41,7 @@
 /**
  * Validate Push Parameter properties
  */
-- (BOOL)pushParametersValid;
+- (BOOL)arePushParametersValid;
 
 /**
  * The Debug state of the application

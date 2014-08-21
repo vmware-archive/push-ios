@@ -80,7 +80,6 @@ static dispatch_once_t _sharedMSSPushClientToken;
 - (void)resetInstance
 {
     self.registrationParameters = nil;
-    
 }
 
 + (void)resetSharedClient
@@ -95,6 +94,14 @@ static dispatch_once_t _sharedMSSPushClientToken;
 
 - (void)registerForRemoteNotifications
 {
+    if (!self.registrationParameters) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
+    }
+    
+    if (![self.registrationParameters arePushParametersValid]) {
+        [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
+    }
+
     if (self.notificationTypes != UIRemoteNotificationTypeNone) {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes:self.notificationTypes];
     }
@@ -165,7 +172,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [MSSPushPersistentStorage setVariantUUID:parameters.variantUUID];
         [MSSPushPersistentStorage setVariantSecret:parameters.variantSecret];
         [MSSPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
-        [MSSPushPersistentStorage setTags:parameters.tags];
+        [MSSPushPersistentStorage setTags:parameters.pushTags];
         
         if (successBlock) {
             successBlock();
@@ -286,8 +293,8 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     
     NSSet *savedTags = [MSSPushPersistentStorage tags];
     BOOL areSavedTagsNilOrEmpty = savedTags == nil || savedTags.count == 0;
-    BOOL areNewTagsNilOrEmpty = parameters.tags == nil || parameters.tags.count == 0;
-    if ((areNewTagsNilOrEmpty && !areSavedTagsNilOrEmpty) || (!areNewTagsNilOrEmpty && ![parameters.tags isEqualToSet:savedTags])) {
+    BOOL areNewTagsNilOrEmpty = parameters.pushTags == nil || parameters.pushTags.count == 0;
+    if ((areNewTagsNilOrEmpty && !areSavedTagsNilOrEmpty) || (!areNewTagsNilOrEmpty && ![parameters.pushTags isEqualToSet:savedTags])) {
         MSSPushLog(@"Parameters specify a different set of tags. Update registration will be required.");
         return NO;
     }

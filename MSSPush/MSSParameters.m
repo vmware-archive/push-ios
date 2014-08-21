@@ -53,7 +53,7 @@ static BOOL kInDebug = NO;
     return kInDebug ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
 
-- (BOOL)pushParametersValid;
+- (BOOL)arePushParametersValid;
 {
     SEL selectors[] = {
         @selector(pushDeviceAlias),
@@ -64,6 +64,8 @@ static BOOL kInDebug = NO;
         @selector(productionPushVariantUUID),
         @selector(productionPushVariantSecret),
     };
+    
+    // NOTE: pushTags are allowed to be nil or empty
 
     for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
         id value = [self valueForKey:NSStringFromSelector(selectors[i])];

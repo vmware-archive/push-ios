@@ -18,17 +18,22 @@ static NSString *const TEST_ANALYTICS_KEY   = @"TEST_ANALYTICS_KEY";
 
 SPEC_BEGIN(MSSRegistrationParametersSpec)
 
-void (^checkPramatersAreValid)(NSString *, MSSParameters *) = ^(NSString *pramType, MSSParameters *model) {
+void (^checkParametersAreValid)(MSSParameters *) = ^(MSSParameters *model) {
     NSDictionary *properties = [MSSClassPropertyUtility propertiesForClass:[MSSParameters class]];
+
     [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
-        //Primitives use single character property types.
+        
+        //Primitives use single character property types.  Don't check those.
+        // Also, don't check the validity of the tags parameter.  It is permitted to be nil.
         //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
-        if ([propertyName rangeOfString:pramType options:NSCaseInsensitiveSearch].length > 0 && propertyType.length > 1) {
+        
+        if (![propertyName isEqualToString:@"pushTags"] && propertyType.length > 1) {
+            NSLog(@"Checking validity of property '%@', type '%@'", propertyName, propertyType);
             id value = [model valueForKey:propertyName];
             [model setValue:nil forKey:propertyName];
             
             BOOL (^valid)(MSSParameters *) = ^BOOL(MSSParameters *model) {
-                return [model pushParametersValid];
+                return [model arePushParametersValid];
             };
             [[theValue(valid(model)) should] beFalse];
             
@@ -37,6 +42,8 @@ void (^checkPramatersAreValid)(NSString *, MSSParameters *) = ^(NSString *pramTy
             
             [model setValue:value forKey:propertyName];
             [[theValue(valid(model)) should] beTrue];
+        } else {
+            NSLog(@"Skipping validity check for property '%@', type '%@'", propertyName, propertyType);
         }
     }];
 };
@@ -63,9 +70,19 @@ describe(@"MSSRegistrationParameters", ^{
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
         
-        it(@"should require all push properties to be non-nil and non-empty", ^{
-            [[theValue([model pushParametersValid]) should] beTrue];
-            checkPramatersAreValid(@"push", model);
+        it(@"should require all push properties (except tags) to be non-nil and non-empty", ^{
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            checkParametersAreValid(model);
+        });
+        
+        it(@"should allow the tags to be nil", ^{
+            model.pushTags = nil;
+            [[theValue([model arePushParametersValid]) should] beTrue];
+        });
+        
+        it(@"should allow the tags to be empty", ^{
+            model.pushTags = [NSSet set];
+            [[theValue([model arePushParametersValid]) should] beTrue];
         });
     });
     
@@ -77,19 +94,19 @@ describe(@"MSSRegistrationParameters", ^{
         
         it(@"push Parameters should be initialized successfully and valid", ^{
             [[model shouldNot] beNil];
-            [[theValue([model pushParametersValid]) should] beTrue];
+            [[theValue([model arePushParametersValid]) should] beTrue];
         });
     });
 
     context(@"initializing with invalid arguments from plist", ^{
        
         beforeEach(^{
-            model = [MSSParameters parametersWithContentsOfFile:@"MSSParameters-Invalid.plist"];
+            model = [MSSParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"MSSParameters-Invalid" ofType:@"plist"]];
         });
         
         it(@"push Parameters should be initialized successfully and invalid", ^{
             [[model shouldNot] beNil];
-            [[theValue([model pushParametersValid]) should] beFalse];
+            [[theValue([model arePushParametersValid]) should] beFalse];
         });
     });
 });

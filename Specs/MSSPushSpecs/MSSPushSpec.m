@@ -22,6 +22,7 @@ describe(@"MSSPush", ^{
     __block id<UIApplicationDelegate> previousAppDelegate;
     
     beforeEach(^{
+        [MSSPushClient resetSharedClient];
         helper = [[MSSPushSpecsHelper alloc] init];
         [helper setupApplication];
         [helper setupApplicationDelegate];
@@ -33,6 +34,28 @@ describe(@"MSSPush", ^{
         previousAppDelegate = nil;
         [helper reset];
         helper = nil;
+    });
+    
+    describe(@"setting parameters", ^{
+       
+        it(@"should raise an exception if parameters are nil", ^{
+            [[theBlock(^{
+                [MSSPush setRegistrationParameters:nil];
+            }) should] raiseWithName:NSInvalidArgumentException];
+        });
+
+        it(@"should raise an exception if parameters are invalid", ^{
+            helper.params.productionPushVariantUUID = nil;
+            [[theBlock(^{
+                [MSSPush setRegistrationParameters:helper.params];
+            }) should] raiseWithName:NSInvalidArgumentException];
+        });
+        
+        it(@"should raise an exception if startRegistration is called without parameters being set", ^{
+            [[theBlock(^{
+                [MSSPush registerForPushNotifications];
+            }) should] raise];
+        });
     });
     
     describe(@"updating registration", ^{
@@ -47,7 +70,6 @@ describe(@"MSSPush", ^{
             registerCount = 0;
             updateRegistrationCount = 0;
             
-            [MSSPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
 
@@ -116,29 +138,58 @@ describe(@"MSSPush", ^{
             [[theValue(registerCount) shouldEventually] equal:theValue(0)];
         });
 
-        it(@"should handle updating after the variantUuid changes", ^{
+        it(@"should update after the variantUuid changes", ^{
             testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
         });
         
-        it(@"should handle updating after the variantSecret changes", ^{
+        it(@"should update after the variantUuid is initially set", ^{
+            testBlock(@selector(setVariantUUID:), nil);
+        });
+        
+        it(@"should update after the variantSecret changes", ^{
             testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
         });
         
-        it(@"should handle updating after the deviceAlias changes", ^{
+        it(@"should update after the variantSecret is initially set", ^{
+            testBlock(@selector(setVariantSecret:), nil);
+        });
+        
+        it(@"should update after the deviceAlias changes", ^{
             testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
         });
         
-        it(@"should handle updating after the APNSDeviceToken changes", ^{
-            testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT DATA" dataUsingEncoding:NSUTF8StringEncoding]);
+        it(@"should update after the deviceAlias is initially set", ^{
+            testBlock(@selector(setDeviceAlias:), nil);
         });
-
-        it(@"should handle updating after the tags change to a different value", ^{
+        
+        it(@"should update after the APNSDeviceToken changes", ^{
+            testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+        });
+        
+        it(@"should update after the tags change to a different value", ^{
             testBlock(@selector(setTags:), [NSSet setWithArray:@[ @"DIFFERENT TAG" ]]);
             // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
         
-        it(@"should handle updating after tags initially set", ^{
+        it(@"should update after tags initially set from nil", ^{
             testBlock(@selector(setTags:), nil);
+            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+        });
+        
+        it(@"should update after tags initially set from empty", ^{
+            testBlock(@selector(setTags:), [NSSet set]);
+            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+        });
+        
+        it(@"should update after tags change to nil", ^{
+            helper.params.pushTags = nil;
+            testBlock(@selector(setTags:), helper.tags1);
+            // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
+        });
+        
+        it(@"should update after tags change to empty", ^{
+            helper.params.pushTags = [NSSet set];
+            testBlock(@selector(setTags:), helper.tags1);
             // TODO - confirm that the request body has the correct subscribe/unsubscribe list of tags
         });
         
@@ -165,7 +216,7 @@ describe(@"MSSPush", ^{
                 __block NSData *newData;
                 __block NSHTTPURLResponse *newResponse;
                 
-                if (/*[request.HTTPMethod isEqualToString:@"PUT"] || */[request.HTTPMethod isEqualToString:@"POST"]) {
+                if ([request.HTTPMethod isEqualToString:@"POST"]) {
                     newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                     NSDictionary *dict = @{
                                            RegistrationAttributes.deviceOS           : TEST_OS,
