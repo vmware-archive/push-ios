@@ -70,7 +70,7 @@ describe(@"MSSTagsHelper", ^{
     
     context(@"when the new tags list is empty", ^{
         
-        it(@"should always return the saved tags list in the unsubscrine list", ^{
+        it(@"should always return the saved tags list in the unsubscribe list", ^{
             
             NSMutableSet *savedTags = [NSMutableSet set];
             for (int i = 0; i < 10; i += 1) {
