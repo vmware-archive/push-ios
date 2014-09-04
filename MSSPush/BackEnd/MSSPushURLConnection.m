@@ -110,7 +110,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     }
     
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
-        [NSException raise:NSInvalidArgumentException format:@"MSSPushRegistrationParameters may not be nil"];
+        [NSException raise:NSInvalidArgumentException format:@"MSSParameters may not be nil"];
     }
     
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];

@@ -39,7 +39,7 @@ static BOOL kInDebug = NO;
 + (MSSParameters *)parameters
 {
     MSSParameters *params = [[self alloc] init];
-    params.pushAutoRegistrationEnabled = YES;
+    params.pushAutoRegistrationEnabled = NO;
     return params;
 }
 
