@@ -119,19 +119,31 @@ static dispatch_once_t _sharedMSSPushClientToken;
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure
 {
-    [MSSPushURLConnection unregisterDeviceID:[MSSPushPersistentStorage serverDeviceID]
+    NSString *deviceId = [MSSPushPersistentStorage serverDeviceID];
+    if (!deviceId || deviceId.length <= 0) {
+        MSSPushLog(@"Not currently registered.");
+        [self handleUnregistrationSuccess:success userInfo:@{ @"Response": @"Already unregistered."}];
+        return;
+    }
+    
+    [MSSPushURLConnection unregisterDeviceID:deviceId
                                   parameters:self.registrationParameters
                                      success:^(NSURLResponse *response, NSData *data) {
-                                         [MSSPushPersistentStorage reset];
                                          
-                                         if (success) {
-                                             success();
-                                         }
-                                         
-                                         NSDictionary *userInfo = @{ @"URLResponse" : response };
-                                         [[NSNotificationCenter defaultCenter] postNotificationName:MSSPushUnregisterNotification object:self userInfo:userInfo];
+                                         [self handleUnregistrationSuccess:success userInfo:@{ @"URLResponse" : response }];
                                      }
                                      failure:failure];
+}
+
+- (void) handleUnregistrationSuccess:(void (^)(void))success userInfo:(NSDictionary*)userInfo
+{
+    [MSSPushPersistentStorage reset];
+    
+    if (success) {
+        success();
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:MSSPushUnregisterNotification object:self userInfo:userInfo];
 }
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);

@@ -328,7 +328,7 @@ describe(@"MSSPush", ^{
         });
     });
     
-    context(@"valid object arguements", ^{
+    context(@"valid object arguments", ^{
         __block BOOL wasExpectedResult = NO;
         __block MSSPushSpecsHelper *helper;
         
@@ -446,52 +446,77 @@ describe(@"MSSPush", ^{
         __block BOOL successBlockExecuted = NO;
         
         beforeEach(^{
-            [helper setupDefaultPersistedParameters];
             successBlockExecuted = NO;
-            
-            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSURLRequest *request = params[0];
-                
-                __block NSHTTPURLResponse *newResponse;
-                
-                if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
-                    newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
-                } else {
-                    fail(@"Request method must be DELETE");
-                }
-                
-                CompletionHandler handler = params[2];
-                handler(newResponse, nil, nil);
-                return nil;
-            }];
+            [helper setupDefaultPersistedParameters];
+
         });
         
         afterEach(^{
-            SEL selectors[] = {
-                @selector(APNSDeviceToken),
-                @selector(serverDeviceID),
-                @selector(variantUUID),
-                @selector(deviceAlias),
-            };
+            [[[MSSPushPersistentStorage APNSDeviceToken] should] beNil];
+            [[[MSSPushPersistentStorage serverDeviceID] should] beNil];
+            [[[MSSPushPersistentStorage variantUUID] should] beNil];
+            [[[MSSPushPersistentStorage deviceAlias] should] beNil];
+        });
+
+        context(@"when not already registered", ^{
             
-            for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
-                [[[MSSPushPersistentStorage performSelector:selectors[i]] should] beNil];
-            }
+            beforeEach(^{
+                [MSSPushPersistentStorage setServerDeviceID:nil];
+            });
+            
+            it(@"should be considered a success if the device isn't currently registered", ^{
+                [[[MSSPushPersistentStorage serverDeviceID] should] beNil];
+                [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+                
+                [MSSPush unregisterWithPushServerSuccess:^{
+                    successBlockExecuted = YES;
+                    
+                } failure:^(NSError *error) {
+                    fail(@"unregistration failure block executed");
+                }];
+                
+                [[theValue(successBlockExecuted) shouldEventually] beTrue];
+            });
         });
         
-        it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID and should remove all persisted parameters when unregister is successful", ^{
-            [[[MSSPushPersistentStorage serverDeviceID] shouldNot] beNil];
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+        context(@"when already registered", ^{
             
-            [MSSPush unregisterWithPushServerSuccess:^{
-                successBlockExecuted = YES;
+            beforeEach(^{
                 
-            } failure:^(NSError *error) {
-                fail(@"unregistration failure block executed");
-            }];
+                [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                    NSURLRequest *request = params[0];
+                    
+                    __block NSHTTPURLResponse *newResponse;
+                    
+                    if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+                        newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:204 HTTPVersion:nil headerFields:nil];
+                    } else {
+                        fail(@"Request method must be DELETE");
+                    }
+                    
+                    CompletionHandler handler = params[2];
+                    handler(newResponse, nil, nil);
+                    return nil;
+                }];
+            });
             
-            [[theValue(successBlockExecuted) shouldEventually] beTrue];
+            
+            it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID and should remove all persisted parameters when unregister is successful", ^{
+                [[[MSSPushPersistentStorage serverDeviceID] shouldNot] beNil];
+                [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+                
+                [MSSPush unregisterWithPushServerSuccess:^{
+                    successBlockExecuted = YES;
+                    
+                } failure:^(NSError *error) {
+                    fail(@"unregistration failure block executed");
+                }];
+                
+                [[theValue(successBlockExecuted) shouldEventually] beTrue];
+            });
         });
+        
+
     });
     
     describe(@"unsuccessful unregistration when device not registered on push server", ^{
