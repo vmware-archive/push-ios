@@ -108,24 +108,39 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
-    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
+    
+    id (^block)(NSArray *params) = ^id(NSArray *params) {
+        
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-            [(MSSAppDelegate *)self.applicationDelegate application:self.application
-                       didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+            
+            [(MSSAppDelegate*) self.applicationDelegate application:self.application
+                   didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
-    }];
+    };
+    
+    // < iOS 8.0
+    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:block];
+    
+    // iOS 8.0 +
+    [self.application stub:@selector(registerForRemoteNotifications) withBlock:block];
 }
 
 - (void) setupApplicationForFailedRegistrationWithError:(NSError *)error
 {
-    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:^id(NSArray *params) {
+    id (^block)(NSArray *params) = ^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
             [(MSSAppDelegate *)self.applicationDelegate application:self.application
-                             didFailToRegisterForRemoteNotificationsWithError:error];
+                   didFailToRegisterForRemoteNotificationsWithError:error];
         }
         return nil;
-    }];
+    };
+    
+    // < iOS 8.0
+    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:block];
+    
+    // iOS 8.0 +
+    [self.application stub:@selector(registerForRemoteNotifications) withBlock:block];
 }
 
 #pragma mark - App Delegate Helpers

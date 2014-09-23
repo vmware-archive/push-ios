@@ -7,6 +7,7 @@
 
 @interface MSSAppDelegate : NSObject <UIApplicationDelegate>
 
-- (void)setPushRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
-                                    failure:(void (^)(NSError *error))failure;
+- (void) setPushRegistrationBlockWithSuccess:(void (^)(NSData *deviceToken))success
+                                     failure:(void (^)(NSError *error))failure;
+
 @end

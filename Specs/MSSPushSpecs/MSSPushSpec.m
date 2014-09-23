@@ -79,7 +79,6 @@ describe(@"MSSPush", ^{
             [helper setupApplicationDelegateForSuccessfulRegistration];
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:1];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:1];
             
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -230,7 +229,6 @@ describe(@"MSSPush", ^{
             __block BOOL successBlockExecuted = NO;
             __block NSSet *expectedTags;
             
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:) withCount:2];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:2];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
             
@@ -318,7 +316,6 @@ describe(@"MSSPush", ^{
         it(@"should handle registration failures from APNS", ^{
             [MSSPush load];
             
-            [[helper.application shouldEventually] receive:@selector(registerForRemoteNotificationTypes:)];
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
             
             [MSSPush setRegistrationParameters:helper.params];

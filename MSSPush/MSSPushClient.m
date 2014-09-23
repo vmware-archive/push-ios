@@ -5,7 +5,6 @@
 #import <objc/runtime.h>
 
 #import "MSSPushClient.h"
-
 #import "MSSPushDebug.h"
 #import "MSSPushErrors.h"
 #import "MSSParameters.h"
@@ -102,8 +101,18 @@ static dispatch_once_t _sharedMSSPushClientToken;
         [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
     }
 
-    if (self.notificationTypes != UIRemoteNotificationTypeNone) {
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:self.notificationTypes];
+    UIApplication *application = [UIApplication sharedApplication];
+    
+    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+        
+        // If this line gives you a compiler error then you need to make sure you have updated
+        // your Xcode to at least Xcode 6.0:
+        [application registerForRemoteNotifications]; // iOS 8.0+
+        
+    } else {
+        
+        // < iOS 8.0. Deprecated on iOS 8.0.
+        [application registerForRemoteNotificationTypes:self.notificationTypes];
     }
 }
 

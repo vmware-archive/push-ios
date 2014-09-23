@@ -182,7 +182,7 @@
 		F1FDE2A018D799E4009EBE38 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0600;
 			};
 			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "MSSPushSpecs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -380,6 +380,7 @@
 		F1FDE2A418D799E4009EBE38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
 		};
