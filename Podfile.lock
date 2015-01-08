@@ -1,17 +1,17 @@
 PODS:
   - Kiwi (2.3.1)
-  - MSSPush (1.0.2)
+  - PCFPush (1.0.2)
 
 DEPENDENCIES:
   - Kiwi
-  - MSSPush (from `./`)
+  - PCFPush (from `./`)
 
 EXTERNAL SOURCES:
-  MSSPush:
+  PCFPush:
     :path: ./
 
 SPEC CHECKSUMS:
   Kiwi: 73e1400209055ee9c8ba78c6012b6b642d0fb9f7
-  MSSPush: 5e6638c723943b442212d75db5f98098ea69dff9
+  PCFPush: 1bcf9f5fdc8454a3b6c31fe8ab8d073cf0028f80
 
 COCOAPODS: 0.35.0

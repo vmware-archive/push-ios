@@ -17,9 +17,9 @@ Although you do not need any extra libraries or frameworks to build the project 
 
 The source code of the project is divided into two separate projects:
 
- * MSSPush - The redistributable portion of the framework.
+ * PCFPush - The redistributable portion of the framework.
 
- * MSSPushSpecs - This target produces an application that links against the MSSPush source code directly and runs the unit tests.
+ * PCFPushSpecs - This target produces an application that links against the PCFPush source code directly and runs the unit tests.
 
 	* Unit tests implemented using [Kiwi](https://github.com/kiwi-bdd/Kiwi).
 	* Dependency management with [CocoaPods](http://cocoapods.org/).
@@ -28,7 +28,7 @@ The source code of the project is divided into two separate projects:
 Building the Framework
 ----------------------
 
-The "MSSPush" target produces a universal framework suitable for building against arm and simulator platforms.  This target depends on the [iOS Universal Framework](https://github.com/kstenerud/iOS-Universal-Framework) build system to produce this framework.
+The "PCFPush" target produces a universal framework suitable for building against arm and simulator platforms.  This target depends on the [iOS Universal Framework](https://github.com/kstenerud/iOS-Universal-Framework) build system to produce this framework.
 
-To build the framework, make sure the iOS Universal Framework is installed and load the MSSPush project in Xcode.  Select the "MSSPush" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a Finder window containing the resultant framework.
+To build the framework, make sure the iOS Universal Framework is installed and load the PCFPush project in Xcode.  Select the "PCFPush" target and select "Archive" from the "Build" menu in Xcode.  After the project is built, Xcode should open a Finder window containing the resultant framework.
 

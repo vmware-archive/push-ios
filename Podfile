@@ -1,11 +1,11 @@
-workspace './MSSPush'
-xcodeproj 'Specs/MSSPushSpecs'
+workspace './PCFPush'
+xcodeproj 'Specs/PCFPushSpecs'
 
-target 'MSSPushSpecs' do
-  xcodeproj 'Specs/MSSPushSpecs'
+target 'PCFPushSpecs' do
+  xcodeproj 'Specs/PCFPushSpecs'
 
   platform :ios, '6.0'
-  link_with 'MSSPushSpecs'
+  link_with 'PCFPushSpecs'
   pod 'Kiwi'
-  pod 'MSSPush', :path => './'
+  pod 'PCFPush', :path => './'
 end
