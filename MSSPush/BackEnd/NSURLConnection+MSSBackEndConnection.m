@@ -54,11 +54,24 @@
     return [response statusCode] >= 200 && [response statusCode] < 300;
 }
 
++ (BOOL)isAuthError:(NSError*)error {
+    if (!error) {
+        return NO;
+    }
+    return ([error.domain isEqualToString:NSURLErrorDomain] && (error.code == NSURLErrorUserCancelledAuthentication || error.code == NSURLErrorUserAuthenticationRequired));
+}
+
 + (CompletionHandler)completionHandlerWithSuccessBlock:(void (^)(NSURLResponse *response, NSData *data))success
                                 failureBlock:(void (^)(NSError *error))failure
 {
     CompletionHandler handler = ^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        if (connectionError) {
+        if ([self isAuthError:connectionError]) {
+            MSSPushCriticalLog(@"NSURLRequest failed with authentication error.");
+            if (failure) {
+                NSError *authError = [MSSPushErrorUtil errorWithCode:MSSPushBackEndRegistrationAuthenticationError localizedDescription:@"Authentication error while communicating with the back-end server.  Check your variant uuid and secret parameters."];
+                failure(authError);
+            }
+        } else if (connectionError) {
             MSSPushCriticalLog(@"NSURLRequest failed with error: %@ %@", connectionError, connectionError.userInfo);
             if (failure) {
                 failure(connectionError);

@@ -129,6 +129,27 @@ describe(@"MSSPushBackEndConnection", ^{
                                                  }];
         });
 
+        it(@"should return a sensible error code if the authentication fails", ^{
+            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSError *authError = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUserCancelledAuthentication userInfo:nil];
+                CompletionHandler handler = params[2];
+                handler(nil, nil, authError);
+                return nil;
+            }];
+            
+            [MSSPushURLConnection registerWithParameters:helper.params
+                                             deviceToken:helper.apnsDeviceToken
+                                                 success: ^(NSURLResponse *response, NSData *data) {
+                                                     wasExpectedResult = NO;
+                                                 }
+             
+                                                 failure: ^(NSError *error) {
+                                                     wasExpectedResult = YES;
+                                                     [[error.domain should] equal:MSSPushErrorDomain];
+                                                     [[theValue(error.code) should] equal:theValue(MSSPushBackEndRegistrationAuthenticationError)];
+                                                 }];
+        });
+
         it(@"should handle a failed request", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(failedRequestRequest:queue:completionHandler:) error:&error];

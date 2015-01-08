@@ -22,6 +22,11 @@ typedef NS_ENUM(NSInteger, MSSPushErrorCodes) {
     MSSPushBackEndRegistrationCancelled = 11,
     
     /**
+     * Failed to authenticate while registering with the back-end server
+     */
+    MSSPushBackEndRegistrationAuthenticationError = 20,
+    
+    /**
      * iOS returned an object to the back-end registration code that was not an NSHTTPURLResponse object.
      */
     MSSPushBackEndRegistrationNotHTTPResponseError = 21,
