@@ -148,7 +148,6 @@ describe(@"PCFPush", ^{
                     fail(@"registration failure block executed");
                 }];
 
-                helper.params.pushAutoRegistrationEnabled = NO;
                 [PCFPush setRegistrationParameters:helper.params];
                 [PCFPush registerForPushNotifications];
             };
@@ -280,14 +279,13 @@ describe(@"PCFPush", ^{
             }                              failure:^(NSError *error) {
                 fail(@"registration failure block executed");
             }];
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
+
+            [PCFPush registerForPushNotifications];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
             successBlockExecuted = NO;
             [PCFPush load];
-            // TODO - confirm that the request body has the correct subscribe list of tags
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
+            [PCFPush registerForPushNotifications];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
         });
     });
@@ -324,7 +322,7 @@ describe(@"PCFPush", ^{
                                                expectedResult = YES;
                                            }];
             
-            [[NSNotificationCenter defaultCenter] postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil];
+            [PCFPush registerForPushNotifications];
         });
     });
     

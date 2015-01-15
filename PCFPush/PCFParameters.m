@@ -38,9 +38,7 @@ static BOOL kInDebug = NO;
 
 + (PCFParameters *)parameters
 {
-    PCFParameters *params = [[self alloc] init];
-    params.pushAutoRegistrationEnabled = NO;
-    return params;
+    return [[self alloc] init];
 }
 
 - (NSString *)variantUUID
@@ -58,7 +56,6 @@ static BOOL kInDebug = NO;
     SEL selectors[] = {
         @selector(pushDeviceAlias),
         @selector(pushAPIURL),
-        @selector(pushAutoRegistrationEnabled),
         @selector(developmentPushVariantUUID),
         @selector(developmentPushVariantSecret),
         @selector(productionPushVariantUUID),

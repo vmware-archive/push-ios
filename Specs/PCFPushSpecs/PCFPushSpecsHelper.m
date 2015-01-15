@@ -212,7 +212,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     params.productionPushVariantSecret = TEST_VARIANT_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
-    params.pushAutoRegistrationEnabled = YES;
     params.pushTags = self.tags1;
     self.params = params;
     return self.params;

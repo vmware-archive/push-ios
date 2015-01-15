@@ -29,8 +29,6 @@
  *
  * The notification types default to (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound).
  *
- * If you are using automatic registration then you may only user the default notification types above.
- *
  * If you want to use a subset of the above default notification types then you must use manual registration.
  *
  * On iOS 8.0+ you should call "- (void) registerUserNotificationSettings:" on [UIApplication sharedApplication] instead
@@ -56,19 +54,17 @@
                                failure:(void (^)(NSError *error))failure;
 
 /**
- * Manually registers device for push notifications.
+ * Registers device for push notifications.
  *
  * Before calling this method, you should call [PCFPush setRegistrationParameters] to provide the registration
  * parameters and call [PCFPush setRemoteNotificationTypes] if you want to provide a different subset of the
  * notification types.  If you want a callback indicating success or failure of the registration operation then
  * you should also call [PCFPush setCompletionBlockWithSuccess:failure].
  *
- * If you want to do automatic registration, then instead provide a PLIST file called "PCFParameters.plist" with
- * the following registration parameters:
+ * If you want to do automatic parameterization, then instead provide a PLIST file called "PCFParameters.plist"
+ * with the following registration parameters:
  * 
- *   pushAutoRegistrationEnabled
  *   pushAPIURL
- *   pushDeviceAlias
  *   productionPushVariantSecret
  *   productionPushVariantUUID
  *   developmentPushVariantSecret

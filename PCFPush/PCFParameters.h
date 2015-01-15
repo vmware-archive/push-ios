@@ -13,7 +13,6 @@
 /**
  * Push Parameters
  */
-@property BOOL pushAutoRegistrationEnabled;
 @property (copy) NSString *pushDeviceAlias;
 @property (copy) NSString *pushAPIURL;
 @property (copy) NSString *developmentPushVariantUUID;

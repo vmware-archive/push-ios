@@ -19,11 +19,6 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void)load
 {
     [[NSNotificationCenter defaultCenter] addObserver:[self class]
-                                             selector:@selector(appDidFinishLaunchingNotification:)
-                                                 name:UIApplicationDidFinishLaunchingNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:[self class]
                                              selector:@selector(appWillTerminateNotification:)
                                                  name:UIApplicationWillTerminateNotification
                                                object:nil];
@@ -49,17 +44,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
         [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
     }
 
-    PCFPushClient *pushClient = [PCFPushClient shared];
-    if (pushClient.registrationParameters &&
-        [self isRegistered] &&
-        parameters.pushAutoRegistrationEnabled)
-    {
-        pushClient.registrationParameters = parameters;
-        [pushClient APNSRegistrationSuccess:[PCFPushPersistentStorage APNSDeviceToken]];
-        
-    } else {
-        pushClient.registrationParameters = parameters;
-    }
+    PCFPushClient.shared.registrationParameters = parameters;
 }
 
 + (BOOL)isRegistered
@@ -87,17 +72,6 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 }
 
 #pragma mark - Notification Handler Methods
-
-+ (void)appDidFinishLaunchingNotification:(NSNotification *)notification
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:[self class] name:UIApplicationDidFinishLaunchingNotification object:nil];
-    PCFPushClient *pushClient = [PCFPushClient shared];
-    
-    if (pushClient.registrationParameters.pushAutoRegistrationEnabled) {
-        PCFPushLog(@"App launch detected. Initiating automatic registration.");
-        [pushClient registerForRemoteNotifications];
-    }
-}
 
 + (void)appWillTerminateNotification:(NSNotification *)notification
 {
