@@ -54,7 +54,6 @@ static BOOL kInDebug = NO;
 - (BOOL)arePushParametersValid;
 {
     SEL selectors[] = {
-        @selector(pushDeviceAlias),
         @selector(pushAPIURL),
         @selector(developmentPushVariantUUID),
         @selector(developmentPushVariantSecret),
@@ -62,14 +61,13 @@ static BOOL kInDebug = NO;
         @selector(productionPushVariantSecret),
     };
     
-    // NOTE: pushTags are allowed to be nil or empty
+    // NOTE: pushTags, and pushDeviceAlias are allowed to be nil or empty
 
     for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
         id value = [self valueForKey:NSStringFromSelector(selectors[i])];
         if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
             PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", NSStringFromSelector(selectors[i]));
             return NO;
-            break;
         }
     }
     return YES;

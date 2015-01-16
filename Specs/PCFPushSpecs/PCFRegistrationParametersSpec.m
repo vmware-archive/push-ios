@@ -21,13 +21,19 @@ SPEC_BEGIN(PCFRegistrationParametersSpec)
 void (^checkParametersAreValid)(PCFParameters *) = ^(PCFParameters *model) {
     NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFParameters class]];
 
+    BOOL (^shouldTestProperty)(NSString *, NSString *) = ^BOOL(NSString *propertyName, NSString *propertyType) {
+
+        // Primitives use single character property types.  Don't check those.
+        // Also, don't check the validity of the tags and alias parameters.  They are permitted to be nil or empty.
+        // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
+
+        if (propertyType.length < 1) return NO;
+        return !([propertyName isEqualToString:@"pushTags"] || [propertyName isEqualToString:@"pushDeviceAlias"]);
+    };
+
     [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
-        
-        //Primitives use single character property types.  Don't check those.
-        // Also, don't check the validity of the tags parameter.  It is permitted to be nil.
-        //https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
-        
-        if (![propertyName isEqualToString:@"pushTags"] && propertyType.length > 1) {
+
+        if (shouldTestProperty(propertyName, propertyType)) {
             NSLog(@"Checking validity of property '%@', type '%@'", propertyName, propertyType);
             id value = [model valueForKey:propertyName];
             [model setValue:nil forKey:propertyName];
@@ -70,7 +76,7 @@ describe(@"PCFRegistrationParameters", ^{
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
         
-        it(@"should require all push properties (except tags) to be non-nil and non-empty", ^{
+        it(@"should require all push properties (except tags and device alias) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
         });

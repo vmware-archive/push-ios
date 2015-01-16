@@ -34,17 +34,12 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [[PCFPushClient shared] registerForRemoteNotifications];
 }
 
-+ (void)setRegistrationParameters:(PCFParameters *)parameters;
-{
-    if (!parameters) {
-        [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
-    }
-    
-    if (![parameters arePushParametersValid]) {
-        [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
-    }
++ (void) setDeviceAlias:(NSString *)deviceAlias {
+    PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
+}
 
-    PCFPushClient.shared.registrationParameters = parameters;
++ (void) setTags:(NSSet *)tags {
+    PCFPushClient.shared.registrationParameters.pushTags = tags;
 }
 
 + (BOOL)isRegistered
@@ -52,9 +47,10 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     return [PCFPushPersistentStorage serverDeviceID] && [PCFPushPersistentStorage APNSDeviceToken];
 }
 
+// TODO - make sure that this method is covered by tests
 + (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
 {
-    [[PCFPushClient shared] setNotificationTypes:types];
+    PCFPushClient.shared.notificationTypes = types;
 }
 
 + (void)setCompletionBlockWithSuccess:(void (^)(void))success

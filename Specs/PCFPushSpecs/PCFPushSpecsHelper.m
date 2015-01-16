@@ -6,44 +6,20 @@
 
 #import "PCFPushSpecsHelper.h"
 #import "PCFAppDelegate.h"
-#import "PCFAppDelegateProxy.h"
-#import "PCFPush.h"
 #import "JRSwizzle.h"
-#import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFParameters.h"
+#import "PCFPushBackEndRegistrationResponseDataTest.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
 #endif
 
-@interface TestAppDelegate : NSObject <UIApplicationDelegate>
-@end
-
-@interface TestAppDelegateRemotePush : TestAppDelegate
-@end
-
-@implementation TestAppDelegate
-@end
-
-@implementation TestAppDelegateRemotePush
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    completionHandler(UIBackgroundFetchResultNoData);
-}
-
-@end
-
-NSInteger TEST_NOTIFICATION_TYPES = UIRemoteNotificationTypeAlert;
-
 NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_VARIANT_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
-NSString *const TEST_VARIANT_UUID_2   = @"222-444-999-ZZZ";
-NSString *const TEST_VARIANT_SECRET_2 = @"My cat's breath smells like cat food";
-NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 @implementation PCFPushSpecsHelper
 
@@ -54,11 +30,8 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     self = [super init];
     if (self) {
         self.apnsDeviceToken = [@"TEST DEVICE TOKEN 1" dataUsingEncoding:NSUTF8StringEncoding];
-        self.apnsDeviceToken2 = [@"TEST DEVICE TOKEN 2" dataUsingEncoding:NSUTF8StringEncoding];
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
-        self.backEndDeviceId2 = @"BACK END DEVICE ID 2";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
-        self.base64AuthString2 = @"MjIyLTQ0NC05OTktWlpaOk15IGNhdCdzIGJyZWF0aCBzbWVsbHMgbGlrZSBjYXQgZm9vZA==";
         self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
         self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
         self.application = [UIApplication sharedApplication];
@@ -71,10 +44,9 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 - (void) reset
 {
     self.params = nil;
+    self.plist = nil;
     self.apnsDeviceToken = nil;
-    self.apnsDeviceToken2 = nil;
     self.backEndDeviceId = nil;
-    self.backEndDeviceId2 = nil;
     self.tags1 = nil;
     self.tags2 = nil;
     self.application = nil;
@@ -108,8 +80,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
-    
-    id (^block)(NSArray *params) = ^id(NSArray *params) {
+    id (^block)(NSArray *) = ^id(NSArray *params) {
         
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
             
@@ -128,7 +99,7 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 
 - (void) setupApplicationForFailedRegistrationWithError:(NSError *)error
 {
-    id (^block)(NSArray *params) = ^id(NSArray *params) {
+    id (^block)(NSArray *) = ^id(NSArray *params) {
         if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
             [(PCFAppDelegate *)self.applicationDelegate application:self.application
                    didFailToRegisterForRemoteNotificationsWithError:error];
@@ -144,35 +115,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
 }
 
 #pragma mark - App Delegate Helpers
-
-- (id<UIApplicationDelegate>) setupMockApplicationDelegateWithoutRemotePush
-{
-    self.applicationDelegate = [KWMock mockForClass:[TestAppDelegate class]];
-    [(NSObject *)self.applicationDelegate stub:@selector(conformsToProtocol:)
-                                     andReturn:@YES
-                                 withArguments:@protocol(UIApplicationDelegate)];
-    
-    [self stubApplication];
-    
-    return self.applicationDelegate;
-}
-
-- (id<UIApplicationDelegate>) setupMockApplicationDelegateWithRemotePush
-{
-    self.applicationDelegate = [KWMock mockForClass:[TestAppDelegateRemotePush class]];
-    [(NSObject *)self.applicationDelegate stub:@selector(conformsToProtocol:)
-                                     andReturn:@YES
-                                 withArguments:@protocol(UIApplicationDelegate)];
-    [(NSObject *)self.applicationDelegate stub:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:) withBlock:^id(NSArray *params) {
-        void (^completionHandler)(UIBackgroundFetchResult) = params[2];
-        completionHandler(UIBackgroundFetchResultNoData);
-        return nil;
-    }];
-    
-    [self stubApplication];
-    
-    return self.applicationDelegate;
-}
 
 - (id<UIApplicationDelegate>) setupApplicationDelegate
 {
@@ -196,11 +138,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [(id)self.applicationDelegate stub:@selector(application:didFailToRegisterForRemoteNotificationsWithError:) withArguments:self.application, error, nil];
 }
 
-- (void) setupApplicationDelegateToReceiveNotification:(NSDictionary *)userInfo
-{
-    [(id)self.applicationDelegate stub:@selector(application:didReceiveRemoteNotification:) withArguments:self.application, userInfo, nil];
-}
-
 #pragma mark - Parameters helpers
 
 - (PCFParameters *)setupParameters
@@ -217,21 +154,6 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     return self.params;
 }
 
-- (void) changeVariantUUIDInParameters:(NSString*)newVariantUUID
-{
-    [self.params setDevelopmentPushVariantUUID:newVariantUUID];
-}
-
-- (void) changeVariantSecretInParameters:(NSString*)newVariantSecret
-{
-    [self.params setDevelopmentPushVariantSecret:newVariantSecret];
-}
-
-- (void) changeDeviceAliasInParameters:(NSString*)newDeviceAlias
-{
-    [self.params setPushDeviceAlias:newDeviceAlias];
-}
-
 - (void)setupDefaultPersistedParameters
 {
     [PCFPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
@@ -242,12 +164,65 @@ NSString *const TEST_DEVICE_ALIAS_2   = @"I can haz cheezburger?";
     [PCFPushPersistentStorage setTags:self.tags1];
 }
 
+- (void) setupDefaultPLIST:(PCFParameters *)parameters
+{
+    self.plist = parameters;
+    [PCFParameters stub:@selector(defaultParameters) andReturn:self.plist];
+}
+
 #pragma mark - NSURLConnection Helpers
 
 - (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector
                                    error:(NSError **)error
 {
     return [NSURLConnection jr_swizzleClassMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) withClassMethod:selector error:error];
+}
+
+- (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block
+{
+    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+        if (block) {
+            NSURLRequest *request = params[0];
+            block(request);
+        }
+        __block NSData *newData;
+        __block NSHTTPURLResponse *newResponse;
+        newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+        NSDictionary *dict = @{
+                RegistrationAttributes.deviceOS           : TEST_OS,
+                RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
+                RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                kDeviceUUID                               : TEST_DEVICE_UUID,
+        };
+        newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+
+        CompletionHandler handler = params[2];
+        handler(newResponse, newData, nil);
+        return nil;
+    }];
+}
+
+- (void)setupSuccessfulDeleteAsyncRequestAndReturnStatus:(NSInteger)status
+{
+    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+        NSURLRequest *request = params[0];
+
+        __block NSHTTPURLResponse *newResponse;
+
+        if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
+            newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:status HTTPVersion:nil headerFields:nil];
+        } else {
+            fail(@"Request method must be DELETE");
+        }
+
+        CompletionHandler handler = params[2];
+        handler(newResponse, nil, nil);
+        return nil;
+    }];
 }
 
 @end
