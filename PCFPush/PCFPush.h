@@ -21,7 +21,7 @@
  * notification types.  If you want a callback indicating success or failure of the registration operation then
  * you should also call [PCFPush setCompletionBlockWithSuccess:failure].
  *
- * To provide parameters, you must provide a PLIST file called "PCFParameters.plist" with the following registration
+ * To provide parameters, you must provide a PLIST file called "Pivotal.plist" with the following registration
  * parameters:
  *
  *   pushAPIURL

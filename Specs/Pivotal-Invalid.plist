@@ -2,17 +2,15 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>pushAPIURL</key>
+	<key>pivotal.push.serviceUrl</key>
 	<string></string>
-	<key>pushDeviceAlias</key>
-	<string>Extreme spiciness classification</string>
-	<key>productionPushVariantSecret</key>
+	<key>pivotal.push.variantSecret.production</key>
 	<string>PROD Put sweet chili sauce on everything</string>
-	<key>productionPushVariantUUID</key>
+	<key>pivotal.push.variantUuid.production</key>
 	<string>PROD-SOS-WE-LIKE-IT-SPICY</string>
-	<key>developmentPushVariantSecret</key>
+	<key>pivotal.push.variantSecret.development</key>
 	<string>DEV Put sweet chili sauce on everything</string>
-	<key>developmentPushVariantUUID</key>
+	<key>pivotal.push.variantUuid.development</key>
 	<string>DEV-SOS-WE-LIKE-IT-SPICY</string>
 </dict>
 </plist>

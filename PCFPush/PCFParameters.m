@@ -26,27 +26,7 @@ static BOOL kInDebug = NO;
 
 + (NSString*) defaultParameterFilename
 {
-    return @"PCFParameters";
-}
-
-+ (void) enumerateParameters:(id)parameters withBlock:(void (^)(id propertyName, id propertyValue, BOOL *stop))block
-{
-    static NSArray *selectors = nil;
-    if (!selectors) {
-        selectors = @[
-                @"pushAPIURL",
-                @"developmentPushVariantUUID",
-                @"developmentPushVariantSecret",
-                @"productionPushVariantUUID",
-                @"productionPushVariantSecret"
-        ];
-    }
-    if (block) {
-        [selectors enumerateObjectsUsingBlock:^(id propertyName, NSUInteger idx, BOOL *stop) {
-            id propertyValue = [parameters valueForKey:propertyName];
-            block(propertyName, propertyValue, stop);
-        }];
-    }
+    return @"Pivotal";
 }
 
 + (PCFParameters *)parametersWithContentsOfFile:(NSString *)path
@@ -55,7 +35,8 @@ static BOOL kInDebug = NO;
     if (path) {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
-            [PCFParameters enumerateParameters:plist withBlock:^(id propertyName, id propertyValue, BOOL *stop) {
+            [PCFParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+                id propertyValue = [plist valueForKey:plistPropertyName];
                 if (propertyValue) {
                     [params setValue:propertyValue forKeyPath:propertyName];
                 }
@@ -83,11 +64,13 @@ static BOOL kInDebug = NO;
     return kInDebug ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
 
+
 - (BOOL)arePushParametersValid;
 {
     __block BOOL result = YES;
 
-    [PCFParameters enumerateParameters:self withBlock:^(id propertyName, id propertyValue, BOOL *stop) {
+    [PCFParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+        id propertyValue = [self valueForKeyPath:propertyName];
         if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
             PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", propertyName);
             result = NO;
@@ -97,4 +80,22 @@ static BOOL kInDebug = NO;
     return result;
 }
 
++ (void) enumerateParametersWithBlock:(void (^)(id plistPropertyName, id propertyName, BOOL *stop))block
+{
+    static NSDictionary *keys = nil;
+    if (!keys) {
+        keys = @{
+                @"pivotal.push.serviceUrl" : @"pushAPIURL",
+                @"pivotal.push.variantUuid.production" : @"productionPushVariantUUID",
+                @"pivotal.push.variantSecret.production" : @"productionPushVariantSecret",
+                @"pivotal.push.variantUuid.development" : @"developmentPushVariantUUID",
+                @"pivotal.push.variantSecret.development" : @"developmentPushVariantSecret",
+        };
+    }
+    if (block) {
+        [keys enumerateKeysAndObjectsUsingBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+            block(plistPropertyName, propertyName, stop);
+        }];
+    }
+}
 @end

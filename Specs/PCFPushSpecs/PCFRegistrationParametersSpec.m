@@ -123,7 +123,7 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with valid arguments from plist", ^{
         
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFParameters-Valid" ofType:@"plist"]];
+            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
         });
         
         it(@"should initialize successfully and indicate that parameters are valid", ^{
@@ -135,7 +135,7 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with invalid arguments from plist", ^{
        
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFParameters-Invalid" ofType:@"plist"]];
+            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Invalid" ofType:@"plist"]];
         });
         
         it(@"should load but indicate that parameters are invalid", ^{
@@ -146,7 +146,7 @@ describe(@"PCFRegistrationParameters", ^{
 
     context(@"ignoring the tags and device alias parameters from plist", ^{
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"PCFParameters-ExtraParameters" ofType:@"plist"]];
+            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-ExtraParameters" ofType:@"plist"]];
         });
 
         it(@"should ignore the device alias in the plist", ^{

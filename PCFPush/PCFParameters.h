@@ -22,7 +22,7 @@
 @property (copy) NSSet *pushTags;
 
 /**
- * Creates an instance using the values set in the `PCFParameters.plist` file.
+ * Creates an instance using the values set in the `Pivotal.plist` file.
  */
 + (PCFParameters *)defaultParameters;
 
