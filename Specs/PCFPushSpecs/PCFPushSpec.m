@@ -45,7 +45,7 @@ describe(@"PCFPush", ^{
                 succeeded = NO;
                 [helper setupApplicationForSuccessfulRegistration];
                 [helper setupApplicationDelegateForSuccessfulRegistration];
-                [helper setupDefaultPLIST:helper.params];
+                [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequestWithBlock:nil];
 
                 [PCFPush setCompletionBlockWithSuccess:^{
@@ -87,19 +87,18 @@ describe(@"PCFPush", ^{
 
         it(@"should raise an exception if parameters are nil", ^{
             [[theBlock(^{
-                [helper setupDefaultPLIST:nil];
+                [helper setupDefaultPLISTWithFile:@"PCFParameters-Empty"];
                 [PCFPush registerForPushNotifications];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should raise an exception if parameters are invalid", ^{
-            helper.params.productionPushVariantUUID = nil;
             [[theBlock(^{
-                [helper setupDefaultPLIST:helper.params];
+                [helper setupDefaultPLISTWithFile:@"PCFParameters-Invalid"];
                 [PCFPush registerForPushNotifications];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
-        
+
         it(@"should raise an exception if startRegistration is called without parameters being set", ^{
             [[theBlock(^{
                 [PCFPush registerForPushNotifications];
@@ -120,7 +119,7 @@ describe(@"PCFPush", ^{
             updateRegistrationCount = 0;
             expectedSubscribeTags = nil;
             expectedUnsubscribeTags = nil;
-            
+
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
@@ -145,6 +144,8 @@ describe(@"PCFPush", ^{
                 } else {
                     [[requestBody.unsubscribeTags should] beNil];
                 }
+                [[requestBody.variantUUID should] beNil];
+                [[requestBody.deviceAlias should] equal:TEST_DEVICE_ALIAS_1];
             }];
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
@@ -153,7 +154,7 @@ describe(@"PCFPush", ^{
             testBlock = ^(SEL sel, id newPersistedValue) {
                 
                 [helper setupDefaultPersistedParameters];
-                [helper setupDefaultPLIST:helper.params];
+                [helper setupDefaultPLIST];
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
                 
@@ -163,6 +164,8 @@ describe(@"PCFPush", ^{
                     fail(@"registration failure block executed");
                 }];
 
+                [PCFPush setTags:helper.params.pushTags];
+                [PCFPush setDeviceAlias:helper.params.pushDeviceAlias];
                 [PCFPush registerForPushNotifications];
             };
         });
@@ -175,27 +178,27 @@ describe(@"PCFPush", ^{
         it(@"should update after the variantUuid changes", ^{
             testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
         });
-        
+
         it(@"should update after the variantUuid is initially set", ^{
             testBlock(@selector(setVariantUUID:), nil);
         });
-        
+
         it(@"should update after the variantSecret changes", ^{
             testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
         });
-        
+
         it(@"should update after the variantSecret is initially set", ^{
             testBlock(@selector(setVariantSecret:), nil);
         });
-        
+
         it(@"should update after the deviceAlias changes", ^{
             testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
         });
-        
+
         it(@"should update after the deviceAlias is initially set", ^{
             testBlock(@selector(setDeviceAlias:), nil);
         });
-        
+
         it(@"should update after the APNSDeviceToken changes", ^{
             testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
         });
@@ -210,18 +213,18 @@ describe(@"PCFPush", ^{
             expectedSubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), nil);
         });
-        
+
         it(@"should update after tags initially set from empty", ^{
             expectedSubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), [NSSet set]);
         });
-        
+
         it(@"should update after tags change to nil", ^{
             helper.params.pushTags = nil;
             expectedUnsubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), helper.tags1);
         });
-        
+
         it(@"should update after tags change to empty", ^{
             helper.params.pushTags = [NSSet set];
             expectedUnsubscribeTags = helper.tags1;
@@ -230,18 +233,18 @@ describe(@"PCFPush", ^{
     });
     
     describe(@"successful registration", ^{
-        
+
         beforeEach(^{
             [PCFPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
             [helper setupApplicationDelegateForSuccessfulRegistration];
         });
-        
+
         it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
-            
+
             __block BOOL successBlockExecuted = NO;
             __block NSSet *expectedTags;
-            
+
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:2];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
 
@@ -265,79 +268,80 @@ describe(@"PCFPush", ^{
 
             expectedTags = helper.tags1;
             [PCFPush load];
-            [helper setupDefaultPLIST:helper.params];
+            [helper setupDefaultPLIST];
             [PCFPush setCompletionBlockWithSuccess:^{
                 successBlockExecuted = YES;
             }                              failure:^(NSError *error) {
                 fail(@"registration failure block executed");
             }];
 
+            [PCFPush setTags:helper.tags1];
             [PCFPush registerForPushNotifications];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
             successBlockExecuted = NO;
             [PCFPush load];
-            
+
             [PCFPush registerForPushNotifications];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
         });
     });
-    
+
     describe(@"failed registration", ^{
-        
+
         __block NSError *testError;
         __block BOOL expectedResult = NO;
-        
+
         beforeEach(^{
             [PCFPushClient resetSharedClient];
-            
+
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithError:testError];
             [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
             expectedResult = NO;
         });
-        
+
         afterEach(^{
             [[theValue(expectedResult) should] beTrue];
             [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
             expectedResult = NO;
             testError = nil;
         });
-        
+
         it(@"should handle registration failures from APNS", ^{
             [PCFPush load];
-            
+
             [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
 
-            [helper setupDefaultPLIST:helper.params];
+            [helper setupDefaultPLIST];
             [PCFPush setCompletionBlockWithSuccess:nil
                                            failure:^(NSError *error) {
                                                expectedResult = YES;
                                            }];
-            
+
             [PCFPush registerForPushNotifications];
         });
     });
-    
+
     context(@"valid object arguments", ^{
         __block BOOL wasExpectedResult = NO;
         __block PCFPushSpecsHelper *helper;
-        
+
         beforeEach(^{
             helper = [[PCFPushSpecsHelper alloc] init];
             [helper setupParameters];
             wasExpectedResult = NO;
         });
-        
+
         afterEach(^{
             [[theValue(wasExpectedResult) should] beTrue];
             [helper reset];
             helper = nil;
         });
-        
+
         it(@"should handle an HTTP status error", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(HTTPErrorResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -349,12 +353,12 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                      }];
         });
-        
-        
+
+
         it(@"should handle a successful response with empty data", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(emptyDataResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -366,11 +370,11 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                      }];
         });
-        
+
         it(@"should handle a successful response with nil data", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(nilDataResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -382,11 +386,11 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                      }];
         });
-        
+
         it(@"should handle a successful response with zero-length", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(zeroLengthDataResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -398,11 +402,11 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                      }];
         });
-        
+
         it(@"should handle a successful response that contains unparseable text", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(unparseableDataResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -413,11 +417,11 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                      }];
         });
-        
+
         it(@"should require a device_uuid in the server response", ^{
             NSError *error;
             [helper swizzleAsyncRequestWithSelector:@selector(missingUUIDResponseRequest:queue:completionHandler:) error:&error];
-            
+
             [PCFPushClient sendRegisterRequestWithParameters:helper.params
                                                  deviceToken:helper.apnsDeviceToken
                                                      success:^{
@@ -430,17 +434,17 @@ describe(@"PCFPush", ^{
                                                      }];
         });
     });
-    
+
     describe(@"successful unregistration from push server", ^{
-        
+
         __block BOOL successBlockExecuted = NO;
-        
+
         beforeEach(^{
             successBlockExecuted = NO;
             [helper setupDefaultPersistedParameters];
 
         });
-        
+
         afterEach(^{
             [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
             [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -449,58 +453,58 @@ describe(@"PCFPush", ^{
         });
 
         context(@"when not already registered", ^{
-            
+
             beforeEach(^{
                 [PCFPushPersistentStorage setServerDeviceID:nil];
             });
-            
+
             it(@"should be considered a success if the device isn't currently registered", ^{
                 [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
                 [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-                
+
                 [PCFPush unregisterWithPushServerSuccess:^{
                     successBlockExecuted = YES;
 
                 }                                failure:^(NSError *error) {
                     fail(@"unregistration failure block executed");
                 }];
-                
+
                 [[theValue(successBlockExecuted) shouldEventually] beTrue];
             });
         });
-        
+
         context(@"when already registered", ^{
-            
+
             it(@"should succesfully unregister if the device has a persisted backEndDeviceUUID and should remove all persisted parameters when unregister is successful", ^{
 
                 [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:204];
 
                 [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
                 [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-                
+
                 [PCFPush unregisterWithPushServerSuccess:^{
                     successBlockExecuted = YES;
 
                 }                                failure:^(NSError *error) {
                     fail(@"unregistration failure block executed");
                 }];
-                
+
                 [[theValue(successBlockExecuted) shouldEventually] beTrue];
             });
         });
     });
-    
+
     describe(@"unsuccessful unregistration when device not registered on push server", ^{
 
         __block BOOL failureBlockExecuted = NO;
-        
+
         it(@"should perform failure block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
 
             [helper setupDefaultPersistedParameters];
             [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:404];
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            
+
             [PCFPush unregisterWithPushServerSuccess:^{
                 fail(@"unregistration success block executed");
 
@@ -508,19 +512,19 @@ describe(@"PCFPush", ^{
                 failureBlockExecuted = YES;
 
             }];
-            
+
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
         });
     });
-    
+
     describe(@"unsuccessful unregistration", ^{
 
         __block BOOL failureBlockExecuted = NO;
-        
+
         it(@"should perform failure block if server request returns error", ^{
             [helper setupDefaultPersistedParameters];
             failureBlockExecuted = NO;
-            
+
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:nil];
                 CompletionHandler handler = params[2];
@@ -529,7 +533,7 @@ describe(@"PCFPush", ^{
             }];
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            
+
             [PCFPush unregisterWithPushServerSuccess:^{
                 fail(@"unregistration success block executed incorrectly");
 
@@ -537,7 +541,7 @@ describe(@"PCFPush", ^{
                 failureBlockExecuted = YES;
 
             }];
-            
+
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
         });
     });

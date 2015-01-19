@@ -7,7 +7,7 @@
 #import "PCFPushBackEndRegistrationRequestDataTest.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushErrors.h"
-#import "PCFPushRegistrationPutRequestData.h"
+#import "PCFPushSpecsHelper.h"
 
 static NSArray *TEST_SUBSCRIBE_TAGS;
 static NSArray *TEST_UNSUBSCRIBE_TAGS;

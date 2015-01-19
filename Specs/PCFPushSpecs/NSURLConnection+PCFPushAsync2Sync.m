@@ -4,6 +4,8 @@
 
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
+#import "PCFPushSpecsHelper.h"
+#import "PCFPushRegistrationData.h"
 
 @implementation NSURLConnection (PCFPushAsync2Sync)
 

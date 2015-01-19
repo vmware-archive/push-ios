@@ -7,9 +7,20 @@
 @class PCFPushPersistentStorage;
 @class PCFParameters;
 
+OBJC_EXPORT NSString *const TEST_PUSH_API_URL_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_SECRET_1;
 OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_1;
+
+OBJC_EXPORT NSString *const TEST_VARIANT_UUID;
+OBJC_EXPORT NSString *const TEST_VARIANT_SECRET;
+OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS;
+OBJC_EXPORT NSString *const TEST_DEVICE_MANUFACTURER;
+OBJC_EXPORT NSString *const TEST_DEVICE_MODEL;
+OBJC_EXPORT NSString *const TEST_OS;
+OBJC_EXPORT NSString *const TEST_OS_VERSION;
+OBJC_EXPORT NSString *const TEST_REGISTRATION_TOKEN;
+OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
 @interface PCFPushSpecsHelper : NSObject
 
@@ -21,7 +32,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_1;
 @property (nonatomic) NSSet *tags1;
 @property (nonatomic) NSSet *tags2;
 @property (nonatomic) PCFParameters *params;
-@property (nonatomic) PCFParameters *plist;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -41,7 +51,8 @@ OBJC_EXPORT NSString *const TEST_DEVICE_ALIAS_1;
 // Parameters helpers
 - (PCFParameters *)setupParameters;
 - (void) setupDefaultPersistedParameters;
-- (void) setupDefaultPLIST:(PCFParameters *)parameters;
+- (void) setupDefaultPLIST;
+- (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename;
 
 // NSURLConnectionHelpers
 - (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error;

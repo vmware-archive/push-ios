@@ -5,12 +5,10 @@
 #import "Kiwi.h"
 
 #import "PCFPushRegistrationResponseData.h"
-#import "PCFPushRegistrationPostRequestData.h"
-#import "PCFPushBackEndRegistrationDataTest.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushErrors.h"
-
+#import "PCFPushSpecsHelper.h"
 
 SPEC_BEGIN(PCFPushBackEndRegistrationResponseDataSpec)
 

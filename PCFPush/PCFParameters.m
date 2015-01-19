@@ -6,6 +6,7 @@
 
 #import "PCFParameters.h"
 #import "PCFPushDebug.h"
+#import "PCFPushPersistentStorage.h"
 
 #ifdef DEBUG
 static BOOL kInDebug = YES;
@@ -13,12 +14,39 @@ static BOOL kInDebug = YES;
 static BOOL kInDebug = NO;
 #endif
 
-
 @implementation PCFParameters
 
 + (PCFParameters *)defaultParameters
 {
-    return [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"PCFParameters" ofType:@"plist"]];
+    PCFParameters *parameters = [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[PCFParameters defaultParameterFilename] ofType:@"plist"]];
+    parameters.pushTags = [PCFPushPersistentStorage tags];
+    parameters.pushDeviceAlias = [PCFPushPersistentStorage deviceAlias];
+    return parameters;
+}
+
++ (NSString*) defaultParameterFilename
+{
+    return @"PCFParameters";
+}
+
++ (void) enumerateParameters:(id)parameters withBlock:(void (^)(id propertyName, id propertyValue, BOOL *stop))block
+{
+    static NSArray *selectors = nil;
+    if (!selectors) {
+        selectors = @[
+                @"pushAPIURL",
+                @"developmentPushVariantUUID",
+                @"developmentPushVariantSecret",
+                @"productionPushVariantUUID",
+                @"productionPushVariantSecret"
+        ];
+    }
+    if (block) {
+        [selectors enumerateObjectsUsingBlock:^(id propertyName, NSUInteger idx, BOOL *stop) {
+            id propertyValue = [parameters valueForKey:propertyName];
+            block(propertyName, propertyValue, stop);
+        }];
+    }
 }
 
 + (PCFParameters *)parametersWithContentsOfFile:(NSString *)path
@@ -26,8 +54,12 @@ static BOOL kInDebug = NO;
     PCFParameters *params = [PCFParameters parameters];
     if (path) {
         @try {
-            NSDictionary *plistDictionary = [[NSDictionary alloc] initWithContentsOfFile:path];
-            [params setValuesForKeysWithDictionary:plistDictionary];
+            NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
+            [PCFParameters enumerateParameters:plist withBlock:^(id propertyName, id propertyValue, BOOL *stop) {
+                if (propertyValue) {
+                    [params setValue:propertyValue forKeyPath:propertyName];
+                }
+            }];
         } @catch (NSException *exception) {
             PCFPushLog(@"Exception while populating PCFParameters object. %@", exception);
             params = nil;
@@ -53,29 +85,16 @@ static BOOL kInDebug = NO;
 
 - (BOOL)arePushParametersValid;
 {
-    SEL selectors[] = {
-        @selector(pushAPIURL),
-        @selector(developmentPushVariantUUID),
-        @selector(developmentPushVariantSecret),
-        @selector(productionPushVariantUUID),
-        @selector(productionPushVariantSecret),
-    };
-    
-    // NOTE: pushTags, and pushDeviceAlias are allowed to be nil or empty
+    __block BOOL result = YES;
 
-    for (NSUInteger i = 0; i < sizeof(selectors)/sizeof(selectors[0]); i++) {
-        id value = [self valueForKey:NSStringFromSelector(selectors[i])];
-        if (!value || ([value respondsToSelector:@selector(length)] && [value length] <= 0)) {
-            PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", NSStringFromSelector(selectors[i]));
-            return NO;
+    [PCFParameters enumerateParameters:self withBlock:^(id propertyName, id propertyValue, BOOL *stop) {
+        if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
+            PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", propertyName);
+            result = NO;
+            *stop = YES;
         }
-    }
-    return YES;
-}
-
-- (BOOL)inDebugMode
-{
-    return kInDebug;
+    }];
+    return result;
 }
 
 @end

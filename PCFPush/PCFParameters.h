@@ -43,11 +43,6 @@
 - (BOOL)arePushParametersValid;
 
 /**
- * The Debug state of the application
- */
-- (BOOL)inDebugMode;
-
-/**
  * The variant UUID (resolved using the inProduction flag).
  */
 - (NSString *)variantUUID;

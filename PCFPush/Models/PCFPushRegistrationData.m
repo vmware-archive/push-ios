@@ -2,23 +2,7 @@
 //  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
-#import <objc/runtime.h>
-
 #import "PCFPushRegistrationData.h"
-#import "PCFPushErrors.h"
-#import "PCFPushErrorUtil.h"
-#import "PCFPushDebug.h"
-
-const struct RegistrationAttributes {
-    PCF_STRUCT_STRING *variantUUID;
-    PCF_STRUCT_STRING *deviceAlias;
-    PCF_STRUCT_STRING *deviceManufacturer;
-    PCF_STRUCT_STRING *deviceModel;
-    PCF_STRUCT_STRING *deviceOS;
-    PCF_STRUCT_STRING *deviceOSVersion;
-    PCF_STRUCT_STRING *registrationToken;
-    PCF_STRUCT_STRING *tags;
-} RegistrationAttributes;
 
 const struct RegistrationAttributes RegistrationAttributes = {
     .variantUUID         = @"variant_uuid",

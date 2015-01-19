@@ -8,6 +8,7 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushErrors.h"
 #import "PCFPushRegistrationPostRequestData.h"
+#import "PCFPushSpecsHelper.h"
 
 static NSArray *TEST_TAGS;
 

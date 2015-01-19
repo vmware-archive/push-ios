@@ -11,6 +11,7 @@
 #import "PCFParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
+#import "PCFPushRegistrationData.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -20,6 +21,16 @@ NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_VARIANT_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
+
+NSString *const TEST_VARIANT_UUID        = @"123-456-789";
+NSString *const TEST_VARIANT_SECRET      = @"My cat's breath smells like cat food";
+NSString *const TEST_DEVICE_ALIAS        = @"l33t devices of badness";
+NSString *const TEST_DEVICE_MANUFACTURER = @"Commodore";
+NSString *const TEST_DEVICE_MODEL        = @"64C";
+NSString *const TEST_OS                  = @"BASIC";
+NSString *const TEST_OS_VERSION          = @"2.0";
+NSString *const TEST_REGISTRATION_TOKEN  = @"ABC-DEF-GHI";
+NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 
 @implementation PCFPushSpecsHelper
 
@@ -44,7 +55,6 @@ NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
 - (void) reset
 {
     self.params = nil;
-    self.plist = nil;
     self.apnsDeviceToken = nil;
     self.backEndDeviceId = nil;
     self.tags1 = nil;
@@ -164,10 +174,15 @@ NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
     [PCFPushPersistentStorage setTags:self.tags1];
 }
 
-- (void) setupDefaultPLIST:(PCFParameters *)parameters
+- (void) setupDefaultPLIST
 {
-    self.plist = parameters;
-    [PCFParameters stub:@selector(defaultParameters) andReturn:self.plist];
+    [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+}
+
+- (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename
+{
+    [PCFParameters stub:@selector(defaultParameterFilename) andReturn:parameterFilename];
+    [self setupDefaultPLIST];
 }
 
 #pragma mark - NSURLConnection Helpers
