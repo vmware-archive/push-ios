@@ -4,7 +4,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class PCFParameters;
+@class PCFPushParameters;
 
 /**
  * Primary entry point for the CF Push Client SDK library.

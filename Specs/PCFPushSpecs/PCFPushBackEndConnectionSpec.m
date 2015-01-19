@@ -7,7 +7,7 @@
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushURLConnection.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFPushErrors.h"
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushClient.h"

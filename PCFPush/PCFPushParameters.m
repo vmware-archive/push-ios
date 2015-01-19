@@ -4,7 +4,7 @@
 
 #import <objc/runtime.h>
 
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
 
@@ -14,11 +14,11 @@ static BOOL kInDebug = YES;
 static BOOL kInDebug = NO;
 #endif
 
-@implementation PCFParameters
+@implementation PCFPushParameters
 
-+ (PCFParameters *)defaultParameters
++ (PCFPushParameters *)defaultParameters
 {
-    PCFParameters *parameters = [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[PCFParameters defaultParameterFilename] ofType:@"plist"]];
+    PCFPushParameters *parameters = [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[PCFPushParameters defaultParameterFilename] ofType:@"plist"]];
     parameters.pushTags = [PCFPushPersistentStorage tags];
     parameters.pushDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     return parameters;
@@ -29,27 +29,27 @@ static BOOL kInDebug = NO;
     return @"Pivotal";
 }
 
-+ (PCFParameters *)parametersWithContentsOfFile:(NSString *)path
++ (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path
 {
-    PCFParameters *params = [PCFParameters parameters];
+    PCFPushParameters *params = [PCFPushParameters parameters];
     if (path) {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
-            [PCFParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+            [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
                 id propertyValue = [plist valueForKey:plistPropertyName];
                 if (propertyValue) {
                     [params setValue:propertyValue forKeyPath:propertyName];
                 }
             }];
         } @catch (NSException *exception) {
-            PCFPushLog(@"Exception while populating PCFParameters object. %@", exception);
+            PCFPushLog(@"Exception while populating PCFPushParameters object. %@", exception);
             params = nil;
         }
     }
     return params;
 }
 
-+ (PCFParameters *)parameters
++ (PCFPushParameters *)parameters
 {
     return [[self alloc] init];
 }
@@ -69,10 +69,10 @@ static BOOL kInDebug = NO;
 {
     __block BOOL result = YES;
 
-    [PCFParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+    [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
         id propertyValue = [self valueForKeyPath:propertyName];
         if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
-            PCFPushLog(@"PCFParameters failed validation caused by an invalid parameter %@.", propertyName);
+            PCFPushLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
             result = NO;
             *stop = YES;
         }

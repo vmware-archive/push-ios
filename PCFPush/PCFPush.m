@@ -3,7 +3,7 @@
 //
 
 #import "PCFPushURLConnection.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFAppDelegateProxy.h"
 #import "PCFPushDebug.h"

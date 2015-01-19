@@ -7,7 +7,7 @@
 #import "PCFPushClient.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrors.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFAppDelegate.h"
 #import "PCFNotifications.h"
 #import "PCFPushErrorUtil.h"
@@ -39,7 +39,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
         self.notificationTypes = (UIRemoteNotificationTypeAlert
                                   |UIRemoteNotificationTypeBadge
                                   |UIRemoteNotificationTypeSound);
-        self.registrationParameters = [PCFParameters defaultParameters];
+        self.registrationParameters = [PCFPushParameters defaultParameters];
         [self swapAppDelegate];
     }
     return self;
@@ -148,7 +148,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
-+ (RegistrationBlock)registrationBlockWithParameters:(PCFParameters *)parameters
++ (RegistrationBlock)registrationBlockWithParameters:(PCFPushParameters *)parameters
                                          deviceToken:(NSData *)deviceToken
                                              success:(void (^)(void))successBlock
                                              failure:(void (^)(NSError *error))failureBlock
@@ -238,7 +238,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     }
 }
 
-+ (void)sendRegisterRequestWithParameters:(PCFParameters *)parameters
++ (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
                               deviceToken:(NSData *)deviceToken
                                   success:(void (^)(void))successBlock
                                   failure:(void (^)(NSError *error))failureBlock
@@ -254,7 +254,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)updateRegistrationRequiredForDeviceToken:(NSData *)deviceToken
-                                      parameters:(PCFParameters *)parameters
+                                      parameters:(PCFPushParameters *)parameters
 {
     // If not currently registered with the back-end then update registration is not required
     if (![PCFPushPersistentStorage APNSDeviceToken]) {
@@ -273,7 +273,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 }
 
 + (BOOL)registrationRequiredForDeviceToken:(NSData *)deviceToken
-                                parameters:(PCFParameters *)parameters
+                                parameters:(PCFPushParameters *)parameters
 {
     // If not currently registered with the back-end then registration will be required
     if (![PCFPushPersistentStorage serverDeviceID]) {
@@ -291,7 +291,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     return NO;
 }
 
-+ (BOOL)localParametersMatchNewParameters:(PCFParameters *)parameters
++ (BOOL)localParametersMatchNewParameters:(PCFPushParameters *)parameters
 {
     // If any of the registration parameters are different then unregistration is required
     NSString *savedVariantUUID = [PCFPushPersistentStorage variantUUID];

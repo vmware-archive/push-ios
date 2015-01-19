@@ -4,13 +4,13 @@
 
 #import <UIKit/UIKit.h>
 
-@class PCFParameters;
 @class PCFAppDelegateProxy;
 @class PCFAppDelegate;
+@class PCFPushParameters;
 
 @interface PCFPushClient : NSObject
 
-@property PCFParameters *registrationParameters;
+@property PCFPushParameters *registrationParameters;
 @property PCFAppDelegateProxy *appDelegateProxy;
 @property UIRemoteNotificationType notificationTypes;
 @property (copy) void (^successBlock)(void);

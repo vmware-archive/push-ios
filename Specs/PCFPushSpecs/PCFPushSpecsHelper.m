@@ -8,7 +8,7 @@
 #import "PCFAppDelegate.h"
 #import "JRSwizzle.h"
 #import "PCFPushPersistentStorage.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushRegistrationData.h"
@@ -150,9 +150,9 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 
 #pragma mark - Parameters helpers
 
-- (PCFParameters *)setupParameters
+- (PCFPushParameters *)setupParameters
 {
-    PCFParameters *params = [PCFParameters parameters];
+    PCFPushParameters *params = [PCFPushParameters parameters];
     params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentPushVariantSecret = TEST_VARIANT_SECRET_1;
     params.productionPushVariantUUID = TEST_VARIANT_UUID_1;
@@ -181,7 +181,7 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 
 - (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename
 {
-    [PCFParameters stub:@selector(defaultParameterFilename) andReturn:parameterFilename];
+    [PCFPushParameters stub:@selector(defaultParameterFilename) andReturn:parameterFilename];
     [self setupDefaultPLIST];
 }
 

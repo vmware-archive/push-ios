@@ -9,7 +9,7 @@
 #import "PCFPushErrors.h"
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushPersistentStorage.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "PCFPushRegistrationPutRequestData.h"
 #import "PCFPushRegistrationPostRequestData.h"
@@ -87,14 +87,14 @@ describe(@"PCFPush", ^{
 
         it(@"should raise an exception if parameters are nil", ^{
             [[theBlock(^{
-                [helper setupDefaultPLISTWithFile:@"PCFParameters-Empty"];
+                [helper setupDefaultPLISTWithFile:@"PCFPushParameters-Empty"];
                 [PCFPush registerForPushNotifications];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should raise an exception if parameters are invalid", ^{
             [[theBlock(^{
-                [helper setupDefaultPLISTWithFile:@"PCFParameters-Invalid"];
+                [helper setupDefaultPLISTWithFile:@"PCFPushParameters-Invalid"];
                 [PCFPush registerForPushNotifications];
             }) should] raiseWithName:NSInvalidArgumentException];
         });

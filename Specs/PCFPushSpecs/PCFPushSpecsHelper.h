@@ -5,7 +5,7 @@
 #import <UIKit/UIKit.h>
 
 @class PCFPushPersistentStorage;
-@class PCFParameters;
+@class PCFPushParameters;
 
 OBJC_EXPORT NSString *const TEST_PUSH_API_URL_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
@@ -31,7 +31,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 @property (nonatomic) NSString *base64AuthString1;
 @property (nonatomic) NSSet *tags1;
 @property (nonatomic) NSSet *tags2;
-@property (nonatomic) PCFParameters *params;
+@property (nonatomic) PCFPushParameters *params;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -49,7 +49,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 - (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error;
 
 // Parameters helpers
-- (PCFParameters *)setupParameters;
+- (PCFPushParameters *)setupParameters;
 - (void) setupDefaultPersistedParameters;
 - (void) setupDefaultPLIST;
 - (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename;

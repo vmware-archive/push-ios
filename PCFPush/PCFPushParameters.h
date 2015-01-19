@@ -8,7 +8,7 @@
  * Defines the set of parameters used while registering the device for push notifications or analyitcs.
  * Pass to one of the `register` methods in the `PCFPush` class.
  */
-@interface PCFParameters : NSObject
+@interface PCFPushParameters : NSObject
 
 /**
  * Push Parameters
@@ -24,18 +24,18 @@
 /**
  * Creates an instance using the values set in the `Pivotal.plist` file.
  */
-+ (PCFParameters *)defaultParameters;
++ (PCFPushParameters *)defaultParameters;
 
 /**
  * Creates an instance using the values found in the specified `.plist` file.
  * @param path The path of the specified file.
  */
-+ (PCFParameters *)parametersWithContentsOfFile:(NSString *)path;
++ (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path;
 
 /**
  * Creates an instance with empty values.
  */
-+ (PCFParameters *)parameters;
++ (PCFPushParameters *)parameters;
 
 /**
  * Validate Push Parameter properties

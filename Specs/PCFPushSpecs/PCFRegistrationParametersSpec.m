@@ -5,14 +5,14 @@
 #import <objc/runtime.h>
 
 #import "Kiwi.h"
-#import "PCFParameters.h"
+#import "PCFPushParameters.h"
 #import "PCFClassPropertyUtility.h"
 #import "PCFPushSpecsHelper.h"
 
 SPEC_BEGIN(PCFRegistrationParametersSpec)
 
-void (^checkParametersAreValid)(PCFParameters *) = ^(PCFParameters *model) {
-    NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFParameters class]];
+void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *model) {
+    NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFPushParameters class]];
 
     BOOL (^shouldTestProperty)(NSString *, NSString *) = ^BOOL(NSString *propertyName, NSString *propertyType) {
 
@@ -31,7 +31,7 @@ void (^checkParametersAreValid)(PCFParameters *) = ^(PCFParameters *model) {
             id value = [model valueForKey:propertyName];
             [model setValue:nil forKey:propertyName];
             
-            BOOL (^valid)(PCFParameters *) = ^BOOL(PCFParameters *model) {
+            BOOL (^valid)(PCFPushParameters *) = ^BOOL(PCFPushParameters *model) {
                 return [model arePushParametersValid];
             };
             [[theValue(valid(model)) should] beFalse];
@@ -50,7 +50,7 @@ void (^checkParametersAreValid)(PCFParameters *) = ^(PCFParameters *model) {
 describe(@"PCFRegistrationParameters", ^{
 
     __block PCFPushSpecsHelper *helper = nil;
-    __block PCFParameters *model;
+    __block PCFPushParameters *model;
 
     beforeEach(^{
         helper = [[PCFPushSpecsHelper alloc] init];
@@ -64,7 +64,7 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with bad arguments programatically", ^{
         
         beforeEach(^{
-            model = [PCFParameters parameters];
+            model = [PCFPushParameters parameters];
             [model setPushTags:[NSSet setWithArray:@[@"TAG1", @"TAG2"]]];
             [model setPushDeviceAlias:TEST_DEVICE_ALIAS];
             [model setPushAPIURL:TEST_PUSH_API_URL_1];
@@ -104,7 +104,7 @@ describe(@"PCFRegistrationParameters", ^{
 
        beforeEach(^{
            [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
-           model = [PCFParameters defaultParameters];
+           model = [PCFPushParameters defaultParameters];
        });
 
         it(@"should initialize successfully and indicate that parameters are valid", ^{
@@ -123,7 +123,7 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with valid arguments from plist", ^{
         
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
         });
         
         it(@"should initialize successfully and indicate that parameters are valid", ^{
@@ -135,7 +135,7 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with invalid arguments from plist", ^{
        
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Invalid" ofType:@"plist"]];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Invalid" ofType:@"plist"]];
         });
         
         it(@"should load but indicate that parameters are invalid", ^{
@@ -146,7 +146,7 @@ describe(@"PCFRegistrationParameters", ^{
 
     context(@"ignoring the tags and device alias parameters from plist", ^{
         beforeEach(^{
-            model = [PCFParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-ExtraParameters" ofType:@"plist"]];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-ExtraParameters" ofType:@"plist"]];
         });
 
         it(@"should ignore the device alias in the plist", ^{
