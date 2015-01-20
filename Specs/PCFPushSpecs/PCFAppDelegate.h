@@ -3,7 +3,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface PCFJSONValueTransformer : NSValueTransformer
+@interface PCFAppDelegate : NSObject <UIApplicationDelegate>
+
 
 @end

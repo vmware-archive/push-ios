@@ -5,7 +5,6 @@
 #import <UIKit/UIKit.h>
 
 #import "PCFHardwareUtil.h"
-#include <sys/types.h>
 #include <sys/sysctl.h>
 
 #define STATIC_VARIABLE(VARIABLENAME, VARIABLEVALUE)       \

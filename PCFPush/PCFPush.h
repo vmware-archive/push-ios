@@ -4,8 +4,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class PCFPushParameters;
-
 /**
  * Primary entry point for the CF Push Client SDK library.
  *
@@ -21,18 +19,52 @@
  * notification types.  If you want a callback indicating success or failure of the registration operation then
  * you should also call [PCFPush setCompletionBlockWithSuccess:failure].
  *
+ * IMPORTANT: You MUST also implement the -application:didRegisterForRemoteNotificationWithDeviceToken: and
+ * -application:didFailToRegisterForRemoteNotificationsWithError: methods in your UIApplicationDelegate class
+ * and call [PCFPush APNSRegistrationSucceededWithDeviceToken:] and [PCFPush APNSRegistrationFailedWithError]
+ * methods respectively in order to successfully complete integration with this library.  If you do not
+ * then you will NOT be able to successfully register for remote notifications with Pivotal CF Push.
+ *
  * To provide parameters, you must provide a PLIST file called "Pivotal.plist" with the following registration
  * parameters:
  *
- *   pushAPIURL
- *   productionPushVariantSecret
- *   productionPushVariantUUID
- *   developmentPushVariantSecret
- *   developmentPushVariantUUID
+ *    pivotal.push.serviceUrl
+ *    pivotal.push.variantSecret.production
+ *    pivotal.push.variantUuid.production
+ *    pivotal.push.variantSecret.development
+ *    pivotal.push.variantUuid.development
  *
  * None of the above values may be `nil`.  None of the above values may be empty.
  */
 + (void) registerForPushNotifications;
+
+/**
+ * IMPORTANT!  You must call this method from your -application:didRegisterForRemoteNotificationWithDeviceToken:
+ * method in your UIApplicationDelegate in order to successfully integrate with Pivotal CF Push.
+ *
+ * example:
+ *
+ * - (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+ * {
+ *     NSLog(@"APNS registration succeeded!");
+ *     [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken]; // Continue registration with PCF Push
+ * }
+ */
++ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken;
+
+/**
+ * IMPORTANT!  You must call this method from your -application:didFailToRegisterForRemoteNotificationsWithError:
+ * method in your UIApplicationDelegate in order to successfully integrate with Pivotal CF Push.
+ *
+ * example:
+ *
+ * - (void) application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+ * {
+ *     NSLog(@"APNS registration failed!");
+ *     [PCFPush APNSRegistrationFailedWithError:error]; // Continue registration with PCF Push
+ * }
+ */
++ (void)APNSRegistrationFailedWithError:(NSError *)error;
 
 /**
  * Sets the type of alerts the user can receive when they receive a remote notification.
@@ -99,5 +131,4 @@
  */
 + (void) unregisterWithPushServerSuccess:(void (^)(void))success
                                  failure:(void (^)(NSError *))failure;
-
 @end

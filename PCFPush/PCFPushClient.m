@@ -8,10 +8,8 @@
 #import "PCFPushDebug.h"
 #import "PCFPushErrors.h"
 #import "PCFPushParameters.h"
-#import "PCFAppDelegate.h"
 #import "PCFNotifications.h"
 #import "PCFPushErrorUtil.h"
-#import "PCFAppDelegateProxy.h"
 #import "PCFPushURLConnection.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushPersistentStorage.h"
@@ -26,7 +24,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
 {
     dispatch_once(&_sharedPCFPushClientToken, ^{
         if (!_sharedPCFPushClient) {
-            _sharedPCFPushClient = [[self alloc] init];
+            _sharedPCFPushClient = [[PCFPushClient alloc] init];
         }
     });
     return _sharedPCFPushClient;
@@ -40,40 +38,8 @@ static dispatch_once_t _sharedPCFPushClientToken;
                                   |UIRemoteNotificationTypeBadge
                                   |UIRemoteNotificationTypeSound);
         self.registrationParameters = [PCFPushParameters defaultParameters];
-        [self swapAppDelegate];
     }
     return self;
-}
-
-- (PCFAppDelegate *)swapAppDelegate
-{
-    UIApplication *application = [UIApplication sharedApplication];
-    PCFAppDelegate *pushAppDelegate;
-    
-    if (application.delegate == self.appDelegateProxy) {
-        pushAppDelegate = (PCFAppDelegate *)[self.appDelegateProxy swappedAppDelegate];
-        
-    } else {
-        self.appDelegateProxy = [[PCFAppDelegateProxy alloc] init];
-        
-        @synchronized(application) {
-            pushAppDelegate = [[PCFAppDelegate alloc] init];
-            self.appDelegateProxy.originalAppDelegate = application.delegate;
-            self.appDelegateProxy.swappedAppDelegate = pushAppDelegate;
-            application.delegate = self.appDelegateProxy;
-        }
-    }
-    
-    [pushAppDelegate setPushRegistrationBlockWithSuccess:^(NSData *deviceToken) {
-        [self APNSRegistrationSuccess:deviceToken];
-        
-    } failure:^(NSError *error) {
-        if (self.failureBlock) {
-            self.failureBlock(error);
-        }
-    }];
-    
-    return pushAppDelegate;
 }
 
 - (void)resetInstance
@@ -215,11 +181,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
     }
     
-    if ([self.class updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
-        RegistrationBlock registrationBlock = [self.class registrationBlockWithParameters:self.registrationParameters
-                                                                              deviceToken:deviceToken
-                                                                                  success:self.successBlock
-                                                                                  failure:self.failureBlock];
+    if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
+                                                                                 deviceToken:deviceToken
+                                                                                     success:self.successBlock
+                                                                                     failure:self.failureBlock];
         
         [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPushPersistentStorage serverDeviceID]
                                                   parameters:self.registrationParameters
@@ -227,11 +193,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                                      success:registrationBlock
                                                      failure:self.failureBlock];
         
-    } else if ([self.class registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
-        [self.class sendRegisterRequestWithParameters:self.registrationParameters
-                                          deviceToken:deviceToken
-                                              success:self.successBlock
-                                              failure:self.failureBlock];
+    } else if ([PCFPushClient registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        [PCFPushClient sendRegisterRequestWithParameters:self.registrationParameters
+                                             deviceToken:deviceToken
+                                                 success:self.successBlock
+                                                 failure:self.failureBlock];
         
     } else if (self.successBlock) {
         self.successBlock();
@@ -243,10 +209,10 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
                                   success:(void (^)(void))successBlock
                                   failure:(void (^)(NSError *error))failureBlock
 {
-    RegistrationBlock registrationBlock = [self registrationBlockWithParameters:parameters
-                                                                    deviceToken:deviceToken
-                                                                        success:successBlock
-                                                                        failure:failureBlock];
+    RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:parameters
+                                                                             deviceToken:deviceToken
+                                                                                 success:successBlock
+                                                                                 failure:failureBlock];
     [PCFPushURLConnection registerWithParameters:parameters
                                      deviceToken:deviceToken
                                          success:registrationBlock
@@ -261,11 +227,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     
-    if (![self localDeviceTokenMatchesNewToken:deviceToken]) {
+    if (![PCFPushClient localDeviceTokenMatchesNewToken:deviceToken]) {
         return YES;
     }
     
-    if (![self localParametersMatchNewParameters:parameters]) {
+    if (![PCFPushClient localParametersMatchNewParameters:parameters]) {
         return YES;
     }
     
@@ -280,11 +246,11 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return YES;
     }
     
-    if (![self localDeviceTokenMatchesNewToken:deviceToken]) {
+    if (![PCFPushClient localDeviceTokenMatchesNewToken:deviceToken]) {
         return YES;
     }
     
-    if (![self localParametersMatchNewParameters:parameters]) {
+    if (![PCFPushClient localParametersMatchNewParameters:parameters]) {
         return YES;
     }
     

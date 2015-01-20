@@ -45,8 +45,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
 // Application Delegate helpers
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
-- (void) setupApplicationDelegateForSuccessfulRegistration;
-- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error;
 
 // Parameters helpers
 - (PCFPushParameters *)setupParameters;

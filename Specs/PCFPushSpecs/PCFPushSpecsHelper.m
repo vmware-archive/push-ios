@@ -75,12 +75,6 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 - (void)stubApplication
 {
     [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
-    [self.application stub:@selector(setDelegate:) withBlock:^id(NSArray *params) {
-        if ([params[0] conformsToProtocol:@protocol(UIApplicationDelegate)]) {
-            self.applicationDelegate = params[0];
-        }
-        return nil;
-    }];
 }
 
 - (void) setupApplicationForSuccessfulRegistration
@@ -94,8 +88,7 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
         
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
             
-            [(PCFAppDelegate *) self.applicationDelegate application:self.application
-                   didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
+            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
     };
@@ -131,21 +124,6 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
     self.applicationDelegate = [[PCFAppDelegate alloc] init];
     [self stubApplication];
     return self.applicationDelegate;
-}
-
-- (void) setupApplicationDelegateForSuccessfulRegistration
-{
-    [self setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:self.apnsDeviceToken];
-}
-
-- (void) setupApplicationDelegateForSuccessfulRegistrationWithApnsDeviceToken:(NSData *)apnsDeviceToken
-{
-    [(id)self.applicationDelegate stub:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withArguments:self.application, apnsDeviceToken, nil];
-}
-
-- (void) setupApplicationDelegateForFailedRegistrationWithError:(NSError *)error
-{
-    [(id)self.applicationDelegate stub:@selector(application:didFailToRegisterForRemoteNotificationsWithError:) withArguments:self.application, error, nil];
 }
 
 #pragma mark - Parameters helpers

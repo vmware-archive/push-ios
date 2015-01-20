@@ -19,10 +19,6 @@
 		2318E691199C039A0054C274 /* PCFPushRegistrationPostRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */; };
 		2318E692199C039A0054C274 /* PCFPushRegistrationResponseData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E693199C039A0054C274 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */; };
-		2318E694199C039A0054C274 /* PCFAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E662199C039A0054C274 /* PCFAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E695199C039A0054C274 /* PCFAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E663199C039A0054C274 /* PCFAppDelegate.m */; };
-		2318E696199C039A0054C274 /* PCFAppDelegateProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E664199C039A0054C274 /* PCFAppDelegateProxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E697199C039A0054C274 /* PCFAppDelegateProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E665199C039A0054C274 /* PCFAppDelegateProxy.m */; };
 		2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66A199C039A0054C274 /* PCFPushParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66B199C039A0054C274 /* PCFPushParameters.m */; };
 		2318E69E199C039A0054C274 /* PCFPush-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2318E66C199C039A0054C274 /* PCFPush-Info.plist */; };
@@ -33,8 +29,6 @@
 		2318E6A7199C039A0054C274 /* PCFSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E677199C039A0054C274 /* PCFSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E6A8199C039A0054C274 /* PCFHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E679199C039A0054C274 /* PCFHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E6A9199C039A0054C274 /* PCFHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E67A199C039A0054C274 /* PCFHardwareUtil.m */; };
-		2318E6AA199C039A0054C274 /* PCFJSONValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E67B199C039A0054C274 /* PCFJSONValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6AB199C039A0054C274 /* PCFJSONValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E67C199C039A0054C274 /* PCFJSONValueTransformer.m */; };
 		2318E6AC199C039A0054C274 /* PCFNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E67D199C039A0054C274 /* PCFNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E6AD199C039A0054C274 /* PCFNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E67E199C039A0054C274 /* PCFNotifications.m */; };
 		2318E6B0199C039A0054C274 /* PCFPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E681199C039A0054C274 /* PCFPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -67,10 +61,6 @@
 		2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationPostRequestData.m; sourceTree = "<group>"; };
 		2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationResponseData.h; sourceTree = "<group>"; };
 		2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationResponseData.m; sourceTree = "<group>"; };
-		2318E662199C039A0054C274 /* PCFAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegate.h; sourceTree = "<group>"; };
-		2318E663199C039A0054C274 /* PCFAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAppDelegate.m; sourceTree = "<group>"; };
-		2318E664199C039A0054C274 /* PCFAppDelegateProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFAppDelegateProxy.h; sourceTree = "<group>"; };
-		2318E665199C039A0054C274 /* PCFAppDelegateProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFAppDelegateProxy.m; sourceTree = "<group>"; };
 		2318E66A199C039A0054C274 /* PCFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushParameters.h; sourceTree = "<group>"; };
 		2318E66B199C039A0054C274 /* PCFPushParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushParameters.m; sourceTree = "<group>"; };
 		2318E66C199C039A0054C274 /* PCFPush-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "PCFPush-Info.plist"; sourceTree = "<group>"; };
@@ -81,8 +71,6 @@
 		2318E677199C039A0054C274 /* PCFSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFSortDescriptors.h; sourceTree = "<group>"; };
 		2318E679199C039A0054C274 /* PCFHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFHardwareUtil.h; sourceTree = "<group>"; };
 		2318E67A199C039A0054C274 /* PCFHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFHardwareUtil.m; sourceTree = "<group>"; };
-		2318E67B199C039A0054C274 /* PCFJSONValueTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFJSONValueTransformer.h; sourceTree = "<group>"; };
-		2318E67C199C039A0054C274 /* PCFJSONValueTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFJSONValueTransformer.m; sourceTree = "<group>"; };
 		2318E67D199C039A0054C274 /* PCFNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFNotifications.h; sourceTree = "<group>"; };
 		2318E67E199C039A0054C274 /* PCFNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFNotifications.m; sourceTree = "<group>"; };
 		2318E681199C039A0054C274 /* PCFPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDebug.h; sourceTree = "<group>"; };
@@ -125,10 +113,6 @@
 				2318E678199C039A0054C274 /* Utils */,
 				2318E66C199C039A0054C274 /* PCFPush-Info.plist */,
 				2318E66D199C039A0054C274 /* PCFPush-Prefix.pch */,
-				2318E662199C039A0054C274 /* PCFAppDelegate.h */,
-				2318E663199C039A0054C274 /* PCFAppDelegate.m */,
-				2318E664199C039A0054C274 /* PCFAppDelegateProxy.h */,
-				2318E665199C039A0054C274 /* PCFAppDelegateProxy.m */,
 				2318E66A199C039A0054C274 /* PCFPushParameters.h */,
 				2318E66B199C039A0054C274 /* PCFPushParameters.m */,
 				2318E66E199C039A0054C274 /* PCFPush.h */,
@@ -197,8 +181,6 @@
 			children = (
 				2318E679199C039A0054C274 /* PCFHardwareUtil.h */,
 				2318E67A199C039A0054C274 /* PCFHardwareUtil.m */,
-				2318E67B199C039A0054C274 /* PCFJSONValueTransformer.h */,
-				2318E67C199C039A0054C274 /* PCFJSONValueTransformer.m */,
 				2318E67D199C039A0054C274 /* PCFNotifications.h */,
 				2318E67E199C039A0054C274 /* PCFNotifications.m */,
 				2318E681199C039A0054C274 /* PCFPushDebug.h */,
@@ -251,16 +233,13 @@
 				2318E6B2199C039A0054C274 /* PCFPushErrors.h in Headers */,
 				2318E6AC199C039A0054C274 /* PCFNotifications.h in Headers */,
 				2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */,
-				2318E696199C039A0054C274 /* PCFAppDelegateProxy.h in Headers */,
 				D4B9FF2319A3CD950070A429 /* PCFPushPersistentStorage.h in Headers */,
 				D4F3AC4F19A3A25F005E84FF /* PCFTagsHelper.h in Headers */,
 				2318E688199C039A0054C274 /* PCFPushURLConnection.h in Headers */,
 				2318E68E199C039A0054C274 /* PCFPushRegistrationData.h in Headers */,
 				2318E6B3199C039A0054C274 /* PCFPushErrorUtil.h in Headers */,
-				2318E6AA199C039A0054C274 /* PCFJSONValueTransformer.h in Headers */,
 				2318E6B5199C039A0054C274 /* PCFPushHexUtil.h in Headers */,
 				D4B9FF2719A511370070A429 /* PCFPushClient.h in Headers */,
-				2318E694199C039A0054C274 /* PCFAppDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -346,11 +325,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				2318E6B4199C039A0054C274 /* PCFPushErrorUtil.m in Sources */,
-				2318E695199C039A0054C274 /* PCFAppDelegate.m in Sources */,
 				2318E6B6199C039A0054C274 /* PCFPushHexUtil.m in Sources */,
-				2318E6AB199C039A0054C274 /* PCFJSONValueTransformer.m in Sources */,
 				2318E6AD199C039A0054C274 /* PCFNotifications.m in Sources */,
-				2318E697199C039A0054C274 /* PCFAppDelegateProxy.m in Sources */,
 				2318E68F199C039A0054C274 /* PCFPushRegistrationData.m in Sources */,
 				2318E691199C039A0054C274 /* PCFPushRegistrationPostRequestData.m in Sources */,
 				2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */,

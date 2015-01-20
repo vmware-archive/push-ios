@@ -10,7 +10,6 @@
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushParameters.h"
-#import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "PCFPushRegistrationPutRequestData.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
@@ -44,7 +43,6 @@ describe(@"PCFPush", ^{
             beforeEach(^{
                 succeeded = NO;
                 [helper setupApplicationForSuccessfulRegistration];
-                [helper setupApplicationDelegateForSuccessfulRegistration];
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequestWithBlock:nil];
 
@@ -53,7 +51,6 @@ describe(@"PCFPush", ^{
                 } failure:^(NSError *error) {
                     fail(@"Should have succeeded");
                 }];
-                [PCFPush registerForPushNotifications];
             });
 
             afterEach(^{
@@ -62,26 +59,32 @@ describe(@"PCFPush", ^{
 
             it(@"should accept a nil deviceAlias", ^{
                 [PCFPush setDeviceAlias:nil];
+                [PCFPush registerForPushNotifications];
             });
 
             it(@"should accept an empty deviceAlias", ^{
                 [PCFPush setDeviceAlias:@""];
+                [PCFPush registerForPushNotifications];
             });
 
             it(@"should accept a non-empty deviceAlias", ^{
                 [PCFPush setDeviceAlias:@"NOT EMPTY"];
+                [PCFPush registerForPushNotifications];
             });
 
             it(@"should accept a nil tags", ^{
                 [PCFPush setTags:nil];
+                [PCFPush registerForPushNotifications];
             });
 
             it(@"should accept an empty tags", ^{
                 [PCFPush setTags:[NSSet set]];
+                [PCFPush registerForPushNotifications];
             });
 
             it(@"should accept a non-empty tags", ^{
                 [PCFPush setTags:helper.tags2];
+                [PCFPush registerForPushNotifications];
             });
         });
 
@@ -105,7 +108,7 @@ describe(@"PCFPush", ^{
             }) should] raise];
         });
     });
-    
+
     describe(@"updating registration", ^{
 
         __block NSInteger successCount;
@@ -121,7 +124,6 @@ describe(@"PCFPush", ^{
             expectedUnsubscribeTags = nil;
 
             [helper setupApplicationForSuccessfulRegistration];
-            [helper setupApplicationDelegateForSuccessfulRegistration];
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
                 [[request.HTTPMethod should] equal:@"PUT"];
@@ -149,15 +151,14 @@ describe(@"PCFPush", ^{
             }];
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:1];
 
             testBlock = ^(SEL sel, id newPersistedValue) {
-                
+
                 [helper setupDefaultPersistedParameters];
                 [helper setupDefaultPLIST];
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
-                
+
                 [PCFPush setCompletionBlockWithSuccess:^{
                     successCount++;
                 }                              failure:^(NSError *error) {
@@ -169,7 +170,7 @@ describe(@"PCFPush", ^{
                 [PCFPush registerForPushNotifications];
             };
         });
-        
+
         afterEach(^{
             [[theValue(successCount) shouldEventually] equal:theValue(1)];
             [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
@@ -202,13 +203,13 @@ describe(@"PCFPush", ^{
         it(@"should update after the APNSDeviceToken changes", ^{
             testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
         });
-        
+
         it(@"should update after the tags change to a different value", ^{
             expectedSubscribeTags = helper.tags1;
             expectedUnsubscribeTags = [NSSet setWithArray:@[ @"DIFFERENT TAG" ]];
             testBlock(@selector(setTags:), expectedUnsubscribeTags);
         });
-        
+
         it(@"should update after tags initially set from nil", ^{
             expectedSubscribeTags = helper.tags1;
             testBlock(@selector(setTags:), nil);
@@ -231,13 +232,12 @@ describe(@"PCFPush", ^{
             testBlock(@selector(setTags:), helper.tags1);
         });
     });
-    
+
     describe(@"successful registration", ^{
 
         beforeEach(^{
             [PCFPushClient resetSharedClient];
             [helper setupApplicationForSuccessfulRegistration];
-            [helper setupApplicationDelegateForSuccessfulRegistration];
         });
 
         it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
@@ -245,7 +245,6 @@ describe(@"PCFPush", ^{
             __block BOOL successBlockExecuted = NO;
             __block NSSet *expectedTags;
 
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:) withCount:2];
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
 
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
@@ -296,7 +295,6 @@ describe(@"PCFPush", ^{
 
             testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
             [helper setupApplicationForFailedRegistrationWithError:testError];
-            [helper setupApplicationDelegateForFailedRegistrationWithError:testError];
             expectedResult = NO;
         });
 
@@ -309,8 +307,6 @@ describe(@"PCFPush", ^{
 
         it(@"should handle registration failures from APNS", ^{
             [PCFPush load];
-
-            [[(id)helper.applicationDelegate shouldEventually] receive:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)];
 
             [helper setupDefaultPLIST];
             [PCFPush setCompletionBlockWithSuccess:nil

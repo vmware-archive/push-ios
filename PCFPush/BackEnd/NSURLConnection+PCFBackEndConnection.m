@@ -4,7 +4,6 @@
 
 #import "PCFPushErrors.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
-#import "NSObject+PCFJSONizable.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 

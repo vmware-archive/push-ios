@@ -11,10 +11,4 @@
                                   success:(void (^)(void))successBlock
                                   failure:(void (^)(NSError *error))failureBlock;
 
-+ (void)sendUpdateRegistrationRequestWithParameters:(PCFPushParameters *)parameters
-                                deviceToken:(NSData *)deviceToken
-                                    success:(void (^)(void))successBlock
-                                    failure:(void (^)(NSError *error))failureBlock;
-
-
 @end
