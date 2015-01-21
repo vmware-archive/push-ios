@@ -11,15 +11,18 @@
 
 @property PCFPushParameters *registrationParameters;
 @property UIRemoteNotificationType notificationTypes;
-@property (copy) void (^successBlock)(void);
-@property (copy) void (^failureBlock)(NSError *error);
 
 + (instancetype)shared;
 + (void)resetSharedClient;
 
-- (void)APNSRegistrationSuccess:(NSData *)deviceToken;
+- (void)APNSRegistrationSuccess:(NSData *)deviceToken
+                        success:(void (^)(void))successBlock
+                        failure:(void (^)(NSError *))failureBlock;
+
 - (void)registerForRemoteNotifications;
+
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure;
 - (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure;
+
 @end

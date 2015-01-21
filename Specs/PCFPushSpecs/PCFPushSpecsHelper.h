@@ -6,6 +6,7 @@
 
 @class PCFPushPersistentStorage;
 @class PCFPushParameters;
+@class PCFAppDelegate;
 
 OBJC_EXPORT NSString *const TEST_PUSH_API_URL_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
@@ -24,14 +25,14 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
 @interface PCFPushSpecsHelper : NSObject
 
-@property (nonatomic) id application;
-@property (nonatomic) id<UIApplicationDelegate> applicationDelegate;
-@property (nonatomic) NSData *apnsDeviceToken;
-@property (nonatomic) NSString *backEndDeviceId;
-@property (nonatomic) NSString *base64AuthString1;
-@property (nonatomic) NSSet *tags1;
-@property (nonatomic) NSSet *tags2;
-@property (nonatomic) PCFPushParameters *params;
+@property id application;
+@property PCFAppDelegate *applicationDelegate;
+@property NSData *apnsDeviceToken;
+@property NSString *backEndDeviceId;
+@property NSString *base64AuthString1;
+@property NSSet *tags1;
+@property NSSet *tags2;
+@property PCFPushParameters *params;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -45,6 +46,8 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
 // Application Delegate helpers
 - (id<UIApplicationDelegate>) setupApplicationDelegate;
+- (void)setCompletionBlockWithSuccess:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure;
 
 // Parameters helpers
 - (PCFPushParameters *)setupParameters;

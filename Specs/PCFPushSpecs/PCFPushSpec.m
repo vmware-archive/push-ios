@@ -3,7 +3,6 @@
 //
 
 #import "Kiwi.h"
-
 #import "PCFPush.h"
 #import "PCFPushClientTest.h"
 #import "PCFPushErrors.h"
@@ -33,7 +32,7 @@ describe(@"PCFPush", ^{
         [helper reset];
         helper = nil;
     });
-    
+
     describe(@"setting parameters", ^{
 
         describe(@"empty and nillable parameters", ^{
@@ -46,9 +45,9 @@ describe(@"PCFPush", ^{
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequestWithBlock:nil];
 
-                [PCFPush setCompletionBlockWithSuccess:^{
+                [helper setCompletionBlockWithSuccess:^{
                     succeeded = YES;
-                } failure:^(NSError *error) {
+                }                             failure:^(NSError *error) {
                     fail(@"Should have succeeded");
                 }];
             });
@@ -166,9 +165,9 @@ describe(@"PCFPush", ^{
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
 
-                [PCFPush setCompletionBlockWithSuccess:^{
+                [helper setCompletionBlockWithSuccess:^{
                     successCount++;
-                }                              failure:^(NSError *error) {
+                }                             failure:^(NSError *error) {
                     fail(@"registration failure block executed");
                 }];
 
@@ -273,9 +272,9 @@ describe(@"PCFPush", ^{
             expectedTags = helper.tags1;
             [PCFPush load];
             [helper setupDefaultPLIST];
-            [PCFPush setCompletionBlockWithSuccess:^{
+            [helper setCompletionBlockWithSuccess:^{
                 successBlockExecuted = YES;
-            }                              failure:^(NSError *error) {
+            }                             failure:^(NSError *error) {
                 fail(@"registration failure block executed");
             }];
 
@@ -313,8 +312,8 @@ describe(@"PCFPush", ^{
             [PCFPush load];
 
             [helper setupDefaultPLIST];
-            [PCFPush setCompletionBlockWithSuccess:nil
-                                           failure:^(NSError *error) {
+            [helper setCompletionBlockWithSuccess:nil
+                                          failure:^(NSError *error) {
                                                expectedResult = YES;
                                            }];
 

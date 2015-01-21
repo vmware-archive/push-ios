@@ -69,7 +69,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
     }
 
     UIApplication *application = [UIApplication sharedApplication];
-    
+
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
 
         // TODO - apply the supplied user notification settings
@@ -179,6 +179,8 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
 // TODO - this method should accept success and failure blocks
 - (void)APNSRegistrationSuccess:(NSData *)deviceToken
+                        success:(void (^)(void))successBlock
+                        failure:(void (^)(NSError *))failureBlock
 {
     if (!deviceToken) {
         [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
@@ -190,23 +192,23 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
         RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
                                                                                  deviceToken:deviceToken
-                                                                                     success:self.successBlock
-                                                                                     failure:self.failureBlock];
+                                                                                     success:successBlock
+                                                                                     failure:failureBlock];
         
         [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPushPersistentStorage serverDeviceID]
                                                   parameters:self.registrationParameters
                                                  deviceToken:deviceToken
                                                      success:registrationBlock
-                                                     failure:self.failureBlock];
+                                                     failure:failureBlock];
         
     } else if ([PCFPushClient registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
         [PCFPushClient sendRegisterRequestWithParameters:self.registrationParameters
                                              deviceToken:deviceToken
-                                                 success:self.successBlock
-                                                 failure:self.failureBlock];
+                                                 success:successBlock
+                                                 failure:failureBlock];
         
-    } else if (self.successBlock) {
-        self.successBlock();
+    } else if (successBlock) {
+        successBlock();
     }
 }
 

@@ -54,31 +54,28 @@
 
 /**
  * IMPORTANT!  You must call this method from your -application:didRegisterForRemoteNotificationWithDeviceToken:
- * method in your UIApplicationDelegate in order to successfully integrate with Pivotal CF Push.
+ * method in your UIApplicationDelegate in order to successfully register your device for push notifications
+ * with Pivotal CF Push.
  *
  * example:
  *
  * - (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
  * {
  *     NSLog(@"APNS registration succeeded!");
- *     [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken]; // Continue registration with PCF Push
- * }
- */
-+ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken;
-
-/**
- * IMPORTANT!  You must call this method from your -application:didFailToRegisterForRemoteNotificationsWithError:
- * method in your UIApplicationDelegate in order to successfully integrate with Pivotal CF Push.
  *
- * example:
- *
- * - (void) application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
- * {
- *     NSLog(@"APNS registration failed!");
- *     [PCFPush APNSRegistrationFailedWithError:error]; // Continue registration with PCF Push
+ *     // Continue registration with PCF Push
+ *     [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken
+ *     success:^{
+ *          // registration with Pivotal CF completed successfully.
+ *     } failure:^(NSError *error) {
+ *          // registration with Pivotal CF FAILED.
+ *     }];
  * }
+ *
  */
-+ (void)APNSRegistrationFailedWithError:(NSError *)error;
++ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken
+                                         success:(void (^)(void))success
+                                         failure:(void (^)(NSError *))failure;
 
 /**
  * Sets the type of alerts the user can receive when they receive a remote notification.
@@ -117,16 +114,6 @@
  * @param tags Provides the list of tags the device should subscribe to. Allowed to be `nil` or empty.
  */
 + (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure;
-
-/**
- * @param success block that will be executed if registration finishes successfully. This callback will
- *                be called on the main queue.  May be `nil`.
- *
- * @param failure block that will be executed if registration fails. This callback will be called on the main
- *                queue.  May be `nil`.
- */
-+ (void) setCompletionBlockWithSuccess:(void (^)(void))success
-                               failure:(void (^)(NSError *))failure;
 
 /**
  * Asynchronously unregisters the device and application from receiving push notifications.  If the application

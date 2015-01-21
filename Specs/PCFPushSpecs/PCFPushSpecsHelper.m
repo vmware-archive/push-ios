@@ -46,7 +46,7 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
         self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
         self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
         self.application = [UIApplication sharedApplication];
-        
+
         [PCFPushPersistentStorage reset];
     }
     return self;
@@ -72,7 +72,7 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
     return self.application;
 }
 
-- (void)stubApplication
+- (void) stubApplication
 {
     [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
 }
@@ -85,17 +85,17 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 - (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
 {
     id (^block)(NSArray *) = ^id(NSArray *params) {
-        
+
         if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-            
+
             [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
         }
         return nil;
     };
-    
+
     // < iOS 8.0
     [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:block];
-    
+
     // iOS 8.0 +
     [self.application stub:@selector(registerForRemoteNotifications) withBlock:block];
 }
@@ -124,6 +124,13 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
     self.applicationDelegate = [[PCFAppDelegate alloc] init];
     [self stubApplication];
     return self.applicationDelegate;
+}
+
+- (void)setCompletionBlockWithSuccess:(void (^)(void))successBlock
+                              failure:(void (^)(NSError *error))failureBlock
+{
+    self.applicationDelegate.successBlock = successBlock;
+    self.applicationDelegate.failureBlock = failureBlock;
 }
 
 #pragma mark - Parameters helpers

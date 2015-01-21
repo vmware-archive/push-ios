@@ -16,12 +16,14 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken];
+    [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken success:self.successBlock failure:self.failureBlock];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    [PCFPush APNSRegistrationFailedWithError:error];
+    if (self.failureBlock) {
+        self.failureBlock(error);
+    }
 }
 
 @end

@@ -7,5 +7,7 @@
 
 @interface PCFAppDelegate : NSObject <UIApplicationDelegate>
 
+@property (nonatomic, copy) void (^successBlock)(void);
+@property (nonatomic, copy) void (^failureBlock)(NSError *error);
 
 @end

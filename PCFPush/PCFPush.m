@@ -66,15 +66,6 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     PCFPushClient.shared.notificationTypes = types;
 }
 
-// TODO - this method does not need to exist
-+ (void)setCompletionBlockWithSuccess:(void (^)(void))success
-                              failure:(void (^)(NSError *error))failure
-{
-    PCFPushClient *pushClient = [PCFPushClient shared];
-    pushClient.successBlock = success;
-    pushClient.failureBlock = failure;
-}
-
 + (void)unregisterWithPushServerSuccess:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure
 {
@@ -84,15 +75,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 #pragma mark - Notification Handler Methods
 
 // TODO - this method should accept success and failure blocks
-+ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken {
-    [PCFPushClient.shared APNSRegistrationSuccess:deviceToken];
++ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken
+                                         success:(void (^)(void))successBlock
+                                         failure:(void (^)(NSError *))failureBlock
+{
+    [PCFPushClient.shared APNSRegistrationSuccess:deviceToken success:successBlock failure:failureBlock];
 }
 
-// TODO - this method does not need to exist
-+ (void)APNSRegistrationFailedWithError:(NSError *)error {
-
-    if (PCFPushClient.shared.failureBlock) {
-        PCFPushClient.shared.failureBlock(error);
-    }
-}
 @end
