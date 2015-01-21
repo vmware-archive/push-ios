@@ -58,34 +58,41 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should accept a nil deviceAlias", ^{
-                [PCFPush setDeviceAlias:nil];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithDeviceAlias:nil];
             });
 
             it(@"should accept an empty deviceAlias", ^{
-                [PCFPush setDeviceAlias:@""];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithDeviceAlias:@""];
             });
 
             it(@"should accept a non-empty deviceAlias", ^{
-                [PCFPush setDeviceAlias:@"NOT EMPTY"];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithDeviceAlias:@"NOT EMPTY"];
             });
 
             it(@"should accept a nil tags", ^{
-                [PCFPush setTags:nil];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithTags:nil];
             });
 
             it(@"should accept an empty tags", ^{
-                [PCFPush setTags:[NSSet set]];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithTags:[NSSet set]];
             });
 
             it(@"should accept a non-empty tags", ^{
-                [PCFPush setTags:helper.tags2];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithTags:helper.tags2];
             });
+
+            it(@"should accept a nil deviceAlias and nil tags", ^{
+                [PCFPush registerForPushNotificationsWithDeviceAlias:nil tags:nil];
+            });
+
+            it(@"should accept an empty deviceAlias and empty tags", ^{
+                [PCFPush registerForPushNotificationsWithDeviceAlias:@"" tags:[NSSet set]];
+            });
+
+            it(@"should accept a non-empty deviceAlias and non-empty tags", ^{
+                [PCFPush registerForPushNotificationsWithDeviceAlias:@"NOT EMPTY" tags:helper.tags2];
+            });
+
         });
 
         it(@"should raise an exception if parameters are nil", ^{
@@ -165,9 +172,7 @@ describe(@"PCFPush", ^{
                     fail(@"registration failure block executed");
                 }];
 
-                [PCFPush setTags:helper.params.pushTags];
-                [PCFPush setDeviceAlias:helper.params.pushDeviceAlias];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPushNotificationsWithDeviceAlias:helper.params.pushDeviceAlias tags:helper.params.pushTags];
             };
         });
 
@@ -274,8 +279,7 @@ describe(@"PCFPush", ^{
                 fail(@"registration failure block executed");
             }];
 
-            [PCFPush setTags:helper.tags1];
-            [PCFPush registerForPushNotifications];
+            [PCFPush registerForPushNotificationsWithTags:helper.tags1];
             [[theValue(successBlockExecuted) shouldEventually] beTrue];
             successBlockExecuted = NO;
             [PCFPush load];
@@ -318,7 +322,7 @@ describe(@"PCFPush", ^{
         });
     });
 
-    context(@"valid object arguments", ^{
+    context(@"handling server responses", ^{
         __block BOOL wasExpectedResult = NO;
         __block PCFPushSpecsHelper *helper;
 
@@ -539,6 +543,161 @@ describe(@"PCFPush", ^{
             }];
 
             [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+        });
+    });
+
+    describe(@"subscribing to tags", ^{
+
+        describe(@"ensuring the device is registered", ^{
+
+            beforeEach(^{
+                [helper setupDefaultPersistedParameters];
+            });
+
+            it(@"should fail if not already registered at all", ^{
+                [PCFPushPersistentStorage setAPNSDeviceToken:nil];
+                [PCFPushPersistentStorage setServerDeviceID:nil];
+            });
+
+            it(@"should fail if not already registered with APNS", ^{
+                [PCFPushPersistentStorage setAPNSDeviceToken:nil];
+            });
+
+            it(@"should fail if not already registered with CF", ^{
+                [PCFPushPersistentStorage setServerDeviceID:nil];
+            });
+
+            afterEach(^{
+                __block BOOL wasFailureBlockCalled = NO;
+                [PCFPush subscribeToTags:helper.tags1 success:^{
+                    fail(@"Should not have succeeded");
+                }                failure:^(NSError *error) {
+                    wasFailureBlockCalled = YES;
+                }];
+
+                [[theValue(wasFailureBlockCalled) shouldEventually] beTrue];
+            });
+        });
+
+        describe(@"successful attempts", ^{
+
+            __block NSInteger updateRegistrationCount;
+            __block NSSet *expectedSubscribeTags;
+            __block NSSet *expectedUnsubscribeTags;
+            __block BOOL wasSuccessBlockCalled;
+
+            beforeEach(^{
+                updateRegistrationCount = 0;
+                expectedSubscribeTags = nil;
+                expectedUnsubscribeTags = nil;
+                wasSuccessBlockCalled = NO;
+
+                [helper setupDefaultPersistedParameters];
+                [helper setupDefaultPLIST];
+
+                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+
+                    [[request.HTTPMethod should] equal:@"PUT"];
+
+                    updateRegistrationCount++;
+
+                    NSError *error;
+                    PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+
+                    [[error should] beNil];
+                    [[requestBody shouldNot] beNil];
+
+                    if (expectedSubscribeTags) {
+                        [[[NSSet setWithArray:requestBody.subscribeTags] should] equal:expectedSubscribeTags];
+                    } else {
+                        [[requestBody.subscribeTags should] beNil];
+                    }
+                    if (expectedUnsubscribeTags) {
+                        [[[NSSet setWithArray:requestBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
+                    } else {
+                        [[requestBody.unsubscribeTags should] beNil];
+                    }
+                }];
+            });
+
+            afterEach(^{
+                [[theValue(wasSuccessBlockCalled) shouldEventually] beTrue];
+            });
+
+            it(@"should be able to register to some new tags", ^{
+                expectedSubscribeTags = helper.tags2;
+                expectedUnsubscribeTags = helper.tags1;
+
+                [PCFPush subscribeToTags:helper.tags2 success:^{
+                    wasSuccessBlockCalled = YES;
+                }                failure:^(NSError *error) {
+                    fail(@"Should not have failed");
+                }];
+
+                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+            });
+
+            it(@"should not be called with the same tags", ^{
+                [PCFPush subscribeToTags:helper.tags1 success:^{
+                    wasSuccessBlockCalled = YES;
+                }                failure:^(NSError *error) {
+                    fail(@"Should not have failed");
+                }];
+
+                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+            });
+        });
+
+        describe(@"unsuccessful attempts", ^{
+
+            __block BOOL wasFailBlockCalled;
+            __block BOOL wasRequestCalled;
+
+            beforeEach(^{
+                [helper setupDefaultPersistedParameters];
+                [helper setupDefaultPLIST];
+                wasFailBlockCalled = NO;
+                wasRequestCalled = NO;
+            });
+
+            afterEach(^{
+                [[theValue(wasFailBlockCalled) shouldEventually] beTrue];
+                [[theValue(wasRequestCalled) shouldEventually] beTrue];
+            });
+
+            it(@"Should fail correctly if there is a network error", ^{
+                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+
+                    *resultResponse = nil;
+                    *resultError = [[NSError alloc] initWithDomain:NSURLErrorDomain code:NSURLErrorSecureConnectionFailed userInfo:nil];
+                    *resultData = nil;
+                    wasRequestCalled = YES;
+                }];
+
+                [PCFPush subscribeToTags:helper.tags2 success:^{
+                    fail(@"should not have succeeded");
+                }                failure:^(NSError *error) {
+                    [[error.domain should] equal:NSURLErrorDomain];
+                    wasFailBlockCalled = YES;
+                }];
+            });
+
+            it(@"Should fail correctly if the response data is bad", ^{
+                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+
+                    *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:request.URL statusCode:200 HTTPVersion:@"1.1" headerFields:nil];
+                    *resultError = nil;
+                    *resultData = [NSData data];
+                    wasRequestCalled = YES;
+                }];
+
+                [PCFPush subscribeToTags:helper.tags2 success:^{
+                    fail(@"should not have succeeded");
+                }                failure:^(NSError *error) {
+                    [[error.domain should] equal:PCFPushErrorDomain];
+                    wasFailBlockCalled = YES;
+                }];
+            });
         });
     });
 });

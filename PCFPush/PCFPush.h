@@ -14,6 +14,8 @@
 /**
  * Registers device for push notifications.
  *
+ * You *MUST* call one of these 'registerForPushNotifications' methods every time the application is started.
+ *
  * Before calling this method, you should call [PCFPush setRegistrationParameters] to provide the registration
  * parameters and call [PCFPush setRemoteNotificationTypes] if you want to provide a different subset of the
  * notification types.  If you want a callback indicating success or failure of the registration operation then
@@ -35,8 +37,20 @@
  *    pivotal.push.variantUuid.development
  *
  * None of the above values may be `nil`.  None of the above values may be empty.
+ *
+ * Optional: You can also set a device alias used to identify the device in the server. Typically you would use
+ * the device name (i.e.: [[UIDevice currentDevice] name]), but the usage of this field
+ * is application-defined and could be anything.
+ *
+ * Optional: If you know which tags you want to subscribe to then you can subscribe to them at the same time
+ * that you register with your device.  If you want to subscribe to other tags later in the runtime of your
+ * app then you can use the subscribeToTags method.  Note that you must have registered successfully
+ * before you can use the subscribeToTags method.
  */
 + (void) registerForPushNotifications;
++ (void) registerForPushNotificationsWithTags:(NSSet *)tags;
++ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias;
++ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias tags:(NSSet *)tags;
 
 /**
  * IMPORTANT!  You must call this method from your -application:didRegisterForRemoteNotificationWithDeviceToken:
@@ -92,22 +106,17 @@
  * some tags and those tags are not provided when calling this method again then those
  * tags will be unsubscribed.
  *
- * You must call [PCFPush registerForPushNotifications] in order for your change to take effect.
+ * The device must be registered before you may call this (i.e: you must have called one of the
+ * following methods and waited for the response to return successfully):
+ *
+ *     registerForPushNotifications;
+ *     registerForPushNotificationsWithTags:(NSSet *)tags;
+ *     registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias;
+ *     registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias tags:(NSSet *)tags;
  *
  * @param tags Provides the list of tags the device should subscribe to. Allowed to be `nil` or empty.
  */
-+ (void) setTags:(NSSet *)tags;
-
-/**
- * Sets the device alias used to identify the device in the server. Typically you would use
- * the device name (i.e.: [[UIDevice currentDevice] name]), but the usage of this field
- * is application-defined and could be anything.
- *
- * You must call [PCFPush registerForPushNotifications] in order for your change to take effect.
- *
- * @param deviceAlias Provides the list of tags the device should subscribe to. Allowed to be `nil` or empty.
- */
-+ (void) setDeviceAlias:(NSString *)deviceAlias;
++ (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure;
 
 /**
  * @param success block that will be executed if registration finishes successfully. This callback will

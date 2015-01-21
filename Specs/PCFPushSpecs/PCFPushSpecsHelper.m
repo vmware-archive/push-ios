@@ -171,6 +171,22 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
     return [NSURLConnection jr_swizzleClassMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) withClassMethod:selector error:error];
 }
 
+- (void)setupAsyncRequestWithBlock:(void(^)(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError))block {
+    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+        NSURLResponse *resultResponse;
+        NSData *resultData;
+        NSError *resultError;
+        if (block) {
+            NSURLRequest *request = params[0];
+            block(request, &resultResponse, &resultData, &resultError);
+        }
+
+        CompletionHandler handler = params[2];
+        handler(resultResponse, resultData, resultError);
+        return nil;
+    }];
+}
+
 - (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block
 {
     [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {

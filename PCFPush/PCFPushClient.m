@@ -57,6 +57,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
     _sharedPCFPushClient = nil;
 }
 
+// TODO - this method should accept the iOS user notification settings
 - (void)registerForRemoteNotifications
 {
     if (!self.registrationParameters) {
@@ -70,13 +71,17 @@ static dispatch_once_t _sharedPCFPushClientToken;
     UIApplication *application = [UIApplication sharedApplication];
     
     if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
-        
+
+        // TODO - apply the supplied user notification settings
+
         // If this line gives you a compiler error then you need to make sure you have updated
         // your Xcode to at least Xcode 6.0:
         [application registerForRemoteNotifications]; // iOS 8.0+
-        
+
     } else {
-        
+
+        // TODO - apply only the notification types from the iOS 8 user notification settings
+
         // < iOS 8.0. Deprecated on iOS 8.0.
         [application registerForRemoteNotificationTypes:self.notificationTypes];
     }
@@ -172,6 +177,7 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     return registrationBlock;
 }
 
+// TODO - this method should accept success and failure blocks
 - (void)APNSRegistrationSuccess:(NSData *)deviceToken
 {
     if (!deviceToken) {
@@ -202,6 +208,30 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     } else if (self.successBlock) {
         self.successBlock();
     }
+}
+
+- (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
+{
+    self.registrationParameters.pushTags = tags;
+
+    // No tags are updated
+    if ([PCFPushClient areTagsTheSame:self.registrationParameters]) {
+        if (success) {
+            success();
+        }
+        return;
+    }
+
+    RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
+                                                                             deviceToken:deviceToken
+                                                                                 success:success
+                                                                                 failure:failure];
+
+    [PCFPushURLConnection updateRegistrationWithDeviceID:deviceUuid
+                                              parameters:self.registrationParameters
+                                             deviceToken:deviceToken
+                                                 success:registrationBlock
+                                                 failure:failure];
 }
 
 + (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
@@ -278,6 +308,10 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     
+    return [PCFPushClient areTagsTheSame:parameters];
+}
+
++ (BOOL)areTagsTheSame:(PCFPushParameters *)parameters {
     NSSet *savedTags = [PCFPushPersistentStorage tags];
     BOOL areSavedTagsNilOrEmpty = savedTags == nil || savedTags.count == 0;
     BOOL areNewTagsNilOrEmpty = parameters.pushTags == nil || parameters.pushTags.count == 0;
@@ -285,7 +319,6 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         PCFPushLog(@"Parameters specify a different set of tags. Update registration will be required.");
         return NO;
     }
-
     return YES;
 }
 

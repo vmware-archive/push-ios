@@ -41,12 +41,15 @@ typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
      */
     PCFPushBackEndRegistrationDataUnparseable = 40,
     
-    
     /**
      * The back-end server did not return a device_uuid after attempting to register.
      */
-    PCFPushBackEndRegistrationResponseDataNoDeviceUuid = 42
-    
+    PCFPushBackEndRegistrationResponseDataNoDeviceUuid = 42,
+
+    /**
+     * Tried to subscribe to tags when not already registered.
+     */
+    PCFPushNotRegistered = 50,
 };
 
 #endif
