@@ -475,7 +475,7 @@ describe(@"PCFPush", ^{
                 [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
                 [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
-                [PCFPush unregisterWithPushServerSuccess:^{
+                [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     successBlockExecuted = YES;
 
                 }                                failure:^(NSError *error) {
@@ -495,7 +495,7 @@ describe(@"PCFPush", ^{
                 [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
                 [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
-                [PCFPush unregisterWithPushServerSuccess:^{
+                [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     successBlockExecuted = YES;
 
                 }                                failure:^(NSError *error) {
@@ -518,7 +518,7 @@ describe(@"PCFPush", ^{
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
-            [PCFPush unregisterWithPushServerSuccess:^{
+            [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                 fail(@"unregistration success block executed");
 
             }                                failure:^(NSError *error) {
@@ -547,7 +547,7 @@ describe(@"PCFPush", ^{
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
-            [PCFPush unregisterWithPushServerSuccess:^{
+            [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                 fail(@"unregistration success block executed incorrectly");
 
             }                                failure:^(NSError *error) {

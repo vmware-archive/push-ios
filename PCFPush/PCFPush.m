@@ -41,8 +41,8 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [PCFPushClient.shared subscribeToTags:tags deviceToken:deviceToken deviceUuid:deviceUuid success:success failure:failure];
 }
 
-+ (void)unregisterWithPushServerSuccess:(void (^)(void))success
-                                failure:(void (^)(NSError *error))failure
++ (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success
+                                              failure:(void (^)(NSError *))failure
 {
     [[PCFPushClient shared] unregisterForRemoteNotificationsWithSuccess:success failure:failure];
 }

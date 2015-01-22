@@ -101,6 +101,6 @@
  * @param failure block that will be executed if unregistration fails. This callback will be called on the main
  *                queue. May be 'nil'.
  */
-+ (void) unregisterWithPushServerSuccess:(void (^)(void))success
-                                 failure:(void (^)(NSError *))failure;
++ (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success
+                                              failure:(void (^)(NSError *))failure;
 @end
