@@ -15,6 +15,8 @@
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushRegistrationResponseData.h"
 
+typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
+
 static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
 
@@ -34,56 +36,53 @@ static dispatch_once_t _sharedPCFPushClientToken;
 {
     self = [super init];
     if (self) {
-        self.notificationTypes = (UIRemoteNotificationTypeAlert
-                                  |UIRemoteNotificationTypeBadge
-                                  |UIRemoteNotificationTypeSound);
         self.registrationParameters = [PCFPushParameters defaultParameters];
     }
     return self;
 }
 
-- (void)resetInstance
-{
-    self.registrationParameters = nil;
-}
-
-+ (void)resetSharedClient
-{
-    if (_sharedPCFPushClient) {
-        [_sharedPCFPushClient resetInstance];
-    }
-    
-    _sharedPCFPushClientToken = 0;
-    _sharedPCFPushClient = nil;
-}
-
-// TODO - this method should accept the iOS user notification settings
-- (void)registerForRemoteNotifications
+- (void)registerWithPCFPushWithDeviceToken:(NSData *)deviceToken
+                                   success:(void (^)(void))successBlock
+                                   failure:(void (^)(NSError *))failureBlock
 {
     if (!self.registrationParameters) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters may not be nil."];
     }
-    
+
     if (![self.registrationParameters arePushParametersValid]) {
         [NSException raise:NSInvalidArgumentException format:@"Parameters are not valid. See log for more info."];
     }
 
-    UIApplication *application = [UIApplication sharedApplication];
+    if (!deviceToken) {
+        [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
+    }
+    if (![deviceToken isKindOfClass:[NSData class]]) {
+        [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
+    }
 
-    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+    if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
+                                                                                 deviceToken:deviceToken
+                                                                                     success:successBlock
+                                                                                     failure:failureBlock];
 
-        // TODO - apply the supplied user notification settings
+        [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPushPersistentStorage serverDeviceID]
+                                                  parameters:self.registrationParameters
+                                                 deviceToken:deviceToken
+                                                     success:registrationBlock
+                                                     failure:failureBlock];
 
-        // If this line gives you a compiler error then you need to make sure you have updated
-        // your Xcode to at least Xcode 6.0:
-        [application registerForRemoteNotifications]; // iOS 8.0+
+    } else if ([PCFPushClient registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
+        [PCFPushClient sendRegisterRequestWithParameters:self.registrationParameters
+                                             deviceToken:deviceToken
+                                                 success:successBlock
+                                                 failure:failureBlock];
 
     } else {
-
-        // TODO - apply only the notification types from the iOS 8 user notification settings
-
-        // < iOS 8.0. Deprecated on iOS 8.0.
-        [application registerForRemoteNotificationTypes:self.notificationTypes];
+        PCFPushLog(@"Registration with PCF Push is being bypassed (already registered).");
+        if (successBlock) {
+            successBlock();
+        }
     }
 }
 
@@ -116,8 +115,6 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
     [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushUnregisterNotification object:self userInfo:userInfo];
 }
-
-typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
 + (RegistrationBlock)registrationBlockWithParameters:(PCFPushParameters *)parameters
                                          deviceToken:(NSData *)deviceToken
@@ -175,41 +172,6 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
     };
     
     return registrationBlock;
-}
-
-// TODO - this method should accept success and failure blocks
-- (void)APNSRegistrationSuccess:(NSData *)deviceToken
-                        success:(void (^)(void))successBlock
-                        failure:(void (^)(NSError *))failureBlock
-{
-    if (!deviceToken) {
-        [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
-    }
-    if (![deviceToken isKindOfClass:[NSData class]]) {
-        [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
-    }
-    
-    if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
-        RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
-                                                                                 deviceToken:deviceToken
-                                                                                     success:successBlock
-                                                                                     failure:failureBlock];
-        
-        [PCFPushURLConnection updateRegistrationWithDeviceID:[PCFPushPersistentStorage serverDeviceID]
-                                                  parameters:self.registrationParameters
-                                                 deviceToken:deviceToken
-                                                     success:registrationBlock
-                                                     failure:failureBlock];
-        
-    } else if ([PCFPushClient registrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
-        [PCFPushClient sendRegisterRequestWithParameters:self.registrationParameters
-                                             deviceToken:deviceToken
-                                                 success:successBlock
-                                                 failure:failureBlock];
-        
-    } else if (successBlock) {
-        successBlock();
-    }
 }
 
 - (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
@@ -330,6 +292,23 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
         return NO;
     }
     return YES;
+}
+
+// Helpers - used in unit tests
+
+- (void)resetInstance
+{
+    self.registrationParameters = nil;
+}
+
++ (void)resetSharedClient
+{
+    if (_sharedPCFPushClient) {
+        [_sharedPCFPushClient resetInstance];
+    }
+
+    _sharedPCFPushClientToken = 0;
+    _sharedPCFPushClient = nil;
 }
 
 @end

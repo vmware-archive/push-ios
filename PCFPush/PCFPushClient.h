@@ -10,16 +10,13 @@
 @interface PCFPushClient : NSObject
 
 @property PCFPushParameters *registrationParameters;
-@property UIRemoteNotificationType notificationTypes;
 
 + (instancetype)shared;
 + (void)resetSharedClient;
 
-- (void)APNSRegistrationSuccess:(NSData *)deviceToken
-                        success:(void (^)(void))successBlock
-                        failure:(void (^)(NSError *))failureBlock;
-
-- (void)registerForRemoteNotifications;
+- (void)registerWithPCFPushWithDeviceToken:(NSData *)deviceToken
+                                   success:(void (^)(void))successBlock
+                                   failure:(void (^)(NSError *))failureBlock;
 
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure;

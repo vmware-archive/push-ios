@@ -23,11 +23,9 @@ describe(@"PCFPush", ^{
     beforeEach(^{
         [PCFPushClient resetSharedClient];
         helper = [[PCFPushSpecsHelper alloc] init];
-        [helper setupApplication];
-        [helper setupApplicationDelegate];
         [helper setupParameters];
     });
-    
+
     afterEach(^{
         [helper reset];
         helper = nil;
@@ -38,18 +36,20 @@ describe(@"PCFPush", ^{
         describe(@"empty and nillable parameters", ^{
 
             __block BOOL succeeded;
+            __block void (^successBlock)();
+            __block void (^failureBlock)(NSError *error);
 
             beforeEach(^{
                 succeeded = NO;
-                [helper setupApplicationForSuccessfulRegistration];
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequestWithBlock:nil];
 
-                [helper setCompletionBlockWithSuccess:^{
+                successBlock = ^{
                     succeeded = YES;
-                }                             failure:^(NSError *error) {
-                    fail(@"Should have succeeded");
-                }];
+                };
+                failureBlock = ^(NSError *error) {
+                    fail(@"should have succeeded");
+                };
             });
 
             afterEach(^{
@@ -57,61 +57,86 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should accept a nil deviceAlias", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:nil success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty deviceAlias", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:@""];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"" success:successBlock failure:failureBlock];
             });
 
-            it(@"should accept a non-empty deviceAlias", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:@"NOT EMPTY"];
+            it(@"should accept a non-empty deviceAlias and tags", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a nil tags", ^{
-                [PCFPush registerForPushNotificationsWithTags:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:@"NOT EMPTY" success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty tags", ^{
-                [PCFPush registerForPushNotificationsWithTags:[NSSet set]];
-            });
-
-            it(@"should accept a non-empty tags", ^{
-                [PCFPush registerForPushNotificationsWithTags:helper.tags2];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a nil deviceAlias and nil tags", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:nil tags:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty deviceAlias and empty tags", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:@"" tags:[NSSet set]];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"" success:successBlock failure:failureBlock];
+            });
+        });
+
+        describe(@"nil callbacks", ^{
+
+            __block void (^successBlock)();
+            __block void (^failureBlock)(NSError *error);
+
+            beforeEach(^{
+                [helper setupDefaultPLIST];
+                [helper setupSuccessfulAsyncRequestWithBlock:nil];
+
+                successBlock = ^{};
+                failureBlock = ^(NSError *error) {};
             });
 
-            it(@"should accept a non-empty deviceAlias and non-empty tags", ^{
-                [PCFPush registerForPushNotificationsWithDeviceAlias:@"NOT EMPTY" tags:helper.tags2];
+            it(@"should accept a nil failureBlock", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" success:successBlock failure:nil];
             });
 
+            it(@"should accept a nil successBlock", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" success:nil failure:failureBlock];
+            });
         });
 
         it(@"should raise an exception if parameters are nil", ^{
             [[theBlock(^{
                 [helper setupDefaultPLISTWithFile:@"PCFPushParameters-Empty"];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil success:nil failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should raise an exception if parameters are invalid", ^{
             [[theBlock(^{
                 [helper setupDefaultPLISTWithFile:@"PCFPushParameters-Invalid"];
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil success:nil failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should raise an exception if startRegistration is called without parameters being set", ^{
             [[theBlock(^{
-                [PCFPush registerForPushNotifications];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil success:nil failure:nil];
             }) should] raise];
+        });
+
+        it(@"should raise an exception if the APNS device token is nil", ^{
+            [[theBlock(^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:nil tags:[NSSet set] deviceAlias:@"NOT EMPTY" success:nil failure:nil];
+            }) should] raise];
+        });
+
+        it(@"should raise an exception if the APNS device token is empty", ^{
+           [[theBlock(^{
+               [PCFPush registerForPCFPushNotificationsWithDeviceToken:@"" tags:[NSSet set] deviceAlias:@"NOT EMPTY" success:nil failure:nil];
+           }) should] raise];
         });
     });
 
@@ -129,7 +154,6 @@ describe(@"PCFPush", ^{
             expectedSubscribeTags = nil;
             expectedUnsubscribeTags = nil;
 
-            [helper setupApplicationForSuccessfulRegistration];
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
                 [[request.HTTPMethod should] equal:@"PUT"];
@@ -165,13 +189,14 @@ describe(@"PCFPush", ^{
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
 
-                [helper setCompletionBlockWithSuccess:^{
+                void (^successBlock)() = ^{
                     successCount++;
-                }                             failure:^(NSError *error) {
+                };
+                void (^failureBlock)(NSError*) = ^(NSError *error) {
                     fail(@"registration failure block executed");
-                }];
+                };
 
-                [PCFPush registerForPushNotificationsWithDeviceAlias:helper.params.pushDeviceAlias tags:helper.params.pushTags];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.params.pushTags deviceAlias:helper.params.pushDeviceAlias success:successBlock failure:failureBlock];
             };
         });
 
@@ -241,20 +266,18 @@ describe(@"PCFPush", ^{
 
         beforeEach(^{
             [PCFPushClient resetSharedClient];
-            [helper setupApplicationForSuccessfulRegistration];
         });
 
-        it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
+        it(@"should make a POST request to the server on a new registration", ^{
 
-            __block BOOL successBlockExecuted = NO;
+            __block BOOL wasSuccessBlockExecuted = NO;
             __block NSSet *expectedTags;
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
 
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
-                if (![request.HTTPMethod isEqualToString:@"POST"]) {
-                    fail(@"Request must be a POST");
-                }
+
+                [[request.HTTPMethod should] equal:@"POST"];
 
                 NSError *error;
                 PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
@@ -272,52 +295,43 @@ describe(@"PCFPush", ^{
             expectedTags = helper.tags1;
             [PCFPush load];
             [helper setupDefaultPLIST];
-            [helper setCompletionBlockWithSuccess:^{
-                successBlockExecuted = YES;
-            }                             failure:^(NSError *error) {
+
+            void (^successBlock)() = ^{
+                wasSuccessBlockExecuted = YES;
+            };
+
+            void (^failureBlock)(NSError *error) = ^(NSError *error) {
                 fail(@"registration failure block executed");
-            }];
+            };
 
-            [PCFPush registerForPushNotificationsWithTags:helper.tags1];
-            [[theValue(successBlockExecuted) shouldEventually] beTrue];
-            successBlockExecuted = NO;
+            [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+            [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+        });
+
+        it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
+
+            __block BOOL wasSuccessBlockExecuted = NO;
+
+            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+            [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {}];
+
             [PCFPush load];
-
-            [PCFPush registerForPushNotifications];
-            [[theValue(successBlockExecuted) shouldEventually] beTrue];
-        });
-    });
-
-    describe(@"failed registration", ^{
-
-        __block NSError *testError;
-        __block BOOL expectedResult = NO;
-
-        beforeEach(^{
-            [PCFPushClient resetSharedClient];
-
-            testError = [NSError errorWithDomain:@"Some boring error" code:0 userInfo:nil];
-            [helper setupApplicationForFailedRegistrationWithError:testError];
-            expectedResult = NO;
-        });
-
-        afterEach(^{
-            [[theValue(expectedResult) should] beTrue];
-            [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
-            expectedResult = NO;
-            testError = nil;
-        });
-
-        it(@"should handle registration failures from APNS", ^{
-            [PCFPush load];
-
             [helper setupDefaultPLIST];
-            [helper setCompletionBlockWithSuccess:nil
-                                          failure:^(NSError *error) {
-                                               expectedResult = YES;
-                                           }];
 
-            [PCFPush registerForPushNotifications];
+            void (^successBlock)() = ^{
+                wasSuccessBlockExecuted = YES;
+            };
+
+            void (^failureBlock)(NSError *error) = ^(NSError *error) {
+                fail(@"registration failure block executed");
+            };
+
+            [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
+            [PCFPush load]; // Reset the state in the state engine
+
+            [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+
+            [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
         });
     });
 

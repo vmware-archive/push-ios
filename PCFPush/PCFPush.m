@@ -14,33 +14,15 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 @implementation PCFPush
 
-+ (void)setNotificationTypes:(UIRemoteNotificationType)notificationTypes
-{
-    [[PCFPushClient shared] setNotificationTypes:notificationTypes];
-}
-
-+ (void)registerForPushNotifications
-{
-    [[PCFPushClient shared] registerForRemoteNotifications];
-}
-
-+ (void) registerForPushNotificationsWithTags:(NSSet *)tags
-{
-    PCFPushClient.shared.registrationParameters.pushTags = tags;
-    [[PCFPushClient shared] registerForRemoteNotifications];
-}
-
-+ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias
-{
-    PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
-    [[PCFPushClient shared] registerForRemoteNotifications];
-}
-
-+ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias tags:(NSSet *)tags
++ (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
+                                                  tags:(NSSet *)tags
+                                           deviceAlias:(NSString *)deviceAlias
+                                               success:(void (^)(void))successBlock
+                                               failure:(void (^)(NSError *))failureBlock
 {
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
     PCFPushClient.shared.registrationParameters.pushTags = tags;
-    [[PCFPushClient shared] registerForRemoteNotifications];
+    [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
 + (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure
@@ -59,27 +41,10 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [PCFPushClient.shared subscribeToTags:tags deviceToken:deviceToken deviceUuid:deviceUuid success:success failure:failure];
 }
 
-// TODO - make sure that this method is covered by tests
-// TODO - this method does not need to exist
-+ (void)setRemoteNotificationTypes:(UIRemoteNotificationType)types
-{
-    PCFPushClient.shared.notificationTypes = types;
-}
-
 + (void)unregisterWithPushServerSuccess:(void (^)(void))success
                                 failure:(void (^)(NSError *error))failure
 {
     [[PCFPushClient shared] unregisterForRemoteNotificationsWithSuccess:success failure:failure];
-}
-
-#pragma mark - Notification Handler Methods
-
-// TODO - this method should accept success and failure blocks
-+ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken
-                                         success:(void (^)(void))successBlock
-                                         failure:(void (^)(NSError *))failureBlock
-{
-    [PCFPushClient.shared APNSRegistrationSuccess:deviceToken success:successBlock failure:failureBlock];
 }
 
 @end

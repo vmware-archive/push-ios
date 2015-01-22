@@ -5,7 +5,6 @@
 #import "Kiwi.h"
 
 #import "PCFPushSpecsHelper.h"
-#import "PCFAppDelegate.h"
 #import "JRSwizzle.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushParameters.h"
@@ -45,7 +44,6 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
         self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
         self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
-        self.application = [UIApplication sharedApplication];
 
         [PCFPushPersistentStorage reset];
     }
@@ -59,78 +57,6 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
     self.backEndDeviceId = nil;
     self.tags1 = nil;
     self.tags2 = nil;
-    self.application = nil;
-    self.applicationDelegate = nil;
-}
-
-#pragma mark - Application helpers
-
-- (id) setupApplication
-{
-    self.application = [KWMock mockForClass:[UIApplication class]];
-    [UIApplication stub:@selector(sharedApplication) andReturn:self.application];
-    return self.application;
-}
-
-- (void) stubApplication
-{
-    [self.application stub:@selector(delegate) andReturn:self.applicationDelegate];
-}
-
-- (void) setupApplicationForSuccessfulRegistration
-{
-    [self setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:self.apnsDeviceToken];
-}
-
-- (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken
-{
-    id (^block)(NSArray *) = ^id(NSArray *params) {
-
-        if ([self.applicationDelegate respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
-
-            [self.applicationDelegate application:self.application didRegisterForRemoteNotificationsWithDeviceToken:newApnsDeviceToken];
-        }
-        return nil;
-    };
-
-    // < iOS 8.0
-    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:block];
-
-    // iOS 8.0 +
-    [self.application stub:@selector(registerForRemoteNotifications) withBlock:block];
-}
-
-- (void) setupApplicationForFailedRegistrationWithError:(NSError *)error
-{
-    id (^block)(NSArray *) = ^id(NSArray *params) {
-        if ([self.applicationDelegate respondsToSelector:@selector(application:didFailToRegisterForRemoteNotificationsWithError:)]) {
-            [(PCFAppDelegate *)self.applicationDelegate application:self.application
-                   didFailToRegisterForRemoteNotificationsWithError:error];
-        }
-        return nil;
-    };
-    
-    // < iOS 8.0
-    [self.application stub:@selector(registerForRemoteNotificationTypes:) withBlock:block];
-    
-    // iOS 8.0 +
-    [self.application stub:@selector(registerForRemoteNotifications) withBlock:block];
-}
-
-#pragma mark - App Delegate Helpers
-
-- (id<UIApplicationDelegate>) setupApplicationDelegate
-{
-    self.applicationDelegate = [[PCFAppDelegate alloc] init];
-    [self stubApplication];
-    return self.applicationDelegate;
-}
-
-- (void)setCompletionBlockWithSuccess:(void (^)(void))successBlock
-                              failure:(void (^)(NSError *error))failureBlock
-{
-    self.applicationDelegate.successBlock = successBlock;
-    self.applicationDelegate.failureBlock = failureBlock;
 }
 
 #pragma mark - Parameters helpers

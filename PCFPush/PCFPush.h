@@ -5,7 +5,7 @@
 #import <UIKit/UIKit.h>
 
 /**
- * Primary entry point for the CF Push Client SDK library.
+ * Primary entry point for the PCF Push Client SDK library.
  *
  * Usage: see `README.md`
  */
@@ -14,48 +14,41 @@
 /**
  * Registers device for push notifications.
  *
- * You *MUST* call one of these 'registerForPushNotifications' methods every time the application is started.
+ * In order to register for push notifications you must first register for push notifications with the Apple Push
+ * Notifications Service (APNS) by calling [UIApplication.sharedApplication registerForRemoteNotifications].  After
+ * Apple registration succeeds then Apple will call the -application:didRegisterForRemoteNotificationWithDeviceToken:
+ * method in your application delegate method.  Pass that device token to PCF via the
+ * -registerForPCFPushNotificationsWithDeviceToken method.
  *
- * Before calling this method, you should call [PCFPush setRegistrationParameters] to provide the registration
- * parameters and call [PCFPush setRemoteNotificationTypes] if you want to provide a different subset of the
- * notification types.  If you want a callback indicating success or failure of the registration operation then
- * you should also call [PCFPush setCompletionBlockWithSuccess:failure].
+ * You *MUST* call the 'registerForPCFPushNotificationsWithDeviceToken' method every time you have successfully
+ * registered for push notifications with APNS.
  *
- * IMPORTANT: You MUST also implement the -application:didRegisterForRemoteNotificationWithDeviceToken: and
- * -application:didFailToRegisterForRemoteNotificationsWithError: methods in your UIApplicationDelegate class
- * and call [PCFPush APNSRegistrationSucceededWithDeviceToken:] and [PCFPush APNSRegistrationFailedWithError]
- * methods respectively in order to successfully complete integration with this library.  If you do not
- * then you will NOT be able to successfully register for remote notifications with Pivotal CF Push.
+ * Apple recommends calling [UIApplication.sharedApplication registerForRemoteNotifications] every time you
+ * start your application.
  *
  * To provide parameters, you must provide a PLIST file called "Pivotal.plist" with the following registration
  * parameters:
  *
- *    pivotal.push.serviceUrl
- *    pivotal.push.variantSecret.production
- *    pivotal.push.variantUuid.production
- *    pivotal.push.variantSecret.development
- *    pivotal.push.variantUuid.development
+ *    pivotal.push.serviceUrl                  - The URL of the PCF Push Server
+ *    pivotal.push.variantUuid.development     - The variant UUID of your push development variant.
+ *    pivotal.push.variantSecret.development   - The variant secret of your push development variant.
+ *    pivotal.push.variantUuid.production      - The variant UUID of your push production variant.
+ *    pivotal.push.variantSecret.production    - The variant secret of your push production variant.
  *
  * None of the above values may be `nil`.  None of the above values may be empty.
  *
+ * The client SDK uses the development variant if the application is compiled in debug mode.
+ *
+ * The client SDK uses the production variant if the application is compiled in release mode.
+ *
  * Optional: You can also set a device alias used to identify the device in the server. Typically you would use
- * the device name (i.e.: [[UIDevice currentDevice] name]), but the usage of this field
+ * the device name (i.e.: UIDevice.currentDevice.name), but the usage of this field
  * is application-defined and could be anything.
  *
  * Optional: If you know which tags you want to subscribe to then you can subscribe to them at the same time
  * that you register with your device.  If you want to subscribe to other tags later in the runtime of your
  * app then you can use the subscribeToTags method.  Note that you must have registered successfully
  * before you can use the subscribeToTags method.
- */
-+ (void) registerForPushNotifications;
-+ (void) registerForPushNotificationsWithTags:(NSSet *)tags;
-+ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias;
-+ (void) registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias tags:(NSSet *)tags;
-
-/**
- * IMPORTANT!  You must call this method from your -application:didRegisterForRemoteNotificationWithDeviceToken:
- * method in your UIApplicationDelegate in order to successfully register your device for push notifications
- * with Pivotal CF Push.
  *
  * example:
  *
@@ -64,38 +57,20 @@
  *     NSLog(@"APNS registration succeeded!");
  *
  *     // Continue registration with PCF Push
- *     [PCFPush APNSRegistrationSucceededWithDeviceToken:deviceToken
- *     success:^{
- *          // registration with Pivotal CF completed successfully.
- *     } failure:^(NSError *error) {
- *          // registration with Pivotal CF FAILED.
- *     }];
+ *     [PCFPush registerForPCFPushNotificationsWithDeviceToken: deviceToken
+ *                                                        tags: [NSSet setWithArray:@[ LIST_OF_TAGS_TO_SUBSCRIBE_TO ]
+ *                                                 deviceAlias: UIDevice.currentDevice.name // or whatever device alias you want to use
+ *                                                     success: ^{  success callback }
+ *                                                     failure: ^(NSError *error) {  error callback }
+ *     ];
  * }
  *
  */
-+ (void)APNSRegistrationSucceededWithDeviceToken:(NSData *)deviceToken
-                                         success:(void (^)(void))success
-                                         failure:(void (^)(NSError *))failure;
-
-/**
- * Sets the type of alerts the user can receive when they receive a remote notification.
- * Applies to iOS 7.1 and earlier.
- *
- * The notification types default to (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound).
- *
- * If you want to use a subset of the above default notification types then you must use manual registration.
- *
- * On iOS 8.0+ you should call "- (void) registerUserNotificationSettings:" on [UIApplication sharedApplication] instead
- * in order to request the type of alerts that the user can receive when they receive remote and/or local notifications.
- *
- * Note that on iOS 8.0+ you will still need to call [PCFPush registerForPushNotifications] in order to register
- * for remote notifications and activate the Pivotal CF Mobile Services push services SDK.
- *
- * You must call [PCFPush registerForPushNotifications] in order for your change to take effect.
- *
- * @param notificationTypes the type of alert that the user can receive when they receive a remote notification.
- */
-+ (void) setRemoteNotificationTypes:(UIRemoteNotificationType)notificationTypes;
++ (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
+                                                  tags:(NSSet *)tags
+                                           deviceAlias:(NSString *)deviceAlias
+                                               success:(void (^)(void))success
+                                               failure:(void (^)(NSError *))failure;
 
 /**
  * Sets the tags that the device should be subscribed to. Always provide the entire
@@ -103,15 +78,16 @@
  * some tags and those tags are not provided when calling this method again then those
  * tags will be unsubscribed.
  *
- * The device must be registered before you may call this (i.e: you must have called one of the
- * following methods and waited for the response to return successfully):
- *
- *     registerForPushNotifications;
- *     registerForPushNotificationsWithTags:(NSSet *)tags;
- *     registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias;
- *     registerForPushNotificationsWithDeviceAlias:(NSString *)deviceAlias tags:(NSSet *)tags;
+ * The device must be registered before you may call subscribeToTags (i.e: you must have called the
+ * registerForPCFPushNotificationsWithDeviceToken method and waited for the response to return successfully).
  *
  * @param tags Provides the list of tags the device should subscribe to. Allowed to be `nil` or empty.
+ *
+ * @param success block that will be executed if subscription is successful. This callback will be called on
+ *                the main queue. May be 'nil'.
+ *
+ * @param failure block that will be executed if subscription fails. This callback will be called on the main
+ *                queue. May be 'nil'.
  */
 + (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure;
 

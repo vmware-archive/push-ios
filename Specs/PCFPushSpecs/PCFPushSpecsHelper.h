@@ -6,7 +6,6 @@
 
 @class PCFPushPersistentStorage;
 @class PCFPushParameters;
-@class PCFAppDelegate;
 
 OBJC_EXPORT NSString *const TEST_PUSH_API_URL_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
@@ -25,8 +24,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
 @interface PCFPushSpecsHelper : NSObject
 
-@property id application;
-@property PCFAppDelegate *applicationDelegate;
 @property NSData *apnsDeviceToken;
 @property NSString *backEndDeviceId;
 @property NSString *base64AuthString1;
@@ -37,17 +34,6 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 // Spec Helper lifecycle
 - (instancetype) init;
 - (void) reset;
-
-// Application helpers
-- (id) setupApplication;
-- (void) setupApplicationForSuccessfulRegistration;
-- (void) setupApplicationForSuccessfulRegistrationWithNewApnsDeviceToken:(NSData *)newApnsDeviceToken;
-- (void) setupApplicationForFailedRegistrationWithError:(NSError *)error;
-
-// Application Delegate helpers
-- (id<UIApplicationDelegate>) setupApplicationDelegate;
-- (void)setCompletionBlockWithSuccess:(void (^)(void))success
-                              failure:(void (^)(NSError *error))failure;
 
 // Parameters helpers
 - (PCFPushParameters *)setupParameters;
