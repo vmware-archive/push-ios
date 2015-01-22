@@ -8,6 +8,7 @@
 #import "PCFPushParameters.h"
 #import "PCFClassPropertyUtility.h"
 #import "PCFPushSpecsHelper.h"
+#import "PCFHardwareUtil.h"
 
 SPEC_BEGIN(PCFRegistrationParametersSpec)
 
@@ -155,6 +156,33 @@ describe(@"PCFRegistrationParameters", ^{
 
         it(@"should ignore the tags in the plist", ^{
             [[model.pushTags should] beNil];
+        });
+    });
+
+    context(@"reading the provisioning profile", ^{
+
+        beforeEach(^{
+            resetOnceToken();
+        });
+
+        it(@"should detect simulators", ^{
+            [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(YES)];
+            [NSData stub:@selector(dataWithContentsOfFile:) andReturn:nil];
+            [[theValue(isAPNSSandbox()) should] beTrue];
+        });
+
+        it(@"should detect sandbox builds", ^{
+            [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(NO)];
+            NSData *sandboxProvisioningFileExcerpt = [@"<key>aps-environment</key><string>development</string>" dataUsingEncoding:NSUTF8StringEncoding];
+            [NSData stub:@selector(dataWithContentsOfFile:) andReturn:sandboxProvisioningFileExcerpt];
+            [[theValue(isAPNSSandbox()) should] beTrue];
+        });
+
+        it(@"should detect production builds", ^{
+            [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(NO)];
+            NSData *productionProvisioningFileExcerpt = [@"<key>aps-environment</key><string>production</string>" dataUsingEncoding:NSUTF8StringEncoding];
+            [NSData stub:@selector(dataWithContentsOfFile:) andReturn:productionProvisioningFileExcerpt];
+            [[theValue(isAPNSSandbox()) should] beFalse];
         });
     });
 });

@@ -2,17 +2,54 @@
 //  Copyright (C) 2014 Pivotal Software, Inc. All rights reserved.
 //
 
-#import <objc/runtime.h>
-
 #import "PCFPushParameters.h"
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFHardwareUtil.h"
 
-#ifdef DEBUG
-static BOOL kInDebug = YES;
-#else
-static BOOL kInDebug = NO;
-#endif
+static dispatch_once_t onceToken;
+
+BOOL isAPNSSandbox() {
+    static BOOL didLoadFile = NO;
+    static BOOL isAPNSSandbox = NO;
+    dispatch_once(&onceToken, ^{
+        @try {
+
+            if ([PCFHardwareUtil isSimulator]) {
+                didLoadFile = YES;
+                isAPNSSandbox = YES;
+                return;
+            }
+
+            // **IMPORTANT** There is no provisioning profile in AppStore Apps.
+            NSData *data = [NSData dataWithContentsOfFile:[NSBundle.mainBundle pathForResource:@"embedded" ofType:@"mobileprovision"]];
+            if (data) {
+                const char *bytes = [data bytes];
+                NSMutableString *profile = [[NSMutableString alloc] initWithCapacity:data.length];
+                for (NSUInteger i = 0; i < data.length; i++) {
+                    [profile appendFormat:@"%c", bytes[i]];
+                }
+                // Look for debug value, if detected we're a development build.
+                NSString *cleared = [[profile componentsSeparatedByCharactersInSet:NSCharacterSet.whitespaceAndNewlineCharacterSet] componentsJoinedByString:@""];
+                isAPNSSandbox = [cleared rangeOfString:@"<key>aps-environment</key><string>development</string>"].length > 0;
+                didLoadFile = YES;
+            }
+        }
+        @finally
+        {
+            // If some other kind of crash happened then something crazy must have happened.  Let's assume
+            // that crazy things usually happen to people in production.
+            if (!didLoadFile) {
+                isAPNSSandbox = NO;
+            }
+        }
+    });
+    return isAPNSSandbox;
+}
+
+void resetOnceToken() {
+    onceToken = 0;
+}
 
 @implementation PCFPushParameters
 
@@ -56,12 +93,12 @@ static BOOL kInDebug = NO;
 
 - (NSString *)variantUUID
 {
-    return kInDebug ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
+    return isAPNSSandbox() ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
 }
 
 - (NSString *)variantSecret
 {
-    return kInDebug ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
+    return isAPNSSandbox() ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
 
 

@@ -14,4 +14,6 @@
 
 + (NSString *)deviceManufacturer;
 
++ (BOOL) isSimulator;
+
 @end

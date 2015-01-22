@@ -48,6 +48,12 @@ return VARIABLENAME;                                       \
     return hardware;
 }
 
++ (BOOL) isSimulator
+{
+    NSString *hardware = [self hardwareString];
+    return [hardware isEqualToString:@"i386"] || [hardware isEqualToString:@"x86_64"];
+}
+
 + (NSString *)hardwareSimpleDescription
 {
     static NSDictionary *hardwareDescriptionDictionary = nil;
