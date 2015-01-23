@@ -18,6 +18,7 @@ BOOL isAPNSSandbox() {
             if ([PCFHardwareUtil isSimulator]) {
                 didLoadFile = YES;
                 isAPNSSandbox = YES;
+                PCFPushLog(@"WARNING: isAPNSSandbox: running on simulator! push notifications will probably not work.");
                 return;
             }
 
@@ -34,12 +35,14 @@ BOOL isAPNSSandbox() {
                 isAPNSSandbox = [cleared rangeOfString:@"<key>aps-environment</key><string>development</string>"].length > 0;
                 didLoadFile = YES;
             }
+            PCFPushLog(@"isAPNSSandbox: %d.", isAPNSSandbox);
         }
         @finally
         {
             // If some other kind of crash happened then something crazy must have happened.  Let's assume
             // that crazy things usually happen to people in production.
             if (!didLoadFile) {
+                PCFPushLog(@"WARNING: Did not load provisioning file correctly. Assuming production build.");
                 isAPNSSandbox = NO;
             }
         }
