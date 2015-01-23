@@ -126,10 +126,10 @@ void resetOnceToken() {
     if (!keys) {
         keys = @{
                 @"pivotal.push.serviceUrl" : @"pushAPIURL",
-                @"pivotal.push.variantUuid.production" : @"productionPushVariantUUID",
-                @"pivotal.push.variantSecret.production" : @"productionPushVariantSecret",
-                @"pivotal.push.variantUuid.development" : @"developmentPushVariantUUID",
-                @"pivotal.push.variantSecret.development" : @"developmentPushVariantSecret",
+                @"pivotal.push.iosPlatform.uuid.production" : @"productionPushVariantUUID",
+                @"pivotal.push.iosPlatform.secret.production" : @"productionPushVariantSecret",
+                @"pivotal.push.iosPlatform.uuid.development" : @"developmentPushVariantUUID",
+                @"pivotal.push.iosPlatform.secret.development" : @"developmentPushVariantSecret",
         };
     }
     if (block) {

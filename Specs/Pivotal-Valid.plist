@@ -4,13 +4,13 @@
 <dict>
 	<key>pivotal.push.serviceUrl</key>
 	<string>http://testURL.com</string>
-	<key>pivotal.push.variantSecret.production</key>
+    <key>pivotal.push.iosPlatform.uuid.development</key>
+    <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
+    <key>pivotal.push.iosPlatform.secret.development</key>
+    <string>DEV Put sweet chili sauce on everything</string>
+    <key>pivotal.push.iosPlatform.uuid.production</key>
+    <string>PROD-SOS-WE-LIKE-IT-SPICY</string>
+	<key>pivotal.push.iosPlatform.secret.production</key>
 	<string>PROD Put sweet chili sauce on everything</string>
-	<key>pivotal.push.variantUuid.production</key>
-	<string>PROD-SOS-WE-LIKE-IT-SPICY</string>
-	<key>pivotal.push.variantSecret.development</key>
-	<string>DEV Put sweet chili sauce on everything</string>
-	<key>pivotal.push.variantUuid.development</key>
-	<string>DEV-SOS-WE-LIKE-IT-SPICY</string>
 </dict>
 </plist>
