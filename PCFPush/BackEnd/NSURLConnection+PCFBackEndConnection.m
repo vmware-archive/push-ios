@@ -67,7 +67,7 @@
         if ([self isAuthError:connectionError]) {
             PCFPushCriticalLog(@"NSURLRequest failed with authentication error.");
             if (failure) {
-                NSError *authError = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationAuthenticationError localizedDescription:@"Authentication error while communicating with the back-end server.  Check your variant uuid and secret parameters."];
+                NSError *authError = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationAuthenticationError localizedDescription:@"Authentication error while communicating with the back-end server.  Check your platform uuid and secret parameters."];
                 failure(authError);
             }
         } else if (connectionError) {

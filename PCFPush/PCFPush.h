@@ -30,16 +30,15 @@
  * parameters:
  *
  *    pivotal.push.serviceUrl                  - The URL of the PCF Push Server
- *    pivotal.push.variantUuid.development     - The variant UUID of your push development variant.
- *    pivotal.push.variantSecret.development   - The variant secret of your push development variant.
- *    pivotal.push.variantUuid.production      - The variant UUID of your push production variant.
- *    pivotal.push.variantSecret.production    - The variant secret of your push production variant.
+ *    pivotal.push.platformUuidDevelopment     - The UUID of your push development platform.
+ *    pivotal.push.platformSecretDevelopment   - The secret of your push development platform.
+ *    pivotal.push.platformUuidProduction      - The UUID of your push production platform.
+ *    pivotal.push.platformSecretProduction    - The secret of your push production platform.
  *
  * None of the above values may be `nil`.  None of the above values may be empty.
  *
- * The client SDK uses the development variant if the application is compiled in debug mode.
- *
- * The client SDK uses the production variant if the application is compiled in release mode.
+ * The client SDK selects the appropriate platform (development or production) at runtime depending
+ * on whether your app is provisioned to use the development or sandbox APNS environments.
  *
  * Optional: You can also set a device alias used to identify the device in the server. Typically you would use
  * the device name (i.e.: UIDevice.currentDevice.name), but the usage of this field
@@ -103,4 +102,5 @@
  */
 + (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success
                                               failure:(void (^)(NSError *))failure;
+
 @end

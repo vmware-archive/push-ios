@@ -256,13 +256,13 @@ static dispatch_once_t _sharedPCFPushClientToken;
     // If any of the registration parameters are different then unregistration is required
     NSString *savedVariantUUID = [PCFPushPersistentStorage variantUUID];
     if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
-        PCFPushLog(@"Parameters specify a different variantUUID. Unregistration and re-registration will be required.");
+        PCFPushLog(@"Parameters specify a different platform UUID. Unregistration and re-registration will be required.");
         return NO;
     }
     
     NSString *savedVariantSecret = [PCFPushPersistentStorage variantSecret];
     if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
-        PCFPushLog(@"Parameters specify a different variantSecret. Unregistration and re-registration will be required.");
+        PCFPushLog(@"Parameters specify a different platform Secret. Unregistration and re-registration will be required.");
         return NO;
     }
     

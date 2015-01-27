@@ -6,13 +6,13 @@
 	<string>http://testURL.com</string>
 	<key>pivotal.push.deviceAlias</key>
 	<string>Extreme spiciness classification</string>
-    <key>pivotal.push.iosPlatform.uuid.development</key>
+    <key>pivotal.push.platformUuidDevelopment</key>
     <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
-    <key>pivotal.push.iosPlatform.secret.development</key>
+    <key>pivotal.push.platformSecretDevelopment</key>
     <string>DEV Put sweet chili sauce on everything</string>
-	<key>pivotal.push.iosPlatform.uuid.production</key>
+	<key>pivotal.push.platformUuidProduction</key>
 	<string>PROD-SOS-WE-LIKE-IT-SPICY</string>
-    <key>pivotal.push.iosPlatform.secret.production</key>
+    <key>pivotal.push.platformSecretProduction</key>
     <string>PROD Put sweet chili sauce on everything</string>
     <key>pivotal.push.tags</key>
     <array>
