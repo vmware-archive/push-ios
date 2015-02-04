@@ -7,7 +7,7 @@ The Push SDK requires iOS 6.0 or greater.
 Push SDK Usage
 --------------
 
-For more information please visit the [docs site](https://github.com/cfmobile/docs-pushnotifications-ios)
+For more information please visit the [docs site](http://docs.pivotal.io/mobile/push/ios/)
 
 
 Building the SDK
