@@ -1,0 +1,23 @@
+{
+    "num": 1,
+    "last_modified": 1424309210305,
+    "geofences": [
+        {
+            "id": 7,
+            "data": {
+                "message": "pizza"
+            },
+            "expiry_time": 1424309210305,
+            "trigger_type": "enter_or_exit",
+            "locations": [
+                {
+                    "id": 88,
+                    "name": "ernsts_amazing_pizza",
+                    "lat": -143.5,
+                    "long": 61.5,
+                    "rad": 150
+                }
+            ]
+        }
+    ]
+}

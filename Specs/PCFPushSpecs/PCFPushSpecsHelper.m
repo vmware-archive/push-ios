@@ -31,6 +31,12 @@ NSString *const TEST_OS_VERSION          = @"2.0";
 NSString *const TEST_REGISTRATION_TOKEN  = @"ABC-DEF-GHI";
 NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 
+const int64_t TEST_GEOFENCE_ID              = 66L;
+NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
+const double TEST_GEOFENCE_LATITUDE         = 53.5;
+const double TEST_GEOFENCE_LONGITUDE        = -91.5;
+const double TEST_GEOFENCE_RADIUS           = 120;
+
 @implementation PCFPushSpecsHelper
 
 # pragma mark - Spec Helper lifecycle
@@ -44,7 +50,8 @@ NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
         self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
         self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
-
+        self.testGeofenceDate = [NSDate date];
+        
         [PCFPushPersistentStorage reset];
     }
     return self;

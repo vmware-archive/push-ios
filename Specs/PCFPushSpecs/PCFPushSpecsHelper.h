@@ -22,6 +22,12 @@ OBJC_EXPORT NSString *const TEST_OS_VERSION;
 OBJC_EXPORT NSString *const TEST_REGISTRATION_TOKEN;
 OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 
+OBJC_EXPORT const int64_t TEST_GEOFENCE_ID;
+OBJC_EXPORT NSString *const TEST_GEOFENCE_LOCATION_NAME;
+OBJC_EXPORT const double TEST_GEOFENCE_LATITUDE;
+OBJC_EXPORT const double TEST_GEOFENCE_LONGITUDE;
+OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
+
 @interface PCFPushSpecsHelper : NSObject
 
 @property NSData *apnsDeviceToken;
@@ -29,6 +35,7 @@ OBJC_EXPORT NSString *const TEST_DEVICE_UUID;
 @property NSString *base64AuthString1;
 @property NSSet *tags1;
 @property NSSet *tags2;
+@property NSDate *testGeofenceDate;
 @property PCFPushParameters *params;
 
 // Spec Helper lifecycle

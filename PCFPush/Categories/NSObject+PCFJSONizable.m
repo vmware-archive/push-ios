@@ -27,25 +27,34 @@
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
             id value = [self valueForKey:propertyName];
             if (value) {
-                NSArray *components = [remoteKey componentsSeparatedByString:@"."];
-                if (components.count == 1) {
-                    // Handle simple items
-                    foundationType[remoteKey] = value;
-                } else if (components.count > 1) {
-                    // Handle nested items
-                    NSUInteger componentIndex = 0;
-                    id currentItem = foundationType;
-                    while (componentIndex < components.count) {
-                        id componentName = components[componentIndex];
-                        if (componentIndex == components.count - 1) {
-                            currentItem[componentName] = value;
-                        } else {
-                            if (!currentItem[componentName]) {
-                                currentItem[componentName] = [NSMutableDictionary dictionary];
+
+                BOOL wasSerializationHandled = NO;
+                if ([self respondsToSelector:@selector(handleSerializingProperty:value:destination:)]) {
+                    id<PCFMapping> i = (id<PCFMapping>)self;
+                    wasSerializationHandled = [i handleSerializingProperty:propertyName value:value destination:foundationType];
+                }
+
+                if (!wasSerializationHandled) {
+                    NSArray *components = [remoteKey componentsSeparatedByString:@"."];
+                    if (components.count == 1) {
+                        // Handle simple items
+                        foundationType[remoteKey] = value;
+                    } else if (components.count > 1) {
+                        // Handle nested items
+                        NSUInteger componentIndex = 0;
+                        id currentItem = foundationType;
+                        while (componentIndex < components.count) {
+                            id componentName = components[componentIndex];
+                            if (componentIndex == components.count - 1) {
+                                currentItem[componentName] = value;
+                            } else {
+                                if (!currentItem[componentName]) {
+                                    currentItem[componentName] = [NSMutableDictionary dictionary];
+                                }
+                                currentItem = currentItem[componentName];
                             }
-                            currentItem = currentItem[componentName];
+                            componentIndex += 1;
                         }
-                        componentIndex += 1;
                     }
                 }
             }
@@ -90,7 +99,13 @@
         [mapping enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *remoteKey, BOOL *stop) {
             id value = [dict valueForKeyPath:remoteKey];
             if (value) {
-                [result setValue:value forKey:propertyName];
+                BOOL wasDeserializationHandled = NO;
+                if ([result respondsToSelector:@selector(handleDeserializingProperty:value:)]) {
+                    wasDeserializationHandled = [result handleDeserializingProperty:propertyName value:value];
+                }
+                if (!wasDeserializationHandled) {
+                    [result setValue:value forKey:propertyName];
+                }
             }
         }];
     }
@@ -102,7 +117,7 @@
 {
     if (!JSONData || JSONData.length <= 0) {
         if (error) {
-            *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationDataUnparseable localizedDescription:@"request data is empty"];
+            *error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndDataUnparseable localizedDescription:@"request data is empty"];
         }
         return nil;
     }

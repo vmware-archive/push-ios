@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
     /**
      * The registration request JSON data object was badly formatted.
      */
-    PCFPushBackEndRegistrationDataUnparseable = 40,
+    PCFPushBackEndDataUnparseable = 40,
     
     /**
      * The back-end server did not return a device_uuid after attempting to register.

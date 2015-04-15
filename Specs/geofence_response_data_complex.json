@@ -1,0 +1,72 @@
+{
+    "num": 3,
+    "last_modified": 1424309210305,
+    "geofences": [
+        {
+            "id": 5,
+            "data": {
+                "message": "pizza"
+            },
+            "expiry_time": 1424309210305,
+            "trigger_type": "enter",
+            "locations": [
+                {
+                    "id": 88,
+                    "name": "ernsts_amazing_pizza",
+                    "lat": -43.5,
+                    "long": 61.5,
+                    "rad": 150
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "data": {
+                "message": "tacos"
+            },
+            "expiry_time": 1142744274,
+            "trigger_type": "exit",
+            "locations": [
+                {
+                    "id": 66,
+                    "name": "robs_wizard_tacos",
+                    "lat": 53.5,
+                    "long": -91.5,
+                    "rad": 120
+                }
+            ]
+        },
+        {
+            "id": 44,
+            "data": {
+                "message": "eat all this great stuff"
+            },
+            "expiry_time": 1142744274,
+            "trigger_type": "exit",
+            "locations": [
+                {
+                    "id": 66,
+                    "name": "robs_wizard_tacos",
+                    "lat": 53.5,
+                    "long": -91.5,
+                    "rad": 120
+                },
+                {
+                    "id": 82,
+                    "name": "robs_lizard_burritos",
+                    "lat": 55.5,
+                    "long": -94.5,
+                    "rad": 100
+                },
+                {
+                    "id": 83,
+                    "name": "ernsts_fancy_croissant",
+                    "lat": 59.5,
+                    "long": -111.5,
+                    "rad": 80
+                }
+            ]
+        }
+    ],
+    "deleted_geofence_ids": [9,13]
+}

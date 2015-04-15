@@ -91,7 +91,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
-            [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationDataUnparseable)];
+            [[theValue(error.code) should] equal:theValue(PCFPushBackEndDataUnparseable)];
         });
         
         it(@"should handle empty input", ^{
@@ -100,7 +100,7 @@ describe(@"PCFPushBackEndRegistrationResponseData", ^{
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
-            [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationDataUnparseable)];
+            [[theValue(error.code) should] equal:theValue(PCFPushBackEndDataUnparseable)];
         });
         
         it(@"should handle bad JSON", ^{

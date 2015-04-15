@@ -8,6 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		113DCA921A69A8FA007DB7A0 /* Pivotal.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */; };
+		11F37BF71ADD62C8001011C9 /* geofence_five_items.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BE91ADD62C8001011C9 /* geofence_five_items.json */; };
+		11F37BF81ADD62C8001011C9 /* geofence_one_item.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BEA1ADD62C8001011C9 /* geofence_one_item.json */; };
+		11F37BF91ADD62C8001011C9 /* geofence_one_item_persisted_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BEB1ADD62C8001011C9 /* geofence_one_item_persisted_1.json */; };
+		11F37BFA1ADD62C8001011C9 /* geofence_one_item_persisted_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BEC1ADD62C8001011C9 /* geofence_one_item_persisted_2.json */; };
+		11F37BFB1ADD62C8001011C9 /* geofence_one_item_persisted_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BED1ADD62C8001011C9 /* geofence_one_item_persisted_3.json */; };
+		11F37BFC1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BEE1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json */; };
+		11F37BFD1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BEF1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json */; };
+		11F37BFE1ADD62C8001011C9 /* geofence_response_data_complex.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF01ADD62C8001011C9 /* geofence_response_data_complex.json */; };
+		11F37BFF1ADD62C8001011C9 /* geofence_response_data_delete_one.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF11ADD62C8001011C9 /* geofence_response_data_delete_one.json */; };
+		11F37C001ADD62C8001011C9 /* geofence_response_data_delete_one_other.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF21ADD62C8001011C9 /* geofence_response_data_delete_one_other.json */; };
+		11F37C011ADD62C8001011C9 /* geofence_response_data_empty.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF31ADD62C8001011C9 /* geofence_response_data_empty.json */; };
+		11F37C021ADD62C8001011C9 /* geofence_response_data_one_item.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF41ADD62C8001011C9 /* geofence_response_data_one_item.json */; };
+		11F37C031ADD62C8001011C9 /* geofence_response_data_one_other_item.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF51ADD62C8001011C9 /* geofence_response_data_one_other_item.json */; };
+		11F37C041ADD62C8001011C9 /* geofence_three_items.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37BF61ADD62C8001011C9 /* geofence_three_items.json */; };
+		11F37C081ADD6F46001011C9 /* PCFPushGeofenceDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37C071ADD6F46001011C9 /* PCFPushGeofenceDataSpec.m */; };
+		11F37C0A1ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37C091ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m */; };
+		11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37C0B1ADD8C03001011C9 /* geofence_location_1.json */; };
+		11F37C0E1ADD9AB6001011C9 /* geofence_with_locations_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37C0D1ADD9AB6001011C9 /* geofence_with_locations_1.json */; };
 		235BB251199C085200B9EE63 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 235BB23A199C085200B9EE63 /* InfoPlist.strings */; };
 		235BB252199C085200B9EE63 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23D199C085200B9EE63 /* JRSwizzle.m */; };
 		235BB253199C085200B9EE63 /* PCFClassPropertyUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23F199C085200B9EE63 /* PCFClassPropertyUtility.m */; };
@@ -34,6 +52,24 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11F37BE91ADD62C8001011C9 /* geofence_five_items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_five_items.json; sourceTree = "<group>"; };
+		11F37BEA1ADD62C8001011C9 /* geofence_one_item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item.json; sourceTree = "<group>"; };
+		11F37BEB1ADD62C8001011C9 /* geofence_one_item_persisted_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item_persisted_1.json; sourceTree = "<group>"; };
+		11F37BEC1ADD62C8001011C9 /* geofence_one_item_persisted_2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item_persisted_2.json; sourceTree = "<group>"; };
+		11F37BED1ADD62C8001011C9 /* geofence_one_item_persisted_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item_persisted_3.json; sourceTree = "<group>"; };
+		11F37BEE1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item_persisted_bad.json; sourceTree = "<group>"; };
+		11F37BEF1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_all_items_culled.json; sourceTree = "<group>"; };
+		11F37BF01ADD62C8001011C9 /* geofence_response_data_complex.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_complex.json; sourceTree = "<group>"; };
+		11F37BF11ADD62C8001011C9 /* geofence_response_data_delete_one.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_delete_one.json; sourceTree = "<group>"; };
+		11F37BF21ADD62C8001011C9 /* geofence_response_data_delete_one_other.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_delete_one_other.json; sourceTree = "<group>"; };
+		11F37BF31ADD62C8001011C9 /* geofence_response_data_empty.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_empty.json; sourceTree = "<group>"; };
+		11F37BF41ADD62C8001011C9 /* geofence_response_data_one_item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_item.json; sourceTree = "<group>"; };
+		11F37BF51ADD62C8001011C9 /* geofence_response_data_one_other_item.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_other_item.json; sourceTree = "<group>"; };
+		11F37BF61ADD62C8001011C9 /* geofence_three_items.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_three_items.json; sourceTree = "<group>"; };
+		11F37C071ADD6F46001011C9 /* PCFPushGeofenceDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceDataSpec.m; sourceTree = "<group>"; };
+		11F37C091ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocationSpec.m; sourceTree = "<group>"; };
+		11F37C0B1ADD8C03001011C9 /* geofence_location_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_location_1.json; sourceTree = "<group>"; };
+		11F37C0D1ADD9AB6001011C9 /* geofence_with_locations_1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_with_locations_1.json; sourceTree = "<group>"; };
 		235BB23B199C085200B9EE63 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		235BB23C199C085200B9EE63 /* JRSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JRSwizzle.h; sourceTree = "<group>"; };
 		235BB23D199C085200B9EE63 /* JRSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JRSwizzle.m; sourceTree = "<group>"; };
@@ -103,6 +139,8 @@
 				235BB244199C085200B9EE63 /* PCFPushBackEndRegistrationResponseDataSpec.m */,
 				235BB245199C085200B9EE63 /* PCFPushBackEndRegistrationResponseDataTest.h */,
 				235BB246199C085200B9EE63 /* PCFPushClientTest.h */,
+				11F37C071ADD6F46001011C9 /* PCFPushGeofenceDataSpec.m */,
+				11F37C091ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m */,
 				235BB247199C085200B9EE63 /* PCFPushHexUtilSpec.m */,
 				235BB248199C085200B9EE63 /* PCFPushPersistentStorageSpec.m */,
 				235BB249199C085200B9EE63 /* PCFPushSpec.m */,
@@ -130,6 +168,22 @@
 		F1CD947B19004FC80086A590 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				11F37C0D1ADD9AB6001011C9 /* geofence_with_locations_1.json */,
+				11F37C0B1ADD8C03001011C9 /* geofence_location_1.json */,
+				11F37BE91ADD62C8001011C9 /* geofence_five_items.json */,
+				11F37BEA1ADD62C8001011C9 /* geofence_one_item.json */,
+				11F37BEB1ADD62C8001011C9 /* geofence_one_item_persisted_1.json */,
+				11F37BEC1ADD62C8001011C9 /* geofence_one_item_persisted_2.json */,
+				11F37BED1ADD62C8001011C9 /* geofence_one_item_persisted_3.json */,
+				11F37BEE1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json */,
+				11F37BEF1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json */,
+				11F37BF01ADD62C8001011C9 /* geofence_response_data_complex.json */,
+				11F37BF11ADD62C8001011C9 /* geofence_response_data_delete_one.json */,
+				11F37BF21ADD62C8001011C9 /* geofence_response_data_delete_one_other.json */,
+				11F37BF31ADD62C8001011C9 /* geofence_response_data_empty.json */,
+				11F37BF41ADD62C8001011C9 /* geofence_response_data_one_item.json */,
+				11F37BF51ADD62C8001011C9 /* geofence_response_data_one_other_item.json */,
+				11F37BF61ADD62C8001011C9 /* geofence_three_items.json */,
 				F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */,
 				F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */,
 				B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */,
@@ -224,11 +278,27 @@
 			buildActionMask = 2147483647;
 			files = (
 				113DCA921A69A8FA007DB7A0 /* Pivotal.plist in Resources */,
+				11F37C031ADD62C8001011C9 /* geofence_response_data_one_other_item.json in Resources */,
+				11F37BF91ADD62C8001011C9 /* geofence_one_item_persisted_1.json in Resources */,
+				11F37C021ADD62C8001011C9 /* geofence_response_data_one_item.json in Resources */,
+				11F37BFD1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json in Resources */,
 				235BB25B199C085200B9EE63 /* PCFPushSpecs-Info.plist in Resources */,
+				11F37BFF1ADD62C8001011C9 /* geofence_response_data_delete_one.json in Resources */,
+				11F37BFA1ADD62C8001011C9 /* geofence_one_item_persisted_2.json in Resources */,
+				11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */,
+				11F37C001ADD62C8001011C9 /* geofence_response_data_delete_one_other.json in Resources */,
+				11F37C041ADD62C8001011C9 /* geofence_three_items.json in Resources */,
 				F1CD94811900666F0086A590 /* Pivotal-Invalid.plist in Resources */,
 				235BB251199C085200B9EE63 /* InfoPlist.strings in Resources */,
+				11F37BF81ADD62C8001011C9 /* geofence_one_item.json in Resources */,
+				11F37C0E1ADD9AB6001011C9 /* geofence_with_locations_1.json in Resources */,
 				F1CD947D19004FE80086A590 /* Pivotal-Valid.plist in Resources */,
 				B6AAEE0D6C25F43D62FE3DF1 /* Pivotal-Empty.plist in Resources */,
+				11F37BFB1ADD62C8001011C9 /* geofence_one_item_persisted_3.json in Resources */,
+				11F37BFC1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json in Resources */,
+				11F37BF71ADD62C8001011C9 /* geofence_five_items.json in Resources */,
+				11F37BFE1ADD62C8001011C9 /* geofence_response_data_complex.json in Resources */,
+				11F37C011ADD62C8001011C9 /* geofence_response_data_empty.json in Resources */,
 				B6AAEEB4854C71C7A968F1DD /* Pivotal-ExtraParameters.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,12 +345,14 @@
 			files = (
 				235BB253199C085200B9EE63 /* PCFClassPropertyUtility.m in Sources */,
 				235BB258199C085200B9EE63 /* PCFPushPersistentStorageSpec.m in Sources */,
+				11F37C081ADD6F46001011C9 /* PCFPushGeofenceDataSpec.m in Sources */,
 				D4F3AC4C19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m in Sources */,
 				235BB25A199C085200B9EE63 /* PCFPushSpecsHelper.m in Sources */,
 				235BB25C199C085200B9EE63 /* PCFRegistrationParametersSpec.m in Sources */,
 				235BB254199C085200B9EE63 /* PCFPushBackEndConnectionSpec.m in Sources */,
 				235BB255199C085200B9EE63 /* PCFPushBackEndRegistrationPostRequestDataSpec.m in Sources */,
 				235BB256199C085200B9EE63 /* PCFPushBackEndRegistrationResponseDataSpec.m in Sources */,
+				11F37C0A1ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m in Sources */,
 				D4F3AC5319A3A35A005E84FF /* PCFTagsHelperSpec.m in Sources */,
 				235BB257199C085200B9EE63 /* PCFPushHexUtilSpec.m in Sources */,
 				235BB259199C085200B9EE63 /* PCFPushSpec.m in Sources */,

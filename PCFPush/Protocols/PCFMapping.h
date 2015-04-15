@@ -13,4 +13,9 @@
 
 + (NSDictionary *)localToRemoteMapping;
 
+@optional
+
+- (BOOL)handleDeserializingProperty:(NSString *)propertyName value:(id)value;
+- (BOOL)handleSerializingProperty:(NSString *)propertyName value:(id)value destination:(NSMutableDictionary *)destination;
+
 @end

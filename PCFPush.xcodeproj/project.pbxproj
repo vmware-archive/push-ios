@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11F37BE31ADD5D3C001011C9 /* PCFPushGeofenceData.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		11F37BE41ADD5D3C001011C9 /* PCFPushGeofenceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */; };
+		11F37BE71ADD600A001011C9 /* PCFPushGeofenceLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		11F37BE81ADD600A001011C9 /* PCFPushGeofenceLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */; };
 		2318E688199C039A0054C274 /* PCFPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E654199C039A0054C274 /* PCFPushURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E689199C039A0054C274 /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E655199C039A0054C274 /* PCFPushURLConnection.m */; };
 		2318E68A199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E656199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -49,6 +53,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceData.h; sourceTree = "<group>"; };
+		11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceData.m; sourceTree = "<group>"; };
+		11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceLocation.h; sourceTree = "<group>"; };
+		11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocation.m; sourceTree = "<group>"; };
 		2318E654199C039A0054C274 /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
 		2318E655199C039A0054C274 /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
 		2318E656199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFBackEndConnection.h"; sourceTree = "<group>"; };
@@ -102,6 +110,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11F37BDF1ADD5CF8001011C9 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				2318E65C199C039A0054C274 /* PCFPushRegistrationData.h */,
+				2318E65D199C039A0054C274 /* PCFPushRegistrationData.m */,
+				2318E65E199C039A0054C274 /* PCFPushRegistrationPostRequestData.h */,
+				2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */,
+				D45B1D7819A2944000F57230 /* PCFPushRegistrationPutRequestData.h */,
+				D45B1D7919A2944000F57230 /* PCFPushRegistrationPutRequestData.m */,
+				2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */,
+				2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */,
+			);
+			name = Api;
+			sourceTree = "<group>";
+		};
+		11F37BE01ADD5D01001011C9 /* Geofence */ = {
+			isa = PBXGroup;
+			children = (
+				11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */,
+				11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */,
+				11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */,
+				11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */,
+			);
+			name = Geofence;
+			sourceTree = "<group>";
+		};
 		2318E652199C039A0054C274 /* PCFPush */ = {
 			isa = PBXGroup;
 			children = (
@@ -146,14 +180,8 @@
 		2318E65B199C039A0054C274 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2318E65C199C039A0054C274 /* PCFPushRegistrationData.h */,
-				2318E65D199C039A0054C274 /* PCFPushRegistrationData.m */,
-				2318E65E199C039A0054C274 /* PCFPushRegistrationPostRequestData.h */,
-				2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */,
-				D45B1D7819A2944000F57230 /* PCFPushRegistrationPutRequestData.h */,
-				D45B1D7919A2944000F57230 /* PCFPushRegistrationPutRequestData.m */,
-				2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */,
-				2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */,
+				11F37BDF1ADD5CF8001011C9 /* Api */,
+				11F37BE01ADD5D01001011C9 /* Geofence */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -233,8 +261,10 @@
 				2318E6B2199C039A0054C274 /* PCFPushErrors.h in Headers */,
 				2318E6AC199C039A0054C274 /* PCFNotifications.h in Headers */,
 				2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */,
+				11F37BE71ADD600A001011C9 /* PCFPushGeofenceLocation.h in Headers */,
 				D4B9FF2319A3CD950070A429 /* PCFPushPersistentStorage.h in Headers */,
 				D4F3AC4F19A3A25F005E84FF /* PCFTagsHelper.h in Headers */,
+				11F37BE31ADD5D3C001011C9 /* PCFPushGeofenceData.h in Headers */,
 				2318E688199C039A0054C274 /* PCFPushURLConnection.h in Headers */,
 				2318E68E199C039A0054C274 /* PCFPushRegistrationData.h in Headers */,
 				2318E6B3199C039A0054C274 /* PCFPushErrorUtil.h in Headers */,
@@ -331,12 +361,14 @@
 				2318E691199C039A0054C274 /* PCFPushRegistrationPostRequestData.m in Sources */,
 				2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */,
 				D4B9FF2419A3CD950070A429 /* PCFPushPersistentStorage.m in Sources */,
+				11F37BE41ADD5D3C001011C9 /* PCFPushGeofenceData.m in Sources */,
 				2318E689199C039A0054C274 /* PCFPushURLConnection.m in Sources */,
 				2318E6A1199C039A0054C274 /* PCFPush.m in Sources */,
 				D4F3AC5019A3A25F005E84FF /* PCFTagsHelper.m in Sources */,
 				2318E6B1199C039A0054C274 /* PCFPushDebug.m in Sources */,
 				2318E693199C039A0054C274 /* PCFPushRegistrationResponseData.m in Sources */,
 				2318E68B199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m in Sources */,
+				11F37BE81ADD600A001011C9 /* PCFPushGeofenceLocation.m in Sources */,
 				D45B1D7B19A2944000F57230 /* PCFPushRegistrationPutRequestData.m in Sources */,
 				2318E6A9199C039A0054C274 /* PCFHardwareUtil.m in Sources */,
 				D4B9FF2819A511370070A429 /* PCFPushClient.m in Sources */,

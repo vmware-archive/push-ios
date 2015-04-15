@@ -1,0 +1,29 @@
+{
+    "id": 7,
+    "data": {
+        "message": "tacos"
+    },
+    "trigger_type": "enter",
+    "expiry_time": 1424309210305,
+    "locations": [{
+                    "id": 66,
+                    "name": "robs_wizard_tacos",
+                    "lat": 53.5,
+                    "long": -91.5,
+                    "rad": 120
+                  },
+                  {
+                    "id": 82,
+                    "name": "robs_lizard_burritos",
+                    "lat": 55.5,
+                    "long": -94.5,
+                    "rad": 100
+                  },
+                  {
+                    "id": 88,
+                    "name": "ernsts_amazing_pizza",
+                    "lat": -143.5,
+                    "long": 61.5,
+                    "rad": 150
+                  }]
+}
