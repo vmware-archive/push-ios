@@ -41,7 +41,7 @@ describe(@"PCFPushGeofenceData", ^{
         });
         
         it(@"should start as nil", ^{
-            [[theValue(model.id) should] equal:theValue(0L)];
+            [[theValue(model.id) should] beZero];
             [[model.tags should] beNil];
             [[model.data should] beNil];
             [[model.expiryTime should] beNil];
@@ -132,7 +132,7 @@ describe(@"PCFPushGeofenceData", ^{
             [[theValue(((PCFPushGeofenceLocation*)(model.locations[2])).id) should] equal:theValue(88L)];
         });
 
-        it(@"should handle converting expiry times", ^{
+        it(@"should handle deserializing expiry times", ^{
             model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"expiry_time" : @0 } ];
             [[model.expiryTime should] equal:[NSDate dateWithTimeIntervalSince1970:0.0]];
 
@@ -149,7 +149,7 @@ describe(@"PCFPushGeofenceData", ^{
             [[model.expiryTime should] beNil];
         });
 
-        it(@"should handle converting all the trigger types", ^{
+        it(@"should handle deserializing all the trigger types", ^{
             model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"enter" } ];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeEnter)];
 
@@ -172,12 +172,12 @@ describe(@"PCFPushGeofenceData", ^{
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
         });
 
-        it(@"should handle converting locations", ^{
+        it(@"should handle deserializing locations", ^{
             model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : [NSNull null] } ];
             [[model.locations should] beNil];
 
             model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : @[] } ];
-            [[model.locations should] beEmpty];
+            [[model.locations should] beNil];
 
             model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : @[ @{@"id":@99L} ] } ];
             [[model.locations should] haveCountOf:1];
@@ -244,7 +244,7 @@ describe(@"PCFPushGeofenceData", ^{
 
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[@"id"] should] equal:theValue(0L)];
+                [[dict[@"id"] should] beZero];
                 [[dict[@"data"] should] beNil];
                 [[dict[@"trigger_type"] should] beNil];
                 [[dict[@"expiry_time"] should] beNil];
@@ -264,7 +264,7 @@ describe(@"PCFPushGeofenceData", ^{
             });
         });
 
-        context(@"individual fields", ^{
+        context(@"serializing individual fields", ^{
 
             it(@"should serialize various trigger types", ^{
                 model.triggerType = PCFPushTriggerTypeUndefined;
@@ -295,7 +295,7 @@ describe(@"PCFPushGeofenceData", ^{
 
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:0];
                 dict = [model pcf_toFoundationType];
-                [[dict[@"expiry_time"] should] equal:@0L];
+                [[dict[@"expiry_time"] should] beZero];
 
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:0.10];
                 dict = [model pcf_toFoundationType];
@@ -317,7 +317,7 @@ describe(@"PCFPushGeofenceData", ^{
 
                 model.locations = @[];
                 dict = [model pcf_toFoundationType];
-                [[dict[@"locations"] should] beEmpty];
+                [[dict[@"locations"] should] beNil];
             });
         });
     });

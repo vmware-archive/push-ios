@@ -40,11 +40,11 @@ describe(@"PCFPushGeofenceLocation", ^{
         });
         
         it(@"should start as nil", ^{
-            [[theValue(model.id) should] equal:theValue(0L)];
+            [[theValue(model.id) should] beZero];
             [[model.name should] beNil];
-            [[theValue(model.latitude) should] equal:theValue(0.0)];
-            [[theValue(model.longitude) should] equal:theValue(0.0)];
-            [[theValue(model.radius) should] equal:theValue(0.0)];
+            [[theValue(model.latitude) should] beZero];
+            [[theValue(model.longitude) should] beZero];
+            [[theValue(model.radius) should] beZero];
         });
         
         it(@"should have an ID", ^{
@@ -167,11 +167,11 @@ describe(@"PCFPushGeofenceLocation", ^{
             
             afterEach(^{
                 [[dict shouldNot] beNil];
-                [[dict[@"id"] should] equal:theValue(0L)];
+                [[dict[@"id"] should] beZero];
                 [[dict[@"name"] should] beNil];
-                [[dict[@"lat"] should] equal:theValue(0.0)];
-                [[dict[@"long"] should] equal:theValue(0.0)];
-                [[dict[@"rad"] should] equal:theValue(0.0)];
+                [[dict[@"lat"] should] beZero];
+                [[dict[@"long"] should] beZero];
+                [[dict[@"rad"] should] beZero];
             });
             
             it(@"should be dictionaryizable", ^{

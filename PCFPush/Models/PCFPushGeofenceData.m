@@ -52,12 +52,14 @@
     } else if ([propertyName isEqualToString:@"locations"]) {
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *locations = (NSArray *) value;
-            NSMutableArray *arr = [NSMutableArray array];
-            for (id location in locations) {
-                PCFPushGeofenceLocation *l = [PCFPushGeofenceLocation pcf_fromDictionary:location];
-                [arr addObject:l];
+            if (locations.count > 0) {
+                NSMutableArray *arr = [NSMutableArray array];
+                for (id location in locations) {
+                    PCFPushGeofenceLocation *l = [PCFPushGeofenceLocation pcf_fromDictionary:location];
+                    [arr addObject:l];
+                }
+                self.locations = arr;
             }
-            self.locations = arr;
         }
         return YES;
     }
@@ -95,12 +97,15 @@
     } else if ([propertyName isEqualToString:@"locations"]) {
 
         if ([value isKindOfClass:[NSArray class]]) {
-            NSMutableArray *arr = [NSMutableArray array];
-            for (PCFPushGeofenceLocation *location in value) {
-                id l = [location pcf_toFoundationType];
-                [arr addObject:l];
+            NSArray *locations = (NSArray*)value;
+            if (locations.count > 0) {
+                NSMutableArray *arr = [NSMutableArray array];
+                for (PCFPushGeofenceLocation *location in locations) {
+                    id l = [location pcf_toFoundationType];
+                    [arr addObject:l];
+                }
+                destination[@"locations"] = arr;
             }
-            destination[@"locations"] = arr;
         }
         return YES;
     }
