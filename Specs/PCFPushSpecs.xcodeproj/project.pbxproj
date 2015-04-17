@@ -39,8 +39,11 @@
 		235BB25B199C085200B9EE63 /* PCFPushSpecs-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 235BB24C199C085200B9EE63 /* PCFPushSpecs-Info.plist */; };
 		235BB25C199C085200B9EE63 /* PCFRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* PCFRegistrationParametersSpec.m */; };
 		235BB25D199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB250199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m */; };
+		B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */; };
 		B6AAE79157694D42D559E3FE /* PCFPushGeofenceEngineSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAE0116E01A3AFABE12569 /* PCFPushGeofenceEngineSpec.m */; };
+		B6AAEC389EDA1FAD0F72FC84 /* PCFPushGeofenceDataListSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEDEC99C23127BF05A661 /* PCFPushGeofenceDataListSpec.m */; };
 		B6AAED08898E5D6E1F11927F /* PCFPushGeofenceResponseDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAE108449F14B20C8442ED /* PCFPushGeofenceResponseDataSpec.m */; };
+		B6AAEDDDCADA3534DAD31793 /* PCFPushGeofenceDataList+Loaders.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEA1588EEB1E98589238C /* PCFPushGeofenceDataList+Loaders.m */; };
 		B6AAEE0D6C25F43D62FE3DF1 /* Pivotal-Empty.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6AAEF958FD1CB06277607D7 /* Pivotal-Empty.plist */; };
 		B6AAEEB4854C71C7A968F1DD /* Pivotal-ExtraParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6AAEAB49D1EA1D6775A4EE8 /* Pivotal-ExtraParameters.plist */; };
 		D4F3AC4C19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC4B19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m */; };
@@ -99,8 +102,12 @@
 		65DC33CB493A38EAF1259929 /* Pods-PCFPushSpecs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.debug.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6AAE0116E01A3AFABE12569 /* PCFPushGeofenceEngineSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceEngineSpec.m; sourceTree = "<group>"; };
+		B6AAE0A90D799F3D4419C8DA /* PCFPushGeofenceDataList+Loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushGeofenceDataList+Loaders.h"; sourceTree = "<group>"; };
 		B6AAE108449F14B20C8442ED /* PCFPushGeofenceResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceResponseDataSpec.m; sourceTree = "<group>"; };
+		B6AAEA1588EEB1E98589238C /* PCFPushGeofenceDataList+Loaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPushGeofenceDataList+Loaders.m"; sourceTree = "<group>"; };
 		B6AAEAB49D1EA1D6775A4EE8 /* Pivotal-ExtraParameters.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-ExtraParameters.plist"; sourceTree = "<group>"; };
+		B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocationMapSpec.m; sourceTree = "<group>"; };
+		B6AAEDEC99C23127BF05A661 /* PCFPushGeofenceDataListSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceDataListSpec.m; sourceTree = "<group>"; };
 		B6AAEF958FD1CB06277607D7 /* Pivotal-Empty.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Empty.plist"; sourceTree = "<group>"; };
 		B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Pivotal.plist; sourceTree = "<group>"; };
 		D4F3AC4B19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushBackEndRegistrationPutRequestDataSpec.m; sourceTree = "<group>"; };
@@ -158,6 +165,10 @@
 				235BB250199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m */,
 				B6AAE0116E01A3AFABE12569 /* PCFPushGeofenceEngineSpec.m */,
 				B6AAE108449F14B20C8442ED /* PCFPushGeofenceResponseDataSpec.m */,
+				B6AAEDEC99C23127BF05A661 /* PCFPushGeofenceDataListSpec.m */,
+				B6AAEA1588EEB1E98589238C /* PCFPushGeofenceDataList+Loaders.m */,
+				B6AAE0A90D799F3D4419C8DA /* PCFPushGeofenceDataList+Loaders.h */,
+				B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -366,6 +377,9 @@
 				235BB25D199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */,
 				B6AAE79157694D42D559E3FE /* PCFPushGeofenceEngineSpec.m in Sources */,
 				B6AAED08898E5D6E1F11927F /* PCFPushGeofenceResponseDataSpec.m in Sources */,
+				B6AAEC389EDA1FAD0F72FC84 /* PCFPushGeofenceDataListSpec.m in Sources */,
+				B6AAEDDDCADA3534DAD31793 /* PCFPushGeofenceDataList+Loaders.m in Sources */,
+				B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
