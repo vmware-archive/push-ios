@@ -22,8 +22,13 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
 
         __block PCFPushGeofenceResponseData *emptyResponseData;
         __block PCFPushGeofenceResponseData *oneItemResponseData;
+        __block PCFPushGeofenceResponseData *complexResponseData;
+        __block PCFPushGeofenceResponseData *oneOtherItemResponseData;
+        __block PCFPushGeofenceResponseData *insufficientDataResponseData;
         __block PCFPushGeofenceDataList *emptyGeofenceList;
         __block PCFPushGeofenceDataList *oneItemGeofenceList;
+        __block PCFPushGeofenceDataList *threeItemGeofenceList;
+        __block PCFPushGeofenceDataList *fiveItemGeofenceList;
         __block PCFPushGeofenceLocationMap *expectedGeofencesToRegister;
         __block PCFPushGeofenceDataList *expectedGeofencesToStore;
 
@@ -48,10 +53,16 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         beforeEach(^{
             emptyResponseData = loadResponseData(@"geofence_response_data_empty");
             oneItemResponseData = loadResponseData(@"geofence_response_data_one_item");
+            complexResponseData = loadResponseData(@"geofence_response_data_complex");
+            oneOtherItemResponseData = loadResponseData(@"geofence_response_data_one_other_item");
+            insufficientDataResponseData = loadResponseData(@"geofence_response_data_all_items_culled");
             oneItemGeofenceList = loadGeofenceList(@"geofence_one_item");
+            threeItemGeofenceList = loadGeofenceList(@"geofence_three_items");
+            fiveItemGeofenceList = loadGeofenceList(@"geofence_five_items");
             emptyGeofenceList = [[PCFPushGeofenceDataList alloc] init];
             expectedGeofencesToRegister = [[PCFPushGeofenceLocationMap alloc] init];
             expectedGeofencesToStore = [[PCFPushGeofenceDataList alloc] init];
+            [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
         });
 
         afterEach(^{
@@ -131,8 +142,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             });
 
             it(@"should register one item if there are no currently registered geofences and an update provides one (with a timestamp)", ^{
-                [expectedGeofencesToRegister put:oneItemResponseData.geofences[0] locationIndex:0];
-                expectedGeofencesToStore[@9L] = oneItemResponseData.geofences[0];
+                [expectedGeofencesToRegister put:oneItemResponseData.geofences[0] locationIndex:0]; // item with ID 9
+                expectedGeofencesToStore[@9L] = oneItemResponseData.geofences[0]; // item with ID 9
                 [[store shouldNot] receive:@selector(reset)];
                 [[registrar shouldNot] receive:@selector(reset)];
                 [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
@@ -140,7 +151,198 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:50L];
             });
+
+            it(@"should reregister the same geofence if passed an update to a currently registered geofence (with no timestamp)", ^{
+                [expectedGeofencesToRegister put:oneOtherItemResponseData.geofences[0] locationIndex:0]; // item with ID 7
+                expectedGeofencesToStore[@7L] = oneOtherItemResponseData.geofences[0]; // item with ID 7
+                [[store should] receive:@selector(reset)];
+                [[registrar should] receive:@selector(reset)];
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneOtherItemResponseData withTimestamp:0L];
+            });
+
+            it(@"should reregister the same geofence if passed an update to a currently registered geofence (with some timestamp)", ^{
+                [expectedGeofencesToRegister put:oneOtherItemResponseData.geofences[0] locationIndex:0]; // item with ID 7
+                expectedGeofencesToStore[@7L] = oneOtherItemResponseData.geofences[0]; // item with ID 7
+                [[store shouldNot] receive:@selector(reset)];
+                [[registrar shouldNot] receive:@selector(reset)];
+                [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneOtherItemResponseData withTimestamp:50L];
+            });
+
+            it(@"should register one item that is not currently registered when one other item is already saved (with no timestamp)", ^{
+                [expectedGeofencesToRegister put:oneItemResponseData.geofences[0] locationIndex:0]; // item with ID 9
+                expectedGeofencesToStore[@9L] = oneItemResponseData.geofences[0]; // item with ID 9
+                [[store should] receive:@selector(reset)];
+                [[registrar should] receive:@selector(reset)];
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneItemResponseData withTimestamp:0L];
+            });
+
+            it(@"should register one item that is not currently registered when one other item is already saved (with some timestamp)", ^{
+                [expectedGeofencesToRegister put:oneItemGeofenceList[@7L] locationIndex:0]; // item with ID 7
+                [expectedGeofencesToRegister put:oneItemResponseData.geofences[0] locationIndex:0]; // item with ID 9
+                expectedGeofencesToStore[@7L] = oneItemGeofenceList[@7L]; // item with ID 7
+                expectedGeofencesToStore[@9L] = oneItemResponseData.geofences[0]; // item with ID 9
+                [[store shouldNot] receive:@selector(reset)];
+                [[registrar shouldNot] receive:@selector(reset)];
+                [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneItemResponseData withTimestamp:50L];
+            });
+
+            it(@"should let you updates some items when there's no timestamp", ^{
+                [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0]; // ID 5  -- was added
+                [expectedGeofencesToRegister put:complexResponseData.geofences[1] locationIndex:0]; // ID 10  -- was added
+                [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:0]; // ID 44  -- was added (1st location)
+                [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:1]; // ID 44  -- was added (2nd location)
+                [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:2]; // ID 44  -- was added (3rd location)
+                expectedGeofencesToStore[@5] = complexResponseData.geofences[0]; // ID 5 - was added
+                expectedGeofencesToStore[@10] = complexResponseData.geofences[1]; // ID 10 was added
+                expectedGeofencesToStore[@44] = complexResponseData.geofences[2]; // ID 44 was added (with three locations)
+                [[store should] receive:@selector(reset)];
+                [[registrar should] receive:@selector(reset)];
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:complexResponseData withTimestamp:0L];
+            });
+
+            context(@"updates with a timestamp", ^{
+
+                it(@"update some items, no items currently stored", ^{
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0]; // ID 5  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[1] locationIndex:0]; // ID 10  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:0]; // ID 44  -- was added (1st location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:1]; // ID 44  -- was added (2nd location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:2]; // ID 44  -- was added (3rd location)
+                    expectedGeofencesToStore[@5] = complexResponseData.geofences[0]; // ID 5 was adde
+                    expectedGeofencesToStore[@10] = complexResponseData.geofences[1]; // ID 10 was added
+                    expectedGeofencesToStore[@44] = complexResponseData.geofences[2]; // ID 44 was added (with three locations)
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+
+                it(@"update some items, one item currently stored", ^{
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0]; // ID 5  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[1] locationIndex:0]; // ID 10  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:0]; // ID 44  -- was added (1st location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:1]; // ID 44  -- was added (2nd location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:2]; // ID 44  -- was added (3rd location)
+                    [expectedGeofencesToRegister put:oneItemGeofenceList[@7L] locationIndex:0]; // ID 7 -- was kept
+                    expectedGeofencesToStore[@5] = complexResponseData.geofences[0]; // ID 5 was added
+                    expectedGeofencesToStore[@10] = complexResponseData.geofences[1]; // ID 10 was added
+                    expectedGeofencesToStore[@44] = complexResponseData.geofences[2]; // ID 44 was added (with three locations)
+                    expectedGeofencesToStore[@7] = oneItemGeofenceList[@7L]; // ID 7 was kept
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+
+                it(@"update some items, many items currently stored", ^{
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0]; // ID 5  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[1] locationIndex:0]; // ID 10  -- was added
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:0]; // ID 44  -- was added (1st location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:1]; // ID 44  -- was added (2nd location)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[2] locationIndex:2]; // ID 44  -- was added (3rd location)
+                    [expectedGeofencesToRegister put:threeItemGeofenceList[@7L] locationIndex:0]; // ID 7 -- was kept. Note: ID 9 was deleted.
+                    expectedGeofencesToStore[@5] = complexResponseData.geofences[0]; // ID 5 was added
+                    expectedGeofencesToStore[@10] = complexResponseData.geofences[1]; // ID 10 was added
+                    expectedGeofencesToStore[@44] = complexResponseData.geofences[2]; // ID 44 was added (with three locations)
+                    expectedGeofencesToStore[@7] = threeItemGeofenceList[@7L]; // ID 7 was kept. Note: ID 9 was deleted.
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+            });
+
+            context(@"filtering items with invalid data", ^{
+
+                it(@"should filter items with insufficient data", ^{
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:insufficientDataResponseData withTimestamp:50L];
+                });
+            });
+
+            context(@"filter expired items", ^{
+
+                beforeEach(^{
+                    NSDate *fakeDate = [NSDate dateWithTimeIntervalSince1970:991142744.274];
+                    [NSDate stub:@selector(date) andReturn:fakeDate];
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                });
+
+                it(@"should filter expired items from store", ^{
+                    [expectedGeofencesToRegister put:threeItemGeofenceList[@7L] locationIndex:0]; // IDs 7 and 44 were registered.  Note that ID 9 has expired.
+                    [expectedGeofencesToRegister put:threeItemGeofenceList[@44L] locationIndex:0];
+                    [expectedGeofencesToRegister put:threeItemGeofenceList[@44L] locationIndex:1];
+                    expectedGeofencesToStore[@7L] = threeItemGeofenceList[@7L];
+                    expectedGeofencesToStore[@44L] = threeItemGeofenceList[@44L];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:emptyResponseData withTimestamp:50L];
+                });
+
+                it(@"should filter expired items from updates", ^{
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0];
+                    expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+
+                it(@"should filter expired items that are not expired but receive updates that are expired", ^{
+                    [expectedGeofencesToRegister put:threeItemGeofenceList[@7L] locationIndex:0]; // Note that item ID 44 becomes expired in the update
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0];
+                    expectedGeofencesToStore[@7L] = threeItemGeofenceList[@7L];
+                    expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+
+                it(@"should retain stored expired items that receive updates that are not expired", ^{
+                    [expectedGeofencesToRegister put:fiveItemGeofenceList[@11L] locationIndex:0]; // Note that item ID 11 is kept from the store (including the 'old' version of item ID 5)
+                    [expectedGeofencesToRegister put:complexResponseData.geofences[0] locationIndex:0]; // Note that item ID 5 is the only unexpired item in the update data
+                    expectedGeofencesToStore[@11L] = fiveItemGeofenceList[@11L];
+                    expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:geofenceDataList:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+            });
+
+
+
+
         });
+
 
     });
 

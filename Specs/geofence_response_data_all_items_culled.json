@@ -3,6 +3,22 @@
     "last_modified": 1424309210305,
     "geofences": [
         {
+          "id": 1,
+          "data": {
+            "message": "i have no expiry_time"
+          },
+          "trigger_type": "enter",
+          "locations": [
+            {
+              "id": 88,
+              "name": "i have no expiry time",
+              "lat": -143.5,
+              "long": 61.5,
+              "rad": 150
+            }
+          ]
+        },
+        {
             "id": 3,
             "expiry_time": 1424309210305,
             "trigger_type": "enter",
