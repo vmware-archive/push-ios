@@ -11,6 +11,7 @@
 #import "PCFPushGeofenceDataList+Loaders.h"
 #import "PCFPushGeofenceLocationMap.h"
 #import "NSObject+PCFJSONizable.h"
+#import "PCFPushGeofenceResponseData+Loaders.h"
 
 SPEC_BEGIN(PCFPushGeofenceEngineSpec)
 
@@ -19,7 +20,6 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceEngine *engine;
         __block PCFPushGeofenceRegistrar *registrar;
         __block PCFPushGeofencePersistentStore *store;
-
         __block PCFPushGeofenceResponseData *emptyResponseData;
         __block PCFPushGeofenceResponseData *oneItemResponseData;
         __block PCFPushGeofenceResponseData *complexResponseData;
@@ -29,36 +29,18 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceDataList *oneItemGeofenceList;
         __block PCFPushGeofenceDataList *threeItemGeofenceList;
         __block PCFPushGeofenceDataList *fiveItemGeofenceList;
-        __block PCFPushGeofenceLocationMap *expectedGeofencesToRegister;
         __block PCFPushGeofenceDataList *expectedGeofencesToStore;
-
-        __block PCFPushGeofenceDataList* (^loadGeofenceList)(NSString *name) = ^PCFPushGeofenceDataList *(NSString *name) {
-            NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:name ofType:@"json"];
-            NSData *data = [NSData dataWithContentsOfFile:filePath];
-            [[data shouldNot] beNil];
-            PCFPushGeofenceDataList *result = [PCFPushGeofenceDataList listFromData:data];
-            return result;
-        };
-
-        __block PCFPushGeofenceResponseData* (^loadResponseData)(NSString *name) = ^PCFPushGeofenceResponseData *(NSString *name) {
-            NSError *error;
-            NSString *filePath = [[NSBundle bundleForClass:[self class]] pathForResource:name ofType:@"json"];
-            NSData *data = [NSData dataWithContentsOfFile:filePath];
-            [[data shouldNot] beNil];
-            PCFPushGeofenceResponseData *result = [PCFPushGeofenceResponseData pcf_fromJSONData:data error:&error];
-            [[error should] beNil];
-            return result;
-        };
+        __block PCFPushGeofenceLocationMap *expectedGeofencesToRegister;
 
         beforeEach(^{
-            emptyResponseData = loadResponseData(@"geofence_response_data_empty");
-            oneItemResponseData = loadResponseData(@"geofence_response_data_one_item");
-            complexResponseData = loadResponseData(@"geofence_response_data_complex");
-            oneOtherItemResponseData = loadResponseData(@"geofence_response_data_one_other_item");
-            insufficientDataResponseData = loadResponseData(@"geofence_response_data_all_items_culled");
-            oneItemGeofenceList = loadGeofenceList(@"geofence_one_item");
-            threeItemGeofenceList = loadGeofenceList(@"geofence_three_items");
-            fiveItemGeofenceList = loadGeofenceList(@"geofence_five_items");
+            emptyResponseData = loadResponseData([self class], @"geofence_response_data_empty");
+            oneItemResponseData = loadResponseData([self class], @"geofence_response_data_one_item");
+            complexResponseData = loadResponseData([self class], @"geofence_response_data_complex");
+            oneOtherItemResponseData = loadResponseData([self class], @"geofence_response_data_one_other_item");
+            insufficientDataResponseData = loadResponseData([self class], @"geofence_response_data_all_items_culled");
+            oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
+            threeItemGeofenceList = loadGeofenceList([self class], @"geofence_three_items");
+            fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items");
             emptyGeofenceList = [[PCFPushGeofenceDataList alloc] init];
             expectedGeofencesToRegister = [[PCFPushGeofenceLocationMap alloc] init];
             expectedGeofencesToStore = [[PCFPushGeofenceDataList alloc] init];
@@ -337,13 +319,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
             });
-
-
-
-
         });
-
-
     });
 
 SPEC_END

@@ -26,6 +26,7 @@
 		11F37C0A1ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37C091ADD83A7001011C9 /* PCFPushGeofenceLocationSpec.m */; };
 		11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37C0B1ADD8C03001011C9 /* geofence_location_1.json */; };
 		11F37C0E1ADD9AB6001011C9 /* geofence_with_locations_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 11F37C0D1ADD9AB6001011C9 /* geofence_with_locations_1.json */; };
+		1D3BF7BAEFEB4B9985F53D82 /* libPods-PCFPushSpecs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D716B45334053F7BD402D0DD /* libPods-PCFPushSpecs.a */; };
 		235BB251199C085200B9EE63 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 235BB23A199C085200B9EE63 /* InfoPlist.strings */; };
 		235BB252199C085200B9EE63 /* JRSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23D199C085200B9EE63 /* JRSwizzle.m */; };
 		235BB253199C085200B9EE63 /* PCFClassPropertyUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB23F199C085200B9EE63 /* PCFClassPropertyUtility.m */; };
@@ -40,6 +41,8 @@
 		235BB25C199C085200B9EE63 /* PCFRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* PCFRegistrationParametersSpec.m */; };
 		235BB25D199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB250199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m */; };
 		B69DB63736EFDB4921867DC2 /* PCFPushGeofenceUpdaterSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB13CFE4E4FE592303B0E /* PCFPushGeofenceUpdaterSpec.m */; };
+		B69DBAA0AFF58A8E0E8336A3 /* PCFPushGeofenceResponseData+Loaders.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */; };
+		B69DBC6CD4EC6094A62A5ABE /* PCFPushGeofenceRegistrarSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB1E4BEB08FDFF683F036 /* PCFPushGeofenceRegistrarSpec.m */; };
 		B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */; };
 		B6AAE79157694D42D559E3FE /* PCFPushGeofenceEngineSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAE0116E01A3AFABE12569 /* PCFPushGeofenceEngineSpec.m */; };
 		B6AAEC389EDA1FAD0F72FC84 /* PCFPushGeofenceDataListSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEDEC99C23127BF05A661 /* PCFPushGeofenceDataListSpec.m */; };
@@ -54,7 +57,6 @@
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
 		F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AF18D79A1B009EBE38 /* Foundation.framework */; };
 		F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2B118D79A1B009EBE38 /* UIKit.framework */; };
-		F869E6470F79409F817D99AD /* libPods-PCFPushSpecs.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B4F77F0A4647269B082C04 /* libPods-PCFPushSpecs.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -99,10 +101,12 @@
 		235BB250199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFPushAsync2Sync.m"; sourceTree = "<group>"; };
 		34012CF2F59FEE470ECEC1F2 /* Pods-PCFPushSpecs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.release.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.release.xcconfig"; sourceTree = "<group>"; };
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		52B4F77F0A4647269B082C04 /* libPods-PCFPushSpecs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PCFPushSpecs.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65DC33CB493A38EAF1259929 /* Pods-PCFPushSpecs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.debug.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B69DB13CFE4E4FE592303B0E /* PCFPushGeofenceUpdaterSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUpdaterSpec.m; sourceTree = "<group>"; };
+		B69DB1E4BEB08FDFF683F036 /* PCFPushGeofenceRegistrarSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceRegistrarSpec.m; sourceTree = "<group>"; };
+		B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPushGeofenceResponseData+Loaders.m"; sourceTree = "<group>"; };
+		B69DB7C339931AD8EBD81D16 /* PCFPushGeofenceResponseData+Loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushGeofenceResponseData+Loaders.h"; sourceTree = "<group>"; };
 		B6AAE0116E01A3AFABE12569 /* PCFPushGeofenceEngineSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceEngineSpec.m; sourceTree = "<group>"; };
 		B6AAE0A90D799F3D4419C8DA /* PCFPushGeofenceDataList+Loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushGeofenceDataList+Loaders.h"; sourceTree = "<group>"; };
 		B6AAE108449F14B20C8442ED /* PCFPushGeofenceResponseDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceResponseDataSpec.m; sourceTree = "<group>"; };
@@ -114,6 +118,7 @@
 		B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Pivotal.plist; sourceTree = "<group>"; };
 		D4F3AC4B19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushBackEndRegistrationPutRequestDataSpec.m; sourceTree = "<group>"; };
 		D4F3AC5219A3A35A005E84FF /* PCFTagsHelperSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFTagsHelperSpec.m; sourceTree = "<group>"; };
+		D716B45334053F7BD402D0DD /* libPods-PCFPushSpecs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PCFPushSpecs.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* PCFPushSpecs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PCFPushSpecs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -130,7 +135,7 @@
 				F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */,
 				F1D1295F18D9DB35002FE233 /* UIKit.framework in Frameworks */,
 				F1D1295E18D9DB35002FE233 /* Foundation.framework in Frameworks */,
-				F869E6470F79409F817D99AD /* libPods-PCFPushSpecs.a in Frameworks */,
+				1D3BF7BAEFEB4B9985F53D82 /* libPods-PCFPushSpecs.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,6 +177,9 @@
 				B6AAE0A90D799F3D4419C8DA /* PCFPushGeofenceDataList+Loaders.h */,
 				B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */,
 				B69DB13CFE4E4FE592303B0E /* PCFPushGeofenceUpdaterSpec.m */,
+				B69DB1E4BEB08FDFF683F036 /* PCFPushGeofenceRegistrarSpec.m */,
+				B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */,
+				B69DB7C339931AD8EBD81D16 /* PCFPushGeofenceResponseData+Loaders.h */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -240,7 +248,7 @@
 				F1FDE2B118D79A1B009EBE38 /* UIKit.framework */,
 				48E0BEE976B04ACBAB665052 /* libPods-ios.a */,
 				982406CD77B04192B6EA55BA /* libPods-iOSTests.a */,
-				52B4F77F0A4647269B082C04 /* libPods-PCFPushSpecs.a */,
+				D716B45334053F7BD402D0DD /* libPods-PCFPushSpecs.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -384,6 +392,8 @@
 				B6AAEDDDCADA3534DAD31793 /* PCFPushGeofenceDataList+Loaders.m in Sources */,
 				B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */,
 				B69DB63736EFDB4921867DC2 /* PCFPushGeofenceUpdaterSpec.m in Sources */,
+				B69DBC6CD4EC6094A62A5ABE /* PCFPushGeofenceRegistrarSpec.m in Sources */,
+				B69DBAA0AFF58A8E0E8336A3 /* PCFPushGeofenceResponseData+Loaders.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +453,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "PCFPushSpecs/PCFPushSpecs-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -487,7 +497,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "PCFPushSpecs/PCFPushSpecs-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

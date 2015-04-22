@@ -13,6 +13,24 @@
 
 @end
 
+int64_t geofenceIdForRequestId(NSString *requestId)
+{
+    NSArray *components = [requestId componentsSeparatedByString:@"_"];
+    if (components.count >= 2) {
+        return atoll([components[1] cStringUsingEncoding:NSUTF8StringEncoding]);
+    }
+    return nil;
+}
+
+int64_t locationIdForRequestId(NSString *requestId)
+{
+    NSArray *components = [requestId componentsSeparatedByString:@"_"];
+    if (components.count >= 3) {
+        return atoll([components[2] cStringUsingEncoding:NSUTF8StringEncoding]);
+    }
+    return nil;
+}
+
 @implementation PCFPushGeofenceLocationMap
 
 + (NSString *)iosRequestIdWithGeofenceId:(int64_t)geofenceId locationId:(int64_t)locationId
@@ -62,5 +80,14 @@
 - (void)setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key
 {
     self.dict[key] = obj;
+}
+
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(int64_t geofenceId, int64_t locationId, PCFPushGeofenceLocation *location, BOOL *stop))block
+{
+    [self.dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        int64_t geofenceId = geofenceIdForRequestId(key);
+        int64_t locationId = geofenceIdForRequestId(key);
+        block(geofenceId, locationId, obj, stop);
+    }];
 }
 @end

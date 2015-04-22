@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "PCFPushGeofenceDataList.h"
 
+extern PCFPushGeofenceDataList* loadGeofenceList(Class testProjectClass, NSString *name);
+
 @interface PCFPushGeofenceDataList (Loaders)
 
 + (PCFPushGeofenceDataList *)listFromData:(NSData *)data;

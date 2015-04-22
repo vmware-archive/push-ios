@@ -7,9 +7,11 @@
 
 @class PCFPushGeofenceDataList;
 @class PCFPushGeofenceLocationMap;
+@class CLLocationManager;
 
 @interface PCFPushGeofenceRegistrar : NSObject
 
+- (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;
 - (void) registerGeofences:(PCFPushGeofenceLocationMap*)geofencesToRegister geofenceDataList:(PCFPushGeofenceDataList*)geofenceDataList;
 - (void) reset;
 

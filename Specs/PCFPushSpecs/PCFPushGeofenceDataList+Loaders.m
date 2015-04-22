@@ -6,6 +6,14 @@
 #import "PCFPushGeofenceData.h"
 #import "NSObject+PCFJSONizable.h"
 
+PCFPushGeofenceDataList* loadGeofenceList(Class testProjectClass, NSString *name)
+{
+    NSString *filePath = [[NSBundle bundleForClass:testProjectClass] pathForResource:name ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    PCFPushGeofenceDataList *result = [PCFPushGeofenceDataList listFromData:data];
+    return result;
+};
+
 @implementation PCFPushGeofenceDataList (Loaders)
 
 + (PCFPushGeofenceDataList *)listFromData:(NSData *)data
