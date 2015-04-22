@@ -4,8 +4,7 @@
 
 #import <UIKit/UIKit.h>
 
-// For unit tests
-extern void resetOnceToken();
+extern void resetOnceToken(); // For unit tests
 
 extern BOOL isAPNSSandbox();
 

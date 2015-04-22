@@ -11,11 +11,19 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushPersistentStorage.h"
 
+static NSString *const GEOFENCE_UPDATE_JSON = @"pivotal.push.geofence_update_json";
+
+BOOL hasGeofencesInRequest(NSDictionary *userInfo);
+
 @interface PCFPushGeofenceUpdater()
 
 @property (nonatomic) PCFPushGeofenceEngine *engine;
 
 @end
+
+BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
+    return userInfo != nil && userInfo[GEOFENCE_UPDATE_JSON] != nil;
+}
 
 @implementation PCFPushGeofenceUpdater
 
@@ -66,10 +74,17 @@
         }
     };
 
-    [PCFPushURLConnection geofenceRequestWithParameters:parameters
-                                              timestamp:timestamp
-                                                success:requestSuccessBlock
-                                                failure:requestFailureBlock];
+    if (hasGeofencesInRequest(userInfo) && isAPNSSandbox()) {
+        NSString *geofencesInRequest = userInfo[GEOFENCE_UPDATE_JSON];
+
+        requestSuccessBlock(nil, [geofencesInRequest dataUsingEncoding:NSUTF8StringEncoding]);
+
+    } else {
+        [PCFPushURLConnection geofenceRequestWithParameters:parameters
+                                                  timestamp:timestamp
+                                                    success:requestSuccessBlock
+                                                    failure:requestFailureBlock];
+    }
 };
 
 @end
