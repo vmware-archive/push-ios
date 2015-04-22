@@ -10,6 +10,7 @@ static NSString *const KEY_VARIANT_UUID       = @"PCF_PUSH_VARIANT_UUID";
 static NSString *const KEY_VARIANT_SECRET     = @"PCF_PUSH_VARIANT_SECRET";
 static NSString *const KEY_DEVICE_ALIAS       = @"PCF_PUSH_DEVICE_ALIAS";
 static NSString *const KEY_TAGS               = @"PCF_PUSH_TAGS";
+static NSString *const KEY_LAST_MODIFIED_TIME = @"PCF_PUSH_LAST_MODIFIED_TIME";
 
 @implementation PCFPushPersistentStorage
 
@@ -22,6 +23,7 @@ static NSString *const KEY_TAGS               = @"PCF_PUSH_TAGS";
                       KEY_VARIANT_SECRET,
                       KEY_DEVICE_ALIAS,
                       KEY_TAGS,
+                      KEY_LAST_MODIFIED_TIME,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -92,6 +94,16 @@ static NSString *const KEY_TAGS               = @"PCF_PUSH_TAGS";
     } else {
         return nil;
     }
+}
+
++ (int64_t)lastModifiedTime
+{
+    return [[self persistedValueForKey:KEY_LAST_MODIFIED_TIME] longLongValue];
+}
+
++ (void)setLastModifiedTime:(int64_t)lastModifiedTime
+{
+    [self persistValue:@(lastModifiedTime) forKey:KEY_LAST_MODIFIED_TIME];
 }
 
 + (void)persistValue:(id)value forKey:(id)key

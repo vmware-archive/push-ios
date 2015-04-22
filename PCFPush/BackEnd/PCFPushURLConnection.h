@@ -26,4 +26,8 @@ NSString *const kBasicAuthorizationKey;
                                success:(void (^)(NSURLResponse *response, NSData *data))success
                                failure:(void (^)(NSError *error))failure;
 
++ (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
+                            timestamp:(int64_t)timestamp
+                              success:(void (^)(NSURLResponse *response, NSData *data))success
+                              failure:(void (^)(NSError *error))failure;
 @end

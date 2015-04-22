@@ -12,7 +12,7 @@
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushClient.h"
 
-SPEC_BEGIN(PCFPushBackEndConnectionSpec)
+SPEC_BEGIN(PCFPushURLConnectionSpec)
 
 describe(@"PCFPushBackEndConnection", ^{
     __block PCFPushSpecsHelper *helper;
@@ -97,6 +97,93 @@ describe(@"PCFPushBackEndConnection", ^{
               shouldNot] raise];
 		});
 	});
+
+    context(@"arguments for geofence updates", ^{
+        it(@"should require a parameters object", ^{
+            [[theBlock( ^{
+                [PCFPushURLConnection geofenceRequestWithParameters:nil timestamp:77777L
+                                                            success:^(NSURLResponse *response, NSData *data) {
+                                                            }
+                                                            failure:^(NSError *error) {
+                                                            }]; })
+                    should] raise];
+        });
+
+        it(@"should not require a success block", ^{
+            [[theBlock( ^{ [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
+                                                                       success:nil
+                                                                       failure:^(NSError *error) {
+                                                                       }]; })
+                    shouldNot] raise];
+        });
+
+        it(@"should not require a failure block", ^{
+            [[theBlock( ^{ [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
+                                                                       success:^(NSURLResponse *response, NSData *data) {
+                                                                       }
+                                                                       failure:nil]; })
+                    shouldNot] raise];
+        });
+    });
+
+    context(@"geofence updates", ^{
+            __block BOOL wasExpectedResult = NO;
+
+            beforeEach ( ^{
+                wasExpectedResult = NO;
+            });
+
+            afterEach ( ^{
+                [[theValue(wasExpectedResult) should] beTrue];
+            });
+
+            it(@"should handle a success request", ^{
+                [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                    NSURLRequest *request = params[0];
+                    //TODO: Verify basic auth once we have a real server
+
+                    [[request.HTTPMethod should] equal:@"GET"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777"];
+
+                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+
+                    CompletionHandler handler = params[2];
+                    handler(response, nil, nil);
+                    return nil;
+                }];
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
+                                                            success:^(NSURLResponse *response, NSData *data) {
+                                                                wasExpectedResult = YES;
+                                                            } failure:^(NSError *error) {
+                            wasExpectedResult = NO;
+                        }];
+            });
+
+            it(@"should handle a failure request", ^{
+                [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                    NSURLRequest *request = params[0];
+                    //TODO: Verify basic auth once we have a real server
+
+                    [[request.HTTPMethod should] equal:@"GET"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777"];
+
+                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
+
+                    CompletionHandler handler = params[2];
+                    handler(response, nil, nil);
+                    return nil;
+                }];
+
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
+                                                            success:^(NSURLResponse *response, NSData *data) {
+                                                                wasExpectedResult = NO;
+                                                            } failure:^(NSError *error) {
+                            wasExpectedResult = YES;
+                        }];
+            });
+
+
+    });
 
     context(@"valid object arguments", ^{
         __block BOOL wasExpectedResult = NO;

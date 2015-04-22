@@ -27,14 +27,7 @@
 
 - (BOOL)handleDeserializingProperty:(NSString *)propertyName value:(id)value
 {
-    if ([propertyName isEqualToString:@"lastModified"]) {
-        if ([value isKindOfClass:[NSNumber class]]) {
-            NSTimeInterval secondsSince1970 = [value longLongValue] / 1000.0;
-            self.lastModified = [NSDate dateWithTimeIntervalSince1970:secondsSince1970];
-        }
-        return YES;
-
-    } else if ([propertyName isEqualToString:@"geofences"]) {
+    if ([propertyName isEqualToString:@"geofences"]) {
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *geofences = (NSArray *) value;
             if (geofences.count > 0) {
@@ -54,14 +47,7 @@
 
 - (BOOL)handleSerializingProperty:(NSString *)propertyName value:(id)value destination:(NSMutableDictionary *)destination
 {
-    if ([propertyName isEqualToString:@"lastModified"]) {
-        if ([value isKindOfClass:[NSDate class]]) {
-            NSNumber *d = @((int64_t) ([self.lastModified timeIntervalSince1970] * 1000.0));
-            destination[@"last_modified"] = d;
-        }
-        return YES;
-
-    } else if ([propertyName isEqualToString:@"geofences"]) {
+    if ([propertyName isEqualToString:@"geofences"]) {
 
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *geofences = (NSArray*)value;
@@ -78,6 +64,39 @@
     }
 
     return NO;
+}
+
+- (BOOL)isEqual:(id)other {
+    if (other == self)
+        return YES;
+    if (!other || ![[other class] isEqual:[self class]])
+        return NO;
+
+    return [self isEqualToData:other];
+}
+
+- (BOOL)isEqualToData:(PCFPushGeofenceResponseData *)data {
+    if (self == data)
+        return YES;
+    if (data == nil)
+        return NO;
+    if (self.number != data.number)
+        return NO;
+    if (self.lastModified != data.lastModified)
+        return NO;
+    if (self.geofences != data.geofences && ![self.geofences isEqualToArray:data.geofences])
+        return NO;
+    if (self.deletedGeofenceIds != data.deletedGeofenceIds && ![self.deletedGeofenceIds isEqualToArray:data.deletedGeofenceIds])
+        return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = (NSUInteger) self.number;
+    hash = hash * 31u + (NSUInteger) self.lastModified;
+    hash = hash * 31u + [self.geofences hash];
+    hash = hash * 31u + [self.deletedGeofenceIds hash];
+    return hash;
 }
 
 @end

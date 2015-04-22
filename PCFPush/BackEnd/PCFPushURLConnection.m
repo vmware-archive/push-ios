@@ -18,19 +18,24 @@
 NSString *const kBasicAuthorizationKey = @"Authorization";
 
 static NSString *const kRegistrationRequestPath = @"v1/registration";
-static NSTimeInterval kRegistrationTimeout = 60.0;
+static NSString *const kGeofencesRequestPath = @"v1/geofence"; // TODO - set to 'geofences' once a real server is available
+static NSString *const kTimestampParam = @"timestamp";
+static NSTimeInterval kRequestTimeout = 60.0;
+
+@implementation NSURL (Additions)
+
+- (NSURL *)URLByAppendingQueryString:(NSString *)queryString {
+    if (![queryString length]) {
+        return self;
+    }
+
+    NSString *URLString = [[NSString alloc] initWithFormat:@"%@%@%@", [self absoluteString], [self query] ? @"&" : @"?", queryString];
+    return [NSURL URLWithString:URLString];
+}
+
+@end
 
 @implementation PCFPushURLConnection
-
-+ (NSURL *)baseURL
-{
-    PCFPushParameters *params = [[PCFPushClient shared] registrationParameters];
-    if (!params || !params.pushAPIURL) {
-        PCFPushLog(@"PCFPushURLConnection baseURL is nil");
-        return nil;
-    }
-    return [NSURL URLWithString:params.pushAPIURL];
-}
 
 + (void)unregisterDeviceID:(NSString *)deviceID
                 parameters:(PCFPushParameters *)parameters
@@ -78,7 +83,20 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
                                          failure:failure];
 }
 
-#pragma mark - Registration
++ (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
+                            timestamp:(int64_t)timestamp
+                              success:(void (^)(NSURLResponse *response, NSData *data))success
+                              failure:(void (^)(NSError *error))failure
+{
+    PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
+    NSMutableURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters];
+
+    [NSURLConnection pcf_sendAsynchronousRequest:request
+                                         success:success
+                                         failure:failure];
+}
+
+#pragma mark - Registration Request
 
 + (NSMutableURLRequest *)updateRequestForDeviceID:(NSString *)deviceID
                                   APNSDeviceToken:(NSData *)APNSDeviceToken
@@ -114,7 +132,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     }
     
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = method;
     [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
@@ -202,7 +220,7 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     return requestData;
 }
 
-#pragma mark - Unregister
+#pragma mark - Unregister Request
 
 + (NSMutableURLRequest *)unregisterRequestForBackEndDeviceID:(NSString *)backEndDeviceUUID
 {
@@ -213,9 +231,34 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
     NSURL *rootURL = [NSURL URLWithString:kRegistrationRequestPath relativeToURL:[self baseURL]];
     NSURL *deviceURL = [rootURL URLByAppendingPathComponent:[backEndDeviceUUID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRegistrationTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = @"DELETE";
     return request;
+}
+
+#pragma mark - Geofence Request
+
++ (NSURLRequest *)geofenceRequestWithTimestamp:(int64_t)timestamp parameters:(PCFPushParameters *)parameters {
+    if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
+        [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
+    }
+
+    NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[self baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld", kTimestampParam, timestamp]];
+    NSURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
+    // TODO - add basic auth to this request once a real server is available
+    return request;
+}
+
+#pragma mark - Helpers
+
++ (NSURL *)baseURL
+{
+    PCFPushParameters *params = [[PCFPushClient shared] registrationParameters];
+    if (!params || !params.pushAPIURL) {
+        PCFPushLog(@"PCFPushURLConnection baseURL is nil");
+        return nil;
+    }
+    return [NSURL URLWithString:params.pushAPIURL];
 }
 
 @end

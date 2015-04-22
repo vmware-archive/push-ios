@@ -24,6 +24,9 @@
 + (void)setTags:(NSSet *)tags;
 + (NSSet *)tags;
 
++ (void)setLastModifiedTime:(int64_t)lastModifiedTime;
++ (int64_t)lastModifiedTime;
+
 + (void)reset;
 
 + (void)persistValue:(id)value forKey:(id)key;

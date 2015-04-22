@@ -42,7 +42,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
         it(@"should start as nil", ^{
             [[theValue(model.number) should] beZero];
-            [[model.lastModified should] beNil];
+            [[theValue(model.lastModified) should] beZero];
             [[model.geofences should] beNil];
             [[model.deletedGeofenceIds should] beNil];
         });
@@ -88,7 +88,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
             [[error should] beNil];
 
             [[theValue(model.number) should] equal:theValue(3)];
-            [[model.lastModified should] equal:[NSDate dateWithTimeIntervalSince1970:1424309210.305]];
+            [[theValue(model.lastModified) should] equal:theValue(1424309210305L)];
             [[model.geofences should] haveCountOf:3];
             [[theValue(((PCFPushGeofenceData*)(model.geofences[0])).id) should] equal:theValue(5)];
             [[theValue(((PCFPushGeofenceData*)(model.geofences[1])).id) should] equal:theValue(10)];
@@ -99,19 +99,16 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
         it(@"should handle deserializing last modified values", ^{
             model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @0 } ];
-            [[model.lastModified should] equal:[NSDate dateWithTimeIntervalSince1970:0.0]];
+            [[theValue(model.lastModified) should] beZero];
 
             model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @10 } ];
-            [[model.lastModified should] equal:[NSDate dateWithTimeIntervalSince1970:0.010]];
+            [[theValue(model.lastModified) should] equal:theValue(10L)];
 
             model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @1000 } ];
-            [[model.lastModified should] equal:[NSDate dateWithTimeIntervalSince1970:1.0]];
-
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : [NSNull null] } ];
-            [[model.lastModified should] beNil];
+            [[theValue(model.lastModified) should] equal:theValue(1000L)];
 
             model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ } ];
-            [[model.lastModified should] beNil];
+            [[theValue(model.lastModified) should] beZero];
         });
 
         it(@"should handle deserializing list of geofences", ^{
@@ -144,7 +141,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
             beforeEach(^{
                 model.number = 2;
-                model.lastModified = [NSDate dateWithTimeIntervalSince1970:100.0];
+                model.lastModified = 100000L;
                 model.deletedGeofenceIds = @[ @2, @17, @22 ];
 
                 data1 = [[PCFPushGeofenceData alloc] init];
@@ -184,7 +181,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[@"num"] should] beZero];
-                [[dict[@"last_modified"] should] beNil];
+                [[dict[@"last_modified"] should] beZero];
                 [[dict[@"geofences"] should] beNil];
                 [[dict[@"delete_geofence_ids"] should] beNil];
             });
@@ -205,23 +202,15 @@ describe(@"PCFPushGeofenceResponseData", ^{
         context(@"serializing individual fields", ^{
 
             it(@"should serialize various last modified times", ^{
-                model.lastModified = nil;
-                dict = [model pcf_toFoundationType];
-                [[dict[@"last_modified"] should] beNil];
-
-                model.lastModified = (NSDate*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
-                [[dict[@"last_modified"] should] beNil];
-
-                model.lastModified = [NSDate dateWithTimeIntervalSince1970:0];
+                model.lastModified = 0L;
                 dict = [model pcf_toFoundationType];
                 [[dict[@"last_modified"] should] beZero];
 
-                model.lastModified = [NSDate dateWithTimeIntervalSince1970:0.10];
+                model.lastModified = 100L;
                 dict = [model pcf_toFoundationType];
                 [[dict[@"last_modified"] should] equal:@100L];
 
-                model.lastModified = [NSDate dateWithTimeIntervalSince1970:1000];
+                model.lastModified = 1000000L;
                 dict = [model pcf_toFoundationType];
                 [[dict[@"last_modified"] should] equal:@1000000L];
             });

@@ -9,8 +9,14 @@
 @interface PCFPushGeofenceResponseData : NSObject<PCFMapping>
 
 @property int64_t number;
-@property NSDate *lastModified;
+@property int64_t lastModified;
 @property NSArray *geofences;
 @property NSArray *deletedGeofenceIds;
+
+- (BOOL)isEqual:(id)other;
+
+- (BOOL)isEqualToData:(PCFPushGeofenceResponseData *)data;
+
+- (NSUInteger)hash;
 
 @end
