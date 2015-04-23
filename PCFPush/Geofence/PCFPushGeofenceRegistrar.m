@@ -29,15 +29,16 @@
     return self;
 }
 
-- (void) registerGeofences:(PCFPushGeofenceLocationMap*)geofencesToRegister geofenceDataList:(PCFPushGeofenceDataList*)geofenceDataList
+- (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister
 {
-    [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, int64_t locationId, PCFPushGeofenceLocation *location, BOOL *stop) {
+    [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
         CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         CLLocationDistance radius = location.radius;
-        NSString *identifier = @"PCF_7_66";
-        CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:identifier];
+        CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
         [self.locationManager startMonitoringForRegion:region];
     }];
+
+    // TODO - write the registered geofences to the filesystem so that sample apps can see them and draw them.
 }
 
 - (void) reset

@@ -38,15 +38,14 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         });
 
         it(@"should do nothing if given nil lists", ^{
-            [registrar registerGeofences:nil geofenceDataList:nil];
+            [registrar registerGeofences:nil];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
         });
 
         it(@"should do nothing if given empty lists", ^{
             PCFPushGeofenceLocationMap *emptyMap = [[PCFPushGeofenceLocationMap alloc] init];
-            PCFPushGeofenceDataList *emptyList = [[PCFPushGeofenceDataList alloc] init];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
-            [registrar registerGeofences:emptyMap geofenceDataList:emptyList];
+            [registrar registerGeofences:emptyMap];
         });
 
         it(@"should be able to monitor a list with one item", ^{
@@ -58,7 +57,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
             NSString *identifier = @"PCF_7_66";
             CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:identifier];
             [[locationManager should] receive:@selector(startMonitoringForRegion:) withArguments:region, nil];
-            [registrar registerGeofences:map geofenceDataList:list];
+            [registrar registerGeofences:map];
         });
 
     });

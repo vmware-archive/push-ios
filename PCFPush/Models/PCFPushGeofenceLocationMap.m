@@ -13,7 +13,7 @@
 
 @end
 
-int64_t geofenceIdForRequestId(NSString *requestId)
+int64_t pcf_geofenceIdForRequestId(NSString *requestId)
 {
     NSArray *components = [requestId componentsSeparatedByString:@"_"];
     if (components.count >= 2) {
@@ -22,7 +22,7 @@ int64_t geofenceIdForRequestId(NSString *requestId)
     return nil;
 }
 
-int64_t locationIdForRequestId(NSString *requestId)
+int64_t pcf_locationIdForRequestId(NSString *requestId)
 {
     NSArray *components = [requestId componentsSeparatedByString:@"_"];
     if (components.count >= 3) {
@@ -31,12 +31,12 @@ int64_t locationIdForRequestId(NSString *requestId)
     return nil;
 }
 
-@implementation PCFPushGeofenceLocationMap
-
-+ (NSString *)iosRequestIdWithGeofenceId:(int64_t)geofenceId locationId:(int64_t)locationId
+NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
 {
     return [NSString stringWithFormat:@"PCF_%lld_%lld", geofenceId, locationId];
 }
+
+@implementation PCFPushGeofenceLocationMap
 
 - (instancetype) init
 {
@@ -47,7 +47,8 @@ int64_t locationIdForRequestId(NSString *requestId)
     return self;
 }
 
-- (BOOL)isEqual:(id)o {
+- (BOOL)isEqual:(id)o
+{
     if (![o isKindOfClass:[PCFPushGeofenceLocationMap class]]) {
         return NO;
     }
@@ -68,7 +69,7 @@ int64_t locationIdForRequestId(NSString *requestId)
 
 - (void) put:(PCFPushGeofenceData*)geofence location:(PCFPushGeofenceLocation*)location
 {
-    NSString *iosRequestId = [PCFPushGeofenceLocationMap iosRequestIdWithGeofenceId:geofence.id locationId:location.id];
+    NSString *iosRequestId = pcf_requestIdWithGeofenceId(geofence.id, location.id);
     self.dict[iosRequestId] = location;
 }
 
@@ -82,12 +83,11 @@ int64_t locationIdForRequestId(NSString *requestId)
     self.dict[key] = obj;
 }
 
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(int64_t geofenceId, int64_t locationId, PCFPushGeofenceLocation *location, BOOL *stop))block
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop))block
 {
     [self.dict enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-        int64_t geofenceId = geofenceIdForRequestId(key);
-        int64_t locationId = geofenceIdForRequestId(key);
-        block(geofenceId, locationId, obj, stop);
+        block(key, obj, stop);
     }];
 }
+
 @end

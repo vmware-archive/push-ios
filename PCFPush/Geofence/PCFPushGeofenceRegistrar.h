@@ -12,7 +12,8 @@
 @interface PCFPushGeofenceRegistrar : NSObject
 
 - (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;
-- (void) registerGeofences:(PCFPushGeofenceLocationMap*)geofencesToRegister geofenceDataList:(PCFPushGeofenceDataList*)geofenceDataList;
+
+- (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister;
 - (void) reset;
 
 @end

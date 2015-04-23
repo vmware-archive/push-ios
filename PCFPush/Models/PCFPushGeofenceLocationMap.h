@@ -8,17 +8,18 @@
 @class PCFPushGeofenceData;
 @class PCFPushGeofenceLocation;
 
+extern int64_t pcf_geofenceIdForRequestId(NSString *requestId);
+extern int64_t pcf_locationIdForRequestId(NSString *requestId);
+extern NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId);
+
 @interface PCFPushGeofenceLocationMap : NSObject
 
 - (NSUInteger) count;
-
-+ (NSString *)iosRequestIdWithGeofenceId:(int64_t)geofenceId locationId:(int64_t)locationId;
-
 - (id)objectForKeyedSubscript:(id <NSCopying>)key;
 - (void)setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key;
 - (void) put:(PCFPushGeofenceData*)geofence location:(PCFPushGeofenceLocation*)location;
 - (void) put:(PCFPushGeofenceData*)geofence locationIndex:(NSUInteger)locationIndex;
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(int64_t geofenceId, int64_t locationId, PCFPushGeofenceLocation *location, BOOL *stop))block;
+- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop))block;
 - (BOOL)isEqual:(id)anObject;
 
 @end
