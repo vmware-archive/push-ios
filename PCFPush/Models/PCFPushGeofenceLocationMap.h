@@ -14,6 +14,8 @@ extern NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locati
 
 @interface PCFPushGeofenceLocationMap : NSObject
 
++ (instancetype) map;
+
 - (NSUInteger) count;
 - (id)objectForKeyedSubscript:(id <NSCopying>)key;
 - (void)setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key;

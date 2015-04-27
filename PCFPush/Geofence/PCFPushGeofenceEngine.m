@@ -130,15 +130,15 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
     if (timestamp != 0L) {
         currentlyRegisteredGeofences = [self.store currentlyRegisteredGeofences];
     } else {
-        currentlyRegisteredGeofences = [[PCFPushGeofenceDataList alloc] init];
+        currentlyRegisteredGeofences = [PCFPushGeofenceDataList list];
     }
 
     if (!hasDataToPersist(responseData, currentlyRegisteredGeofences)) {
         return;
     }
 
-    PCFPushGeofenceDataList *geofencesToStore = [[PCFPushGeofenceDataList alloc] init];
-    PCFPushGeofenceLocationMap *geofencesToRegister = [[PCFPushGeofenceLocationMap alloc] init];
+    PCFPushGeofenceDataList *geofencesToStore = [PCFPushGeofenceDataList list];
+    PCFPushGeofenceLocationMap *geofencesToRegister = [PCFPushGeofenceLocationMap map];
 
     addValidGeofencesFromStore(geofencesToStore, currentlyRegisteredGeofences, responseData);
     addValidGeofencesFromUpdate(geofencesToStore, responseData.geofences);

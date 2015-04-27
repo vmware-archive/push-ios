@@ -25,7 +25,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
-        [[theValue([PCFPushPersistentStorage lastModifiedTime]) should] beZero];
+        [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
     });
     
     it(@"should be able to save the APNS device token", ^{
@@ -64,8 +64,8 @@ describe(@"PCFPushPersistentStorage", ^{
     });
 
     it(@"should be able to save last modified times", ^{
-        [PCFPushPersistentStorage setLastModifiedTime:7777L];
-        [[theValue([PCFPushPersistentStorage lastModifiedTime]) should] equal:theValue(7777L)];
+        [PCFPushPersistentStorage setGeofenceLastModifiedTime:7777L];
+        [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(7777L)];
     });
     
     it(@"should clear values after being reset", ^{
@@ -75,7 +75,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
         [PCFPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
         [PCFPushPersistentStorage setTags:helper.tags2];
-        [PCFPushPersistentStorage setLastModifiedTime:888L];
+        [PCFPushPersistentStorage setGeofenceLastModifiedTime:888L];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -83,7 +83,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantUUID] should] beNil];
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
-        [[theValue([PCFPushPersistentStorage lastModifiedTime]) should] beZero];
+        [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
     });
 });
 

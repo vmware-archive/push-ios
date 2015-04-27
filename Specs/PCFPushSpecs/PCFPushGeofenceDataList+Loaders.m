@@ -22,7 +22,7 @@ PCFPushGeofenceDataList* loadGeofenceList(Class testProjectClass, NSString *name
         return nil;
     }
 
-    PCFPushGeofenceDataList *list = [[PCFPushGeofenceDataList alloc] init];
+    PCFPushGeofenceDataList *list = [PCFPushGeofenceDataList list];
     NSMutableDictionary *loadedDict = [PCFPushGeofenceDataList loadData:data];
     [list addEntriesFromDictionary:loadedDict];
 

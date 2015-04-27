@@ -4,12 +4,19 @@
 
 #import <UIKit/UIKit.h>
 
-@class PCFAppDelegate;
 @class PCFPushParameters;
+@class CLLocationManager;
+@class PCFPushGeofenceRegistrar;
+@class PCFPushGeofencePersistentStore;
+@class PCFPushGeofenceEngine;
 
 @interface PCFPushClient : NSObject
 
-@property PCFPushParameters *registrationParameters;
+@property(nonatomic, strong) PCFPushParameters *registrationParameters;
+@property(nonatomic, strong) CLLocationManager *locationManager;
+@property(nonatomic, strong) PCFPushGeofenceRegistrar *registrar;
+@property(nonatomic, strong) PCFPushGeofencePersistentStore *store;
+@property(nonatomic, strong) PCFPushGeofenceEngine *engine;
 
 + (instancetype)shared;
 + (void)resetSharedClient;
@@ -20,6 +27,11 @@
 
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure;
-- (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure;
+
+- (void) subscribeToTags:(NSSet *)tags
+             deviceToken:(NSData *)deviceToken
+              deviceUuid:(NSString *)deviceUuid
+                 success:(void (^)(void))success
+                 failure:(void (^)(NSError*))failure;
 
 @end

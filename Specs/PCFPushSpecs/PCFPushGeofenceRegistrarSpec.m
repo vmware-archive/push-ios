@@ -43,14 +43,14 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         });
 
         it(@"should do nothing if given empty lists", ^{
-            PCFPushGeofenceLocationMap *emptyMap = [[PCFPushGeofenceLocationMap alloc] init];
+            PCFPushGeofenceLocationMap *emptyMap = [PCFPushGeofenceLocationMap map];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
             [registrar registerGeofences:emptyMap];
         });
 
         it(@"should be able to monitor a list with one item", ^{
             PCFPushGeofenceDataList *list = loadGeofenceList([self class], @"geofence_one_item");
-            PCFPushGeofenceLocationMap *map = [[PCFPushGeofenceLocationMap alloc] init];
+            PCFPushGeofenceLocationMap *map = [PCFPushGeofenceLocationMap map];
             [map put:list[@7L] locationIndex:0];
             CLLocationCoordinate2D center = CLLocationCoordinate2DMake(53.5, -91.5);
             CLLocationDistance radius = 120;

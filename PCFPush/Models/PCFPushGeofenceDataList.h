@@ -9,6 +9,8 @@
 
 @interface PCFPushGeofenceDataList : NSObject
 
++ (instancetype) list;
+
 - (void)addEntriesFromDictionary:(NSDictionary *)dict;
 - (id)objectForKeyedSubscript:(id <NSCopying>)key;
 - (void)setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key;

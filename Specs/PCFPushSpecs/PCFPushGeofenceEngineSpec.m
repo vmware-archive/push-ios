@@ -41,14 +41,10 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
             threeItemGeofenceList = loadGeofenceList([self class], @"geofence_three_items");
             fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items");
-            emptyGeofenceList = [[PCFPushGeofenceDataList alloc] init];
-            expectedGeofencesToRegister = [[PCFPushGeofenceLocationMap alloc] init];
-            expectedGeofencesToStore = [[PCFPushGeofenceDataList alloc] init];
+            emptyGeofenceList = [PCFPushGeofenceDataList list];
+            expectedGeofencesToRegister = [PCFPushGeofenceLocationMap map];
+            expectedGeofencesToStore = [PCFPushGeofenceDataList list];
             [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
-        });
-
-        afterEach(^{
-            engine = nil;
         });
 
         context(@"check dependencies", ^{

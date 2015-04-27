@@ -11,6 +11,7 @@
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushRegistrationData.h"
+#import "PCFPushGeofenceUpdater.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -127,6 +128,11 @@ const double TEST_GEOFENCE_RADIUS           = 120;
     }];
 }
 
+- (void)setupSuccessfulAsyncRequest
+{
+    [self setupSuccessfulAsyncRequestWithBlock:nil];
+}
+
 - (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block
 {
     [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -171,6 +177,52 @@ const double TEST_GEOFENCE_RADIUS           = 120;
         CompletionHandler handler = params[2];
         handler(newResponse, nil, nil);
         return nil;
+    }];
+}
+
+#pragma mark - Geofence Helpers
+
+- (void)setupGeofencesForSuccessfulUpdateWithLastModifiedTime:(int64_t)lastModifiedTime
+{
+    [self setupGeofencesForSuccessfulUpdateWithLastModifiedTime:lastModifiedTime withBlock:nil];
+}
+
+- (void)setupGeofencesForSuccessfulUpdateWithLastModifiedTime:(int64_t)lastModifiedTime withBlock:(void(^)(NSArray *))block
+{
+    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+        if (block) {
+            block(params);
+        }
+        [PCFPushPersistentStorage setGeofenceLastModifiedTime:lastModifiedTime];
+        void (^successBlock)() = params[3];
+        successBlock();
+        return nil;
+    }];
+}
+
+- (void)setupGeofencesForFailedUpdate
+{
+    [self setupGeofencesForFailedUpdateWithBlock:nil];
+}
+
+- (void)setupGeofencesForFailedUpdateWithBlock:(void(^)(NSArray *))block
+{
+    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+        if (block) {
+            block(params);
+        }
+        NSError *error = [NSError errorWithDomain:@"Fake geofence update error" code:1234 userInfo:nil];
+        void (^failureBlock)(NSError *) = params[4];
+        failureBlock(error);
+        return nil;
+    }];
+}
+
+- (void)setupClearGeofencesForSuccess
+{
+    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+        [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+        return theValue(YES);
     }];
 }
 

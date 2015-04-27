@@ -9,10 +9,12 @@
 
 @interface PCFPushGeofenceUpdater : NSObject
 
-- (instancetype) initWithGeofenceEngine:(PCFPushGeofenceEngine*)engine;
-
-- (void) startGeofenceUpdate:(NSDictionary *)userInfo
++ (void) startGeofenceUpdate:(PCFPushGeofenceEngine *)engine
+                    userInfo:(NSDictionary *)userInfo
                    timestamp:(int64_t)timestamp
                      success:(void (^)(void))successBlock
-                     failure:(void (^)(NSError *error))failureBlock;
+                     failure:(void( ^)(NSError *error))failureBlock;
+
++ (BOOL) clearGeofences:(PCFPushGeofenceEngine *)engine error:(NSError **)error;
+
 @end

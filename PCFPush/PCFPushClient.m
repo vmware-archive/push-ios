@@ -3,17 +3,22 @@
 //
 
 #import <objc/runtime.h>
+#import <CoreLocation/CoreLocation.h>
 
 #import "PCFPushClient.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrors.h"
-#import "PCFPushParameters.h"
 #import "PCFNotifications.h"
 #import "PCFPushErrorUtil.h"
+#import "PCFPushParameters.h"
 #import "PCFPushURLConnection.h"
+#import "PCFPushGeofenceUpdater.h"
+#import "PCFPushGeofenceRegistrar.h"
 #import "NSObject+PCFJSONizable.h"
+#import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushRegistrationResponseData.h"
+#import "PCFPushGeofenceEngine.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -37,6 +42,10 @@ static dispatch_once_t _sharedPCFPushClientToken;
     self = [super init];
     if (self) {
         self.registrationParameters = [PCFPushParameters defaultParameters];
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
+        self.store = [[PCFPushGeofencePersistentStore alloc] init];
+        self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
     }
     return self;
 }
@@ -57,7 +66,14 @@ static dispatch_once_t _sharedPCFPushClientToken;
         [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
     }
     if (![deviceToken isKindOfClass:[NSData class]]) {
-        [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type. NSData."];
+        [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type: NSData."];
+    }
+
+    if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
+        NSError *error;
+        if ([PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
+            PCFPushLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
+        }
     }
 
     if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
@@ -77,6 +93,9 @@ static dispatch_once_t _sharedPCFPushClientToken;
                                              deviceToken:deviceToken
                                                  success:successBlock
                                                  failure:failureBlock];
+
+    } else if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
+        [PCFPushClient startGeofenceUpdate:self.registrationParameters success:successBlock failure:failureBlock];
 
     } else {
         PCFPushLog(@"Registration with PCF Push is being bypassed (already registered).");
@@ -112,7 +131,6 @@ static dispatch_once_t _sharedPCFPushClientToken;
     if (success) {
         success();
     }
-
     [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushUnregisterNotification object:self userInfo:userInfo];
 }
 
@@ -162,16 +180,38 @@ static dispatch_once_t _sharedPCFPushClientToken;
         [PCFPushPersistentStorage setVariantSecret:parameters.variantSecret];
         [PCFPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
         [PCFPushPersistentStorage setTags:parameters.pushTags];
-        
-        if (successBlock) {
-            successBlock();
+
+        if ([PCFPushClient isGeofenceUpdateRequired:parameters]) {
+
+            [PCFPushClient startGeofenceUpdate:parameters success:successBlock failure:failureBlock];
+
+        } else {
+            if (successBlock) {
+                successBlock();
+            }
+
+            NSDictionary *userInfo = @{ @"URLResponse" : response };
+            [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushRegistrationSuccessNotification object:self userInfo:userInfo];
         }
-        
-        NSDictionary *userInfo = @{ @"URLResponse" : response };
-        [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushRegistrationSuccessNotification object:self userInfo:userInfo];
     };
     
     return registrationBlock;
+}
+
++ (void)startGeofenceUpdate:(PCFPushParameters *)parameters success:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
+{
+    [PCFPushGeofenceUpdater startGeofenceUpdate:PCFPushClient.shared.engine userInfo:nil timestamp:0L success:^{
+
+        if (successBlock) {
+            successBlock();
+        }
+
+    } failure:^(NSError *error) {
+
+        if (failureBlock) {
+            failureBlock(error);
+        }
+    }];
 }
 
 - (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
@@ -180,7 +220,11 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
     // No tags are updated
     if ([PCFPushClient areTagsTheSame:self.registrationParameters]) {
-        if (success) {
+        if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
+
+            [PCFPushClient startGeofenceUpdate:self.registrationParameters success:success failure:failure];
+
+        } else if (success) {
             success();
         }
         return;
@@ -253,26 +297,30 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
 + (BOOL)localParametersMatchNewParameters:(PCFPushParameters *)parameters
 {
-    // If any of the registration parameters are different then unregistration is required
-    NSString *savedVariantUUID = [PCFPushPersistentStorage variantUUID];
-    if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
-        PCFPushLog(@"Parameters specify a different platform UUID. Unregistration and re-registration will be required.");
-        return NO;
-    }
-    
-    NSString *savedVariantSecret = [PCFPushPersistentStorage variantSecret];
-    if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
-        PCFPushLog(@"Parameters specify a different platform Secret. Unregistration and re-registration will be required.");
-        return NO;
-    }
-    
     NSString *savedDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     if ((parameters.pushDeviceAlias == nil && savedDeviceAlias != nil) || (parameters.pushDeviceAlias != nil && ![parameters.pushDeviceAlias isEqualToString:savedDeviceAlias])) {
         PCFPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
         return NO;
     }
     
-    return [PCFPushClient areTagsTheSame:parameters];
+    return [PCFPushClient localVariantMatchNewVariant:parameters] && [PCFPushClient areTagsTheSame:parameters];
+}
+
++ (BOOL)localVariantMatchNewVariant:(PCFPushParameters *)parameters
+{
+    NSString *savedVariantUUID = [PCFPushPersistentStorage variantUUID];
+    if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
+        PCFPushLog(@"Parameters specify a different platform UUID. Unregistration and re-registration will be required.");
+        return NO;
+    }
+
+    NSString *savedVariantSecret = [PCFPushPersistentStorage variantSecret];
+    if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
+        PCFPushLog(@"Parameters specify a different platform Secret. Unregistration and re-registration will be required.");
+        return NO;
+    }
+
+    return YES;
 }
 
 + (BOOL)areTagsTheSame:(PCFPushParameters *)parameters {
@@ -294,11 +342,24 @@ static dispatch_once_t _sharedPCFPushClientToken;
     return YES;
 }
 
-// Helpers - used in unit tests
++ (BOOL)isGeofenceUpdateRequired: (PCFPushParameters *)parameters {
+
+    return [PCFPushPersistentStorage lastGeofencesModifiedTime] == PCF_NEVER_UPDATED_GEOFENCES || ![PCFPushClient localVariantMatchNewVariant:parameters];
+}
+
++ (BOOL)isClearGeofencesRequired: (PCFPushParameters *)parameters {
+    return [PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES && ![PCFPushClient localVariantMatchNewVariant:parameters];
+}
+
+#pragma mark - Helpers for unit tests
 
 - (void)resetInstance
 {
     self.registrationParameters = nil;
+    self.locationManager = nil;
+    self.registrar = nil;
+    self.store = nil;
+    self.engine = nil;
 }
 
 + (void)resetSharedClient

@@ -4,6 +4,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define PCF_NEVER_UPDATED_GEOFENCES -1
+
 @interface PCFPushPersistentStorage : NSObject
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken;
@@ -24,8 +26,8 @@
 + (void)setTags:(NSSet *)tags;
 + (NSSet *)tags;
 
-+ (void)setLastModifiedTime:(int64_t)lastModifiedTime;
-+ (int64_t)lastModifiedTime;
++ (void)setGeofenceLastModifiedTime:(int64_t)lastModifiedTime;
++ (int64_t)lastGeofencesModifiedTime;
 
 + (void)reset;
 

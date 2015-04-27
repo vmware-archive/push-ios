@@ -15,6 +15,11 @@
 
 @implementation PCFPushGeofenceDataList
 
++ (instancetype) list
+{
+    return [[PCFPushGeofenceDataList alloc] init];
+}
+
 - (instancetype) init
 {
     self = [super init];

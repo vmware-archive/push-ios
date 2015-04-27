@@ -13,37 +13,21 @@
 
 static NSString *const GEOFENCE_UPDATE_JSON = @"pivotal.push.geofence_update_json";
 
-BOOL hasGeofencesInRequest(NSDictionary *userInfo);
-
-@interface PCFPushGeofenceUpdater()
-
-@property (nonatomic) PCFPushGeofenceEngine *engine;
-
-@end
-
 BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
     return userInfo != nil && userInfo[GEOFENCE_UPDATE_JSON] != nil;
 }
 
 @implementation PCFPushGeofenceUpdater
 
-- (instancetype) initWithGeofenceEngine:(PCFPushGeofenceEngine*)engine
-{
-    self = [super init];
-    if (self) {
-        if (engine == nil) {
-            @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"engine may not be nil" userInfo:nil];
-        }
-        self.engine = engine;
-    }
-    return self;
-}
-
-- (void) startGeofenceUpdate:(NSDictionary *)userInfo
++ (void) startGeofenceUpdate:(PCFPushGeofenceEngine *)engine
+                    userInfo:(NSDictionary *)userInfo
                    timestamp:(int64_t)timestamp
                      success:(void (^)(void))successBlock
                      failure:(void( ^)(NSError *error))failureBlock
 {
+    if (engine == nil) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"engine may not be nil" userInfo:nil];
+    }
 
     PCFPushParameters *parameters = [PCFPushParameters defaultParameters];
 
@@ -57,9 +41,9 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
             return;
         }
 
-        [self.engine processResponseData:responseData withTimestamp:timestamp];
+        [engine processResponseData:responseData withTimestamp:timestamp];
 
-        [PCFPushPersistentStorage setLastModifiedTime:responseData.lastModified];
+        [PCFPushPersistentStorage setGeofenceLastModifiedTime:responseData.lastModified];
 
         if (successBlock) {
             successBlock();
@@ -86,5 +70,13 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
                                                     failure:requestFailureBlock];
     }
 };
+
++ (BOOL) clearGeofences:(PCFPushGeofenceEngine *)engine
+                  error:(NSError **)error
+{
+    [engine processResponseData:nil withTimestamp:0L];
+    [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+    return YES;
+}
 
 @end

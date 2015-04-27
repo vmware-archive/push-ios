@@ -16,14 +16,12 @@ describe(@"PCFPushGeofenceDataList", ^{
     
     __block PCFPushGeofenceDataList *model;
 
-    beforeEach(^{
+    it(@"should be initializable with a class method", ^{
+        model = [PCFPushGeofenceDataList list];
+        [[model shouldNot] beNil];
     });
-    
-    afterEach(^{
-        model = nil;
-    });
-    
-    it(@"should be initializable", ^{
+
+    it(@"should be initializable via alloc and init", ^{
         model = [[PCFPushGeofenceDataList alloc] init];
         [[model shouldNot] beNil];
     });

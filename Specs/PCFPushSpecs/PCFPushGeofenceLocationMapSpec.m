@@ -31,11 +31,7 @@ describe(@"PCFPushGeofenceLocation", ^{
 
     beforeEach(^{
         oneItemGeofenceList = loadGeofenceList(@"geofence_one_item");
-        model = [[PCFPushGeofenceLocationMap alloc] init];
-    });
-
-    afterEach(^{
-        model = nil;
+        model = [PCFPushGeofenceLocationMap map];
     });
 
     it(@"should be initializable", ^{

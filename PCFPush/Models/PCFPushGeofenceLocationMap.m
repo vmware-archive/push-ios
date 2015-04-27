@@ -38,6 +38,11 @@ NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
 
 @implementation PCFPushGeofenceLocationMap
 
++ (instancetype) map
+{
+    return [[PCFPushGeofenceLocationMap alloc] init];
+}
+
 - (instancetype) init
 {
     self = [super init];

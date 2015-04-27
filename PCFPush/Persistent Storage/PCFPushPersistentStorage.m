@@ -4,13 +4,13 @@
 
 #import "PCFPushPersistentStorage.h"
 
-static NSString *const KEY_BACK_END_DEVICE_ID = @"PCF_PUSH_BACK_END_DEVICE_ID";
-static NSString *const KEY_APNS_DEVICE_TOKEN  = @"PCF_PUSH_APNS_DEVICE_TOKEN";
-static NSString *const KEY_VARIANT_UUID       = @"PCF_PUSH_VARIANT_UUID";
-static NSString *const KEY_VARIANT_SECRET     = @"PCF_PUSH_VARIANT_SECRET";
-static NSString *const KEY_DEVICE_ALIAS       = @"PCF_PUSH_DEVICE_ALIAS";
-static NSString *const KEY_TAGS               = @"PCF_PUSH_TAGS";
-static NSString *const KEY_LAST_MODIFIED_TIME = @"PCF_PUSH_LAST_MODIFIED_TIME";
+static NSString *const KEY_BACK_END_DEVICE_ID           = @"PCF_PUSH_BACK_END_DEVICE_ID";
+static NSString *const KEY_APNS_DEVICE_TOKEN            = @"PCF_PUSH_APNS_DEVICE_TOKEN";
+static NSString *const KEY_VARIANT_UUID                 = @"PCF_PUSH_VARIANT_UUID";
+static NSString *const KEY_VARIANT_SECRET               = @"PCF_PUSH_VARIANT_SECRET";
+static NSString *const KEY_DEVICE_ALIAS                 = @"PCF_PUSH_DEVICE_ALIAS";
+static NSString *const KEY_TAGS                         = @"PCF_PUSH_TAGS";
+static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_LAST_MODIFIED_TIME";
 
 @implementation PCFPushPersistentStorage
 
@@ -23,7 +23,7 @@ static NSString *const KEY_LAST_MODIFIED_TIME = @"PCF_PUSH_LAST_MODIFIED_TIME";
                       KEY_VARIANT_SECRET,
                       KEY_DEVICE_ALIAS,
                       KEY_TAGS,
-                      KEY_LAST_MODIFIED_TIME,
+                      KEY_GEOFENCES_LAST_MODIFIED_TIME,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -96,14 +96,19 @@ static NSString *const KEY_LAST_MODIFIED_TIME = @"PCF_PUSH_LAST_MODIFIED_TIME";
     }
 }
 
-+ (int64_t)lastModifiedTime
++ (int64_t)lastGeofencesModifiedTime
 {
-    return [[self persistedValueForKey:KEY_LAST_MODIFIED_TIME] longLongValue];
+    id value = [self persistedValueForKey:KEY_GEOFENCES_LAST_MODIFIED_TIME];
+    if (value == nil) {
+        return PCF_NEVER_UPDATED_GEOFENCES;
+    } else {
+        return [value longLongValue];
+    }
 }
 
-+ (void)setLastModifiedTime:(int64_t)lastModifiedTime
++ (void)setGeofenceLastModifiedTime:(int64_t)lastModifiedTime
 {
-    [self persistValue:@(lastModifiedTime) forKey:KEY_LAST_MODIFIED_TIME];
+    [self persistValue:@(lastModifiedTime) forKey:KEY_GEOFENCES_LAST_MODIFIED_TIME];
 }
 
 + (void)persistValue:(id)value forKey:(id)key
