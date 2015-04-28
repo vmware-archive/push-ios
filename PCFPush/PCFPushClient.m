@@ -44,7 +44,7 @@ static dispatch_once_t _sharedPCFPushClientToken;
         self.registrationParameters = [PCFPushParameters defaultParameters];
         self.locationManager = [[CLLocationManager alloc] init];
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
-        self.store = [[PCFPushGeofencePersistentStore alloc] init];
+        self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
     }
     return self;

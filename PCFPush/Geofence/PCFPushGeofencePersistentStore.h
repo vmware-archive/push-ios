@@ -9,6 +9,7 @@
 
 @interface PCFPushGeofencePersistentStore : NSObject
 
+- (instancetype) initWithFileManager:(NSFileManager*)fileManager;
 - (void) reset;
 - (PCFPushGeofenceDataList *)currentlyRegisteredGeofences;
 - (void) saveRegisteredGeofences:(PCFPushGeofenceDataList *)geofences;

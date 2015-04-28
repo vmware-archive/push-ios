@@ -5,11 +5,23 @@
 #import "PCFPushGeofenceDataList+Loaders.h"
 #import "PCFPushGeofenceData.h"
 #import "NSObject+PCFJSONizable.h"
+#import "PCFPushDebug.h"
+
+NSData* loadTestFile(Class testProjectClass, NSString *name)
+{
+    NSError *error;
+    NSString *filePath = [[NSBundle bundleForClass:testProjectClass] pathForResource:name ofType:@"json"];
+    NSString *fileContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
+    if (error) {
+        PCFPushLog(@"Error reading test file contents '%@': %@", filePath, error);
+        return nil;
+    }
+    return [fileContents dataUsingEncoding:NSUTF8StringEncoding];
+}
 
 PCFPushGeofenceDataList* loadGeofenceList(Class testProjectClass, NSString *name)
 {
-    NSString *filePath = [[NSBundle bundleForClass:testProjectClass] pathForResource:name ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:filePath];
+    NSData *data = loadTestFile(testProjectClass, name);
     PCFPushGeofenceDataList *result = [PCFPushGeofenceDataList listFromData:data];
     return result;
 };
