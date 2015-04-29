@@ -6,12 +6,14 @@
 #import <Foundation/Foundation.h>
 
 @class PCFPushGeofenceDataList;
+@class PCFPushGeofenceData;
 
 @interface PCFPushGeofencePersistentStore : NSObject
 
 - (instancetype) initWithFileManager:(NSFileManager*)fileManager;
-- (void) reset;
 - (PCFPushGeofenceDataList *)currentlyRegisteredGeofences;
 - (void) saveRegisteredGeofences:(PCFPushGeofenceDataList *)geofences;
+- (id)objectForKeyedSubscript:(id <NSCopying>)key;
+- (void) reset;
 
 @end
