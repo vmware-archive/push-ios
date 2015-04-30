@@ -34,4 +34,7 @@
                  success:(void (^)(void))success
                  failure:(void (^)(NSError*))failure;
 
+- (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
+                   completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
+
 @end

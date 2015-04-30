@@ -24,6 +24,16 @@ typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
 static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
+static NSString const* kPCFPushGeofenceUpdateAvailable = @"pivotal.push.geofence_update_available";
+
+BOOL isGeofenceUpdate(NSDictionary* userInfo)
+{
+    BOOL isContentAvailable = [userInfo[@"aps"][@"content-available"] intValue] == 1;
+    id i = userInfo[kPCFPushGeofenceUpdateAvailable];
+    BOOL isGeofenceUpdateAvailable = i != nil && (([i isKindOfClass:[NSString class]] && [i isEqualToString:@"true"])
+            || ([i isKindOfClass:[NSNumber class]] && [i boolValue]));
+    return isContentAvailable && isGeofenceUpdateAvailable;
+}
 
 @implementation PCFPushClient
 
@@ -370,6 +380,30 @@ static dispatch_once_t _sharedPCFPushClientToken;
 
     _sharedPCFPushClientToken = 0;
     _sharedPCFPushClient = nil;
+}
+
+- (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
+                   completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler
+{
+    if (!handler) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"handler may not be nil" userInfo:nil];
+    }
+
+    if (isGeofenceUpdate(userInfo)) {
+
+        int64_t timestamp = [PCFPushPersistentStorage lastGeofencesModifiedTime];
+        [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp success:^{
+
+            handler(NO, UIBackgroundFetchResultNewData, nil);
+
+        } failure:^(NSError *error) {
+
+            handler(NO, UIBackgroundFetchResultFailed, error);
+
+        }];
+    } else {
+        handler(YES, UIBackgroundFetchResultNoData, nil);
+    }
 }
 
 @end

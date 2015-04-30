@@ -11,6 +11,7 @@
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceLocation.h"
+#import "PCFPushDebug.h"
 
 @interface PCFPushGeofenceEngine ()
 
@@ -117,6 +118,7 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
 - (void) processResponseData:(PCFPushGeofenceResponseData*)responseData withTimestamp:(int64_t)timestamp
 {
     if (timestamp == 0L) {
+        PCFPushLog(@"Resetting currently stored and monitored geofences (if there are any).");
         [self.registrar reset];
         [self.store reset];
     }
@@ -134,6 +136,7 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
     }
 
     if (!hasDataToPersist(responseData, currentlyRegisteredGeofences)) {
+        PCFPushLog(@"Geofence engine exiting, no data to persist");
         return;
     }
 

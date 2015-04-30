@@ -222,7 +222,7 @@ describe(@"PCFPushGeofencePersistentStore", ^{
         });
 
         it(@"should return one file if one geofence is registered", ^{
-            [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[[NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_1.json"]]];
+            [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[@"PCF_PUSH_GEOFENCE_1.json"]];
             [NSData stub:@selector(dataWithContentsOfFile:) andReturn:loadTestFile([self class], @"geofence_one_item_persisted_1")];
             PCFPushGeofenceDataList *geofences = [store currentlyRegisteredGeofences];
             [[geofences should] haveCountOf:1];
@@ -231,9 +231,9 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should return three files if three geofences are registered", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_1.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_2.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_3.json"]]];
+                    @"PCF_PUSH_GEOFENCE_1.json",
+                    @"PCF_PUSH_GEOFENCE_2.json",
+                    @"PCF_PUSH_GEOFENCE_3.json"]];
 
             [NSData stub:@selector(dataWithContentsOfFile:) withBlock:^id(NSArray *params) {
                 if ([params[0] hasSuffix:@"PCF_PUSH_GEOFENCE_1.json"]) {
@@ -256,9 +256,9 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should ignore filenames that don't exist", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_1.json"],
-                    [NSURL fileURLWithPath:@"imposter.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_something_else"]]];
+                    @"PCF_PUSH_GEOFENCE_1.json",
+                    @"imposter.json",
+                    @"PCF_PUSH_GEOFENCE_something_else"]];
 
             [NSData stub:@selector(dataWithContentsOfFile:) withBlock:^id(NSArray *params) {
                 if ([params[0] hasSuffix:@"PCF_PUSH_GEOFENCE_1.json"]) {
@@ -275,8 +275,8 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should ignore filenames that don't load", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_2.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_9.json"]]];
+                    @"PCF_PUSH_GEOFENCE_2.json",
+                    @"PCF_PUSH_GEOFENCE_9.json"]];
 
             [NSData stub:@selector(dataWithContentsOfFile:) withBlock:^id(NSArray *params) {
                 if ([params[0] hasSuffix:@"PCF_PUSH_GEOFENCE_2.json"]) {
@@ -308,7 +308,7 @@ describe(@"PCFPushGeofencePersistentStore", ^{
         });
 
         it(@"should be able to reset when there is one stored geofence", ^{
-            [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[[NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_1.json"]]];
+            [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[@"PCF_PUSH_GEOFENCE_1.json"]];
             [[fileManager should] receive:@selector(removeItemAtPath:error:) withCount:1];
             [store reset];
         });
@@ -316,9 +316,9 @@ describe(@"PCFPushGeofencePersistentStore", ^{
         it(@"should be able to reset when there are three stored geofences", ^{
 
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_1.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_2.json"],
-                    [NSURL fileURLWithPath:@"PCF_PUSH_GEOFENCE_3.json"]]];
+                    @"PCF_PUSH_GEOFENCE_1.json",
+                    @"PCF_PUSH_GEOFENCE_2.json",
+                    @"PCF_PUSH_GEOFENCE_3.json"]];
 
             [[fileManager should] receive:@selector(removeItemAtPath:error:) withCount:3];
             [store reset];
@@ -383,17 +383,15 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should save three files and delete three pre-existing files", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_0.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_53.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"]
-            ]];
+                    @"PCF_PUSH_GEOFENCE_0.json",
+                    @"PCF_PUSH_GEOFENCE_53.json",
+                    @"PCF_PUSH_GEOFENCE_127.json"]];
 
             __block NSMutableArray *removedFilenames = [NSMutableArray array];
             NSArray *expectedRemovedFilenames = @[
                     @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_0.json",
                     @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_53.json",
-                    @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"
-            ];
+                    @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"];
 
             [fileManager stub:@selector(removeItemAtPath:error:) withBlock:^id(NSArray *params) {
                 [removedFilenames addObject:params[0]];
@@ -411,16 +409,15 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should save two new files, replace one file and delete two pre-existing files", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_7.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_53.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"]
-            ]];
+                    @"PCF_PUSH_GEOFENCE_7.json",
+                    @"PCF_PUSH_GEOFENCE_53.json",
+                    @"PCF_PUSH_GEOFENCE_127.json"]];
 
             __block NSMutableArray *removedFilenames = [NSMutableArray array];
+
             NSArray *expectedRemovedFilenames = @[
                     @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_53.json",
-                    @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"
-            ];
+                    @"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_127.json"];
 
             [fileManager stub:@selector(removeItemAtPath:error:) withBlock:^id(NSArray *params) {
                 [removedFilenames addObject:params[0]];
@@ -437,10 +434,9 @@ describe(@"PCFPushGeofencePersistentStore", ^{
 
         it(@"should replace three files and delete no files", ^{
             [fileManager stub:@selector(contentsOfDirectoryAtPath:error:) andReturn:@[
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_7.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_9.json"],
-                    [NSURL fileURLWithPath:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_44.json"]
-            ]];
+                    @"PCF_PUSH_GEOFENCE_7.json",
+                    @"PCF_PUSH_GEOFENCE_9.json",
+                    @"PCF_PUSH_GEOFENCE_44.json"]];
 
             [fileManager stub:@selector(createFileAtPath:contents:attributes:) withBlock:createFileStub];
             [[fileManager shouldNot] receive:@selector(removeItemAtPath:error:)];

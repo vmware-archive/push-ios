@@ -44,7 +44,13 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success
                                               failure:(void (^)(NSError *))failure
 {
-    [[PCFPushClient shared] unregisterForRemoteNotificationsWithSuccess:success failure:failure];
+    [PCFPushClient.shared unregisterForRemoteNotificationsWithSuccess:success failure:failure];
+}
+
++ (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
+                   completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler
+{
+    [PCFPushClient.shared didReceiveRemoteNotification:userInfo completionHandler:handler];
 }
 
 @end

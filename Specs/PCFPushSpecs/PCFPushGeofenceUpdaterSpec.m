@@ -140,7 +140,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                     [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
                         wasRequestMade = YES;
-                        NSError *error = [[NSError alloc] init];
+                        NSError *error = [NSError errorWithDomain:@"Fake request failed fakely" code:0 userInfo:nil];
                         void(^completionHandler)(NSError *) = params[3];
                         completionHandler(error);
                         return nil;

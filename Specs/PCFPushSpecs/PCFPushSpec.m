@@ -15,6 +15,7 @@
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
+#import "PCFPushURLConnection.h"
 
 SPEC_BEGIN(PCFPushSpecs)
 
@@ -597,7 +598,6 @@ describe(@"PCFPush", ^{
             beforeEach(^{
                 successBlockExecuted = NO;
                 [helper setupDefaultPersistedParameters];
-
             });
 
             afterEach(^{
@@ -927,6 +927,113 @@ describe(@"PCFPush", ^{
                     [[error.domain should] equal:PCFPushErrorDomain];
                     wasFailBlockCalled = YES;
                 }];
+            });
+        });
+    });
+
+    describe(@"handling remote notifications", ^{
+
+        __block BOOL wasCompletionHandlerCalled;
+
+        beforeEach(^{
+            wasCompletionHandlerCalled = NO;
+        });
+
+        context(@"processing geofence updates", ^{
+            afterEach(^{
+                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+            });
+
+            NSDictionary *const userInfo = @{ @"aps" : @{ @"content-available" : @1 }, @"pivotal.push.geofence_update_available" : @"true" };
+
+            it(@"should process geofence updates with some data available on server", ^{
+
+                [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+                    NSDictionary *actualUserInfo = params[1];
+                    [[actualUserInfo should] equal:userInfo];
+                    void (^successBlock)(void) = params[3];
+                    if (successBlock) {
+                        successBlock();
+                    }
+                    return nil;
+                }];
+
+                [PCFPush didReceiveRemoteNotification:userInfo completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beNo];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNewData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+
+            it(@"should handle server errors in geofence updates", ^{
+
+                [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+                    NSDictionary *actualUserInfo = params[1];
+                    [[actualUserInfo should] equal:userInfo];
+                    void (^failureBlock)(NSError *) = params[4];
+                    if (failureBlock) {
+                        failureBlock([NSError errorWithDomain:@"FAKE ERROR" code:0 userInfo:nil]);
+                    }
+                    return nil;
+                }];
+
+                [PCFPush didReceiveRemoteNotification:userInfo completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beNo];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultFailed)];
+                    [[error shouldNot] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+        });
+
+        context(@"other kinds of messages", ^{
+            afterEach(^{
+                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+            });
+
+            it(@"should ignore notifications nil data", ^{
+                [PCFPush didReceiveRemoteNotification:nil completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+
+            it(@"should ignore notification when the user data is empty", ^{
+                [PCFPush didReceiveRemoteNotification:@{} completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+
+            it(@"should ignore notification when it's some regular push message (not a background fetch)", ^{
+                [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"alert" : @"some message" } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+
+            it(@"should ignore background notifications that are not for us", ^{
+                [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+        });
+
+        context(@"failed completion handler", ^{
+            it(@"should throw an exception if a handler is not provided", ^{
+                [[theBlock(^{
+                    [PCFPush didReceiveRemoteNotification:@{} completionHandler:nil];
+                }) should] raiseWithName:NSInvalidArgumentException];
             });
         });
     });

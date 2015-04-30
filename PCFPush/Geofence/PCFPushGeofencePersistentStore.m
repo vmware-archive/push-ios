@@ -188,14 +188,14 @@
         return nil;
     }
 
-    NSPredicate *filter = [NSPredicate predicateWithFormat:@"lastPathComponent BEGINSWITH 'PCF_PUSH_GEOFENCE_' AND lastPathComponent ENDSWITH '.json'"];
-    NSArray *filteredUrls = [urls filteredArrayUsingPredicate:filter];
+    NSPredicate *filter = [NSPredicate predicateWithFormat:@"self BEGINSWITH 'PCF_PUSH_GEOFENCE_' AND self ENDSWITH '.json'"];
+    NSArray *filteredFilenames = [urls filteredArrayUsingPredicate:filter];
 
-    NSMutableArray *filteredFilenames = [NSMutableArray arrayWithCapacity:filteredUrls.count];
-    for (NSURL *url in filteredUrls) {
-        [filteredFilenames addObject:url.path];
+    NSMutableArray *result = [NSMutableArray arrayWithCapacity:filteredFilenames.count];
+    for (NSString *filteredFilename in filteredFilenames) {
+        [result addObject:[path stringByAppendingPathComponent:filteredFilename]];
     }
-    return filteredFilenames;
+    return result;
 }
 
 - (BOOL) createGeofenceDirectoryAtPath:(NSString*)path

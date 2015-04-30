@@ -5,8 +5,8 @@
 
 #import "PCFPushGeofenceRegistrar.h"
 #import "PCFPushGeofenceLocationMap.h"
-#import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceLocation.h"
+#import "PCFPushDebug.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface PCFPushGeofenceRegistrar ()
@@ -37,6 +37,8 @@
         CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
         [self.locationManager startMonitoringForRegion:region];
     }];
+
+    PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);
 
     // TODO - write the registered geofences to the filesystem so that sample apps can see them and draw them.
 }

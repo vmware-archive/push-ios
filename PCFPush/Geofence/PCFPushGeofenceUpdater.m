@@ -10,6 +10,7 @@
 #import "PCFPushGeofenceResponseData.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushDebug.h"
 
 static NSString *const GEOFENCE_UPDATE_JSON = @"pivotal.push.geofence_update_json";
 
@@ -37,6 +38,7 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
         PCFPushGeofenceResponseData *responseData = [PCFPushGeofenceResponseData pcf_fromJSONData:data error:&error];
 
         if (error) {
+            PCFPushLog(@"Error parsing geofence response data: %@", error);
             failureBlock(error);
             return;
         }
@@ -53,6 +55,7 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
     void (^requestFailureBlock)(NSError *) = ^(NSError *error) {
 
         // TODO - update the GeofenceStatus
+        PCFPushLog(@"Fetching geofences request failed: %@", error);
         if (failureBlock) {
             failureBlock(error);
         }
@@ -64,6 +67,8 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
         requestSuccessBlock(nil, [geofencesInRequest dataUsingEncoding:NSUTF8StringEncoding]);
 
     } else {
+        PCFPushLog(@"Fetching geofence updates from server with timestamp %lld", timestamp);
+
         [PCFPushURLConnection geofenceRequestWithParameters:parameters
                                                   timestamp:timestamp
                                                     success:requestSuccessBlock

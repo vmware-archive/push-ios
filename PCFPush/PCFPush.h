@@ -103,4 +103,10 @@
 + (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success
                                               failure:(void (^)(NSError *))failure;
 
+/**
+ * TODO - write docs
+ */
++ (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
+                   completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
+
 @end
