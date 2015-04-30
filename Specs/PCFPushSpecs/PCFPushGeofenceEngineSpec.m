@@ -74,7 +74,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             });
 
             it(@"should do a reset if passed a null response data with no (or zero) timestamp", ^{
-                [[registrar shouldNot] receive:@selector(registerGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
                 [[registrar should] receive:@selector(reset) withCount:1];
                 [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
                 [[store should] receive:@selector(reset) withCount:1];
@@ -82,7 +82,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             });
 
             it(@"should do nothing if passed a null response data with some timestamp", ^{
-                [[registrar shouldNot] receive:@selector(registerGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
                 [[registrar shouldNot] receive:@selector(reset)];
                 [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
                 [[store shouldNot] receive:@selector(reset)];
@@ -90,7 +90,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             });
 
             it(@"should do a reset if passed empty response data with no timestamp", ^{
-                [[registrar shouldNot] receive:@selector(registerGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
                 [[registrar should] receive:@selector(reset) withCount:1];
                 [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
                 [[store should] receive:@selector(reset) withCount:1];
@@ -104,7 +104,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:oneItemGeofenceList, nil];
                 [[registrar shouldNot] receive:@selector(reset)];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:emptyResponseData withTimestamp:50L];
             });
 
@@ -115,7 +115,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar should] receive:@selector(reset)];
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:0L];
             });
 
@@ -126,7 +126,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar shouldNot] receive:@selector(reset)];
                 [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:50L];
             });
 
@@ -137,7 +137,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar should] receive:@selector(reset)];
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneOtherItemResponseData withTimestamp:0L];
             });
 
@@ -148,7 +148,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar shouldNot] receive:@selector(reset)];
                 [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneOtherItemResponseData withTimestamp:50L];
             });
 
@@ -159,7 +159,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar should] receive:@selector(reset)];
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:0L];
             });
 
@@ -172,7 +172,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar shouldNot] receive:@selector(reset)];
                 [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:50L];
             });
 
@@ -189,7 +189,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[registrar should] receive:@selector(reset)];
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:complexResponseData withTimestamp:0L];
             });
 
@@ -208,7 +208,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[registrar shouldNot] receive:@selector(reset)];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
 
@@ -227,7 +227,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[registrar shouldNot] receive:@selector(reset)];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
 
@@ -246,7 +246,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[registrar shouldNot] receive:@selector(reset)];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
             });
@@ -258,7 +258,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[registrar shouldNot] receive:@selector(reset)];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:insufficientDataResponseData withTimestamp:50L];
                 });
             });
@@ -280,7 +280,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     expectedGeofencesToStore[@44L] = threeItemGeofenceList[@44L];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:emptyResponseData withTimestamp:50L];
                 });
 
@@ -289,7 +289,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
 
@@ -300,7 +300,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:threeItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
 
@@ -311,7 +311,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     expectedGeofencesToStore[@5L] = complexResponseData.geofences[0];
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                    [[registrar should] receive:@selector(registerGeofences:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
             });

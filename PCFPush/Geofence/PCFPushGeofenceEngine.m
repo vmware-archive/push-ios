@@ -148,7 +148,7 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
 
     addLocations(geofencesToRegister, geofencesToStore);
 
-    [self.registrar registerGeofences:geofencesToRegister];
+    [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
     [self.store saveRegisteredGeofences:geofencesToStore];
 }
 

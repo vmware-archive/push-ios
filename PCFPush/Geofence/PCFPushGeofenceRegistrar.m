@@ -7,6 +7,9 @@
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceLocation.h"
 #import "PCFPushDebug.h"
+#import "PCFPushParameters.h"
+#import "PCFPushGeofenceDataList.h"
+#import "PCFPushGeofenceData.h"
 #import <CoreLocation/CoreLocation.h>
 
 @interface PCFPushGeofenceRegistrar ()
@@ -29,7 +32,7 @@
     return self;
 }
 
-- (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister
+- (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list
 {
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
         CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
@@ -40,7 +43,48 @@
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);
 
-    // TODO - write the registered geofences to the filesystem so that sample apps can see them and draw them.
+    if (isAPNSSandbox()) {
+        [self serializeGeofencesForDebug:geofencesToRegister list:list];
+    }
+}
+
+- (void)serializeGeofencesForDebug:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list
+{
+    NSMutableArray *arr = [NSMutableArray array];
+
+    [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
+        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        PCFPushGeofenceData *data = list[@(geofenceId)];
+        NSDictionary *item = @{
+                @"lat": [@(location.latitude) stringValue],
+                @"long": [@(location.longitude) stringValue],
+                @"rad": [@(location.radius) stringValue],
+                @"name": location.name,
+                @"expiry": [@([data.expiryTime timeIntervalSince1970]) stringValue]
+        };
+        [arr addObject:item];
+    }];
+
+    NSError *error = nil;
+    NSData *json = [NSJSONSerialization dataWithJSONObject:arr options:0 error:&error];
+    if (!json) {
+        PCFPushLog(@"Error serializing monitored geofences to test file for debug: %@", error);
+    }
+
+    if (![json writeToFile:self.geofencesFilename options:0 error:&error]) {
+        PCFPushLog(@"Error writing monitored geofences to test file for debug: %@", error);
+    }
+}
+
+- (NSString*) geofencesFilename
+{
+    NSArray *possibleURLs = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+    if (!possibleURLs || possibleURLs.count <= 0) {
+        PCFPushLog(@"Error getting user library directory.");
+        return nil;
+    }
+
+    return [((NSURL *) (possibleURLs[0])).path stringByAppendingPathComponent:@"pivotal.push.geofence_status.json"];
 }
 
 - (void) reset
