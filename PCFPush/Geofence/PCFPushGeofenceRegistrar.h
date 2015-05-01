@@ -13,7 +13,7 @@
 
 - (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;
 
-- (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list;
+- (void) registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list;
 - (void) reset;
 
 @end

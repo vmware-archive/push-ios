@@ -74,6 +74,9 @@
     if (![json writeToFile:self.geofencesFilename options:0 error:&error]) {
         PCFPushLog(@"Error writing monitored geofences to test file for debug: %@", error);
     }
+
+    NSNotification *notification = [NSNotification notificationWithName:@"pivotal.push.geofences.updated" object:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (NSString*) geofencesFilename
@@ -89,7 +92,26 @@
 
 - (void) reset
 {
-    // TODO - implement
+    for (CLRegion *region in self.locationManager.monitoredRegions) {
+        [self.locationManager stopMonitoringForRegion:region];
+    }
+
+    PCFPushLog(@"Number of monitored geofence locations: 0");
+
+    if (isAPNSSandbox()) {
+        [self clearGeofencesForDebugFile];
+    }
+}
+
+- (void)clearGeofencesForDebugFile
+{
+    NSError *error = nil;
+    NSString *filename = self.geofencesFilename;
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
+        if (![[NSFileManager defaultManager] removeItemAtPath:filename error:&error]) {
+            PCFPushLog(@"Error deleting geofence debug file: %@", error);
+        }
+    }
 }
 
 @end
