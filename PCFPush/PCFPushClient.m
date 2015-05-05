@@ -19,6 +19,7 @@
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
+#import "PCFPushGeofenceHandler.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -53,6 +54,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if (self) {
         self.registrationParameters = [PCFPushParameters defaultParameters];
         self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
         self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
@@ -406,4 +408,22 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 }
 
+#pragma mark - CLLocationManagerDelegate methods
+
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+    PCFPushLog(@"locationManager:didEnterRegion %@", region);
+    [PCFPushGeofenceHandler processRegion:region store:self.store];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    PCFPushLog(@"locationManager:didExitRegion %@", region);
+//    [PCFPushGeofenceHandler processRegion:region store:self.store];
+}
+
+- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    PCFPushLog(@"locationManager:monitoringDidFailForRegion %@: %@", region, error);
+}
 @end

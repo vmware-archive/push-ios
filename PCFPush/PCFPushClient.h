@@ -3,14 +3,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class PCFPushParameters;
-@class CLLocationManager;
 @class PCFPushGeofenceRegistrar;
 @class PCFPushGeofencePersistentStore;
 @class PCFPushGeofenceEngine;
 
-@interface PCFPushClient : NSObject
+@interface PCFPushClient : NSObject<CLLocationManagerDelegate>
 
 @property(nonatomic, strong) PCFPushParameters *registrationParameters;
 @property(nonatomic, strong) CLLocationManager *locationManager;

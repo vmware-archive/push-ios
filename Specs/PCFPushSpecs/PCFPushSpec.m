@@ -5,17 +5,18 @@
 #import "Kiwi.h"
 #import "PCFPush.h"
 #import "PCFPushErrors.h"
+#import "PCFPushParameters.h"
 #import "PCFPushClientTest.h"
 #import "PCFPushSpecsHelper.h"
-#import "PCFPushParameters.h"
+#import "PCFPushURLConnection.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceUpdater.h"
+#import "PCFPushGeofenceHandler.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushRegistrationPutRequestData.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
-#import "PCFPushURLConnection.h"
 
 SPEC_BEGIN(PCFPushSpecs)
 
@@ -613,6 +614,7 @@ describe(@"PCFPush", ^{
                     [PCFPushPersistentStorage setServerDeviceID:nil];
                 });
 
+                // TODO - crashes here sometimes? race condition? watch this.
                 it(@"should be considered a success if the device isn't currently registered", ^{
                     [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
                     [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
@@ -992,7 +994,7 @@ describe(@"PCFPush", ^{
                 [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
             });
 
-            it(@"should ignore notifications nil data", ^{
+            it(@"should ignore notifications with nil data", ^{
                 [PCFPush didReceiveRemoteNotification:nil completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1035,6 +1037,21 @@ describe(@"PCFPush", ^{
                     [PCFPush didReceiveRemoteNotification:@{} completionHandler:nil];
                 }) should] raiseWithName:NSInvalidArgumentException];
             });
+        });
+    });
+
+    describe(@"geofence events", ^{
+
+        it(@"should trigger a local notification when entering a monitored geofence", ^{
+            CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
+            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:)];
+            [[PCFPushClient shared] locationManager:nil didEnterRegion:region];
+        });
+
+        it(@"should trigger a local notification when exiting a monitored geofenct", ^{
+           CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0,44.0) radius:100.0 identifier:@"PCF_3_66"];
+            [[PCFPushGeofenceHandler  should] receive:@selector(processRegion:store:)];
+            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
         });
     });
 });
