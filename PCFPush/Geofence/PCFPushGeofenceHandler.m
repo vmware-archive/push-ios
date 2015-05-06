@@ -28,6 +28,48 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
     }
 }
 
+static NSDictionary *dictionaryWithTriggerCondition(NSDictionary* dictionary, CLRegionState state)
+{
+    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:dictionary];
+    switch (state) {
+        case CLRegionStateInside:
+            result[@"pivotal.push.geofence_trigger_condition"] = @"enter";
+            break;
+        case CLRegionStateOutside:
+            result[@"pivotal.push.geofence_trigger_condition"] = @"exit";
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofence, CLRegionState state)
+{
+    UILocalNotification *notification = [[UILocalNotification alloc] init];
+
+    // < iOS 8.0
+    notification.alertAction = geofence.data[@"ios"][@"alertAction"];
+    notification.alertBody = geofence.data[@"ios"][@"alertBody"];
+    notification.alertLaunchImage = geofence.data[@"ios"][@"alertLaunchImage"];
+    notification.hasAction = [geofence.data[@"ios"][@"hasAction"] boolValue];
+    notification.applicationIconBadgeNumber = [geofence.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
+    notification.soundName = geofence.data[@"ios"][@"soundName"];
+    notification.userInfo = dictionaryWithTriggerCondition(geofence.data[@"ios"][@"userInfo"], state);
+
+    // iOS 8.0+
+    if([notification respondsToSelector:@selector(setCategory:)]) {
+        notification.category = geofence.data[@"ios"][@"category"];
+    }
+
+    // iOS 8.2+
+    if([notification respondsToSelector:@selector(setAlertTitle:)]) {
+        notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
+    }
+
+    return notification;
+}
+
 @implementation PCFPushGeofenceHandler
 
 + (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store state:(CLRegionState)state
@@ -48,35 +90,9 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
     }
 
     if (shouldTriggerNotification(geofence, state)) {
-        UILocalNotification *localNotification = [PCFPushGeofenceHandler createNotificationFromGeofence:geofence];
+        UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
     }
-}
-
-+ (UILocalNotification *) createNotificationFromGeofence:(PCFPushGeofenceData *)geofence
-{
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-
-    // < iOS 8.0
-    notification.alertAction = geofence.data[@"ios"][@"alertAction"];
-    notification.alertBody = geofence.data[@"ios"][@"alertBody"];
-    notification.alertLaunchImage = geofence.data[@"ios"][@"alertLaunchImage"];
-    notification.hasAction = [geofence.data[@"ios"][@"hasAction"] boolValue];
-    notification.applicationIconBadgeNumber = [geofence.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
-    notification.soundName = geofence.data[@"ios"][@"soundName"];
-    notification.userInfo = geofence.data[@"ios"][@"userInfo"];
-
-    // iOS 8.0+
-    if([notification respondsToSelector:@selector(setCategory:)]) {
-        notification.category = geofence.data[@"ios"][@"category"];
-    }
-
-    // iOS 8.2+
-    if([notification respondsToSelector:@selector(setAlertTitle:)]) {
-        notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
-    }
-
-    return notification;
 }
 
 @end

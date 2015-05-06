@@ -11,6 +11,7 @@
 #import "PCFPushGeofenceDataList+Loaders.h"
 
 typedef id (^StubBlock)(NSArray*);
+
 static StubBlock geofenceWithId(int64_t expectedGeofenceId, PCFPushGeofenceData *geofence)
 {
     return ^id(NSArray *params) {
@@ -29,7 +30,7 @@ static PCFPushGeofenceData *loadGeofence(Class testProjectClass, NSString *fileN
     return [PCFPushGeofenceData pcf_fromJSONData:data error:&error];
 }
 
-BOOL isAtLeastiOS8_2()
+static BOOL isAtLeastiOS8_2()
 {
     NSArray *iosVersion = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
     int versionMajor = [iosVersion[0] intValue];
@@ -38,6 +39,7 @@ BOOL isAtLeastiOS8_2()
 }
 
 SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
+
 
     describe(@"PCFPushGeofenceHandler", ^{
 
@@ -70,12 +72,26 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
             context(@"entering a geofence", ^{
 
                 it(@"should trigger a local notification with the enter_or_exit trigger type", ^{
+
+                    [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
+                        UILocalNotification *notification = params[0];
+                        [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
+                        return nil;
+                    }];
+
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExitWithTags)];
                     [PCFPushGeofenceHandler processRegion:region1 store:store state:CLRegionStateInside];
                 });
 
                 it(@"should trigger a local notification with the enter trigger type", ^{
+
+                    [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
+                        UILocalNotification *notification = params[0];
+                        [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
+                        return nil;
+                    }];
+
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
                     [PCFPushGeofenceHandler processRegion:region2 store:store state:CLRegionStateInside];
@@ -97,6 +113,13 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
             context(@"exiting a geofence", ^{
 
                 it(@"should trigger a local notification with the enter_or_exit trigger type", ^{
+
+                    [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
+                        UILocalNotification *notification = params[0];
+                        [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"exit"];
+                        return nil;
+                    }];
+
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExitWithTags)];
                     [PCFPushGeofenceHandler processRegion:region1 store:store state:CLRegionStateOutside];
@@ -109,6 +132,13 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 });
 
                 it(@"should trigger a local notification with the exit trigger type", ^{
+
+                    [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
+                        UILocalNotification *notification = params[0];
+                        [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"exit"];
+                        return nil;
+                    }];
+
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
                     [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateOutside];
@@ -151,7 +181,11 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 expectedNotification.hasAction = [geofence3Exit.data[@"ios"][@"hasAction"] boolValue];
                 expectedNotification.applicationIconBadgeNumber = [geofence3Exit.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
                 expectedNotification.soundName = geofence3Exit.data[@"ios"][@"soundName"];
-                expectedNotification.userInfo = geofence3Exit.data[@"ios"][@"userInfo"];
+
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:geofence3Exit.data[@"ios"][@"userInfo"]];
+                userInfo[@"pivotal.push.geofence_trigger_condition"] = @"exit";
+
+                expectedNotification.userInfo = userInfo;
 
                 if (isAtLeastiOS8_2()) {
                     [[expectedNotification.alertTitle should] beNil];
@@ -179,7 +213,11 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 expectedNotification.hasAction = [geofence3Exit.data[@"ios"][@"hasAction"] boolValue];
                 expectedNotification.applicationIconBadgeNumber = [geofence3Exit.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
                 expectedNotification.soundName = geofence3Exit.data[@"ios"][@"soundName"];
-                expectedNotification.userInfo = geofence3Exit.data[@"ios"][@"userInfo"];
+
+                NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:geofence3Exit.data[@"ios"][@"userInfo"]];
+                userInfo[@"pivotal.push.geofence_trigger_condition"] = @"exit";
+
+                expectedNotification.userInfo = userInfo;
 
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments: expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
