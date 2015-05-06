@@ -34,11 +34,17 @@
 
 - (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list
 {
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
+        PCFPushLog(@"ERROR: isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.");
+        return;
+    }
+
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
         CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         CLLocationDistance radius = location.radius;
         CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
         [self.locationManager startMonitoringForRegion:region];
+        [self.locationManager requestStateForRegion:region];
     }];
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);

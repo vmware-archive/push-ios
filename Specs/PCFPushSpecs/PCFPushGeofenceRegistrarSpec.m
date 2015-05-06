@@ -15,9 +15,14 @@ describe(@"PCFPushGeofenceRegistrar", ^{
 
     __block PCFPushGeofenceRegistrar *registrar;
     __block CLLocationManager *locationManager;
+    __block PCFPushGeofenceDataList *oneItemGeofenceList;
+    __block PCFPushGeofenceLocationMap *oneItemGeofenceMap;
 
     beforeEach(^{
         locationManager = [CLLocationManager mock];
+        oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
+        oneItemGeofenceMap = [PCFPushGeofenceLocationMap map];
+        [oneItemGeofenceMap put:oneItemGeofenceList[@7L] locationIndex:0];
     });
 
     it(@"should be initializable", ^{
@@ -31,33 +36,42 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         }) should] raise];
     });
 
+    it(@"should require hardware support", ^{
+        registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:locationManager];
+        [CLLocationManager stub:@selector(isMonitoringAvailableForClass:) andReturn:theValue(NO)];
+        [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
+        [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+        [registrar registerGeofences:oneItemGeofenceMap list:oneItemGeofenceList];
+    });
+
     context(@"registering geofences", ^{
 
         beforeEach(^{
             registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:locationManager];
+            [CLLocationManager stub:@selector(isMonitoringAvailableForClass:) andReturn:theValue(YES)];
         });
 
         it(@"should do nothing if given nil lists", ^{
-            [registrar registerGeofences:nil list:nil];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
+            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+            [registrar registerGeofences:nil list:nil];
         });
 
         it(@"should do nothing if given empty lists", ^{
             PCFPushGeofenceLocationMap *emptyMap = [PCFPushGeofenceLocationMap map];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
+            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
             [registrar registerGeofences:emptyMap list:nil];
         });
 
         it(@"should be able to monitor a list with one item", ^{
-            PCFPushGeofenceDataList *list = loadGeofenceList([self class], @"geofence_one_item");
-            PCFPushGeofenceLocationMap *map = [PCFPushGeofenceLocationMap map];
-            [map put:list[@7L] locationIndex:0];
             CLLocationCoordinate2D center = CLLocationCoordinate2DMake(53.5, -91.5);
             CLLocationDistance radius = 120;
             NSString *identifier = @"PCF_7_66";
             CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:identifier];
             [[locationManager should] receive:@selector(startMonitoringForRegion:) withArguments:region, nil];
-            [registrar registerGeofences:map list:list];
+            [[locationManager should] receive:@selector(requestStateForRegion:) withArguments:region, nil];
+            [registrar registerGeofences:oneItemGeofenceMap list:oneItemGeofenceList];
         });
     });
 

@@ -410,20 +410,38 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 #pragma mark - CLLocationManagerDelegate methods
 
-- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
-{
-    PCFPushLog(@"locationManager:didEnterRegion %@", region);
-    [PCFPushGeofenceHandler processRegion:region store:self.store];
-}
-
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
-    PCFPushLog(@"locationManager:didExitRegion %@", region);
+    PCFPushLog(@"locationManager:didExitRegion %@", region.identifier);
 //    [PCFPushGeofenceHandler processRegion:region store:self.store];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
-    PCFPushLog(@"locationManager:monitoringDidFailForRegion %@: %@", region, error);
+    PCFPushLog(@"locationManager:monitoringDidFailForRegion %@: %@. This error is transient and non-fatal.", region.identifier, error);
 }
+
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
+{
+    NSString *s = nil;
+    switch(state) {
+        case CLRegionStateUnknown:
+            s = @"Unknown";
+            break;
+        case CLRegionStateInside:
+            s = @"Inside";
+            break;
+        case CLRegionStateOutside:
+            s = @"Outside";
+            break;
+    }
+
+    PCFPushLog(@"locationManager:didDetermineState (%@) forRegion: %@", s, region.identifier);
+
+    if (state == CLRegionStateInside) {
+        // Device entered geofence. Trigger notification.
+        [PCFPushGeofenceHandler processRegion:region store:self.store];
+    }
+}
+
 @end

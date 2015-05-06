@@ -1045,14 +1045,14 @@ describe(@"PCFPush", ^{
         it(@"should trigger a local notification when entering a monitored geofence", ^{
             CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
             [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:)];
-            [[PCFPushClient shared] locationManager:nil didEnterRegion:region];
+            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateInside forRegion:region];
         });
 
-        it(@"should trigger a local notification when exiting a monitored geofenct", ^{
-           CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0,44.0) radius:100.0 identifier:@"PCF_3_66"];
-            [[PCFPushGeofenceHandler  should] receive:@selector(processRegion:store:)];
-            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
-        });
+//        it(@"should trigger a local notification when exiting a monitored geofence", ^{
+//           CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0,44.0) radius:100.0 identifier:@"PCF_3_66"];
+//            [[PCFPushGeofenceHandler  should] receive:@selector(processRegion:store:)];
+//            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
+//        });
     });
 });
 
