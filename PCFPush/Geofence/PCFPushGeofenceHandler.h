@@ -9,6 +9,6 @@
 
 @interface PCFPushGeofenceHandler : NSObject
 
-+ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store;
++ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store state:(CLRegionState)state;
 
 @end

@@ -15,9 +15,22 @@
 
 @end
 
+static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionState state) {
+    switch (geofence.triggerType) {
+        case PCFPushTriggerTypeEnterOrExit:
+            return YES;
+        case PCFPushTriggerTypeEnter:
+            return CLRegionStateInside == state;
+        case PCFPushTriggerTypeExit:
+            return CLRegionStateOutside == state;
+        default:
+            return NO;
+    }
+}
+
 @implementation PCFPushGeofenceHandler
 
-+ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store
++ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store state:(CLRegionState)state
 {
     if (!store) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"store may not be nil" userInfo:nil];
@@ -34,8 +47,10 @@
         return;
     }
 
-    UILocalNotification *localNotification = [PCFPushGeofenceHandler createNotificationFromGeofence: geofence];
-    [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
+    if (shouldTriggerNotification(geofence, state)) {
+        UILocalNotification *localNotification = [PCFPushGeofenceHandler createNotificationFromGeofence:geofence];
+        [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
+    }
 }
 
 + (UILocalNotification *) createNotificationFromGeofence:(PCFPushGeofenceData *)geofence
@@ -52,17 +67,16 @@
     notification.userInfo = geofence.data[@"ios"][@"userInfo"];
 
     // iOS 8.0+
-    if([UILocalNotification instancesRespondToSelector:@selector(setCategory:)]) {
+    if([notification respondsToSelector:@selector(setCategory:)]) {
         notification.category = geofence.data[@"ios"][@"category"];
     }
 
     // iOS 8.2+
-    if([UILocalNotification instancesRespondToSelector:@selector(setAlertTitle:)]) {
+    if([notification respondsToSelector:@selector(setAlertTitle:)]) {
         notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
     }
 
     return notification;
 }
-
 
 @end

@@ -1,10 +1,18 @@
 {
     "id": 2,
     "data": {
-        "message": "tacos"
+      "alertBody":"Alert Body of Awesome",
+      "alertAction":"Alert Action of Joy",
+      "alertTitle":"Alert Title of Fancy",
+      "alertLaunchImage":"Alert Image of Beauty",
+      "hasAction":"true",
+      "category":"Alert Category of Choice",
+      "applicationIconBadgeNumber": 1337,
+      "soundName": "Alert Sound of Volume",
+      "userInfo": { "extraField" : "extraValue"}
     },
     "expiry_time": 1142744274,
-    "trigger_type": "exit",
+    "trigger_type": "enter",
     "locations": [
         {
             "id": 66,

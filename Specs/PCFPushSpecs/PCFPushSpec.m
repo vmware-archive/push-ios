@@ -1042,17 +1042,27 @@ describe(@"PCFPush", ^{
 
     describe(@"geofence events", ^{
 
-        it(@"should trigger a local notification when entering a monitored geofence", ^{
-            CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
-            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:)];
+        __block CLRegion *region;
+
+        beforeEach(^{
+           region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
+        });
+
+        it(@"should process geofence on exiting region", ^{
+            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:state:)];
+            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
+        });
+
+        it(@"should process geofence inside region", ^{
+            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:state:)];
             [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateInside forRegion:region];
         });
 
-//        it(@"should trigger a local notification when exiting a monitored geofence", ^{
-//           CLRegion *region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0,44.0) radius:100.0 identifier:@"PCF_3_66"];
-//            [[PCFPushGeofenceHandler  should] receive:@selector(processRegion:store:)];
-//            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
-//        });
+        it(@"should not process geofence", ^{
+            [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:state:)];
+            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateOutside forRegion:region];
+            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateUnknown forRegion:region];
+        });
     });
 });
 
