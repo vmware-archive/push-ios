@@ -22,7 +22,8 @@
                                  PCF_STR_PROP(data) : @"data",
                                  PCF_STR_PROP(triggerType) : @"trigger_type",
                                  PCF_STR_PROP(expiryTime) : @"expiry_time",
-                                 PCF_STR_PROP(locations) : @"locations"
+                                 PCF_STR_PROP(locations) : @"locations",
+                                 PCF_STR_PROP(tags) : @"tags"
                                  };
     });
     return localToRemoteMapping;
@@ -62,6 +63,15 @@
             }
         }
         return YES;
+
+    } else if ([propertyName isEqualToString:@"tags"]) {
+        if ([value isKindOfClass:[NSArray class]]) {
+            NSArray *tags = (NSArray *) value;
+            if (tags.count > 0) {
+                self.tags = [NSSet setWithArray:tags];
+            }
+        }
+        return YES;
     }
     
     return NO;
@@ -97,7 +107,7 @@
     } else if ([propertyName isEqualToString:@"locations"]) {
 
         if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *locations = (NSArray*)value;
+            NSArray *locations = (NSArray *) value;
             if (locations.count > 0) {
                 NSMutableArray *arr = [NSMutableArray array];
                 for (PCFPushGeofenceLocation *location in locations) {
@@ -108,6 +118,17 @@
             }
         }
         return YES;
+
+    } else if ([propertyName isEqualToString:@"tags"]) {
+
+        if ([value isKindOfClass:[NSSet class]]) {
+            NSSet *tags = (NSSet *) value;
+            if (tags.count > 0) {
+                destination[@"tags"] = tags.allObjects;
+            }
+        }
+        return YES;
+
     }
 
     return NO;

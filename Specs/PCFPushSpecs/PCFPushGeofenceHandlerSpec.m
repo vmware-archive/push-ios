@@ -6,6 +6,7 @@
 #import "Kiwi.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceHandler.h"
+#import "PCFPushPersistentStorage.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushGeofenceDataList+Loaders.h"
@@ -40,39 +41,73 @@ static BOOL isAtLeastiOS8_2()
 
 SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
 
+    beforeEach(^{
+        [PCFPushPersistentStorage setTags:[NSSet set]];
+    });
 
     describe(@"PCFPushGeofenceHandler", ^{
 
         __block PCFPushGeofencePersistentStore *store;
+        __block PCFPushGeofenceData *geofence1EnterOrExit;
         __block PCFPushGeofenceData *geofence2Enter;
         __block PCFPushGeofenceData *geofence3Exit;
-        __block PCFPushGeofenceData *geofence1EnterOrExitWithTags;
+        __block PCFPushGeofenceData *geofence4EnterWithTags;
         __block UIApplication *application;
+        __block CLRegion *region1;
         __block CLRegion *region2;
         __block CLRegion *region3;
-        __block CLRegion *region1;
+        __block CLRegion *region4;
 
         describe(@"handling geofence events", ^{
 
             beforeEach(^{
                 store = [PCFPushGeofencePersistentStore mock];
                 application = [UIApplication mock];
-                geofence1EnterOrExitWithTags = loadGeofence([self class], @"geofence_one_item_persisted_1");
-                [[geofence1EnterOrExitWithTags shouldNot] beNil];
+                geofence1EnterOrExit = loadGeofence([self class], @"geofence_one_item_persisted_1");
+                [[geofence1EnterOrExit shouldNot] beNil];
                 geofence2Enter = loadGeofence([self class], @"geofence_one_item_persisted_2");
                 [[geofence2Enter shouldNot] beNil];
                 geofence3Exit = loadGeofence([self class], @"geofence_one_item_persisted_3");
                 [[geofence3Exit shouldNot] beNil];
+                geofence4EnterWithTags = loadGeofence([self class], @"geofence_one_item_persisted_4");
+                [[geofence4EnterWithTags shouldNot] beNil];
                 region1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_1_66"];
                 region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_2_66"];
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
+                region4 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_4_66"];
                 [UIApplication stub:@selector(sharedApplication) andReturn:application];
+            });
+
+            context(@"unknown state", ^{
+
+                it(@"should not trigger a local notification at all ever if the state is unknown (1)", ^{
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExit)];
+                    [PCFPushGeofenceHandler processRegion:region1 store:store state:CLRegionStateUnknown];
+                });
+
+                it(@"should not trigger a local notification at all ever if the state is unknown (2)", ^{
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store state:CLRegionStateUnknown];
+                });
+
+                it(@"should not trigger a local notification at all ever if the state is unknown (3)", ^{
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateUnknown];
+                });
+
+                it(@"should not trigger a local notification at all ever if the state is unknown (4)", ^{
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence3Exit)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store state:CLRegionStateUnknown];
+                });
             });
 
             context(@"entering a geofence", ^{
 
                 it(@"should trigger a local notification with the enter_or_exit trigger type", ^{
-
                     [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
                         UILocalNotification *notification = params[0];
                         [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
@@ -80,12 +115,11 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     }];
 
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
-                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExitWithTags)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExit)];
                     [PCFPushGeofenceHandler processRegion:region1 store:store state:CLRegionStateInside];
                 });
 
                 it(@"should trigger a local notification with the enter trigger type", ^{
-
                     [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
                         UILocalNotification *notification = params[0];
                         [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
@@ -102,18 +136,11 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
                     [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateInside];
                 });
-
-                it(@"should not trigger a local notification at all ever if the state is unknown", ^{
-                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
-                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateUnknown];
-                });
             });
 
             context(@"exiting a geofence", ^{
 
                 it(@"should trigger a local notification with the enter_or_exit trigger type", ^{
-
                     [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
                         UILocalNotification *notification = params[0];
                         [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"exit"];
@@ -121,7 +148,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     }];
 
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
-                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExitWithTags)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(1L, geofence1EnterOrExit)];
                     [PCFPushGeofenceHandler processRegion:region1 store:store state:CLRegionStateOutside];
                 });
 
@@ -132,7 +159,6 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 });
 
                 it(@"should trigger a local notification with the exit trigger type", ^{
-
                     [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
                         UILocalNotification *notification = params[0];
                         [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"exit"];
@@ -143,11 +169,30 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
                     [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateOutside];
                 });
+            });
 
-                it(@"should not trigger a local notification at all ever if the state is unknown", ^{
+            context(@"tags", ^{
+
+                it(@"should ignore geofences if the user is not subscribed to any tags", ^{
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
-                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store state:CLRegionStateUnknown];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store state:CLRegionStateInside];
+
+                });
+
+                it(@"should ignore geofences if the user is not subscribed to one of its tags", ^{
+                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"TUESDAY", @"WEDNESDAY"]]];
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store state:CLRegionStateInside];
+
+                });
+
+                it(@"should trigger geofences if the user is subscribed to one of its tags", ^{
+                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"THURSDAY", @"FRIDAY"]]];
+                    [[application should] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store state:CLRegionStateInside];
                 });
             });
 

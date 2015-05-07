@@ -183,6 +183,21 @@ describe(@"PCFPushGeofenceData", ^{
             [[model.locations should] haveCountOf:1];
             [[theValue(((PCFPushGeofenceLocation *)(model.locations[0])).id) should] equal:theValue(99L)];
         });
+
+        it(@"should handle deserializing tags", ^{
+
+            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : [NSNull null] } ];
+            [[model.tags should] beNil];
+
+            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[] } ];
+            [[model.tags should] beNil];
+
+            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[ @"TAG1" ] } ];
+            [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG1" ] ] ];
+
+            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[ @"TAG2", @"TAG3"] } ];
+            [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG2", @"TAG3" ] ] ];
+        });
     });
     
     context(@"serialization", ^{
@@ -214,6 +229,8 @@ describe(@"PCFPushGeofenceData", ^{
                 location2.id = 784L;
 
                 model.locations = @[ location1, location2 ];
+
+                model.tags = [NSSet setWithArray:@[ @"PETE", @"REPEAT" ]];
             });
 
             afterEach(^{
@@ -225,6 +242,7 @@ describe(@"PCFPushGeofenceData", ^{
                 [[dict[@"locations"] should] haveCountOf:2];
                 [[dict[@"locations"][0][@"id"] should] equal:@66L];
                 [[dict[@"locations"][1][@"id"] should] equal:@784L];
+                [[dict[@"tags"] should] containObjectsInArray:@[ @"PETE", @"REPEAT" ]];
             });
 
             it(@"should be dictionaryizable", ^{
@@ -249,6 +267,7 @@ describe(@"PCFPushGeofenceData", ^{
                 [[dict[@"trigger_type"] should] beNil];
                 [[dict[@"expiry_time"] should] beNil];
                 [[dict[@"locations"] should] beNil];
+                [[dict[@"tags"] should] beNil];
             });
 
             it(@"should be dictionaryizable", ^{
@@ -318,6 +337,28 @@ describe(@"PCFPushGeofenceData", ^{
                 model.locations = @[];
                 dict = [model pcf_toFoundationType];
                 [[dict[@"locations"] should] beNil];
+            });
+
+            it(@"should serialize tags", ^{
+                model.tags = nil;
+                dict = [model pcf_toFoundationType];
+                [[dict[@"tags"] should] beNil];
+
+                model.tags = (NSSet*)(id)[NSNull null];
+                dict = [model pcf_toFoundationType];
+                [[dict[@"tags"] should] beNil];
+
+                model.tags = [NSSet set];
+                dict = [model pcf_toFoundationType];
+                [[dict[@"tags"] should] beNil];
+
+                model.tags = [NSSet setWithObject:@"CACTUS"];
+                dict = [model pcf_toFoundationType];
+                [[dict[@"tags"] should] equal:@[@"CACTUS"]];
+
+                model.tags = [NSSet setWithArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
+                dict = [model pcf_toFoundationType];
+                [[dict[@"tags"] should] containObjectsInArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
             });
         });
     });

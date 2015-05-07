@@ -1,5 +1,5 @@
 {
-    "id": 1,
+    "id": 4,
     "data": {
       "alertBody":"Alert Body of Awesome",
       "alertAction":"Alert Action of Joy",
@@ -12,7 +12,8 @@
       "userInfo": { "extraField" : "extraValue"}
     },
     "expiry_time": 1142744274,
-    "trigger_type": "enter_or_exit",
+    "trigger_type": "enter",
+    "tags":["MONDAY", "FRIDAY"],
     "locations": [
         {
             "id": 66,

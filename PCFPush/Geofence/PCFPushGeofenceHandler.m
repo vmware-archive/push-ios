@@ -8,6 +8,8 @@
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceData.h"
+#import "PCFPushPersistentStorage.h"
+#import "PCFPushDebug.h"
 
 @interface PCFPushGeofenceHandler()
 
@@ -15,7 +17,30 @@
 
 @end
 
-static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionState state) {
+static BOOL isUserSubscribedToGeofenceTag(PCFPushGeofenceData *geofence)
+{
+    if (geofence.tags) {
+        NSSet *subscribedTags = [PCFPushPersistentStorage tags];
+        BOOL intersects = [subscribedTags intersectsSet:geofence.tags];
+        if (!intersects) {
+            PCFPushLog(@"Ignoring geofence %lld. Not subscribed to any of its tags.", geofence.id);
+        }
+        return intersects;
+    } else {
+        return YES;
+    }
+}
+
+static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionState state)
+{
+    if (state == CLRegionStateUnknown) {
+        return NO;
+    }
+
+    if (!isUserSubscribedToGeofenceTag(geofence)) {
+        return NO;
+    }
+
     switch (geofence.triggerType) {
         case PCFPushTriggerTypeEnterOrExit:
             return YES;
