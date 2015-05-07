@@ -139,7 +139,10 @@ static NSTimeInterval kRegistrationTimeout = 60.0;
         return [plainData base64EncodedStringWithOptions:0];
         
     } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         return [plainData base64Encoding];
+#pragma clang diagnostic pop
     }
 }
 
