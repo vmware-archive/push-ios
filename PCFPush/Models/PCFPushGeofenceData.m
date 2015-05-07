@@ -29,6 +29,56 @@
     return localToRemoteMapping;
 }
 
+- (BOOL)isEqual:(id)other {
+    if (other == self)
+        return YES;
+    if (!other || ![[other class] isEqual:[self class]])
+        return NO;
+
+    return [self isEqualToData:other];
+}
+
+- (BOOL)isEqualToData:(PCFPushGeofenceData *)data {
+    if (self == data)
+        return YES;
+    if (data == nil)
+        return NO;
+    if (self.id != data.id)
+        return NO;
+    if (self.expiryTime != data.expiryTime && ![self.expiryTime isEqualToDate:data.expiryTime])
+        return NO;
+    if (self.locations != data.locations && ![self.locations isEqualToArray:data.locations])
+        return NO;
+    if (self.data != data.data && ![self.data isEqualToDictionary:data.data])
+        return NO;
+    if (self.tags != data.tags && ![self.tags isEqualToSet:data.tags])
+        return NO;
+    if (self.triggerType != data.triggerType)
+        return NO;
+    return YES;
+}
+
+- (NSUInteger)hash {
+    NSUInteger hash = (NSUInteger) self.id;
+    hash = hash * 31u + [self.expiryTime hash];
+    hash = hash * 31u + [self.locations hash];
+    hash = hash * 31u + [self.data hash];
+    hash = hash * 31u + [self.tags hash];
+    hash = hash * 31u + (NSUInteger) self.triggerType;
+    return hash;
+}
+
+- (instancetype)newCopyWithoutLocations
+{
+    PCFPushGeofenceData *newCopy = [[PCFPushGeofenceData alloc] init];
+    newCopy.id = self.id;
+    newCopy.data = self.data;
+    newCopy.triggerType = self.triggerType;
+    newCopy.expiryTime = self.expiryTime;
+    newCopy.tags = self.tags;
+    return newCopy;
+}
+
 - (BOOL)handleDeserializingProperty:(NSString *)propertyName value:(id)value
 {
     if ([propertyName isEqualToString:@"expiryTime"]) {

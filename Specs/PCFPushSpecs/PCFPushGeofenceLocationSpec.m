@@ -187,6 +187,32 @@ describe(@"PCFPushGeofenceLocation", ^{
             });
         });
     });
+
+    context(@"object comparison", ^{
+
+        it(@"should be able to compare to objects with isEqual", ^{
+
+            PCFPushGeofenceLocation *location1 = [[PCFPushGeofenceLocation alloc] init];
+            location1.id = 55;
+            location1.name = [@"CHURROS " stringByAppendingString:@"LOCATION"];
+            location1.latitude = 80.5;
+            location1.longitude = -40.5;
+            location1.radius = 160.5;
+
+            PCFPushGeofenceLocation *location2 = [[PCFPushGeofenceLocation alloc] init];
+            location2.id = 55;
+            location2.name = [NSString stringWithFormat:@"%@ LOC%@", @"CHURROS", @"ATION"];
+            location2.latitude = 80.5;
+            location2.longitude = -40.5;
+            location2.radius = 160.5;
+
+            [[theValue([location1 isEqual:location2]) should] beYes];
+            [[theValue([location2 isEqual:location1]) should] beYes];
+
+            [[location1 should] equal:location2];
+            [[location2 should] equal:location1];
+        });
+    });
 });
 
 SPEC_END

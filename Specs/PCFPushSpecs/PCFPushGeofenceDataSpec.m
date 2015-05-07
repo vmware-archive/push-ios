@@ -362,6 +362,54 @@ describe(@"PCFPushGeofenceData", ^{
             });
         });
     });
+
+    context(@"object comparison", ^{
+
+        it(@"should be able to compare two objects with isEqual", ^{
+
+            PCFPushGeofenceLocation *location1 = [[PCFPushGeofenceLocation alloc] init];
+            location1.id = 55;
+            location1.name = [@"CHURROS " stringByAppendingString:@"LOCATION"];
+            location1.latitude = 80.5;
+            location1.longitude = -40.5;
+            location1.radius = 160.5;
+
+            PCFPushGeofenceLocation *location2 = [[PCFPushGeofenceLocation alloc] init];
+            location2.id = 55;
+            location2.name = [NSString stringWithFormat:@"%@ LOC%@", @"CHURROS", @"ATION"];
+            location2.latitude = 80.5;
+            location2.longitude = -40.5;
+            location2.radius = 160.5;
+
+            PCFPushGeofenceData *data1 = [[PCFPushGeofenceData alloc] init];
+            data1.id = 10;
+            data1.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
+            data1.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
+            data1.data = @{ @"CAT" : @"PRETTY" };
+            data1.triggerType = PCFPushTriggerTypeEnterOrExit;
+            data1.locations = @[ location1 ];
+
+
+            PCFPushGeofenceData *data2 = [[PCFPushGeofenceData alloc] init];
+            data2.id = 10;
+            data2.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
+            data2.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
+            data2.data = @{ @"CAT" : @"PRETTY" };
+            data2.triggerType = PCFPushTriggerTypeEnterOrExit;
+            data2.locations = @[ location2 ];
+
+            [[theValue([data1.locations isEqualToArray:data2.locations]) should] beYes];
+            [[theValue([location1 isEqual:location1]) should] beYes];
+            [[theValue([location2 isEqual:location2]) should] beYes];
+            [[theValue([location1 isEqual:location2]) should] beYes];
+            [[theValue([location2 isEqual:location1]) should] beYes];
+
+            [[data1 should] equal:data2];
+            [[data2 should] equal:data1];
+
+        });
+
+    });
 });
 
 SPEC_END

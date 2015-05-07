@@ -12,6 +12,8 @@
 #import "PCFPushGeofenceLocationMap.h"
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceResponseData+Loaders.h"
+#import "PCFPushGeofenceData.h"
+#import "PCFPushGeofenceLocation.h"
 
 SPEC_BEGIN(PCFPushGeofenceEngineSpec)
 
@@ -314,6 +316,108 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
                 });
+            });
+        });
+
+        context(@"clearing items", ^{
+
+            it(@"should do nothing if you try to clear a null list", ^{
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [engine clearLocations:nil];
+            });
+
+            it(@"should do nothing if you try to clear an empty list", ^{
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [engine clearLocations:[PCFPushGeofenceLocationMap map]];
+            });
+
+            it(@"should be able to clear one item", ^{
+               [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+
+                PCFPushGeofenceLocationMap *oneItemMapToClear = [PCFPushGeofenceLocationMap map];
+                [oneItemMapToClear put:fiveItemGeofenceList[@11L] locationIndex:0];
+
+                expectedGeofencesToStore[@5L] = fiveItemGeofenceList[@5L];
+                expectedGeofencesToStore[@44L] = fiveItemGeofenceList[@44L];
+                expectedGeofencesToStore[@49L] = fiveItemGeofenceList[@49L];
+                expectedGeofencesToStore[@51L] = fiveItemGeofenceList[@51L];
+
+                expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
+
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+
+                [engine clearLocations:oneItemMapToClear];
+            });
+
+            it(@"should be able to clear two items", ^{
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+
+                PCFPushGeofenceLocationMap *twoItemMapToClear = [PCFPushGeofenceLocationMap map];
+                [twoItemMapToClear put:fiveItemGeofenceList[@11L] locationIndex:0];
+                [twoItemMapToClear put:fiveItemGeofenceList[@44L] locationIndex:0];
+
+                PCFPushGeofenceData *item44 = [fiveItemGeofenceList[@44L] newCopyWithoutLocations];
+                item44.locations = @[ ((PCFPushGeofenceData *)(fiveItemGeofenceList[@44L])).locations[1] ];
+                expectedGeofencesToStore[@5L] = fiveItemGeofenceList[@5L];
+                expectedGeofencesToStore[@44L] = item44;
+                expectedGeofencesToStore[@49L] = fiveItemGeofenceList[@49L];
+                expectedGeofencesToStore[@51L] = fiveItemGeofenceList[@51L];
+
+                expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
+
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+
+                [engine clearLocations:twoItemMapToClear];
+            });
+
+            it(@"should be able to clear six items", ^{
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+
+                PCFPushGeofenceLocationMap *sixItemMapToClear = [PCFPushGeofenceLocationMap map];
+                [sixItemMapToClear put:fiveItemGeofenceList[@5L] locationIndex:0];
+                [sixItemMapToClear put:fiveItemGeofenceList[@11L] locationIndex:0];
+                [sixItemMapToClear put:fiveItemGeofenceList[@44L] locationIndex:0];
+                [sixItemMapToClear put:fiveItemGeofenceList[@44L] locationIndex:1];
+                [sixItemMapToClear put:fiveItemGeofenceList[@49L] locationIndex:1];
+                [sixItemMapToClear put:fiveItemGeofenceList[@51L] locationIndex:0];
+
+                PCFPushGeofenceData *item49 = [fiveItemGeofenceList[@49L] newCopyWithoutLocations];
+                item49.locations = @[ ((PCFPushGeofenceData *)(fiveItemGeofenceList[@49L])).locations[0] ];
+                expectedGeofencesToStore[@49L] = item49;
+
+                expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
+
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+
+                [engine clearLocations:sixItemMapToClear];
+            });
+
+            it(@"should be able to clear when some items do not exist", ^{
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+
+                PCFPushGeofenceLocationMap *twoItemMapToClear = [PCFPushGeofenceLocationMap map];
+                [twoItemMapToClear put:threeItemGeofenceList[@7L] locationIndex:0];
+                [twoItemMapToClear put:threeItemGeofenceList[@9L] locationIndex:0];
+
+                expectedGeofencesToStore[@5L] = fiveItemGeofenceList[@5L];
+                expectedGeofencesToStore[@11L] = fiveItemGeofenceList[@11L];
+                expectedGeofencesToStore[@44L] = fiveItemGeofenceList[@44L];
+                expectedGeofencesToStore[@49L] = fiveItemGeofenceList[@49L];
+                expectedGeofencesToStore[@51L] = fiveItemGeofenceList[@51L];
+
+                expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
+
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+
+                [engine clearLocations:twoItemMapToClear];
             });
         });
     });

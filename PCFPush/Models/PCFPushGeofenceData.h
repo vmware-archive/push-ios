@@ -25,4 +25,12 @@ typedef NS_ENUM(NSInteger, PCFPushTriggerType) {
 @property NSSet *tags;
 @property PCFPushTriggerType triggerType;
 
+- (instancetype)newCopyWithoutLocations;
+
+- (BOOL)isEqual:(id)other;
+
+- (BOOL)isEqualToData:(PCFPushGeofenceData *)data;
+
+- (NSUInteger)hash;
+
 @end

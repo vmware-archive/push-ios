@@ -17,4 +17,10 @@
 @property double longitude;
 @property double radius;
 
+- (BOOL)isEqual:(id)other;
+
+- (BOOL)isEqualToLocation:(PCFPushGeofenceLocation *)location;
+
+- (NSUInteger)hash;
+
 @end

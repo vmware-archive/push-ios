@@ -6,6 +6,7 @@
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceLocation.h"
+#import "PCFPushGeofenceDataList.h"
 
 @interface PCFPushGeofenceLocationMap ()
 
@@ -41,6 +42,17 @@ NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
 + (instancetype) map
 {
     return [[PCFPushGeofenceLocationMap alloc] init];
+}
+
++ (instancetype) mapWithGeofencesInList:(PCFPushGeofenceDataList *)list
+{
+    PCFPushGeofenceLocationMap *map = [[PCFPushGeofenceLocationMap alloc] init];
+    [list enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
+        for (PCFPushGeofenceLocation *location in geofence.locations) {
+            [map put:geofence location:location];
+        }
+    }];
+    return map;
 }
 
 - (instancetype) init

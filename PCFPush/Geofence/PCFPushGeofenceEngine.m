@@ -20,7 +20,8 @@
 
 @end
 
-static BOOL isItemExpired(PCFPushGeofenceData *geofence) {
+static BOOL isItemExpired(PCFPushGeofenceData *geofence)
+{
     if (geofence.expiryTime == nil) {
         return YES;
     }
@@ -31,7 +32,8 @@ static BOOL isItemExpired(PCFPushGeofenceData *geofence) {
     return isItemExpired;
 }
 
-static BOOL isItemUpdated(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData) {
+static BOOL isItemUpdated(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData)
+{
     for (PCFPushGeofenceData *responseDataGeofence in responseData.geofences) {
         if (responseDataGeofence.id == geofence.id) {
             return YES;
@@ -40,7 +42,8 @@ static BOOL isItemUpdated(PCFPushGeofenceData *geofence, PCFPushGeofenceResponse
     return NO;
 }
 
-static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData) {
+static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData)
+{
     if ([responseData.deletedGeofenceIds containsObject:@(geofence.id)]) {
         return NO;
     }
@@ -53,7 +56,8 @@ static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofe
     return YES;
 }
 
-static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence) {
+static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
+{
     if (geofence.data == nil) {
         return NO;
     }
@@ -69,7 +73,8 @@ static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence) {
     return YES;
 }
 
-static void addValidGeofencesFromStore(PCFPushGeofenceDataList *requiredGeofences, PCFPushGeofenceDataList *storedGeofences, PCFPushGeofenceResponseData *responseData) {
+static void addValidGeofencesFromStore(PCFPushGeofenceDataList *requiredGeofences, PCFPushGeofenceDataList *storedGeofences, PCFPushGeofenceResponseData *responseData)
+{
     [storedGeofences enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         if (isValidGeofenceFromStore(geofence, responseData)) {
             requiredGeofences[@(id)] = geofence;
@@ -77,7 +82,8 @@ static void addValidGeofencesFromStore(PCFPushGeofenceDataList *requiredGeofence
     }];
 }
 
-static void addValidGeofencesFromUpdate(PCFPushGeofenceDataList *list, NSArray *update) {
+static void addValidGeofencesFromUpdate(PCFPushGeofenceDataList *list, NSArray *update)
+{
     for (PCFPushGeofenceData *geofence in update) {
         if (isValidGeofenceFromResponseData(geofence)) {
             list[@(geofence.id)] = geofence;
@@ -85,7 +91,8 @@ static void addValidGeofencesFromUpdate(PCFPushGeofenceDataList *list, NSArray *
     }
 }
 
-static void addLocations(PCFPushGeofenceLocationMap *map, PCFPushGeofenceDataList *list) {
+static void addLocations(PCFPushGeofenceLocationMap *map, PCFPushGeofenceDataList *list)
+{
     [list enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         for(PCFPushGeofenceLocation *location in geofence.locations) {
             [map put:geofence location:location];
@@ -93,8 +100,43 @@ static void addLocations(PCFPushGeofenceLocationMap *map, PCFPushGeofenceDataLis
     }];
 }
 
-static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushGeofenceDataList *storedGeofences) {
+static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushGeofenceDataList *storedGeofences)
+{
     return (storedGeofences != nil && storedGeofences.count > 0) || (responseData.geofences != nil && responseData.geofences.count > 0);
+}
+
+static void keepGeofenceLocation(int64_t geofenceId, PCFPushGeofenceData *geofenceToKeep, PCFPushGeofenceLocation *locationToKeep, PCFPushGeofenceDataList *geofencesToStore, PCFPushGeofenceLocationMap *geofencesToRegister, NSString *requestId)
+{
+    geofencesToRegister[requestId] = locationToKeep;
+
+    PCFPushGeofenceData *newCopy = geofencesToStore[@(geofenceId)];
+    if (!newCopy) {
+        newCopy = [geofenceToKeep newCopyWithoutLocations];
+        NSMutableArray *newLocations = [NSMutableArray array];
+        [newLocations addObject:locationToKeep];
+        newCopy.locations = newLocations;
+        geofencesToStore[@(geofenceId)] = newCopy;
+    } else {
+        NSMutableArray *newLocations = (NSMutableArray *)newCopy.locations;
+        [newLocations addObject:locationToKeep];
+    }
+}
+
+static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear, PCFPushGeofenceDataList *storedGeofences, PCFPushGeofenceDataList *geofencesToStore, PCFPushGeofenceLocationMap *geofencesToRegister)
+{
+    [storedGeofences enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, PCFPushGeofenceData *geofence, BOOL *stop) {
+
+        if (!geofence || !geofence.locations || geofence.locations.count <= 0) {
+            return;
+        }
+
+        for (PCFPushGeofenceLocation *location in geofence.locations) {
+            NSString *requestId = pcf_requestIdWithGeofenceId(geofenceId, location.id);
+            if (!locationsToClear[requestId]) {
+                keepGeofenceLocation(geofenceId, geofence, location, geofencesToStore, geofencesToRegister, requestId);
+            }
+        }
+    }];
 }
 
 @implementation PCFPushGeofenceEngine
@@ -147,6 +189,22 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
     addValidGeofencesFromUpdate(geofencesToStore, responseData.geofences);
 
     addLocations(geofencesToRegister, geofencesToStore);
+
+    [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
+    [self.store saveRegisteredGeofences:geofencesToStore];
+}
+
+- (void) clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear
+{
+    if (!locationsToClear || locationsToClear.count <= 0) {
+        return;
+    }
+
+    PCFPushGeofenceDataList *storedGeofences = [self.store currentlyRegisteredGeofences];
+    PCFPushGeofenceDataList *geofencesToStore = [PCFPushGeofenceDataList list];
+    PCFPushGeofenceLocationMap *geofencesToRegister = [PCFPushGeofenceLocationMap map];
+
+    filterClearedLocations(locationsToClear, storedGeofences, geofencesToStore, geofencesToRegister);
 
     [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
     [self.store saveRegisteredGeofences:geofencesToStore];

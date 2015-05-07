@@ -7,6 +7,7 @@
 
 @class PCFPushGeofenceData;
 @class PCFPushGeofenceLocation;
+@class PCFPushGeofenceDataList;
 
 extern int64_t pcf_geofenceIdForRequestId(NSString *requestId);
 extern int64_t pcf_locationIdForRequestId(NSString *requestId);
@@ -15,6 +16,7 @@ extern NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locati
 @interface PCFPushGeofenceLocationMap : NSObject
 
 + (instancetype) map;
++ (instancetype) mapWithGeofencesInList:(PCFPushGeofenceDataList *)list;
 
 - (NSUInteger) count;
 - (id)objectForKeyedSubscript:(id <NSCopying>)key;
