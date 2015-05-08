@@ -10,10 +10,8 @@
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceDataList+Loaders.h"
 #import "PCFPushGeofenceLocationMap.h"
-#import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceResponseData+Loaders.h"
 #import "PCFPushGeofenceData.h"
-#import "PCFPushGeofenceLocation.h"
 
 SPEC_BEGIN(PCFPushGeofenceEngineSpec)
 

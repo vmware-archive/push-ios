@@ -3,6 +3,7 @@
 // Copyright (c) 2015 Pivotal. All rights reserved.
 //
 
+#import <CoreLocation/CoreLocation.h>
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceResponseData.h"
 #import "PCFPushGeofenceRegistrar.h"
@@ -56,6 +57,19 @@ static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofe
     return YES;
 }
 
+static BOOL geofenceHasInvalidLocations(NSArray *array)
+{
+    // Note - a geofence can have several locations.  If *any* of those locations has a invalid set of coordinates then the whole geofence is considered invalid.
+    for (PCFPushGeofenceLocation *location in array) {
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(location.latitude, location.longitude);
+        if (!CLLocationCoordinate2DIsValid(coord)) {
+            PCFPushLog(@"Location with id %lld has invalid coordinates %f, %f", location.id, location.latitude, location.longitude);
+            return YES;
+        }
+    }
+    return NO;
+}
+
 static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
 {
     if (geofence.data == nil) {
@@ -65,6 +79,9 @@ static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
         return NO;
     }
     if (geofence.locations == nil || geofence.locations.count <= 0) {
+        return NO;
+    }
+    if (geofenceHasInvalidLocations(geofence.locations)) {
         return NO;
     }
     if (isItemExpired(geofence)) {

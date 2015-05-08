@@ -49,6 +49,74 @@
             ]
         },
         {
+          "id": 6,
+          "data": {
+            "message": "bad longitudes"
+          },
+          "trigger_type": "enter",
+          "expiry_time": 1424309210305,
+          "locations": [
+            {
+              "id": 88,
+              "name": "ernst_loves_dumplings",
+              "lat": -143.5,
+              "long": 261.5,
+              "rad": 150
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "data": {
+            "message": "bad longitudes"
+          },
+          "trigger_type": "enter",
+          "expiry_time": 1424309210305,
+          "locations": [
+            {
+              "id": 89,
+              "name": "ernst_loves_dumplings",
+              "lat": -143.5,
+              "long": -181.0,
+              "rad": 150
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "data": {
+            "message": "bad_latitudes"
+          },
+          "trigger_type": "exit",
+          "expiry_time": 1424309210305,
+          "locations": [
+            {
+              "id": 88,
+              "name": "ernsts_wants_crepes",
+              "lat": -91.5,
+              "long": 61.5,
+              "rad": 150
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "data": {
+            "message": "bad_latitudes"
+          },
+          "trigger_type": "exit",
+          "expiry_time": 1424309210305,
+          "locations": [
+            {
+              "id": 90,
+              "name": "ernsts_wants_crepes",
+              "lat": 93.5,
+              "long": 61.5,
+              "rad": 150
+            }
+          ]
+        },
+        {
             "id": 10,
             "data": {
                 "message": "i have an empty locations array"
