@@ -6,9 +6,10 @@
 #import <UIKit/UIKit.h>
 
 @class PCFPushGeofencePersistentStore;
+@class PCFPushGeofenceEngine;
 
 @interface PCFPushGeofenceHandler : NSObject
 
-+ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store state:(CLRegionState)state;
++ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store engine:(PCFPushGeofenceEngine *)engine state:(CLRegionState)state;
 
 @end

@@ -413,7 +413,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
     PCFPushLog(@"locationManager:didExitRegion %@", region.identifier);
-    [PCFPushGeofenceHandler processRegion:region store:self.store state:CLRegionStateOutside];
+    [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
@@ -440,7 +440,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     if (state == CLRegionStateInside) {
         // Device entered geofence. Trigger notification.
-        [PCFPushGeofenceHandler processRegion:region store:self.store state:CLRegionStateInside];
+        [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateInside];
     }
 }
 

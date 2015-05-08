@@ -9,7 +9,9 @@
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofenceEngine.h"
 #import "PCFPushDebug.h"
+#import "PCFPushGeofenceLocation.h"
 
 @interface PCFPushGeofenceHandler()
 
@@ -95,12 +97,29 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     return notification;
 }
 
+void clearLocation(NSString *geofenceId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
+{
+    int64_t locationId = pcf_locationIdForRequestId(geofenceId);
+    for (PCFPushGeofenceLocation *location in geofence.locations) {
+        if (location.id == locationId) {
+            PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
+            [locationsToClear put:geofence location:location];
+            [engine clearLocations:locationsToClear];
+            break;
+        }
+    }
+}
+
 @implementation PCFPushGeofenceHandler
 
-+ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store state:(CLRegionState)state
++ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store engine:(PCFPushGeofenceEngine *)engine state:(CLRegionState)state
 {
     if (!store) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"store may not be nil" userInfo:nil];
+    }
+
+    if (!engine) {
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"engine may not be nil" userInfo:nil];
     }
 
     if (!region || !region.identifier || region.identifier.length <= 0) {
@@ -117,6 +136,8 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     if (shouldTriggerNotification(geofence, state)) {
         UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
+
+        clearLocation(region.identifier, geofence, engine);
     }
 }
 

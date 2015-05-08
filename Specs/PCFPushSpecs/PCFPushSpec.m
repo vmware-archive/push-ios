@@ -1049,17 +1049,17 @@ describe(@"PCFPush", ^{
         });
 
         it(@"should process geofence on exiting region", ^{
-            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:state:)];
+            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
             [[PCFPushClient shared] locationManager:nil didExitRegion:region];
         });
 
         it(@"should process geofence inside region", ^{
-            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:state:)];
+            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
             [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateInside forRegion:region];
         });
 
         it(@"should not process geofence", ^{
-            [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:state:)];
+            [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
             [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateOutside forRegion:region];
             [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateUnknown forRegion:region];
         });
