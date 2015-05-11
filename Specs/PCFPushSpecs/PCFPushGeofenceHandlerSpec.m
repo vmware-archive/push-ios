@@ -49,6 +49,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
 
     describe(@"PCFPushGeofenceHandler", ^{
 
+        __block CLLocationManager *locationManager;
         __block PCFPushGeofenceEngine *engine;
         __block PCFPushGeofencePersistentStore *store;
         __block PCFPushGeofenceData *geofence1EnterOrExit;
@@ -57,6 +58,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block PCFPushGeofenceData *geofence4EnterWithTags;
         __block PCFPushGeofenceLocationMap *expectedMapToClear;
         __block UIApplication *application;
+        __block PCFPushGeofenceDataList *fiveItemGeofenceList;
         __block CLRegion *region1;
         __block CLRegion *region2;
         __block CLRegion *region3;
@@ -65,6 +67,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         describe(@"handling geofence events", ^{
 
             beforeEach(^{
+                locationManager = [CLLocationManager mock];
                 store = [PCFPushGeofencePersistentStore mock];
                 engine = [PCFPushGeofenceEngine mock];
                 application = [UIApplication mock];
@@ -76,6 +79,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[geofence3Exit shouldNot] beNil];
                 geofence4EnterWithTags = loadGeofence([self class], @"geofence_one_item_persisted_4");
                 [[geofence4EnterWithTags shouldNot] beNil];
+                fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items_with_tags");
                 region1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_1_66"];
                 region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_2_66"];
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
@@ -301,6 +305,43 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments: expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
                 [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside];
+            });
+        });
+
+        context(@"checking geofences after changing tags", ^{
+
+            it(@"should do nothing if there are no currently registered tags", ^{
+                PCFPushGeofenceDataList *emptyGeofenceList = [PCFPushGeofenceDataList list];
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+
+                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+            });
+
+            it(@"should skip all the items if not registered to any of the geofence's tags", ^{
+                [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"NOT_RELATED_TAG", @"MEANINGLESS_TAG" ]]];
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+                [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+
+                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+            });
+
+            it(@"should try to determine the state for any geofences subscribed to any user tags", ^{
+                [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"TAG_1", @"TAG_2" ]]];
+                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+
+                NSArray *expectedRequestStatesForRegionIds = @[ @"PCF_11_66", @"PCF_44_66", @"PCF_44_82", @"PCF_51_53" ];
+                NSMutableArray *requestedStatesForRegionIds = [NSMutableArray array];
+                [[locationManager should] receive:@selector(requestStateForRegion:) withCount:4];
+                [locationManager stub:@selector(requestStateForRegion:) withBlock:^id(NSArray *params){
+                    CLRegion *requestStateForRegion = (CLRegion *)params[0];
+                    [requestedStatesForRegionIds addObject:requestStateForRegion.identifier];
+                    return nil;
+                }];
+
+                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+
+                [[requestedStatesForRegionIds should] containObjectsInArray:expectedRequestStatesForRegionIds];
             });
         });
     });

@@ -1,0 +1,103 @@
+[
+    {
+        "id": 5,
+        "data": {
+            "message": "tacos"
+        },
+        "trigger_type": "enter",
+        "tags": ["TAG_3"],
+        "expiry_time": 1142744274,
+        "locations": [
+            {
+                "id": 99,
+                "name": "robs_wizard_tacos",
+                "lat": -43.5,
+                "long": 61.5,
+                "rad": 150
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "data": {
+            "message": "pizzas"
+        },
+        "trigger_type": "enter_or_exit",
+        "tags": ["TAG_1"],
+        "expiry_time": 1424309210305,
+        "locations": [
+            {
+                "id": 66,
+                "name": "robs_wizard_tacos",
+                "lat": 53.5,
+                "long": -91.5,
+                "rad": 120
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "data": {
+            "message": "eat all this great stuff"
+        },
+        "trigger_type": "exit",
+        "tags": ["TAG_2", "TAG_1"],
+        "expiry_time": 1142744274,
+        "locations": [
+            {
+                "id": 66,
+                "name": "robs_wizard_tacos",
+                "lat": 53.5,
+                "long": -91.5,
+                "rad": 120
+            },
+            {
+                "id": 82,
+                "name": "robs_lizard_burritos",
+                "lat": 55.5,
+                "long": -94.5,
+                "rad": 100
+            }
+        ]
+    },
+    {
+        "id": 49,
+        "data": {
+            "message": "gelato"
+        },
+        "trigger_type": "exit",
+        "tags": ["TAG_3", "TAG_4"],
+        "expiry_time": 1142744274,
+        "locations": [
+            {
+                "id": 97,
+                "name": "robs_wizard_tacos",
+                "lat": 63.5,
+                "long": -61.5,
+                "rad": 130
+            },
+            {
+                "id": 99,
+                "name": "banana_stand",
+                "lat": 73.5,
+                "long": -61.5,
+                "rad": 140
+            }
+        ]
+    },
+    {
+        "id": 51,
+        "trigger_type": "exit",
+        "tags": ["TAG_1"],
+        "expiry_time": 1142744274,
+        "locations": [
+            {
+                "id": 53,
+                "name": "snuh",
+                "lat": 63.5,
+                "long": -61.5,
+                "rad": 160
+            }
+        ]
+    }
+]

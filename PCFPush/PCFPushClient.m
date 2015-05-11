@@ -20,6 +20,10 @@
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceHandler.h"
+#import "PCFPushGeofenceDataList.h"
+#import "PCFPushGeofenceLocation.h"
+#import "PCFPushGeofenceLocationMap.h"
+#import "PCFPushGeofenceData.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -184,7 +188,9 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
             }
             return;
         }
-        
+
+        BOOL areTagsTheSame = [PCFPushClient areTagsTheSame:parameters];
+
         PCFPushLog(@"Registration with back-end succeded. Device ID: \"%@\".", parsedData.deviceUUID);
         [PCFPushPersistentStorage setAPNSDeviceToken:deviceToken];
         [PCFPushPersistentStorage setServerDeviceID:parsedData.deviceUUID];
@@ -198,6 +204,11 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
             [PCFPushClient startGeofenceUpdate:parameters success:successBlock failure:failureBlock];
 
         } else {
+            
+            if (!areTagsTheSame) {
+                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:PCFPushClient.shared.store locationManager:PCFPushClient.shared.locationManager];
+            }
+
             if (successBlock) {
                 successBlock();
             }
@@ -209,6 +220,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     
     return registrationBlock;
 }
+
 
 + (void)startGeofenceUpdate:(PCFPushParameters *)parameters success:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
 {

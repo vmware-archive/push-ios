@@ -3,6 +3,7 @@
 // Copyright (c) 2015 Pivotal. All rights reserved.
 //
 
+#import <CoreLocation/CoreLocation.h>
 #import "PCFPushGeofenceRegistrar.h"
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceLocation.h"
@@ -10,7 +11,13 @@
 #import "PCFPushParameters.h"
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
-#import <CoreLocation/CoreLocation.h>
+
+CLRegion * pcf_regionForLocation(NSString *requestId, PCFPushGeofenceLocation *location)
+{
+    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
+    CLLocationDistance radius = location.radius;
+    return [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
+}
 
 @interface PCFPushGeofenceRegistrar ()
 
@@ -40,9 +47,7 @@
     }
 
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
-        CLLocationDistance radius = location.radius;
-        CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
+        CLRegion *region = pcf_regionForLocation(requestId, location);
         [self.locationManager startMonitoringForRegion:region];
         [self.locationManager requestStateForRegion:region];
     }];
@@ -51,6 +56,25 @@
 
     if (isAPNSSandbox()) {
         [self serializeGeofencesForDebug:geofencesToRegister list:list];
+    }
+}
+
+- (void) unregisterGeofences:(PCFPushGeofenceLocationMap *)geofencesToUnregister geofencesToKeep:(PCFPushGeofenceLocationMap *)geofencesToKeep list:(PCFPushGeofenceDataList *)list
+{
+    if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
+        PCFPushLog(@"ERROR: isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.");
+        return;
+    }
+
+    [geofencesToUnregister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
+        CLRegion *region = pcf_regionForLocation(requestId, location);
+        [self.locationManager stopMonitoringForRegion:region];
+    }];
+
+    PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToKeep.count);
+
+    if (isAPNSSandbox()) {
+        [self serializeGeofencesForDebug:geofencesToKeep list:list];
     }
 }
 

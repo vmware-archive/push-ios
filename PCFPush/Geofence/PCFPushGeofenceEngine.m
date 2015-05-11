@@ -223,7 +223,7 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
 
     filterClearedLocations(locationsToClear, storedGeofences, geofencesToStore, geofencesToRegister);
 
-    [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
+    [self.registrar unregisterGeofences:locationsToClear geofencesToKeep:geofencesToRegister list:storedGeofences];
     [self.store saveRegisteredGeofences:geofencesToStore];
 }
 

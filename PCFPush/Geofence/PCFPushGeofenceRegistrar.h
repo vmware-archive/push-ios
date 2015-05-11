@@ -8,12 +8,17 @@
 @class PCFPushGeofenceDataList;
 @class PCFPushGeofenceLocationMap;
 @class CLLocationManager;
+@class CLCircularRegion;
+@class PCFPushGeofenceLocation;
+
+extern CLRegion * pcf_regionForLocation(NSString *requestId, PCFPushGeofenceLocation *location);
 
 @interface PCFPushGeofenceRegistrar : NSObject
 
 - (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;
 
 - (void) registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list;
+- (void) unregisterGeofences:(PCFPushGeofenceLocationMap *)geofencesToUnregister geofencesToKeep:(PCFPushGeofenceLocationMap *)geofencesToKeep list:(PCFPushGeofenceDataList *)list;
 - (void) reset;
 
 @end

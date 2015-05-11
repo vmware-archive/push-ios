@@ -323,6 +323,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
                 [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar shouldNot] receive:@selector(unregisterGeofences:geofencesToKeep:list:)];
                 [engine clearLocations:nil];
             });
 
@@ -330,6 +331,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                 [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
                 [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar shouldNot] receive:@selector(unregisterGeofences:geofencesToKeep:list:)];
                 [engine clearLocations:[PCFPushGeofenceLocationMap map]];
             });
 
@@ -347,7 +349,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
 
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar should] receive:@selector(unregisterGeofences:geofencesToKeep:list:) withArguments:oneItemMapToClear, expectedGeofencesToRegister, fiveItemGeofenceList, nil];
 
                 [engine clearLocations:oneItemMapToClear];
             });
@@ -369,7 +372,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
 
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar should] receive:@selector(unregisterGeofences:geofencesToKeep:list:) withArguments:twoItemMapToClear, expectedGeofencesToRegister, fiveItemGeofenceList, nil];
 
                 [engine clearLocations:twoItemMapToClear];
             });
@@ -392,7 +396,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
 
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar should] receive:@selector(unregisterGeofences:geofencesToKeep:list:) withArguments:sixItemMapToClear, expectedGeofencesToRegister, fiveItemGeofenceList, nil];
 
                 [engine clearLocations:sixItemMapToClear];
             });
@@ -413,7 +418,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 expectedGeofencesToRegister = [PCFPushGeofenceLocationMap mapWithGeofencesInList:expectedGeofencesToStore];
 
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
-                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [[registrar should] receive:@selector(unregisterGeofences:geofencesToKeep:list:) withArguments:twoItemMapToClear, expectedGeofencesToRegister, fiveItemGeofenceList, nil];
 
                 [engine clearLocations:twoItemMapToClear];
             });
