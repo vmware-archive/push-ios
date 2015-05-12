@@ -12,11 +12,32 @@
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
 
-CLRegion * pcf_regionForLocation(NSString *requestId, PCFPushGeofenceLocation *location)
+CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceLocation *location)
 {
     CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
     CLLocationDistance radius = location.radius;
-    return [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
+    CLRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
+
+    switch (geofence.triggerType) {
+        case PCFPushTriggerTypeEnterOrExit:
+            region.notifyOnEntry = YES;
+            region.notifyOnExit = YES;
+            break;
+        case PCFPushTriggerTypeEnter:
+            region.notifyOnEntry = YES;
+            region.notifyOnExit = NO;
+            break;
+        case PCFPushTriggerTypeExit:
+            region.notifyOnEntry = NO;
+            region.notifyOnExit = YES;
+            break;
+        default:
+            region.notifyOnEntry = NO;
+            region.notifyOnExit = NO;
+            break;
+    }
+
+    return region;
 }
 
 @interface PCFPushGeofenceRegistrar ()
@@ -47,8 +68,11 @@ CLRegion * pcf_regionForLocation(NSString *requestId, PCFPushGeofenceLocation *l
     }
 
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        CLRegion *region = pcf_regionForLocation(requestId, location);
+        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        PCFPushGeofenceData *geofence = list[@(geofenceId)];
+        CLRegion *region = pcf_regionForLocation(requestId, geofence, location);
         [self.locationManager startMonitoringForRegion:region];
+        PCFPushLog(@"Now monitoring location '%@'", requestId);
         [self.locationManager requestStateForRegion:region];
     }];
 
@@ -67,7 +91,9 @@ CLRegion * pcf_regionForLocation(NSString *requestId, PCFPushGeofenceLocation *l
     }
 
     [geofencesToUnregister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        CLRegion *region = pcf_regionForLocation(requestId, location);
+        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        PCFPushGeofenceData *geofence = list[@(geofenceId)];
+        CLRegion *region = pcf_regionForLocation(requestId, geofence, location);
         [self.locationManager stopMonitoringForRegion:region];
     }];
 

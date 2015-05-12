@@ -435,6 +435,11 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
+    if (![manager.monitoredRegions containsObject:region]) {
+        PCFPushLog(@"Location %@ is no longer being monitored. Ignoring state update.", region.identifier);
+        return;
+    }
+
     NSString *s = @"N/A";
     switch(state) {
         case CLRegionStateUnknown:
@@ -447,7 +452,6 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
             s = @"Outside";
             break;
     }
-
     PCFPushLog(@"locationManager:didDetermineState (%@) forRegion: %@", s, region.identifier);
 
     if (state == CLRegionStateInside) {

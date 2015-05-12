@@ -9,6 +9,7 @@
 #import "PCFPushGeofenceRegistrar.h"
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushGeofenceLocationMap.h"
+#import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceLocation.h"
@@ -21,7 +22,7 @@
 
 @end
 
-static BOOL isItemExpired(PCFPushGeofenceData *geofence)
+BOOL pcf_isItemExpired(PCFPushGeofenceData *geofence)
 {
     if (geofence.expiryTime == nil) {
         return YES;
@@ -48,7 +49,7 @@ static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofe
     if ([responseData.deletedGeofenceIds containsObject:@(geofence.id)]) {
         return NO;
     }
-    if (isItemExpired(geofence)) {
+    if (pcf_isItemExpired(geofence)) {
         return NO;
     }
     if (isItemUpdated(geofence, responseData)) {
@@ -84,7 +85,7 @@ static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
     if (geofenceHasInvalidLocations(geofence.locations)) {
         return NO;
     }
-    if (isItemExpired(geofence)) {
+    if (pcf_isItemExpired(geofence)) {
         return NO;
     }
     return YES;

@@ -1,0 +1,39 @@
+{
+    "id": 5,
+    "data": {
+      "alertBody":"Alert Body of Awesome",
+      "alertAction":"Alert Action of Joy",
+      "alertTitle":"Alert Title of Fancy",
+      "alertLaunchImage":"Alert Image of Beauty",
+      "hasAction":"true",
+      "category":"Alert Category of Choice",
+      "applicationIconBadgeNumber": 1337,
+      "soundName": "Alert Sound of Volume",
+      "userInfo": { "extraField" : "extraValue"}
+    },
+    "expiry_time": 1142744274,
+    "trigger_type": "enter",
+    "locations": [
+        {
+            "id": 66,
+            "name": "robs_wizard_tacos",
+            "lat": 53.5,
+            "long": -91.5,
+            "rad": 120
+        },
+        {
+          "id": 67,
+          "name": "anishas_sparkly_donuts",
+          "lat": 60.0,
+          "long": -75.5,
+          "rad": 77
+        },
+        {
+          "id": 68,
+          "name": "jesses_cromulent_churrasqueiras",
+          "lat": 30.6,
+          "long": -120.2,
+          "rad": 100
+        }
+    ]
+}

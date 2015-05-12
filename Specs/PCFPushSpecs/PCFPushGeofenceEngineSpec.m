@@ -266,7 +266,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             context(@"filter expired items", ^{
 
                 beforeEach(^{
-                    NSDate *fakeDate = [NSDate dateWithTimeIntervalSince1970:991142744.274];
+                    NSDate *fakeDate = [NSDate dateWithTimeIntervalSince1970:991142744.274]; // Tue May 29 2001
                     [NSDate stub:@selector(date) andReturn:fakeDate];
                     [[store shouldNot] receive:@selector(reset)];
                     [[registrar shouldNot] receive:@selector(reset)];

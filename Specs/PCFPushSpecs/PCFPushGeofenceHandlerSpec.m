@@ -56,6 +56,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block PCFPushGeofenceData *geofence2Enter;
         __block PCFPushGeofenceData *geofence3Exit;
         __block PCFPushGeofenceData *geofence4EnterWithTags;
+        __block PCFPushGeofenceData *geofence5EnterThreeLocations;
         __block PCFPushGeofenceLocationMap *expectedMapToClear;
         __block UIApplication *application;
         __block PCFPushGeofenceDataList *fiveItemGeofenceList;
@@ -63,6 +64,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block CLRegion *region2;
         __block CLRegion *region3;
         __block CLRegion *region4;
+        __block CLRegion *region5;
 
         describe(@"handling geofence events", ^{
 
@@ -79,13 +81,17 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[geofence3Exit shouldNot] beNil];
                 geofence4EnterWithTags = loadGeofence([self class], @"geofence_one_item_persisted_4");
                 [[geofence4EnterWithTags shouldNot] beNil];
+                geofence5EnterThreeLocations = loadGeofence([self class], @"geofence_one_item_persisted_5");
+                [[geofence5EnterThreeLocations shouldNot] beNil];
                 fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items_with_tags");
                 region1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_1_66"];
                 region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_2_66"];
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
                 region4 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_4_66"];
+                region5 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_5_67"];
                 expectedMapToClear = [PCFPushGeofenceLocationMap map];
                 [UIApplication stub:@selector(sharedApplication) andReturn:application];
+                [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
             });
 
             context(@"unknown state", ^{
@@ -219,6 +225,40 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
                     [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside];
+                });
+            });
+
+            context(@"expired geofences need to be cleared", ^{
+
+                beforeEach(^{
+                    NSDate *fakeDate = [NSDate dateWithTimeIntervalSince1970:991142744.274]; // Tue May 29 2001
+                    [NSDate stub:@selector(date) andReturn:fakeDate];
+                });
+
+                it(@"should not trigger when entering a location that has expired (in a geofence with only one location)", ^{
+                    [expectedMapToClear put:geofence2Enter locationIndex:0];
+                    [[engine should] receive:@selector(clearLocations:) withArguments:expectedMapToClear, nil];
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside];
+                });
+
+                it(@"should not trigger when entering a location that has expired (in a geofence with several locations)", ^{
+                    [expectedMapToClear put:geofence5EnterThreeLocations locationIndex:0];
+                    [expectedMapToClear put:geofence5EnterThreeLocations locationIndex:1];
+                    [expectedMapToClear put:geofence5EnterThreeLocations locationIndex:2];
+                    [[engine should] receive:@selector(clearLocations:) withArguments:expectedMapToClear, nil];
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(5L, geofence5EnterThreeLocations)];
+                    [PCFPushGeofenceHandler processRegion:region5 store:store engine:engine state:CLRegionStateInside];
+                });
+
+                it(@"should not trigger when exiting a location that has expired (in a geofence with only one location)", ^{
+                    [expectedMapToClear put:geofence3Exit locationIndex:0];
+                    [[engine should] receive:@selector(clearLocations:) withArguments:expectedMapToClear, nil];
+                    [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside];
                 });
             });
 

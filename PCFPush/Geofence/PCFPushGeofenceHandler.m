@@ -8,7 +8,6 @@
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceData.h"
-#import "PCFPushGeofenceData.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushDebug.h"
@@ -100,15 +99,25 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     return notification;
 }
 
+static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
+{
+    PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
+    for (PCFPushGeofenceLocation *location in geofence.locations) {
+        PCFPushLog(@"Clearing geofence location from monitor: %@", pcf_requestIdWithGeofenceId(geofence.id, location.id));
+        [locationsToClear put:geofence location:location];
+    }
+    [engine clearLocations:locationsToClear];
+}
+
 static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
 {
     int64_t locationId = pcf_locationIdForRequestId(requestId);
     for (PCFPushGeofenceLocation *location in geofence.locations) {
         if (location.id == locationId) {
             PCFPushLog(@"Clearing geofence from monitor: %@", requestId);
-            PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
-            [locationsToClear put:geofence location:location];
-            [engine clearLocations:locationsToClear];
+            PCFPushGeofenceLocationMap *locationToClear = [PCFPushGeofenceLocationMap map];
+            [locationToClear put:geofence location:location];
+            [engine clearLocations:locationToClear];
             break;
         }
     }
@@ -137,11 +146,17 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
         return;
     }
 
-    if (shouldTriggerNotification(geofence, state)) {
+    if (pcf_isItemExpired(geofence)) {
+
+        PCFPushLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
+        clearGeofence(geofence, engine); // Clears all the locations at the same geofence since they expire at the same time.
+
+    } else if (shouldTriggerNotification(geofence, state)) {
+
+        PCFPushLog(@"Triggering geofence '%@'.", region.identifier);
         UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
-
-        clearLocation(region.identifier, geofence, engine);
+        clearLocation(region.identifier, geofence, engine); // Clear just this one location.
     }
 }
 
@@ -153,7 +168,7 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
         if (isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
             for (PCFPushGeofenceLocation *location in geofence.locations) {
                 NSString *requestId = pcf_requestIdWithGeofenceId(geofenceId, location.id);
-                CLRegion *region = pcf_regionForLocation(requestId, location);
+                CLRegion *region = pcf_regionForLocation(requestId, NULL, location);
                 [locationManager requestStateForRegion:region];
             }
         }

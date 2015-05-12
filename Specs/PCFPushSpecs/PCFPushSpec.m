@@ -1055,25 +1055,29 @@ describe(@"PCFPush", ^{
     describe(@"geofence events", ^{
 
         __block CLRegion *region;
+        __block CLLocationManager *locationManager;
 
         beforeEach(^{
-           region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
+            region = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(33.0, 44.0) radius:100.0 identifier:@"PCF_3_66"];
+            locationManager = [CLLocationManager mock];
+            NSSet *monitoredRegions = [NSSet setWithObject:region];
+            [locationManager stub:@selector(monitoredRegions) andReturn:monitoredRegions];
         });
 
         it(@"should process geofence on exiting region", ^{
             [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:nil didExitRegion:region];
+            [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
         });
 
         it(@"should process geofence inside region", ^{
             [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateInside forRegion:region];
+            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
         });
 
         it(@"should not process geofence", ^{
             [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateOutside forRegion:region];
-            [[PCFPushClient shared] locationManager:nil didDetermineState:CLRegionStateUnknown forRegion:region];
+            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
+            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
         });
     });
 });
