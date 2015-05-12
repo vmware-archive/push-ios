@@ -22,7 +22,7 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
         // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 
         if (propertyType.length < 1) return NO;
-        return !([propertyName isEqualToString:@"pushTags"] || [propertyName isEqualToString:@"pushDeviceAlias"]);
+        return !([propertyName isEqualToString:@"pushTags"] || [propertyName isEqualToString:@"pushDeviceAlias"] || [propertyName isEqualToString:@"areGeofencesEnabled"]);
     };
 
     [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
@@ -31,15 +31,15 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
             NSLog(@"Checking validity of property '%@', type '%@'", propertyName, propertyType);
             id value = [model valueForKey:propertyName];
             [model setValue:nil forKey:propertyName];
-            
+
             BOOL (^valid)(PCFPushParameters *) = ^BOOL(PCFPushParameters *model) {
                 return [model arePushParametersValid];
             };
             [[theValue(valid(model)) should] beFalse];
-            
+
             [model setValue:@"" forKey:propertyName];
             [[theValue(valid(model)) should] beFalse];
-            
+
             [model setValue:value forKey:propertyName];
             [[theValue(valid(model)) should] beTrue];
         } else {
@@ -75,7 +75,7 @@ describe(@"PCFRegistrationParameters", ^{
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
         
-        it(@"should require all push properties (except tags and device alias) to be non-nil and non-empty", ^{
+        it(@"should require all push properties (except tags, device alias, and geofences enabled) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
         });
@@ -118,6 +118,7 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.productionPushVariantUUID should] equal:@"444-555-666-777"];
             [[model.pushDeviceAlias should] beNil];
             [[model.pushTags should] beNil];
+            [[theValue(model.areGeofencesEnabled) should] beYes];
         });
     });
     
@@ -130,6 +131,16 @@ describe(@"PCFRegistrationParameters", ^{
         it(@"should initialize successfully and indicate that parameters are valid", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
+        });
+    });
+
+    context(@"reading the areGeofencesEnabled value", ^{
+
+        it(@"should initialize successfully and indicate that parameters are valid if areGeofencesEnabled is false", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-GeofencesDisabled" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.areGeofencesEnabled) should] beNo];
         });
     });
 

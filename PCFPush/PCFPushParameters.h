@@ -24,6 +24,7 @@ extern BOOL isAPNSSandbox();
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushVariantSecret;
 @property (copy) NSSet *pushTags;
+@property BOOL areGeofencesEnabled;
 
 /**
  * Creates an instance using the values set in the `Pivotal.plist` file.

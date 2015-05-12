@@ -4,22 +4,22 @@
 <dict>
 
 	<key>pivotal.push.serviceUrl</key>
-	<string>http://test.url.com</string>
+	<string>http://testURL.com</string>
 
     <key>pivotal.push.platformUuidDevelopment</key>
-    <string>444-555-666-777</string>
+    <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
 
     <key>pivotal.push.platformSecretDevelopment</key>
-    <string>No secret is as strong as its blabbiest keeper</string>
+    <string>DEV Put sweet chili sauce on everything</string>
 
     <key>pivotal.push.platformUuidProduction</key>
-    <string>444-555-666-777</string>
+    <string>PROD-SOS-WE-LIKE-IT-SPICY</string>
 
 	<key>pivotal.push.platformSecretProduction</key>
-	<string>No secret is as strong as its blabbiest keeper</string>
+	<string>PROD Put sweet chili sauce on everything</string>
 
     <key>pivotal.push.areGeofencesEnabled</key>
-    <true/>
+    <false/>
 
 </dict>
 </plist>

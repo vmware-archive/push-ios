@@ -2,15 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
 	<key>pivotal.push.serviceUrl</key>
 	<string></string>
+
     <key>pivotal.push.platformUuidDevelopment</key>
     <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
+
     <key>pivotal.push.platformSecretDevelopment</key>
     <string>DEV Put sweet chili sauce on everything</string>
+
 	<key>pivotal.push.platformUuidProduction</key>
 	<string>PROD-SOS-WE-LIKE-IT-SPICY</string>
+
     <key>pivotal.push.platformSecretProduction</key>
     <string>PROD Put sweet chili sauce on everything</string>
+
+    <key>pivotal.push.areGeofencesEnabled</key>
+    <true/>
+
 </dict>
 </plist>
