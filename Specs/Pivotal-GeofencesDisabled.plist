@@ -3,20 +3,20 @@
 <plist version="1.0">
 <dict>
 
-	<key>pivotal.push.serviceUrl</key>
-	<string>http://testURL.com</string>
+    <key>pivotal.push.serviceUrl</key>
+    <string>http://test.url.com</string>
 
     <key>pivotal.push.platformUuidDevelopment</key>
-    <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
+    <string>444-555-666-777</string>
 
     <key>pivotal.push.platformSecretDevelopment</key>
-    <string>DEV Put sweet chili sauce on everything</string>
+    <string>No secret is as strong as its blabbiest keeper</string>
 
     <key>pivotal.push.platformUuidProduction</key>
-    <string>PROD-SOS-WE-LIKE-IT-SPICY</string>
+    <string>444-555-666-777</string>
 
-	<key>pivotal.push.platformSecretProduction</key>
-	<string>PROD Put sweet chili sauce on everything</string>
+    <key>pivotal.push.platformSecretProduction</key>
+    <string>No secret is as strong as its blabbiest keeper</string>
 
     <key>pivotal.push.areGeofencesEnabled</key>
     <false/>

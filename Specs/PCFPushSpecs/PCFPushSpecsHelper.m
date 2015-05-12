@@ -71,6 +71,11 @@ const double TEST_GEOFENCE_RADIUS           = 120;
 
 - (PCFPushParameters *)setupParameters
 {
+    return [self setupParametersWithGeofencesEnabled:YES];
+}
+
+- (PCFPushParameters *)setupParametersWithGeofencesEnabled:(BOOL)geofencesEnabled
+{
     PCFPushParameters *params = [PCFPushParameters parameters];
     params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
     params.developmentPushVariantSecret = TEST_VARIANT_SECRET_1;
@@ -79,6 +84,7 @@ const double TEST_GEOFENCE_RADIUS           = 120;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushTags = self.tags1;
+    params.areGeofencesEnabled = geofencesEnabled;
     self.params = params;
     return self.params;
 }

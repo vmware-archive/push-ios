@@ -44,6 +44,7 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 
 // Parameters helpers
 - (PCFPushParameters *)setupParameters;
+- (PCFPushParameters *)setupParametersWithGeofencesEnabled:(BOOL)geofencesEnabled;
 - (void) setupDefaultPersistedParameters;
 - (void) setupDefaultPLIST;
 - (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename;

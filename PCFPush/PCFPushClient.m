@@ -205,23 +205,23 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
         } else {
             
-            if (!areTagsTheSame) {
+            if (parameters.areGeofencesEnabled && !areTagsTheSame) {
                 [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:PCFPushClient.shared.store locationManager:PCFPushClient.shared.locationManager];
             }
 
             if (successBlock) {
                 successBlock();
             }
-
-            NSDictionary *userInfo = @{ @"URLResponse" : response };
-            [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushRegistrationSuccessNotification object:self userInfo:userInfo];
         }
+
+        NSDictionary *userInfo = @{ @"URLResponse" : response };
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCFPushRegistrationSuccessNotification object:self userInfo:userInfo];
     };
     
     return registrationBlock;
 }
 
-
+// TODO - decide if we need to pass the parameters into this method
 + (void)startGeofenceUpdate:(PCFPushParameters *)parameters success:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
 {
     [PCFPushGeofenceUpdater startGeofenceUpdate:PCFPushClient.shared.engine userInfo:nil timestamp:0L success:^{
@@ -242,8 +242,16 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
     self.registrationParameters.pushTags = tags;
 
-    // No tags are updated
+    if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
+        NSError *error;
+        if ([PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
+            PCFPushLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
+        }
+    }
+
     if ([PCFPushClient areTagsTheSame:self.registrationParameters]) {
+
+        // No tags are updated - just check if want to update geofences
         if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
 
             [PCFPushClient startGeofenceUpdate:self.registrationParameters success:success failure:failure];
@@ -251,19 +259,21 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
         } else if (success) {
             success();
         }
-        return;
+
+    } else {
+
+        // Tags have been updated - a registration request to the server will be required
+        RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
+                                                                                 deviceToken:deviceToken
+                                                                                     success:success
+                                                                                     failure:failure];
+
+        [PCFPushURLConnection updateRegistrationWithDeviceID:deviceUuid
+                                                  parameters:self.registrationParameters
+                                                 deviceToken:deviceToken
+                                                     success:registrationBlock
+                                                     failure:failure];
     }
-
-    RegistrationBlock registrationBlock = [PCFPushClient registrationBlockWithParameters:self.registrationParameters
-                                                                             deviceToken:deviceToken
-                                                                                 success:success
-                                                                                 failure:failure];
-
-    [PCFPushURLConnection updateRegistrationWithDeviceID:deviceUuid
-                                              parameters:self.registrationParameters
-                                             deviceToken:deviceToken
-                                                 success:registrationBlock
-                                                 failure:failure];
 }
 
 + (void)sendRegisterRequestWithParameters:(PCFPushParameters *)parameters
@@ -347,7 +357,8 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return YES;
 }
 
-+ (BOOL)areTagsTheSame:(PCFPushParameters *)parameters {
++ (BOOL)areTagsTheSame:(PCFPushParameters *)parameters
+{
     NSSet *savedTags = [PCFPushPersistentStorage tags];
     BOOL areSavedTagsNilOrEmpty = savedTags == nil || savedTags.count == 0;
     BOOL areNewTagsNilOrEmpty = parameters.pushTags == nil || parameters.pushTags.count == 0;
@@ -358,7 +369,8 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return YES;
 }
 
-+ (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken {
++ (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken
+{
     if (![deviceToken isEqualToData:[PCFPushPersistentStorage APNSDeviceToken]]) {
         PCFPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
         return NO;
@@ -366,13 +378,14 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return YES;
 }
 
-+ (BOOL)isGeofenceUpdateRequired: (PCFPushParameters *)parameters {
-
-    return [PCFPushPersistentStorage lastGeofencesModifiedTime] == PCF_NEVER_UPDATED_GEOFENCES || ![PCFPushClient localVariantMatchNewVariant:parameters];
++ (BOOL)isGeofenceUpdateRequired: (PCFPushParameters *)parameters
+{
+    return parameters.areGeofencesEnabled && ([PCFPushPersistentStorage lastGeofencesModifiedTime] == PCF_NEVER_UPDATED_GEOFENCES || ![PCFPushClient localVariantMatchNewVariant:parameters]);
 }
 
-+ (BOOL)isClearGeofencesRequired: (PCFPushParameters *)parameters {
-    return [PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES && ![PCFPushClient localVariantMatchNewVariant:parameters];
++ (BOOL)isClearGeofencesRequired: (PCFPushParameters *)parameters
+{
+    return [PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES && (![PCFPushClient localVariantMatchNewVariant:parameters] || !parameters.areGeofencesEnabled);
 }
 
 #pragma mark - Helpers for unit tests
@@ -424,17 +437,29 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
 {
+    if (!self.registrationParameters.areGeofencesEnabled) {
+        return;
+    }
+
     PCFPushLog(@"locationManager:didExitRegion %@", region.identifier);
     [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
 {
+    if (!self.registrationParameters.areGeofencesEnabled) {
+        return;
+    }
+
     PCFPushLog(@"locationManager:monitoringDidFailForRegion %@: %@. This error is transient and non-fatal.", region.identifier, error);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
+    if (!self.registrationParameters.areGeofencesEnabled) {
+        return;
+    }
+
     if (![manager.monitoredRegions containsObject:region]) {
         PCFPushLog(@"Location %@ is no longer being monitored. Ignoring state update.", region.identifier);
         return;

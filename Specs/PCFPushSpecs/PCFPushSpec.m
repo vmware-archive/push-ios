@@ -138,7 +138,7 @@ describe(@"PCFPush", ^{
         });
     });
 
-    describe(@"updating registration", ^{
+    describe(@"updating push registration", ^{
 
         __block NSInteger successCount;
         __block NSInteger updateRegistrationCount;
@@ -151,7 +151,6 @@ describe(@"PCFPush", ^{
             updateRegistrationCount = 0;
             expectedSubscribeTags = nil;
             expectedUnsubscribeTags = nil;
-
 
             [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
@@ -181,10 +180,10 @@ describe(@"PCFPush", ^{
 
             [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
-            testBlock = ^(SEL sel, id newPersistedValue) {
+            [helper setupDefaultPersistedParameters];
+            [helper setupDefaultPLIST];
 
-                [helper setupDefaultPersistedParameters];
-                [helper setupDefaultPLIST];
+            testBlock = ^(SEL sel, id newPersistedValue) {
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
 
@@ -204,283 +203,532 @@ describe(@"PCFPush", ^{
             [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
         });
 
-        context(@"with no geofence update in the past (and so will update geofences this time)", ^{
+        context(@"with no geofence update in the past (i.e.: geofences have been disabled)", ^{
 
-            beforeEach(^{
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
-                [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
-                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+            context(@"geofences are enabled (and so will update geofences this time)", ^{
+
+                beforeEach(^{
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+                });
+
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
+                });
+
+                it(@"should update the push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil);
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil);
+                });
+
+                it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the deviceAlias is initially set (with geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), nil);
+                });
+
+                it(@"should update the push registration and geofences after the APNSDeviceToken changes", ^{
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                });
+
+                it(@"should update the push registration and geofences after the tags change to a different value", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                });
+
+                it(@"should update the push registration and geofences after tags initially set from nil", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), nil);
+                });
+
+                it(@"should update the push registration and geofences after tags initially set from empty", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), [NSSet set]);
+                });
+
+                it(@"should update the push registration and geofences after tags change to nil", ^{
+                    helper.params.pushTags = nil;
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
+
+                it(@"should update the push registration and geofences after tags change to empty", ^{
+                    helper.params.pushTags = [NSSet set];
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
             });
 
-            afterEach(^{
-                [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
-            });
+            context(@"geofences are disabled (neither clear nor update geofences)", ^{
 
-            it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
-            });
+                beforeEach(^{
+                    [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+                });
 
-            it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                testBlock(@selector(setVariantUUID:), nil);
-            });
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                });
 
-            it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
-            });
+                it(@"should update the push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                });
 
-            it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                testBlock(@selector(setVariantSecret:), nil);
-            });
+                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil);
+                });
 
-            it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
-                testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
-            });
+                it(@"should update the push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                });
 
-            it(@"should update the push registration and geofences after the deviceAlias is initially set (with geofence update)", ^{
-                testBlock(@selector(setDeviceAlias:), nil);
-            });
+                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil);
+                });
 
-            it(@"should update the push registration and geofences after the APNSDeviceToken changes", ^{
-                testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
-            });
+                it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                });
 
-            it(@"should update the push registration and geofences after the tags change to a different value", ^{
-                expectedSubscribeTags = helper.tags1;
-                expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                testBlock(@selector(setTags:), expectedUnsubscribeTags);
-            });
+                it(@"should update the push registration and geofences after the deviceAlias is initially set (with geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), nil);
+                });
 
-            it(@"should update the push registration and geofences after tags initially set from nil", ^{
-                expectedSubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), nil);
-            });
+                it(@"should update the push registration and geofences after the APNSDeviceToken changes", ^{
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                });
 
-            it(@"should update the push registration and geofences after tags initially set from empty", ^{
-                expectedSubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), [NSSet set]);
-            });
+                it(@"should update the push registration and geofences after the tags change to a different value", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                });
 
-            it(@"should update the push registration and geofences after tags change to nil", ^{
-                helper.params.pushTags = nil;
-                expectedUnsubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), helper.tags1);
-            });
+                it(@"should update the push registration and geofences after tags initially set from nil", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), nil);
+                });
 
-            it(@"should update the push registration and geofences after tags change to empty", ^{
-                helper.params.pushTags = [NSSet set];
-                expectedUnsubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), helper.tags1);
+                it(@"should update the push registration and geofences after tags initially set from empty", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), [NSSet set]);
+                });
+
+                it(@"should update the push registration and geofences after tags change to nil", ^{
+                    helper.params.pushTags = nil;
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
+
+                it(@"should update the push registration and geofences after tags change to empty", ^{
+                    helper.params.pushTags = [NSSet set];
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
             });
         });
 
-        context(@"with geofences updated in the past (and so will skip a geofence update this time)", ^{
+        context(@"with geofences updated in the past (same variant)", ^{
 
-            beforeEach(^{
-                [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
-                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
-                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+            context(@"geofences are enabled (and so will skip a geofence update this time)", ^{
+
+                beforeEach(^{
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+                });
+
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
+                });
+
+                it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration after the deviceAlias is initially set (without geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), nil);
+                });
+
+                it(@"should update the push registration after the APNSDeviceToken changes", ^{
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                });
+
+                it(@"should update the push registration after the tags change to a different value", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                });
+
+                it(@"should update the push registration after tags initially set from nil", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), nil);
+                });
+
+                it(@"should update the push registration after tags initially set from empty", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), [NSSet set]);
+                });
+
+                it(@"should update the push registration after tags change to nil", ^{
+                    helper.params.pushTags = nil;
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
+
+                it(@"should update the push registration after tags change to empty", ^{
+                    helper.params.pushTags = [NSSet set];
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
             });
 
-            afterEach(^{
-                [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
-            });
+            context(@"geofences are disabled (so it should clear geofences this time)", ^{
 
-            it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
-                testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
-            });
+                beforeEach(^{
+                    [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
+                    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+                        [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+                        return nil;
+                    }];
+                });
 
-            it(@"should update the push registration after the deviceAlias is initially set (without geofence update)", ^{
-                testBlock(@selector(setDeviceAlias:), nil);
-            });
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                });
 
-            it(@"should update the push registration after the APNSDeviceToken changes", ^{
-                testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
-            });
+                it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                });
 
-            it(@"should update the push registration after the tags change to a different value", ^{
-                expectedSubscribeTags = helper.tags1;
-                expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                testBlock(@selector(setTags:), expectedUnsubscribeTags);
-            });
+                it(@"should update the push registration after the deviceAlias is initially set (without geofence update)", ^{
+                    testBlock(@selector(setDeviceAlias:), nil);
+                });
 
-            it(@"should update the push registration after tags initially set from nil", ^{
-                expectedSubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), nil);
-            });
+                it(@"should update the push registration after the APNSDeviceToken changes", ^{
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                });
 
-            it(@"should update the push registration after tags initially set from empty", ^{
-                expectedSubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), [NSSet set]);
-            });
+                it(@"should update the push registration after the tags change to a different value", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                });
 
-            it(@"should update the push registration after tags change to nil", ^{
-                helper.params.pushTags = nil;
-                expectedUnsubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), helper.tags1);
-            });
+                it(@"should update the push registration after tags initially set from nil", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), nil);
+                });
 
-            it(@"should update the push registration after tags change to empty", ^{
-                helper.params.pushTags = [NSSet set];
-                expectedUnsubscribeTags = helper.tags1;
-                testBlock(@selector(setTags:), helper.tags1);
+                it(@"should update the push registration after tags initially set from empty", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), [NSSet set]);
+                });
+
+                it(@"should update the push registration after tags change to nil", ^{
+                    helper.params.pushTags = nil;
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
+
+                it(@"should update the push registration after tags change to empty", ^{
+                    helper.params.pushTags = [NSSet set];
+                    expectedUnsubscribeTags = helper.tags1;
+                    testBlock(@selector(setTags:), helper.tags1);
+                });
             });
         });
 
-        context(@"with geofences updated in the past (and will still do a geofence reset and update this time)", ^{
+        context(@"with geofences updated in the past (different variant)", ^{
 
-            beforeEach(^{
-                [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
-                [helper setupClearGeofencesForSuccess];
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:2784L];
-                [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:) withCount:1];
-                [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+            context(@"with geofences enabled (and will still do a geofence reset and update this time)", ^{
+
+                beforeEach(^{
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+                    [helper setupClearGeofencesForSuccess];
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:2784L];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:) withCount:1];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                });
+
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(2784L)];
+                });
+
+                it(@"should update the push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil);
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil);
+                });
             });
 
-            afterEach(^{
-                [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(2784L)];
-            });
+            context(@"with geofences disabled (and will just do a geofence reset - with no update)", ^{
 
-            it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
-            });
+                beforeEach(^{
+                    [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+                    [helper setupClearGeofencesForSuccess];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:) withCount:1];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+                        [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+                        return nil;
+                    }];
+                });
 
-            it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                testBlock(@selector(setVariantUUID:), nil);
-            });
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                });
 
-            it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
-            });
+                it(@"should update the push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                });
 
-            it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                testBlock(@selector(setVariantSecret:), nil);
+                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil);
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                });
+
+                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil);
+                });
             });
         });
     });
 
-    describe(@"successful registration", ^{
+    describe(@"successful push registration", ^{
 
-        it(@"should make a POST request to the server and update geofences on a new registration", ^{
+        context(@"geofences enabled", ^{
+            it(@"should make a POST request to the server and update geofences on a new registration", ^{
 
-            __block BOOL wasSuccessBlockExecuted = NO;
-            __block NSSet *expectedTags = helper.tags1;
+                __block BOOL wasSuccessBlockExecuted = NO;
+                __block NSSet *expectedTags = helper.tags1;
 
-            [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:999L withBlock:^void(NSArray *params) {
-                int64_t timestamp = [params[2] longLongValue];
-                [[theValue(timestamp) should] beZero];
-            }];
-            [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:999L withBlock:^void(NSArray *params) {
+                    int64_t timestamp = [params[2] longLongValue];
+                    [[theValue(timestamp) should] beZero];
+                }];
+                [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
 
-            [[NSURLConnection should] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+                [[NSURLConnection should] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
 
-            [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
-                [[request.HTTPMethod should] equal:@"POST"];
+                    [[request.HTTPMethod should] equal:@"POST"];
 
-                NSError *error;
-                PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
-                [[error should] beNil];
-                [[requestBody shouldNot] beNil];
-                [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
-            }];
+                    NSError *error;
+                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                    [[error should] beNil];
+                    [[requestBody shouldNot] beNil];
+                    [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
+                }];
 
-            [helper setupDefaultPLIST];
+                [helper setupDefaultPLIST];
 
-            void (^successBlock)() = ^{
-                wasSuccessBlockExecuted = YES;
-            };
+                void (^successBlock)() = ^{
+                    wasSuccessBlockExecuted = YES;
+                };
 
-            void (^failureBlock)(NSError *) = ^(NSError *error) {
-                fail(@"registration failure block executed");
-            };
+                void (^failureBlock)(NSError *) = ^(NSError *error) {
+                    fail(@"registration failure block executed");
+                };
 
-            [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
 
-            [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+                [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+            });
+
+            context(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
+
+                __block NSInteger registrationRequestCount;
+                __block NSInteger geofenceUpdateCount;
+                __block BOOL wasSuccessBlockExecuted;
+                __block BOOL wasFailBlockExecuted;
+                __block void (^successBlock)() = ^{
+                    wasSuccessBlockExecuted = YES;
+                };
+                __block void (^failureBlock)(NSError *) = ^(NSError *error) {
+                    wasFailBlockExecuted = YES;
+                };
+
+                beforeEach(^{
+                    registrationRequestCount = 0;
+                    geofenceUpdateCount = 0;
+                    wasSuccessBlockExecuted = NO;
+                    wasFailBlockExecuted = NO;
+                });
+
+                afterEach(^{
+                    [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+                });
+
+                it(@"when geofences were never updated (and the geofence update passes)", ^{
+
+                    [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                        registrationRequestCount += 1;
+                    }];
+
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L withBlock:^(NSArray *array) {
+                        geofenceUpdateCount += 1;
+                    }];
+
+                    [PCFPush load];
+                    [helper setupDefaultPLIST];
+
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
+                    [[theValue(registrationRequestCount) should] equal:theValue(1)];
+                    [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
+                    [PCFPush load]; // Reset the state in the state engine
+
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+                    [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the second registration request was a no-op
+                    [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
+                    [[theValue(wasSuccessBlockExecuted) shouldEventually] beYes];
+                    [[theValue(wasFailBlockExecuted) should] beNo];
+                });
+
+                it(@"when geofences were never updated (and the geofence update fails)", ^{
+
+                    [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                        registrationRequestCount += 1;
+                    }];
+
+                    [helper setupGeofencesForFailedUpdateWithBlock:^(NSArray *array) {
+                        geofenceUpdateCount += 1;
+                    }];
+
+                    [PCFPush load];
+                    [helper setupDefaultPLIST];
+
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
+                    [[theValue(wasFailBlockExecuted) should] beYes];
+                    [[theValue(registrationRequestCount) should] equal:theValue(1)];
+                    [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
+                    wasFailBlockExecuted = NO;
+                    [PCFPush load]; // Reset the state in the state engine
+
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
+                    [[theValue(wasFailBlockExecuted) should] beYes];
+                    [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the second registration request was a no-op
+                    [[theValue(geofenceUpdateCount) should] equal:theValue(2)];
+
+                    [PCFPush load]; // Reset the state in the state engine
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:777L withBlock:^(NSArray *array) {
+                        geofenceUpdateCount += 1;
+                    }];
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:nil];
+                    [[theValue(wasSuccessBlockExecuted) should] beYes];
+                    [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the third registration request was a no-op
+                    [[theValue(geofenceUpdateCount) should] equal:theValue(3)];
+                });
+            });
         });
 
-        context(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
+        context(@"geofences disabled", ^{
 
-            __block NSInteger registrationRequestCount;
-            __block NSInteger geofenceUpdateCount;
-            __block BOOL wasSuccessBlockExecuted;
-            __block BOOL wasFailBlockExecuted;
-            __block void (^successBlock)() = ^{
-                wasSuccessBlockExecuted = YES;
-            };
-            __block void (^failureBlock)(NSError *) = ^(NSError *error) {
-                wasFailBlockExecuted = YES;
-            };
+            it(@"should make a POST request to the server", ^{
 
-            beforeEach(^{
-                registrationRequestCount = 0;
-                geofenceUpdateCount = 0;
-                wasSuccessBlockExecuted = NO;
-                wasFailBlockExecuted = NO;
+                __block BOOL wasSuccessBlockExecuted = NO;
+                __block NSSet *expectedTags = helper.tags1;
+
+                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:999L withBlock:^void(NSArray *params) {
+                    int64_t timestamp = [params[2] longLongValue];
+                    [[theValue(timestamp) should] beZero];
+                }];
+
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+
+                [[NSURLConnection should] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+
+                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+
+                    [[request.HTTPMethod should] equal:@"POST"];
+
+                    NSError *error;
+                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                    [[error should] beNil];
+                    [[requestBody shouldNot] beNil];
+                    [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
+                }];
+
+                [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+
+                void (^successBlock)() = ^{
+                    wasSuccessBlockExecuted = YES;
+                };
+
+                void (^failureBlock)(NSError *) = ^(NSError *error) {
+                    fail(@"registration failure block executed");
+                };
+
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+
+                [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
             });
 
-            afterEach(^{
-                [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
-            });
+            it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
 
-            it(@"when geofences were never updated (and the geofence update passes)", ^{
+                __block NSInteger registrationRequestCount = 0;
+                __block BOOL wasSuccessBlockExecuted = NO; // TODO - not being checked anymore?
+                __block BOOL wasFailBlockExecuted = NO; // TODO - not being checked anymore?
+
+                void (^successBlock)() = ^{
+                    wasSuccessBlockExecuted = YES;
+                };
+
+                void (^failureBlock)(NSError *) = ^(NSError *error) {
+                    wasFailBlockExecuted = YES;
+                };
 
                 [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
                     registrationRequestCount += 1;
                 }];
 
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L withBlock:^(NSArray *array) {
-                    geofenceUpdateCount += 1;
-                }];
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
 
                 [PCFPush load];
-                [helper setupDefaultPLIST];
+
+                [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
                 [[theValue(registrationRequestCount) should] equal:theValue(1)];
-                [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
                 [PCFPush load]; // Reset the state in the state engine
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
-                [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the second registration request was a no-op
-                [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
-                [[theValue(wasSuccessBlockExecuted) shouldEventually] beYes];
-                [[theValue(wasFailBlockExecuted) should] beNo];
-            });
-
-            it(@"when geofences were never updated (and the geofence update fails)", ^{
-
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
-                    registrationRequestCount += 1;
-                }];
-
-                [helper setupGeofencesForFailedUpdateWithBlock:^(NSArray *array) {
-                    geofenceUpdateCount += 1;
-                }];
-
-                [PCFPush load];
-                [helper setupDefaultPLIST];
-
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
-                [[theValue(wasFailBlockExecuted) should] beYes];
-                [[theValue(registrationRequestCount) should] equal:theValue(1)];
-                [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
-                wasFailBlockExecuted = NO;
-                [PCFPush load]; // Reset the state in the state engine
-
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
-                [[theValue(wasFailBlockExecuted) should] beYes];
-                [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the second registration request was a no-op
-                [[theValue(geofenceUpdateCount) should] equal:theValue(2)];
-
-                [PCFPush load]; // Reset the state in the state engine
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:777L withBlock:^(NSArray *array) {
-                    geofenceUpdateCount += 1;
-                }];
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:nil];
-                [[theValue(wasSuccessBlockExecuted) should] beYes];
-                [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the third registration request was a no-op
-                [[theValue(geofenceUpdateCount) should] equal:theValue(3)];
             });
         });
     });
@@ -752,7 +1000,6 @@ describe(@"PCFPush", ^{
                 wasExpectedBlockCalled = NO;
 
                 [helper setupDefaultPersistedParameters];
-                [helper setupDefaultPLIST];
 
                 [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
@@ -782,107 +1029,202 @@ describe(@"PCFPush", ^{
             afterEach(^{
                 [[theValue(wasExpectedBlockCalled) shouldEventually] beTrue];
             });
+//
+//            it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates (but fail to fetch geofences)", ^{
+//                expectedSubscribeTags = helper.tags2;
+//                expectedUnsubscribeTags = helper.tags1;
+//
+//                [helper setupGeofencesForFailedUpdate];
+//                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+//                [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+//
+//                [PCFPush subscribeToTags:helper.tags2 success:^{
+//                    fail(@"should not have succedeed");
+//                }                failure:^(NSError *error) {
+//                    wasExpectedBlockCalled = YES;
+//                }];
+//
+//                [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+//                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+//            });
+//
+            context(@"geofences enabled", ^{
 
-            it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates (but fail to fetch geofences)", ^{
-                expectedSubscribeTags = helper.tags2;
-                expectedUnsubscribeTags = helper.tags1;
+                beforeEach(^{
+                    [helper setupDefaultPLIST];
+                });
 
-                [helper setupGeofencesForFailedUpdate];
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates", ^{
+                    expectedSubscribeTags = helper.tags2;
+                    expectedUnsubscribeTags = helper.tags1;
 
-                [PCFPush subscribeToTags:helper.tags2 success:^{
-                    fail(@"should not have succedeed");
-                }                failure:^(NSError *error) {
-                    wasExpectedBlockCalled = YES;
-                }];
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
 
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                    [PCFPush subscribeToTags:helper.tags2 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                });
+
+                it(@"should be able to register to some new tags and then stop if there have been some geofence updates in the past", ^{
+                    expectedSubscribeTags = helper.tags2;
+                    expectedUnsubscribeTags = helper.tags1;
+
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:8888L];
+                    [[PCFPushGeofenceHandler should] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+
+                    [PCFPush subscribeToTags:helper.tags2 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                });
+
+                it(@"should not call the update API if provided the same tags (but then do a geofence update if required - but the geofence update fails)", ^{
+                    [helper setupGeofencesForFailedUpdate];
+
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+
+                    [PCFPush subscribeToTags:helper.tags1 success:^{
+                        fail(@"Should not have failed");
+                    }                failure:^(NSError *error) {
+                        wasExpectedBlockCalled = YES;
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
+
+                it(@"should not call the update API if provided the same tags (but then do a geofence update if required)", ^{
+                    [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
+
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+
+                    [PCFPush subscribeToTags:helper.tags1 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
+
+                it(@"should not call the update API if provided the same tags (and then skip the geofence update if not required)", ^{
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:999L];
+
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+
+                    [PCFPush subscribeToTags:helper.tags1 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
             });
 
-            it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates", ^{
-                expectedSubscribeTags = helper.tags2;
-                expectedUnsubscribeTags = helper.tags1;
+            context(@"geofences disabled", ^{
 
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                beforeEach(^{
+                    [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+                });
 
-                [PCFPush subscribeToTags:helper.tags2 success:^{
-                    wasExpectedBlockCalled = YES;
-                }                failure:^(NSError *error) {
-                    fail(@"Should not have failed");
-                }];
+                afterEach(^{
+                    [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                });
 
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
-            });
+                it(@"should be able to register to some new tags", ^{
+                    expectedSubscribeTags = helper.tags2;
+                    expectedUnsubscribeTags = helper.tags1;
 
-            it(@"should be able to register to some new tags and then stop if there have been some geofence updates in the past", ^{
-                expectedSubscribeTags = helper.tags2;
-                expectedUnsubscribeTags = helper.tags1;
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
 
-                [PCFPushPersistentStorage setGeofenceLastModifiedTime:8888L];
-                [[PCFPushGeofenceHandler should] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [PCFPush subscribeToTags:helper.tags2 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
 
-                [PCFPush subscribeToTags:helper.tags2 success:^{
-                    wasExpectedBlockCalled = YES;
-                }                failure:^(NSError *error) {
-                    fail(@"Should not have failed");
-                }];
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                });
 
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
-            });
+                it(@"should be able to register to some new tags and then clear the currently monitored geofences", ^{
+                    expectedSubscribeTags = helper.tags2;
+                    expectedUnsubscribeTags = helper.tags1;
 
-            it(@"should not call the update API if provided the same tags (but then do a geofence update if required - but the geofence update fails)", ^{
-                [helper setupGeofencesForFailedUpdate];
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:8888L];
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
+                    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+                        [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+                        return nil;
+                    }];
 
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                    [PCFPush subscribeToTags:helper.tags2 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
 
-                [PCFPush subscribeToTags:helper.tags1 success:^{
-                    fail(@"Should not have failed");
-                }                failure:^(NSError *error) {
-                    wasExpectedBlockCalled = YES;
-                }];
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                });
 
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
-            });
+                it(@"should not call the update API if provided the same tags (i.e.: no-op)", ^{
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
 
-            it(@"should not call the update API if provided the same tags (but then do a geofence update if required)", ^{
-                [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
+                    [PCFPush subscribeToTags:helper.tags1 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
 
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withCount:1];
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
 
-                [PCFPush subscribeToTags:helper.tags1 success:^{
-                    wasExpectedBlockCalled = YES;
-                }                failure:^(NSError *error) {
-                    fail(@"Should not have failed");
-                }];
+                it(@"should not call the update API if provided the same tags (and then clear the geofences)", ^{
+                    [PCFPushPersistentStorage setGeofenceLastModifiedTime:999L];
 
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
-            });
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
+                    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+                        [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
+                        return nil;
+                    }];
 
-            it(@"should not call the update API if provided the same tags (and then skip the geofence update if not required)", ^{
-                [PCFPushPersistentStorage setGeofenceLastModifiedTime:999L];
+                    [PCFPush subscribeToTags:helper.tags1 success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
 
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
-
-                [PCFPush subscribeToTags:helper.tags1 success:^{
-                    wasExpectedBlockCalled = YES;
-                }                failure:^(NSError *error) {
-                    fail(@"Should not have failed");
-                }];
-
-                [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
             });
         });
 
@@ -1064,20 +1406,50 @@ describe(@"PCFPush", ^{
             [locationManager stub:@selector(monitoredRegions) andReturn:monitoredRegions];
         });
 
-        it(@"should process geofence on exiting region", ^{
-            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
+        context(@"geofences enabled", ^{
+
+            beforeEach(^{
+                [helper setupDefaultPLIST];
+            });
+
+            it(@"should process geofence on exiting region", ^{
+                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
+            });
+
+            it(@"should process geofence inside region", ^{
+                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
+            });
+
+            it(@"should not process geofence", ^{
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
+            });
         });
 
-        it(@"should process geofence inside region", ^{
-            [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
-        });
+        context(@"geofences disabled", ^{
 
-        it(@"should not process geofence", ^{
-            [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
-            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
-            [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
+            beforeEach(^{
+                [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+            });
+
+            it(@"should process geofence on exiting region", ^{
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
+            });
+
+            it(@"should process geofence inside region", ^{
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
+            });
+
+            it(@"should not process geofence", ^{
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:)];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
+                [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
+            });
         });
     });
 });
