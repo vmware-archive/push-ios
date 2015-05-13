@@ -12,8 +12,6 @@
 @class CLLocationManager;
 @class CLRegion;
 
-extern CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceLocation *location);
-
 @interface PCFPushGeofenceRegistrar : NSObject
 
 - (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;

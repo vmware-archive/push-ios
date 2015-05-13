@@ -7,7 +7,6 @@
 #import "PCFPushGeofenceData.h"
 #import "NSObject+PCFJSONizable.h"
 
-
 @implementation PCFPushGeofenceResponseData
 
 + (NSDictionary *)localToRemoteMapping
@@ -33,7 +32,7 @@
             if (geofences.count > 0) {
                 NSMutableArray *arr = [NSMutableArray array];
                 for (id geofence in geofences) {
-                    PCFPushGeofenceData *l = [PCFPushGeofenceData pcf_fromDictionary:geofence];
+                    PCFPushGeofenceData *l = [PCFPushGeofenceData pcfPushFromDictionary:geofence];
                     [arr addObject:l];
                 }
                 self.geofences = arr;
@@ -54,7 +53,7 @@
             if (geofences.count > 0) {
                 NSMutableArray *arr = [NSMutableArray array];
                 for (PCFPushGeofenceData *geofence in geofences) {
-                    id g = [geofence pcf_toFoundationType];
+                    id g = [geofence pcfPushToFoundationType];
                     [arr addObject:g];
                 }
                 destination[@"geofences"] = arr;

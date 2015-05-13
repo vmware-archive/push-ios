@@ -9,7 +9,7 @@
 
 static dispatch_once_t onceToken;
 
-BOOL isAPNSSandbox() {
+BOOL pcfPushIsAPNSSandbox() {
     static BOOL didLoadFile = NO;
     static BOOL isAPNSSandbox = NO;
     dispatch_once(&onceToken, ^{
@@ -18,7 +18,7 @@ BOOL isAPNSSandbox() {
             if ([PCFHardwareUtil isSimulator]) {
                 didLoadFile = YES;
                 isAPNSSandbox = YES;
-                PCFPushLog(@"WARNING: isAPNSSandbox: running on simulator! push notifications will probably not work.");
+                PCFPushLog(@"WARNING: pcfPushIsAPNSSandbox: running on simulator! push notifications will probably not work.");
                 return;
             }
 
@@ -35,7 +35,7 @@ BOOL isAPNSSandbox() {
                 isAPNSSandbox = [cleared rangeOfString:@"<key>aps-environment</key><string>development</string>"].length > 0;
                 didLoadFile = YES;
             }
-            PCFPushLog(@"isAPNSSandbox: %d.", isAPNSSandbox);
+            PCFPushLog(@"pcfPushIsAPNSSandbox: %d.", isAPNSSandbox);
         }
         @finally
         {
@@ -50,7 +50,7 @@ BOOL isAPNSSandbox() {
     return isAPNSSandbox;
 }
 
-void resetOnceToken() {
+void pcfPushResetOnceToken() {
     onceToken = 0;
 }
 
@@ -96,14 +96,13 @@ void resetOnceToken() {
 
 - (NSString *)variantUUID
 {
-    return isAPNSSandbox() ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
+    return pcfPushIsAPNSSandbox() ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
 }
 
 - (NSString *)variantSecret
 {
-    return isAPNSSandbox() ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
+    return pcfPushIsAPNSSandbox() ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
 }
-
 
 - (BOOL)arePushParametersValid;
 {
@@ -139,4 +138,5 @@ void resetOnceToken() {
         }];
     }
 }
+
 @end

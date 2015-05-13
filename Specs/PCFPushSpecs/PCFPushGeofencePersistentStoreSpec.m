@@ -330,7 +330,7 @@ describe(@"PCFPushGeofencePersistentStore", ^{
         id (^const createFileStub)(NSArray *) = ^id(NSArray *params) {
             NSError *error = nil;
             NSString *path = params[0];
-            PCFPushGeofenceData *data = [PCFPushGeofenceData pcf_fromJSONData:params[1] error:&error];
+            PCFPushGeofenceData *data = [PCFPushGeofenceData pcfPushFromJSONData:params[1] error:&error];
             [[error should] beNil];
             if ([path isEqualToString:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_7.json"]) {
                 [[theValue(data.id) should] equal:theValue(7L)];
@@ -363,7 +363,7 @@ describe(@"PCFPushGeofencePersistentStore", ^{
                 NSError *error = nil;
                 NSString *path = params[0];
                 [[path should] equal:@"/Library/PCF_PUSH_GEOFENCE/PCF_PUSH_GEOFENCE_7.json"];
-                PCFPushGeofenceData *data = [PCFPushGeofenceData pcf_fromJSONData:params[1] error:&error];
+                PCFPushGeofenceData *data = [PCFPushGeofenceData pcfPushFromJSONData:params[1] error:&error];
                 [[error should] beNil];
                 [[theValue(data.id) should] equal:theValue(7L)];
                 return theValue(YES);

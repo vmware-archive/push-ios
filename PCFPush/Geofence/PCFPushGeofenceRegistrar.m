@@ -11,34 +11,7 @@
 #import "PCFPushParameters.h"
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
-
-CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceLocation *location)
-{
-    CLLocationCoordinate2D center = CLLocationCoordinate2DMake(location.latitude, location.longitude);
-    CLLocationDistance radius = location.radius;
-    CLRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
-
-    switch (geofence.triggerType) {
-        case PCFPushTriggerTypeEnterOrExit:
-            region.notifyOnEntry = YES;
-            region.notifyOnExit = YES;
-            break;
-        case PCFPushTriggerTypeEnter:
-            region.notifyOnEntry = YES;
-            region.notifyOnExit = NO;
-            break;
-        case PCFPushTriggerTypeExit:
-            region.notifyOnEntry = NO;
-            region.notifyOnExit = YES;
-            break;
-        default:
-            region.notifyOnEntry = NO;
-            region.notifyOnExit = NO;
-            break;
-    }
-
-    return region;
-}
+#import "PCFPushGeofenceUtil.h"
 
 @interface PCFPushGeofenceRegistrar ()
 
@@ -68,9 +41,9 @@ CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofen
     }
 
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);
         PCFPushGeofenceData *geofence = list[@(geofenceId)];
-        CLRegion *region = pcf_regionForLocation(requestId, geofence, location);
+        CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
         [self.locationManager startMonitoringForRegion:region];
         PCFPushLog(@"Now monitoring location '%@'", requestId);
         [self.locationManager requestStateForRegion:region];
@@ -78,7 +51,7 @@ CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofen
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);
 
-    if (isAPNSSandbox()) {
+    if (pcfPushIsAPNSSandbox()) {
         [self serializeGeofencesForDebug:geofencesToRegister list:list];
     }
 }
@@ -91,15 +64,15 @@ CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofen
     }
 
     [geofencesToUnregister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);
         PCFPushGeofenceData *geofence = list[@(geofenceId)];
-        CLRegion *region = pcf_regionForLocation(requestId, geofence, location);
+        CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
         [self.locationManager stopMonitoringForRegion:region];
     }];
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToKeep.count);
 
-    if (isAPNSSandbox()) {
+    if (pcfPushIsAPNSSandbox()) {
         [self serializeGeofencesForDebug:geofencesToKeep list:list];
     }
 }
@@ -109,7 +82,7 @@ CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofen
     NSMutableArray *arr = [NSMutableArray array];
 
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        int64_t geofenceId = pcf_geofenceIdForRequestId(requestId);
+        int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);
         PCFPushGeofenceData *data = list[@(geofenceId)];
         NSDictionary *item = @{
                 @"lat": [@(location.latitude) stringValue],
@@ -154,7 +127,7 @@ CLRegion *pcf_regionForLocation(NSString *requestId, PCFPushGeofenceData *geofen
 
     PCFPushLog(@"Number of monitored geofence locations: 0");
 
-    if (isAPNSSandbox()) {
+    if (pcfPushIsAPNSSandbox()) {
         [self clearGeofencesForDebugFile];
     }
 }

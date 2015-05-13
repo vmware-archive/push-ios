@@ -11,7 +11,7 @@
 #import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceDataList.h"
-#import "PCFPushGeofenceData.h"
+#import "PCFPushGeofenceUtil.h"
 #import "PCFPushGeofenceLocation.h"
 #import "PCFPushDebug.h"
 
@@ -21,18 +21,6 @@
 @property (nonatomic) PCFPushGeofencePersistentStore *store;
 
 @end
-
-BOOL pcf_isItemExpired(PCFPushGeofenceData *geofence)
-{
-    if (geofence.expiryTime == nil) {
-        return YES;
-    }
-
-    NSDate *currentDate = [NSDate date];
-    NSDate *laterDate = [currentDate laterDate:geofence.expiryTime];
-    BOOL isItemExpired = laterDate == currentDate; // If the later date is the current date then the expiry date is in the past and so the item is expired
-    return isItemExpired;
-}
 
 static BOOL isItemUpdated(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData)
 {
@@ -49,7 +37,7 @@ static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofe
     if ([responseData.deletedGeofenceIds containsObject:@(geofence.id)]) {
         return NO;
     }
-    if (pcf_isItemExpired(geofence)) {
+    if (pcfPushIsItemExpired(geofence)) {
         return NO;
     }
     if (isItemUpdated(geofence, responseData)) {
@@ -85,7 +73,7 @@ static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
     if (geofenceHasInvalidLocations(geofence.locations)) {
         return NO;
     }
-    if (pcf_isItemExpired(geofence)) {
+    if (pcfPushIsItemExpired(geofence)) {
         return NO;
     }
     return YES;
@@ -149,7 +137,7 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
         }
 
         for (PCFPushGeofenceLocation *location in geofence.locations) {
-            NSString *requestId = pcf_requestIdWithGeofenceId(geofenceId, location.id);
+            NSString *requestId = pcfPushRequestIdWithGeofenceId(geofenceId, location.id);
             if (!locationsToClear[requestId]) {
                 keepGeofenceLocation(geofenceId, geofence, location, geofencesToStore, geofencesToRegister, requestId);
             }

@@ -199,7 +199,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should have basic auth headers in the request", ^{
             [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
-                NSString *authValue = request.allHTTPHeaderFields[kBasicAuthorizationKey];
+                NSString *authValue = request.allHTTPHeaderFields[kPCFPushBasicAuthorizationKey];
                 [[authValue shouldNot] beNil];
                 [[authValue should] startWithString:@"Basic "];
                 [[authValue should] endWithString:helper.base64AuthString1];

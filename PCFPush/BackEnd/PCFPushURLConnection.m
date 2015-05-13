@@ -15,7 +15,7 @@
 #import "PCFTagsHelper.h"
 #import "PCFPushPersistentStorage.h"
 
-NSString *const kBasicAuthorizationKey = @"Authorization";
+NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofence"; // TODO - set to 'geofences' once a real server is available
@@ -48,9 +48,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
     if (request) {
         [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
 
-        [NSURLConnection pcf_sendAsynchronousRequest:request
-                                             success:success
-                                             failure:failure];
+        [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                                success:success
+                                                failure:failure];
     }
 }
 
@@ -63,9 +63,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSMutableURLRequest *request = [self registerRequestForAPNSDeviceToken:deviceToken
                                                                 parameters:parameters];
 
-    [NSURLConnection pcf_sendAsynchronousRequest:request
-                                         success:success
-                                         failure:failure];
+    [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                            success:success
+                                            failure:failure];
 }
 
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
@@ -78,9 +78,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSMutableURLRequest *request = [self updateRequestForDeviceID:deviceID
                                                   APNSDeviceToken:deviceToken
                                                        parameters:parameters];
-    [NSURLConnection pcf_sendAsynchronousRequest:request
-                                         success:success
-                                         failure:failure];
+    [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                            success:success
+                                            failure:failure];
 }
 
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
@@ -91,9 +91,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
     PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
     NSMutableURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters];
 
-    [NSURLConnection pcf_sendAsynchronousRequest:request
-                                         success:success
-                                         failure:failure];
+    [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                            success:success
+                                            failure:failure];
 }
 
 #pragma mark - Registration Request
@@ -170,12 +170,12 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
         PCFPushRegistrationPostRequestData *requestData = [self pushRequestDataForAPNSDeviceToken:apnsDeviceToken
                                                                                        parameters:parameters];
-        return [requestData pcf_toJSONData:&error];
+        return [requestData pcfPushToJSONData:&error];
     } else if ([method isEqualToString:@"PUT"]) {
         
         PCFPushRegistrationPutRequestData *requestData = [self putRequestDataForAPNSDeviceToken:apnsDeviceToken
                                                                                        parameters:parameters];
-        return [requestData pcf_toJSONData:&error];
+        return [requestData pcfPushToJSONData:&error];
     } else {
         [NSException raise:NSInvalidArgumentException format:@"Unknown method type"];
     }

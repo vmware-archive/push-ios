@@ -9,20 +9,20 @@
 
 @implementation NSURLConnection (PCFBackEndConnection)
 
-+ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
-                            success:(void (^)(NSURLResponse *response, NSData *data))success
-                            failure:(void (^)(NSError *error))failure
++ (void)pcfPushSendAsynchronousRequest:(NSURLRequest *)request
+                               success:(void (^)(NSURLResponse *response, NSData *data))success
+                               failure:(void (^)(NSError *error))failure
 {
-    [self pcf_sendAsynchronousRequest:request
-                                queue:[NSOperationQueue mainQueue]
-                              success:success
-                              failure:failure];
+    [self pcfPushSendAsynchronousRequest:request
+                                   queue:[NSOperationQueue mainQueue]
+                                 success:success
+                                 failure:failure];
 }
 
-+ (void)pcf_sendAsynchronousRequest:(NSURLRequest *)request
-                              queue:(NSOperationQueue *)queue
-                            success:(void (^)(NSURLResponse *response, NSData *data))success
-                            failure:(void (^)(NSError *error))failure
++ (void)pcfPushSendAsynchronousRequest:(NSURLRequest *)request
+                                 queue:(NSOperationQueue *)queue
+                               success:(void (^)(NSURLResponse *response, NSData *data))success
+                               failure:(void (^)(NSError *error))failure
 {
     if (!request || !request.URL) {
         PCFPushLog(@"Required URL request is nil.");

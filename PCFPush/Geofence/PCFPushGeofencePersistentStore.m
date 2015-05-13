@@ -47,7 +47,7 @@
         return nil;
     }
 
-    PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcf_fromJSONData:data error:&error];
+    PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcfPushFromJSONData:data error:&error];
     if (!geofence) {
         PCFPushLog(@"Error deserializing geofence data in file '%@': %@", geofenceFilename, error);
         return nil;
@@ -77,7 +77,7 @@
     PCFPushGeofenceDataList *result = [PCFPushGeofenceDataList list];
     for (NSString *filename in filenames) {
         NSData *geofenceData = [NSData dataWithContentsOfFile:filename];
-        PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcf_fromJSONData:geofenceData error:&error];
+        PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcfPushFromJSONData:geofenceData error:&error];
         if (error) {
             PCFPushLog(@"Error reading geofence file '%@': %@", filename, error);
         } else {
@@ -136,7 +136,7 @@
     // Write updated geofences
     __block NSError *error = nil;
     [geofences enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
-        NSData *data = [geofence pcf_toJSONData:&error];
+        NSData *data = [geofence pcfPushToJSONData:&error];
         if (error) {
             PCFPushLog(@"Error serializing geofence data for item with ID %lld: ", id, error);
         } else {

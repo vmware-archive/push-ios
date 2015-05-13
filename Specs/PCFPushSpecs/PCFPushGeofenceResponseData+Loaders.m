@@ -10,7 +10,7 @@ PCFPushGeofenceResponseData* loadResponseData(Class testProjectClass, NSString *
     NSError *error;
     NSString *filePath = [[NSBundle bundleForClass:testProjectClass] pathForResource:name ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:filePath];
-    PCFPushGeofenceResponseData *result = [PCFPushGeofenceResponseData pcf_fromJSONData:data error:&error];
+    PCFPushGeofenceResponseData *result = [PCFPushGeofenceResponseData pcfPushFromJSONData:data error:&error];
     return result;
 };
 

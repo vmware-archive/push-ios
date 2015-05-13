@@ -159,7 +159,7 @@ describe(@"PCFPush", ^{
                 updateRegistrationCount++;
 
                 NSError *error;
-                PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
 
                 [[error should] beNil];
                 [[requestBody shouldNot] beNil];
@@ -549,7 +549,7 @@ describe(@"PCFPush", ^{
                     [[request.HTTPMethod should] equal:@"POST"];
 
                     NSError *error;
-                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
                     [[error should] beNil];
                     [[requestBody shouldNot] beNil];
                     [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
@@ -678,7 +678,7 @@ describe(@"PCFPush", ^{
                     [[request.HTTPMethod should] equal:@"POST"];
 
                     NSError *error;
-                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                    PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
                     [[error should] beNil];
                     [[requestBody shouldNot] beNil];
                     [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
@@ -1045,7 +1045,7 @@ describe(@"PCFPush", ^{
                     updateRegistrationCount++;
 
                     NSError *error;
-                    PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcf_fromJSONData:request.HTTPBody error:&error];
+                    PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
 
                     [[error should] beNil];
                     [[requestBody shouldNot] beNil];

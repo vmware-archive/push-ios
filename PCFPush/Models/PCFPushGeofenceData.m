@@ -106,7 +106,7 @@
             if (locations.count > 0) {
                 NSMutableArray *arr = [NSMutableArray array];
                 for (id location in locations) {
-                    PCFPushGeofenceLocation *l = [PCFPushGeofenceLocation pcf_fromDictionary:location];
+                    PCFPushGeofenceLocation *l = [PCFPushGeofenceLocation pcfPushFromDictionary:location];
                     [arr addObject:l];
                 }
                 self.locations = arr;
@@ -161,7 +161,7 @@
             if (locations.count > 0) {
                 NSMutableArray *arr = [NSMutableArray array];
                 for (PCFPushGeofenceLocation *location in locations) {
-                    id l = [location pcf_toFoundationType];
+                    id l = [location pcfPushToFoundationType];
                     [arr addObject:l];
                 }
                 destination[@"locations"] = arr;

@@ -33,10 +33,10 @@ NSString *const TEST_REGISTRATION_TOKEN  = @"ABC-DEF-GHI";
 NSString *const TEST_DEVICE_UUID         = @"L337-L337-OH-YEAH";
 
 const int64_t TEST_GEOFENCE_ID              = 66L;
-NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 const double TEST_GEOFENCE_LATITUDE         = 53.5;
 const double TEST_GEOFENCE_LONGITUDE        = -91.5;
 const double TEST_GEOFENCE_RADIUS           = 120;
+NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 @implementation PCFPushSpecsHelper
 
@@ -150,14 +150,14 @@ const double TEST_GEOFENCE_RADIUS           = 120;
         __block NSHTTPURLResponse *newResponse;
         newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
         NSDictionary *dict = @{
-                RegistrationAttributes.deviceOS           : TEST_OS,
-                RegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
-                RegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
-                RegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                RegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
-                RegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
-                RegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
-                kDeviceUUID                               : TEST_DEVICE_UUID,
+                PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
+                PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
+                PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
+                PCFPushRegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
+                PCFPushRegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
+                PCFPushRegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
+                kPCFPushDeviceUUID                               : TEST_DEVICE_UUID,
         };
         newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
 

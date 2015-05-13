@@ -53,7 +53,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
         it(@"should handle a nil input", ^{
             NSError *error;
-            model = [PCFPushGeofenceResponseData pcf_fromJSONData:nil error:&error];
+            model = [PCFPushGeofenceResponseData pcfPushFromJSONData:nil error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -62,7 +62,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
         it(@"should handle empty input", ^{
             NSError *error;
-            model = [PCFPushGeofenceResponseData pcf_fromJSONData:[NSData data] error:&error];
+            model = [PCFPushGeofenceResponseData pcfPushFromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -72,7 +72,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
         it(@"should handle bad JSON", ^{
             NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [PCFPushGeofenceResponseData pcf_fromJSONData:JSONData error:&error];
+            model = [PCFPushGeofenceResponseData pcfPushFromJSONData:JSONData error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
         });
@@ -84,7 +84,7 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
             [[data shouldNot] beNil];
 
-            model = [PCFPushGeofenceResponseData pcf_fromJSONData:data error:&error];
+            model = [PCFPushGeofenceResponseData pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
 
             [[theValue(model.number) should] equal:theValue(3)];
@@ -98,27 +98,27 @@ describe(@"PCFPushGeofenceResponseData", ^{
         });
 
         it(@"should handle deserializing last modified values", ^{
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @0 } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{@"last_modified" : @0}];
             [[theValue(model.lastModified) should] beZero];
 
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @10 } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{@"last_modified" : @10}];
             [[theValue(model.lastModified) should] equal:theValue(10L)];
 
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"last_modified" : @1000 } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{@"last_modified" : @1000}];
             [[theValue(model.lastModified) should] equal:theValue(1000L)];
 
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{}];
             [[theValue(model.lastModified) should] beZero];
         });
 
         it(@"should handle deserializing list of geofences", ^{
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{}];
             [[model.geofences should] beNil];
 
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"geofenes":[NSNull null]} ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{@"geofenes" : [NSNull null]}];
             [[model.geofences should] beNil];
 
-            model = [PCFPushGeofenceResponseData pcf_fromDictionary:@{ @"geofenes":@[] } ];
+            model = [PCFPushGeofenceResponseData pcfPushFromDictionary:@{@"geofenes" : @[]}];
             [[model.geofences should] beNil];
         });
     });
@@ -164,11 +164,11 @@ describe(@"PCFPushGeofenceResponseData", ^{
             });
 
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
 
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -187,11 +187,11 @@ describe(@"PCFPushGeofenceResponseData", ^{
             });
 
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
 
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -203,43 +203,43 @@ describe(@"PCFPushGeofenceResponseData", ^{
 
             it(@"should serialize various last modified times", ^{
                 model.lastModified = 0L;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"last_modified"] should] beZero];
 
                 model.lastModified = 100L;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"last_modified"] should] equal:@100L];
 
                 model.lastModified = 1000000L;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"last_modified"] should] equal:@1000000L];
             });
 
             it(@"should serialize list of geofences", ^{
                 model.geofences = nil;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"geofences"] should] beNil];
 
                 model.geofences = (NSArray*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"geofences"] should] beNil];
 
                 model.geofences = @[];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"geofences"] should] beNil];
             });
 
             it(@"should serialize various deleted geofence ids", ^{
                 model.deletedGeofenceIds = nil;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"delete_geofence_ids"] should] beNil];
 
                 model.deletedGeofenceIds = (NSArray*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"delete_geofence_ids"] should] beNil];
 
                 model.deletedGeofenceIds = @[];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"delete_geofence_ids"] should] beNil];
             });
 

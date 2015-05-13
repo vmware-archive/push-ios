@@ -5,7 +5,7 @@
 #import <Foundation/Foundation.h>
 #import "PCFMapping.h"
 
-struct RegistrationAttributes {
+struct PCFPushRegistrationAttributes {
     PCF_STRUCT_STRING *variantUUID;
     PCF_STRUCT_STRING *deviceAlias;
     PCF_STRUCT_STRING *deviceManufacturer;
@@ -16,7 +16,7 @@ struct RegistrationAttributes {
     PCF_STRUCT_STRING *tags;
 };
 
-extern const struct RegistrationAttributes RegistrationAttributes;
+extern const struct PCFPushRegistrationAttributes PCFPushRegistrationAttributes;
 
 @interface PCFPushRegistrationData : NSObject <PCFMapping>
 

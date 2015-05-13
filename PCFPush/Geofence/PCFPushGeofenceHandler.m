@@ -14,6 +14,7 @@
 #import "PCFPushGeofenceLocation.h"
 #import "PCFPushGeofenceRegistrar.h"
 #import "PCFPushGeofenceDataList.h"
+#import "PCFPushGeofenceUtil.h"
 
 @interface PCFPushGeofenceHandler()
 
@@ -103,7 +104,7 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
 {
     PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
     for (PCFPushGeofenceLocation *location in geofence.locations) {
-        PCFPushLog(@"Clearing geofence location from monitor: %@", pcf_requestIdWithGeofenceId(geofence.id, location.id));
+        PCFPushLog(@"Clearing geofence location from monitor: %@", pcfPushRequestIdWithGeofenceId(geofence.id, location.id));
         [locationsToClear put:geofence location:location];
     }
     [engine clearLocations:locationsToClear];
@@ -111,7 +112,7 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
 
 static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
 {
-    int64_t locationId = pcf_locationIdForRequestId(requestId);
+    int64_t locationId = pcfPushLocationIdForRequestId(requestId);
     for (PCFPushGeofenceLocation *location in geofence.locations) {
         if (location.id == locationId) {
             PCFPushLog(@"Clearing geofence from monitor: %@", requestId);
@@ -139,14 +140,14 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
         return;
     }
     
-    int64_t geofenceId = pcf_geofenceIdForRequestId(region.identifier);
+    int64_t geofenceId = pcfPushGeofenceIdForRequestId(region.identifier);
     PCFPushGeofenceData *geofence = store[@(geofenceId)];
 
     if (!geofence) {
         return;
     }
 
-    if (pcf_isItemExpired(geofence)) {
+    if (pcfPushIsItemExpired(geofence)) {
 
         PCFPushLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
         clearGeofence(geofence, engine); // Clears all the locations at the same geofence since they expire at the same time.
@@ -167,8 +168,8 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     [geofences enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, PCFPushGeofenceData *geofence, BOOL *stop) {
         if (isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
             for (PCFPushGeofenceLocation *location in geofence.locations) {
-                NSString *requestId = pcf_requestIdWithGeofenceId(geofenceId, location.id);
-                CLRegion *region = pcf_regionForLocation(requestId, NULL, location);
+                NSString *requestId = pcfPushRequestIdWithGeofenceId(geofenceId, location.id);
+                CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
                 [locationManager requestStateForRegion:region];
             }
         }

@@ -4,7 +4,7 @@
 
 #import "PCFPushRegistrationResponseData.h"
 
-NSString *const kDeviceUUID = @"device_uuid";
+NSString *const kPCFPushDeviceUUID = @"device_uuid";
 
 @implementation PCFPushRegistrationResponseData
 
@@ -14,7 +14,7 @@ NSString *const kDeviceUUID = @"device_uuid";
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableDictionary *mapping = [NSMutableDictionary dictionaryWithDictionary:[super localToRemoteMapping]];
-        [mapping setObject:kDeviceUUID forKey:PCF_STR_PROP(deviceUUID)];
+        mapping[PCF_STR_PROP(deviceUUID)] = kPCFPushDeviceUUID;
         localToRemoteMapping = [NSDictionary dictionaryWithDictionary:mapping];
     });
     

@@ -14,7 +14,8 @@
 
 static NSString *const GEOFENCE_UPDATE_JSON = @"pivotal.push.geofence_update_json";
 
-BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
+static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
+{
     return userInfo != nil && userInfo[GEOFENCE_UPDATE_JSON] != nil;
 }
 
@@ -35,7 +36,7 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
     void (^requestSuccessBlock)(NSURLResponse *, NSData *) = ^(NSURLResponse *response, NSData *data) {
 
         NSError *error;
-        PCFPushGeofenceResponseData *responseData = [PCFPushGeofenceResponseData pcf_fromJSONData:data error:&error];
+        PCFPushGeofenceResponseData *responseData = [PCFPushGeofenceResponseData pcfPushFromJSONData:data error:&error];
 
         if (error) {
             PCFPushLog(@"Error parsing geofence response data: %@", error);
@@ -61,7 +62,7 @@ BOOL hasGeofencesInRequest(NSDictionary *userInfo) {
         }
     };
 
-    if (hasGeofencesInRequest(userInfo) && isAPNSSandbox()) {
+    if (hasGeofencesInRequest(userInfo) && pcfPushIsAPNSSandbox()) {
         NSString *geofencesInRequest = userInfo[GEOFENCE_UPDATE_JSON];
 
         requestSuccessBlock(nil, [geofencesInRequest dataUsingEncoding:NSUTF8StringEncoding]);

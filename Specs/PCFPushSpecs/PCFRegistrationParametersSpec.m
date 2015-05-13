@@ -173,27 +173,27 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"reading the provisioning profile", ^{
 
         beforeEach(^{
-            resetOnceToken();
+            pcfPushResetOnceToken();
         });
 
         it(@"should detect simulators", ^{
             [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(YES)];
             [NSData stub:@selector(dataWithContentsOfFile:) andReturn:nil];
-            [[theValue(isAPNSSandbox()) should] beTrue];
+            [[theValue(pcfPushIsAPNSSandbox()) should] beTrue];
         });
 
         it(@"should detect sandbox builds", ^{
             [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(NO)];
             NSData *sandboxProvisioningFileExcerpt = [@"<key>aps-environment</key><string>development</string>" dataUsingEncoding:NSUTF8StringEncoding];
             [NSData stub:@selector(dataWithContentsOfFile:) andReturn:sandboxProvisioningFileExcerpt];
-            [[theValue(isAPNSSandbox()) should] beTrue];
+            [[theValue(pcfPushIsAPNSSandbox()) should] beTrue];
         });
 
         it(@"should detect production builds", ^{
             [PCFHardwareUtil stub:@selector(isSimulator) andReturn:theValue(NO)];
             NSData *productionProvisioningFileExcerpt = [@"<key>aps-environment</key><string>production</string>" dataUsingEncoding:NSUTF8StringEncoding];
             [NSData stub:@selector(dataWithContentsOfFile:) andReturn:productionProvisioningFileExcerpt];
-            [[theValue(isAPNSSandbox()) should] beFalse];
+            [[theValue(pcfPushIsAPNSSandbox()) should] beFalse];
         });
     });
 });

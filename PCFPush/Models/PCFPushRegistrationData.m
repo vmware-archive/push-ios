@@ -4,7 +4,7 @@
 
 #import "PCFPushRegistrationData.h"
 
-const struct RegistrationAttributes RegistrationAttributes = {
+const struct PCFPushRegistrationAttributes PCFPushRegistrationAttributes = {
     .variantUUID         = @"variant_uuid",
     .deviceAlias         = @"device_alias",
     .deviceManufacturer  = @"device_manufacturer",
@@ -23,13 +23,13 @@ const struct RegistrationAttributes RegistrationAttributes = {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                                 PCF_STR_PROP(variantUUID) : RegistrationAttributes.variantUUID,
-                                 PCF_STR_PROP(deviceAlias) : RegistrationAttributes.deviceAlias,
-                                 PCF_STR_PROP(deviceManufacturer) : RegistrationAttributes.deviceManufacturer,
-                                 PCF_STR_PROP(deviceModel) : RegistrationAttributes.deviceModel,
-                                 PCF_STR_PROP(os) : RegistrationAttributes.deviceOS,
-                                 PCF_STR_PROP(osVersion) : RegistrationAttributes.deviceOSVersion,
-                                 PCF_STR_PROP(registrationToken) : RegistrationAttributes.registrationToken,
+                                 PCF_STR_PROP(variantUUID) : PCFPushRegistrationAttributes.variantUUID,
+                                 PCF_STR_PROP(deviceAlias) : PCFPushRegistrationAttributes.deviceAlias,
+                                 PCF_STR_PROP(deviceManufacturer) : PCFPushRegistrationAttributes.deviceManufacturer,
+                                 PCF_STR_PROP(deviceModel) : PCFPushRegistrationAttributes.deviceModel,
+                                 PCF_STR_PROP(os) : PCFPushRegistrationAttributes.deviceOS,
+                                 PCF_STR_PROP(osVersion) : PCFPushRegistrationAttributes.deviceOSVersion,
+                                 PCF_STR_PROP(registrationToken) : PCFPushRegistrationAttributes.registrationToken,
                                  };
     });
     return localToRemoteMapping;

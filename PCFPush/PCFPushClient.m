@@ -31,7 +31,7 @@ static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
 static NSString const* kPCFPushGeofenceUpdateAvailable = @"pivotal.push.geofence_update_available";
 
-BOOL isGeofenceUpdate(NSDictionary* userInfo)
+static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
     BOOL isContentAvailable = [userInfo[@"aps"][@"content-available"] intValue] == 1;
     id i = userInfo[kPCFPushGeofenceUpdateAvailable];
@@ -175,7 +175,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
             return;
         }
         
-        PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData pcf_fromJSONData:responseData error:&error];
+        PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData pcfPushFromJSONData:responseData error:&error];
         
         if (error) {
             PCFPushLog(@"%@", error);

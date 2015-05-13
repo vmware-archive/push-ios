@@ -7,35 +7,13 @@
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceLocation.h"
 #import "PCFPushGeofenceDataList.h"
+#import "PCFPushGeofenceUtil.h"
 
 @interface PCFPushGeofenceLocationMap ()
 
 @property (nonatomic) NSMutableDictionary *dict;
 
 @end
-
-int64_t pcf_geofenceIdForRequestId(NSString *requestId)
-{
-    NSArray *components = [requestId componentsSeparatedByString:@"_"];
-    if (components.count >= 2) {
-        return atoll([components[1] cStringUsingEncoding:NSUTF8StringEncoding]);
-    }
-    return nil;
-}
-
-int64_t pcf_locationIdForRequestId(NSString *requestId)
-{
-    NSArray *components = [requestId componentsSeparatedByString:@"_"];
-    if (components.count >= 3) {
-        return atoll([components[2] cStringUsingEncoding:NSUTF8StringEncoding]);
-    }
-    return nil;
-}
-
-NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
-{
-    return [NSString stringWithFormat:@"PCF_%lld_%lld", geofenceId, locationId];
-}
 
 @implementation PCFPushGeofenceLocationMap
 
@@ -86,7 +64,7 @@ NSString * pcf_requestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
 
 - (void) put:(PCFPushGeofenceData*)geofence location:(PCFPushGeofenceLocation*)location
 {
-    NSString *iosRequestId = pcf_requestIdWithGeofenceId(geofence.id, location.id);
+    NSString *iosRequestId = pcfPushRequestIdWithGeofenceId(geofence.id, location.id);
     self.dict[iosRequestId] = location;
 }
 

@@ -30,7 +30,7 @@ static PCFPushGeofenceData *loadGeofence(Class testProjectClass, NSString *fileN
 {
     NSData *data = loadTestFile(testProjectClass, fileName);
     NSError *error = nil;
-    return [PCFPushGeofenceData pcf_fromJSONData:data error:&error];
+    return [PCFPushGeofenceData pcfPushFromJSONData:data error:&error];
 }
 
 static BOOL isAtLeastiOS8_2()

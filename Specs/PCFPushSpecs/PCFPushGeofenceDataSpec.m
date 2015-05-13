@@ -87,7 +87,7 @@ describe(@"PCFPushGeofenceData", ^{
         
         it(@"should handle a nil input", ^{
             NSError *error;
-            model = [PCFPushGeofenceData pcf_fromJSONData:nil error:&error];
+            model = [PCFPushGeofenceData pcfPushFromJSONData:nil error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -96,7 +96,7 @@ describe(@"PCFPushGeofenceData", ^{
         
         it(@"should handle empty input", ^{
             NSError *error;
-            model = [PCFPushGeofenceData pcf_fromJSONData:[NSData data] error:&error];
+            model = [PCFPushGeofenceData pcfPushFromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -106,7 +106,7 @@ describe(@"PCFPushGeofenceData", ^{
         it(@"should handle bad JSON", ^{
             NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [PCFPushGeofenceData pcf_fromJSONData:JSONData error:&error];
+            model = [PCFPushGeofenceData pcfPushFromJSONData:JSONData error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
         });
@@ -118,7 +118,7 @@ describe(@"PCFPushGeofenceData", ^{
             
             [[data shouldNot] beNil];
             
-            model = [PCFPushGeofenceData pcf_fromJSONData:data error:&error];
+            model = [PCFPushGeofenceData pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
             
             [[theValue(model.id) should] equal:theValue(7L)];
@@ -133,69 +133,69 @@ describe(@"PCFPushGeofenceData", ^{
         });
 
         it(@"should handle deserializing expiry times", ^{
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"expiry_time" : @0 } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"expiry_time" : @0}];
             [[model.expiryTime should] equal:[NSDate dateWithTimeIntervalSince1970:0.0]];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"expiry_time" : @10 } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"expiry_time" : @10}];
             [[model.expiryTime should] equal:[NSDate dateWithTimeIntervalSince1970:0.010]];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"expiry_time" : @1000 } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"expiry_time" : @1000}];
             [[model.expiryTime should] equal:[NSDate dateWithTimeIntervalSince1970:1.0]];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"expiry_time" : [NSNull null] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"expiry_time" : [NSNull null]}];
             [[model.expiryTime should] beNil];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{}];
             [[model.expiryTime should] beNil];
         });
 
         it(@"should handle deserializing all the trigger types", ^{
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"enter" } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"enter"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeEnter)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"exit" } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"exit"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeExit)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"enter_or_exit" } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"enter_or_exit"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeEnterOrExit)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"not_a_trigger_type" } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"not_a_trigger_type"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : @"" } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @""}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"trigger_type" : [NSNull null] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : [NSNull null]}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{  } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
         });
 
         it(@"should handle deserializing locations", ^{
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : [NSNull null] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"locations" : [NSNull null]}];
             [[model.locations should] beNil];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : @[] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"locations" : @[]}];
             [[model.locations should] beNil];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary: @{ @"locations" : @[ @{@"id":@99L} ] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"locations" : @[@{@"id" : @99L}]}];
             [[model.locations should] haveCountOf:1];
             [[theValue(((PCFPushGeofenceLocation *)(model.locations[0])).id) should] equal:theValue(99L)];
         });
 
         it(@"should handle deserializing tags", ^{
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : [NSNull null] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : [NSNull null]}];
             [[model.tags should] beNil];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : @[]}];
             [[model.tags should] beNil];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[ @"TAG1" ] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : @[@"TAG1"]}];
             [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG1" ] ] ];
 
-            model = [PCFPushGeofenceData pcf_fromDictionary:@{ @"tags" : @[ @"TAG2", @"TAG3"] } ];
+            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : @[@"TAG2", @"TAG3"]}];
             [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG2", @"TAG3" ] ] ];
         });
     });
@@ -246,11 +246,11 @@ describe(@"PCFPushGeofenceData", ^{
             });
 
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
 
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -271,11 +271,11 @@ describe(@"PCFPushGeofenceData", ^{
             });
 
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
 
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -287,77 +287,77 @@ describe(@"PCFPushGeofenceData", ^{
 
             it(@"should serialize various trigger types", ^{
                 model.triggerType = PCFPushTriggerTypeUndefined;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"trigger_type"] should] beNil];
 
                 model.triggerType = PCFPushTriggerTypeEnter;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"trigger_type"] should] equal:@"enter"];
 
                 model.triggerType = PCFPushTriggerTypeExit;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"trigger_type"] should] equal:@"exit"];
 
                 model.triggerType = PCFPushTriggerTypeEnterOrExit;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"trigger_type"] should] equal:@"enter_or_exit"];
             });
 
             it(@"should serialize various expiry times", ^{
                 model.expiryTime = nil;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"expiry_time"] should] beNil];
 
                 model.expiryTime = (NSDate*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"expiry_time"] should] beNil];
 
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:0];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"expiry_time"] should] beZero];
 
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:0.10];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"expiry_time"] should] equal:@100L];
 
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"expiry_time"] should] equal:@1000000L];
             });
 
             it(@"should serialize list of locations", ^{
                 model.locations = nil;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"locations"] should] beNil];
 
                 model.locations = (NSArray*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"locations"] should] beNil];
 
                 model.locations = @[];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"locations"] should] beNil];
             });
 
             it(@"should serialize tags", ^{
                 model.tags = nil;
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
                 model.tags = (NSSet*)(id)[NSNull null];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
                 model.tags = [NSSet set];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
                 model.tags = [NSSet setWithObject:@"CACTUS"];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] equal:@[@"CACTUS"]];
 
                 model.tags = [NSSet setWithArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] containObjectsInArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
             });
         });

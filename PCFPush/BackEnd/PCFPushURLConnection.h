@@ -6,7 +6,7 @@
 
 @class PCFPushParameters;
 
-NSString *const kBasicAuthorizationKey;
+NSString *const kPCFPushBasicAuthorizationKey;
 
 @interface PCFPushURLConnection : NSObject
 

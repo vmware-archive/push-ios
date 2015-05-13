@@ -77,7 +77,7 @@ describe(@"PCFPushGeofenceLocation", ^{
         
         it(@"should handle a nil input", ^{
             NSError *error;
-            model = [PCFPushGeofenceLocation pcf_fromJSONData:nil error:&error];
+            model = [PCFPushGeofenceLocation pcfPushFromJSONData:nil error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -86,7 +86,7 @@ describe(@"PCFPushGeofenceLocation", ^{
         
         it(@"should handle empty input", ^{
             NSError *error;
-            model = [PCFPushGeofenceLocation pcf_fromJSONData:[NSData data] error:&error];
+            model = [PCFPushGeofenceLocation pcfPushFromJSONData:[NSData data] error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
             [[error.domain should] equal:PCFPushErrorDomain];
@@ -96,7 +96,7 @@ describe(@"PCFPushGeofenceLocation", ^{
         it(@"should handle bad JSON", ^{
             NSError *error;
             NSData *JSONData = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-            model = [PCFPushGeofenceLocation pcf_fromJSONData:JSONData error:&error];
+            model = [PCFPushGeofenceLocation pcfPushFromJSONData:JSONData error:&error];
             [[model should] beNil];
             [[error shouldNot] beNil];
         });
@@ -109,7 +109,7 @@ describe(@"PCFPushGeofenceLocation", ^{
             
             [[data shouldNot] beNil];
             
-            model = [PCFPushGeofenceLocation pcf_fromJSONData:data error:&error];
+            model = [PCFPushGeofenceLocation pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
             [[theValue(model.id) should] equal:theValue(TEST_GEOFENCE_ID)];
             [[model.name should] equal:TEST_GEOFENCE_LOCATION_NAME];
@@ -151,11 +151,11 @@ describe(@"PCFPushGeofenceLocation", ^{
             });
             
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];
@@ -175,11 +175,11 @@ describe(@"PCFPushGeofenceLocation", ^{
             });
             
             it(@"should be dictionaryizable", ^{
-                dict = [model pcf_toFoundationType];
+                dict = [model pcfPushToFoundationType];
             });
             
             it(@"should be JSONizable", ^{
-                NSData *JSONData = [model pcf_toJSONData:nil];
+                NSData *JSONData = [model pcfPushToJSONData:nil];
                 [[JSONData shouldNot] beNil];
                 NSError *error = nil;
                 dict = [NSJSONSerialization JSONObjectWithData:JSONData options:0 error:&error];

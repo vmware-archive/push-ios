@@ -4,9 +4,9 @@
 
 #import <UIKit/UIKit.h>
 
-extern void resetOnceToken(); // For unit tests
+extern void pcfPushResetOnceToken(); // For unit tests
 
-extern BOOL isAPNSSandbox();
+extern BOOL pcfPushIsAPNSSandbox();
 
 /**
  * Defines the set of parameters used while registering the device for push notifications or analyitcs.

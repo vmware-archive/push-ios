@@ -65,7 +65,7 @@ PCFPushGeofenceDataList* loadGeofenceList(Class testProjectClass, NSString *name
         if (![i isKindOfClass:[NSDictionary class]]) {
             @throw [NSException exceptionWithName:NSInvalidArchiveOperationException reason:@"expected serialized geofence list item to be a dictionary" userInfo:nil];
         }
-        PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcf_fromDictionary:i];
+        PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcfPushFromDictionary:i];
         resultDict[@(geofence.id)] = geofence;
     }
     return resultDict;

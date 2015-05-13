@@ -9,9 +9,6 @@
 @class PCFPushGeofenceRegistrar;
 @class PCFPushGeofencePersistentStore;
 @class PCFPushGeofenceLocationMap;
-@class PCFPushGeofenceData;
-
-extern BOOL pcf_isItemExpired(PCFPushGeofenceData *geofence);
 
 @interface PCFPushGeofenceEngine : NSObject
 
