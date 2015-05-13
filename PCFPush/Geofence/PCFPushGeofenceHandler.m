@@ -104,8 +104,10 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
 {
     PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
     for (PCFPushGeofenceLocation *location in geofence.locations) {
-        PCFPushLog(@"Clearing geofence location from monitor: %@", pcfPushRequestIdWithGeofenceId(geofence.id, location.id));
-        [locationsToClear put:geofence location:location];
+        if (location.id >= 0) {
+            PCFPushLog(@"Clearing geofence location from monitor: %@", pcfPushRequestIdWithGeofenceId(geofence.id, location.id));
+            [locationsToClear put:geofence location:location];
+        }
     }
     [engine clearLocations:locationsToClear];
 }
@@ -113,13 +115,15 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
 static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
 {
     int64_t locationId = pcfPushLocationIdForRequestId(requestId);
-    for (PCFPushGeofenceLocation *location in geofence.locations) {
-        if (location.id == locationId) {
-            PCFPushLog(@"Clearing geofence from monitor: %@", requestId);
-            PCFPushGeofenceLocationMap *locationToClear = [PCFPushGeofenceLocationMap map];
-            [locationToClear put:geofence location:location];
-            [engine clearLocations:locationToClear];
-            break;
+    if (locationId >= 0) {
+        for (PCFPushGeofenceLocation *location in geofence.locations) {
+            if (location.id == locationId) {
+                PCFPushLog(@"Clearing geofence from monitor: %@", requestId);
+                PCFPushGeofenceLocationMap *locationToClear = [PCFPushGeofenceLocationMap map];
+                [locationToClear put:geofence location:location];
+                [engine clearLocations:locationToClear];
+                break;
+            }
         }
     }
 }
@@ -141,6 +145,10 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     }
     
     int64_t geofenceId = pcfPushGeofenceIdForRequestId(region.identifier);
+    if (geofenceId < 0) {
+        return;
+    }
+
     PCFPushGeofenceData *geofence = store[@(geofenceId)];
 
     if (!geofence) {

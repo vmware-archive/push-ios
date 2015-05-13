@@ -101,7 +101,9 @@ static void addLocations(PCFPushGeofenceLocationMap *map, PCFPushGeofenceDataLis
 {
     [list enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         for(PCFPushGeofenceLocation *location in geofence.locations) {
-            [map put:geofence location:location];
+            if (geofence.id >= 0 && location.id >= 0) {
+                [map put:geofence location:location];
+            }
         }
     }];
 }

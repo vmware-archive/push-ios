@@ -57,7 +57,21 @@ describe(@"PCFPushGeofenceLocation", ^{
         [[model[@"PCF_7_66"] should] equal:geofence.locations[0]];
     });
 
+    it(@"should not let you put items with bad location IDs into the map", ^{
+        PCFPushGeofenceData *geofence = oneItemGeofenceList[@7L];
+        PCFPushGeofenceLocation *location = geofence.locations[0];
+        location.id = -99;
+        [model put:geofence location:location];
+        [[model should] beEmpty];
+    });
 
+    it(@"should not let you put items with bad geofence IDs into the map", ^{
+        PCFPushGeofenceData *geofence = oneItemGeofenceList[@7L];
+        PCFPushGeofenceLocation *location = geofence.locations[0];
+        geofence.id = -99;
+        [model put:geofence location:location];
+        [[model should] beEmpty];
+    });
 });
 
 SPEC_END

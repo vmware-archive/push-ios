@@ -65,6 +65,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block CLRegion *region3;
         __block CLRegion *region4;
         __block CLRegion *region5;
+        __block CLRegion *badRegion;
 
         describe(@"handling geofence events", ^{
 
@@ -89,6 +90,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
                 region4 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_4_66"];
                 region5 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_5_67"];
+                badRegion = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"XXXXXXXX"];
                 expectedMapToClear = [PCFPushGeofenceLocationMap map];
                 [UIApplication stub:@selector(sharedApplication) andReturn:application];
                 [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
@@ -282,7 +284,14 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [PCFPushGeofenceHandler processRegion:emptyRegion store:store engine:engine state:CLRegionStateInside];
             });
 
-            it(@"should ignore geofence events with unknown IDs", ^{
+            it(@"should ignore geofence events for regions with bad identifiers", ^{
+                [[engine shouldNot] receive:@selector(clearLocations:)];
+                [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
+                [[store shouldNot] receive:@selector(objectForKeyedSubscript:)];
+                [PCFPushGeofenceHandler processRegion:badRegion store:store engine:engine state:CLRegionStateInside];
+            });
+
+            it(@"should ignore geofence events for non-existent objects", ^{
                 [[engine shouldNot] receive:@selector(clearLocations:)];
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [store stub:@selector(objectForKeyedSubscript:) andReturn:nil];

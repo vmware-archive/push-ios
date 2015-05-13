@@ -54,7 +54,7 @@ int64_t pcfPushGeofenceIdForRequestId(NSString *requestId)
     if (components.count >= 2) {
         return atoll([components[1] cStringUsingEncoding:NSUTF8StringEncoding]);
     }
-    return nil;
+    return PCF_PUSH_NO_GEOFENCE_ID;
 }
 
 int64_t pcfPushLocationIdForRequestId(NSString *requestId)
@@ -63,10 +63,14 @@ int64_t pcfPushLocationIdForRequestId(NSString *requestId)
     if (components.count >= 3) {
         return atoll([components[2] cStringUsingEncoding:NSUTF8StringEncoding]);
     }
-    return nil;
+    return PCF_PUSH_NO_LOCATION_ID;
 }
 
 NSString *pcfPushRequestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
 {
-    return [NSString stringWithFormat:@"PCF_%lld_%lld", geofenceId, locationId];
+    if (geofenceId >= 0 && locationId >= 0) {
+        return [NSString stringWithFormat:@"PCF_%lld_%lld", geofenceId, locationId];
+    } else {
+        return nil;
+    }
 }

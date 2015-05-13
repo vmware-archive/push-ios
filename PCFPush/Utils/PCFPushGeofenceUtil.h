@@ -9,6 +9,9 @@
 @class PCFPushGeofenceLocation;
 @class CLRegion;
 
+#define PCF_PUSH_NO_LOCATION_ID -1
+#define PCF_PUSH_NO_GEOFENCE_ID -1
+
 extern BOOL pcfPushIsItemExpired(PCFPushGeofenceData *geofence);
 extern CLRegion *pcfPushRegionForLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceLocation *location);
 extern int64_t pcfPushGeofenceIdForRequestId(NSString *requestId);

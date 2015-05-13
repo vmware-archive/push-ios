@@ -27,7 +27,9 @@
     PCFPushGeofenceLocationMap *map = [[PCFPushGeofenceLocationMap alloc] init];
     [list enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         for (PCFPushGeofenceLocation *location in geofence.locations) {
-            [map put:geofence location:location];
+            if (geofence.id >= 0 && location.id >= 0) {
+                [map put:geofence location:location];
+            }
         }
     }];
     return map;
@@ -65,7 +67,9 @@
 - (void) put:(PCFPushGeofenceData*)geofence location:(PCFPushGeofenceLocation*)location
 {
     NSString *iosRequestId = pcfPushRequestIdWithGeofenceId(geofence.id, location.id);
-    self.dict[iosRequestId] = location;
+    if (iosRequestId) {
+        self.dict[iosRequestId] = location;
+    }
 }
 
 - (id)objectForKeyedSubscript:(id <NSCopying>)key
