@@ -32,12 +32,7 @@
         }
         return;
     }
-    
-    //TODO Complete GZIP code to compress HTTPBody on POST/PUT
-    //    if (request.HTTPBody) {
-    //        [request setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-    //    }
-    
+
     CompletionHandler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
     [self sendAsynchronousRequest:request
                             queue:queue

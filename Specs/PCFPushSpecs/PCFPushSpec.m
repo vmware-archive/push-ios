@@ -702,15 +702,14 @@ describe(@"PCFPush", ^{
             it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
 
                 __block NSInteger registrationRequestCount = 0;
-                __block BOOL wasSuccessBlockExecuted = NO; // TODO - not being checked anymore?
-                __block BOOL wasFailBlockExecuted = NO; // TODO - not being checked anymore?
+                __block BOOL wasSuccessBlockExecuted = NO;
 
                 void (^successBlock)() = ^{
                     wasSuccessBlockExecuted = YES;
                 };
 
                 void (^failureBlock)(NSError *) = ^(NSError *error) {
-                    wasFailBlockExecuted = YES;
+                    fail(@"should not have failed");
                 };
 
                 [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
@@ -729,6 +728,8 @@ describe(@"PCFPush", ^{
                 [PCFPush load]; // Reset the state in the state engine
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+                [[theValue(registrationRequestCount) should] equal:theValue(1)];
+                [[theValue(wasSuccessBlockExecuted) should] beYes];
             });
         });
     });

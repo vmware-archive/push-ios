@@ -111,7 +111,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
                                                  failure:failureBlock];
 
     } else if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
-        [PCFPushClient startGeofenceUpdate:self.registrationParameters success:successBlock failure:failureBlock];
+        [PCFPushClient startGeofenceUpdate:successBlock failure:failureBlock];
 
     } else {
         PCFPushLog(@"Registration with PCF Push is being bypassed (already registered).");
@@ -208,7 +208,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
         if ([PCFPushClient isGeofenceUpdateRequired:parameters]) {
 
-            [PCFPushClient startGeofenceUpdate:parameters success:successBlock failure:failureBlock];
+            [PCFPushClient startGeofenceUpdate:successBlock failure:failureBlock];
 
         } else {
             
@@ -228,8 +228,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return registrationBlock;
 }
 
-// TODO - decide if we need to pass the parameters into this method
-+ (void)startGeofenceUpdate:(PCFPushParameters *)parameters success:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
++ (void)startGeofenceUpdate:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
 {
     [PCFPushGeofenceUpdater startGeofenceUpdate:PCFPushClient.shared.engine userInfo:nil timestamp:0L success:^{
 
@@ -261,7 +260,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         // No tags are updated - just check if want to update geofences
         if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
 
-            [PCFPushClient startGeofenceUpdate:self.registrationParameters success:success failure:failure];
+            [PCFPushClient startGeofenceUpdate:success failure:failure];
 
         } else if (success) {
             success();
