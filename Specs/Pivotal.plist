@@ -18,7 +18,7 @@
 	<key>pivotal.push.platformSecretProduction</key>
 	<string>No secret is as strong as its blabbiest keeper</string>
 
-    <key>pivotal.push.areGeofencesEnabled</key>
+    <key>pivotal.push.geofencesEnabled</key>
     <true/>
 
 </dict>

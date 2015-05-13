@@ -130,7 +130,7 @@ void resetOnceToken() {
                 @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
-                @"pivotal.push.areGeofencesEnabled" : @"areGeofencesEnabled"
+                @"pivotal.push.geofencesEnabled" : @"areGeofencesEnabled"
         };
     }
     if (block) {

@@ -27,7 +27,7 @@
         <string>tag2</string>
     </array>
 
-    <key>pivotal.push.areGeofencesEnabled</key>
+    <key>pivotal.push.geofencesEnabled</key>
     <true/>
 
 </dict>

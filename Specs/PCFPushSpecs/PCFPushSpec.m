@@ -1291,16 +1291,21 @@ describe(@"PCFPush", ^{
 
         __block BOOL wasCompletionHandlerCalled;
 
+        NSDictionary *const userInfo = @{ @"aps" : @{ @"content-available" : @1 }, @"pivotal.push.geofence_update_available" : @"true" };
+
         beforeEach(^{
             wasCompletionHandlerCalled = NO;
         });
 
         context(@"processing geofence updates", ^{
+
+            beforeEach(^{
+                [helper setupDefaultPLIST];
+            });
+
             afterEach(^{
                 [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
             });
-
-            NSDictionary *const userInfo = @{ @"aps" : @{ @"content-available" : @1 }, @"pivotal.push.geofence_update_available" : @"true" };
 
             it(@"should process geofence updates with some data available on server", ^{
 
@@ -1343,7 +1348,33 @@ describe(@"PCFPush", ^{
             });
         });
 
+        context(@"geofences are disabled", ^{
+
+            afterEach(^{
+                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+            });
+
+            it(@"should process geofence updates with some data available on server", ^{
+
+                [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
+
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:)];
+
+                [PCFPush didReceiveRemoteNotification:userInfo completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+            });
+        });
+
         context(@"other kinds of messages", ^{
+
+            beforeEach(^{
+                [helper setupDefaultPLIST];
+            });
+
             afterEach(^{
                 [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
             });

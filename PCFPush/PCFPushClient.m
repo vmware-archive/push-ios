@@ -87,7 +87,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
         NSError *error;
-        if ([PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
+        if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
             PCFPushLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
         }
     }
@@ -416,7 +416,7 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"handler may not be nil" userInfo:nil];
     }
 
-    if (isGeofenceUpdate(userInfo)) {
+    if (self.registrationParameters.areGeofencesEnabled && isGeofenceUpdate(userInfo)) {
 
         int64_t timestamp = [PCFPushPersistentStorage lastGeofencesModifiedTime];
         [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp success:^{
