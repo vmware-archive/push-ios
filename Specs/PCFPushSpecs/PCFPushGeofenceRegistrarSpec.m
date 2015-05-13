@@ -42,7 +42,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
 
     it(@"should require a location manager", ^{
         [[theBlock(^{
-            [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:nil];
+            registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:nil];
         }) should] raise];
     });
 

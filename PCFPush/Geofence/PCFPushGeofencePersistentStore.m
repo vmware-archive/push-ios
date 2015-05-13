@@ -203,7 +203,7 @@
     NSError *error = nil;
     if (![self.fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error]) {
         PCFPushLog(@"Error creating directory at path '%@': %@", path, error);
-        return nil;
+        return NO;
     }
     return YES;
 }

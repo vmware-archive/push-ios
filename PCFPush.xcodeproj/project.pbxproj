@@ -25,7 +25,6 @@
 		2318E693199C039A0054C274 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */; };
 		2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66A199C039A0054C274 /* PCFPushParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66B199C039A0054C274 /* PCFPushParameters.m */; };
-		2318E69E199C039A0054C274 /* PCFPush-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2318E66C199C039A0054C274 /* PCFPush-Info.plist */; };
 		2318E69F199C039A0054C274 /* PCFPush-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66D199C039A0054C274 /* PCFPush-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E6A0199C039A0054C274 /* PCFPush.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66E199C039A0054C274 /* PCFPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2318E6A1199C039A0054C274 /* PCFPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66F199C039A0054C274 /* PCFPush.m */; };
@@ -402,7 +401,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2318E69E199C039A0054C274 /* PCFPush-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

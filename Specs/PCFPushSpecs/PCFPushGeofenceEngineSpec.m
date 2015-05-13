@@ -52,14 +52,14 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             it(@"should require a geofence registrar", ^{
 
                 [[theBlock(^{
-                    [[PCFPushGeofenceEngine alloc] initWithRegistrar:nil store:store];
+                    engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:nil store:store];
                 }) should] raiseWithName:NSInvalidArgumentException];
 
             });
 
             it(@"should require a geofence persistent store", ^{
                 [[theBlock(^{
-                    [[PCFPushGeofenceEngine alloc] initWithRegistrar:registrar store:nil];
+                    engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:registrar store:nil];
                 }) should] raiseWithName:NSInvalidArgumentException];
 
             });

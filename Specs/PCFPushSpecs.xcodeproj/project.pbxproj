@@ -37,7 +37,6 @@
 		235BB258199C085200B9EE63 /* PCFPushPersistentStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB248199C085200B9EE63 /* PCFPushPersistentStorageSpec.m */; };
 		235BB259199C085200B9EE63 /* PCFPushSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB249199C085200B9EE63 /* PCFPushSpec.m */; };
 		235BB25A199C085200B9EE63 /* PCFPushSpecsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24B199C085200B9EE63 /* PCFPushSpecsHelper.m */; };
-		235BB25B199C085200B9EE63 /* PCFPushSpecs-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 235BB24C199C085200B9EE63 /* PCFPushSpecs-Info.plist */; };
 		235BB25C199C085200B9EE63 /* PCFRegistrationParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* PCFRegistrationParametersSpec.m */; };
 		235BB25D199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB250199C085200B9EE63 /* NSURLConnection+PCFPushAsync2Sync.m */; };
 		B69DB029DD6EC4142DEAC23B /* geofence_one_item_persisted_4.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB8B8004B79E41AAA3C12 /* geofence_one_item_persisted_4.json */; };
@@ -328,7 +327,6 @@
 				11F37BF91ADD62C8001011C9 /* geofence_one_item_persisted_1.json in Resources */,
 				11F37C021ADD62C8001011C9 /* geofence_response_data_one_item.json in Resources */,
 				11F37BFD1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json in Resources */,
-				235BB25B199C085200B9EE63 /* PCFPushSpecs-Info.plist in Resources */,
 				11F37BFF1ADD62C8001011C9 /* geofence_response_data_delete_one.json in Resources */,
 				11F37BFA1ADD62C8001011C9 /* geofence_one_item_persisted_2.json in Resources */,
 				11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */,

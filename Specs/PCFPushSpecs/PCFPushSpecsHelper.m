@@ -106,7 +106,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename
 {
-    [PCFPushParameters stub:@selector(defaultParameterFilename) andReturn:parameterFilename];
+    [PCFPushParameters stub:NSSelectorFromString(@"defaultParameterFilename") andReturn:parameterFilename];
     [self setupDefaultPLIST];
 }
 

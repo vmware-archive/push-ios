@@ -89,7 +89,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
                               failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
-    NSMutableURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters];
+    NSURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters];
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
@@ -153,12 +153,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
 + (NSString *)base64String:(NSString *)normalString
 {
     NSData *plainData = [normalString dataUsingEncoding:NSUTF8StringEncoding];
-    if ([plainData respondsToSelector:@selector(base64EncodedStringWithOptions:)]) {
-        return [plainData base64EncodedStringWithOptions:0];
-        
-    } else {
-        return [plainData base64Encoding];
-    }
+    return [plainData base64EncodedStringWithOptions:0]; // iOS 7.0+
 }
 
 + (NSData *)requestBodyDataForForAPNSDeviceToken:(NSData *)apnsDeviceToken
