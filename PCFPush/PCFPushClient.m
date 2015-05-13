@@ -124,13 +124,20 @@ BOOL isGeofenceUpdate(NSDictionary* userInfo)
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure
 {
+    if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
+        NSError *error;
+        if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
+            PCFPushLog(@"Clear geofences upon unregistration failed.  Error: %@", error);
+        }
+    }
+
     NSString *deviceId = [PCFPushPersistentStorage serverDeviceID];
     if (!deviceId || deviceId.length <= 0) {
         PCFPushLog(@"Not currently registered.");
         [self handleUnregistrationSuccess:success userInfo:@{ @"Response": @"Already unregistered."}];
         return;
     }
-    
+
     [PCFPushURLConnection unregisterDeviceID:deviceId
                                   parameters:self.registrationParameters
                                      success:^(NSURLResponse *response, NSData *data) {

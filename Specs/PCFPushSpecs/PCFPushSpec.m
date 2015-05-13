@@ -848,6 +848,7 @@ describe(@"PCFPush", ^{
             beforeEach(^{
                 successBlockExecuted = NO;
                 [helper setupDefaultPersistedParameters];
+                [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
             });
 
             afterEach(^{
@@ -865,6 +866,8 @@ describe(@"PCFPush", ^{
 
                 // TODO - crashes here sometimes? race condition? watch this.
                 it(@"should be considered a success if the device isn't currently registered", ^{
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
+
                     [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
                     [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
@@ -885,6 +888,7 @@ describe(@"PCFPush", ^{
 
                     [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:204];
 
+                    [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
                     [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
                     [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
@@ -904,11 +908,16 @@ describe(@"PCFPush", ^{
 
             __block BOOL failureBlockExecuted = NO;
 
+            beforeEach(^{
+                [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+            });
+
             it(@"should perform failure block if server responds with a 404 (DeviceUUID not registered on server) ", ^{
 
                 [helper setupDefaultPersistedParameters];
                 [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:404];
 
+                [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
                 [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
@@ -927,10 +936,15 @@ describe(@"PCFPush", ^{
 
             __block BOOL failureBlockExecuted = NO;
 
+            beforeEach(^{
+                [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
+            });
+
             it(@"should perform failure block if server request returns error", ^{
                 [helper setupDefaultPersistedParameters];
                 failureBlockExecuted = NO;
 
+                [[PCFPushGeofenceUpdater should] receive:@selector(clearGeofences:error:)];
                 [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
                     NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:nil];
                     CompletionHandler handler = params[2];
@@ -949,6 +963,29 @@ describe(@"PCFPush", ^{
                 }];
 
                 [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+            });
+        });
+
+        describe(@"no geofences in the system during successful unregistration", ^{
+
+            __block BOOL successBlockExecuted = NO;
+
+            it(@"should not clear geofences during a unregistration", ^{
+                [helper setupDefaultPersistedParameters];
+                [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:204];
+
+                [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearGeofences:error:)];
+                [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
+                [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+
+                [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
+                    successBlockExecuted = YES;
+
+                }                                              failure:^(NSError *error) {
+                    fail(@"unregistration failure block executed");
+                }];
+
+                [[theValue(successBlockExecuted) shouldEventually] beTrue];
             });
         });
     });
