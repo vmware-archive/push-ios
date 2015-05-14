@@ -13,6 +13,7 @@
 #import "PCFPushGeofenceUpdater.h"
 #import "PCFPushGeofenceHandler.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofenceStatusUtil.h"
 #import "PCFPushRegistrationPutRequestData.h"
 #import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "PCFPushRegistrationPostRequestData.h"
@@ -49,6 +50,7 @@ describe(@"PCFPush", ^{
             beforeEach(^{
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequest];
+                [PCFPushGeofenceStatusUtil stub:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
             });
 
             afterEach(^{
@@ -86,14 +88,13 @@ describe(@"PCFPush", ^{
 
         describe(@"nil callbacks", ^{
 
-            __block void (^successBlock)() = ^{
-            };
-            __block void (^failureBlock)(NSError *) = ^(NSError *error) {
-            };
+            void (^successBlock)() = ^{};
+            void (^failureBlock)(NSError *) = ^(NSError *error) {};
 
             beforeEach(^{
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRequest];
+                [PCFPushGeofenceStatusUtil stub:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
             });
 
             it(@"should accept a nil failureBlock", ^{

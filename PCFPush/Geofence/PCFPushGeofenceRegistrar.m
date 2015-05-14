@@ -12,6 +12,8 @@
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceUtil.h"
+#import "PCFPushGeofenceStatus.h"
+#import "PCFPushGeofenceStatusUtil.h"
 
 @interface PCFPushGeofenceRegistrar ()
 
@@ -36,7 +38,9 @@
 - (void)registerGeofences:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list
 {
     if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
-        PCFPushLog(@"ERROR: isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.");
+        NSString *errorReason = @"isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.";
+        PCFPushLog(@"ERROR: %@", errorReason);
+        [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:errorReason number:0 fileManager:[NSFileManager defaultManager]];
         return;
     }
 
@@ -50,6 +54,7 @@
     }];
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);
+    [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:geofencesToRegister.count fileManager:[NSFileManager defaultManager]];
 
     if (pcfPushIsAPNSSandbox()) {
         [self serializeGeofencesForDebug:geofencesToRegister list:list];
@@ -59,7 +64,9 @@
 - (void) unregisterGeofences:(PCFPushGeofenceLocationMap *)geofencesToUnregister geofencesToKeep:(PCFPushGeofenceLocationMap *)geofencesToKeep list:(PCFPushGeofenceDataList *)list
 {
     if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
-        PCFPushLog(@"ERROR: isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.");
+        NSString *errorReason = @"isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.";
+        PCFPushLog(@"ERROR: %@", errorReason);
+        [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:errorReason number:0 fileManager:[NSFileManager defaultManager]];
         return;
     }
 
@@ -71,6 +78,7 @@
     }];
 
     PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToKeep.count);
+    [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:geofencesToKeep.count fileManager:[NSFileManager defaultManager]];
 
     if (pcfPushIsAPNSSandbox()) {
         [self serializeGeofencesForDebug:geofencesToKeep list:list];
@@ -126,6 +134,7 @@
     }
 
     PCFPushLog(@"Number of monitored geofence locations: 0");
+    [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:0 fileManager:[NSFileManager defaultManager]];
 
     if (pcfPushIsAPNSSandbox()) {
         [self clearGeofencesForDebugFile];

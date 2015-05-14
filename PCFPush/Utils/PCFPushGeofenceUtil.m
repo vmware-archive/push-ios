@@ -7,6 +7,9 @@
 #import "PCFPushGeofenceUtil.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceLocation.h"
+#import "PCFPushDebug.h"
+#import "PCFPushGeofenceStatus.h"
+#import "PCFPushGeofenceStatusUtil.h"
 
 BOOL pcfPushIsItemExpired(PCFPushGeofenceData *geofence)
 {
@@ -73,4 +76,17 @@ NSString *pcfPushRequestIdWithGeofenceId(int64_t geofenceId, int64_t locationId)
     } else {
         return nil;
     }
+}
+
+NSString* pcfPushGeofencesPath(NSFileManager *fileManager)
+{
+    NSArray *possibleURLs = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
+    if (!possibleURLs || possibleURLs.count <= 0) {
+        PCFPushLog(@"Error getting user library directory.");
+        return nil;
+    }
+
+    NSURL* url = possibleURLs[0];
+    NSString *geofencesPath = [url.path stringByAppendingPathComponent:@"PCF_PUSH_GEOFENCE"];
+    return geofencesPath;
 }
