@@ -46,15 +46,12 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
         return NO;
     }
 
-    switch (geofence.triggerType) {
-        case PCFPushTriggerTypeEnterOrExit:
-            return YES;
-        case PCFPushTriggerTypeEnter:
-            return CLRegionStateInside == state;
-        case PCFPushTriggerTypeExit:
-            return CLRegionStateOutside == state;
-        default:
-            return NO;
+    if (geofence.triggerType == PCFPushTriggerTypeEnter) {
+        return CLRegionStateInside == state;
+    } else if (geofence.triggerType == PCFPushTriggerTypeExit) {
+        return CLRegionStateOutside == state;
+    } else {
+        return NO;
     }
 }
 

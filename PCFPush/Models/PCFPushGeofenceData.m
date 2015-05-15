@@ -94,8 +94,6 @@
                 self.triggerType = PCFPushTriggerTypeEnter;
             } else if ([value isEqualToString:@"exit"]) {
                 self.triggerType = PCFPushTriggerTypeExit;
-            } else if ([value isEqualToString:@"enter_or_exit"]) {
-                self.triggerType = PCFPushTriggerTypeEnterOrExit;
             }
         }
         return YES;
@@ -145,9 +143,6 @@
                 case PCFPushTriggerTypeExit:
                     destination[@"trigger_type"] = @"exit";
                     break;
-                case PCFPushTriggerTypeEnterOrExit:
-                    destination[@"trigger_type"] = @"enter_or_exit";
-                    break;
                 default:
                     break;
             }
@@ -178,7 +173,6 @@
             }
         }
         return YES;
-
     }
 
     return NO;

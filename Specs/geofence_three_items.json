@@ -21,7 +21,7 @@
         "data": {
             "message": "pizzas"
         },
-        "trigger_type": "enter_or_exit",
+        "trigger_type": "exit",
         "expiry_time": 1142744274,
         "locations": [
             {

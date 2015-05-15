@@ -156,9 +156,6 @@ describe(@"PCFPushGeofenceData", ^{
             model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"exit"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeExit)];
 
-            model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"enter_or_exit"}];
-            [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeEnterOrExit)];
-
             model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"trigger_type" : @"not_a_trigger_type"}];
             [[theValue(model.triggerType) should] equal:theValue(PCFPushTriggerTypeUndefined)];
 
@@ -219,7 +216,7 @@ describe(@"PCFPushGeofenceData", ^{
             beforeEach(^{
                 model.id = TEST_GEOFENCE_ID;
                 model.data = @{ @"message":@"tacos" };
-                model.triggerType = PCFPushTriggerTypeEnterOrExit;
+                model.triggerType = PCFPushTriggerTypeEnter;
                 model.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
 
                 location1 = [[PCFPushGeofenceLocation alloc] init];
@@ -237,7 +234,7 @@ describe(@"PCFPushGeofenceData", ^{
                 [[dict shouldNot] beNil];
                 [[dict[@"id"] should] equal:theValue(TEST_GEOFENCE_ID)];
                 [[dict[@"data"] should] equal:@{ @"message":@"tacos" }];
-                [[dict[@"trigger_type"] should] equal:@"enter_or_exit"];
+                [[dict[@"trigger_type"] should] equal:@"enter"];
                 [[dict[@"expiry_time"] should] equal:@1000000];
                 [[dict[@"locations"] should] haveCountOf:2];
                 [[dict[@"locations"][0][@"id"] should] equal:@66L];
@@ -297,10 +294,6 @@ describe(@"PCFPushGeofenceData", ^{
                 model.triggerType = PCFPushTriggerTypeExit;
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"trigger_type"] should] equal:@"exit"];
-
-                model.triggerType = PCFPushTriggerTypeEnterOrExit;
-                dict = [model pcfPushToFoundationType];
-                [[dict[@"trigger_type"] should] equal:@"enter_or_exit"];
             });
 
             it(@"should serialize various expiry times", ^{
@@ -386,7 +379,7 @@ describe(@"PCFPushGeofenceData", ^{
             data1.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
             data1.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
             data1.data = @{ @"CAT" : @"PRETTY" };
-            data1.triggerType = PCFPushTriggerTypeEnterOrExit;
+            data1.triggerType = PCFPushTriggerTypeEnter;
             data1.locations = @[ location1 ];
 
 
@@ -395,7 +388,7 @@ describe(@"PCFPushGeofenceData", ^{
             data2.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
             data2.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
             data2.data = @{ @"CAT" : @"PRETTY" };
-            data2.triggerType = PCFPushTriggerTypeEnterOrExit;
+            data2.triggerType = PCFPushTriggerTypeEnter;
             data2.locations = @[ location2 ];
 
             [[theValue([data1.locations isEqualToArray:data2.locations]) should] beYes];

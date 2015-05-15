@@ -30,10 +30,6 @@ CLRegion *pcfPushRegionForLocation(NSString *requestId, PCFPushGeofenceData *geo
     CLRegion *region = [[CLCircularRegion alloc] initWithCenter:center radius:radius identifier:requestId];
 
     switch (geofence.triggerType) {
-        case PCFPushTriggerTypeEnterOrExit:
-            region.notifyOnEntry = YES;
-            region.notifyOnExit = YES;
-            break;
         case PCFPushTriggerTypeEnter:
             region.notifyOnEntry = YES;
             region.notifyOnExit = NO;

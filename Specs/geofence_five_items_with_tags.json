@@ -22,7 +22,7 @@
         "data": {
             "message": "pizzas"
         },
-        "trigger_type": "enter_or_exit",
+        "trigger_type": "exit",
         "tags": ["TAG_1"],
         "expiry_time": 1424309210305,
         "locations": [

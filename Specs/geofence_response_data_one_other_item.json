@@ -8,7 +8,7 @@
                 "message": "pizza"
             },
             "expiry_time": 1424309210305,
-            "trigger_type": "enter_or_exit",
+            "trigger_type": "exit",
             "locations": [
                 {
                     "id": 88,

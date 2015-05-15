@@ -12,8 +12,7 @@
 typedef NS_ENUM(NSInteger, PCFPushTriggerType) {
     PCFPushTriggerTypeUndefined = 0,
     PCFPushTriggerTypeEnter,
-    PCFPushTriggerTypeExit,
-    PCFPushTriggerTypeEnterOrExit
+    PCFPushTriggerTypeExit
 };
 
 @interface PCFPushGeofenceData : NSObject <PCFMapping>
