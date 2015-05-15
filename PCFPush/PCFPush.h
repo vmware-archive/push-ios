@@ -3,6 +3,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PCFPushGeofenceStatus.h"
 
 /**
  * Primary entry point for the PCF Push Client SDK library.
@@ -108,5 +109,10 @@
  */
 + (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
+
+/**
+ * TODO - write docs
+ */
++ (PCFPushGeofenceStatus*) geofenceStatus;
 
 @end

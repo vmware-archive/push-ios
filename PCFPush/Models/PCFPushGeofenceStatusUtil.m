@@ -61,7 +61,7 @@
 
     id dictionary = @{
             @"isError" : @(geofenceStatus.isError),
-            @"errorReason" : geofenceStatus.errorReason,
+            @"errorReason" : geofenceStatus.errorReason ? geofenceStatus.errorReason : [NSNull null],
             @"numberOfCurrentlyMonitoredGeofences" : @(geofenceStatus.numberOfCurrentlyMonitoredGeofences) };
 
     NSError *error;

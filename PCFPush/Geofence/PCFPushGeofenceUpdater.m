@@ -11,6 +11,8 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushDebug.h"
+#import "PCFPushGeofenceStatus.h"
+#import "PCFPushGeofenceStatusUtil.h"
 
 static NSString *const GEOFENCE_UPDATE_JSON = @"pivotal.push.geofence_update_json";
 
@@ -40,7 +42,13 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 
         if (error) {
             PCFPushLog(@"Error parsing geofence response data: %@", error);
-            failureBlock(error);
+
+            PCFPushGeofenceStatus *oldStatus = [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
+            [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:error.localizedDescription number:oldStatus.numberOfCurrentlyMonitoredGeofences fileManager:[NSFileManager defaultManager]];
+
+            if (failureBlock) {
+                failureBlock(error);
+            }
             return;
         }
 
@@ -55,8 +63,11 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 
     void (^requestFailureBlock)(NSError *) = ^(NSError *error) {
 
-        // TODO - update the GeofenceStatus
         PCFPushLog(@"Fetching geofences request failed: %@", error);
+
+        PCFPushGeofenceStatus *oldStatus = [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
+        [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:error.localizedDescription number:oldStatus.numberOfCurrentlyMonitoredGeofences fileManager:[NSFileManager defaultManager]];
+
         if (failureBlock) {
             failureBlock(error);
         }

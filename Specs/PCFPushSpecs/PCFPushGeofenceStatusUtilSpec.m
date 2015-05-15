@@ -21,8 +21,12 @@ SPEC_BEGIN(PCFPushGeofenceStatusUtilSpec)
 
     describe(@"PCFPushGeofenceStatusUtil", ^{
 
-        __block PCFPushGeofenceStatus *status = [PCFPushGeofenceStatus statusWithError:YES errorReason:@"Stuff got broken" number:5];
+        __block PCFPushGeofenceStatus *status;
         NSFileManager *fileManager = [NSFileManager mock];
+
+        beforeEach(^{
+            status = [PCFPushGeofenceStatus statusWithError:YES errorReason:@"Stuff got broken" number:5];
+        });
 
         context(@"saving", ^{
 
@@ -43,6 +47,29 @@ SPEC_BEGIN(PCFPushGeofenceStatusUtilSpec)
                     return theValue(YES);
                 }];
                 [[fileManager should] receive:@selector(createFileAtPath:contents:attributes:)];
+
+                BOOL succeeded = [PCFPushGeofenceStatusUtil saveGeofenceStatus:status fileManager:fileManager];
+                [[theValue(succeeded) should] beYes];
+            });
+
+            it(@"should be able to save an empty geofence status object", ^{
+
+                status = [PCFPushGeofenceStatus statusWithError:NO errorReason:nil number:0];
+
+                [fileManager stub:@selector(URLsForDirectory:inDomains:) andReturn:@[[NSURL fileURLWithPath:@"/Library"]]];
+                [fileManager stub:@selector(createFileAtPath:contents:attributes:) withBlock:^id(NSArray *params) {
+                    NSError *error = nil;
+                    NSString *path = params[0];
+                    NSData *data = params[1];
+                    [[path should] equal:@"/Library/PCF_PUSH_GEOFENCE/status.json"];
+                    [[data shouldNot] beNil];
+                    id dictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                    [[dictionary shouldNot] beNil];
+                    [[dictionary[@"isError"] should] beNo];
+                    [[dictionary[@"errorReason"] should] equal:[NSNull null]];
+                    [[dictionary[@"numberOfCurrentlyMonitoredGeofences"] should] beZero];
+                    return theValue(YES);
+                }];
 
                 BOOL succeeded = [PCFPushGeofenceStatusUtil saveGeofenceStatus:status fileManager:fileManager];
                 [[theValue(succeeded) should] beYes];

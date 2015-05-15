@@ -48,6 +48,7 @@
 		B69DBAA0AFF58A8E0E8336A3 /* PCFPushGeofenceResponseData+Loaders.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */; };
 		B69DBC468B6BA4BB464C2C1B /* PCFPushGeofenceStatusUtilSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB56F0AB90D9795383DC6 /* PCFPushGeofenceStatusUtilSpec.m */; };
 		B69DBC6CD4EC6094A62A5ABE /* PCFPushGeofenceRegistrarSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB1E4BEB08FDFF683F036 /* PCFPushGeofenceRegistrarSpec.m */; };
+		B69DBC9013D7BFD369ECFE01 /* PCFPushGeofenceStatusSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB43F807692606F21D2F5 /* PCFPushGeofenceStatusSpec.m */; };
 		B69DBD13EE0D7A03D7C2C186 /* PCFPushGeofenceHandlerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB760E9EB3FC425F7065C /* PCFPushGeofenceHandlerSpec.m */; };
 		B69DBD2526A022C80E82BA78 /* PCFPushGeofencePersistentStoreSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBFDDC883851885CD76AC /* PCFPushGeofencePersistentStoreSpec.m */; };
 		B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEB0DACB4E44D1452EEA8 /* PCFPushGeofenceLocationMapSpec.m */; };
@@ -113,6 +114,7 @@
 		B69DB13CFE4E4FE592303B0E /* PCFPushGeofenceUpdaterSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUpdaterSpec.m; sourceTree = "<group>"; };
 		B69DB1E4BEB08FDFF683F036 /* PCFPushGeofenceRegistrarSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceRegistrarSpec.m; sourceTree = "<group>"; };
 		B69DB2931A317F32444F08D5 /* geofence_five_items_with_tags.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_five_items_with_tags.json; sourceTree = "<group>"; };
+		B69DB43F807692606F21D2F5 /* PCFPushGeofenceStatusSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatusSpec.m; sourceTree = "<group>"; };
 		B69DB56F0AB90D9795383DC6 /* PCFPushGeofenceStatusUtilSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatusUtilSpec.m; sourceTree = "<group>"; };
 		B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PCFPushGeofenceResponseData+Loaders.m"; sourceTree = "<group>"; };
 		B69DB695AA3A9187DAFF6E1C /* geofence_one_item_persisted_5.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_persisted_5.json; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				B69DBFDDC883851885CD76AC /* PCFPushGeofencePersistentStoreSpec.m */,
 				B69DB760E9EB3FC425F7065C /* PCFPushGeofenceHandlerSpec.m */,
 				B69DB56F0AB90D9795383DC6 /* PCFPushGeofenceStatusUtilSpec.m */,
+				B69DB43F807692606F21D2F5 /* PCFPushGeofenceStatusSpec.m */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 				B69DBD2526A022C80E82BA78 /* PCFPushGeofencePersistentStoreSpec.m in Sources */,
 				B69DBD13EE0D7A03D7C2C186 /* PCFPushGeofenceHandlerSpec.m in Sources */,
 				B69DBC468B6BA4BB464C2C1B /* PCFPushGeofenceStatusUtilSpec.m in Sources */,
+				B69DBC9013D7BFD369ECFE01 /* PCFPushGeofenceStatusSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

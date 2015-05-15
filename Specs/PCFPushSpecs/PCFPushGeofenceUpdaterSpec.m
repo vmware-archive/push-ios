@@ -9,6 +9,35 @@
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushGeofenceResponseData.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofenceStatusUtil.h"
+#import "PCFPushGeofenceStatus.h"
+
+typedef id (^GeofenceRequestStub)(NSArray *params);
+
+static GeofenceRequestStub successfulGeofenceRequestStub(NSUInteger httpStatus, NSData *data, void (^block)())
+{
+    return ^id(NSArray *params) {
+        if (block) {
+            block();
+        }
+        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:httpStatus HTTPVersion:nil headerFields:nil];
+        void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
+        completionHandler(response, data);
+        return nil;
+    };
+}
+
+static GeofenceRequestStub failedGeofenceRequestStub(void (^block)())
+{
+    return ^id(NSArray *params) {
+        if (block) {
+            block();
+        }
+        void(^completionHandler)(NSError *) = params[3];
+        completionHandler([NSError errorWithDomain:@"Fake request failed fakely" code:0 userInfo:nil]);
+        return nil;
+    };
+}
 
 SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
@@ -31,6 +60,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             beforeEach(^{
                 engine = [PCFPushGeofenceEngine mock];
                 [engine stub:@selector(processResponseData:withTimestamp:)];
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], nil)];
             });
 
             it(@"should require a geofence engine", ^{
@@ -61,95 +91,65 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
         context(@"doing updates based on server data", ^{
 
             __block BOOL wasExpectedResult;
-            __block BOOL wasRequestMade;
+            __block BOOL wasRequestAttempted;
 
             beforeEach(^{
                 engine = [PCFPushGeofenceEngine mock];
                 wasExpectedResult = NO;
-                wasRequestMade = NO;
+                wasRequestAttempted = NO;
             });
 
             afterEach(^{
-                [[theValue(wasExpectedResult) shouldEventually] beYes];
-                [[theValue(wasRequestMade) shouldEventually] beYes];
+                [[theValue(wasExpectedResult) should] beYes];
+                [[theValue(wasRequestAttempted) should] beYes];
             });
 
             context(@"bad responses", ^{
 
-                afterEach(^{
-                    [[engine shouldNotEventually] receive:@selector(processResponseData:withTimestamp:)];
+                beforeEach(^{
+                    [[engine shouldNot] receive:@selector(processResponseData:withTimestamp:)];
+                    [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(YES), any(), theValue(97), any(), nil];
+                    [PCFPushGeofenceStatusUtil stub:@selector(loadGeofenceStatus:) andReturn:[PCFPushGeofenceStatus statusWithError:NO errorReason:nil number:97]];
                 });
 
                 it(@"should handle empty JSON response data", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                        wasRequestMade = YES;
-                        NSData *data = [NSData data];
-                        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                        void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
-                        completionHandler(response, data);
-                        return nil;
-                    }];
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], ^{
+                        wasRequestAttempted = YES;
+                    })];
 
                     [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
                         wasExpectedResult = NO;
 
-                    }                    failure:^(NSError *error) {
+                    } failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
 
                 it(@"should handle bogus JSON response data", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                        wasRequestMade = YES;
-                        NSData *data = [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
-                        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                        void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
-                        completionHandler(response, data);
-                        return nil;
-                    }];
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding], ^{
+                        wasRequestAttempted = YES;
+                    })];
 
                     [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
                         wasExpectedResult = NO;
 
-                    }                    failure:^(NSError *error) {
-                        wasExpectedResult = YES;
-                    }];
-                });
-
-                it(@"should handle a failed reponse status", ^{
-
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                        wasRequestMade = YES;
-                        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
-                        void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
-                        completionHandler(response, nil);
-                        return nil;
-                    }];
-
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
-                        wasExpectedResult = NO;
-
-                    }                    failure:^(NSError *error) {
+                    } failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
 
                 it(@"should handle a failed request (like a connection error)", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                        wasRequestMade = YES;
-                        NSError *error = [NSError errorWithDomain:@"Fake request failed fakely" code:0 userInfo:nil];
-                        void(^completionHandler)(NSError *) = params[3];
-                        completionHandler(error);
-                        return nil;
-                    }];
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:failedGeofenceRequestStub(^{
+                        wasRequestAttempted = YES;
+                    })];
 
                     [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
                         wasExpectedResult = NO;
 
-                    }                    failure:^(NSError *error) {
+                    } failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
@@ -157,45 +157,39 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
             it(@"should be able to make a successful request", ^{
 
-                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                    wasRequestMade = YES;
-                    NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
-                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                    void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
-                    completionHandler(response, data);
-                    return nil;
-                }];
+                NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
+                    wasRequestAttempted = YES;
+                })];
 
                 [[PCFPushPersistentStorage should] receive:@selector(setGeofenceLastModifiedTime:) withArguments:theValue(123456789123456789L), nil];
+                [[PCFPushGeofenceStatusUtil shouldNot] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine shouldEventually] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
+                [[engine should] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
 
                 [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
                     wasExpectedResult = YES;
 
-                }                    failure:^(NSError *error) {
+                } failure:^(NSError *error) {
                     wasExpectedResult = NO;
                 }];
             });
 
             it(@"should be able to make a successful request when the userInfo is not null but doesn't contain geofence update JSON", ^{
 
-                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:^id(NSArray *params) {
-                    wasRequestMade = YES;
-                    NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
-                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                    void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
-                    completionHandler(response, data);
-                    return nil;
-                }];
+                NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
+                    wasRequestAttempted = YES;
+                })];
 
                 [[PCFPushPersistentStorage should] receive:@selector(setGeofenceLastModifiedTime:) withArguments:theValue(123456789123456789L), nil];
+                [[PCFPushGeofenceStatusUtil shouldNot] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine shouldEventually] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
+                [[engine should] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.something_else" : @"I AM NOT JSON" };
 

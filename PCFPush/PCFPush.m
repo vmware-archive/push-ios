@@ -8,6 +8,8 @@
 #import "PCFPushClient.h"
 #import "PCFPushErrors.h"
 #import "PCFPushErrorUtil.h"
+#import "PCFPushGeofenceStatus.h"
+#import "PCFPushGeofenceStatusUtil.h"
 
 // Error domain
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
@@ -51,6 +53,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler
 {
     [PCFPushClient.shared didReceiveRemoteNotification:userInfo completionHandler:handler];
+}
+
++ (PCFPushGeofenceStatus*) geofenceStatus
+{
+    return [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
 }
 
 @end
