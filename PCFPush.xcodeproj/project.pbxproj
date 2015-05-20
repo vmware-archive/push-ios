@@ -6,422 +6,429 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		F131CC2E1B0D0831004101F5 /* PCFPush-Universal */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = F131CC2F1B0D0832004101F5 /* Build configuration list for PBXAggregateTarget "PCFPush-Universal" */;
+			buildPhases = (
+				F131CC321B0D0853004101F5 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "PCFPush-Universal";
+			productName = "PCFPush-Universal";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
-		11F37BE31ADD5D3C001011C9 /* PCFPushGeofenceData.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		11F37BE41ADD5D3C001011C9 /* PCFPushGeofenceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */; };
-		11F37BE71ADD600A001011C9 /* PCFPushGeofenceLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		11F37BE81ADD600A001011C9 /* PCFPushGeofenceLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */; };
-		2318E688199C039A0054C274 /* PCFPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E654199C039A0054C274 /* PCFPushURLConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E689199C039A0054C274 /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E655199C039A0054C274 /* PCFPushURLConnection.m */; };
-		2318E68A199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E656199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E68B199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E657199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m */; };
-		2318E68C199C039A0054C274 /* NSObject+PCFJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E659199C039A0054C274 /* NSObject+PCFJSONizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E68D199C039A0054C274 /* NSObject+PCFJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E65A199C039A0054C274 /* NSObject+PCFJSONizable.m */; };
-		2318E68E199C039A0054C274 /* PCFPushRegistrationData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E65C199C039A0054C274 /* PCFPushRegistrationData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E68F199C039A0054C274 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E65D199C039A0054C274 /* PCFPushRegistrationData.m */; };
-		2318E690199C039A0054C274 /* PCFPushRegistrationPostRequestData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E65E199C039A0054C274 /* PCFPushRegistrationPostRequestData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E691199C039A0054C274 /* PCFPushRegistrationPostRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */; };
-		2318E692199C039A0054C274 /* PCFPushRegistrationResponseData.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E693199C039A0054C274 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */; };
-		2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66A199C039A0054C274 /* PCFPushParameters.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66B199C039A0054C274 /* PCFPushParameters.m */; };
-		2318E69F199C039A0054C274 /* PCFPush-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66D199C039A0054C274 /* PCFPush-Prefix.pch */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6A0199C039A0054C274 /* PCFPush.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E66E199C039A0054C274 /* PCFPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6A1199C039A0054C274 /* PCFPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E66F199C039A0054C274 /* PCFPush.m */; };
-		2318E6A6199C039A0054C274 /* PCFMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E676199C039A0054C274 /* PCFMapping.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6A7199C039A0054C274 /* PCFSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E677199C039A0054C274 /* PCFSortDescriptors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6A8199C039A0054C274 /* PCFHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E679199C039A0054C274 /* PCFHardwareUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6A9199C039A0054C274 /* PCFHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E67A199C039A0054C274 /* PCFHardwareUtil.m */; };
-		2318E6AC199C039A0054C274 /* PCFNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E67D199C039A0054C274 /* PCFNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6AD199C039A0054C274 /* PCFNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E67E199C039A0054C274 /* PCFNotifications.m */; };
-		2318E6B0199C039A0054C274 /* PCFPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E681199C039A0054C274 /* PCFPushDebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6B1199C039A0054C274 /* PCFPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E682199C039A0054C274 /* PCFPushDebug.m */; };
-		2318E6B2199C039A0054C274 /* PCFPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E683199C039A0054C274 /* PCFPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6B3199C039A0054C274 /* PCFPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E684199C039A0054C274 /* PCFPushErrorUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6B4199C039A0054C274 /* PCFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E685199C039A0054C274 /* PCFPushErrorUtil.m */; };
-		2318E6B5199C039A0054C274 /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 2318E686199C039A0054C274 /* PCFPushHexUtil.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2318E6B6199C039A0054C274 /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 2318E687199C039A0054C274 /* PCFPushHexUtil.m */; };
-		B69DB039F1E97E573F39C03A /* PCFPushGeofenceStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBE9A0377F688AB2D1F16 /* PCFPushGeofenceStatus.m */; };
-		B69DB1EEC9EB7BF62896AAA0 /* PCFPushGeofenceStatusUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DB8195974FF4923F4D17B /* PCFPushGeofenceStatusUtil.h */; };
-		B69DB2D24516A6782605DEE2 /* PCFPushGeofenceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBC1B7BC4509C7E4FA986 /* PCFPushGeofenceUpdater.m */; };
-		B69DB3A12431A5816FC17742 /* PCFPushGeofenceStatusUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBA8A83D311DC72EC0076 /* PCFPushGeofenceStatusUtil.m */; };
-		B69DB3C3791FD7D020B6B690 /* PCFPushGeofenceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB216AC019030320DE841 /* PCFPushGeofenceHandler.m */; };
-		B69DB570E9C76F5515B42C4D /* PCFPushGeofencePersistentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB59C486F16E87C96C4B8 /* PCFPushGeofencePersistentStore.m */; };
-		B69DB8E0DED2E9249B97548E /* PCFPushGeofenceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DBCC03168C8606F7B7249 /* PCFPushGeofenceUpdater.h */; };
-		B69DB941956271D4368ADEB1 /* PCFPushGeofenceStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DBD41558A9B2185E9EE0A /* PCFPushGeofenceStatus.h */; };
-		B69DBA34E0E3ED2B69454D2E /* PCFPushGeofenceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB4B5CC00E3E89C869D31 /* PCFPushGeofenceUtil.m */; };
-		B69DBB5A6FD6FC9CCFB6086F /* PCFPushGeofenceRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DB86777A36076D36BB22D /* PCFPushGeofenceRegistrar.h */; };
-		B69DBE3D8848CE4BEADC86D8 /* PCFPushGeofenceHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DBAFA3303E5DCC6749C2B /* PCFPushGeofenceHandler.h */; };
-		B69DBF8600873A67D2ABD3A6 /* PCFPushGeofencePersistentStore.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DB1C2D882B1AB6F8F73E5 /* PCFPushGeofencePersistentStore.h */; };
-		B69DBFCB75D9FACF9BD7F685 /* PCFPushGeofenceUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DB318EB3F2765AF94D34F /* PCFPushGeofenceUtil.h */; };
-		B69DBFE2898CE4FFA99C2848 /* PCFPushGeofenceRegistrar.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB963D0F1D32741B06483 /* PCFPushGeofenceRegistrar.m */; };
-		B6AAE235DECB19F6F60BC24C /* PCFPushGeofenceEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAE9734B009E5D34DE6680 /* PCFPushGeofenceEngine.h */; };
-		B6AAE2368E14973F43CA128A /* PCFPushGeofenceLocationMap.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAE4A4FB3E24B5C25CBF67 /* PCFPushGeofenceLocationMap.h */; };
-		B6AAE3281C14E902B4387CCA /* PCFPushGeofenceDataList.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAE0169A8F29ED3BE9981E /* PCFPushGeofenceDataList.h */; };
-		B6AAE4F0A62FB3DB181EBC21 /* PCFPushGeofenceLocationMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAE98A3ACCC62519ADDE29 /* PCFPushGeofenceLocationMap.m */; };
-		B6AAE60D18DD698257FF7330 /* PCFPushGeofenceResponseData.h in Headers */ = {isa = PBXBuildFile; fileRef = B6AAEC4FED7F52E461AC3F77 /* PCFPushGeofenceResponseData.h */; };
-		B6AAEADB189ADCF9746258E0 /* PCFPushGeofenceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAECE1CE6EDD30D6788C23 /* PCFPushGeofenceEngine.m */; };
-		B6AAEC75CF1D18F241519531 /* PCFPushGeofenceDataList.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAEAA082AAC56CD4F66FBD /* PCFPushGeofenceDataList.m */; };
-		B6AAED1D0CD3BDF37F9F40A7 /* PCFPushGeofenceResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = B6AAE6EC49ADE7B7EFB63AAE /* PCFPushGeofenceResponseData.m */; };
-		D45B1D7A19A2944000F57230 /* PCFPushRegistrationPutRequestData.h in Headers */ = {isa = PBXBuildFile; fileRef = D45B1D7819A2944000F57230 /* PCFPushRegistrationPutRequestData.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D45B1D7B19A2944000F57230 /* PCFPushRegistrationPutRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = D45B1D7919A2944000F57230 /* PCFPushRegistrationPutRequestData.m */; };
-		D4B9FF2319A3CD950070A429 /* PCFPushPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = D4B9FF2119A3CD950070A429 /* PCFPushPersistentStorage.h */; };
-		D4B9FF2419A3CD950070A429 /* PCFPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B9FF2219A3CD950070A429 /* PCFPushPersistentStorage.m */; };
-		D4B9FF2719A511370070A429 /* PCFPushClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4B9FF2519A511370070A429 /* PCFPushClient.h */; };
-		D4B9FF2819A511370070A429 /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B9FF2619A511370070A429 /* PCFPushClient.m */; };
-		D4F3AC4F19A3A25F005E84FF /* PCFTagsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = D4F3AC4D19A3A25F005E84FF /* PCFTagsHelper.h */; };
-		D4F3AC5019A3A25F005E84FF /* PCFTagsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC4E19A3A25F005E84FF /* PCFTagsHelper.m */; };
-		F19D6BE61AE82AE70009D4B6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F19D6BE51AE82AE70009D4B6 /* CoreLocation.framework */; };
+		F131CB3E1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CAF71B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.h */; };
+		F131CB3F1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CAF81B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.m */; };
+		F131CB411B0D0664004101F5 /* PCFPushURLConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CAF91B0D0663004101F5 /* PCFPushURLConnection.h */; };
+		F131CB421B0D0664004101F5 /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CAFA1B0D0663004101F5 /* PCFPushURLConnection.m */; };
+		F131CB441B0D0664004101F5 /* NSObject+PCFJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CAFC1B0D0663004101F5 /* NSObject+PCFJSONizable.h */; };
+		F131CB451B0D0664004101F5 /* NSObject+PCFJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CAFD1B0D0663004101F5 /* NSObject+PCFJSONizable.m */; };
+		F131CB471B0D0664004101F5 /* PCFPushGeofenceEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CAFF1B0D0663004101F5 /* PCFPushGeofenceEngine.h */; };
+		F131CB481B0D0664004101F5 /* PCFPushGeofenceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB001B0D0663004101F5 /* PCFPushGeofenceEngine.m */; };
+		F131CB4A1B0D0664004101F5 /* PCFPushGeofenceHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB011B0D0663004101F5 /* PCFPushGeofenceHandler.h */; };
+		F131CB4B1B0D0664004101F5 /* PCFPushGeofenceHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB021B0D0663004101F5 /* PCFPushGeofenceHandler.m */; };
+		F131CB4D1B0D0664004101F5 /* PCFPushGeofencePersistentStore.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB031B0D0663004101F5 /* PCFPushGeofencePersistentStore.h */; };
+		F131CB4E1B0D0664004101F5 /* PCFPushGeofencePersistentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB041B0D0663004101F5 /* PCFPushGeofencePersistentStore.m */; };
+		F131CB501B0D0664004101F5 /* PCFPushGeofenceRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB051B0D0663004101F5 /* PCFPushGeofenceRegistrar.h */; };
+		F131CB511B0D0664004101F5 /* PCFPushGeofenceRegistrar.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB061B0D0663004101F5 /* PCFPushGeofenceRegistrar.m */; };
+		F131CB531B0D0664004101F5 /* PCFPushGeofenceStatusUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB071B0D0663004101F5 /* PCFPushGeofenceStatusUtil.h */; };
+		F131CB541B0D0664004101F5 /* PCFPushGeofenceStatusUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB081B0D0663004101F5 /* PCFPushGeofenceStatusUtil.m */; };
+		F131CB561B0D0664004101F5 /* PCFPushGeofenceUpdater.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB091B0D0663004101F5 /* PCFPushGeofenceUpdater.h */; };
+		F131CB571B0D0664004101F5 /* PCFPushGeofenceUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB0A1B0D0663004101F5 /* PCFPushGeofenceUpdater.m */; };
+		F131CB591B0D0664004101F5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F131CB0B1B0D0663004101F5 /* Info.plist */; };
+		F131CB5B1B0D0664004101F5 /* PCFPushGeofenceData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB0D1B0D0663004101F5 /* PCFPushGeofenceData.h */; };
+		F131CB5C1B0D0664004101F5 /* PCFPushGeofenceData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB0E1B0D0663004101F5 /* PCFPushGeofenceData.m */; };
+		F131CB5E1B0D0664004101F5 /* PCFPushGeofenceDataList.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB0F1B0D0663004101F5 /* PCFPushGeofenceDataList.h */; };
+		F131CB5F1B0D0664004101F5 /* PCFPushGeofenceDataList.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB101B0D0663004101F5 /* PCFPushGeofenceDataList.m */; };
+		F131CB611B0D0664004101F5 /* PCFPushGeofenceLocation.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB111B0D0663004101F5 /* PCFPushGeofenceLocation.h */; };
+		F131CB621B0D0664004101F5 /* PCFPushGeofenceLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB121B0D0663004101F5 /* PCFPushGeofenceLocation.m */; };
+		F131CB641B0D0664004101F5 /* PCFPushGeofenceLocationMap.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB131B0D0663004101F5 /* PCFPushGeofenceLocationMap.h */; };
+		F131CB651B0D0664004101F5 /* PCFPushGeofenceLocationMap.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB141B0D0663004101F5 /* PCFPushGeofenceLocationMap.m */; };
+		F131CB671B0D0664004101F5 /* PCFPushGeofenceResponseData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB151B0D0663004101F5 /* PCFPushGeofenceResponseData.h */; };
+		F131CB681B0D0664004101F5 /* PCFPushGeofenceResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB161B0D0663004101F5 /* PCFPushGeofenceResponseData.m */; };
+		F131CB6A1B0D0664004101F5 /* PCFPushGeofenceStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB171B0D0663004101F5 /* PCFPushGeofenceStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F131CB6B1B0D0664004101F5 /* PCFPushGeofenceStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB181B0D0663004101F5 /* PCFPushGeofenceStatus.m */; };
+		F131CB6D1B0D0664004101F5 /* PCFPushRegistrationData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB191B0D0663004101F5 /* PCFPushRegistrationData.h */; };
+		F131CB6E1B0D0664004101F5 /* PCFPushRegistrationData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB1A1B0D0663004101F5 /* PCFPushRegistrationData.m */; };
+		F131CB701B0D0664004101F5 /* PCFPushRegistrationPostRequestData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB1B1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.h */; };
+		F131CB711B0D0664004101F5 /* PCFPushRegistrationPostRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB1C1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.m */; };
+		F131CB731B0D0664004101F5 /* PCFPushRegistrationPutRequestData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB1D1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.h */; };
+		F131CB741B0D0664004101F5 /* PCFPushRegistrationPutRequestData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB1E1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.m */; };
+		F131CB761B0D0664004101F5 /* PCFPushRegistrationResponseData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB1F1B0D0663004101F5 /* PCFPushRegistrationResponseData.h */; };
+		F131CB771B0D0664004101F5 /* PCFPushRegistrationResponseData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB201B0D0663004101F5 /* PCFPushRegistrationResponseData.m */; };
+		F131CB791B0D0664004101F5 /* PCFPush-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = F131CB211B0D0663004101F5 /* PCFPush-Prefix.pch */; };
+		F131CB7A1B0D0664004101F5 /* PCFPush.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB221B0D0663004101F5 /* PCFPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F131CB7B1B0D0664004101F5 /* PCFPush.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB231B0D0663004101F5 /* PCFPush.m */; };
+		F131CB7D1B0D0664004101F5 /* PCFPushClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB241B0D0663004101F5 /* PCFPushClient.h */; };
+		F131CB7E1B0D0664004101F5 /* PCFPushClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB251B0D0663004101F5 /* PCFPushClient.m */; };
+		F131CB801B0D0664004101F5 /* PCFPushParameters.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB261B0D0664004101F5 /* PCFPushParameters.h */; };
+		F131CB811B0D0664004101F5 /* PCFPushParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB271B0D0664004101F5 /* PCFPushParameters.m */; };
+		F131CB831B0D0664004101F5 /* PCFPushPersistentStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB291B0D0664004101F5 /* PCFPushPersistentStorage.h */; };
+		F131CB841B0D0664004101F5 /* PCFPushPersistentStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB2A1B0D0664004101F5 /* PCFPushPersistentStorage.m */; };
+		F131CB861B0D0664004101F5 /* PCFMapping.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB2C1B0D0664004101F5 /* PCFMapping.h */; };
+		F131CB871B0D0664004101F5 /* PCFSortDescriptors.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB2D1B0D0664004101F5 /* PCFSortDescriptors.h */; };
+		F131CB881B0D0664004101F5 /* PCFHardwareUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB2F1B0D0664004101F5 /* PCFHardwareUtil.h */; };
+		F131CB891B0D0664004101F5 /* PCFHardwareUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB301B0D0664004101F5 /* PCFHardwareUtil.m */; };
+		F131CB8B1B0D0664004101F5 /* PCFNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB311B0D0664004101F5 /* PCFNotifications.h */; };
+		F131CB8C1B0D0664004101F5 /* PCFNotifications.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB321B0D0664004101F5 /* PCFNotifications.m */; };
+		F131CB8E1B0D0664004101F5 /* PCFPushDebug.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB331B0D0664004101F5 /* PCFPushDebug.h */; };
+		F131CB8F1B0D0664004101F5 /* PCFPushDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB341B0D0664004101F5 /* PCFPushDebug.m */; };
+		F131CB911B0D0664004101F5 /* PCFPushErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB351B0D0664004101F5 /* PCFPushErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F131CB921B0D0664004101F5 /* PCFPushErrorUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB361B0D0664004101F5 /* PCFPushErrorUtil.h */; };
+		F131CB931B0D0664004101F5 /* PCFPushErrorUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB371B0D0664004101F5 /* PCFPushErrorUtil.m */; };
+		F131CB951B0D0664004101F5 /* PCFPushGeofenceUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB381B0D0664004101F5 /* PCFPushGeofenceUtil.h */; };
+		F131CB961B0D0664004101F5 /* PCFPushGeofenceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB391B0D0664004101F5 /* PCFPushGeofenceUtil.m */; };
+		F131CB981B0D0664004101F5 /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB3A1B0D0664004101F5 /* PCFPushHexUtil.h */; };
+		F131CB991B0D0664004101F5 /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB3B1B0D0664004101F5 /* PCFPushHexUtil.m */; };
+		F131CB9B1B0D0664004101F5 /* PCFTagsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB3C1B0D0664004101F5 /* PCFTagsHelper.h */; };
+		F131CB9C1B0D0664004101F5 /* PCFTagsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB3D1B0D0664004101F5 /* PCFTagsHelper.m */; };
+		F131CC341B0D0AC3004101F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F131CC331B0D0AC3004101F5 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceData.h; sourceTree = "<group>"; };
-		11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceData.m; sourceTree = "<group>"; };
-		11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceLocation.h; sourceTree = "<group>"; };
-		11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocation.m; sourceTree = "<group>"; };
-		2318E654199C039A0054C274 /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
-		2318E655199C039A0054C274 /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
-		2318E656199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFBackEndConnection.h"; sourceTree = "<group>"; };
-		2318E657199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFBackEndConnection.m"; sourceTree = "<group>"; };
-		2318E659199C039A0054C274 /* NSObject+PCFJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PCFJSONizable.h"; sourceTree = "<group>"; };
-		2318E65A199C039A0054C274 /* NSObject+PCFJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PCFJSONizable.m"; sourceTree = "<group>"; };
-		2318E65C199C039A0054C274 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
-		2318E65D199C039A0054C274 /* PCFPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationData.m; sourceTree = "<group>"; };
-		2318E65E199C039A0054C274 /* PCFPushRegistrationPostRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationPostRequestData.h; sourceTree = "<group>"; };
-		2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationPostRequestData.m; sourceTree = "<group>"; };
-		2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationResponseData.h; sourceTree = "<group>"; };
-		2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationResponseData.m; sourceTree = "<group>"; };
-		2318E66A199C039A0054C274 /* PCFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushParameters.h; sourceTree = "<group>"; };
-		2318E66B199C039A0054C274 /* PCFPushParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushParameters.m; sourceTree = "<group>"; };
-		2318E66C199C039A0054C274 /* PCFPush-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.info; path = "PCFPush-Info.plist"; sourceTree = "<group>"; };
-		2318E66D199C039A0054C274 /* PCFPush-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPush-Prefix.pch"; sourceTree = "<group>"; };
-		2318E66E199C039A0054C274 /* PCFPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPush.h; sourceTree = "<group>"; };
-		2318E66F199C039A0054C274 /* PCFPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPush.m; sourceTree = "<group>"; };
-		2318E676199C039A0054C274 /* PCFMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFMapping.h; sourceTree = "<group>"; };
-		2318E677199C039A0054C274 /* PCFSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFSortDescriptors.h; sourceTree = "<group>"; };
-		2318E679199C039A0054C274 /* PCFHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFHardwareUtil.h; sourceTree = "<group>"; };
-		2318E67A199C039A0054C274 /* PCFHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFHardwareUtil.m; sourceTree = "<group>"; };
-		2318E67D199C039A0054C274 /* PCFNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFNotifications.h; sourceTree = "<group>"; };
-		2318E67E199C039A0054C274 /* PCFNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFNotifications.m; sourceTree = "<group>"; };
-		2318E681199C039A0054C274 /* PCFPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDebug.h; sourceTree = "<group>"; };
-		2318E682199C039A0054C274 /* PCFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDebug.m; sourceTree = "<group>"; };
-		2318E683199C039A0054C274 /* PCFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrors.h; sourceTree = "<group>"; };
-		2318E684199C039A0054C274 /* PCFPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrorUtil.h; sourceTree = "<group>"; };
-		2318E685199C039A0054C274 /* PCFPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushErrorUtil.m; sourceTree = "<group>"; };
-		2318E686199C039A0054C274 /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
-		2318E687199C039A0054C274 /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
-		B69DB1C2D882B1AB6F8F73E5 /* PCFPushGeofencePersistentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofencePersistentStore.h; sourceTree = "<group>"; };
-		B69DB216AC019030320DE841 /* PCFPushGeofenceHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceHandler.m; sourceTree = "<group>"; };
-		B69DB318EB3F2765AF94D34F /* PCFPushGeofenceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceUtil.h; sourceTree = "<group>"; };
-		B69DB4B5CC00E3E89C869D31 /* PCFPushGeofenceUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUtil.m; sourceTree = "<group>"; };
-		B69DB59C486F16E87C96C4B8 /* PCFPushGeofencePersistentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofencePersistentStore.m; sourceTree = "<group>"; };
-		B69DB8195974FF4923F4D17B /* PCFPushGeofenceStatusUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceStatusUtil.h; sourceTree = "<group>"; };
-		B69DB86777A36076D36BB22D /* PCFPushGeofenceRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceRegistrar.h; sourceTree = "<group>"; };
-		B69DB963D0F1D32741B06483 /* PCFPushGeofenceRegistrar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceRegistrar.m; sourceTree = "<group>"; };
-		B69DBA8A83D311DC72EC0076 /* PCFPushGeofenceStatusUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatusUtil.m; sourceTree = "<group>"; };
-		B69DBAFA3303E5DCC6749C2B /* PCFPushGeofenceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceHandler.h; sourceTree = "<group>"; };
-		B69DBC1B7BC4509C7E4FA986 /* PCFPushGeofenceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUpdater.m; sourceTree = "<group>"; };
-		B69DBCC03168C8606F7B7249 /* PCFPushGeofenceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceUpdater.h; sourceTree = "<group>"; };
-		B69DBD41558A9B2185E9EE0A /* PCFPushGeofenceStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceStatus.h; sourceTree = "<group>"; };
-		B69DBE9A0377F688AB2D1F16 /* PCFPushGeofenceStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatus.m; sourceTree = "<group>"; };
-		B6AAE0169A8F29ED3BE9981E /* PCFPushGeofenceDataList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceDataList.h; sourceTree = "<group>"; };
-		B6AAE4A4FB3E24B5C25CBF67 /* PCFPushGeofenceLocationMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceLocationMap.h; sourceTree = "<group>"; };
-		B6AAE6EC49ADE7B7EFB63AAE /* PCFPushGeofenceResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceResponseData.m; sourceTree = "<group>"; };
-		B6AAE9734B009E5D34DE6680 /* PCFPushGeofenceEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceEngine.h; sourceTree = "<group>"; };
-		B6AAE98A3ACCC62519ADDE29 /* PCFPushGeofenceLocationMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocationMap.m; sourceTree = "<group>"; };
-		B6AAEAA082AAC56CD4F66FBD /* PCFPushGeofenceDataList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceDataList.m; sourceTree = "<group>"; };
-		B6AAEC4FED7F52E461AC3F77 /* PCFPushGeofenceResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceResponseData.h; sourceTree = "<group>"; };
-		B6AAECE1CE6EDD30D6788C23 /* PCFPushGeofenceEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceEngine.m; sourceTree = "<group>"; };
-		D45B1D7819A2944000F57230 /* PCFPushRegistrationPutRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationPutRequestData.h; sourceTree = "<group>"; };
-		D45B1D7919A2944000F57230 /* PCFPushRegistrationPutRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationPutRequestData.m; sourceTree = "<group>"; };
-		D4B9FF2119A3CD950070A429 /* PCFPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushPersistentStorage.h; sourceTree = "<group>"; };
-		D4B9FF2219A3CD950070A429 /* PCFPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushPersistentStorage.m; sourceTree = "<group>"; };
-		D4B9FF2519A511370070A429 /* PCFPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClient.h; sourceTree = "<group>"; };
-		D4B9FF2619A511370070A429 /* PCFPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushClient.m; sourceTree = "<group>"; };
-		D4F3AC4D19A3A25F005E84FF /* PCFTagsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFTagsHelper.h; sourceTree = "<group>"; };
-		D4F3AC4E19A3A25F005E84FF /* PCFTagsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFTagsHelper.m; sourceTree = "<group>"; };
-		F19D6BE51AE82AE70009D4B6 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
-		F1B601851922A12500B65371 /* PCFPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework.static; includeInIndex = 0; path = PCFPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F131CADA1B0D05B7004101F5 /* PCFPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PCFPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F131CAF71B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection+PCFBackEndConnection.h"; sourceTree = "<group>"; };
+		F131CAF81B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection+PCFBackEndConnection.m"; sourceTree = "<group>"; };
+		F131CAF91B0D0663004101F5 /* PCFPushURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnection.h; sourceTree = "<group>"; };
+		F131CAFA1B0D0663004101F5 /* PCFPushURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnection.m; sourceTree = "<group>"; };
+		F131CAFC1B0D0663004101F5 /* NSObject+PCFJSONizable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+PCFJSONizable.h"; sourceTree = "<group>"; };
+		F131CAFD1B0D0663004101F5 /* NSObject+PCFJSONizable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+PCFJSONizable.m"; sourceTree = "<group>"; };
+		F131CAFF1B0D0663004101F5 /* PCFPushGeofenceEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceEngine.h; sourceTree = "<group>"; };
+		F131CB001B0D0663004101F5 /* PCFPushGeofenceEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceEngine.m; sourceTree = "<group>"; };
+		F131CB011B0D0663004101F5 /* PCFPushGeofenceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceHandler.h; sourceTree = "<group>"; };
+		F131CB021B0D0663004101F5 /* PCFPushGeofenceHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceHandler.m; sourceTree = "<group>"; };
+		F131CB031B0D0663004101F5 /* PCFPushGeofencePersistentStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofencePersistentStore.h; sourceTree = "<group>"; };
+		F131CB041B0D0663004101F5 /* PCFPushGeofencePersistentStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofencePersistentStore.m; sourceTree = "<group>"; };
+		F131CB051B0D0663004101F5 /* PCFPushGeofenceRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceRegistrar.h; sourceTree = "<group>"; };
+		F131CB061B0D0663004101F5 /* PCFPushGeofenceRegistrar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceRegistrar.m; sourceTree = "<group>"; };
+		F131CB071B0D0663004101F5 /* PCFPushGeofenceStatusUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceStatusUtil.h; sourceTree = "<group>"; };
+		F131CB081B0D0663004101F5 /* PCFPushGeofenceStatusUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatusUtil.m; sourceTree = "<group>"; };
+		F131CB091B0D0663004101F5 /* PCFPushGeofenceUpdater.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceUpdater.h; sourceTree = "<group>"; };
+		F131CB0A1B0D0663004101F5 /* PCFPushGeofenceUpdater.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUpdater.m; sourceTree = "<group>"; };
+		F131CB0B1B0D0663004101F5 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F131CB0D1B0D0663004101F5 /* PCFPushGeofenceData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceData.h; sourceTree = "<group>"; };
+		F131CB0E1B0D0663004101F5 /* PCFPushGeofenceData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceData.m; sourceTree = "<group>"; };
+		F131CB0F1B0D0663004101F5 /* PCFPushGeofenceDataList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceDataList.h; sourceTree = "<group>"; };
+		F131CB101B0D0663004101F5 /* PCFPushGeofenceDataList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceDataList.m; sourceTree = "<group>"; };
+		F131CB111B0D0663004101F5 /* PCFPushGeofenceLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceLocation.h; sourceTree = "<group>"; };
+		F131CB121B0D0663004101F5 /* PCFPushGeofenceLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocation.m; sourceTree = "<group>"; };
+		F131CB131B0D0663004101F5 /* PCFPushGeofenceLocationMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceLocationMap.h; sourceTree = "<group>"; };
+		F131CB141B0D0663004101F5 /* PCFPushGeofenceLocationMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceLocationMap.m; sourceTree = "<group>"; };
+		F131CB151B0D0663004101F5 /* PCFPushGeofenceResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceResponseData.h; sourceTree = "<group>"; };
+		F131CB161B0D0663004101F5 /* PCFPushGeofenceResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceResponseData.m; sourceTree = "<group>"; };
+		F131CB171B0D0663004101F5 /* PCFPushGeofenceStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceStatus.h; sourceTree = "<group>"; };
+		F131CB181B0D0663004101F5 /* PCFPushGeofenceStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceStatus.m; sourceTree = "<group>"; };
+		F131CB191B0D0663004101F5 /* PCFPushRegistrationData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationData.h; sourceTree = "<group>"; };
+		F131CB1A1B0D0663004101F5 /* PCFPushRegistrationData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationData.m; sourceTree = "<group>"; };
+		F131CB1B1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationPostRequestData.h; sourceTree = "<group>"; };
+		F131CB1C1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationPostRequestData.m; sourceTree = "<group>"; };
+		F131CB1D1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationPutRequestData.h; sourceTree = "<group>"; };
+		F131CB1E1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationPutRequestData.m; sourceTree = "<group>"; };
+		F131CB1F1B0D0663004101F5 /* PCFPushRegistrationResponseData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushRegistrationResponseData.h; sourceTree = "<group>"; };
+		F131CB201B0D0663004101F5 /* PCFPushRegistrationResponseData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushRegistrationResponseData.m; sourceTree = "<group>"; };
+		F131CB211B0D0663004101F5 /* PCFPush-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPush-Prefix.pch"; sourceTree = "<group>"; };
+		F131CB221B0D0663004101F5 /* PCFPush.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPush.h; sourceTree = "<group>"; };
+		F131CB231B0D0663004101F5 /* PCFPush.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPush.m; sourceTree = "<group>"; };
+		F131CB241B0D0663004101F5 /* PCFPushClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushClient.h; sourceTree = "<group>"; };
+		F131CB251B0D0663004101F5 /* PCFPushClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushClient.m; sourceTree = "<group>"; };
+		F131CB261B0D0664004101F5 /* PCFPushParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushParameters.h; sourceTree = "<group>"; };
+		F131CB271B0D0664004101F5 /* PCFPushParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushParameters.m; sourceTree = "<group>"; };
+		F131CB291B0D0664004101F5 /* PCFPushPersistentStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushPersistentStorage.h; sourceTree = "<group>"; };
+		F131CB2A1B0D0664004101F5 /* PCFPushPersistentStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushPersistentStorage.m; sourceTree = "<group>"; };
+		F131CB2C1B0D0664004101F5 /* PCFMapping.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFMapping.h; sourceTree = "<group>"; };
+		F131CB2D1B0D0664004101F5 /* PCFSortDescriptors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFSortDescriptors.h; sourceTree = "<group>"; };
+		F131CB2F1B0D0664004101F5 /* PCFHardwareUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFHardwareUtil.h; sourceTree = "<group>"; };
+		F131CB301B0D0664004101F5 /* PCFHardwareUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFHardwareUtil.m; sourceTree = "<group>"; };
+		F131CB311B0D0664004101F5 /* PCFNotifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFNotifications.h; sourceTree = "<group>"; };
+		F131CB321B0D0664004101F5 /* PCFNotifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFNotifications.m; sourceTree = "<group>"; };
+		F131CB331B0D0664004101F5 /* PCFPushDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushDebug.h; sourceTree = "<group>"; };
+		F131CB341B0D0664004101F5 /* PCFPushDebug.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushDebug.m; sourceTree = "<group>"; };
+		F131CB351B0D0664004101F5 /* PCFPushErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrors.h; sourceTree = "<group>"; };
+		F131CB361B0D0664004101F5 /* PCFPushErrorUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushErrorUtil.h; sourceTree = "<group>"; };
+		F131CB371B0D0664004101F5 /* PCFPushErrorUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushErrorUtil.m; sourceTree = "<group>"; };
+		F131CB381B0D0664004101F5 /* PCFPushGeofenceUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushGeofenceUtil.h; sourceTree = "<group>"; };
+		F131CB391B0D0664004101F5 /* PCFPushGeofenceUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUtil.m; sourceTree = "<group>"; };
+		F131CB3A1B0D0664004101F5 /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
+		F131CB3B1B0D0664004101F5 /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
+		F131CB3C1B0D0664004101F5 /* PCFTagsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFTagsHelper.h; sourceTree = "<group>"; };
+		F131CB3D1B0D0664004101F5 /* PCFTagsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFTagsHelper.m; sourceTree = "<group>"; };
+		F131CC331B0D0AC3004101F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F1B6015D1922A12500B65371 /* Frameworks */ = {
+		F131CAD61B0D05B7004101F5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F19D6BE61AE82AE70009D4B6 /* CoreLocation.framework in Frameworks */,
+				F131CC341B0D0AC3004101F5 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11F37BDF1ADD5CF8001011C9 /* Api */ = {
+		F131CAD01B0D05B7004101F5 = {
 			isa = PBXGroup;
 			children = (
-				2318E65C199C039A0054C274 /* PCFPushRegistrationData.h */,
-				2318E65D199C039A0054C274 /* PCFPushRegistrationData.m */,
-				2318E65E199C039A0054C274 /* PCFPushRegistrationPostRequestData.h */,
-				2318E65F199C039A0054C274 /* PCFPushRegistrationPostRequestData.m */,
-				D45B1D7819A2944000F57230 /* PCFPushRegistrationPutRequestData.h */,
-				D45B1D7919A2944000F57230 /* PCFPushRegistrationPutRequestData.m */,
-				2318E660199C039A0054C274 /* PCFPushRegistrationResponseData.h */,
-				2318E661199C039A0054C274 /* PCFPushRegistrationResponseData.m */,
+				F131CC331B0D0AC3004101F5 /* CoreLocation.framework */,
+				F131CADC1B0D05B7004101F5 /* PCFPush */,
+				F131CADB1B0D05B7004101F5 /* Products */,
 			);
-			name = Api;
 			sourceTree = "<group>";
 		};
-		11F37BE01ADD5D01001011C9 /* Geofence */ = {
+		F131CADB1B0D05B7004101F5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				11F37BE11ADD5D3C001011C9 /* PCFPushGeofenceData.h */,
-				11F37BE21ADD5D3C001011C9 /* PCFPushGeofenceData.m */,
-				11F37BE51ADD600A001011C9 /* PCFPushGeofenceLocation.h */,
-				11F37BE61ADD600A001011C9 /* PCFPushGeofenceLocation.m */,
-				B6AAE6EC49ADE7B7EFB63AAE /* PCFPushGeofenceResponseData.m */,
-				B6AAEC4FED7F52E461AC3F77 /* PCFPushGeofenceResponseData.h */,
-				B6AAEAA082AAC56CD4F66FBD /* PCFPushGeofenceDataList.m */,
-				B6AAE0169A8F29ED3BE9981E /* PCFPushGeofenceDataList.h */,
-				B6AAE98A3ACCC62519ADDE29 /* PCFPushGeofenceLocationMap.m */,
-				B6AAE4A4FB3E24B5C25CBF67 /* PCFPushGeofenceLocationMap.h */,
-				B69DBE9A0377F688AB2D1F16 /* PCFPushGeofenceStatus.m */,
-				B69DBD41558A9B2185E9EE0A /* PCFPushGeofenceStatus.h */,
+				F131CADA1B0D05B7004101F5 /* PCFPush.framework */,
 			);
-			name = Geofence;
+			name = Products;
 			sourceTree = "<group>";
 		};
-		2318E652199C039A0054C274 /* PCFPush */ = {
+		F131CADC1B0D05B7004101F5 /* PCFPush */ = {
 			isa = PBXGroup;
 			children = (
-				2318E653199C039A0054C274 /* BackEnd */,
-				2318E658199C039A0054C274 /* Categories */,
-				2318E65B199C039A0054C274 /* Models */,
-				2318E672199C039A0054C274 /* Persistent Storage */,
-				2318E675199C039A0054C274 /* Protocols */,
-				2318E678199C039A0054C274 /* Utils */,
-				2318E66C199C039A0054C274 /* PCFPush-Info.plist */,
-				2318E66D199C039A0054C274 /* PCFPush-Prefix.pch */,
-				2318E66A199C039A0054C274 /* PCFPushParameters.h */,
-				2318E66B199C039A0054C274 /* PCFPushParameters.m */,
-				2318E66E199C039A0054C274 /* PCFPush.h */,
-				2318E66F199C039A0054C274 /* PCFPush.m */,
-				D4B9FF2519A511370070A429 /* PCFPushClient.h */,
-				D4B9FF2619A511370070A429 /* PCFPushClient.m */,
-				B6AAE519EC3D8EB53624B601 /* Geofence */,
+				F131CAF61B0D0663004101F5 /* BackEnd */,
+				F131CAFB1B0D0663004101F5 /* Categories */,
+				F131CAFE1B0D0663004101F5 /* Geofence */,
+				F131CB0B1B0D0663004101F5 /* Info.plist */,
+				F131CB0C1B0D0663004101F5 /* Models */,
+				F131CB211B0D0663004101F5 /* PCFPush-Prefix.pch */,
+				F131CB221B0D0663004101F5 /* PCFPush.h */,
+				F131CB231B0D0663004101F5 /* PCFPush.m */,
+				F131CB241B0D0663004101F5 /* PCFPushClient.h */,
+				F131CB251B0D0663004101F5 /* PCFPushClient.m */,
+				F131CB261B0D0664004101F5 /* PCFPushParameters.h */,
+				F131CB271B0D0664004101F5 /* PCFPushParameters.m */,
+				F131CB281B0D0664004101F5 /* Persistent Storage */,
+				F131CB2B1B0D0664004101F5 /* Protocols */,
+				F131CB2E1B0D0664004101F5 /* Utils */,
 			);
 			path = PCFPush;
 			sourceTree = "<group>";
 		};
-		2318E653199C039A0054C274 /* BackEnd */ = {
+		F131CAF61B0D0663004101F5 /* BackEnd */ = {
 			isa = PBXGroup;
 			children = (
-				2318E654199C039A0054C274 /* PCFPushURLConnection.h */,
-				2318E655199C039A0054C274 /* PCFPushURLConnection.m */,
-				2318E656199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h */,
-				2318E657199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m */,
+				F131CAF71B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.h */,
+				F131CAF81B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.m */,
+				F131CAF91B0D0663004101F5 /* PCFPushURLConnection.h */,
+				F131CAFA1B0D0663004101F5 /* PCFPushURLConnection.m */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
 		};
-		2318E658199C039A0054C274 /* Categories */ = {
+		F131CAFB1B0D0663004101F5 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
-				2318E659199C039A0054C274 /* NSObject+PCFJSONizable.h */,
-				2318E65A199C039A0054C274 /* NSObject+PCFJSONizable.m */,
+				F131CAFC1B0D0663004101F5 /* NSObject+PCFJSONizable.h */,
+				F131CAFD1B0D0663004101F5 /* NSObject+PCFJSONizable.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		2318E65B199C039A0054C274 /* Models */ = {
+		F131CAFE1B0D0663004101F5 /* Geofence */ = {
 			isa = PBXGroup;
 			children = (
-				11F37BDF1ADD5CF8001011C9 /* Api */,
-				11F37BE01ADD5D01001011C9 /* Geofence */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		2318E672199C039A0054C274 /* Persistent Storage */ = {
-			isa = PBXGroup;
-			children = (
-				D4B9FF2119A3CD950070A429 /* PCFPushPersistentStorage.h */,
-				D4B9FF2219A3CD950070A429 /* PCFPushPersistentStorage.m */,
-			);
-			path = "Persistent Storage";
-			sourceTree = "<group>";
-		};
-		2318E675199C039A0054C274 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				2318E676199C039A0054C274 /* PCFMapping.h */,
-				2318E677199C039A0054C274 /* PCFSortDescriptors.h */,
-			);
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		2318E678199C039A0054C274 /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				2318E679199C039A0054C274 /* PCFHardwareUtil.h */,
-				2318E67A199C039A0054C274 /* PCFHardwareUtil.m */,
-				2318E67D199C039A0054C274 /* PCFNotifications.h */,
-				2318E67E199C039A0054C274 /* PCFNotifications.m */,
-				2318E681199C039A0054C274 /* PCFPushDebug.h */,
-				2318E682199C039A0054C274 /* PCFPushDebug.m */,
-				2318E683199C039A0054C274 /* PCFPushErrors.h */,
-				2318E684199C039A0054C274 /* PCFPushErrorUtil.h */,
-				2318E685199C039A0054C274 /* PCFPushErrorUtil.m */,
-				2318E686199C039A0054C274 /* PCFPushHexUtil.h */,
-				2318E687199C039A0054C274 /* PCFPushHexUtil.m */,
-				D4F3AC4D19A3A25F005E84FF /* PCFTagsHelper.h */,
-				D4F3AC4E19A3A25F005E84FF /* PCFTagsHelper.m */,
-				B69DB4B5CC00E3E89C869D31 /* PCFPushGeofenceUtil.m */,
-				B69DB318EB3F2765AF94D34F /* PCFPushGeofenceUtil.h */,
-			);
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		B6AAE519EC3D8EB53624B601 /* Geofence */ = {
-			isa = PBXGroup;
-			children = (
-				B6AAECE1CE6EDD30D6788C23 /* PCFPushGeofenceEngine.m */,
-				B6AAE9734B009E5D34DE6680 /* PCFPushGeofenceEngine.h */,
-				B69DB1C2D882B1AB6F8F73E5 /* PCFPushGeofencePersistentStore.h */,
-				B69DB59C486F16E87C96C4B8 /* PCFPushGeofencePersistentStore.m */,
-				B69DB963D0F1D32741B06483 /* PCFPushGeofenceRegistrar.m */,
-				B69DB86777A36076D36BB22D /* PCFPushGeofenceRegistrar.h */,
-				B69DBC1B7BC4509C7E4FA986 /* PCFPushGeofenceUpdater.m */,
-				B69DBCC03168C8606F7B7249 /* PCFPushGeofenceUpdater.h */,
-				B69DB216AC019030320DE841 /* PCFPushGeofenceHandler.m */,
-				B69DBAFA3303E5DCC6749C2B /* PCFPushGeofenceHandler.h */,
-				B69DB8195974FF4923F4D17B /* PCFPushGeofenceStatusUtil.h */,
-				B69DBA8A83D311DC72EC0076 /* PCFPushGeofenceStatusUtil.m */,
+				F131CAFF1B0D0663004101F5 /* PCFPushGeofenceEngine.h */,
+				F131CB001B0D0663004101F5 /* PCFPushGeofenceEngine.m */,
+				F131CB011B0D0663004101F5 /* PCFPushGeofenceHandler.h */,
+				F131CB021B0D0663004101F5 /* PCFPushGeofenceHandler.m */,
+				F131CB031B0D0663004101F5 /* PCFPushGeofencePersistentStore.h */,
+				F131CB041B0D0663004101F5 /* PCFPushGeofencePersistentStore.m */,
+				F131CB051B0D0663004101F5 /* PCFPushGeofenceRegistrar.h */,
+				F131CB061B0D0663004101F5 /* PCFPushGeofenceRegistrar.m */,
+				F131CB071B0D0663004101F5 /* PCFPushGeofenceStatusUtil.h */,
+				F131CB081B0D0663004101F5 /* PCFPushGeofenceStatusUtil.m */,
+				F131CB091B0D0663004101F5 /* PCFPushGeofenceUpdater.h */,
+				F131CB0A1B0D0663004101F5 /* PCFPushGeofenceUpdater.m */,
 			);
 			path = Geofence;
 			sourceTree = "<group>";
 		};
-		D4E8A7FD185BAFDC00A841EE = {
+		F131CB0C1B0D0663004101F5 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F19D6BE51AE82AE70009D4B6 /* CoreLocation.framework */,
-				2318E652199C039A0054C274 /* PCFPush */,
-				D4E8A809185BAFDC00A841EE /* Products */,
+				F131CB0D1B0D0663004101F5 /* PCFPushGeofenceData.h */,
+				F131CB0E1B0D0663004101F5 /* PCFPushGeofenceData.m */,
+				F131CB0F1B0D0663004101F5 /* PCFPushGeofenceDataList.h */,
+				F131CB101B0D0663004101F5 /* PCFPushGeofenceDataList.m */,
+				F131CB111B0D0663004101F5 /* PCFPushGeofenceLocation.h */,
+				F131CB121B0D0663004101F5 /* PCFPushGeofenceLocation.m */,
+				F131CB131B0D0663004101F5 /* PCFPushGeofenceLocationMap.h */,
+				F131CB141B0D0663004101F5 /* PCFPushGeofenceLocationMap.m */,
+				F131CB151B0D0663004101F5 /* PCFPushGeofenceResponseData.h */,
+				F131CB161B0D0663004101F5 /* PCFPushGeofenceResponseData.m */,
+				F131CB171B0D0663004101F5 /* PCFPushGeofenceStatus.h */,
+				F131CB181B0D0663004101F5 /* PCFPushGeofenceStatus.m */,
+				F131CB191B0D0663004101F5 /* PCFPushRegistrationData.h */,
+				F131CB1A1B0D0663004101F5 /* PCFPushRegistrationData.m */,
+				F131CB1B1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.h */,
+				F131CB1C1B0D0663004101F5 /* PCFPushRegistrationPostRequestData.m */,
+				F131CB1D1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.h */,
+				F131CB1E1B0D0663004101F5 /* PCFPushRegistrationPutRequestData.m */,
+				F131CB1F1B0D0663004101F5 /* PCFPushRegistrationResponseData.h */,
+				F131CB201B0D0663004101F5 /* PCFPushRegistrationResponseData.m */,
 			);
+			path = Models;
 			sourceTree = "<group>";
 		};
-		D4E8A809185BAFDC00A841EE /* Products */ = {
+		F131CB281B0D0664004101F5 /* Persistent Storage */ = {
 			isa = PBXGroup;
 			children = (
-				F1B601851922A12500B65371 /* PCFPush.framework */,
+				F131CB291B0D0664004101F5 /* PCFPushPersistentStorage.h */,
+				F131CB2A1B0D0664004101F5 /* PCFPushPersistentStorage.m */,
 			);
-			name = Products;
+			path = "Persistent Storage";
+			sourceTree = "<group>";
+		};
+		F131CB2B1B0D0664004101F5 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				F131CB2C1B0D0664004101F5 /* PCFMapping.h */,
+				F131CB2D1B0D0664004101F5 /* PCFSortDescriptors.h */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		F131CB2E1B0D0664004101F5 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				F131CB2F1B0D0664004101F5 /* PCFHardwareUtil.h */,
+				F131CB301B0D0664004101F5 /* PCFHardwareUtil.m */,
+				F131CB311B0D0664004101F5 /* PCFNotifications.h */,
+				F131CB321B0D0664004101F5 /* PCFNotifications.m */,
+				F131CB331B0D0664004101F5 /* PCFPushDebug.h */,
+				F131CB341B0D0664004101F5 /* PCFPushDebug.m */,
+				F131CB351B0D0664004101F5 /* PCFPushErrors.h */,
+				F131CB361B0D0664004101F5 /* PCFPushErrorUtil.h */,
+				F131CB371B0D0664004101F5 /* PCFPushErrorUtil.m */,
+				F131CB381B0D0664004101F5 /* PCFPushGeofenceUtil.h */,
+				F131CB391B0D0664004101F5 /* PCFPushGeofenceUtil.m */,
+				F131CB3A1B0D0664004101F5 /* PCFPushHexUtil.h */,
+				F131CB3B1B0D0664004101F5 /* PCFPushHexUtil.m */,
+				F131CB3C1B0D0664004101F5 /* PCFTagsHelper.h */,
+				F131CB3D1B0D0664004101F5 /* PCFTagsHelper.m */,
+			);
+			path = Utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		F1B6015E1922A12500B65371 /* Headers */ = {
+		F131CAD71B0D05B7004101F5 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2318E6B0199C039A0054C274 /* PCFPushDebug.h in Headers */,
-				2318E692199C039A0054C274 /* PCFPushRegistrationResponseData.h in Headers */,
-				2318E6A6199C039A0054C274 /* PCFMapping.h in Headers */,
-				2318E6A0199C039A0054C274 /* PCFPush.h in Headers */,
-				2318E6A7199C039A0054C274 /* PCFSortDescriptors.h in Headers */,
-				2318E69F199C039A0054C274 /* PCFPush-Prefix.pch in Headers */,
-				2318E68A199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
-				2318E6A8199C039A0054C274 /* PCFHardwareUtil.h in Headers */,
-				D45B1D7A19A2944000F57230 /* PCFPushRegistrationPutRequestData.h in Headers */,
-				2318E690199C039A0054C274 /* PCFPushRegistrationPostRequestData.h in Headers */,
-				2318E68C199C039A0054C274 /* NSObject+PCFJSONizable.h in Headers */,
-				2318E6B2199C039A0054C274 /* PCFPushErrors.h in Headers */,
-				2318E6AC199C039A0054C274 /* PCFNotifications.h in Headers */,
-				2318E69C199C039A0054C274 /* PCFPushParameters.h in Headers */,
-				11F37BE71ADD600A001011C9 /* PCFPushGeofenceLocation.h in Headers */,
-				D4B9FF2319A3CD950070A429 /* PCFPushPersistentStorage.h in Headers */,
-				D4F3AC4F19A3A25F005E84FF /* PCFTagsHelper.h in Headers */,
-				11F37BE31ADD5D3C001011C9 /* PCFPushGeofenceData.h in Headers */,
-				2318E688199C039A0054C274 /* PCFPushURLConnection.h in Headers */,
-				2318E68E199C039A0054C274 /* PCFPushRegistrationData.h in Headers */,
-				2318E6B3199C039A0054C274 /* PCFPushErrorUtil.h in Headers */,
-				2318E6B5199C039A0054C274 /* PCFPushHexUtil.h in Headers */,
-				D4B9FF2719A511370070A429 /* PCFPushClient.h in Headers */,
-				B6AAE235DECB19F6F60BC24C /* PCFPushGeofenceEngine.h in Headers */,
-				B6AAE60D18DD698257FF7330 /* PCFPushGeofenceResponseData.h in Headers */,
-				B6AAE3281C14E902B4387CCA /* PCFPushGeofenceDataList.h in Headers */,
-				B6AAE2368E14973F43CA128A /* PCFPushGeofenceLocationMap.h in Headers */,
-				B69DBF8600873A67D2ABD3A6 /* PCFPushGeofencePersistentStore.h in Headers */,
-				B69DBB5A6FD6FC9CCFB6086F /* PCFPushGeofenceRegistrar.h in Headers */,
-				B69DB8E0DED2E9249B97548E /* PCFPushGeofenceUpdater.h in Headers */,
-				B69DBE3D8848CE4BEADC86D8 /* PCFPushGeofenceHandler.h in Headers */,
-				B69DBFCB75D9FACF9BD7F685 /* PCFPushGeofenceUtil.h in Headers */,
-				B69DB941956271D4368ADEB1 /* PCFPushGeofenceStatus.h in Headers */,
-				B69DB1EEC9EB7BF62896AAA0 /* PCFPushGeofenceStatusUtil.h in Headers */,
+				F131CB7A1B0D0664004101F5 /* PCFPush.h in Headers */,
+				F131CB6A1B0D0664004101F5 /* PCFPushGeofenceStatus.h in Headers */,
+				F131CB911B0D0664004101F5 /* PCFPushErrors.h in Headers */,
+				F131CB5B1B0D0664004101F5 /* PCFPushGeofenceData.h in Headers */,
+				F131CB861B0D0664004101F5 /* PCFMapping.h in Headers */,
+				F131CB801B0D0664004101F5 /* PCFPushParameters.h in Headers */,
+				F131CB8B1B0D0664004101F5 /* PCFNotifications.h in Headers */,
+				F131CB611B0D0664004101F5 /* PCFPushGeofenceLocation.h in Headers */,
+				F131CB531B0D0664004101F5 /* PCFPushGeofenceStatusUtil.h in Headers */,
+				F131CB881B0D0664004101F5 /* PCFHardwareUtil.h in Headers */,
+				F131CB701B0D0664004101F5 /* PCFPushRegistrationPostRequestData.h in Headers */,
+				F131CB4A1B0D0664004101F5 /* PCFPushGeofenceHandler.h in Headers */,
+				F131CB471B0D0664004101F5 /* PCFPushGeofenceEngine.h in Headers */,
+				F131CB5E1B0D0664004101F5 /* PCFPushGeofenceDataList.h in Headers */,
+				F131CB4D1B0D0664004101F5 /* PCFPushGeofencePersistentStore.h in Headers */,
+				F131CB8E1B0D0664004101F5 /* PCFPushDebug.h in Headers */,
+				F131CB561B0D0664004101F5 /* PCFPushGeofenceUpdater.h in Headers */,
+				F131CB981B0D0664004101F5 /* PCFPushHexUtil.h in Headers */,
+				F131CB641B0D0664004101F5 /* PCFPushGeofenceLocationMap.h in Headers */,
+				F131CB671B0D0664004101F5 /* PCFPushGeofenceResponseData.h in Headers */,
+				F131CB791B0D0664004101F5 /* PCFPush-Prefix.pch in Headers */,
+				F131CB9B1B0D0664004101F5 /* PCFTagsHelper.h in Headers */,
+				F131CB7D1B0D0664004101F5 /* PCFPushClient.h in Headers */,
+				F131CB761B0D0664004101F5 /* PCFPushRegistrationResponseData.h in Headers */,
+				F131CB731B0D0664004101F5 /* PCFPushRegistrationPutRequestData.h in Headers */,
+				F131CB501B0D0664004101F5 /* PCFPushGeofenceRegistrar.h in Headers */,
+				F131CB441B0D0664004101F5 /* NSObject+PCFJSONizable.h in Headers */,
+				F131CB6D1B0D0664004101F5 /* PCFPushRegistrationData.h in Headers */,
+				F131CB411B0D0664004101F5 /* PCFPushURLConnection.h in Headers */,
+				F131CB3E1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
+				F131CB921B0D0664004101F5 /* PCFPushErrorUtil.h in Headers */,
+				F131CB831B0D0664004101F5 /* PCFPushPersistentStorage.h in Headers */,
+				F131CB951B0D0664004101F5 /* PCFPushGeofenceUtil.h in Headers */,
+				F131CB871B0D0664004101F5 /* PCFSortDescriptors.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		F1B6013F1922A12500B65371 /* PCFPush */ = {
+		F131CAD91B0D05B7004101F5 /* PCFPush */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "PCFPush" */;
+			buildConfigurationList = F131CAF01B0D05B8004101F5 /* Build configuration list for PBXNativeTarget "PCFPush" */;
 			buildPhases = (
-				F1B601401922A12500B65371 /* Sources */,
-				F1B6015D1922A12500B65371 /* Frameworks */,
-				F1B6015E1922A12500B65371 /* Headers */,
-				F1B6017F1922A12500B65371 /* Resources */,
-				F1B601801922A12500B65371 /* ShellScript */,
+				F131CAD51B0D05B7004101F5 /* Sources */,
+				F131CAD61B0D05B7004101F5 /* Frameworks */,
+				F131CAD71B0D05B7004101F5 /* Headers */,
+				F131CAD81B0D05B7004101F5 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = PCFPush;
-			productName = OmniaPushSDK;
-			productReference = F1B601851922A12500B65371 /* PCFPush.framework */;
-			productType = "com.apple.product-type.framework.static";
+			productName = PCFPush;
+			productReference = F131CADA1B0D05B7004101F5 /* PCFPush.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D4E8A7FE185BAFDC00A841EE /* Project object */ = {
+		F131CAD11B0D05B7004101F5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = Pivotal;
+				TargetAttributes = {
+					F131CAD91B0D05B7004101F5 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+					F131CC2E1B0D0831004101F5 = {
+						CreatedOnToolsVersion = 6.3.1;
+					};
+				};
 			};
-			buildConfigurationList = D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "PCFPush" */;
+			buildConfigurationList = F131CAD41B0D05B7004101F5 /* Build configuration list for PBXProject "PCFPush" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 			);
-			mainGroup = D4E8A7FD185BAFDC00A841EE;
-			productRefGroup = D4E8A809185BAFDC00A841EE /* Products */;
+			mainGroup = F131CAD01B0D05B7004101F5;
+			productRefGroup = F131CADB1B0D05B7004101F5 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				F1B6013F1922A12500B65371 /* PCFPush */,
+				F131CAD91B0D05B7004101F5 /* PCFPush */,
+				F131CC2E1B0D0831004101F5 /* PCFPush-Universal */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		F1B6017F1922A12500B65371 /* Resources */ = {
+		F131CAD81B0D05B7004101F5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F131CB591B0D0664004101F5 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		F1B601801922A12500B65371 /* ShellScript */ = {
+		F131CC321B0D0853004101F5 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -431,53 +438,53 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /usr/bin/python;
-			shellScript = "# TAG: BUILD SCRIPT (do not remove this comment)\n# Build script generated using https://github.com/kstenerud/iOS-Universal-Framework Mk 8 (beta 2012-06-16)\nimport logging\n\n\n##############################################################################\n#\n# Configuration\n#\n##############################################################################\n\n# Select which kind of framework to build.\n#\n# Note: Due to issues with Xcode's build process, if you select\n#       'embeddedframework', it will still show the regular framework\n#       (as a symlink) along side of the embedded framework. Be sure to\n#       instruct your users to copy/move the embedded framework in this case!\n#\n# If your framework contains resources such as images, nibs, momds, plists,\n# zipfiles and such, choose 'embeddedframework'.\n#\n# If your framework contains no resources, choose 'framework'.\n#\nconfig_framework_type = 'framework'\n#config_framework_type = 'embeddedframework'\n\n# Open the build directory in Finder when the universal framework is\n# successfully built.\n#\n# This value can be overridden by setting the UFW_OPEN_BUILD_DIR env variable\n# to True or False.\n#\n# Recommended setting: True\n#\nconfig_open_build_dir = True\n\n# If true, ensures that all public headers are stored in the framework under\n# the same directory hierarchy as they were in the source tree.\n#\n# Xcode by default places all headers at the same top level, but every other\n# build tool in the known universe preserves directory structure. For simple\n# libraries it doesn't really matter much, but for ports of existing software\n# packages or for bigger libraries, it makes sense to have more structure.\n#\n# The default is set to \"False\" since that's what most Xcode users are used to.\n#\n# Recommended setting: True for deep hierarchy projects, False otherwise.\n#\nconfig_deep_header_hierarchy = False\n\n# Specify where the top of the public header hierarchy is. This path is\n# relative to the project's dir (PROJECT_DIR). You can reference environment\n# variables using templating syntax (e.g. \"${TARGET_NAME}/Some/Subdir\")\n#\n# NOTE: Only used if config_deep_header_hierarchy is True.\n#\n# If this is set to None, the script will attempt to figure out for itself\n# where the top of the header hierarchy is by looking for common path prefixes\n# in the public header files. This process can fail if:\n# - You only have one public header file.\n# - Your source header files don't all have a common root.\n#\n# A common approach is to use \"${TARGET_NAME}\", working under the assumption\n# that all of your header files share the common root of a directory under\n# your project with the same name as your target (which is the Xcode default).\n#\n# Recommended setting: \"${TARGET_NAME}\"\n#\nconfig_deep_header_top = \"${TARGET_NAME}\"\n\n# Warn when \"DerivedData\" is detected in any of the header, library, or\n# framework search paths. In almost all cases, references to directories under\n# DerivedData are added as a result of an Xcode bug and must be manually\n# removed.\n#\n# Recommended setting: True\n#\nconfig_warn_derived_data = True\n\n# Warn if no headers were marked public in this framework.\n#\n# Recommended setting: True\n#\nconfig_warn_no_public_headers = True\n\n# Cause the build to fail if any warnings are issued.\n#\n# Recommended setting: True\n#\nconfig_fail_on_warnings = True\n\n# Minimum log level\n#\n# Recommended setting: logging.INFO\n#\nconfig_log_level = logging.INFO\n\n\n##############################################################################\n#\n# Don't touch anything below here unless you know what you're doing.\n#\n##############################################################################\n\nimport collections\nimport json\nimport os\nimport re\nimport shlex\nimport shutil\nimport string\nimport subprocess\nimport sys\nimport time\nimport traceback\n\n\n##############################################################################\n#\n# Globals\n#\n##############################################################################\n\nlog = logging.getLogger('UFW')\n\nissued_warnings = False\n\n\n##############################################################################\n#\n# Classes\n#\n##############################################################################\n\n# Allows the slave build to communicate with the master build.\n#\nclass BuildState:\n\n    def __init__(self):\n        self.reload()\n\n    def reset(self):\n        self.slave_platform = None\n        self.slave_architectures = []\n        self.slave_linked_archive_paths = []\n        self.slave_built_fw_path = None\n        self.slave_built_embedded_fw_path = None\n\n    def set_slave_properties(self, architectures,\n                             linked_archive_paths,\n                             built_fw_path,\n                             built_embedded_fw_path):\n        self.slave_platform = os.environ['PLATFORM_NAME']\n        self.slave_architectures = architectures\n        self.slave_linked_archive_paths = linked_archive_paths\n        self.slave_built_fw_path = built_fw_path\n        self.slave_built_embedded_fw_path = built_embedded_fw_path\n\n    def get_save_path(self):\n        return os.path.join(os.environ['PROJECT_TEMP_DIR'], \"ufw_build_state.json\")\n\n    def persist(self):\n        filename = self.get_save_path()\n        parent = os.path.dirname(filename)\n        if not os.path.isdir(parent):\n            os.makedirs(parent)\n        with open(filename, \"w\") as f:\n            f.write(json.dumps(self.__dict__))\n\n    def reload(self):\n        self.reset()\n        filename = self.get_save_path()\n        if os.path.exists(filename):\n            with open(filename, \"r\") as f:\n                new_dict = json.loads(f.read())\n                if new_dict is not None:\n                    self.__dict__ = dict(self.__dict__.items() + new_dict.items())\n\n\n# Holds information about the current project and build environment.\n#\nclass Project:\n\n    def __init__(self, filename):\n        sourcecode_types = ['sourcecode.c.c',\n                            'sourcecode.c.objc',\n                            'sourcecode.cpp.cpp',\n                            'sourcecode.cpp.objcpp',\n                            'sourcecode.asm.asm',\n                            'sourcecode.asm.llvm',\n                            'sourcecode.nasm']\n\n        self.build_state = BuildState()\n        self.project_data = self.load_from_file(filename)\n        self.target = filter(lambda x: x['name'] == os.environ['TARGET_NAME'], self.project_data['targets'])[0]\n        self.public_headers = self.get_build_phase_files('PBXHeadersBuildPhase', lambda x: x.get('settings', False) and x['settings'].get('ATTRIBUTES', False) and 'Public' in x['settings']['ATTRIBUTES'])\n        self.static_libraries = self.get_build_phase_files('PBXFrameworksBuildPhase', lambda x: x['fileRef']['fileType'] == 'archive.ar' and x['fileRef']['sourceTree'] not in ['DEVELOPER_DIR', 'SDKROOT'])\n        self.static_frameworks = self.get_build_phase_files('PBXFrameworksBuildPhase', lambda x: x['fileRef']['fileType'] == 'wrapper.framework' and x['fileRef']['sourceTree'] not in ['DEVELOPER_DIR', 'SDKROOT'])\n        self.compilable_sources = self.get_build_phase_files('PBXSourcesBuildPhase', lambda x: x['fileRef']['fileType'] in sourcecode_types)\n        self.header_paths = [os.path.join(*x['pathComponents']) for x in self.public_headers]\n\n        self.headers_dir = os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['CONTENTS_FOLDER_PATH'], 'Headers')\n        self.libtool_path = os.path.join(os.environ['DT_TOOLCHAIN_DIR'], 'usr', 'bin', 'libtool')\n        self.project_filename = os.path.join(os.environ['PROJECT_FILE_PATH'], \"project.pbxproj\")\n        self.local_exe_path = os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['EXECUTABLE_PATH'])\n        self.local_architectures = os.environ['ARCHS'].split(' ')\n        self.local_built_fw_path = os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['WRAPPER_NAME'])\n        self.local_built_embedded_fw_path = os.path.splitext(self.local_built_fw_path)[0] + \".embeddedframework\"\n        self.local_linked_archive_paths = [self.get_linked_ufw_archive_path(arch) for arch in self.local_architectures]\n        self.local_platform = os.environ['PLATFORM_NAME']\n        other_platforms = os.environ['SUPPORTED_PLATFORMS'].split(' ')\n        other_platforms.remove(self.local_platform)\n        self.other_platform = other_platforms[0]\n\n        sdk_name = os.environ['SDK_NAME']\n        if not sdk_name.startswith(self.local_platform):\n            raise Exception(\"%s didn't start with %s\" % (sdk_name, self.local_platform))\n        self.sdk_version = sdk_name[len(self.local_platform):]\n\n    # Load an Xcode project file.\n    #\n    def load_from_file(self, filename):\n        project_file = json.loads(subprocess.check_output([\"plutil\", \"-convert\", \"json\", \"-o\", \"-\", filename]))\n        all_objects = project_file['objects']\n        del project_file['objects']\n        for obj in all_objects.values():\n            self.fix_keys(obj)\n        self.unpack_objects(self.build_dereference_list(all_objects, None, None, project_file))\n        self.unpack_objects(self.build_dereference_list(all_objects, None, None, all_objects.values()))\n        project_data = project_file['rootObject']\n        self.build_full_paths(project_data, splitpath(os.environ['SOURCE_ROOT']))\n        return project_data\n\n    def is_key(self, obj):        \n        return isinstance(obj, basestring) and len(obj) == 24 and re.search('^[0-9a-fA-F]+$', obj) is not None\n    \n    def build_dereference_list(self, all_objects, parent, key, obj):\n        deref_list = []\n        if self.is_key(obj):\n            dereferenced = all_objects.get(obj, obj)\n            if dereferenced is not obj:\n                deref_list.append((parent, key, obj, dereferenced))\n        elif isinstance(obj, collections.Mapping):\n            for k, v in obj.iteritems():\n                deref_list += self.build_dereference_list(all_objects, obj, k, v)\n        elif isinstance(obj, collections.Iterable) and not isinstance(obj, basestring):\n            for item in obj:\n                deref_list += self.build_dereference_list(all_objects, obj, None, item)\n        return deref_list\n    \n    def unpack_objects(self, deref_list):\n        for parent, key, orig, obj in deref_list:\n            if key is None:\n                parent.remove(orig)\n                parent.append(obj)\n            else:\n                parent[key] = obj\n\n    # Store the full path, separated into components, to a node inside the node\n    # as \"pathComponents\". Also recurse into that node if it's a group.\n    #\n    def build_full_paths(self, node, base_path):\n        # Some nodes are relative to a different source tree, specified as an\n        # env variable.\n        if node.get('sourceTree', '<group>') != '<group>':\n            new_base_path = os.environ.get(node['sourceTree'], None)\n            if new_base_path:\n                base_path = splitpath(new_base_path)\n        # Add the current node's path, if any.\n        if node.get('path', False):\n            base_path = base_path + splitpath(node['path'])\n        node['pathComponents'] = base_path\n        # Recurse if this is a group.\n        if node['isa'] == 'PBXGroup':\n            for child in node['children']:\n                self.build_full_paths(child, base_path)\n        elif node['isa'] == 'PBXProject':\n            self.build_full_paths(node['mainGroup'], base_path)\n            self.build_full_paths(node['productRefGroup'], base_path)\n            for child in node['targets']:\n                self.build_full_paths(child, base_path)\n            projectRefs = node.get('projectReferences', None)\n            if projectRefs is not None:\n                for child in projectRefs[0].values():\n                    self.build_full_paths(child, base_path)\n\n    # Fix up any inconvenient keys.\n    #\n    def fix_keys(self, obj):\n        key_remappings = {'lastKnownFileType': 'fileType', 'explicitFileType': 'fileType'}\n        for key in list(set(key_remappings.keys()) & set(obj.keys())):\n            obj[key_remappings[key]] = obj[key]\n            del obj[key]\n\n    # Get the files from a build phase.\n    #\n    def get_build_phase_files(self, build_phase_name, filter_func):\n        build_phase = filter(lambda x: x['isa'] == build_phase_name, self.target['buildPhases'])[0]\n        build_files = filter(filter_func, build_phase['files'])\n        return [x['fileRef'] for x in build_files]\n\n    # Get the truncated paths of all headers that start with the specified\n    # relative path. Paths are read and returned as fully separated lists.\n    # e.g. ['Some', 'Path', 'To', 'A', 'Header'] with relative_path of\n    # ['Some', 'Path'] gets truncated to ['To', 'A', 'Header']\n    #\n    def movable_headers_relative_to(self, relative_path):\n        rel_path_length = len(relative_path)\n        result = filter(lambda path: len(path) >= rel_path_length and\n                                     path[:rel_path_length] == relative_path, self.header_paths)\n        return [path[rel_path_length:] for path in result]\n\n    # Get the full path to where a linkable archive (library or framework)\n    # is supposed to be.\n    #\n    def get_linked_archive_path(self, architecture):\n        return os.path.join(os.environ['OBJECT_FILE_DIR_%s' % os.environ['CURRENT_VARIANT']],\n                            architecture,\n                            os.environ['EXECUTABLE_NAME'])\n\n    # Get the full path to our custom linked archive of the project.\n    #\n    def get_linked_ufw_archive_path(self, architecture):\n        return self.get_linked_archive_path(architecture) + \".ufwbuild\"\n\n    # Get the full path to the executable of an archive.\n    #\n    def get_exe_path(self, node):\n        path = os.path.join(*node['pathComponents'])\n        if node['fileType'] == 'wrapper.framework':\n            # Frameworks are directories, so go one deeper\n            path = os.path.join(path, os.path.splitext(node['pathComponents'][-1])[0])\n        return path\n\n    # Get the path to the directory containing the archive.\n    #\n    def get_containing_path(self, node):\n        return os.path.join(*node['pathComponents'])\n    \n    def get_archive_search_paths(self):\n        log.info(\"Search paths = %s\" % set([self.get_containing_path(fw) for fw in self.static_frameworks] + [self.get_containing_path(fw) for fw in self.static_libraries]))\n        return set([self.get_containing_path(fw) for fw in self.static_frameworks] + [self.get_containing_path(fw) for fw in self.static_libraries])\n\n    # Command to link all objects of a single architecture.\n    #\n    def get_single_arch_link_command(self, architecture):\n        cmd = [self.libtool_path,\n               \"-static\",\n               \"-arch_only\", architecture,\n               \"-syslibroot\", os.environ['SDKROOT'],\n               \"-L%s\" % os.environ['TARGET_BUILD_DIR'],\n               \"-filelist\", os.environ['LINK_FILE_LIST_%s_%s' % (os.environ['CURRENT_VARIANT'], architecture)]]\n        if os.environ.get('OTHER_LDFLAGS', False):\n            cmd += [os.environ['OTHER_LDFLAGS']]\n        if os.environ.get('WARNING_LDFLAGS', False):\n            cmd += [os.environ['WARNING_LDFLAGS']]\n#        cmd += [\"-L%s\" % libpath for libpath in self.get_archive_search_paths()]\n        cmd += [self.get_exe_path(fw) for fw in self.static_frameworks]\n        cmd += [self.get_exe_path(lib) for lib in self.static_libraries]\n        cmd += [\"-o\", self.get_linked_ufw_archive_path(architecture)]\n        return cmd\n\n    # Command to link all local architectures for the current configuration\n    # into an archive. This reads all libraries + the UFW-built archives and\n    # overwrites the final product.\n    #\n    def get_local_archs_link_command(self):\n        cmd = [self.libtool_path,\n               \"-static\"]\n        cmd += self.local_linked_archive_paths\n        cmd += [self.get_exe_path(fw) for fw in self.static_frameworks]\n        cmd += [self.get_exe_path(lib) for lib in self.static_libraries]\n        cmd += [\"-o\", os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['EXECUTABLE_PATH'])]\n        return cmd\n\n    # Command to link all architectures into a universal archive.\n    # This reads all UFW-built archives and overwrites the final product.\n    #\n    def get_all_archs_link_command(self):\n        cmd = [self.libtool_path,\n               \"-static\"]\n        cmd += self.local_linked_archive_paths + self.build_state.slave_linked_archive_paths\n        cmd += [\"-o\", os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['EXECUTABLE_PATH'])]\n        return cmd\n\n    # Build up an environment for the slave process. This uses BUILD_ROOT\n    # and TEMP_ROOT to convert all environment variables to values suitable\n    # for the slave build environment so that xcodebuild doesn't try to build\n    # in the project directory under \"build\".\n    #\n    def get_slave_environment(self):\n        ignored = ['LD_MAP_FILE_PATH',\n        'HEADER_SEARCH_PATHS',\n        'LIBRARY_SEARCH_PATHS',\n        'FRAMEWORK_SEARCH_PATHS']\n        build_root = os.environ['BUILD_ROOT']\n        temp_root = os.environ['TEMP_ROOT']\n        newenv = {}\n        for key, value in os.environ.items():\n            if key not in ignored and not key.startswith('LINK_FILE_LIST_') and not key.startswith('LD_DEPENDENCY_'):\n                if build_root in value or temp_root in value:\n                    newenv[key] = value.replace(self.local_platform, self.other_platform)\n        return newenv\n\n    # Command to invoke xcodebuild on the slave platform.\n    #\n    def get_slave_project_build_command(self):\n        cmd = [\"xcodebuild\",\n               \"-project\",\n               os.environ['PROJECT_FILE_PATH'],\n               \"-target\",\n               os.environ['TARGET_NAME'],\n               \"-configuration\",\n               os.environ['CONFIGURATION'],\n               \"-sdk\",\n               self.other_platform + self.sdk_version]\n        cmd += [\"%s=%s\" % (key, value) for key, value in self.get_slave_environment().items()]\n        cmd += [\"UFW_MASTER_PLATFORM=\" + os.environ['PLATFORM_NAME']]\n        cmd += [os.environ['ACTION']]\n        return cmd\n\n\n\n##############################################################################\n#\n# Utility Functions\n#\n##############################################################################\n\n# Split a path into a list of path components.\n#\ndef splitpath(path, maxdepth=20):\n     (head, tail) = os.path.split(path)\n     return splitpath(head, maxdepth - 1) + [tail] if maxdepth and head and head != path else [ head or tail ]\n\n# Remove all subdirectories under a path.\n#\ndef remove_subdirs(path, ignore_files):\n    if os.path.exists(path):\n        for filename in filter(lambda x: x not in ignore_files, os.listdir(path)):\n            fullpath = os.path.join(path, filename)\n            if os.path.isdir(fullpath):\n                log.info(\"Remove %s\" % fullpath)\n                shutil.rmtree(fullpath)\n\n# Make whatever parent paths are necessary for a path to exist.\n#\ndef ensure_path_exists(path):\n    if not os.path.isdir(path):\n        os.makedirs(path)\n\n# Make whatever parent paths are necessary for a path's parent to exist.\n#\ndef ensure_parent_exists(path):\n    parent = os.path.dirname(path)\n    if not os.path.isdir(parent):\n        os.makedirs(parent)\n\n# Remove a file or dir if it exists.\n#\ndef remove_path(path):\n    if os.path.exists(path):\n        if os.path.isdir(path) and not os.path.islink(path):\n            shutil.rmtree(path)\n        else:\n            os.remove(path)\n\n# Move a file or dir, replacing the destination if it exists.\n#\ndef move_file(src, dst):\n    if src == dst or not os.path.isfile(src):\n        return\n    log.info(\"Move %s to %s\" % (src, dst))\n    ensure_parent_exists(dst)\n    remove_path(dst)\n    shutil.move(src, dst)\n\n# Copy a file or dir, replacing the destination if it exists already.\n#\ndef copy_overwrite(src, dst):\n    if src != dst:\n        remove_path(dst)\n        ensure_parent_exists(dst)\n        shutil.copytree(src, dst, symlinks=True)\n\n# Attempt to symlink link_path -> link_to.\n# link_to must be a path relative to link_path's parent and must exist.\n# If link_path already exists, do nothing.\n#\ndef attempt_symlink(link_path, link_to):\n    # Only allow linking to an existing file\n    os.stat(os.path.abspath(os.path.join(link_path, \"..\", link_to)))\n\n    # Only make the link if it hasn't already been made\n    if not os.path.exists(link_path):\n        log.info(\"Symlink %s -> %s\" % (link_path, link_to))\n        os.symlink(link_to, link_path)\n\n# Takes the last entry in an array-based path and returns a normal path\n# relative to base_path.\n#\ndef top_level_file_path(base_path, path_list):\n    return os.path.join(base_path, os.path.split(path_list[-1])[-1])\n\n# Takes all entries in an array-based path and returns a normal path\n# relative to base_path.\n#\ndef full_file_path(base_path, path_list):\n    return os.path.join(*([base_path] + path_list))\n\n# Print a command before executing it.\n# Also print out all output from the command to STDOUT.\n#\ndef print_and_call(cmd):\n    log.info(\"Cmd \" + \" \".join(cmd))\n    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    result = p.communicate()[0]\n    if len(result) > 0:\n        log.info(result)\n    if p.returncode != 0:\n        raise subprocess.CalledProcessError(p.returncode, cmd)\n\n# Special print-and-call command for the slave build that strips out\n# xcodebuild's spammy list of environment variables.\n#\ndef print_and_call_slave_build(cmd, other_platform):\n    separator = '=== BUILD NATIVE TARGET '\n    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)\n    result = p.communicate()[0].split(separator)\n    if len(result) == 1:\n        result = result[0]\n    else:\n        result = separator + result[1]\n    log.info(\"Cmd \" + \" \".join(cmd) + \"\\n\" + result)\n    if p.returncode != 0:\n        raise subprocess.CalledProcessError(p.returncode, cmd)\n\n# Issue a warning and record that a warning has been issued.\n#\ndef issue_warning(msg, *args, **kwargs):\n    global issued_warnings\n    issued_warnings = True\n    log.warn(msg, *args, **kwargs)\n\n\n\n##############################################################################\n#\n# Main Application\n#\n##############################################################################\n\n# Check if we are running as master.\n#\ndef is_master():\n    return os.environ.get('UFW_MASTER_PLATFORM', os.environ['PLATFORM_NAME']) == os.environ['PLATFORM_NAME']\n\n# DerivedData should almost never appear in any framework, library, or header\n# search paths. However, Xcode will sometimes add them in, so we check to make\n# sure.\n#\ndef check_for_derived_data_in_search_paths(project):\n    search_path_keys = [\"FRAMEWORK_SEARCH_PATHS\", \"LIBRARY_SEARCH_PATHS\", \"HEADER_SEARCH_PATHS\"]\n    build_configs = project.target['buildConfigurationList']['buildConfigurations']\n    build_settings = filter(lambda x: x['name'] == os.environ['CONFIGURATION'], build_configs)[0]['buildSettings']\n    \n    found_something = False\n    for path_key in filter(lambda x: x in build_settings, search_path_keys):\n        path = build_settings[path_key]\n        if \"DerivedData\" in path:\n            found_something = True\n            log.warn(\"Derived data in %s\" % path)\n            issue_warning(\"'%s' contains reference to 'DerivedData'.\" % path_key)\n    if found_something:\n        log.warn(\"Check your build settings and remove any entries that contain paths inside the DerivedData folder.\")\n        log.warn(\"Otherwise you can disable this warning by changing 'config_warn_derived_data' in this script.\")\n\n# Link local architectures into their respective archives.\n#\ndef link_local_archs(project):\n    for arch in project.local_architectures:\n        print_and_call(project.get_single_arch_link_command(arch))\n\n# Link only the local architectures into the final product, not the slave\n# architectures. For iphoneos, this will be armv6, armv7. For simulator, this\n# will be i386.\n#\ndef link_combine_local_archs(project):\n    print_and_call(project.get_local_archs_link_command())\n\n# Link all architectures into the final product.\n#\ndef link_combine_all_archs(project):\n    print_and_call(project.get_all_archs_link_command())\n\n# Check if we should open the build directory after a successful build.\n#\ndef should_open_build_dir():\n    env_setting = os.environ.get('UFW_OPEN_BUILD_DIR', None)\n    if env_setting is not None:\n        return env_setting\n    \n    # If building on Xcode Bots shouldn't open build directory.\n    build_user = os.environ['USER']\n    if build_user == '_teamsserver':\n        return False\n\n    return config_open_build_dir\n\n# Open the build dir in Finder.\n#\ndef open_build_dir():\n    print_and_call(['open', os.environ['TARGET_BUILD_DIR']])\n\n# Check if the build was started by selecting \"Archive\" under \"Product\" in\n# Xcode.\n#\ndef is_archive_build():\n    # ACTION is always 'build', but perhaps Apple will fix this someday?\n    archive_build = os.environ['ACTION'] == 'archive'\n\n    if not archive_build:\n        # This can be passed in as an env variable when building from command line.\n        archive_build = os.environ.get('UFW_ACTION', None) == 'archive'\n\n    build_dir = splitpath(os.environ['BUILD_DIR'])\n    if not archive_build:\n        # This partial path is used when you select \"archive\" from within Xcode.\n        archive_build = 'ArchiveIntermediates' in build_dir\n\n    # It only counts as a full archive build if this target is being built into\n    # its own build dir (not being built as a dependency of another target)\n    if archive_build:\n        archive_build = os.environ['TARGET_NAME'] in build_dir\n    \n    return archive_build\n\n# Xcode by default throws all public headers into the top level directory.\n# This function moves them to their expected deep hierarchy.\n#\ndef build_deep_header_hierarchy(project):\n    header_path_top = config_deep_header_top\n    if not header_path_top:\n        header_path_top = os.path.commonprefix(project.header_paths)\n    else:\n        header_path_top = splitpath(header_path_top)\n\n    built_headers_path = os.path.join(os.environ['TARGET_BUILD_DIR'], os.environ['PUBLIC_HEADERS_FOLDER_PATH'])\n    movable_headers = project.movable_headers_relative_to(header_path_top)\n\n    # Remove subdirs if they only contain files that have been rebuilt\n    ignore_headers = filter(lambda x: not os.path.isfile(top_level_file_path(built_headers_path, x)), movable_headers)\n    remove_subdirs(built_headers_path, [file[0] for file in ignore_headers])\n\n    # Move rebuilt headers into their proper subdirs\n    for header in movable_headers:\n        move_file(top_level_file_path(built_headers_path, header), full_file_path(built_headers_path, header))\n\n# Add all symlinks needed to make a full framework structure:\n#\n# MyFramework.framework\n# |-- MyFramework -> Versions/Current/MyFramework\n# |-- Headers -> Versions/Current/Headers\n# |-- Resources -> Versions/Current/Resources\n# `-- Versions\n#     |-- A\n#     |   |-- MyFramework\n#     |   |-- Headers\n#     |   |   `-- MyFramework.h\n#     |   `-- Resources\n#     |       |-- Info.plist\n#     |       |-- MyViewController.nib\n#     |       `-- en.lproj\n#     |           `-- InfoPlist.strings\n#     `-- Current -> A\n#\ndef add_symlinks_to_framework(project):\n    base_dir = project.local_built_fw_path\n    attempt_symlink(os.path.join(base_dir, \"Versions\", \"Current\"), os.environ['FRAMEWORK_VERSION'])\n    if os.path.isdir(os.path.join(base_dir, \"Versions\", \"Current\", \"Headers\")):\n        attempt_symlink(os.path.join(base_dir, \"Headers\"), os.path.join(\"Versions\", \"Current\", \"Headers\"))\n    if os.path.isdir(os.path.join(base_dir, \"Versions\", \"Current\", \"Resources\")):\n        attempt_symlink(os.path.join(base_dir, \"Resources\"), os.path.join(\"Versions\", \"Current\", \"Resources\"))\n    attempt_symlink(os.path.join(base_dir, os.environ['EXECUTABLE_NAME']), os.path.join(\"Versions\", \"Current\", os.environ['EXECUTABLE_NAME']))\n\n# Build an embedded framework structure.\n# An embedded framework contains the actual framework, plus a \"Resources\"\n# directory containing symlinks to all resources found in the actual framework,\n# with the exception of \"Info.plist\" and anything ending in \".lproj\":\n#\n# MyFramework.embeddedframework\n# |-- MyFramework.framework\n# |   |-- MyFramework -> Versions/Current/MyFramework\n# |   |-- Headers -> Versions/Current/Headers\n# |   |-- Resources -> Versions/Current/Resources\n# |   `-- Versions\n# |       |-- A\n# |       |   |-- MyFramework\n# |       |   |-- Headers\n# |       |   |   `-- MyFramework.h\n# |       |   `-- Resources\n# |       |       |-- Info.plist\n# |       |       |-- MyViewController.nib\n# |       |       `-- en.lproj\n# |       |           `-- InfoPlist.strings\n# |       `-- Current -> A\n# `-- Resources\n#     `-- MyViewController.nib -> ../MyFramework.framework/Resources/MyViewController.nib\n#\ndef build_embedded_framework(project):\n    fw_path = project.local_built_fw_path\n    embedded_path = project.local_built_embedded_fw_path\n    fw_name = os.environ['WRAPPER_NAME']\n\n    if (os.path.islink(fw_path)):\n        # If the framework path is a link, the build result already in embeddedframework.\n        # Just recreate embeddedframework's Resources\n        remove_path(os.path.join(embedded_path, \"Resources\"))\n    else:\n        remove_path(embedded_path)\n        ensure_path_exists(embedded_path)\n        copy_overwrite(fw_path, os.path.join(embedded_path, fw_name))\n\n    # Create embeddedframework's Resources        \n    ensure_path_exists(os.path.join(embedded_path, \"Resources\"))\n    symlink_source = os.path.join(\"..\", fw_name, \"Resources\")\n    symlink_path = os.path.join(embedded_path, \"Resources\")\n    if os.path.isdir(os.path.join(fw_path, \"Resources\")):\n        for file in filter(lambda x: x != \"Info.plist\" and not x.endswith(\".lproj\"), os.listdir(os.path.join(fw_path, \"Resources\"))):\n            attempt_symlink(os.path.join(symlink_path, file), os.path.join(symlink_source, file))\n\n    # Remove the normal framework and replace it with a symlink to the copy\n    # in the embedded framework. This is needed because Xcode runs its strip\n    # phase AFTER the script runs.\n    embed_fw_wrapper = os.path.splitext(os.environ['WRAPPER_NAME'])[0] + \".embeddedframework\"\n    remove_path(fw_path)\n    attempt_symlink(fw_path, os.path.join(embed_fw_wrapper, os.environ['WRAPPER_NAME']))\n\n\n# Run the build process in slave mode to build the other configuration\n# (device/simulator).\n#\ndef run_slave_build(project):\n    print_and_call_slave_build(project.get_slave_project_build_command(), project.other_platform)\n\n# Run the build process.\n#\ndef run_build():\n    project = Project(os.path.join(os.environ['PROJECT_FILE_PATH'], \"project.pbxproj\"))\n\n    # Issue warnings only if we're master.\n    if is_master():\n        if len(project.compilable_sources) == 0:\n            raise Exception(\"No compilable sources found. Please add at least one source file to build target %s.\" % os.environ['TARGET_NAME'])\n\n        if config_warn_derived_data:\n            check_for_derived_data_in_search_paths(project)\n        if config_warn_no_public_headers and len(project.public_headers) == 0:\n            issue_warning('No headers in build target %s were marked public. Please move at least one header to \"Public\" in the \"Copy Headers\" build phase.' % os.environ['TARGET_NAME'])\n\n    # Only build slave if this is an archive build.\n    if is_archive_build():\n        if is_master():\n            log.debug(\"Building as MASTER\")\n            # The slave-side linker tries to include this (nonexistent) path as\n            # a library path.\n            ensure_path_exists(project.get_slave_environment()['BUILT_PRODUCTS_DIR'])\n            project.build_state.persist()\n            run_slave_build(project)\n            project.build_state.reload()\n        else:\n            log.debug(\"Building as SLAVE\")\n            project.build_state.reload()\n            project.build_state.set_slave_properties(project.local_architectures,\n                                                     project.local_linked_archive_paths,\n                                                     project.local_built_fw_path,\n                                                     project.local_built_embedded_fw_path)\n            project.build_state.persist()\n\n    link_local_archs(project)\n    \n    # Only do a universal binary when building an archive.\n    if is_archive_build() and is_master():\n        link_combine_all_archs(project)\n    else:\n        link_combine_local_archs(project)\n\n    if config_deep_header_hierarchy:\n        build_deep_header_hierarchy(project)\n\n    add_symlinks_to_framework(project)\n    \n    if is_master():\n        if config_framework_type == 'embeddedframework':\n            build_embedded_framework(project)\n        elif config_framework_type != 'framework':\n            raise Exception(\"%s: Unknown framework type for config_framework_type\" % config_framework_type)\n\n\nif __name__ == \"__main__\":\n    log_handler = logging.StreamHandler()\n    log_handler.setFormatter(logging.Formatter(\"%(name)s (\" + os.environ['PLATFORM_NAME'] + \"): %(levelname)s: %(message)s\"))\n    log.addHandler(log_handler)\n    log.setLevel(config_log_level)\n\n    error_code = 0\n    prefix = \"M\" if is_master() else \"S\"\n    log_handler.setFormatter(logging.Formatter(\"%(name)s (\" + prefix + \" \" + os.environ['PLATFORM_NAME'] + \"): %(levelname)s: %(message)s\"))\n\n    log.debug(\"Begin build process\")\n\n    if config_deep_header_top:\n        config_deep_header_top = string.Template(config_deep_header_top).substitute(os.environ)\n\n    try:\n        run_build()\n        if issued_warnings:\n            if config_fail_on_warnings:\n                error_code = 1\n            log.warn(\"Build completed with warnings\")\n        else:\n            log.info(\"Build completed\")\n        if not is_archive_build():\n            log.info(\"Note: This is *NOT* a universal framework build. To build as a universal framework, do an archive build.\")\n            log.info(\"To do an archive build from command line, use \\\"xcodebuild -configuration Release UFW_ACTION=archive clean build\\\"\")\n    except Exception:\n        traceback.print_exc(file=sys.stdout)\n        error_code = 1\n        log.error(\"Build failed\")\n    finally:\n        if error_code == 0 and is_archive_build() and is_master():\n            log.info(\"Built framework is in \" + os.environ['TARGET_BUILD_DIR'])\n            if should_open_build_dir():\n                open_build_dir()\n        sys.exit(error_code)\n";
+			shellPath = /bin/sh;
+			shellScript = scripts/build.sh;
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		F1B601401922A12500B65371 /* Sources */ = {
+		F131CAD51B0D05B7004101F5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2318E6B4199C039A0054C274 /* PCFPushErrorUtil.m in Sources */,
-				2318E6B6199C039A0054C274 /* PCFPushHexUtil.m in Sources */,
-				2318E6AD199C039A0054C274 /* PCFNotifications.m in Sources */,
-				2318E68F199C039A0054C274 /* PCFPushRegistrationData.m in Sources */,
-				2318E691199C039A0054C274 /* PCFPushRegistrationPostRequestData.m in Sources */,
-				2318E69D199C039A0054C274 /* PCFPushParameters.m in Sources */,
-				D4B9FF2419A3CD950070A429 /* PCFPushPersistentStorage.m in Sources */,
-				11F37BE41ADD5D3C001011C9 /* PCFPushGeofenceData.m in Sources */,
-				2318E689199C039A0054C274 /* PCFPushURLConnection.m in Sources */,
-				2318E6A1199C039A0054C274 /* PCFPush.m in Sources */,
-				D4F3AC5019A3A25F005E84FF /* PCFTagsHelper.m in Sources */,
-				2318E6B1199C039A0054C274 /* PCFPushDebug.m in Sources */,
-				2318E693199C039A0054C274 /* PCFPushRegistrationResponseData.m in Sources */,
-				2318E68B199C039A0054C274 /* NSURLConnection+PCFBackEndConnection.m in Sources */,
-				11F37BE81ADD600A001011C9 /* PCFPushGeofenceLocation.m in Sources */,
-				D45B1D7B19A2944000F57230 /* PCFPushRegistrationPutRequestData.m in Sources */,
-				2318E6A9199C039A0054C274 /* PCFHardwareUtil.m in Sources */,
-				D4B9FF2819A511370070A429 /* PCFPushClient.m in Sources */,
-				2318E68D199C039A0054C274 /* NSObject+PCFJSONizable.m in Sources */,
-				B6AAEADB189ADCF9746258E0 /* PCFPushGeofenceEngine.m in Sources */,
-				B6AAED1D0CD3BDF37F9F40A7 /* PCFPushGeofenceResponseData.m in Sources */,
-				B6AAEC75CF1D18F241519531 /* PCFPushGeofenceDataList.m in Sources */,
-				B6AAE4F0A62FB3DB181EBC21 /* PCFPushGeofenceLocationMap.m in Sources */,
-				B69DB570E9C76F5515B42C4D /* PCFPushGeofencePersistentStore.m in Sources */,
-				B69DBFE2898CE4FFA99C2848 /* PCFPushGeofenceRegistrar.m in Sources */,
-				B69DB2D24516A6782605DEE2 /* PCFPushGeofenceUpdater.m in Sources */,
-				B69DB3C3791FD7D020B6B690 /* PCFPushGeofenceHandler.m in Sources */,
-				B69DBA34E0E3ED2B69454D2E /* PCFPushGeofenceUtil.m in Sources */,
-				B69DB039F1E97E573F39C03A /* PCFPushGeofenceStatus.m in Sources */,
-				B69DB3A12431A5816FC17742 /* PCFPushGeofenceStatusUtil.m in Sources */,
+				F131CB8C1B0D0664004101F5 /* PCFNotifications.m in Sources */,
+				F131CB511B0D0664004101F5 /* PCFPushGeofenceRegistrar.m in Sources */,
+				F131CB9C1B0D0664004101F5 /* PCFTagsHelper.m in Sources */,
+				F131CB4E1B0D0664004101F5 /* PCFPushGeofencePersistentStore.m in Sources */,
+				F131CB841B0D0664004101F5 /* PCFPushPersistentStorage.m in Sources */,
+				F131CB741B0D0664004101F5 /* PCFPushRegistrationPutRequestData.m in Sources */,
+				F131CB6E1B0D0664004101F5 /* PCFPushRegistrationData.m in Sources */,
+				F131CB711B0D0664004101F5 /* PCFPushRegistrationPostRequestData.m in Sources */,
+				F131CB651B0D0664004101F5 /* PCFPushGeofenceLocationMap.m in Sources */,
+				F131CB4B1B0D0664004101F5 /* PCFPushGeofenceHandler.m in Sources */,
+				F131CB931B0D0664004101F5 /* PCFPushErrorUtil.m in Sources */,
+				F131CB8F1B0D0664004101F5 /* PCFPushDebug.m in Sources */,
+				F131CB771B0D0664004101F5 /* PCFPushRegistrationResponseData.m in Sources */,
+				F131CB3F1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.m in Sources */,
+				F131CB5F1B0D0664004101F5 /* PCFPushGeofenceDataList.m in Sources */,
+				F131CB991B0D0664004101F5 /* PCFPushHexUtil.m in Sources */,
+				F131CB681B0D0664004101F5 /* PCFPushGeofenceResponseData.m in Sources */,
+				F131CB961B0D0664004101F5 /* PCFPushGeofenceUtil.m in Sources */,
+				F131CB481B0D0664004101F5 /* PCFPushGeofenceEngine.m in Sources */,
+				F131CB5C1B0D0664004101F5 /* PCFPushGeofenceData.m in Sources */,
+				F131CB7E1B0D0664004101F5 /* PCFPushClient.m in Sources */,
+				F131CB571B0D0664004101F5 /* PCFPushGeofenceUpdater.m in Sources */,
+				F131CB811B0D0664004101F5 /* PCFPushParameters.m in Sources */,
+				F131CB891B0D0664004101F5 /* PCFHardwareUtil.m in Sources */,
+				F131CB541B0D0664004101F5 /* PCFPushGeofenceStatusUtil.m in Sources */,
+				F131CB6B1B0D0664004101F5 /* PCFPushGeofenceStatus.m in Sources */,
+				F131CB451B0D0664004101F5 /* NSObject+PCFJSONizable.m in Sources */,
+				F131CB7B1B0D0664004101F5 /* PCFPush.m in Sources */,
+				F131CB621B0D0664004101F5 /* PCFPushGeofenceLocation.m in Sources */,
+				F131CB421B0D0664004101F5 /* PCFPushURLConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		D4E8A817185BAFDC00A841EE /* Debug */ = {
+		F131CAEE1B0D05B8004101F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -492,11 +499,19 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PCFPush/PCFPush-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -505,17 +520,22 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = PCFPush;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		D4E8A818185BAFDC00A841EE /* Release */ = {
+		F131CAEF1B0D05B8004101F5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -530,148 +550,111 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PCFPush/PCFPush-Prefix.pch";
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = PCFPush;
 				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				VALID_ARCHS = "arm64 armv7 armv7s x86_64 i386";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
 		};
-		F1B601821922A12500B65371 /* Debug */ = {
+		F131CAF11B0D05B8004101F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_MODULES_AUTOLINK = NO;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PCFPush/PCFPush-Prefix.pch";
-				INFOPLIST_FILE = "PCFPush/PCFPush-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = PCFPush;
-				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-				WRAPPER_EXTENSION = framework;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = PCFPush/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
-		F1B601831922A12500B65371 /* Coverage */ = {
+		F131CAF21B0D05B8004101F5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_MODULES_AUTOLINK = NO;
+				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_TEST_COVERAGE_FILES = YES;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PCFPush/PCFPush-Prefix.pch";
-				INFOPLIST_FILE = "PCFPush/PCFPush-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = PCFPush;
-				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-				WRAPPER_EXTENSION = framework;
-			};
-			name = Coverage;
-		};
-		F1B601841922A12500B65371 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_MODULES_AUTOLINK = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_TEST_COVERAGE_FILES = NO;
-				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "PCFPush/PCFPush-Prefix.pch";
-				INFOPLIST_FILE = "PCFPush/PCFPush-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PRODUCT_NAME = PCFPush;
-				SKIP_INSTALL = NO;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALID_ARCHS = "arm64 armv7 armv7s i386 x86_64";
-				WRAPPER_EXTENSION = framework;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = PCFPush/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
-		F1DA268A18DB3B9800F6B191 /* Coverage */ = {
+		F131CC301B0D0832004101F5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
-				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_NAME = PCFPush;
-				SDKROOT = iphoneos;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
-			name = Coverage;
+			name = Debug;
+		};
+		F131CC311B0D0832004101F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D4E8A801185BAFDC00A841EE /* Build configuration list for PBXProject "PCFPush" */ = {
+		F131CAD41B0D05B7004101F5 /* Build configuration list for PBXProject "PCFPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				D4E8A817185BAFDC00A841EE /* Debug */,
-				F1DA268A18DB3B9800F6B191 /* Coverage */,
-				D4E8A818185BAFDC00A841EE /* Release */,
+				F131CAEE1B0D05B8004101F5 /* Debug */,
+				F131CAEF1B0D05B8004101F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F1B601811922A12500B65371 /* Build configuration list for PBXNativeTarget "PCFPush" */ = {
+		F131CAF01B0D05B8004101F5 /* Build configuration list for PBXNativeTarget "PCFPush" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F1B601821922A12500B65371 /* Debug */,
-				F1B601831922A12500B65371 /* Coverage */,
-				F1B601841922A12500B65371 /* Release */,
+				F131CAF11B0D05B8004101F5 /* Debug */,
+				F131CAF21B0D05B8004101F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F131CC2F1B0D0832004101F5 /* Build configuration list for PBXAggregateTarget "PCFPush-Universal" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F131CC301B0D0832004101F5 /* Debug */,
+				F131CC311B0D0832004101F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D4E8A7FE185BAFDC00A841EE /* Project object */;
+	rootObject = F131CAD11B0D05B7004101F5 /* Project object */;
 }
