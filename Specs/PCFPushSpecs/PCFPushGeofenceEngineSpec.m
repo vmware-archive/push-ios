@@ -29,6 +29,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceDataList *oneItemGeofenceList;
         __block PCFPushGeofenceDataList *threeItemGeofenceList;
         __block PCFPushGeofenceDataList *fiveItemGeofenceList;
+        __block PCFPushGeofenceDataList *oneItemBadRadiusGeofenceList;
         __block PCFPushGeofenceDataList *expectedGeofencesToStore;
         __block PCFPushGeofenceLocationMap *expectedGeofencesToRegister;
 
@@ -41,6 +42,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
             threeItemGeofenceList = loadGeofenceList([self class], @"geofence_three_items");
             fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items");
+            oneItemBadRadiusGeofenceList = loadGeofenceList([self class], @"geofence_one_item_bad_radius");
             emptyGeofenceList = [PCFPushGeofenceDataList list];
             expectedGeofencesToRegister = [PCFPushGeofenceLocationMap map];
             expectedGeofencesToStore = [PCFPushGeofenceDataList list];
@@ -313,6 +315,15 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:complexResponseData withTimestamp:50L];
+                });
+            });
+
+            context(@"filter invalid items", ^{
+                it(@"should filter invalid items from store", ^{
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemBadRadiusGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:emptyResponseData withTimestamp:50L];
                 });
             });
         });

@@ -32,6 +32,22 @@ static BOOL isItemUpdated(PCFPushGeofenceData *geofence, PCFPushGeofenceResponse
     return NO;
 }
 
+static BOOL geofenceHasInvalidLocations(NSArray *array)
+{
+    // Note - a geofence can have several locations.  If *any* of those locations has a invalid set of coordinates then the whole geofence is considered invalid.
+    for (PCFPushGeofenceLocation *location in array) {
+        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(location.latitude, location.longitude);
+        if (!CLLocationCoordinate2DIsValid(coord)) {
+            PCFPushLog(@"Location with id %lld has invalid coordinates %f, %f", location.id, location.latitude, location.longitude);
+            return YES;
+        } else if (location.radius < 10.0) {
+            PCFPushLog(@"Location with id %lld has invalid radius value %f", location.radius);
+            return YES;
+        }
+    }
+    return NO;
+}
+
 static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofenceResponseData *responseData)
 {
     if ([responseData.deletedGeofenceIds containsObject:@(geofence.id)]) {
@@ -43,20 +59,10 @@ static BOOL isValidGeofenceFromStore(PCFPushGeofenceData *geofence, PCFPushGeofe
     if (isItemUpdated(geofence, responseData)) {
         return NO;
     }
-    return YES;
-}
-
-static BOOL geofenceHasInvalidLocations(NSArray *array)
-{
-    // Note - a geofence can have several locations.  If *any* of those locations has a invalid set of coordinates then the whole geofence is considered invalid.
-    for (PCFPushGeofenceLocation *location in array) {
-        CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(location.latitude, location.longitude);
-        if (!CLLocationCoordinate2DIsValid(coord)) {
-            PCFPushLog(@"Location with id %lld has invalid coordinates %f, %f", location.id, location.latitude, location.longitude);
-            return YES;
-        }
+    if (geofenceHasInvalidLocations(geofence.locations)) {
+        return NO;
     }
-    return NO;
+    return YES;
 }
 
 static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)

@@ -1,137 +1,178 @@
 {
-    "num": 3,
-    "last_modified": 1424309210305,
-    "geofences": [
+  "num": 9,
+  "last_modified": 1424309210305,
+  "geofences": [
+    {
+      "id": 1,
+      "data": {
+        "ios":{"alertBody": "i have no expiry_time"}
+      },
+      "trigger_type": "enter",
+      "locations": [
         {
-          "id": 1,
-          "data": {
-            "message": "i have no expiry_time"
-          },
-          "trigger_type": "enter",
-          "locations": [
-            {
-              "id": 88,
-              "name": "i have no expiry time",
-              "lat": -143.5,
-              "long": 61.5,
-              "rad": 150
-            }
-          ]
-        },
-        {
-            "id": 3,
-            "expiry_time": 1424309210305,
-            "trigger_type": "enter",
-            "locations": [
-                {
-                    "id": 88,
-                    "name": "i have no data",
-                    "lat": -143.5,
-                    "long": 61.5,
-                    "rad": 150
-                }
-            ]
-        },
-        {
-            "id": 5,
-            "data": {
-                "message": "i have no trigger_type"
-            },
-            "expiry_time": 1424309210305,
-            "locations": [
-                {
-                    "id": 88,
-                    "name": "ernsts_amazing_pizza",
-                    "lat": -143.5,
-                    "long": 61.5,
-                    "rad": 150
-                }
-            ]
-        },
-        {
-          "id": 6,
-          "data": {
-            "message": "bad longitudes"
-          },
-          "trigger_type": "enter",
-          "expiry_time": 1424309210305,
-          "locations": [
-            {
-              "id": 88,
-              "name": "ernst_loves_dumplings",
-              "lat": -143.5,
-              "long": 261.5,
-              "rad": 150
-            }
-          ]
-        },
-        {
-          "id": 7,
-          "data": {
-            "message": "bad longitudes"
-          },
-          "trigger_type": "enter",
-          "expiry_time": 1424309210305,
-          "locations": [
-            {
-              "id": 89,
-              "name": "ernst_loves_dumplings",
-              "lat": -143.5,
-              "long": -181.0,
-              "rad": 150
-            }
-          ]
-        },
-        {
-          "id": 8,
-          "data": {
-            "message": "bad_latitudes"
-          },
-          "trigger_type": "exit",
-          "expiry_time": 1424309210305,
-          "locations": [
-            {
-              "id": 88,
-              "name": "ernsts_wants_crepes",
-              "lat": -91.5,
-              "long": 61.5,
-              "rad": 150
-            }
-          ]
-        },
-        {
-          "id": 9,
-          "data": {
-            "message": "bad_latitudes"
-          },
-          "trigger_type": "exit",
-          "expiry_time": 1424309210305,
-          "locations": [
-            {
-              "id": 90,
-              "name": "ernsts_wants_crepes",
-              "lat": 93.5,
-              "long": 61.5,
-              "rad": 150
-            }
-          ]
-        },
-        {
-            "id": 10,
-            "data": {
-                "message": "i have an empty locations array"
-            },
-            "expiry_time": 1142744274,
-            "trigger_type": "enter",
-            "locations": []
-        },
-        {
-            "id": 44,
-            "data": {
-                "message": "i have no locations array at all"
-            },
-            "expiry_time": 1142744274,
-            "trigger_type": "exit"
+          "id": 88,
+          "name": "i have no expiry time",
+          "lat": -43.5,
+          "long": 61.5,
+          "rad": 150
         }
-    ]
+      ]
+    },
+    {
+      "id": 3,
+      "expiry_time": 1424309210305,
+      "trigger_type": "enter",
+      "locations": [
+        {
+          "id": 88,
+          "name": "i have no data",
+          "lat": -43.5,
+          "long": 61.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "data": {
+        "ios":{"alertBody": "i have no trigger_type"}
+      },
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 88,
+          "name": "ernsts_amazing_pizza",
+          "lat": -43.5,
+          "long": 61.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "data": {
+        "ios":{"alertBody": "bad longitudes"}
+      },
+      "trigger_type": "enter",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 88,
+          "name": "ernst_loves_dumplings",
+          "lat": -43.5,
+          "long": 261.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "data": {
+        "ios":{"alertBody": "bad longitudes"}
+      },
+      "trigger_type": "enter",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 89,
+          "name": "ernst_loves_dumplings",
+          "lat": -43.5,
+          "long": -181.0,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "data": {
+        "ios":{"alertBody": "bad_latitudes"}
+      },
+      "trigger_type": "exit",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 88,
+          "name": "ernsts_wants_crepes",
+          "lat": -91.5,
+          "long": 61.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "data": {
+        "ios":{"alertBody": "bad_latitudes"}
+      },
+      "trigger_type": "exit",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 90,
+          "name": "ernsts_wants_crepes",
+          "lat": 93.5,
+          "long": 61.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "data": {
+        "ios":{"alertBody": "bad_radius"}
+      },
+      "trigger_type": "exit",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 90,
+          "name": "ernsts_wants_crepes",
+          "lat": 3.5,
+          "long": 61.5,
+          "rad": -150
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "data": {
+        "ios":{"alertBody": "bad_radius"}
+      },
+      "trigger_type": "exit",
+      "expiry_time": 1424309210305,
+      "locations": [
+        {
+          "id": 90,
+          "name": "ernsts_wants_crepes",
+          "lat": 3.5,
+          "long": 61.5,
+          "rad": 1000
+        },
+        {
+          "id": 91,
+          "name": "ernsts_wants_chocolate_covered_almonds",
+          "lat": 3.5,
+          "long": 61.5,
+          "rad": 9.9
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "data": {
+        "ios":{"alertBody": "i have an empty locations array"}
+      },
+      "expiry_time": 1142744274,
+      "trigger_type": "enter",
+      "locations": []
+    },
+    {
+      "id": 44,
+      "data": {
+        "ios":{"alertBody": "i have no locations array at all"}
+      },
+      "expiry_time": 1142744274,
+      "trigger_type": "exit"
+    }
+  ]
 }
