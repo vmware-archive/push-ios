@@ -143,7 +143,7 @@ describe(@"PCFPushBackEndConnection", ^{
                     //TODO: Verify basic auth once we have a real server
 
                     [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&platform=ios"];
 
                     NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
 
@@ -165,7 +165,7 @@ describe(@"PCFPushBackEndConnection", ^{
                     //TODO: Verify basic auth once we have a real server
 
                     [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&platform=ios"];
 
                     NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
 
