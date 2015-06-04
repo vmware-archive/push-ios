@@ -2,7 +2,7 @@
     {
         "id": 5,
         "data": {
-            "message": "tacos"
+            "ios": {"message": "tacos"}
         },
         "trigger_type": "enter",
         "tags": ["TAG_3"],
@@ -20,7 +20,7 @@
     {
         "id": 11,
         "data": {
-            "message": "pizzas"
+            "ios": {"message": "pizzas"}
         },
         "trigger_type": "exit",
         "tags": ["TAG_1"],
@@ -38,7 +38,7 @@
     {
         "id": 44,
         "data": {
-            "message": "eat all this great stuff"
+            "ios": {"message": "eat all this great stuff"}
         },
         "trigger_type": "exit",
         "tags": ["TAG_2", "TAG_1"],
@@ -63,7 +63,7 @@
     {
         "id": 49,
         "data": {
-            "message": "gelato"
+            "ios": {"message": "gelato"}
         },
         "trigger_type": "exit",
         "tags": ["TAG_3", "TAG_4"],

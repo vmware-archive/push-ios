@@ -260,7 +260,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
 
             it(@"should populate only iOS 7.0 fields on location notifications on devices < iOS 8.0", ^{
 
-                [UILocalNotification stub: @selector(instancesRespondToSelector:) andReturn:theValue(NO)];
+                [PCFPushGeofenceHandler stub:@selector(localNotificationRespondsToSetAlertTitle:) andReturn:theValue(NO)];
+                [PCFPushGeofenceHandler stub:@selector(localNotificationRespondsToSetCategory:) andReturn:theValue(NO)];
 
                 UILocalNotification *expectedNotification = [[UILocalNotification alloc] init];
                 expectedNotification.alertAction = geofence3Exit.data[@"ios"][@"alertAction"];
@@ -294,6 +295,9 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     return;
                 }
 
+                [PCFPushGeofenceHandler stub:@selector(localNotificationRespondsToSetAlertTitle:) andReturn:theValue(YES)];
+                [PCFPushGeofenceHandler stub:@selector(localNotificationRespondsToSetCategory:) andReturn:theValue(YES)];
+
                 UILocalNotification *expectedNotification = [[UILocalNotification alloc] init];
                 expectedNotification.alertTitle = geofence3Exit.data[@"ios"][@"alertTitle"]; // iOS 8.2+
                 expectedNotification.category = geofence3Exit.data[@"ios"][@"category"]; // iOS 8.0+
@@ -315,42 +319,42 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
                 [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside];
             });
-        });
 
-        context(@"checking geofences after changing tags", ^{
+            context(@"checking geofences after changing tags", ^{
 
-            it(@"should do nothing if there are no currently registered tags", ^{
-                PCFPushGeofenceDataList *emptyGeofenceList = [PCFPushGeofenceDataList list];
-                [store stub:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
-                [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+                it(@"should do nothing if there are no currently registered tags", ^{
+                    PCFPushGeofenceDataList *emptyGeofenceList = [PCFPushGeofenceDataList list];
+                    [store stub:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                    [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
 
-                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
-            });
+                    [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+                });
 
-            it(@"should skip all the items if not registered to any of the geofence's tags", ^{
-                [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"NOT_RELATED_TAG", @"MEANINGLESS_TAG" ]]];
-                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
-                [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
+                it(@"should skip all the items if not registered to any of the geofence's tags", ^{
+                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"NOT_RELATED_TAG", @"MEANINGLESS_TAG" ]]];
+                    [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+                    [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
 
-                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
-            });
+                    [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+                });
 
-            it(@"should try to determine the state for any geofences subscribed to any user tags", ^{
-                [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"TAG_1", @"TAG_2" ]]];
-                [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
+                it(@"should try to determine the state for any geofences subscribed to any user tags", ^{
+                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"TAG_1", @"TAG_2" ]]];
+                    [store stub:@selector(currentlyRegisteredGeofences) andReturn:fiveItemGeofenceList];
 
-                NSArray *expectedRequestStatesForRegionIds = @[ @"PCF_11_66", @"PCF_44_66", @"PCF_44_82", @"PCF_51_53" ];
-                NSMutableArray *requestedStatesForRegionIds = [NSMutableArray array];
-                [[locationManager should] receive:@selector(requestStateForRegion:) withCount:4];
-                [locationManager stub:@selector(requestStateForRegion:) withBlock:^id(NSArray *params){
-                    CLRegion *requestStateForRegion = (CLRegion *)params[0];
-                    [requestedStatesForRegionIds addObject:requestStateForRegion.identifier];
-                    return nil;
-                }];
+                    NSArray *expectedRequestStatesForRegionIds = @[ @"PCF_11_66", @"PCF_44_66", @"PCF_44_82", @"PCF_51_53" ];
+                    NSMutableArray *requestedStatesForRegionIds = [NSMutableArray array];
+                    [[locationManager should] receive:@selector(requestStateForRegion:) withCount:4];
+                    [locationManager stub:@selector(requestStateForRegion:) withBlock:^id(NSArray *params){
+                        CLRegion *requestStateForRegion = (CLRegion *)params[0];
+                        [requestedStatesForRegionIds addObject:requestStateForRegion.identifier];
+                        return nil;
+                    }];
 
-                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
+                    [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:store locationManager:locationManager];
 
-                [[requestedStatesForRegionIds should] containObjectsInArray:expectedRequestStatesForRegionIds];
+                    [[requestedStatesForRegionIds should] containObjectsInArray:expectedRequestStatesForRegionIds];
+                });
             });
         });
     });

@@ -70,6 +70,9 @@ static BOOL isValidGeofenceFromResponseData(PCFPushGeofenceData *geofence)
     if (geofence.data == nil) {
         return NO;
     }
+    if (geofence.data[@"ios"] == nil) {
+        return NO;
+    }
     if (geofence.triggerType == PCFPushTriggerTypeUndefined) {
         return NO;
     }

@@ -1,7 +1,7 @@
 {
     "id": 9,
     "data": {
-        "message": "tacos"
+        "ios": {"message": "tacos"}
     },
     "expiry_time": 1142744274,
     "trigger_type": "exit",

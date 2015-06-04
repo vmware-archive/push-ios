@@ -5,7 +5,7 @@
         {
             "id": 5,
             "data": {
-                "message": "pizza"
+                "ios": {"message": "pizza"}
             },
             "expiry_time": 1424309210305,
             "trigger_type": "enter",
@@ -22,7 +22,7 @@
         {
             "id": 10,
             "data": {
-                "message": "tacos"
+                "ios": {"message": "tacos"}
             },
             "expiry_time": 1142744274,
             "trigger_type": "exit",
@@ -39,7 +39,7 @@
         {
             "id": 44,
             "data": {
-                "message": "eat all this great stuff"
+                "ios": {"message": "eat all this great stuff"}
             },
             "expiry_time": 1142744274,
             "trigger_type": "exit",

@@ -20,10 +20,6 @@
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceHandler.h"
-#import "PCFPushGeofenceDataList.h"
-#import "PCFPushGeofenceLocation.h"
-#import "PCFPushGeofenceLocationMap.h"
-#import "PCFPushGeofenceData.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 

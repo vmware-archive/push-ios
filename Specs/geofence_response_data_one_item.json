@@ -5,7 +5,7 @@
         {
             "id": 9,
             "data": {
-                "message": "pants"
+                "ios": {"message": "pants"}
             },
             "trigger_type": "exit",
             "expiry_time": 1424309210305,

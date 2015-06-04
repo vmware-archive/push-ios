@@ -33,6 +33,23 @@
       ]
     },
     {
+      "id": 4,
+      "data": {
+        "alertBody": "i have no expiry_time"
+      },
+      "expiry_time": 1424309210305,
+      "trigger_type": "enter",
+      "locations": [
+        {
+          "id": 88,
+          "name": "i have no iOS data",
+          "lat": -43.5,
+          "long": 61.5,
+          "rad": 150
+        }
+      ]
+    },
+    {
       "id": 5,
       "data": {
         "ios":{"alertBody": "i have no trigger_type"}

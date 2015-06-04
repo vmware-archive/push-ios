@@ -85,12 +85,12 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     notification.userInfo = dictionaryWithTriggerCondition(geofence.data[@"ios"][@"userInfo"], state);
 
     // iOS 8.0+
-    if([notification respondsToSelector:@selector(setCategory:)]) {
+    if ([PCFPushGeofenceHandler localNotificationRespondsToSetCategory:notification]) {
         notification.category = geofence.data[@"ios"][@"category"];
     }
 
     // iOS 8.2+
-    if([notification respondsToSelector:@selector(setAlertTitle:)]) {
+    if ([PCFPushGeofenceHandler localNotificationRespondsToSetAlertTitle:notification]) {
         notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
     }
 
@@ -126,6 +126,16 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
 }
 
 @implementation PCFPushGeofenceHandler
+
++ (BOOL) localNotificationRespondsToSetCategory:(UILocalNotification*)notification
+{
+    return [notification respondsToSelector:@selector(setCategory:)];
+}
+
++ (BOOL) localNotificationRespondsToSetAlertTitle:(UILocalNotification*)notification
+{
+    return [notification respondsToSelector:@selector(setAlertTitle:)];
+}
 
 + (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store engine:(PCFPushGeofenceEngine *)engine state:(CLRegionState)state
 {
