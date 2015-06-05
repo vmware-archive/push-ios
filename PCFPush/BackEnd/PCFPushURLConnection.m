@@ -20,6 +20,7 @@ NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofence"; // TODO - set to 'geofences' once a real server is available
 static NSString *const kTimestampParam = @"timestamp";
+static NSString *const kDeviceUuidParam = @"device_uuid";
 static NSString *const kPlatformParam = @"platform=ios";
 static NSTimeInterval kRequestTimeout = 60.0;
 
@@ -86,11 +87,12 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
                             timestamp:(int64_t)timestamp
+                           deviceUuid:(NSString *)deviceUuid
                               success:(void (^)(NSURLResponse *response, NSData *data))success
                               failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
-    NSURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters];
+    NSURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters deviceUuid:deviceUuid];
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
@@ -234,12 +236,16 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 #pragma mark - Geofence Request
 
-+ (NSURLRequest *)geofenceRequestWithTimestamp:(int64_t)timestamp parameters:(PCFPushParameters *)parameters {
++ (NSURLRequest *)geofenceRequestWithTimestamp:(int64_t)timestamp parameters:(PCFPushParameters *)parameters deviceUuid:(NSString *)deviceUuid {
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
 
-    NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[self baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@", kTimestampParam, timestamp, kPlatformParam]];
+    if (!deviceUuid) {
+        [NSException raise:NSInvalidArgumentException format:@"Device UUID may not be nil"];
+    }
+
+    NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[self baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
     NSURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     // TODO - add basic auth to this request once a real server is available
     return request;

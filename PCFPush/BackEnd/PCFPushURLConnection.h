@@ -28,6 +28,8 @@ extern NSString *const kPCFPushBasicAuthorizationKey;
 
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
                             timestamp:(int64_t)timestamp
+                           deviceUuid:(NSString *)deviceUuid
                               success:(void (^)(NSURLResponse *response, NSData *data))success
                               failure:(void (^)(NSError *error))failure;
+
 @end

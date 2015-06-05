@@ -81,10 +81,8 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
     } else {
         PCFPushLog(@"Fetching geofence updates from server with timestamp %lld", timestamp);
 
-        [PCFPushURLConnection geofenceRequestWithParameters:parameters
-                                                  timestamp:timestamp
-                                                    success:requestSuccessBlock
-                                                    failure:requestFailureBlock];
+        NSString *deviceID = [PCFPushPersistentStorage serverDeviceID];
+        [PCFPushURLConnection geofenceRequestWithParameters:parameters timestamp:timestamp deviceUuid:deviceID success:requestSuccessBlock failure:requestFailureBlock];
     }
 };
 

@@ -101,28 +101,26 @@ describe(@"PCFPushBackEndConnection", ^{
     context(@"arguments for geofence updates", ^{
         it(@"should require a parameters object", ^{
             [[theBlock( ^{
-                [PCFPushURLConnection geofenceRequestWithParameters:nil timestamp:77777L
-                                                            success:^(NSURLResponse *response, NSData *data) {
-                                                            }
-                                                            failure:^(NSError *error) {
-                                                            }]; })
-                    should] raise];
+                [PCFPushURLConnection geofenceRequestWithParameters:nil timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {} failure:^(NSError *error) {}];
+            }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should not require a success block", ^{
-            [[theBlock( ^{ [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
-                                                                       success:nil
-                                                                       failure:^(NSError *error) {
-                                                                       }]; })
-                    shouldNot] raise];
+            [[theBlock( ^{
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:nil failure:^(NSError *error) {}];
+            }) shouldNot] raise];
         });
 
         it(@"should not require a failure block", ^{
-            [[theBlock( ^{ [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
-                                                                       success:^(NSURLResponse *response, NSData *data) {
-                                                                       }
-                                                                       failure:nil]; })
-                    shouldNot] raise];
+            [[theBlock( ^{
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {} failure:nil];
+            }) shouldNot] raise];
+        });
+
+        it(@"should require a device UUID", ^{
+            [[theBlock( ^{
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:nil success:^(NSURLResponse *response, NSData *data) {} failure:nil];
+            }) should] raiseWithName:NSInvalidArgumentException];
         });
     });
 
@@ -143,7 +141,7 @@ describe(@"PCFPushBackEndConnection", ^{
                     //TODO: Verify basic auth once we have a real server
 
                     [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&platform=ios"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
 
                     NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
 
@@ -151,12 +149,11 @@ describe(@"PCFPushBackEndConnection", ^{
                     handler(response, nil, nil);
                     return nil;
                 }];
-                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
-                                                            success:^(NSURLResponse *response, NSData *data) {
-                                                                wasExpectedResult = YES;
-                                                            } failure:^(NSError *error) {
-                            wasExpectedResult = NO;
-                        }];
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = YES;
+                }                                           failure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
             });
 
             it(@"should handle a failure request", ^{
@@ -165,7 +162,7 @@ describe(@"PCFPushBackEndConnection", ^{
                     //TODO: Verify basic auth once we have a real server
 
                     [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&platform=ios"];
+                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
 
                     NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
 
@@ -174,12 +171,11 @@ describe(@"PCFPushBackEndConnection", ^{
                     return nil;
                 }];
 
-                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L
-                                                            success:^(NSURLResponse *response, NSData *data) {
-                                                                wasExpectedResult = NO;
-                                                            } failure:^(NSError *error) {
-                            wasExpectedResult = YES;
-                        }];
+                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                }                                           failure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                }];
             });
 
 

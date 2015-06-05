@@ -21,7 +21,7 @@ static GeofenceRequestStub successfulGeofenceRequestStub(NSUInteger httpStatus, 
             block();
         }
         NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:httpStatus HTTPVersion:nil headerFields:nil];
-        void(^completionHandler)(NSURLResponse *, NSData *) = params[2];
+        void(^completionHandler)(NSURLResponse *, NSData *) = params[3];
         completionHandler(response, data);
         return nil;
     };
@@ -33,7 +33,7 @@ static GeofenceRequestStub failedGeofenceRequestStub(void (^block)())
         if (block) {
             block();
         }
-        void(^completionHandler)(NSError *) = params[3];
+        void(^completionHandler)(NSError *) = params[4];
         completionHandler([NSError errorWithDomain:@"Fake request failed fakely" code:0 userInfo:nil]);
         return nil;
     };
@@ -60,7 +60,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             beforeEach(^{
                 engine = [PCFPushGeofenceEngine mock];
                 [engine stub:@selector(processResponseData:withTimestamp:)];
-                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], nil)];
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], nil)];
             });
 
             it(@"should require a geofence engine", ^{
@@ -108,13 +108,14 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 beforeEach(^{
                     [[engine shouldNot] receive:@selector(processResponseData:withTimestamp:)];
+//                    [PCFPushPersistentStorage setServerDeviceID:@"DEVICE_ID"];
                     [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(YES), any(), theValue(97), any(), nil];
                     [PCFPushGeofenceStatusUtil stub:@selector(loadGeofenceStatus:) andReturn:[PCFPushGeofenceStatus statusWithError:NO errorReason:nil number:97]];
                 });
 
                 it(@"should handle empty JSON response data", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], ^{
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], ^{
                         wasRequestAttempted = YES;
                     })];
 
@@ -128,7 +129,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 it(@"should handle bogus JSON response data", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding], ^{
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, [@"I AM NOT JSON" dataUsingEncoding:NSUTF8StringEncoding], ^{
                         wasRequestAttempted = YES;
                     })];
 
@@ -142,7 +143,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 it(@"should handle a failed request (like a connection error)", ^{
 
-                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:failedGeofenceRequestStub(^{
+                    [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:failedGeofenceRequestStub(^{
                         wasRequestAttempted = YES;
                     })];
 
@@ -158,7 +159,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             it(@"should be able to make a successful request", ^{
 
                 NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
-                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
                     wasRequestAttempted = YES;
                 })];
 
@@ -180,7 +181,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             it(@"should be able to make a successful request when the userInfo is not null but doesn't contain geofence update JSON", ^{
 
                 NSData *data = [@"{\"last_modified\":123456789123456789}" dataUsingEncoding:NSUTF8StringEncoding];
-                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
+                [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, data, ^{
                     wasRequestAttempted = YES;
                 })];
 
@@ -217,7 +218,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
             it(@"should read the geofence update from the request data if in debug mode", ^{
 
-                [[PCFPushURLConnection shouldNot] receive:@selector(geofenceRequestWithParameters:timestamp:success:failure:)];
+                [[PCFPushURLConnection shouldNot] receive:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:)];
 
                 [[PCFPushPersistentStorage should] receive:@selector(setGeofenceLastModifiedTime:) withArguments:theValue(123456789123456789L), nil];
 
@@ -237,7 +238,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
             it(@"should handle bad geofence update data in the request data if in debug mode", ^{
 
-                [[PCFPushURLConnection shouldNot] receive:@selector(geofenceRequestWithParameters:timestamp:success:failure:)];
+                [[PCFPushURLConnection shouldNot] receive:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:)];
 
                 [[PCFPushPersistentStorage shouldNot] receive:@selector(setGeofenceLastModifiedTime:)];
 
