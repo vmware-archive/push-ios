@@ -25,6 +25,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceResponseData *complexResponseData;
         __block PCFPushGeofenceResponseData *oneOtherItemResponseData;
         __block PCFPushGeofenceResponseData *insufficientDataResponseData;
+        __block PCFPushGeofenceResponseData *oneItemBadTriggerResponseData;
         __block PCFPushGeofenceDataList *emptyGeofenceList;
         __block PCFPushGeofenceDataList *oneItemGeofenceList;
         __block PCFPushGeofenceDataList *threeItemGeofenceList;
@@ -39,6 +40,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             complexResponseData = loadResponseData([self class], @"geofence_response_data_complex");
             oneOtherItemResponseData = loadResponseData([self class], @"geofence_response_data_one_other_item");
             insufficientDataResponseData = loadResponseData([self class], @"geofence_response_data_all_items_culled");
+            oneItemBadTriggerResponseData = loadResponseData([self class], @"geofence_response_data_one_item_bad_trigger");
             oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
             threeItemGeofenceList = loadGeofenceList([self class], @"geofence_three_items");
             fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items");
@@ -262,6 +264,16 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                     [engine processResponseData:insufficientDataResponseData withTimestamp:50L];
+                });
+
+                it(@"should filter items with bad trigger type data", ^{
+                    [[store shouldNot] receive:@selector(reset)];
+                    [[registrar shouldNot] receive:@selector(reset)];
+                    [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                    [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                    [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                    [engine processResponseData:oneItemBadTriggerResponseData withTimestamp:50L];
+
                 });
             });
 
