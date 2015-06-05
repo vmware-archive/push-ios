@@ -77,6 +77,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if (!deviceToken) {
         [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
     }
+
     if (![deviceToken isKindOfClass:[NSData class]]) {
         [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type: NSData."];
     }
@@ -319,15 +320,11 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if (![PCFPushPersistentStorage serverDeviceID]) {
         return YES;
     }
-    
-    if (![PCFPushClient localDeviceTokenMatchesNewToken:deviceToken]) {
+
+    if (![PCFPushClient localVariantMatchNewVariant:parameters]) {
         return YES;
     }
-    
-    if (![PCFPushClient localParametersMatchNewParameters:parameters]) {
-        return YES;
-    }
-    
+
     return NO;
 }
 
@@ -335,24 +332,24 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
     NSString *savedDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     if ((parameters.pushDeviceAlias == nil && savedDeviceAlias != nil) || (parameters.pushDeviceAlias != nil && ![parameters.pushDeviceAlias isEqualToString:savedDeviceAlias])) {
-        PCFPushLog(@"Parameters specify a different deviceAlias. Unregistration and re-registration will be required.");
+        PCFPushLog(@"Parameters specify a different deviceAlias. Update registration will be required.");
         return NO;
     }
     
-    return [PCFPushClient localVariantMatchNewVariant:parameters] && [PCFPushClient areTagsTheSame:parameters];
+    return [PCFPushClient areTagsTheSame:parameters];
 }
 
 + (BOOL)localVariantMatchNewVariant:(PCFPushParameters *)parameters
 {
     NSString *savedVariantUUID = [PCFPushPersistentStorage variantUUID];
     if ((parameters.variantUUID == nil && savedVariantUUID != nil) || (parameters.variantUUID != nil && ![parameters.variantUUID isEqualToString:savedVariantUUID])) {
-        PCFPushLog(@"Parameters specify a different platform UUID. Unregistration and re-registration will be required.");
+        PCFPushLog(@"Parameters specify a different platform UUID. A new registration will be required.");
         return NO;
     }
 
     NSString *savedVariantSecret = [PCFPushPersistentStorage variantSecret];
     if ((parameters.variantSecret == nil && savedVariantSecret != nil) || (parameters.variantSecret != nil && ![parameters.variantSecret isEqualToString:savedVariantSecret])) {
-        PCFPushLog(@"Parameters specify a different platform Secret. Unregistration and re-registration will be required.");
+        PCFPushLog(@"Parameters specify a different platform Secret. A new registration will be required.");
         return NO;
     }
 
@@ -374,7 +371,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 + (BOOL)localDeviceTokenMatchesNewToken:(NSData *)deviceToken
 {
     if (![deviceToken isEqualToData:[PCFPushPersistentStorage APNSDeviceToken]]) {
-        PCFPushLog(@"APNS returned a different APNS token. Unregistration and re-registration will be required.");
+        PCFPushLog(@"APNS returned a different APNS token. Update registration will be required.");
         return NO;
     }
     return YES;

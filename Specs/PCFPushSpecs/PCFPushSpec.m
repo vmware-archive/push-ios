@@ -139,11 +139,11 @@ describe(@"PCFPush", ^{
         });
     });
 
-    describe(@"updating push registration", ^{
+    describe(@"a push registration with an existing registration", ^{
 
         __block NSInteger successCount;
         __block NSInteger updateRegistrationCount;
-        __block void (^testBlock)(SEL, id);
+        __block void (^testBlock)(SEL, id, NSString*);
         __block NSSet *expectedSubscribeTags;
         __block NSSet *expectedUnsubscribeTags;
 
@@ -153,44 +153,69 @@ describe(@"PCFPush", ^{
             expectedSubscribeTags = nil;
             expectedUnsubscribeTags = nil;
 
-            [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+            testBlock = ^(SEL sel, id newPersistedValue, NSString *expectedHttpMethod) {
 
-                [[request.HTTPMethod should] equal:@"PUT"];
+                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
 
-                updateRegistrationCount++;
+                    [[request.HTTPMethod should] equal:expectedHttpMethod];
 
-                NSError *error;
-                PCFPushRegistrationPutRequestData *requestBody = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
+                    updateRegistrationCount++;
 
-                [[error should] beNil];
-                [[requestBody shouldNot] beNil];
+                    NSError *error;
 
-                if (expectedSubscribeTags) {
-                    [[[NSSet setWithArray:requestBody.subscribeTags] should] equal:expectedSubscribeTags];
-                } else {
-                    [[requestBody.subscribeTags should] beNil];
-                }
-                if (expectedUnsubscribeTags) {
-                    [[[NSSet setWithArray:requestBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
-                } else {
-                    [[requestBody.unsubscribeTags should] beNil];
-                }
-                [[requestBody.variantUUID should] beNil];
-                [[requestBody.deviceAlias should] equal:TEST_DEVICE_ALIAS_1];
-            }];
+                    PCFPushRegistrationData *requestBody;
 
-            [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+                    if ([expectedHttpMethod isEqualToString:@"PUT"]) {
 
-            [helper setupDefaultPersistedParameters];
-            [helper setupDefaultPLIST];
+                        PCFPushRegistrationPutRequestData *requestPutBody = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
+                        requestBody = requestPutBody;
 
-            testBlock = ^(SEL sel, id newPersistedValue) {
+                        [[error should] beNil];
+                        [[requestPutBody shouldNot] beNil];
+
+                        if (expectedSubscribeTags) {
+                            [[[NSSet setWithArray:requestPutBody.subscribeTags] should] equal:expectedSubscribeTags];
+                        } else {
+                            [[requestPutBody.subscribeTags should] beNil];
+                        }
+
+                        if (expectedUnsubscribeTags) {
+                            [[[NSSet setWithArray:requestPutBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
+                        } else {
+                            [[requestPutBody.unsubscribeTags should] beNil];
+                        }
+
+                    } else if ([expectedHttpMethod isEqualToString:@"POST"]) {
+
+                        PCFPushRegistrationPostRequestData *requestPostBody = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
+                        requestBody = requestPostBody;
+
+                        [[error should] beNil];
+                        [[requestPostBody shouldNot] beNil];
+
+                        if (expectedSubscribeTags) {
+                            [[[NSSet setWithArray:requestPostBody.tags] should] equal:expectedSubscribeTags];
+                        } else {
+                            [[requestPostBody.tags should] beNil];
+                        }
+                    }
+
+                    [[requestBody shouldNot] beNil];
+                    [[requestBody.variantUUID should] beNil];
+                    [[requestBody.deviceAlias should] equal:TEST_DEVICE_ALIAS_1];
+                }];
+
+                [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+
+                [helper setupDefaultPersistedParameters];
+                [helper setupDefaultPLIST];
 
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
 
                 void (^successBlock)() = ^{
                     successCount++;
                 };
+
                 void (^failureBlock)(NSError *) = ^(NSError *error) {
                     fail(@"registration failure block executed");
                 };
@@ -218,60 +243,64 @@ describe(@"PCFPush", ^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantUuid changes", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                    testBlock(@selector(setVariantUUID:), nil);
+                it(@"should do a new push registration and geofences after the variantUuid is initially set", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantUUID:), nil, @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantSecret changes", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                    testBlock(@selector(setVariantSecret:), nil);
+                it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantSecret:), nil, @"POST");
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING", @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias is initially set (with geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), nil);
+                    testBlock(@selector(setDeviceAlias:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the APNSDeviceToken changes", ^{
-                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding], @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
                     expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags initially set from nil", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), nil);
+                    testBlock(@selector(setTags:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set]);
+                    testBlock(@selector(setTags:), [NSSet set], @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags change to nil", ^{
                     helper.params.pushTags = nil;
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags change to empty", ^{
                     helper.params.pushTags = [NSSet set];
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
             });
 
@@ -287,60 +316,64 @@ describe(@"PCFPush", ^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantUuid changes", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                    testBlock(@selector(setVariantUUID:), nil);
+                it(@"should do a new push registration and geofences after the variantUuid is initially set", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantUUID:), nil, @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantSecret changes", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                    testBlock(@selector(setVariantSecret:), nil);
+                it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
+                    expectedSubscribeTags = helper.tags1;
+                    testBlock(@selector(setVariantSecret:), nil, @"POST");
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING", @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias is initially set (with geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), nil);
+                    testBlock(@selector(setDeviceAlias:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the APNSDeviceToken changes", ^{
-                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding], @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
                     expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags initially set from nil", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), nil);
+                    testBlock(@selector(setTags:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set]);
+                    testBlock(@selector(setTags:), [NSSet set], @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags change to nil", ^{
                     helper.params.pushTags = nil;
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
 
                 it(@"should update the push registration and geofences after tags change to empty", ^{
                     helper.params.pushTags = [NSSet set];
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
             });
         });
@@ -360,43 +393,43 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING", @"PUT");
                 });
 
                 it(@"should update the push registration after the deviceAlias is initially set (without geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), nil);
+                    testBlock(@selector(setDeviceAlias:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration after the APNSDeviceToken changes", ^{
-                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding], @"PUT");
                 });
 
                 it(@"should update the push registration after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
                     expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT");
                 });
 
                 it(@"should update the push registration after tags initially set from nil", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), nil);
+                    testBlock(@selector(setTags:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set]);
+                    testBlock(@selector(setTags:), [NSSet set], @"PUT");
                 });
 
                 it(@"should update the push registration after tags change to nil", ^{
                     helper.params.pushTags = nil;
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
 
                 it(@"should update the push registration after tags change to empty", ^{
                     helper.params.pushTags = [NSSet set];
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
             });
 
@@ -418,43 +451,43 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING");
+                    testBlock(@selector(setDeviceAlias:), @"DIFFERENT STRING", @"PUT");
                 });
 
                 it(@"should update the push registration after the deviceAlias is initially set (without geofence update)", ^{
-                    testBlock(@selector(setDeviceAlias:), nil);
+                    testBlock(@selector(setDeviceAlias:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration after the APNSDeviceToken changes", ^{
-                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding]);
+                    testBlock(@selector(setAPNSDeviceToken:), [@"DIFFERENT TOKEN" dataUsingEncoding:NSUTF8StringEncoding], @"PUT");
                 });
 
                 it(@"should update the push registration after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
                     expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
-                    testBlock(@selector(setTags:), expectedUnsubscribeTags);
+                    testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT");
                 });
 
                 it(@"should update the push registration after tags initially set from nil", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), nil);
+                    testBlock(@selector(setTags:), nil, @"PUT");
                 });
 
                 it(@"should update the push registration after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set]);
+                    testBlock(@selector(setTags:), [NSSet set], @"PUT");
                 });
 
                 it(@"should update the push registration after tags change to nil", ^{
                     helper.params.pushTags = nil;
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
 
                 it(@"should update the push registration after tags change to empty", ^{
                     helper.params.pushTags = [NSSet set];
                     expectedUnsubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), helper.tags1);
+                    testBlock(@selector(setTags:), helper.tags1, @"PUT");
                 });
             });
         });
@@ -464,6 +497,7 @@ describe(@"PCFPush", ^{
             context(@"with geofences enabled (and will still do a geofence reset and update this time)", ^{
 
                 beforeEach(^{
+                    expectedSubscribeTags = helper.tags1;
                     [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
                     [helper setupClearGeofencesForSuccess];
                     [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:2784L];
@@ -475,26 +509,27 @@ describe(@"PCFPush", ^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(2784L)];
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                    testBlock(@selector(setVariantUUID:), nil);
+                it(@"should do a new push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil, @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                    testBlock(@selector(setVariantSecret:), nil);
+                it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil, @"POST");
                 });
             });
 
             context(@"with geofences disabled (and will just do a geofence reset - with no update)", ^{
 
                 beforeEach(^{
+                    expectedSubscribeTags = helper.tags1;
                     [helper setupDefaultPLISTWithFile:@"Pivotal-GeofencesDisabled"];
                     [PCFPushPersistentStorage setGeofenceLastModifiedTime:1337L];
                     [helper setupClearGeofencesForSuccess];
@@ -510,20 +545,20 @@ describe(@"PCFPush", ^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid changes", ^{
-                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantUuid changes", ^{
+                    testBlock(@selector(setVariantUUID:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantUuid is initially set", ^{
-                    testBlock(@selector(setVariantUUID:), nil);
+                it(@"should do a new push registration and geofences after the variantUuid is initially set", ^{
+                    testBlock(@selector(setVariantUUID:), nil, @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret changes", ^{
-                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING");
+                it(@"should do a new push registration and geofences after the variantSecret changes", ^{
+                    testBlock(@selector(setVariantSecret:), @"DIFFERENT STRING", @"POST");
                 });
 
-                it(@"should update the push registration and geofences after the variantSecret is initially set", ^{
-                    testBlock(@selector(setVariantSecret:), nil);
+                it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
+                    testBlock(@selector(setVariantSecret:), nil, @"POST");
                 });
             });
         });
