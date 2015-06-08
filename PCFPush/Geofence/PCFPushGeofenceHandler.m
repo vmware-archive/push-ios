@@ -57,7 +57,14 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
 
 static NSDictionary *dictionaryWithTriggerCondition(NSDictionary* dictionary, CLRegionState state)
 {
-    NSMutableDictionary *result = [NSMutableDictionary dictionaryWithDictionary:dictionary];
+    NSMutableDictionary *result;
+    
+    if (dictionary && ![dictionary isKindOfClass:[NSNull class]]) {
+        result = [NSMutableDictionary dictionaryWithDictionary:dictionary];
+    } else {
+        result = [NSMutableDictionary dictionary];
+    }
+    
     switch (state) {
         case CLRegionStateInside:
             result[@"pivotal.push.geofence_trigger_condition"] = @"enter";
@@ -76,22 +83,44 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     UILocalNotification *notification = [[UILocalNotification alloc] init];
 
     // < iOS 8.0
-    notification.alertAction = geofence.data[@"ios"][@"alertAction"];
-    notification.alertBody = geofence.data[@"ios"][@"alertBody"];
-    notification.alertLaunchImage = geofence.data[@"ios"][@"alertLaunchImage"];
-    notification.hasAction = [geofence.data[@"ios"][@"hasAction"] boolValue];
-    notification.applicationIconBadgeNumber = [geofence.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
-    notification.soundName = geofence.data[@"ios"][@"soundName"];
+    if (geofence.data[@"ios"][@"alertAction"] && ![geofence.data[@"ios"][@"alertAction"] isKindOfClass:[NSNull class]]) {
+        notification.alertAction = geofence.data[@"ios"][@"alertAction"];
+    }
+    
+    if (geofence.data[@"ios"][@"alertBody"] && ![geofence.data[@"ios"][@"alertBody"] isKindOfClass:[NSNull class]]) {
+        notification.alertBody = geofence.data[@"ios"][@"alertBody"];
+    }
+        
+    if (geofence.data[@"ios"][@"alertLaunchImage"] && ![geofence.data[@"ios"][@"alertLaunchImage"] isKindOfClass:[NSNull class]]) {
+        notification.alertLaunchImage = geofence.data[@"ios"][@"alertLaunchImage"];
+    }
+    
+    if (geofence.data[@"ios"][@"hasAction"] && ![geofence.data[@"ios"][@"hasAction"] isKindOfClass:[NSNull class]]) {
+        notification.hasAction = [geofence.data[@"ios"][@"hasAction"] boolValue];
+    }
+    
+    if (geofence.data[@"ios"][@"applicationIconBadgeNumber"] && ![geofence.data[@"ios"][@"applicationIconBadgeNumber"] isKindOfClass:[NSNull class]]) {
+        notification.applicationIconBadgeNumber = [geofence.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
+    }
+    
+    if (geofence.data[@"ios"][@"soundName"] && ![geofence.data[@"ios"][@"soundName"] isKindOfClass:[NSNull class]]) {
+        notification.soundName = geofence.data[@"ios"][@"soundName"];
+    }
+    
     notification.userInfo = dictionaryWithTriggerCondition(geofence.data[@"ios"][@"userInfo"], state);
 
     // iOS 8.0+
     if ([PCFPushGeofenceHandler localNotificationRespondsToSetCategory:notification]) {
-        notification.category = geofence.data[@"ios"][@"category"];
+        if (geofence.data[@"ios"][@"category"] && ![geofence.data[@"ios"][@"category"] isKindOfClass:[NSNull class]]) {
+            notification.category = geofence.data[@"ios"][@"category"];
+        }
     }
 
     // iOS 8.2+
     if ([PCFPushGeofenceHandler localNotificationRespondsToSetAlertTitle:notification]) {
-        notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
+        if (geofence.data[@"ios"][@"alertTitle"] && ![geofence.data[@"ios"][@"alertTitle"] isKindOfClass:[NSNull class]]) {
+            notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
+        }
     }
 
     return notification;

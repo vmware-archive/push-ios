@@ -18,7 +18,7 @@
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 
 static NSString *const kRegistrationRequestPath = @"v1/registration";
-static NSString *const kGeofencesRequestPath = @"v1/geofence"; // TODO - set to 'geofences' once a real server is available
+static NSString *const kGeofencesRequestPath = @"v1/geofences";
 static NSString *const kTimestampParam = @"timestamp";
 static NSString *const kDeviceUuidParam = @"device_uuid";
 static NSString *const kPlatformParam = @"platform=ios";
@@ -45,10 +45,10 @@ static NSTimeInterval kRequestTimeout = 60.0;
                    failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
-    NSMutableURLRequest *request = [self unregisterRequestForBackEndDeviceID:deviceID];
+    NSMutableURLRequest *request = [PCFPushURLConnection unregisterRequestForBackEndDeviceID:deviceID];
     
     if (request) {
-        [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
+        [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
 
         [NSURLConnection pcfPushSendAsynchronousRequest:request
                                                 success:success
@@ -62,8 +62,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
                        failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Register with push server for device token: %@", deviceToken);
-    NSMutableURLRequest *request = [self registerRequestForAPNSDeviceToken:deviceToken
-                                                                parameters:parameters];
+    NSMutableURLRequest *request = [PCFPushURLConnection registerRequestForAPNSDeviceToken:deviceToken
+                                                                                parameters:parameters];
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
@@ -77,9 +77,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
                                    failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Update Registration with push server for device ID: %@", deviceID);
-    NSMutableURLRequest *request = [self updateRequestForDeviceID:deviceID
-                                                  APNSDeviceToken:deviceToken
-                                                       parameters:parameters];
+    NSMutableURLRequest *request = [PCFPushURLConnection updateRequestForDeviceID:deviceID
+                                                                  APNSDeviceToken:deviceToken
+                                                                       parameters:parameters];
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
                                             failure:failure];
@@ -92,7 +92,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
                               failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
-    NSURLRequest *request = [self geofenceRequestWithTimestamp:timestamp parameters:parameters deviceUuid:deviceUuid];
+    NSURLRequest *request = [PCFPushURLConnection geofenceRequestWithTimestamp:timestamp parameters:parameters deviceUuid:deviceUuid];
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
@@ -106,19 +106,19 @@ static NSTimeInterval kRequestTimeout = 60.0;
                                        parameters:(PCFPushParameters *)parameters
 {
     NSString *relativePath = [[NSString stringWithFormat:@"%@/%@", kRegistrationRequestPath, deviceID] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    return [self requestWithAPNSDeviceToken:APNSDeviceToken
-                               relativePath:relativePath
-                                 HTTPMethod:@"PUT"
-                                 parameters:parameters];
+    return [PCFPushURLConnection requestWithAPNSDeviceToken:APNSDeviceToken
+                                               relativePath:relativePath
+                                                 HTTPMethod:@"PUT"
+                                                 parameters:parameters];
 }
 
 + (NSMutableURLRequest *)registerRequestForAPNSDeviceToken:(NSData *)APNSDeviceToken
                                                 parameters:(PCFPushParameters *)parameters
 {
-    return [self requestWithAPNSDeviceToken:APNSDeviceToken
-                               relativePath:kRegistrationRequestPath
-                                 HTTPMethod:@"POST"
-                                 parameters:parameters];
+    return [PCFPushURLConnection requestWithAPNSDeviceToken:APNSDeviceToken
+                                               relativePath:kRegistrationRequestPath
+                                                 HTTPMethod:@"POST"
+                                                 parameters:parameters];
 }
 
 + (NSMutableURLRequest *)requestWithAPNSDeviceToken:(NSData *)APNSDeviceToken
@@ -134,11 +134,11 @@ static NSTimeInterval kRequestTimeout = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
     
-    NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[self baseURL]];
+    NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[PCFPushURLConnection baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = method;
-    [self addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
-    request.HTTPBody = [self requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
+    [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
+    request.HTTPBody = [PCFPushURLConnection requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
@@ -148,7 +148,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
                  withVariantUUID:(NSString *)variantUUID
                    variantSecret:(NSString *)variantSecret
 {
-    NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
+    NSString *authString = [PCFPushURLConnection base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
     NSString *authToken = [NSString stringWithFormat:@"Basic  %@", authString];
     [request setValue:authToken forHTTPHeaderField:@"Authorization"];
 }
@@ -166,12 +166,12 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSError *error = nil;
     if ([method isEqualToString:@"POST"]) {
 
-        PCFPushRegistrationPostRequestData *requestData = [self pushRequestDataForAPNSDeviceToken:apnsDeviceToken
+        PCFPushRegistrationPostRequestData *requestData = [PCFPushURLConnection pushRequestDataForAPNSDeviceToken:apnsDeviceToken
                                                                                        parameters:parameters];
         return [requestData pcfPushToJSONData:&error];
     } else if ([method isEqualToString:@"PUT"]) {
         
-        PCFPushRegistrationPutRequestData *requestData = [self putRequestDataForAPNSDeviceToken:apnsDeviceToken
+        PCFPushRegistrationPutRequestData *requestData = [PCFPushURLConnection putRequestDataForAPNSDeviceToken:apnsDeviceToken
                                                                                        parameters:parameters];
         return [requestData pcfPushToJSONData:&error];
     } else {
@@ -226,7 +226,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
         return nil;
     }
     
-    NSURL *rootURL = [NSURL URLWithString:kRegistrationRequestPath relativeToURL:[self baseURL]];
+    NSURL *rootURL = [NSURL URLWithString:kRegistrationRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
     NSURL *deviceURL = [rootURL URLByAppendingPathComponent:[backEndDeviceUUID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
@@ -236,7 +236,10 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 #pragma mark - Geofence Request
 
-+ (NSURLRequest *)geofenceRequestWithTimestamp:(int64_t)timestamp parameters:(PCFPushParameters *)parameters deviceUuid:(NSString *)deviceUuid {
++ (NSURLRequest *)geofenceRequestWithTimestamp:(int64_t)timestamp
+                                    parameters:(PCFPushParameters *)parameters
+                                    deviceUuid:(NSString *)deviceUuid
+{
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
@@ -245,9 +248,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"Device UUID may not be nil"];
     }
 
-    NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[self baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
+    NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
     NSURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
-    // TODO - add basic auth to this request once a real server is available
+    [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     return request;
 }
 
