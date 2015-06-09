@@ -1,0 +1,17 @@
+{
+    "id": 6,
+    "data": {
+      "ios": {  }
+    },
+    "expiry_time": 1142744274,
+    "trigger_type": "enter",
+    "locations": [
+        {
+          "id": 68,
+          "name": "anishas_sparkly_donuts",
+          "lat": 60.0,
+          "long": -75.5,
+          "rad": 77
+        }
+    ]
+}

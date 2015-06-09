@@ -56,6 +56,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block PCFPushGeofenceData *geofence3Exit;
         __block PCFPushGeofenceData *geofence4EnterWithTags;
         __block PCFPushGeofenceData *geofence5EnterThreeLocations;
+        __block PCFPushGeofenceData *geofence6EmptyiOSData;
+        __block PCFPushGeofenceData *geofence7NulliOSData;
         __block PCFPushGeofenceLocationMap *expectedMapToClear;
         __block UIApplication *application;
         __block PCFPushGeofenceDataList *fiveItemGeofenceList;
@@ -63,6 +65,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block CLRegion *region3;
         __block CLRegion *region4;
         __block CLRegion *region5;
+        __block CLRegion *region6;
+        __block CLRegion *region7;
         __block CLRegion *badRegion;
 
         describe(@"handling geofence events", ^{
@@ -80,11 +84,17 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[geofence4EnterWithTags shouldNot] beNil];
                 geofence5EnterThreeLocations = loadGeofence([self class], @"geofence_one_item_persisted_5");
                 [[geofence5EnterThreeLocations shouldNot] beNil];
+                geofence6EmptyiOSData = loadGeofence([self class], @"geofence_one_item_persisted_6");
+                [[geofence6EmptyiOSData shouldNot] beNil];
+                geofence7NulliOSData = loadGeofence([self class], @"geofence_one_item_persisted_7");
+                [[geofence7NulliOSData shouldNot] beNil];
                 fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items_with_tags");
                 region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_2_66"];
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
                 region4 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_4_66"];
                 region5 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_5_67"];
+                region6 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_6_68"];
+                region7 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_7_70"];
                 badRegion = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"XXXXXXXX"];
                 expectedMapToClear = [PCFPushGeofenceLocationMap map];
                 [UIApplication stub:@selector(sharedApplication) andReturn:application];
@@ -256,6 +266,54 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [store stub:@selector(objectForKeyedSubscript:) andReturn:nil];
                 [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateInside];
+            });
+
+            it(@"should not populate fields with nil values", ^{
+
+                UILocalNotification *expectedNotification = [[UILocalNotification alloc] init];
+                expectedNotification.alertAction = nil;
+                expectedNotification.alertBody = nil;
+                expectedNotification.alertLaunchImage = nil;
+                expectedNotification.hasAction = NO;
+                expectedNotification.applicationIconBadgeNumber = 0;
+                expectedNotification.soundName = nil;
+
+                expectedNotification.userInfo =  @{@"pivotal.push.geofence_trigger_condition" : @"enter"};
+
+                if (isAtLeastiOS8_2()) {
+                    expectedNotification.alertTitle = nil;
+                    expectedNotification.category = nil;
+                }
+
+                [expectedMapToClear put:geofence6EmptyiOSData locationIndex:0];
+                [[engine should] receive:@selector(clearLocations:) withArguments:expectedMapToClear, nil];
+                [[application should] receive:@selector(presentLocalNotificationNow:) withArguments:expectedNotification, nil];
+                [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(6L, geofence6EmptyiOSData)];
+                [PCFPushGeofenceHandler processRegion:region6 store:store engine:engine state:CLRegionStateInside];
+            });
+
+            it(@"should not populate fields with NSNull values", ^{
+
+                UILocalNotification *expectedNotification = [[UILocalNotification alloc] init];
+                expectedNotification.alertAction = nil;
+                expectedNotification.alertBody = nil;
+                expectedNotification.alertLaunchImage = nil;
+                expectedNotification.hasAction = NO;
+                expectedNotification.applicationIconBadgeNumber = 0;
+                expectedNotification.soundName = nil;
+
+                expectedNotification.userInfo =  @{@"pivotal.push.geofence_trigger_condition" : @"enter"};
+
+                if (isAtLeastiOS8_2()) {
+                    expectedNotification.alertTitle = nil;
+                    expectedNotification.category = nil;
+                }
+
+                [expectedMapToClear put:geofence7NulliOSData locationIndex:0];
+                [[engine should] receive:@selector(clearLocations:) withArguments:expectedMapToClear, nil];
+                [[application should] receive:@selector(presentLocalNotificationNow:) withArguments:expectedNotification, nil];
+                [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(7L, geofence7NulliOSData)];
+                [PCFPushGeofenceHandler processRegion:region7 store:store engine:engine state:CLRegionStateInside];
             });
 
             it(@"should populate only iOS 7.0 fields on location notifications on devices < iOS 8.0", ^{

@@ -1,0 +1,27 @@
+{
+    "id": 7,
+    "data": {
+      "ios": {
+        "alertBody": null,
+        "alertAction": null,
+        "alertTitle": null,
+        "alertLaunchImage": null,
+        "hasAction": null,
+        "category": null,
+        "applicationIconBadgeNumber": null,
+        "soundName": null,
+        "userInfo": null
+      }
+    },
+    "expiry_time": 1142744274,
+    "trigger_type": "enter",
+    "locations": [
+        {
+          "id": 70,
+          "name": "jesses_cromulent_churrasqueiras",
+          "lat": 30.6,
+          "long": -120.2,
+          "rad": 100
+        }
+    ]
+}

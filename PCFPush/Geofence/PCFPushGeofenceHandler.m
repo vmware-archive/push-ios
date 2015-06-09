@@ -78,32 +78,41 @@ static NSDictionary *dictionaryWithTriggerCondition(NSDictionary* dictionary, CL
     return result;
 }
 
+static BOOL isFieldAvailable(PCFPushGeofenceData *geofence, NSString *field)
+{
+    return geofence.data[@"ios"][field] && ![geofence.data[@"ios"][field] isKindOfClass:[NSNull class]];
+}
+
 static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofence, CLRegionState state)
 {
     UILocalNotification *notification = [[UILocalNotification alloc] init];
 
     // < iOS 8.0
-    if (geofence.data[@"ios"][@"alertAction"] && ![geofence.data[@"ios"][@"alertAction"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"alertAction")) {
         notification.alertAction = geofence.data[@"ios"][@"alertAction"];
     }
     
-    if (geofence.data[@"ios"][@"alertBody"] && ![geofence.data[@"ios"][@"alertBody"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"alertBody")) {
         notification.alertBody = geofence.data[@"ios"][@"alertBody"];
     }
         
-    if (geofence.data[@"ios"][@"alertLaunchImage"] && ![geofence.data[@"ios"][@"alertLaunchImage"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"alertLaunchImage")) {
         notification.alertLaunchImage = geofence.data[@"ios"][@"alertLaunchImage"];
     }
     
-    if (geofence.data[@"ios"][@"hasAction"] && ![geofence.data[@"ios"][@"hasAction"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"hasAction")) {
         notification.hasAction = [geofence.data[@"ios"][@"hasAction"] boolValue];
+    } else {
+        notification.hasAction = NO;
     }
     
-    if (geofence.data[@"ios"][@"applicationIconBadgeNumber"] && ![geofence.data[@"ios"][@"applicationIconBadgeNumber"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"applicationIconBadgeNumber")) {
         notification.applicationIconBadgeNumber = [geofence.data[@"ios"][@"applicationIconBadgeNumber"] integerValue];
+    } else {
+        notification.applicationIconBadgeNumber = 0;
     }
     
-    if (geofence.data[@"ios"][@"soundName"] && ![geofence.data[@"ios"][@"soundName"] isKindOfClass:[NSNull class]]) {
+    if (isFieldAvailable(geofence, @"soundName")) {
         notification.soundName = geofence.data[@"ios"][@"soundName"];
     }
     
@@ -111,14 +120,14 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
 
     // iOS 8.0+
     if ([PCFPushGeofenceHandler localNotificationRespondsToSetCategory:notification]) {
-        if (geofence.data[@"ios"][@"category"] && ![geofence.data[@"ios"][@"category"] isKindOfClass:[NSNull class]]) {
+        if (isFieldAvailable(geofence, @"category")) {
             notification.category = geofence.data[@"ios"][@"category"];
         }
     }
 
     // iOS 8.2+
     if ([PCFPushGeofenceHandler localNotificationRespondsToSetAlertTitle:notification]) {
-        if (geofence.data[@"ios"][@"alertTitle"] && ![geofence.data[@"ios"][@"alertTitle"] isKindOfClass:[NSNull class]]) {
+        if (isFieldAvailable(geofence, @"alertTitle")) {
             notification.alertTitle = geofence.data[@"ios"][@"alertTitle"];
         }
     }
