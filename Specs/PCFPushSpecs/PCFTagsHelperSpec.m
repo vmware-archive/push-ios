@@ -10,7 +10,26 @@ SPEC_BEGIN(PCFTagsHelperSpec)
 describe(@"PCFTagsHelper", ^{
     
     __block PCFTagsHelper *tagsHelper;
-    
+
+    context(@"pcfPushLowercaseTags function", ^{
+
+        it(@"should ignore nil sets", ^{
+            [[pcfPushLowercaseTags(nil) should] beNil];
+        });
+
+        it(@"should ignore empty sets", ^{
+            [[pcfPushLowercaseTags([NSSet set]) should] beEmpty];
+        });
+
+        it(@"should lowercase a set with one item", ^{
+            [[pcfPushLowercaseTags([NSSet setWithArray:@[ @"UPPER" ]]) should] equal:[NSSet setWithArray:@[ @"upper" ]]];
+        });
+
+        it(@"should lowercase a set with some items", ^{
+            [[pcfPushLowercaseTags([NSSet setWithArray:@[ @"cATs", @"DogS", @"fish", @"123" ]]) should] equal:[NSSet setWithArray:@[ @"dogs", @"cats", @"123", @"fish" ]]];
+        });
+    });
+
     context(@"nil arguments", ^{
         
         it(@"should take a nil list for the saved items", ^{

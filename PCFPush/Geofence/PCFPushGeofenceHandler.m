@@ -12,7 +12,7 @@
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushDebug.h"
 #import "PCFPushGeofenceLocation.h"
-#import "PCFPushGeofenceRegistrar.h"
+#import "PCFTagsHelper.h"
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceUtil.h"
 
@@ -25,7 +25,7 @@
 static BOOL isUserSubscribedToGeofenceTag(PCFPushGeofenceData *geofence, NSSet *subscribedTags)
 {
     if (geofence.tags) {
-        BOOL intersects = [subscribedTags intersectsSet:geofence.tags];
+        BOOL intersects = [subscribedTags intersectsSet:pcfPushLowercaseTags(geofence.tags)];
         if (!intersects) {
             PCFPushLog(@"Ignoring geofence %lld. Not subscribed to any of its tags.", geofence.id);
         }
@@ -41,7 +41,7 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
         return NO;
     }
 
-    NSSet *subscribedTags = [PCFPushPersistentStorage tags];
+    NSSet *subscribedTags = pcfPushLowercaseTags([PCFPushPersistentStorage tags]);
     if (!isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
         return NO;
     }
@@ -217,7 +217,7 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
 + (void) checkGeofencesForNewlySubscribedTagsWithStore:(PCFPushGeofencePersistentStore *)store locationManager:(CLLocationManager *)locationManager
 {
     PCFPushGeofenceDataList *geofences = [store currentlyRegisteredGeofences];
-    NSSet *subscribedTags = [PCFPushPersistentStorage tags];
+    NSSet *subscribedTags = pcfPushLowercaseTags([PCFPushPersistentStorage tags]);
     [geofences enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, PCFPushGeofenceData *geofence, BOOL *stop) {
         if (isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
             for (PCFPushGeofenceLocation *location in geofence.locations) {
@@ -228,4 +228,5 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
         }
     }];
 }
+
 @end

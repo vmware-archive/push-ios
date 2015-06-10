@@ -5,7 +5,7 @@
             "ios": {"message": "tacos"}
         },
         "trigger_type": "enter",
-        "tags": ["TAG_3"],
+        "tags": ["taG_3"],
         "expiry_time": 1142744274,
         "locations": [
             {
@@ -23,7 +23,7 @@
             "ios": {"message": "pizzas"}
         },
         "trigger_type": "exit",
-        "tags": ["TAG_1"],
+        "tags": ["TAg_1"],
         "expiry_time": 1424309210305,
         "locations": [
             {
@@ -41,7 +41,7 @@
             "ios": {"message": "eat all this great stuff"}
         },
         "trigger_type": "exit",
-        "tags": ["TAG_2", "TAG_1"],
+        "tags": ["TaG_2", "tAG_1"],
         "expiry_time": 1142744274,
         "locations": [
             {
@@ -66,7 +66,7 @@
             "ios": {"message": "gelato"}
         },
         "trigger_type": "exit",
-        "tags": ["TAG_3", "TAG_4"],
+        "tags": ["Tag_3", "taG_4"],
         "expiry_time": 1142744274,
         "locations": [
             {
@@ -88,7 +88,7 @@
     {
         "id": 51,
         "trigger_type": "exit",
-        "tags": ["TAG_1"],
+        "tags": ["tag_1"],
         "expiry_time": 1142744274,
         "locations": [
             {

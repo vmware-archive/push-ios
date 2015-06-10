@@ -4,6 +4,20 @@
 
 #import "PCFTagsHelper.h"
 
+NSSet *pcfPushLowercaseTags(NSSet *tags)
+{
+    if (!tags) {
+        return nil;
+    }
+
+    NSMutableSet *s = [NSMutableSet setWithCapacity:tags.count];
+    for (NSString *tag in tags) {
+        [s addObject:[tag lowercaseString]];
+    }
+
+    return s;
+}
+
 @implementation PCFTagsHelper
 
 + (instancetype) tagsHelperWithSavedTags:(NSSet*)savedTags newTags:(NSSet*)newTags

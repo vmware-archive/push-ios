@@ -4,6 +4,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSSet *pcfPushLowercaseTags(NSSet *tags);
+
 @interface PCFTagsHelper : NSObject
 
 @property (nonatomic) NSSet *subscribeTags;
