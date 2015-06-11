@@ -104,7 +104,9 @@
                     wasDeserializationHandled = [result handleDeserializingProperty:propertyName value:value];
                 }
                 if (!wasDeserializationHandled) {
-                    [result setValue:value forKey:propertyName];
+                    if (value && ![value isKindOfClass:[NSNull class]]) {
+                        [result setValue:value forKey:propertyName];
+                    }
                 }
             }
         }];
