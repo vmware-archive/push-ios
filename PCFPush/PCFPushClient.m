@@ -484,4 +484,9 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+{
+    PCFPushLog(@"Started monitoring region '%@'. Total number of monitored geofence locations: %d", region.identifier, self.locationManager.monitoredRegions.count);
+}
+
 @end

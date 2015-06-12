@@ -12,7 +12,6 @@
 #import "PCFPushGeofenceDataList.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceUtil.h"
-#import "PCFPushGeofenceStatus.h"
 #import "PCFPushGeofenceStatusUtil.h"
 
 @interface PCFPushGeofenceRegistrar ()
@@ -44,16 +43,21 @@
         return;
     }
 
+    NSSet *monitoredRegions = [self.locationManager.monitoredRegions copy];
+    for (CLRegion *region in monitoredRegions) {
+        [self.locationManager stopMonitoringForRegion:region];
+    }
+
+    PCFPushLog(@"About to monitor %d geofences locations." , geofencesToRegister.count);
+
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
         int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);
         PCFPushGeofenceData *geofence = list[@(geofenceId)];
         CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
         [self.locationManager startMonitoringForRegion:region];
-        PCFPushLog(@"Now monitoring location '%@'", requestId);
         [self.locationManager requestStateForRegion:region];
     }];
 
-    PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToRegister.count);
     [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:geofencesToRegister.count fileManager:[NSFileManager defaultManager]];
 
     if (pcfPushIsAPNSSandbox()) {
@@ -77,7 +81,7 @@
         [self.locationManager stopMonitoringForRegion:region];
     }];
 
-    PCFPushLog(@"Number of monitored geofence locations: %d", geofencesToKeep.count);
+    PCFPushLog(@"Number of geofences to keep: %d.  Number of monitored geofence locations: %d", geofencesToKeep.count, self.locationManager.monitoredRegions.count);
     [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:geofencesToKeep.count fileManager:[NSFileManager defaultManager]];
 
     if (pcfPushIsAPNSSandbox()) {

@@ -70,6 +70,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         });
 
         it(@"should do nothing if given nil lists", ^{
+            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet set]];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
             [[locationManager shouldNot] receive:@selector(stopMonitoringForRegion:)];
             [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
@@ -79,6 +80,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
 
         it(@"should do nothing if given empty lists", ^{
             PCFPushGeofenceLocationMap *emptyMap = [PCFPushGeofenceLocationMap map];
+            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet set]];
             [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
             [[locationManager shouldNot] receive:@selector(stopMonitoringForRegion:)];
             [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
@@ -87,8 +89,19 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         });
 
         it(@"should be able to monitor a list with one item", ^{
+            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet set]];
             [[locationManager should] receive:@selector(startMonitoringForRegion:) withArguments:region, nil];
             [[locationManager shouldNot] receive:@selector(stopMonitoringForRegion:)];
+            [[locationManager should] receive:@selector(requestStateForRegion:) withArguments:region, nil];
+            [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(1), any(), nil];
+            [registrar registerGeofences:oneItemGeofenceMap list:oneItemGeofenceList];
+        });
+
+        it(@"should stop monitoring regions that you don't register", ^{
+            CLRegion *monitoredRegion = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(10.0, 10.0) radius:200.0 identifier:@"OLD_REGION"];
+            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet setWithArray:@[ monitoredRegion ]]];
+            [[locationManager should] receive:@selector(startMonitoringForRegion:) withArguments:region, nil];
+            [[locationManager should] receive:@selector(stopMonitoringForRegion:) withArguments:monitoredRegion];
             [[locationManager should] receive:@selector(requestStateForRegion:) withArguments:region, nil];
             [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(1), any(), nil];
             [registrar registerGeofences:oneItemGeofenceMap list:oneItemGeofenceList];
@@ -99,6 +112,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
 
         beforeEach(^{
             registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:locationManager];
+            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet set]];
         });
 
         it(@"should do nothing if given nil lists", ^{

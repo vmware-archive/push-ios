@@ -26,6 +26,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceResponseData *oneOtherItemResponseData;
         __block PCFPushGeofenceResponseData *insufficientDataResponseData;
         __block PCFPushGeofenceResponseData *oneItemBadTriggerResponseData;
+        __block PCFPushGeofenceResponseData *oneDeletedItemResponseData;
+        __block PCFPushGeofenceResponseData *oneOtherDeletedItemResponseData;
         __block PCFPushGeofenceDataList *emptyGeofenceList;
         __block PCFPushGeofenceDataList *oneItemGeofenceList;
         __block PCFPushGeofenceDataList *threeItemGeofenceList;
@@ -41,6 +43,8 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             oneOtherItemResponseData = loadResponseData([self class], @"geofence_response_data_one_other_item");
             insufficientDataResponseData = loadResponseData([self class], @"geofence_response_data_all_items_culled");
             oneItemBadTriggerResponseData = loadResponseData([self class], @"geofence_response_data_one_item_bad_trigger");
+            oneDeletedItemResponseData = loadResponseData([self class], @"geofence_response_data_delete_one");
+            oneOtherDeletedItemResponseData = loadResponseData([self class], @"geofence_response_data_delete_one_other");
             oneItemGeofenceList = loadGeofenceList([self class], @"geofence_one_item");
             threeItemGeofenceList = loadGeofenceList([self class], @"geofence_three_items");
             fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items");
@@ -178,6 +182,53 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                 [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
                 [engine processResponseData:oneItemResponseData withTimestamp:50L];
+            });
+
+            it(@"should delete one item that exists (with no timestamp)", ^{
+                [[store should] receive:@selector(reset)];
+                [[registrar should] receive:@selector(reset)];
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [engine processResponseData:oneDeletedItemResponseData withTimestamp:0L];
+            });
+
+            it(@"should delete one item that exists (with some timestamp)", ^{
+                [[store shouldNot] receive:@selector(reset)];
+                [[registrar shouldNot] receive:@selector(reset)];
+                [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneDeletedItemResponseData withTimestamp:50L];
+            });
+
+            it(@"should delete one item that does not exist (with no timestamp)", ^{
+                [[store should] receive:@selector(reset)];
+                [[registrar should] receive:@selector(reset)];
+                [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
+                [[store shouldNot] receive:@selector(saveRegisteredGeofences:)];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:)];
+                [engine processResponseData:oneOtherDeletedItemResponseData withTimestamp:0L];
+            });
+
+            it(@"should delete one item that does not exist (with a timestamp)", ^{
+                [expectedGeofencesToRegister put:oneItemGeofenceList[@7L] locationIndex:0]; // item with ID 7
+                expectedGeofencesToStore[@7L] = oneItemGeofenceList[@7L]; // item with ID 7
+                [[store shouldNot] receive:@selector(reset)];
+                [[registrar shouldNot] receive:@selector(reset)];
+                [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
+                [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneOtherDeletedItemResponseData withTimestamp:50L];
+            });
+
+            it(@"should delete one item that does not exist with an empty store (with a timestamp)", ^{
+                [[store shouldNot] receive:@selector(reset)];
+                [[registrar shouldNot] receive:@selector(reset)];
+                [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
+                [[store shouldNot] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
+                [[registrar shouldNot] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
+                [engine processResponseData:oneOtherDeletedItemResponseData withTimestamp:50L];
             });
 
             it(@"should let you updates some items when there's no timestamp", ^{
