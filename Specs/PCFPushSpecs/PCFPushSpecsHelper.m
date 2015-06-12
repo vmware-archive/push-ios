@@ -12,6 +12,7 @@
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushRegistrationData.h"
 #import "PCFPushGeofenceUpdater.h"
+#import "PCFPushTimer.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -65,6 +66,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
     self.backEndDeviceId = nil;
     self.tags1 = nil;
     self.tags2 = nil;
+    pcfPushTimerReferenceCounter = 0;
 }
 
 #pragma mark - Parameters helpers

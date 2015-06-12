@@ -20,6 +20,7 @@
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceHandler.h"
+#import "PCFPushTimer.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -408,6 +409,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     _sharedPCFPushClient = nil;
 }
 
+#pragma mark - Handling remote notifications
+
 - (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler
 {
@@ -429,6 +432,31 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         }];
     } else {
         handler(YES, UIBackgroundFetchResultNoData, nil);
+    }
+}
+
+#pragma mark - Location tracking
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    if (!locations || locations.count <= 0) {
+        return;
+    }
+    CLLocation* location = [locations lastObject];
+    NSDate* eventDate = location.timestamp;
+    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
+    if (fabs(howRecent) <= 15.0) { // If the event is recent then do something with it.
+
+        // TODO - decide if 10 meters is too demanding.
+        PCFPushLog(@"Received location update: %@", location);
+        if (location.horizontalAccuracy <= 10.0) {
+
+            PCFPushLog(@"Testing geofences since current location accuracy is less than 10.0 m.");
+
+            [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:self.store locationManager:self.locationManager];
+
+            [PCFPushTimer stopLocationUpdateTimer:self.locationManager];
+        }
     }
 }
 
