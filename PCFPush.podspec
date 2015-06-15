@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'PCFPush'
-  s.version      = '1.0.4'
+  s.version      = '1.3.0'
   s.license      = { :type => 'CUSTOM', :file => 'LICENSE' }
   s.summary      = 'Pivotal CF Mobile Services Push Client SDK for iOS'
   s.homepage     = 'https://github.com/cfmobile'

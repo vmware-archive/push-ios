@@ -17,6 +17,11 @@ OBJC_EXPORT NSString *const PCFPushErrorDomain;
 typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
 
     /**
+     * The back-end server returned a response that was not an HTTP response object
+     */
+    PCFPushBackEndRegistrationNotHTTPResponseError = 19,
+
+    /**
      * Failed to authenticate while registering with the back-end server
      */
     PCFPushBackEndRegistrationAuthenticationError = 20,

@@ -249,7 +249,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
     }
 
     NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
-    NSURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     return request;
 }

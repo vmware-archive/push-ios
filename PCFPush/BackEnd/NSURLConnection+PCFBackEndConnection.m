@@ -6,6 +6,7 @@
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
+#import "PCFPushURLConnectionDelegate.h"
 
 @implementation NSURLConnection (PCFBackEndConnection)
 
@@ -34,21 +35,31 @@
     }
 
     CompletionHandler handler = [self completionHandlerWithSuccessBlock:success failureBlock:failure];
-    [self sendAsynchronousRequest:request
-                            queue:queue
-                completionHandler:handler];
+    [self pcfPushSendAsynchronousRequestWrapper:request
+                                          queue:queue
+                              completionHandler:handler];
+}
+
++ (void)pcfPushSendAsynchronousRequestWrapper:(NSURLRequest *)request
+                                        queue:(NSOperationQueue *)queue
+                            completionHandler:(void (^)(NSURLResponse*, NSData*, NSError*))handler
+{
+    PCFPushURLConnectionDelegate *delegate = [[PCFPushURLConnectionDelegate alloc] initWithRequest:request queue:queue completionHandler:handler];
+    (void)[[NSURLConnection alloc] initWithRequest:request delegate:delegate];
 }
 
 #pragma mark - Utility Methods
 
-+ (BOOL)successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response {
++ (BOOL)successfulStatusForHTTPResponse:(NSHTTPURLResponse *)response
+{
     if (![response isKindOfClass:[NSHTTPURLResponse class]]) {
         return NO;
     }
     return [response statusCode] >= 200 && [response statusCode] < 300;
 }
 
-+ (BOOL)isAuthError:(NSError*)error {
++ (BOOL)isAuthError:(NSError*)error
+{
     if (!error) {
         return NO;
     }

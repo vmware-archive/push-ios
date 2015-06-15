@@ -4,7 +4,6 @@
 
 #import "Kiwi.h"
 
-#import "NSURLConnection+PCFPushAsync2Sync.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushURLConnection.h"
 #import "PCFPushParameters.h"
@@ -136,7 +135,7 @@ describe(@"PCFPushBackEndConnection", ^{
             });
 
             it(@"should handle a success request", ^{
-                [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                     NSURLRequest *request = params[0];
                     //TODO: Verify basic auth once we have a real server
 
@@ -157,7 +156,7 @@ describe(@"PCFPushBackEndConnection", ^{
             });
 
             it(@"should handle a failure request", ^{
-                [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                     NSURLRequest *request = params[0];
                     //TODO: Verify basic auth once we have a real server
 
@@ -193,7 +192,7 @@ describe(@"PCFPushBackEndConnection", ^{
 		});
 
         it(@"should have basic auth headers in the request", ^{
-            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
                 NSString *authValue = request.allHTTPHeaderFields[kPCFPushBasicAuthorizationKey];
                 [[authValue shouldNot] beNil];
@@ -223,7 +222,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
 
         it(@"should return a sensible error code if the authentication fails", ^{
-            [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSError *authError = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUserCancelledAuthentication userInfo:nil];
                 CompletionHandler handler = params[2];
                 handler(nil, nil, authError);
@@ -244,8 +243,17 @@ describe(@"PCFPushBackEndConnection", ^{
         });
 
         it(@"should handle a failed request", ^{
-            NSError *error;
-            [helper swizzleAsyncRequestWithSelector:@selector(failedRequestRequest:queue:completionHandler:) error:&error];
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSDictionary *userInfo = @{
+                        @"NSLocalizedDescription" : @"bad URL",
+                        @"NSUnderlyingError" : [NSError errorWithDomain:(NSString *) kCFErrorDomainCFNetwork code:1000 userInfo:@{@"NSLocalizedDescription" : @"bad URL"}],
+                };
+                NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:1000 userInfo:userInfo];
+                CompletionHandler handler = params[2];
+                handler(nil, nil, error);
+                return nil;
+            }];
+
             [PCFPushURLConnection registerWithParameters:helper.params
                                              deviceToken:helper.apnsDeviceToken
                                                  success:^(NSURLResponse *response, NSData *data) {

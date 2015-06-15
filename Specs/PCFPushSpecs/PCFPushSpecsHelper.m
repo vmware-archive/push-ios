@@ -5,7 +5,6 @@
 #import "Kiwi.h"
 
 #import "PCFPushSpecsHelper.h"
-#import "JRSwizzle.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushParameters.h"
 #import "PCFPushBackEndRegistrationResponseDataTest.h"
@@ -114,14 +113,8 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 #pragma mark - NSURLConnection Helpers
 
-- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector
-                                   error:(NSError **)error
-{
-    return [NSURLConnection jr_swizzleClassMethod:@selector(sendAsynchronousRequest:queue:completionHandler:) withClassMethod:selector error:error];
-}
-
 - (void)setupAsyncRequestWithBlock:(void(^)(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError))block {
-    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+    [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
         NSURLResponse *resultResponse;
         NSData *resultData;
         NSError *resultError;
@@ -143,7 +136,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block
 {
-    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+    [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
         if (block) {
             NSURLRequest *request = params[0];
             block(request);
@@ -152,14 +145,14 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         __block NSHTTPURLResponse *newResponse;
         newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
         NSDictionary *dict = @{
-                PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
-                PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
-                PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
+                PCFPushRegistrationAttributes.deviceOS : TEST_OS,
+                PCFPushRegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
+                PCFPushRegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
                 PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
-                PCFPushRegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
-                PCFPushRegistrationAttributes.variantUUID        : TEST_VARIANT_UUID,
-                PCFPushRegistrationAttributes.registrationToken  : TEST_REGISTRATION_TOKEN,
-                kPCFPushDeviceUUID                               : TEST_DEVICE_UUID,
+                PCFPushRegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,
+                PCFPushRegistrationAttributes.variantUUID : TEST_VARIANT_UUID,
+                PCFPushRegistrationAttributes.registrationToken : TEST_REGISTRATION_TOKEN,
+                kPCFPushDeviceUUID : TEST_DEVICE_UUID,
         };
         newData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
 
@@ -171,7 +164,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)setupSuccessfulDeleteAsyncRequestAndReturnStatus:(NSInteger)status
 {
-    [NSURLConnection stub:@selector(sendAsynchronousRequest:queue:completionHandler:) withBlock:^id(NSArray *params) {
+    [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
         NSURLRequest *request = params[0];
 
         __block NSHTTPURLResponse *newResponse;

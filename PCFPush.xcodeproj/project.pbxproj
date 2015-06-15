@@ -86,6 +86,8 @@
 		F131CB961B0D0664004101F5 /* PCFPushGeofenceUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB391B0D0664004101F5 /* PCFPushGeofenceUtil.m */; };
 		F131CB981B0D0664004101F5 /* PCFPushHexUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB3A1B0D0664004101F5 /* PCFPushHexUtil.h */; };
 		F131CB991B0D0664004101F5 /* PCFPushHexUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB3B1B0D0664004101F5 /* PCFPushHexUtil.m */; };
+		B69DB187F06479E0C679E69D /* PCFPushURLConnectionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB1C1C77D584309B4A514 /* PCFPushURLConnectionDelegate.m */; };
+		B69DB6F10C98BAE96E584C79 /* PCFPushURLConnectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = B69DBF79035BF7EB512921CE /* PCFPushURLConnectionDelegate.h */; };
 		F131CB9B1B0D0664004101F5 /* PCFTagsHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB3C1B0D0664004101F5 /* PCFTagsHelper.h */; };
 		F131CB9C1B0D0664004101F5 /* PCFTagsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB3D1B0D0664004101F5 /* PCFTagsHelper.m */; };
 		F131CC341B0D0AC3004101F5 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F131CC331B0D0AC3004101F5 /* CoreLocation.framework */; };
@@ -158,6 +160,8 @@
 		F131CB391B0D0664004101F5 /* PCFPushGeofenceUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceUtil.m; sourceTree = "<group>"; };
 		F131CB3A1B0D0664004101F5 /* PCFPushHexUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushHexUtil.h; sourceTree = "<group>"; };
 		F131CB3B1B0D0664004101F5 /* PCFPushHexUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushHexUtil.m; sourceTree = "<group>"; };
+		B69DB1C1C77D584309B4A514 /* PCFPushURLConnectionDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushURLConnectionDelegate.m; sourceTree = "<group>"; };
+		B69DBF79035BF7EB512921CE /* PCFPushURLConnectionDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushURLConnectionDelegate.h; sourceTree = "<group>"; };
 		F131CB3C1B0D0664004101F5 /* PCFTagsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFTagsHelper.h; sourceTree = "<group>"; };
 		F131CB3D1B0D0664004101F5 /* PCFTagsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFTagsHelper.m; sourceTree = "<group>"; };
 		F131CC331B0D0AC3004101F5 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
@@ -240,6 +244,8 @@
 				F131CAF81B0D0663004101F5 /* NSURLConnection+PCFBackEndConnection.m */,
 				F131CAF91B0D0663004101F5 /* PCFPushURLConnection.h */,
 				F131CAFA1B0D0663004101F5 /* PCFPushURLConnection.m */,
+				B69DB1C1C77D584309B4A514 /* PCFPushURLConnectionDelegate.m */,
+				B69DBF79035BF7EB512921CE /* PCFPushURLConnectionDelegate.h */,
 			);
 			path = BackEnd;
 			sourceTree = "<group>";
@@ -364,6 +370,7 @@
 				B69DBACDB87201479C6C14FB /* PCFPushGeofenceStatusUtil.h in Headers */,
 				B69DB864506F35E9175ABE10 /* PCFPushGeofenceUpdater.h in Headers */,
 				B69DB415965E916FAE9C4939 /* PCFPushTimer.h in Headers */,
+				B69DB6F10C98BAE96E584C79 /* PCFPushURLConnectionDelegate.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +493,7 @@
 				B69DB12EB98C6C28D68AB40F /* PCFPushGeofenceStatusUtil.m in Sources */,
 				B69DB519C4D304E5E1450D3E /* PCFPushGeofenceUpdater.m in Sources */,
 				B69DB16BA3F332D7307C1075 /* PCFPushTimer.m in Sources */,
+				B69DB187F06479E0C679E69D /* PCFPushURLConnectionDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

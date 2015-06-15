@@ -50,7 +50,6 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 - (void) setupDefaultPLISTWithFile:(NSString*)parameterFilename;
 
 // NSURLConnectionHelpers
-- (BOOL) swizzleAsyncRequestWithSelector:(SEL)selector error:(NSError **)error;
 - (void)setupAsyncRequestWithBlock:(void(^)(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError))block;
 - (void)setupSuccessfulAsyncRequest;
 - (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block;

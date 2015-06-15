@@ -22,7 +22,11 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
         // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 
         if (propertyType.length < 1) return NO;
-        return !([propertyName isEqualToString:@"pushTags"] || [propertyName isEqualToString:@"pushDeviceAlias"] || [propertyName isEqualToString:@"areGeofencesEnabled"]);
+
+        return !([propertyName isEqualToString:@"pushTags"] ||
+                 [propertyName isEqualToString:@"pushDeviceAlias"] ||
+                 [propertyName isEqualToString:@"areGeofencesEnabled"] ||
+                 [propertyName isEqualToString:@"trustAllSslCertificates"]);
     };
 
     [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
@@ -61,9 +65,9 @@ describe(@"PCFRegistrationParameters", ^{
         model = nil;
         [helper reset];
     });
-    
+
     context(@"initializing with bad arguments programatically", ^{
-        
+
         beforeEach(^{
             model = [PCFPushParameters parameters];
             [model setPushTags:[NSSet setWithArray:@[@"TAG1", @"TAG2"]]];
@@ -74,8 +78,8 @@ describe(@"PCFRegistrationParameters", ^{
             [model setDevelopmentPushVariantUUID:TEST_VARIANT_UUID];
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
-        
-        it(@"should require all push properties (except tags, device alias, and geofences enabled) to be non-nil and non-empty", ^{
+
+        it(@"should require all push properties (except tags, device alias, trustAllSslCertificates, and geofences enabled) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
         });
@@ -94,7 +98,7 @@ describe(@"PCFRegistrationParameters", ^{
             model.pushTags = nil;
             [[theValue([model arePushParametersValid]) should] beTrue];
         });
-        
+
         it(@"should allow the tags to be empty", ^{
             model.pushTags = [NSSet set];
             [[theValue([model arePushParametersValid]) should] beTrue];
@@ -119,18 +123,20 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.pushDeviceAlias should] beNil];
             [[model.pushTags should] beNil];
             [[theValue(model.areGeofencesEnabled) should] beYes];
+            [[theValue(model.trustAllSslCertificates) should] beFalse];
         });
     });
-    
+
     context(@"initializing with valid arguments from plist", ^{
-        
+
         beforeEach(^{
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
         });
-        
+
         it(@"should initialize successfully and indicate that parameters are valid", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.trustAllSslCertificates) should] beTrue];
         });
     });
 
@@ -145,11 +151,11 @@ describe(@"PCFRegistrationParameters", ^{
     });
 
     context(@"initializing with invalid arguments from plist", ^{
-       
+
         beforeEach(^{
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Invalid" ofType:@"plist"]];
         });
-        
+
         it(@"should load but indicate that parameters are invalid", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beFalse];

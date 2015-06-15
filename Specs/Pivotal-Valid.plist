@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
+  <dict>
 
-	<key>pivotal.push.serviceUrl</key>
-	<string>http://testURL.com</string>
+    <key>pivotal.push.serviceUrl</key>
+    <string>http://testURL.com</string>
 
     <key>pivotal.push.platformUuidDevelopment</key>
     <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
@@ -15,11 +15,13 @@
     <key>pivotal.push.platformUuidProduction</key>
     <string>PROD-SOS-WE-LIKE-IT-SPICY</string>
 
-	<key>pivotal.push.platformSecretProduction</key>
-	<string>PROD Put sweet chili sauce on everything</string>
+    <key>pivotal.push.platformSecretProduction</key>
+    <string>PROD Put sweet chili sauce on everything</string>
 
     <key>pivotal.push.geofencesEnabled</key>
     <true/>
 
-</dict>
+    <key>pivotal.push.trustAllSslCertificates</key>
+    <string>true</string>
+  </dict>
 </plist>

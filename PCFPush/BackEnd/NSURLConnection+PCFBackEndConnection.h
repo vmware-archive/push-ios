@@ -17,4 +17,8 @@ typedef void (^CompletionHandler)(NSURLResponse *response, NSData *data, NSError
                                success:(void (^)(NSURLResponse *response, NSData *data))success
                                failure:(void (^)(NSError *error))failure;
 
++ (void)pcfPushSendAsynchronousRequestWrapper:(NSURLRequest *)request
+                                        queue:(NSOperationQueue *)queue
+                            completionHandler:(void (^)(NSURLResponse*, NSData*, NSError*))handler;
+
 @end

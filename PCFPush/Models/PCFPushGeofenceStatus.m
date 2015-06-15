@@ -70,9 +70,9 @@ NSString* PCF_PUSH_GEOFENCE_STATUS_UPDATE_NOTIFICATION = @"pivotal.push.geofence
 - (NSString *)description
 {
     if (self.errorReason) {
-        return [NSString stringWithFormat:@"PCFPushGeofenceStatus: isError:%d errorReason:%@ numberOfCurrentlyMonitoredGeofences:%d", self.isError, self.errorReason, self.numberOfCurrentlyMonitoredGeofences];
+        return [NSString stringWithFormat:@"PCFPushGeofenceStatus: isError:%d errorReason:%@ numberOfCurrentlyMonitoredGeofences:%lu", self.isError, self.errorReason, (unsigned long)self.numberOfCurrentlyMonitoredGeofences];
     } else {
-        return [NSString stringWithFormat:@"PCFPushGeofenceStatus: isError:%d numberOfCurrentlyMonitoredGeofences:%d", self.isError, self.numberOfCurrentlyMonitoredGeofences];
+        return [NSString stringWithFormat:@"PCFPushGeofenceStatus: isError:%d numberOfCurrentlyMonitoredGeofences:%lu", self.isError, (unsigned long)self.numberOfCurrentlyMonitoredGeofences];
     }
 }
 
