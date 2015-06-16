@@ -78,14 +78,7 @@ void pcfPushResetOnceToken() {
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
                 id propertyValue = [plist valueForKey:plistPropertyName];
                 if (propertyValue) {
-                    if ([propertyName isEqualToString:@"trustAllSslCertificates"]) {
-                        NSString *trustValue = (NSString*)propertyValue;
-                        if ([trustValue.lowercaseString isEqualToString:@"true"]) {
-                            params.trustAllSslCertificates = YES;
-                        }
-                    } else {
-                        [params setValue:propertyValue forKeyPath:propertyName];
-                    }
+                    [params setValue:propertyValue forKeyPath:propertyName];
                 }
             }];
         } @catch (NSException *exception) {

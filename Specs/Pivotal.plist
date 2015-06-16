@@ -22,6 +22,6 @@
     <true/>
 
     <key>pivotal.push.trustAllSslCertificates</key>
-    <string>false</string>
+    <false/>
   </dict>
 </plist>
