@@ -48,7 +48,11 @@
         [self.locationManager stopMonitoringForRegion:region];
     }
 
-    PCFPushLog(@"About to monitor %d geofences locations." , geofencesToRegister.count);
+    if (geofencesToRegister.count > 20) {
+        PCFPushLog(@"WARNING: About to monitor %d geofence locations. iOS has a limit of 20 geofences per app. Not all of these geofences will be monitored.", geofencesToRegister.count);
+    } else {
+        PCFPushLog(@"About to monitor %d geofences locations.", geofencesToRegister.count);
+    }
 
     [geofencesToRegister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
         int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);

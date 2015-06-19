@@ -78,12 +78,6 @@ typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
         return;
     }
 
-    // Empty
-    if (self.responseData == nil || self.responseData.length <= 0) {
-        [self returnError:[PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"]];
-        return;
-    }
-
     if (self.queue && self.handler) {
         [self.queue addOperationWithBlock:^{
             self.handler(self.response, self.responseData, nil);

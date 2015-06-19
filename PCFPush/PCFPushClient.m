@@ -472,15 +472,6 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside];
 }
 
-- (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
-{
-    if (!self.registrationParameters.areGeofencesEnabled) {
-        return;
-    }
-
-    PCFPushLog(@"locationManager:monitoringDidFailForRegion %@: %@. This error is transient and non-fatal.", region.identifier, error);
-}
-
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
 {
     if (!self.registrationParameters.areGeofencesEnabled) {
