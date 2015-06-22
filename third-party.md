@@ -1,4 +1,7 @@
+Dependencies
+============
 
-| Dependancy | Version | Project Link                     | License | Copyright Text 
-| ---------- | ------- | -------------------------------- | ------- | --------------
-| kiwi       | 2.3.0   | https://github.com/kiwi-bdd/Kiwi | BSD     | Copyright (c) 2010, Allen Ding
+Name                 | Version | Description                          | License           | License Text | URL                                                   | Modified | Interaction
+-------------------- | ------- | ------------------------------------ | ----------------- | ------------ | ----------------------------------------------------- | -------- | ------------------------------------------
+Kiwi                 | 2.3.1   |                                      | BSD               |              | https://github.com/kiwi-bdd/Kiwi                      | NO       | Used during testing only. Not distributed.
+
