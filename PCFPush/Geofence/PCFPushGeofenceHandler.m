@@ -202,12 +202,12 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
 
     if (pcfPushIsItemExpired(geofence)) {
 
-        PCFPushLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
+        PCFPushCriticalLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
         clearGeofence(geofence, engine); // Clears all the locations at the same geofence since they expire at the same time.
 
     } else if (shouldTriggerNotification(geofence, state)) {
 
-        PCFPushLog(@"Triggering geofence '%@'.", region.identifier);
+        PCFPushCriticalLog(@"Triggering geofence '%@'.", region.identifier);
         UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
         clearLocation(region.identifier, geofence, engine); // Clear just this one location.

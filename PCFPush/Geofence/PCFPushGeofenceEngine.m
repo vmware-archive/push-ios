@@ -38,10 +38,10 @@ static BOOL geofenceHasInvalidLocations(NSArray *array)
     for (PCFPushGeofenceLocation *location in array) {
         CLLocationCoordinate2D coord = CLLocationCoordinate2DMake(location.latitude, location.longitude);
         if (!CLLocationCoordinate2DIsValid(coord)) {
-            PCFPushLog(@"Location with id %lld has invalid coordinates %f, %f", location.id, location.latitude, location.longitude);
+            PCFPushCriticalLog(@"Location with id %lld has invalid coordinates %f, %f", location.id, location.latitude, location.longitude);
             return YES;
         } else if (location.radius < 10.0) {
-            PCFPushLog(@"Location with id %lld has invalid radius value %f", location.radius);
+            PCFPushCriticalLog(@"Location with id %lld has invalid radius value %f", location.radius);
             return YES;
         }
     }

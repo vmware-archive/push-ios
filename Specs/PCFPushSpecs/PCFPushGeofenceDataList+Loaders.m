@@ -13,7 +13,7 @@ NSData* loadTestFile(Class testProjectClass, NSString *name)
     NSString *filePath = [[NSBundle bundleForClass:testProjectClass] pathForResource:name ofType:@"json"];
     NSString *fileContents = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:&error];
     if (error) {
-        PCFPushLog(@"Error reading test file contents '%@': %@", filePath, error);
+        PCFPushCriticalLog(@"Error reading test file contents '%@': %@", filePath, error);
         return nil;
     }
     return [fileContents dataUsingEncoding:NSUTF8StringEncoding];

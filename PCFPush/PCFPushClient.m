@@ -86,7 +86,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
         NSError *error;
         if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
+            PCFPushCriticalLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
         }
     }
 
@@ -125,7 +125,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
         NSError *error;
         if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushLog(@"Clear geofences upon unregistration failed.  Error: %@", error);
+            PCFPushCriticalLog(@"Clear geofences upon unregistration failed.  Error: %@", error);
         }
     }
 
@@ -165,7 +165,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         
         if (!responseData || ([responseData isKindOfClass:[NSData class]] && [(NSData *)responseData length] <= 0)) {
             error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationEmptyResponseData localizedDescription:@"Response body is empty when attempting registration with back-end server"];
-            PCFPushLog(@"%@", error);
+            PCFPushCriticalLog(@"%@", error);
             
             if (failureBlock) {
                 failureBlock(error);
@@ -176,7 +176,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         PCFPushRegistrationResponseData *parsedData = [PCFPushRegistrationResponseData pcfPushFromJSONData:responseData error:&error];
         
         if (error) {
-            PCFPushLog(@"%@", error);
+            PCFPushCriticalLog(@"%@", error);
             
             if (failureBlock) {
                 failureBlock(error);
@@ -186,7 +186,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         
         if (!parsedData.deviceUUID) {
             error = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationResponseDataNoDeviceUuid localizedDescription:@"Response body from registering with the back-end server does not contain an UUID "];
-            PCFPushLog(@"%@", error);
+            PCFPushCriticalLog(@"%@", error);
             
             if (failureBlock) {
                 failureBlock(error);
@@ -249,7 +249,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
         NSError *error;
         if ([PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
+            PCFPushCriticalLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
         }
     }
 
@@ -505,7 +505,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
 {
-    PCFPushLog(@"Started monitoring region '%@'. Total number of monitored geofence locations: %d", region.identifier, self.locationManager.monitoredRegions.count);
+    PCFPushCriticalLog(@"Started monitoring region '%@'. Total number of monitored geofence locations: %d", region.identifier, self.locationManager.monitoredRegions.count);
 }
 
 @end

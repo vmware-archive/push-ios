@@ -18,7 +18,7 @@ BOOL pcfPushIsAPNSSandbox() {
             if ([PCFHardwareUtil isSimulator]) {
                 didLoadFile = YES;
                 isAPNSSandbox = YES;
-                PCFPushLog(@"WARNING: pcfPushIsAPNSSandbox: running on simulator! push notifications will probably not work.");
+                PCFPushCriticalLog(@"WARNING: pcfPushIsAPNSSandbox: running on simulator! push notifications will probably not work.");
                 return;
             }
 
@@ -82,7 +82,7 @@ void pcfPushResetOnceToken() {
                 }
             }];
         } @catch (NSException *exception) {
-            PCFPushLog(@"Exception while populating PCFPushParameters object. %@", exception);
+            PCFPushCriticalLog(@"Exception while populating PCFPushParameters object. %@", exception);
             params = nil;
         }
     }
@@ -116,7 +116,7 @@ void pcfPushResetOnceToken() {
 
         id propertyValue = [self valueForKeyPath:propertyName];
         if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
-            PCFPushLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
+            PCFPushCriticalLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
             result = NO;
             *stop = YES;
         }

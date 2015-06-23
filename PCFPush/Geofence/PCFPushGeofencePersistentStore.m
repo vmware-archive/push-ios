@@ -43,13 +43,13 @@
     NSError *error = nil;
     NSData *data = [NSData dataWithContentsOfFile:geofenceFilename options:0 error:&error];
     if (!data) {
-        PCFPushLog(@"Error reading geofence file '%@': %@", geofenceFilename, error);
+        PCFPushCriticalLog(@"Error reading geofence file '%@': %@", geofenceFilename, error);
         return nil;
     }
 
     PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcfPushFromJSONData:data error:&error];
     if (!geofence) {
-        PCFPushLog(@"Error deserializing geofence data in file '%@': %@", geofenceFilename, error);
+        PCFPushCriticalLog(@"Error deserializing geofence data in file '%@': %@", geofenceFilename, error);
         return nil;
     }
 
@@ -79,7 +79,7 @@
         NSData *geofenceData = [NSData dataWithContentsOfFile:filename];
         PCFPushGeofenceData *geofence = [PCFPushGeofenceData pcfPushFromJSONData:geofenceData error:&error];
         if (error) {
-            PCFPushLog(@"Error reading geofence file '%@': %@", filename, error);
+            PCFPushCriticalLog(@"Error reading geofence file '%@': %@", filename, error);
         } else {
             result[@(geofence.id)] = geofence;
         }
@@ -138,7 +138,7 @@
     [geofences enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         NSData *data = [geofence pcfPushToJSONData:&error];
         if (error) {
-            PCFPushLog(@"Error serializing geofence data for item with ID %lld: ", id, error);
+            PCFPushCriticalLog(@"Error serializing geofence data for item with ID %lld: ", id, error);
         } else {
             NSString *filename = [self filenameForGeofence:geofence atPath:geofencesPath];
             [self.fileManager createFileAtPath:filename contents:data attributes:nil];
@@ -156,7 +156,7 @@
 {
     NSArray *possibleURLs = [self.fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
     if (!possibleURLs || possibleURLs.count <= 0) {
-        PCFPushLog(@"Error getting user library directory.");
+        PCFPushCriticalLog(@"Error getting user library directory.");
         return nil;
     }
 
@@ -173,7 +173,7 @@
         return NO;
     }
     if (!isDirectory) {
-        PCFPushLog(@"Warning: '%@' is not a directory", path);
+        PCFPushCriticalLog(@"Warning: '%@' is not a directory", path);
         return NO;
     }
     return YES;
@@ -184,7 +184,7 @@
     NSError *error = nil;
     NSArray *urls = [self.fileManager contentsOfDirectoryAtPath:path error:&error];
     if (!urls) {
-        PCFPushLog(@"Error reading contents of directory %@: %@", path, error);
+        PCFPushCriticalLog(@"Error reading contents of directory %@: %@", path, error);
         return nil;
     }
 
@@ -202,7 +202,7 @@
 {
     NSError *error = nil;
     if (![self.fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:&error]) {
-        PCFPushLog(@"Error creating directory at path '%@': %@", path, error);
+        PCFPushCriticalLog(@"Error creating directory at path '%@': %@", path, error);
         return NO;
     }
     return YES;
@@ -225,7 +225,7 @@
     NSError *error = nil;
     for (NSString *filename in filenames) {
         if (![self.fileManager removeItemAtPath:filename error:&error]) {
-            PCFPushLog(@"Error removing geofence file '%@' : '%@", filename, error);
+            PCFPushCriticalLog(@"Error removing geofence file '%@' : '%@", filename, error);
         }
     }
 }

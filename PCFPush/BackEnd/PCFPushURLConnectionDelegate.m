@@ -96,7 +96,7 @@ typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
         willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
     if ([PCFPushParameters defaultParameters].trustAllSslCertificates) {
-        PCFPushLog(@"Note: We trust all SSL certifications in PCF Push.");
+        PCFPushCriticalLog(@"Note: We trust all SSL certifications in PCF Push.");
         NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
         NSURLCredential *credential = [NSURLCredential credentialForTrust:[protectionSpace serverTrust]];
         [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];

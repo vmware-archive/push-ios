@@ -78,7 +78,7 @@ NSString* pcfPushGeofencesPath(NSFileManager *fileManager)
 {
     NSArray *possibleURLs = [fileManager URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
     if (!possibleURLs || possibleURLs.count <= 0) {
-        PCFPushLog(@"Error getting user library directory.");
+        PCFPushCriticalLog(@"Error getting user library directory.");
         return nil;
     }
 

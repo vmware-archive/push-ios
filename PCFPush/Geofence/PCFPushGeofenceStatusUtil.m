@@ -20,7 +20,7 @@
     NSString *geofencesPath = pcfPushGeofencesPath(fileManager);
 
     if (!geofencesPath) {
-        PCFPushLog(@"Error getting geofences path.");
+        PCFPushCriticalLog(@"Error getting geofences path.");
         return [PCFPushGeofenceStatus emptyStatus];
     }
 
@@ -36,14 +36,14 @@
     NSData *data = [NSData dataWithContentsOfFile:filename options:0 error:&error];
 
     if (!data) {
-        PCFPushLog(@"Error reading contents of geofence status file '%@':", error);
+        PCFPushCriticalLog(@"Error reading contents of geofence status file '%@':", error);
         return [PCFPushGeofenceStatus emptyStatus];
     }
 
     id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 
     if (!json) {
-        PCFPushLog(@"Error deserializing geofence status: %@", error);
+        PCFPushCriticalLog(@"Error deserializing geofence status: %@", error);
         return [PCFPushGeofenceStatus emptyStatus];
     }
 
@@ -68,14 +68,14 @@
     NSData *data = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:&error];
 
     if (!data) {
-        PCFPushLog(@"Error serializing geofence status data: %@", error);
+        PCFPushCriticalLog(@"Error serializing geofence status data: %@", error);
         return NO;
     }
 
     NSString *geofencesPath = pcfPushGeofencesPath(fileManager);
 
     if (!geofencesPath) {
-        PCFPushLog(@"Error getting geofences path.");
+        PCFPushCriticalLog(@"Error getting geofences path.");
         return NO;
     }
 

@@ -38,7 +38,7 @@
 {
     if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
         NSString *errorReason = @"isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.";
-        PCFPushLog(@"ERROR: %@", errorReason);
+        PCFPushCriticalLog(@"ERROR: %@", errorReason);
         [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:errorReason number:0 fileManager:[NSFileManager defaultManager]];
         return;
     }
@@ -49,7 +49,7 @@
     }
 
     if (geofencesToRegister.count > 20) {
-        PCFPushLog(@"WARNING: About to monitor %d geofence locations. iOS has a limit of 20 geofences per app. Not all of these geofences will be monitored.", geofencesToRegister.count);
+        PCFPushCriticalLog(@"WARNING: About to monitor %d geofence locations. iOS has a limit of 20 geofences per app. Not all of these geofences will be monitored.", geofencesToRegister.count);
     } else {
         PCFPushLog(@"About to monitor %d geofences locations.", geofencesToRegister.count);
     }
@@ -73,7 +73,7 @@
 {
     if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
         NSString *errorReason = @"isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.";
-        PCFPushLog(@"ERROR: %@", errorReason);
+        PCFPushCriticalLog(@"ERROR: %@", errorReason);
         [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:errorReason number:0 fileManager:[NSFileManager defaultManager]];
         return;
     }
@@ -113,11 +113,11 @@
     NSError *error = nil;
     NSData *json = [NSJSONSerialization dataWithJSONObject:arr options:0 error:&error];
     if (!json) {
-        PCFPushLog(@"Error serializing monitored geofences to test file for debug: %@", error);
+        PCFPushCriticalLog(@"Error serializing monitored geofences to test file for debug: %@", error);
     }
 
     if (![json writeToFile:self.geofencesFilename options:0 error:&error]) {
-        PCFPushLog(@"Error writing monitored geofences to test file for debug: %@", error);
+        PCFPushCriticalLog(@"Error writing monitored geofences to test file for debug: %@", error);
     }
 
     NSNotification *notification = [NSNotification notificationWithName:@"pivotal.push.geofences.updated" object:nil];
@@ -128,7 +128,7 @@
 {
     NSArray *possibleURLs = [[NSFileManager defaultManager] URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask];
     if (!possibleURLs || possibleURLs.count <= 0) {
-        PCFPushLog(@"Error getting user library directory.");
+        PCFPushCriticalLog(@"Error getting user library directory.");
         return nil;
     }
 
@@ -155,7 +155,7 @@
     NSString *filename = self.geofencesFilename;
     if ([[NSFileManager defaultManager] fileExistsAtPath:filename]) {
         if (![[NSFileManager defaultManager] removeItemAtPath:filename error:&error]) {
-            PCFPushLog(@"Error deleting geofence debug file: %@", error);
+            PCFPushCriticalLog(@"Error deleting geofence debug file: %@", error);
         }
     }
 }

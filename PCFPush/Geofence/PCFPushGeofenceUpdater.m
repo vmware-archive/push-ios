@@ -41,7 +41,7 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
         PCFPushGeofenceResponseData *responseData = [PCFPushGeofenceResponseData pcfPushFromJSONData:data error:&error];
 
         if (error) {
-            PCFPushLog(@"Error parsing geofence response data: %@", error);
+            PCFPushCriticalLog(@"Error parsing geofence response data: %@", error);
 
             PCFPushGeofenceStatus *oldStatus = [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
             [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:error.localizedDescription number:oldStatus.numberOfCurrentlyMonitoredGeofences fileManager:[NSFileManager defaultManager]];
@@ -63,7 +63,7 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 
     void (^requestFailureBlock)(NSError *) = ^(NSError *error) {
 
-        PCFPushLog(@"Fetching geofences request failed: %@", error);
+        PCFPushCriticalLog(@"Fetching geofences request failed: %@", error);
 
         PCFPushGeofenceStatus *oldStatus = [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
         [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:error.localizedDescription number:oldStatus.numberOfCurrentlyMonitoredGeofences fileManager:[NSFileManager defaultManager]];

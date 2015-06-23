@@ -260,7 +260,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
 {
     PCFPushParameters *params = [[PCFPushClient shared] registrationParameters];
     if (!params || !params.pushAPIURL) {
-        PCFPushLog(@"PCFPushURLConnection baseURL is nil");
+        PCFPushCriticalLog(@"PCFPushURLConnection baseURL is nil");
         return nil;
     }
     return [NSURL URLWithString:params.pushAPIURL];
