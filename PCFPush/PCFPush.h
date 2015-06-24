@@ -105,13 +105,60 @@
                                               failure:(void (^)(NSError *))failure;
 
 /**
- * TODO - write docs
+ * Call this method in your application delegate application:didReceiveRemoteNotification:fetchCompletionHandler: method
+ * in order to inform PCF Push that your application has received a remote notification.  If you do not call this method then
+ * geofences will not be updated and monitored automatically.
+ *
+ * @param userInfo - You must provide the same userInfo delivered by the remote notification. May not be `nil`.
+ *
+ * @param completionHandler - A block that will be called when PCF Push is done processing the remote notification.  PCF Push will
+ *                            call this block when it is done its asynchronous processing on the remote notification.  The individual
+ *                            block arguments are descibed below:
+ *                            
+ *                            wasIgnored - Set to `YES` if this particular remote notification did not contain any updates for
+ *                                         PCF Push and it was ignored.
+ *
+ *                            fetchResult - PCF Push may download geofence updates after it receives certain remote notifications.  If
+ *                                          it does then this block argument will indicate the fetch result.  You can pass this
+ *                                          fetchResult back to Apple's `completionHandler`.
+ *
+ *                            error - The `error` block argument will be set if any errors occur while PCF Push is processing the
+ *                                    remote notification.
+ *
+ * You must wait until the PCF Push didReceiveRemoteNotification:completionHandler: method is completed its asynchronous processing
+ * before you call Apple's completion handler.  Example:
+ *
+ *   - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+ *   {
+ *     [self handleRemoteNotification:userInfo];
+ *
+ *     [PCFPush didReceiveRemoteNotification:userInfo completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+ *
+ *       if (wasIgnored) {
+ *         PCFPushLog(@"PCFPush ignored this remote notification.");
+ *       }
+ *
+ *       if (completionHandler) {
+ *         completionHandler(fetchResult);
+ *       }
+ *     }];
+ *   }
  */
 + (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
 
 /**
- * TODO - write docs
+ * Call this method to read the current geofence monitoring status.  If an error occurs while geofences are being updated in the background
+ * then this status object is the only way to check the status at runtime.  The UINotification PCF_PUSH_GEOFENCE_STATUS_UPDATE_NOTIFICATION is
+ * triggered whenever this geofence status is changed.  Example:
+ *
+ *     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(geofenceStatusChanged:) name:PCF_PUSH_GEOFENCE_STATUS_UPDATE_NOTIFICATION object:nil];
+ *
+ *   - (void) geofenceStatusChanged:(NSNotification*)notification
+ *   {
+ *     PCFPushGeofenceStatus *status = [PCFPush geofenceStatus];
+ *     NSLog(@"%@", status);
+ *   }
  */
 + (PCFPushGeofenceStatus*) geofenceStatus;
 
