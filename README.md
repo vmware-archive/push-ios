@@ -1,10 +1,9 @@
 iOS Push Client SDK
 ===================
 
-The Push SDK requires iOS 6.0 or greater.
+The Push SDK requires iOS 7.0 or greater.
 
-The Push iOS SDK v1.0.4 is compatible with the Push Notification Service
-1.2.0
+The Push iOS SDK v1.3.0 is compatible with the Push Notification Service 1.3.0.
 
 Push SDK Usage
 --------------
