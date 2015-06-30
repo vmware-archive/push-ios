@@ -23,8 +23,8 @@ extern BOOL pcfPushIsAPNSSandbox();
 @property (copy) NSString *developmentPushVariantSecret;
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushVariantSecret;
-@property (copy) NSArray *pinnedSSLCertificateNames;
-@property (assign) BOOL trustAllSSLCertificates;
+@property (copy) NSArray *pinnedSslCertificateNames;
+@property (assign) BOOL trustAllSslCertificates;
 @property (copy) NSSet *pushTags;
 @property BOOL areGeofencesEnabled;
 

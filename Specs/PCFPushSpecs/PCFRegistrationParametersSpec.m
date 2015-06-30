@@ -26,8 +26,8 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
         return !([propertyName isEqualToString:@"pushTags"] ||
                  [propertyName isEqualToString:@"pushDeviceAlias"] ||
                  [propertyName isEqualToString:@"areGeofencesEnabled"] ||
-                 [propertyName isEqualToString:@"trustAllSSLCertificates"] ||
-                 [propertyName isEqualToString:@"pinnedSSLCertificateNames"]);
+                 [propertyName isEqualToString:@"trustAllSslCertificates"] ||
+                 [propertyName isEqualToString:@"pinnedSslCertificateNames"]);
     };
 
     [properties enumerateKeysAndObjectsUsingBlock:^(NSString *propertyName, NSString *propertyType, BOOL *stop) {
@@ -80,7 +80,7 @@ describe(@"PCFRegistrationParameters", ^{
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
 
-        it(@"should require all push properties (except tags, device alias, trustAllSSLCertificates, and geofences enabled) to be non-nil and non-empty", ^{
+        it(@"should require all push properties (except tags, device alias, trustAllSslCertificates, and geofences enabled) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
         });
@@ -124,8 +124,8 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.pushDeviceAlias should] beNil];
             [[model.pushTags should] beNil];
             [[theValue(model.areGeofencesEnabled) should] beYes];
-            [[theValue(model.trustAllSSLCertificates) should] beFalse];
-            [[model.pinnedSSLCertificateNames should] containObjectsInArray:@[ @"certificate.der", @"DOGS", @"CATS" ]];
+            [[theValue(model.trustAllSslCertificates) should] beFalse];
+            [[model.pinnedSslCertificateNames should] containObjectsInArray:@[ @"certificate.der", @"DOGS", @"CATS" ]];
         });
     });
 
@@ -138,7 +138,7 @@ describe(@"PCFRegistrationParameters", ^{
         it(@"should initialize successfully and indicate that parameters are valid", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[theValue(model.trustAllSSLCertificates) should] beTrue];
+            [[theValue(model.trustAllSslCertificates) should] beTrue];
         });
     });
 

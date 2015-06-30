@@ -125,18 +125,18 @@ void pcfPushResetOnceToken() {
 
     [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
 
-        if ([propertyName isEqualToString:@"pinnedSSLCertificateNames"]) {
+        if ([propertyName isEqualToString:@"pinnedSslCertificateNames"]) {
             id propertyValue = [self valueForKeyPath:propertyName];
             if (!propertyValue || [propertyValue isKindOfClass:[NSArray class]]) {
                 return;
             }
-            PCFPushCriticalLog(@"pinnedSSLCertificateNames must be an array, if present");
+            PCFPushCriticalLog(@"pinnedSslCertificateNames must be an array, if present");
             result = NO;
             *stop = YES;
             return;
         }
 
-        if ([propertyName isEqualToString:@"trustAllSSLCertificates"]) {
+        if ([propertyName isEqualToString:@"trustAllSslCertificates"]) {
             return;
         }
 
@@ -161,8 +161,8 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
                 @"pivotal.push.geofencesEnabled" : @"areGeofencesEnabled",
-                @"pivotal.push.trustAllSSLCertificates" : @"trustAllSSLCertificates",
-                @"pivotal.push.pinnedSSLCertificateNames" : @"pinnedSSLCertificateNames"
+                @"pivotal.push.trustAllSslCertificates" : @"trustAllSslCertificates",
+                @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };
     }
     if (block) {

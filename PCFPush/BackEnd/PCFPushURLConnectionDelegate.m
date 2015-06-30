@@ -99,13 +99,13 @@ typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
 
     if ([protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
 
-        if ([PCFPushParameters defaultParameters].trustAllSSLCertificates) {
+        if ([PCFPushParameters defaultParameters].trustAllSslCertificates) {
 
             PCFPushCriticalLog(@"Note: We trust all SSL certifications in PCF Push");
             NSURLCredential *credential = [NSURLCredential credentialForTrust:[protectionSpace serverTrust]];
             [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
 
-        } else if ([PCFPushParameters defaultParameters].pinnedSSLCertificateNames && [PCFPushParameters defaultParameters].pinnedSSLCertificateNames.count > 0) {
+        } else if ([PCFPushParameters defaultParameters].pinnedSslCertificateNames && [PCFPushParameters defaultParameters].pinnedSslCertificateNames.count > 0) {
 
             PCFPushCriticalLog(@"Note: Using pinned certificate in PCF Push.");
             SecTrustRef serverTrust = protectionSpace.serverTrust;
@@ -113,7 +113,7 @@ typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
             NSData *remoteCertificateData = CFBridgingRelease(SecCertificateCopyData(certificate));
 
             BOOL foundPinnedCert = NO;
-            NSArray *certList = [PCFPushParameters defaultParameters].pinnedSSLCertificateNames;
+            NSArray *certList = [PCFPushParameters defaultParameters].pinnedSslCertificateNames;
             
             for (NSString *cert in certList) {
                 NSString *certPath = [[NSBundle mainBundle] pathForResource:[cert stringByDeletingPathExtension] ofType:[cert pathExtension]];
