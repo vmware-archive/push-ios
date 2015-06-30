@@ -37,8 +37,8 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
             id value = [model valueForKey:propertyName];
             [model setValue:nil forKey:propertyName];
 
-            BOOL (^valid)(PCFPushParameters *) = ^BOOL(PCFPushParameters *model) {
-                return [model arePushParametersValid];
+            BOOL (^valid)(PCFPushParameters *) = ^BOOL(PCFPushParameters *m) {
+                return [m arePushParametersValid];
             };
             [[theValue(valid(model)) should] beFalse];
 

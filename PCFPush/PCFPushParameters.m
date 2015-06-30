@@ -78,7 +78,22 @@ void pcfPushResetOnceToken() {
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
                 id propertyValue = [plist valueForKey:plistPropertyName];
                 if (propertyValue) {
-                    [params setValue:propertyValue forKeyPath:propertyName];
+
+                    if ([propertyValue isKindOfClass:[NSString class]]) {
+                        [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
+
+                    } else if ([propertyValue isKindOfClass:[NSArray class]]) {
+                        NSArray *inputArray = (NSArray*) propertyValue;
+                        NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:inputArray.count];
+                        for (NSString *s in inputArray) {
+                            [resultArray addObject:[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                        }
+                        [params setValue:[NSArray arrayWithArray:resultArray] forKeyPath:propertyName];
+
+                    } else {
+                        [params setValue:propertyValue forKeyPath:propertyName];
+                    }
+
                 }
             }];
         } @catch (NSException *exception) {

@@ -4,19 +4,19 @@
   <dict>
 
     <key>pivotal.push.serviceUrl</key>
-    <string>http://test.url.com</string>
+    <string>http://test.url.com   </string>
 
     <key>pivotal.push.platformUuidDevelopment</key>
-    <string>444-555-666-777</string>
+    <string>   444-555-666-777</string>
 
     <key>pivotal.push.platformSecretDevelopment</key>
-    <string>No secret is as strong as its blabbiest keeper</string>
+    <string>        No secret is as strong as its blabbiest keeper       </string>
 
     <key>pivotal.push.platformUuidProduction</key>
-    <string>444-555-666-777</string>
+    <string>   444-555-666-777   </string>
 
     <key>pivotal.push.platformSecretProduction</key>
-    <string>No secret is as strong as its blabbiest keeper</string>
+    <string> No secret is as strong as its blabbiest keeper</string>
 
     <key>pivotal.push.geofencesEnabled</key>
     <true/>
@@ -26,9 +26,9 @@
 
     <key>pivotal.push.pinnedSSLCertificateNames</key>
     <array>
-        <string>CATS</string>
-        <string>DOGS</string>
-        <string>certificate.der</string>
+        <string>CATS    </string>
+        <string>    DOGS</string>
+        <string>    certificate.der     </string>
     </array>
 
   </dict>
