@@ -1,35 +1,32 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
 
     <key>pivotal.push.serviceUrl</key>
-    <string>http://test.url.com</string>
+    <string>http://testURL.com</string>
 
     <key>pivotal.push.platformUuidDevelopment</key>
-    <string>444-555-666-777</string>
+    <string>DEV-SOS-WE-LIKE-IT-SPICY</string>
 
     <key>pivotal.push.platformSecretDevelopment</key>
-    <string>No secret is as strong as its blabbiest keeper</string>
+    <string>DEV Put sweet chili sauce on everything</string>
 
     <key>pivotal.push.platformUuidProduction</key>
-    <string>444-555-666-777</string>
+    <string>PROD-SOS-WE-LIKE-IT-SPICY</string>
 
     <key>pivotal.push.platformSecretProduction</key>
-    <string>No secret is as strong as its blabbiest keeper</string>
+    <string>PROD Put sweet chili sauce on everything</string>
 
     <key>pivotal.push.geofencesEnabled</key>
     <true/>
 
     <key>pivotal.push.trustAllSSLCertificates</key>
-    <false/>
+    <true/>
 
     <key>pivotal.push.pinnedSSLCertificateNames</key>
-    <array>
-        <string>CATS</string>
-        <string>DOGS</string>
-        <string>certificate.der</string>
-    </array>
+    <string>certificate.der</string>
 
   </dict>
 </plist>

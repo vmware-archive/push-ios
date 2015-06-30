@@ -95,14 +95,61 @@ typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
 - (void)connection:(NSURLConnection *)connection
         willSendRequestForAuthenticationChallenge:(NSURLAuthenticationChallenge *)challenge
 {
-    if ([PCFPushParameters defaultParameters].trustAllSslCertificates) {
-        PCFPushCriticalLog(@"Note: We trust all SSL certifications in PCF Push.");
-        NSURLProtectionSpace *protectionSpace = [challenge protectionSpace];
-        NSURLCredential *credential = [NSURLCredential credentialForTrust:[protectionSpace serverTrust]];
-        [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+    NSURLProtectionSpace *protectionSpace = challenge.protectionSpace;
+
+    if ([protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+
+        if ([PCFPushParameters defaultParameters].trustAllSSLCertificates) {
+
+            PCFPushCriticalLog(@"Note: We trust all SSL certifications in PCF Push");
+            NSURLCredential *credential = [NSURLCredential credentialForTrust:[protectionSpace serverTrust]];
+            [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+
+        } else if ([PCFPushParameters defaultParameters].pinnedSSLCertificateNames && [PCFPushParameters defaultParameters].pinnedSSLCertificateNames.count > 0) {
+
+            PCFPushCriticalLog(@"Note: Using pinned certificate in PCF Push.");
+            SecTrustRef serverTrust = protectionSpace.serverTrust;
+            SecCertificateRef certificate = SecTrustGetCertificateAtIndex(serverTrust, 0);
+            NSData *remoteCertificateData = CFBridgingRelease(SecCertificateCopyData(certificate));
+
+            BOOL foundPinnedCert = NO;
+            NSArray *certList = [PCFPushParameters defaultParameters].pinnedSSLCertificateNames;
+            
+            for (NSString *cert in certList) {
+                NSString *certPath = [[NSBundle mainBundle] pathForResource:[cert stringByDeletingPathExtension] ofType:[cert pathExtension]];
+                NSData *localCertificateData = [NSData dataWithContentsOfFile:certPath];
+                
+                if (certPath == nil) {
+                    PCFPushLog(@"Invalid certificate path: %@", cert);
+                    continue;
+                }
+                
+                foundPinnedCert = [remoteCertificateData isEqualToData:localCertificateData];
+                if (foundPinnedCert) {
+                    break;
+                }
+            }
+            
+            if (foundPinnedCert) {
+                NSURLCredential *credential = [NSURLCredential credentialForTrust:[protectionSpace serverTrust]];
+                [[challenge sender] useCredential:credential forAuthenticationChallenge:challenge];
+            } else {
+                PCFPushCriticalLog(@"Error: The server's certificate has not been authenticated. Cancelling the request.");
+                [[challenge sender] cancelAuthenticationChallenge:challenge];
+            }
+
+        } else {
+
+            PCFPushLog(@"Note: PCF Push using system-default SSL authentication");
+            [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
+        }
+
     } else {
+
+        PCFPushLog(@"Note: PCF Push using system-default authentication");
         [[challenge sender] performDefaultHandlingForAuthenticationChallenge:challenge];
     }
+
 }
 
 - (void) returnError:(NSError*)error

@@ -21,7 +21,15 @@
     <key>pivotal.push.geofencesEnabled</key>
     <true/>
 
-    <key>pivotal.push.trustAllSslCertificates</key>
+    <key>pivotal.push.trustAllSSLCertificates</key>
     <true/>
+
+    <key>pivotal.push.pinnedSSLCertificateNames</key>
+    <array>
+      <string>CATS</string>
+      <string>DOGS</string>
+      <string>certificate.der</string>
+    </array>
+
   </dict>
 </plist>
