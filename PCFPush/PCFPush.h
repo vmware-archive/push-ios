@@ -4,6 +4,7 @@
 
 #import <UIKit/UIKit.h>
 #import "PCFPushGeofenceStatus.h"
+#import "PCFPushErrors.h"
 
 /**
  * Primary entry point for the PCF Push Client SDK library.
