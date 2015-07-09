@@ -59,31 +59,37 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
             beforeEach(^{
                 engine = [PCFPushGeofenceEngine mock];
-                [engine stub:@selector(processResponseData:withTimestamp:)];
+                [engine stub:@selector(processResponseData:withTimestamp:withTags:)];
                 [PCFPushURLConnection stub:@selector(geofenceRequestWithParameters:timestamp:deviceUuid:success:failure:) withBlock:successfulGeofenceRequestStub(200, [NSData data], nil)];
             });
 
             it(@"should require a geofence engine", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:nil userInfo:@{} timestamp:0L success:^{} failure:^(NSError *error){}];
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:nil userInfo:@{} timestamp:0L tags:[NSSet set] success:^{} failure:^(NSError *error) {}];
                 }) should] raise];
             });
 
             it(@"should not require a userdata object", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:0L success:^{} failure:^(NSError *error){}];
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:0L tags:[NSSet set] success:^{} failure:^(NSError *error) {}];
+                }) shouldNot] raise];
+            });
+
+            it(@"should not require tags", ^{
+                [[theBlock(^{
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:@{} timestamp:0L tags:nil success:^{} failure:^(NSError *error) {}];
                 }) shouldNot] raise];
             });
 
             it(@"should not require a success block", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:@{} timestamp:0L success:nil failure:^(NSError *error){}];
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:@{} timestamp:0L tags:[NSSet set] success:nil failure:^(NSError *error) {}];
                 }) shouldNot] raise];
             });
 
             it(@"should not require a failure block", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:@{} timestamp:0L success:^{} failure:nil];
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:@{} timestamp:0L tags:[NSSet set] success:^{} failure:nil];
                 }) shouldNot] raise];
             });
         });
@@ -107,7 +113,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             context(@"bad responses", ^{
 
                 beforeEach(^{
-                    [[engine shouldNot] receive:@selector(processResponseData:withTimestamp:)];
+                    [[engine shouldNot] receive:@selector(processResponseData:withTimestamp:withTags:)];
 //                    [PCFPushPersistentStorage setServerDeviceID:@"DEVICE_ID"];
                     [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(YES), any(), theValue(97), any(), nil];
                     [PCFPushGeofenceStatusUtil stub:@selector(loadGeofenceStatus:) andReturn:[PCFPushGeofenceStatus statusWithError:NO errorReason:nil number:97]];
@@ -119,10 +125,10 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
                         wasRequestAttempted = YES;
                     })];
 
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L tags:[NSSet set] success:^{
                         wasExpectedResult = NO;
 
-                    } failure:^(NSError *error) {
+                    }                                   failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
@@ -133,10 +139,10 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
                         wasRequestAttempted = YES;
                     })];
 
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L tags:[NSSet set] success:^{
                         wasExpectedResult = NO;
 
-                    } failure:^(NSError *error) {
+                    }                                   failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
@@ -147,10 +153,10 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
                         wasRequestAttempted = YES;
                     })];
 
-                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
+                    [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L tags:[NSSet set] success:^{
                         wasExpectedResult = NO;
 
-                    } failure:^(NSError *error) {
+                    }                                   failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
                 });
@@ -168,12 +174,12 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine should] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
+                [[engine should] receive:@selector(processResponseData:withTimestamp:withTags:) withArguments:expectedResponseData, theValue(7777L), [NSSet set], nil];
 
-                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L success:^{
+                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:nil timestamp:7777L tags:[NSSet set] success:^{
                     wasExpectedResult = YES;
 
-                } failure:^(NSError *error) {
+                }                                   failure:^(NSError *error) {
                     wasExpectedResult = NO;
                 }];
             });
@@ -190,14 +196,14 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine should] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
+                [[engine should] receive:@selector(processResponseData:withTimestamp:withTags:) withArguments:expectedResponseData, theValue(7777L), [NSSet set], nil];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.something_else" : @"I AM NOT JSON" };
 
-                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L success:^{
+                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L tags:[NSSet set] success:^{
                     wasExpectedResult = YES;
 
-                } failure:^(NSError *error) {
+                }                                   failure:^(NSError *error) {
                     wasExpectedResult = NO;
                 }];
             });
@@ -224,14 +230,14 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine shouldEventually] receive:@selector(processResponseData:withTimestamp:) withArguments:expectedResponseData, theValue(7777L), nil];
+                [[engine shouldEventually] receive:@selector(processResponseData:withTimestamp:withTags:) withArguments:expectedResponseData, theValue(7777L), [NSSet set], nil];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.geofence_update_json" : @"{\"last_modified\":123456789123456789}" };
 
-                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L success:^{
+                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L tags:[NSSet set] success:^{
                     wasExpectedResult = YES;
 
-                } failure:^(NSError *error) {
+                }                                   failure:^(NSError *error) {
                     wasExpectedResult = NO;
                 }];
             });
@@ -242,14 +248,14 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 [[PCFPushPersistentStorage shouldNot] receive:@selector(setGeofenceLastModifiedTime:)];
 
-                [[engine shouldNotEventually] receive:@selector(processResponseData:withTimestamp:)];
+                [[engine shouldNotEventually] receive:@selector(processResponseData:withTimestamp:withTags:)];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.geofence_update_json" : @"I AM NOT JSON" };
 
-                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L success:^{
+                [PCFPushGeofenceUpdater startGeofenceUpdate:engine userInfo:userInfo timestamp:7777L tags:[NSSet set] success:^{
                     wasExpectedResult = NO;
 
-                } failure:^(NSError *error) {
+                }                                   failure:^(NSError *error) {
                     wasExpectedResult = YES;
                 }];
             });

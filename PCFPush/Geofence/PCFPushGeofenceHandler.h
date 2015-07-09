@@ -13,7 +13,13 @@
 
 + (BOOL) localNotificationRespondsToSetCategory:(UILocalNotification*)notification;
 + (BOOL) localNotificationRespondsToSetAlertTitle:(UILocalNotification*)notification;
-+ (void) processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store engine:(PCFPushGeofenceEngine *)engine state:(CLRegionState)state;
-+ (void) checkGeofencesForNewlySubscribedTagsWithStore:(PCFPushGeofencePersistentStore *)store locationManager:(CLLocationManager *)locationManager;
+
++ (void)processRegion:(CLRegion *)region
+                store:(PCFPushGeofencePersistentStore *)store
+               engine:(PCFPushGeofenceEngine *)engine
+                state:(CLRegionState)state
+                 tags:(NSSet *)subscribedTags;
+
++ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet*)subscribedTags;
 
 @end

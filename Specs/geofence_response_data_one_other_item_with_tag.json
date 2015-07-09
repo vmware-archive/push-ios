@@ -1,0 +1,24 @@
+{
+    "num": 1,
+    "last_modified": 1424309210305,
+    "geofences": [
+        {
+            "id": 7,
+            "data": {
+                "ios":{"alertBody": "pants"}
+            },
+            "tags" : ["pineapples"],
+            "trigger_type": "exit",
+            "expiry_time": 1424309210305,
+            "locations": [
+                {
+                    "id": 77,
+                    "name": "pants_location",
+                    "lat": 43.5,
+                    "long": -81.5,
+                    "rad": 100
+                }
+            ]
+        }
+    ]
+}

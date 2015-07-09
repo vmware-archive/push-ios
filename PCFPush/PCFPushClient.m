@@ -20,7 +20,6 @@
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceHandler.h"
-#import "PCFPushTimer.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -84,10 +83,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
-        NSError *error;
-        if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushCriticalLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
-        }
+        [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
     }
 
     if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
@@ -109,7 +105,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
                                                  failure:failureBlock];
 
     } else if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
-        [PCFPushClient startGeofenceUpdate:successBlock failure:failureBlock];
+        [PCFPushClient startGeofenceUpdateWithTags:self.registrationParameters.pushTags successBlock:successBlock failure:failureBlock];
 
     } else {
         PCFPushLog(@"Registration with PCF Push is being bypassed (already registered).");
@@ -123,10 +119,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
                                             failure:(void (^)(NSError *error))failure
 {
     if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
-        NSError *error;
-        if (![PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushCriticalLog(@"Clear geofences upon unregistration failed.  Error: %@", error);
-        }
+        [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
     }
 
     NSString *deviceId = [PCFPushPersistentStorage serverDeviceID];
@@ -206,12 +199,12 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
         if ([PCFPushClient isGeofenceUpdateRequired:parameters]) {
 
-            [PCFPushClient startGeofenceUpdate:successBlock failure:failureBlock];
+            [PCFPushClient startGeofenceUpdateWithTags:parameters.pushTags successBlock:successBlock failure:failureBlock];
 
         } else {
             
             if (parameters.areGeofencesEnabled && !areTagsTheSame) {
-                [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:PCFPushClient.shared.store locationManager:PCFPushClient.shared.locationManager];
+                [PCFPushGeofenceHandler reregisterGeofencesWithEngine:PCFPushClient.shared.engine subscribedTags:parameters.pushTags];
             }
 
             if (successBlock) {
@@ -226,9 +219,11 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return registrationBlock;
 }
 
-+ (void)startGeofenceUpdate:(void (^)())successBlock failure:(void (^)(NSError *))failureBlock
++ (void)startGeofenceUpdateWithTags:(NSSet *)subscribedTags
+                       successBlock:(void (^)())successBlock
+                            failure:(void (^)(NSError *))failureBlock
 {
-    [PCFPushGeofenceUpdater startGeofenceUpdate:PCFPushClient.shared.engine userInfo:nil timestamp:0L success:^{
+    [PCFPushGeofenceUpdater startGeofenceUpdate:PCFPushClient.shared.engine userInfo:nil timestamp:0L tags:subscribedTags success:^{
 
         if (successBlock) {
             successBlock();
@@ -247,10 +242,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     self.registrationParameters.pushTags = tags;
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
-        NSError *error;
-        if ([PCFPushGeofenceUpdater clearGeofences:self.engine error:&error]) {
-            PCFPushCriticalLog(@"Warning: clear geofences failed. Going to proceed with update anyways. Error: %@", error);
-        }
+        [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
     }
 
     if ([PCFPushClient areTagsTheSame:self.registrationParameters]) {
@@ -258,7 +250,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         // No tags are updated - just check if want to update geofences
         if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
 
-            [PCFPushClient startGeofenceUpdate:success failure:failure];
+            [PCFPushClient startGeofenceUpdateWithTags:tags successBlock:success failure:failure];
 
         } else if (success) {
             success();
@@ -421,7 +413,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if (self.registrationParameters.areGeofencesEnabled && isGeofenceUpdate(userInfo)) {
 
         int64_t timestamp = [PCFPushPersistentStorage lastGeofencesModifiedTime];
-        [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp success:^{
+        [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp tags:self.registrationParameters.pushTags success:^{
 
             handler(NO, UIBackgroundFetchResultNewData, nil);
 
@@ -435,31 +427,6 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 }
 
-#pragma mark - Location tracking
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    if (!locations || locations.count <= 0) {
-        return;
-    }
-    CLLocation* location = [locations lastObject];
-    NSDate* eventDate = location.timestamp;
-    NSTimeInterval howRecent = [eventDate timeIntervalSinceNow];
-    if (fabs(howRecent) <= 15.0) { // If the event is recent then do something with it.
-
-        // TODO - decide if 10 meters is too demanding.
-        PCFPushLog(@"Received location update: %@", location);
-        if (location.horizontalAccuracy <= 10.0) {
-
-            PCFPushLog(@"Testing geofences since current location accuracy is less than 10.0 m.");
-
-            [PCFPushGeofenceHandler checkGeofencesForNewlySubscribedTagsWithStore:self.store locationManager:self.locationManager];
-
-            [PCFPushTimer stopLocationUpdateTimer:self.locationManager];
-        }
-    }
-}
-
 #pragma mark - CLLocationManagerDelegate methods
 
 - (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
@@ -469,7 +436,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 
     PCFPushLog(@"locationManager:didExitRegion %@", region.identifier);
-    [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside];
+    [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside tags:self.registrationParameters.pushTags];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
@@ -499,7 +466,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     if (state == CLRegionStateInside) {
         // Device entered geofence. Trigger notification.
-        [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateInside];
+        [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateInside tags:self.registrationParameters.pushTags];
     }
 }
 

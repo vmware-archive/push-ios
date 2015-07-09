@@ -1,6 +1,6 @@
 PODS:
   - Kiwi (2.3.1)
-  - PCFPush (1.3.0)
+  - PCFPush (1.3.1)
 
 DEPENDENCIES:
   - Kiwi
@@ -12,6 +12,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Kiwi: f038a6c61f7a9e4d7766bff5717aa3b3fdb75f55
-  PCFPush: bb245332f1b9dd62488e94eacce982c8cd05a922
+  PCFPush: abfd538c4bee1f80adfac7d4c73ef0b863a1faef
 
 COCOAPODS: 0.36.4

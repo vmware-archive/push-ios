@@ -13,7 +13,11 @@
 @interface PCFPushGeofenceEngine : NSObject
 
 - (id)initWithRegistrar:(PCFPushGeofenceRegistrar *)registrar store:(PCFPushGeofencePersistentStore *)store;
-- (void) processResponseData:(PCFPushGeofenceResponseData*)responseData withTimestamp:(int64_t)timestamp;
-- (void) clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear;
+
+- (void)processResponseData:(PCFPushGeofenceResponseData *)responseData withTimestamp:(int64_t)timestamp withTags:(NSSet *)tags;
+
+- (void)clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear withTags:(NSSet *)subscribedTags;
+
+- (void)reregisterCurrentLocationsWithTags:(NSSet*)subscribedTags;
 
 @end

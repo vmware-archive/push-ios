@@ -1,0 +1,63 @@
+[
+    {
+        "id": 7,
+        "data": {
+            "ios":{"alertBody": "tacos"}
+        },
+        "trigger_type": "enter",
+        "tags": [ "ducks" ],
+        "expiry_time": 1424309210305,
+        "locations": [
+            {
+                "id": 99,
+                "name": "robs_wizard_tacos",
+                "lat": -43.5,
+                "long": 61.5,
+                "rad": 150
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "data": {
+            "ios":{"alertBody": "pizzas"}
+        },
+        "trigger_type": "exit",
+        "tags": [ "rats" ],
+        "expiry_time": 1142744274,
+        "locations": [
+            {
+                "id": 66,
+                "name": "robs_wizard_tacos",
+                "lat": 53.5,
+                "long": -91.5,
+                "rad": 120
+            }
+        ]
+    },
+    {
+        "id": 44,
+        "data": {
+            "ios":{"alertBody": "eat all this great stuff"}
+        },
+        "tags": [ "ducks", "rats" ],
+        "trigger_type": "exit",
+        "expiry_time": 1924309210305,
+        "locations": [
+            {
+                "id": 66,
+                "name": "robs_wizard_tacos",
+                "lat": 53.5,
+                "long": -91.5,
+                "rad": 120
+            },
+            {
+                "id": 82,
+                "name": "robs_lizard_burritos",
+                "lat": 55.5,
+                "long": -94.5,
+                "rad": 100
+            }
+        ]
+    }
+]

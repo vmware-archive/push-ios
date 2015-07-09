@@ -26,8 +26,9 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 + (void) startGeofenceUpdate:(PCFPushGeofenceEngine *)engine
                     userInfo:(NSDictionary *)userInfo
                    timestamp:(int64_t)timestamp
+                        tags:(NSSet *)subscribedTags
                      success:(void (^)(void))successBlock
-                     failure:(void( ^)(NSError *error))failureBlock
+                     failure:(void (^)(NSError *error))failureBlock
 {
     if (engine == nil) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"engine may not be nil" userInfo:nil];
@@ -52,7 +53,7 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
             return;
         }
 
-        [engine processResponseData:responseData withTimestamp:timestamp];
+        [engine processResponseData:responseData withTimestamp:timestamp withTags:subscribedTags];
 
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:responseData.lastModified];
 
@@ -86,12 +87,10 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
     }
 };
 
-+ (BOOL) clearGeofences:(PCFPushGeofenceEngine *)engine
-                  error:(NSError **)error
++ (void) clearAllGeofences:(PCFPushGeofenceEngine *)engine
 {
-    [engine processResponseData:nil withTimestamp:0L];
+    [engine processResponseData:nil withTimestamp:0L withTags:nil];
     [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
-    return YES;
 }
 
 @end

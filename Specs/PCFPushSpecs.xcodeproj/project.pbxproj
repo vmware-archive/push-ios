@@ -62,6 +62,11 @@
 		B6AAEEB4854C71C7A968F1DD /* Pivotal-ExtraParameters.plist in Resources */ = {isa = PBXBuildFile; fileRef = B6AAEAB49D1EA1D6775A4EE8 /* Pivotal-ExtraParameters.plist */; };
 		D4F3AC4C19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC4B19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m */; };
 		D4F3AC5319A3A35A005E84FF /* PCFTagsHelperSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = D4F3AC5219A3A35A005E84FF /* PCFTagsHelperSpec.m */; };
+		F107D7D91B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F107D7D81B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json */; };
+		F10922441B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922401B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json */; };
+		F10922451B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922411B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json */; };
+		F10922461B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922421B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json */; };
+		F10922471B4B07AD003BF725 /* geofence_three_items_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922431B4B07AD003BF725 /* geofence_three_items_with_tag.json */; };
 		F1CD947D19004FE80086A590 /* Pivotal-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */; };
 		F1CD94811900666F0086A590 /* Pivotal-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */; };
 		F1D1295D18D9DB35002FE233 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1FDE2AD18D79A1B009EBE38 /* XCTest.framework */; };
@@ -138,6 +143,11 @@
 		D4F3AC4B19A2A120005E84FF /* PCFPushBackEndRegistrationPutRequestDataSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushBackEndRegistrationPutRequestDataSpec.m; sourceTree = "<group>"; };
 		D4F3AC5219A3A35A005E84FF /* PCFTagsHelperSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFTagsHelperSpec.m; sourceTree = "<group>"; };
 		D716B45334053F7BD402D0DD /* libPods-PCFPushSpecs.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PCFPushSpecs.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F107D7D81B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_one_item_with_tag.json; sourceTree = "<group>"; };
+		F10922401B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_item_with_tag.json; sourceTree = "<group>"; };
+		F10922411B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_other_item_with_no_tag.json; sourceTree = "<group>"; };
+		F10922421B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_other_item_with_tag.json; sourceTree = "<group>"; };
+		F10922431B4B07AD003BF725 /* geofence_three_items_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_three_items_with_tag.json; sourceTree = "<group>"; };
 		F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Invalid.plist"; sourceTree = "<group>"; };
 		F1D1295C18D9DB35002FE233 /* PCFPushSpecs.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PCFPushSpecs.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -215,6 +225,11 @@
 		F1CD947B19004FC80086A590 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F10922401B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json */,
+				F10922411B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json */,
+				F10922421B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json */,
+				F10922431B4B07AD003BF725 /* geofence_three_items_with_tag.json */,
+				F107D7D81B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json */,
 				11F37C0D1ADD9AB6001011C9 /* geofence_with_locations_1.json */,
 				11F37C0B1ADD8C03001011C9 /* geofence_location_1.json */,
 				11F37BE91ADD62C8001011C9 /* geofence_five_items.json */,
@@ -335,14 +350,18 @@
 			files = (
 				113DCA921A69A8FA007DB7A0 /* Pivotal.plist in Resources */,
 				11F37C031ADD62C8001011C9 /* geofence_response_data_one_other_item.json in Resources */,
+				F10922461B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json in Resources */,
 				11F37BF91ADD62C8001011C9 /* geofence_one_item_persisted_1.json in Resources */,
 				11F37C021ADD62C8001011C9 /* geofence_response_data_one_item.json in Resources */,
 				11F37BFD1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json in Resources */,
 				11F37BFF1ADD62C8001011C9 /* geofence_response_data_delete_one.json in Resources */,
 				11F37BFA1ADD62C8001011C9 /* geofence_one_item_persisted_2.json in Resources */,
+				F10922471B4B07AD003BF725 /* geofence_three_items_with_tag.json in Resources */,
 				11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */,
+				F107D7D91B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json in Resources */,
 				11F37C001ADD62C8001011C9 /* geofence_response_data_delete_one_other.json in Resources */,
 				11F37C041ADD62C8001011C9 /* geofence_three_items.json in Resources */,
+				F10922441B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json in Resources */,
 				F1CD94811900666F0086A590 /* Pivotal-Invalid.plist in Resources */,
 				235BB251199C085200B9EE63 /* InfoPlist.strings in Resources */,
 				11F37BF81ADD62C8001011C9 /* geofence_one_item.json in Resources */,
@@ -356,6 +375,7 @@
 				11F37C011ADD62C8001011C9 /* geofence_response_data_empty.json in Resources */,
 				B6AAEEB4854C71C7A968F1DD /* Pivotal-ExtraParameters.plist in Resources */,
 				B69DB029DD6EC4142DEAC23B /* geofence_one_item_persisted_4.json in Resources */,
+				F10922451B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json in Resources */,
 				B69DB4A145327A56F17FD1F8 /* geofence_five_items_with_tags.json in Resources */,
 				B69DB855864EFF3C8A64A111 /* geofence_one_item_persisted_5.json in Resources */,
 				B69DB80AD5182686398758FD /* Pivotal-GeofencesDisabled.plist in Resources */,

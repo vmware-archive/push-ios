@@ -10,6 +10,7 @@
 #import "PCFPushErrorUtil.h"
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushGeofenceStatusUtil.h"
+#import "PCFTagsHelper.h"
 
 // Error domain
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
@@ -23,7 +24,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                failure:(void (^)(NSError *))failureBlock
 {
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
-    PCFPushClient.shared.registrationParameters.pushTags = tags;
+    PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
     [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
@@ -40,7 +41,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
         return;
     }
 
-    [PCFPushClient.shared subscribeToTags:tags deviceToken:deviceToken deviceUuid:deviceUuid success:success failure:failure];
+    [PCFPushClient.shared subscribeToTags:pcfPushLowercaseTags(tags) deviceToken:deviceToken deviceUuid:deviceUuid success:success failure:failure];
 }
 
 + (void)unregisterFromPCFPushNotificationsWithSuccess:(void (^)(void))success

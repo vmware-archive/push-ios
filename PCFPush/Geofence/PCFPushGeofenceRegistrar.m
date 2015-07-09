@@ -69,30 +69,6 @@
     }
 }
 
-- (void) unregisterGeofences:(PCFPushGeofenceLocationMap *)geofencesToUnregister geofencesToKeep:(PCFPushGeofenceLocationMap *)geofencesToKeep list:(PCFPushGeofenceDataList *)list
-{
-    if (![CLLocationManager isMonitoringAvailableForClass:[CLCircularRegion class]]) {
-        NSString *errorReason = @"isMonitoringAvailableForClass:CLCircularRegion is NOT available. Monitoring of geofences not possible on this device.";
-        PCFPushCriticalLog(@"ERROR: %@", errorReason);
-        [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:YES errorReason:errorReason number:0 fileManager:[NSFileManager defaultManager]];
-        return;
-    }
-
-    [geofencesToUnregister enumerateKeysAndObjectsUsingBlock:^(NSString *requestId, PCFPushGeofenceLocation *location, BOOL *stop) {
-        int64_t geofenceId = pcfPushGeofenceIdForRequestId(requestId);
-        PCFPushGeofenceData *geofence = list[@(geofenceId)];
-        CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
-        [self.locationManager stopMonitoringForRegion:region];
-    }];
-
-    PCFPushLog(@"Number of geofences to keep: %d.  Number of monitored geofence locations: %d", geofencesToKeep.count, self.locationManager.monitoredRegions.count);
-    [PCFPushGeofenceStatusUtil updateGeofenceStatusWithError:NO errorReason:nil number:geofencesToKeep.count fileManager:[NSFileManager defaultManager]];
-
-    if (pcfPushIsAPNSSandbox()) {
-        [self serializeGeofencesForDebug:geofencesToKeep list:list];
-    }
-}
-
 - (void)serializeGeofencesForDebug:(PCFPushGeofenceLocationMap *)geofencesToRegister list:(PCFPushGeofenceDataList *)list
 {
     NSMutableArray *arr = [NSMutableArray array];

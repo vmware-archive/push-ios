@@ -14,6 +14,10 @@
 #import "PCFPushGeofenceUtil.h"
 #import "PCFPushGeofenceLocation.h"
 #import "PCFPushDebug.h"
+#import "PCFTagsHelper.h"
+#import "PCFPushPersistentStorage.h"
+
+static BOOL shouldSelectGeofenceForRegistration(PCFPushGeofenceData *geofence, NSSet *subscribedTags);
 
 @interface PCFPushGeofenceEngine ()
 
@@ -106,15 +110,33 @@ static void addValidGeofencesFromUpdate(PCFPushGeofenceDataList *list, NSArray *
     }
 }
 
-static void addLocations(PCFPushGeofenceLocationMap *map, PCFPushGeofenceDataList *list)
+static void selectGeofencesToRegister(PCFPushGeofenceLocationMap *geofencesToRegister, PCFPushGeofenceDataList *geofencesToStore, NSSet *subscribedTags)
 {
-    [list enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
+    [geofencesToStore enumerateKeysAndObjectsUsingBlock:^(int64_t id, PCFPushGeofenceData *geofence, BOOL *stop) {
         for(PCFPushGeofenceLocation *location in geofence.locations) {
-            if (geofence.id >= 0 && location.id >= 0) {
-                [map put:geofence location:location];
+            if (shouldSelectGeofenceForRegistration(geofence, subscribedTags)) {
+                [geofencesToRegister put:geofence location:location];
             }
         }
     }];
+}
+
+static BOOL shouldSelectGeofenceForRegistration(PCFPushGeofenceData *geofence, NSSet *subscribedTags)
+{
+    if (geofence.tags && geofence.tags.count > 0) {
+        if (subscribedTags) {
+            BOOL intersects = [subscribedTags intersectsSet:pcfPushLowercaseTags(geofence.tags)];
+            if (!intersects) {
+                PCFPushLog(@"Ignoring geofence %lld. Not subscribed to any of its tags.", geofence.id);
+            }
+            return intersects;
+        } else {
+            PCFPushLog(@"Ignoring geofence %lld. Not subscribed to any tags.", geofence.id);
+            return NO;
+        }
+    } else {
+        return YES;
+    }
 }
 
 static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushGeofenceDataList *storedGeofences)
@@ -122,9 +144,17 @@ static BOOL hasDataToPersist(PCFPushGeofenceResponseData *responseData, PCFPushG
     return (storedGeofences != nil && storedGeofences.count > 0) || (responseData.geofences != nil && responseData.geofences.count > 0);
 }
 
-static void keepGeofenceLocation(int64_t geofenceId, PCFPushGeofenceData *geofenceToKeep, PCFPushGeofenceLocation *locationToKeep, PCFPushGeofenceDataList *geofencesToStore, PCFPushGeofenceLocationMap *geofencesToRegister, NSString *requestId)
+static void keepGeofenceLocation(int64_t geofenceId,
+        PCFPushGeofenceData *geofenceToKeep,
+        PCFPushGeofenceLocation *locationToKeep,
+        PCFPushGeofenceDataList *geofencesToStore,
+        PCFPushGeofenceLocationMap *geofencesToRegister,
+        NSString *requestId,
+        NSSet *subscribedTags)
 {
-    geofencesToRegister[requestId] = locationToKeep;
+    if (shouldSelectGeofenceForRegistration(geofenceToKeep, subscribedTags)) {
+        geofencesToRegister[requestId] = locationToKeep;
+    }
 
     PCFPushGeofenceData *newCopy = geofencesToStore[@(geofenceId)];
     if (!newCopy) {
@@ -139,7 +169,7 @@ static void keepGeofenceLocation(int64_t geofenceId, PCFPushGeofenceData *geofen
     }
 }
 
-static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear, PCFPushGeofenceDataList *storedGeofences, PCFPushGeofenceDataList *geofencesToStore, PCFPushGeofenceLocationMap *geofencesToRegister)
+static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear, PCFPushGeofenceDataList *storedGeofences, PCFPushGeofenceDataList *geofencesToStore, PCFPushGeofenceLocationMap *geofencesToRegister, NSSet *subscribedTags)
 {
     [storedGeofences enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, PCFPushGeofenceData *geofence, BOOL *stop) {
 
@@ -150,7 +180,7 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
         for (PCFPushGeofenceLocation *location in geofence.locations) {
             NSString *requestId = pcfPushRequestIdWithGeofenceId(geofenceId, location.id);
             if (!locationsToClear[requestId]) {
-                keepGeofenceLocation(geofenceId, geofence, location, geofencesToStore, geofencesToRegister, requestId);
+                keepGeofenceLocation(geofenceId, geofence, location, geofencesToStore, geofencesToRegister, requestId, subscribedTags);
             }
         }
     }];
@@ -174,7 +204,7 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
     return self;
 }
 
-- (void) processResponseData:(PCFPushGeofenceResponseData*)responseData withTimestamp:(int64_t)timestamp
+- (void)processResponseData:(PCFPushGeofenceResponseData *)responseData withTimestamp:(int64_t)timestamp withTags:(NSSet *)tags
 {
     if (timestamp == 0L) {
         PCFPushLog(@"Resetting currently stored and monitored geofences (if there are any).");
@@ -205,13 +235,13 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
     addValidGeofencesFromStore(geofencesToStore, currentlyRegisteredGeofences, responseData);
     addValidGeofencesFromUpdate(geofencesToStore, responseData.geofences);
 
-    addLocations(geofencesToRegister, geofencesToStore);
+    selectGeofencesToRegister(geofencesToRegister, geofencesToStore, tags);
 
     [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
     [self.store saveRegisteredGeofences:geofencesToStore];
 }
 
-- (void) clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear
+- (void)clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear withTags:(NSSet *)subscribedTags
 {
     if (!locationsToClear || locationsToClear.count <= 0) {
         return;
@@ -221,10 +251,20 @@ static void filterClearedLocations(PCFPushGeofenceLocationMap *locationsToClear,
     PCFPushGeofenceDataList *geofencesToStore = [PCFPushGeofenceDataList list];
     PCFPushGeofenceLocationMap *geofencesToRegister = [PCFPushGeofenceLocationMap map];
 
-    filterClearedLocations(locationsToClear, storedGeofences, geofencesToStore, geofencesToRegister);
+    filterClearedLocations(locationsToClear, storedGeofences, geofencesToStore, geofencesToRegister, subscribedTags);
 
-    [self.registrar unregisterGeofences:locationsToClear geofencesToKeep:geofencesToRegister list:storedGeofences];
+    [self.registrar registerGeofences:geofencesToRegister list:geofencesToStore];
     [self.store saveRegisteredGeofences:geofencesToStore];
+}
+
+- (void)reregisterCurrentLocationsWithTags:(NSSet*)subscribedTags
+{
+    PCFPushGeofenceDataList *storedGeofences = [self.store currentlyRegisteredGeofences];
+
+    PCFPushGeofenceLocationMap *geofencesToRegister = [PCFPushGeofenceLocationMap map];
+    selectGeofencesToRegister(geofencesToRegister, storedGeofences, subscribedTags);
+
+    [self.registrar registerGeofences:geofencesToRegister list:storedGeofences];
 }
 
 @end

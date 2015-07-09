@@ -11,7 +11,6 @@
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushRegistrationData.h"
 #import "PCFPushGeofenceUpdater.h"
-#import "PCFPushTimer.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -49,8 +48,8 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         self.apnsDeviceToken = [@"TEST DEVICE TOKEN 1" dataUsingEncoding:NSUTF8StringEncoding];
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
-        self.tags1 = [NSSet setWithArray:@[ @"TACOS", @"BURRITOS" ]];
-        self.tags2 = [NSSet setWithArray:@[ @"COCONUTS", @"PAPAYAS" ]];
+        self.tags1 = [NSSet setWithArray:@[ @"tacos", @"burritos" ]];
+        self.tags2 = [NSSet setWithArray:@[ @"coconuts", @"papayas" ]];
         self.testGeofenceDate = [NSDate date];
         
         [PCFPushPersistentStorage reset];
@@ -65,7 +64,6 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
     self.backEndDeviceId = nil;
     self.tags1 = nil;
     self.tags2 = nil;
-    pcfPushTimerReferenceCounter = 0;
 }
 
 #pragma mark - Parameters helpers
@@ -190,12 +188,12 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)setupGeofencesForSuccessfulUpdateWithLastModifiedTime:(int64_t)lastModifiedTime withBlock:(void(^)(NSArray *))block
 {
-    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withBlock:^id(NSArray *params) {
         if (block) {
             block(params);
         }
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:lastModifiedTime];
-        void (^successBlock)() = params[3];
+        void (^successBlock)() = params[4];
         successBlock();
         return nil;
     }];
@@ -208,12 +206,12 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)setupGeofencesForFailedUpdateWithBlock:(void(^)(NSArray *))block
 {
-    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:success:failure:) withBlock:^id(NSArray *params) {
+    [PCFPushGeofenceUpdater stub:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withBlock:^id(NSArray *params) {
         if (block) {
             block(params);
         }
         NSError *error = [NSError errorWithDomain:@"Fake geofence update error" code:1234 userInfo:nil];
-        void (^failureBlock)(NSError *) = params[4];
+        void (^failureBlock)(NSError *) = params[5];
         failureBlock(error);
         return nil;
     }];
@@ -221,9 +219,9 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)setupClearGeofencesForSuccess
 {
-    [PCFPushGeofenceUpdater stub:@selector(clearGeofences:error:) withBlock:^id(NSArray *params) {
+    [PCFPushGeofenceUpdater stub:@selector(clearAllGeofences:) withBlock:^id(NSArray *params) {
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
-        return theValue(YES);
+        return nil;
     }];
 }
 

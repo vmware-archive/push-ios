@@ -108,47 +108,6 @@ describe(@"PCFPushGeofenceRegistrar", ^{
         });
     });
 
-    context(@"unregistering geofences", ^{
-
-        beforeEach(^{
-            registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:locationManager];
-            [locationManager stub:@selector(monitoredRegions) andReturn:[NSSet set]];
-        });
-
-        it(@"should do nothing if given nil lists", ^{
-            [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
-            [[locationManager shouldNot] receive:@selector(stopMonitoringForRegion:)];
-            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
-            [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(0), any(), nil];
-            [registrar unregisterGeofences:nil geofencesToKeep:nil list:nil];
-        });
-
-        it(@"should do nothing if given empty lists", ^{
-            PCFPushGeofenceLocationMap *emptyMap = [PCFPushGeofenceLocationMap map];
-            [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
-            [[locationManager shouldNot] receive:@selector(stopMonitoringForRegion:)];
-            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
-            [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(0), any(), nil];
-            [registrar unregisterGeofences:emptyMap geofencesToKeep:nil list:nil];
-        });
-
-        it(@"should be able to unregister a list with one item", ^{
-            [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
-            [[locationManager should] receive:@selector(stopMonitoringForRegion:) withArguments:region, nil];
-            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
-            [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(0), any(), nil];
-            [registrar unregisterGeofences:oneItemGeofenceMap geofencesToKeep:nil list:oneItemGeofenceList];
-        });
-
-        it(@"should be able to unregister a list with one item and continue to monitor some other geofences", ^{
-            [[locationManager shouldNot] receive:@selector(startMonitoringForRegion:)];
-            [[locationManager should] receive:@selector(stopMonitoringForRegion:) withArguments:region, nil];
-            [[locationManager shouldNot] receive:@selector(requestStateForRegion:)];
-            [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(7), any(), nil];
-            [registrar unregisterGeofences:oneItemGeofenceMap geofencesToKeep:fiveItemGeofenceMap list:fiveItemGeofenceList];
-        });
-    });
-
     context(@"resetting geofences", ^{
 
         beforeEach(^{

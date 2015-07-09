@@ -135,7 +135,7 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     return notification;
 }
 
-static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
+static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet *subscribedTags)
 {
     PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
     for (PCFPushGeofenceLocation *location in geofence.locations) {
@@ -144,10 +144,11 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
             [locationsToClear put:geofence location:location];
         }
     }
-    [engine clearLocations:locationsToClear];
+
+    [engine clearLocations:locationsToClear withTags:subscribedTags];
 }
 
-static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine)
+static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet *subscribedTags)
 {
     int64_t locationId = pcfPushLocationIdForRequestId(requestId);
     if (locationId >= 0) {
@@ -156,7 +157,7 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
                 PCFPushLog(@"Clearing geofence from monitor: %@", requestId);
                 PCFPushGeofenceLocationMap *locationToClear = [PCFPushGeofenceLocationMap map];
                 [locationToClear put:geofence location:location];
-                [engine clearLocations:locationToClear];
+                [engine clearLocations:locationToClear withTags:subscribedTags];
                 break;
             }
         }
@@ -175,7 +176,11 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     return [notification respondsToSelector:@selector(setAlertTitle:)];
 }
 
-+ (void)processRegion:(CLRegion *)region store:(PCFPushGeofencePersistentStore *)store engine:(PCFPushGeofenceEngine *)engine state:(CLRegionState)state
++ (void)processRegion:(CLRegion *)region
+                store:(PCFPushGeofencePersistentStore *)store
+               engine:(PCFPushGeofenceEngine *)engine
+                state:(CLRegionState)state
+                 tags:(NSSet *)subscribedTags
 {
     if (!store) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"store may not be nil" userInfo:nil];
@@ -203,30 +208,20 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     if (pcfPushIsItemExpired(geofence)) {
 
         PCFPushCriticalLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
-        clearGeofence(geofence, engine); // Clears all the locations at the same geofence since they expire at the same time.
+        clearGeofence(geofence, engine, subscribedTags); // Clears all the locations at the same geofence since they expire at the same time.
 
     } else if (shouldTriggerNotification(geofence, state)) {
 
         PCFPushCriticalLog(@"Triggering geofence '%@'.", region.identifier);
         UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
-        clearLocation(region.identifier, geofence, engine); // Clear just this one location.
+        clearLocation(region.identifier, geofence, engine, subscribedTags); // Clear just this one location.
     }
 }
 
-+ (void) checkGeofencesForNewlySubscribedTagsWithStore:(PCFPushGeofencePersistentStore *)store locationManager:(CLLocationManager *)locationManager
++ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet*)subscribedTags
 {
-    PCFPushGeofenceDataList *geofences = [store currentlyRegisteredGeofences];
-    NSSet *subscribedTags = pcfPushLowercaseTags([PCFPushPersistentStorage tags]);
-    [geofences enumerateKeysAndObjectsUsingBlock:^(int64_t geofenceId, PCFPushGeofenceData *geofence, BOOL *stop) {
-        if (isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
-            for (PCFPushGeofenceLocation *location in geofence.locations) {
-                NSString *requestId = pcfPushRequestIdWithGeofenceId(geofenceId, location.id);
-                CLRegion *region = pcfPushRegionForLocation(requestId, geofence, location);
-                [locationManager requestStateForRegion:region];
-            }
-        }
-    }];
+    [engine reregisterCurrentLocationsWithTags:subscribedTags];
 }
 
 @end

@@ -1,0 +1,20 @@
+[
+    {
+        "id": 7,
+        "data": {
+            "ios":{"alertBody": "tacos"}
+        },
+        "expiry_time": 1142744274,
+        "tags": ["PINEAPPLES"],
+        "trigger_type": "exit",
+        "locations": [
+            {
+                "id": 66,
+                "name": "robs_wizard_tacos",
+                "lat": 53.5,
+                "long": -91.5,
+                "rad": 120
+            }
+        ]
+    }
+]
