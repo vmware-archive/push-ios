@@ -568,6 +568,7 @@
 		F1FDE2A418D799E4009EBE38 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -575,6 +576,7 @@
 		F1FDE2A518D799E4009EBE38 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 			};
 			name = Release;
 		};

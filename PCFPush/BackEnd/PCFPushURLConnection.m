@@ -46,7 +46,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
 {
     PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
     NSMutableURLRequest *request = [PCFPushURLConnection unregisterRequestForBackEndDeviceID:deviceID];
-    
+
     if (request) {
         [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
 
@@ -129,11 +129,11 @@ static NSTimeInterval kRequestTimeout = 60.0;
     if (!APNSDeviceToken) {
         [NSException raise:NSInvalidArgumentException format:@"APNSDeviceToken may not be nil"];
     }
-    
+
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
-    
+
     NSURL *registrationURL = [NSURL URLWithString:path relativeToURL:[PCFPushURLConnection baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:registrationURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = method;
@@ -148,7 +148,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
                  withVariantUUID:(NSString *)variantUUID
                    variantSecret:(NSString *)variantSecret
 {
-    NSString *authString = [PCFPushURLConnection base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
+    NSString *authString = [self base64String:[NSString stringWithFormat:@"%@:%@", variantUUID, variantSecret]];
     NSString *authToken = [NSString stringWithFormat:@"Basic  %@", authString];
     [request setValue:authToken forHTTPHeaderField:@"Authorization"];
 }
@@ -170,7 +170,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
                                                                                        parameters:parameters];
         return [requestData pcfPushToJSONData:&error];
     } else if ([method isEqualToString:@"PUT"]) {
-        
+
         PCFPushRegistrationPutRequestData *requestData = [PCFPushURLConnection putRequestDataForAPNSDeviceToken:apnsDeviceToken
                                                                                        parameters:parameters];
         return [requestData pcfPushToJSONData:&error];
@@ -206,7 +206,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
     requestData.deviceModel = [PCFHardwareUtil deviceModel];
     requestData.os = [PCFHardwareUtil operatingSystem];
     requestData.osVersion = [PCFHardwareUtil operatingSystemVersion];
-    
+
     NSSet *savedTags = [PCFPushPersistentStorage tags];
     PCFTagsHelper *tagsHelper = [PCFTagsHelper tagsHelperWithSavedTags:savedTags newTags:parameters.pushTags];
     if (tagsHelper.subscribeTags && tagsHelper.subscribeTags.count > 0) {
@@ -225,10 +225,10 @@ static NSTimeInterval kRequestTimeout = 60.0;
     if (!backEndDeviceUUID) {
         return nil;
     }
-    
+
     NSURL *rootURL = [NSURL URLWithString:kRegistrationRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
     NSURL *deviceURL = [rootURL URLByAppendingPathComponent:[backEndDeviceUUID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = @"DELETE";
     return request;
