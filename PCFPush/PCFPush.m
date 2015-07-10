@@ -8,7 +8,6 @@
 #import "PCFPushClient.h"
 #import "PCFPushErrors.h"
 #import "PCFPushErrorUtil.h"
-#import "PCFPushGeofenceStatus.h"
 #import "PCFPushGeofenceStatusUtil.h"
 #import "PCFTagsHelper.h"
 
@@ -59,6 +58,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (PCFPushGeofenceStatus*) geofenceStatus
 {
     return [PCFPushGeofenceStatusUtil loadGeofenceStatus:[NSFileManager defaultManager]];
+}
+
++ (NSString*)deviceUuid
+{
+    return [PCFPushPersistentStorage serverDeviceID];
 }
 
 @end

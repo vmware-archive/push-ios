@@ -19,7 +19,6 @@
 
 SPEC_BEGIN(PCFPushSpecs)
 
-
 describe(@"PCFPush", ^{
     __block PCFPushSpecsHelper *helper = nil;
 
@@ -211,6 +210,7 @@ describe(@"PCFPush", ^{
                 [PCFPushPersistentStorage performSelector:sel withObject:newPersistedValue];
 
                 void (^successBlock)() = ^{
+                    [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                     successCount++;
                 };
 
@@ -621,6 +621,8 @@ describe(@"PCFPush", ^{
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
 
                 [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+
+                [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
             });
 
             context(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
@@ -645,6 +647,7 @@ describe(@"PCFPush", ^{
 
                 afterEach(^{
                     [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+                    [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                 });
 
                 it(@"when geofences were never updated (and the geofence update passes)", ^{
@@ -750,6 +753,8 @@ describe(@"PCFPush", ^{
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
 
                 [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+
+                [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
             });
 
             it(@"should bypass registering against Remote Push Server if Device Token matches the stored token.", ^{
@@ -778,11 +783,14 @@ describe(@"PCFPush", ^{
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:nil failure:failureBlock];
                 [[theValue(registrationRequestCount) should] equal:theValue(1)];
+                [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                 [PCFPush load]; // Reset the state in the state engine
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS success:successBlock failure:failureBlock];
+
                 [[theValue(registrationRequestCount) should] equal:theValue(1)];
                 [[theValue(wasSuccessBlockExecuted) should] beYes];
+                [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
             });
         });
     });
@@ -814,6 +822,7 @@ describe(@"PCFPush", ^{
                                                      failure:^(NSError *error) {
                                                          [[error.domain should] equal:PCFPushErrorDomain];
                                                          [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationFailedHTTPStatusCode)];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
         });
@@ -835,6 +844,7 @@ describe(@"PCFPush", ^{
                                                      failure:^(NSError *error) {
                                                          [[error.domain should] equal:PCFPushErrorDomain];
                                                          [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
         });
@@ -855,6 +865,7 @@ describe(@"PCFPush", ^{
                                                      failure:^(NSError *error) {
                                                          [[error.domain should] equal:PCFPushErrorDomain];
                                                          [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
         });
@@ -876,6 +887,7 @@ describe(@"PCFPush", ^{
                                                      failure:^(NSError *error) {
                                                          [[error.domain should] equal:PCFPushErrorDomain];
                                                          [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationEmptyResponseData)];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
         });
@@ -896,6 +908,7 @@ describe(@"PCFPush", ^{
                                                      }
                                                      failure:^(NSError *error) {
                                                          [[error shouldNot] beNil];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
         });
@@ -920,6 +933,7 @@ describe(@"PCFPush", ^{
                                                          wasExpectedResult = YES;
                                                          [[error.domain should] equal:PCFPushErrorDomain];
                                                          [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationResponseDataNoDeviceUuid)];
+                                                         [[[PCFPush deviceUuid] should] beNil];
                                                      }];
         });
     });
@@ -940,6 +954,7 @@ describe(@"PCFPush", ^{
                 [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
                 [[[PCFPushPersistentStorage variantUUID] should] beNil];
                 [[[PCFPushPersistentStorage deviceAlias] should] beNil];
+                [[[PCFPush deviceUuid] should] beNil];
             });
 
             context(@"when not already registered", ^{
@@ -1003,14 +1018,16 @@ describe(@"PCFPush", ^{
 
                 [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
                 [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
+                [[[PCFPush deviceUuid] shouldNot] beNil];
                 [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     fail(@"unregistration success block executed");
 
-                }                                              failure:^(NSError *error) {
+                } failure:^(NSError *error) {
+                    // TODO - should we consider a 404 from the server to be a success and continue to delete the registration from the location device anyways?
                     failureBlockExecuted = YES;
-
+                    [[[PCFPush deviceUuid] shouldNot] beNil];
                 }];
 
                 [[theValue(failureBlockExecuted) shouldEventually] beTrue];
@@ -1029,6 +1046,7 @@ describe(@"PCFPush", ^{
                 [helper setupDefaultPersistedParameters];
                 failureBlockExecuted = NO;
 
+                [[[PCFPush deviceUuid] shouldNot] beNil];
                 [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
                 [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                     NSError *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorTimedOut userInfo:nil];
@@ -1042,9 +1060,9 @@ describe(@"PCFPush", ^{
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     fail(@"unregistration success block executed incorrectly");
 
-                }                                              failure:^(NSError *error) {
+                } failure:^(NSError *error) {
                     failureBlockExecuted = YES;
-
+                    [[[PCFPush deviceUuid] shouldNot] beNil];
                 }];
 
                 [[theValue(failureBlockExecuted) shouldEventually] beTrue];
@@ -1061,13 +1079,14 @@ describe(@"PCFPush", ^{
 
                 [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
+                [[[PCFPush deviceUuid] shouldNot] beNil];
                 [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearAllGeofences:)];
                 [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
 
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     successBlockExecuted = YES;
-
-                }                                              failure:^(NSError *error) {
+                    [[[PCFPush deviceUuid] should] beNil];
+                } failure:^(NSError *error) {
                     fail(@"unregistration failure block executed");
                 }];
 

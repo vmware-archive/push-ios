@@ -162,4 +162,6 @@
  */
 + (PCFPushGeofenceStatus*) geofenceStatus;
 
++ (NSString *) deviceUuid;
+
 @end
