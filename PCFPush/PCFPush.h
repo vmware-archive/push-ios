@@ -163,6 +163,11 @@
  */
 + (PCFPushGeofenceStatus*) geofenceStatus;
 
+/**
+ * Call this method to read the current PCF Push Notification Service device UUID.  You'll need device UUID if you want to target this
+ * specific device with remote notification using the PCF Push Notification Service.  This method will return `nil` if the device is
+ * not currently registered with PCF Push.
+ */
 + (NSString *) deviceUuid;
 
 @end
