@@ -973,7 +973,6 @@ describe(@"PCFPush", ^{
                     [PCFPushPersistentStorage setServerDeviceID:nil];
                 });
 
-                // TODO - crashes here sometimes? race condition? watch this.
                 it(@"should be considered a success if the device isn't currently registered", ^{
                     [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
 
@@ -1189,26 +1188,6 @@ describe(@"PCFPush", ^{
                 [[theValue(wasExpectedBlockCalled) shouldEventually] beTrue];
             });
 
-            // TODO - fix this test
-//
-//            it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates (but fail to fetch geofences)", ^{
-//                expectedSubscribeTags = helper.tags2;
-//                expectedUnsubscribeTags = helper.tags1;
-//
-//                [helper setupGeofencesForFailedUpdate];
-//                [[PCFPushGeofenceHandler shouldNot] receive:@selector(checkGeofencesForNewlySubscribedTagsWithStore:locationManager:)];
-//                [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
-//
-//                [PCFPush subscribeToTags:helper.tags2 success:^{
-//                    fail(@"should not have succedeed");
-//                }                failure:^(NSError *error) {
-//                    wasExpectedBlockCalled = YES;
-//                }];
-//
-//                [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-//                [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
-//            });
-//
             context(@"geofences enabled", ^{
 
                 beforeEach(^{
@@ -1222,7 +1201,7 @@ describe(@"PCFPush", ^{
                     [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:1337L];
                     [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
                     [[PCFPushGeofenceHandler shouldNot] receive:@selector(reregisterGeofencesWithEngine:subscribedTags:)];
-                    [[PCFPushGeofenceUpdater shouldEventually] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
 
                     [PCFPush subscribeToTags:helper.tags2 success:^{
                         wasExpectedBlockCalled = YES;
@@ -1231,7 +1210,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(1)];
                 });
 
                 it(@"should be able to register to some new tags and then stop if there have been some geofence updates in the past", ^{
@@ -1250,7 +1229,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(1)];
                 });
 
                 it(@"should not call the update API if provided the same tags (but then do a geofence update if required - but the geofence update fails)", ^{
@@ -1261,13 +1240,33 @@ describe(@"PCFPush", ^{
                     [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
 
                     [PCFPush subscribeToTags:helper.tags1 success:^{
-                        fail(@"Should not have failed");
+                        fail(@"Should not have succeeded");
                     }                failure:^(NSError *error) {
                         wasExpectedBlockCalled = YES;
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
+                });
+
+                it(@"should be able to register to some new tags and then fetch geofences if there have been no geofence updates (but fail to fetch geofences)", ^{
+                    expectedSubscribeTags = helper.tags2;
+                    expectedUnsubscribeTags = helper.tags1;
+
+                    [helper setupGeofencesForFailedUpdate];
+                    [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(reregisterGeofencesWithEngine:subscribedTags:)];
+                    [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
+
+                    [PCFPush subscribeToTags:helper.tags2 success:^{
+                        fail(@"should not have succedeed");
+                    }                failure:^(NSError *error) {
+                        wasExpectedBlockCalled = YES;
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(1)];
+                    [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beYes];
                 });
 
                 it(@"should not call the update API if provided the same tags (but then do a geofence update if required)", ^{
@@ -1284,7 +1283,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
                 });
 
                 it(@"should not call the update API if provided the same tags (and then skip the geofence update if not required)", ^{
@@ -1300,7 +1299,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
                 });
             });
 
