@@ -8,6 +8,7 @@
 #import "PCFPushParameters.h"
 #import "PCFClassPropertyUtility.h"
 #import "PCFPushSpecsHelper.h"
+#import "PCFPushPersistentStorage.h"
 #import "PCFHardwareUtil.h"
 
 SPEC_BEGIN(PCFRegistrationParametersSpec)
@@ -123,7 +124,7 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.productionPushVariantUUID should] equal:@"444-555-666-777"];
             [[model.pushDeviceAlias should] beNil];
             [[model.pushTags should] beNil];
-            [[theValue(model.areGeofencesEnabled) should] beYes];
+            [[theValue(model.areGeofencesEnabled) should] beFalse];
             [[theValue(model.trustAllSslCertificates) should] beFalse];
             [[model.pinnedSslCertificateNames should] containObjectsInArray:@[ @"certificate.der", @"DOGS", @"CATS" ]];
         });
@@ -144,11 +145,13 @@ describe(@"PCFRegistrationParameters", ^{
 
     context(@"reading the areGeofencesEnabled value", ^{
 
-        it(@"should initialize successfully and indicate that parameters are valid if areGeofencesEnabled is false", ^{
-            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-GeofencesDisabled" ofType:@"plist"]];
+        it(@"should initialize successfully and indicate that parameters are valid if areGeofencesEnabled is true", ^{
+            [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+            [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+            model = [PCFPushParameters defaultParameters];
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[theValue(model.areGeofencesEnabled) should] beNo];
+            [[theValue(model.areGeofencesEnabled) should] beYes];
         });
     });
 

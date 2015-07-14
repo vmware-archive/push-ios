@@ -26,6 +26,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
     });
     
     it(@"should be able to save the APNS device token", ^{
@@ -67,6 +68,11 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:7777L];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(7777L)];
     });
+
+    it(@"should be able to save are geofences enabled", ^{
+        [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beTrue];
+    });
     
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
@@ -76,6 +82,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
         [PCFPushPersistentStorage setTags:helper.tags2];
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:888L];
+        [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -84,6 +91,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
     });
 });
 

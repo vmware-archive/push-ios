@@ -89,6 +89,7 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 
 + (void) clearAllGeofences:(PCFPushGeofenceEngine *)engine
 {
+    PCFPushLog(@"Clearing all geofences");
     [engine processResponseData:nil withTimestamp:0L withTags:nil];
     [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
 }

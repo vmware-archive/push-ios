@@ -70,6 +70,7 @@
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
                                                   tags:(NSSet *)tags
                                            deviceAlias:(NSString *)deviceAlias
+                                   areGeofencesEnabled:(BOOL)areGeofencesEnabled
                                                success:(void (^)(void))success
                                                failure:(void (^)(NSError *))failure;
 
@@ -147,6 +148,25 @@
  */
 + (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
+
+
+/**
+ * Enables or disables geofences.  If geofences are set to enabled, active geofences will be downloaded and
+ * monitored.  Disabling geofences will clear all geofences.
+ *
+ * The device must be registered before you may call setAreGeofencesEnabled.
+ *
+ * @param areGeofencesEnabled Provides either YES/NO indicating enable/disable geofences.
+ *
+ * @param success block that will be executed if the parameter is set successfully. This callback will be called on
+ *                the main queue. May be 'nil'.
+ *
+ * @param failure block that will be executed if the parameter fails to be set. This callback will be called on the main
+ *                queue. May be 'nil'.
+ */
++ (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled
+                       success:(void (^)(void))success
+                       failure:(void (^)(NSError*))failure;
 
 /**
  * Call this method to read the current geofence monitoring status.  If an error occurs while geofences are being updated in the background

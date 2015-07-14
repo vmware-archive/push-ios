@@ -84,6 +84,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
         [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
+        [PCFPushPersistentStorage setAreGeofencesEnabled:NO];
     }
 
     if ([PCFPushClient updateRegistrationRequiredForDeviceToken:deviceToken parameters:self.registrationParameters]) {
@@ -105,7 +106,16 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
                                                  failure:failureBlock];
 
     } else if ([PCFPushClient isGeofenceUpdateRequired:self.registrationParameters]) {
-        [PCFPushClient startGeofenceUpdateWithTags:self.registrationParameters.pushTags successBlock:successBlock failure:failureBlock];
+
+        [PCFPushClient startGeofenceUpdateWithTags:self.registrationParameters.pushTags successBlock:^{
+
+            [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+
+            if (successBlock) {
+                successBlock();
+            }
+
+        } failure:failureBlock];
 
     } else {
         PCFPushLog(@"Registration with PCF Push is being bypassed (already registered).");
@@ -121,6 +131,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
         [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
     }
+    [PCFPushPersistentStorage setAreGeofencesEnabled:NO];
 
     NSString *deviceId = [PCFPushPersistentStorage serverDeviceID];
     if (!deviceId || deviceId.length <= 0) {
@@ -197,9 +208,21 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         [PCFPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
         [PCFPushPersistentStorage setTags:parameters.pushTags];
 
+        if (!parameters.areGeofencesEnabled) {
+            [PCFPushPersistentStorage setAreGeofencesEnabled:NO];
+        }
+
         if ([PCFPushClient isGeofenceUpdateRequired:parameters]) {
 
-            [PCFPushClient startGeofenceUpdateWithTags:parameters.pushTags successBlock:successBlock failure:failureBlock];
+            [PCFPushClient startGeofenceUpdateWithTags:parameters.pushTags successBlock:^{
+
+                [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+
+                if (successBlock) {
+                    successBlock();
+                }
+
+            } failure:failureBlock];
 
         } else {
             

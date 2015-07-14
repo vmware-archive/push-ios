@@ -6,7 +6,6 @@
 #import "PCFPushPersistentStorage.h"
 #import "PCFPush.h"
 #import "PCFPushClient.h"
-#import "PCFPushErrors.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushGeofenceStatusUtil.h"
 #import "PCFTagsHelper.h"
@@ -19,11 +18,13 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
                                                   tags:(NSSet *)tags
                                            deviceAlias:(NSString *)deviceAlias
+                                   areGeofencesEnabled:(BOOL)areGeofencesEnabled
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
     PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
+    PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
     [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
@@ -53,6 +54,22 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler
 {
     [PCFPushClient.shared didReceiveRemoteNotification:userInfo completionHandler:handler];
+}
+
++ (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled success:(void (^)(void))success failure:(void (^)(NSError*))failure
+{
+    NSData *deviceToken = [PCFPushPersistentStorage APNSDeviceToken];
+    if (!deviceToken) {
+        if (failure) {
+            NSError *error = [PCFPushErrorUtil errorWithCode:PCFPushNotRegistered localizedDescription:@"Your device must be registered before you can attempt to toggle geofences"];
+            failure(error);
+        }
+        return;
+    }
+
+    PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
+
+    [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:success failure:failure];
 }
 
 + (PCFPushGeofenceStatus*) geofenceStatus

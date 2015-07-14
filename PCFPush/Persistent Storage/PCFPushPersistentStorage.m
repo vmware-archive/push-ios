@@ -11,8 +11,24 @@ static NSString *const KEY_VARIANT_SECRET               = @"PCF_PUSH_VARIANT_SEC
 static NSString *const KEY_DEVICE_ALIAS                 = @"PCF_PUSH_DEVICE_ALIAS";
 static NSString *const KEY_TAGS                         = @"PCF_PUSH_TAGS";
 static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_LAST_MODIFIED_TIME";
+static NSString *const KEY_ARE_GEOFENCES_ENABLED        = @"PCF_PUSH_ARE_GEOFENCES_ENABLED";
 
 @implementation PCFPushPersistentStorage
+
++ (void)persistValue:(id)value forKey:(id)key
+{
+    [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
+}
+
++ (id)persistedValueForKey:(id)key
+{
+    return [[NSUserDefaults standardUserDefaults] valueForKey:key];
+}
+
++ (void)removeObjectForKey:(id)key
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+}
 
 + (void)reset
 {
@@ -24,6 +40,7 @@ static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_L
                       KEY_DEVICE_ALIAS,
                       KEY_TAGS,
                       KEY_GEOFENCES_LAST_MODIFIED_TIME,
+                      KEY_ARE_GEOFENCES_ENABLED
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -111,19 +128,14 @@ static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_L
     [self persistValue:@(lastModifiedTime) forKey:KEY_GEOFENCES_LAST_MODIFIED_TIME];
 }
 
-+ (void)persistValue:(id)value forKey:(id)key
++ (BOOL)areGeofencesEnabled
 {
-    [[NSUserDefaults standardUserDefaults] setValue:value forKey:key];
+    return [[self persistedValueForKey:KEY_ARE_GEOFENCES_ENABLED] boolValue];
 }
 
-+ (id)persistedValueForKey:(id)key
++ (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:key];
-}
-
-+ (void)removeObjectForKey:(id)key
-{
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:key];
+    [self persistValue:@(areGeofencesEnabled) forKey:KEY_ARE_GEOFENCES_ENABLED];
 }
 
 @end

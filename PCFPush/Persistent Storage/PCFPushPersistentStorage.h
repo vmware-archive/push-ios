@@ -29,10 +29,9 @@
 + (void)setGeofenceLastModifiedTime:(int64_t)lastModifiedTime;
 + (int64_t)lastGeofencesModifiedTime;
 
-+ (void)reset;
++ (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled;
++ (BOOL)areGeofencesEnabled;
 
-+ (void)persistValue:(id)value forKey:(id)key;
-+ (id)persistedValueForKey:(id)key;
-+ (void)removeObjectForKey:(id)key;
++ (void)reset;
 
 @end
