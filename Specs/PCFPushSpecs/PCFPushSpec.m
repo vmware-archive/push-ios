@@ -1370,6 +1370,26 @@ describe(@"PCFPush", ^{
                     [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
                 });
 
+                it(@"should not call the update API if provided tags that differ only by case (i.e.: no-op)", ^{
+                    [[PCFPushGeofenceHandler shouldNot] receive:@selector(reregisterGeofencesWithEngine:subscribedTags:)];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
+                    [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearAllGeofences:)];
+
+                    NSMutableSet *uppercaseTags = [NSMutableSet setWithCapacity:helper.tags1.count];
+                    for (NSString *tag in helper.tags1) {
+                        [uppercaseTags addObject:[tag uppercaseString]];
+                    }
+
+                    [PCFPush subscribeToTags:uppercaseTags success:^{
+                        wasExpectedBlockCalled = YES;
+                    }                failure:^(NSError *error) {
+                        fail(@"Should not have failed");
+                    }];
+
+                    [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
+                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                });
+
                 it(@"should not call the update API if provided the same tags (and then clear the geofences)", ^{
                     [PCFPushPersistentStorage setGeofenceLastModifiedTime:999L];
 
