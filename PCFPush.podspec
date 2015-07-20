@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = 'PCFPush'
-  s.version      = '1.3.2'
+  s.version      = '1.4.0'
   s.license      = { :type => 'CUSTOM', :file => 'LICENSE' }
   s.summary      = 'Pivotal CF Mobile Services Push Client SDK for iOS'
   s.homepage     = 'https://github.com/cfmobile'
   s.authors      = 'Rob Szumlakowski'
-  s.source       = { :git => 'https://github.com/cfmobile/push-ios.git', :tag => "1.3.2-final" }
+  s.source       = { :git => 'https://github.com/cfmobile/push-ios.git', :tag => "1.4.0-final" }
   s.framework    = "CoreLocation"
   s.requires_arc = true
 
