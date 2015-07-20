@@ -161,7 +161,6 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
-                @"pivotal.push.geofencesEnabled" : @"areGeofencesEnabled",
                 @"pivotal.push.trustAllSslCertificates" : @"trustAllSslCertificates",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };
