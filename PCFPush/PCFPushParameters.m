@@ -62,6 +62,7 @@ void pcfPushResetOnceToken() {
     parameters.pushTags = [PCFPushPersistentStorage tags];
     parameters.pushDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     parameters.areGeofencesEnabled = [PCFPushPersistentStorage areGeofencesEnabled];
+    parameters.areAnalyticsEnabled = [PCFPushPersistentStorage areAnalyticsEnabled];
     return parameters;
 }
 
@@ -161,6 +162,7 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
+                @"pivotal.push.analyticsEnabled" : @"areAnalyticsEnabled",
                 @"pivotal.push.trustAllSslCertificates" : @"trustAllSslCertificates",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };

@@ -27,6 +27,7 @@ extern BOOL pcfPushIsAPNSSandbox();
 @property (assign) BOOL trustAllSslCertificates;
 @property (copy) NSSet *pushTags;
 @property BOOL areGeofencesEnabled;
+@property BOOL areAnalyticsEnabled;
 
 /**
  * Creates an instance using the values set in the `Pivotal.plist` file.

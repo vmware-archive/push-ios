@@ -8,6 +8,7 @@
 #import "PCFPushClient.h"
 #import "PCFPushDebug.h"
 #import "PCFPushErrors.h"
+#import "PCFPushAnalytics.h"
 #import "PCFNotifications.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushParameters.h"
@@ -446,6 +447,11 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
         }];
     } else {
+
+        if (userInfo[@"receiptId"]) {
+            [PCFPushAnalytics logReceivedRemoteNotification:userInfo[@"receiptId"]];
+        }
+
         handler(YES, UIBackgroundFetchResultNoData, nil);
     }
 }

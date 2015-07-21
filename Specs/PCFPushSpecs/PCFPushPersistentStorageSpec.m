@@ -26,7 +26,8 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
-        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
+        [[theValue([PCFPushPersistentStorage areAnalyticsEnabled]) should] beYes];
     });
     
     it(@"should be able to save the APNS device token", ^{
@@ -71,7 +72,12 @@ describe(@"PCFPushPersistentStorage", ^{
 
     it(@"should be able to save are geofences enabled", ^{
         [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
-        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beTrue];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beYes];
+    });
+
+    it(@"should be able to save are analytics enabled", ^{
+        [PCFPushPersistentStorage setAreAnalyticsEnabled:NO];
+        [[theValue([PCFPushPersistentStorage areAnalyticsEnabled]) should] beNo];
     });
     
     it(@"should clear values after being reset", ^{
@@ -83,6 +89,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setTags:helper.tags2];
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:888L];
         [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+        [PCFPushPersistentStorage setAreAnalyticsEnabled:NO];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -91,7 +98,8 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
-        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
+        [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
+        [[theValue([PCFPushPersistentStorage areAnalyticsEnabled]) should] beYes];
     });
 });
 

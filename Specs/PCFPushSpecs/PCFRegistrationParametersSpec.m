@@ -27,6 +27,7 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
         return !([propertyName isEqualToString:@"pushTags"] ||
                  [propertyName isEqualToString:@"pushDeviceAlias"] ||
                  [propertyName isEqualToString:@"areGeofencesEnabled"] ||
+                 [propertyName isEqualToString:@"areAnalyticsEnabled"] ||
                  [propertyName isEqualToString:@"trustAllSslCertificates"] ||
                  [propertyName isEqualToString:@"pinnedSslCertificateNames"]);
     };
@@ -125,6 +126,7 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.pushDeviceAlias should] beNil];
             [[model.pushTags should] beNil];
             [[theValue(model.areGeofencesEnabled) should] beFalse];
+            [[theValue(model.areAnalyticsEnabled) should] beTrue];
             [[theValue(model.trustAllSslCertificates) should] beFalse];
             [[model.pinnedSslCertificateNames should] containObjectsInArray:@[ @"certificate.der", @"DOGS", @"CATS" ]];
         });

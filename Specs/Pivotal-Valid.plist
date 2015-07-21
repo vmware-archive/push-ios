@@ -28,5 +28,8 @@
       <string>certificate.der</string>
     </array>
 
+    <key>pivotal.push.areAnalyticsEnabled</key>
+    <true/>
+
   </dict>
 </plist>

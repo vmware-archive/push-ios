@@ -32,6 +32,9 @@
 + (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled;
 + (BOOL)areGeofencesEnabled;
 
++ (void)setAreAnalyticsEnabled:(BOOL)areAnalyticsEnabled;
++ (BOOL)areAnalyticsEnabled;
+
 + (void)reset;
 
 @end

@@ -44,6 +44,7 @@
 		B69DB63736EFDB4921867DC2 /* PCFPushGeofenceUpdaterSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB13CFE4E4FE592303B0E /* PCFPushGeofenceUpdaterSpec.m */; };
 		B69DB6E0BB51A375CB11DD5C /* geofence_one_item_persisted_6.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB00B8B5F2DE55A62352A /* geofence_one_item_persisted_6.json */; };
 		B69DB6FC0DEEBFF0E9814EB6 /* geofence_response_data_one_item_bad_trigger.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB28E8810C33C38810700 /* geofence_response_data_one_item_bad_trigger.json */; };
+		B69DB70C4805223B09942CE8 /* PCFPushAnalyticsSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBA57F87E491AF87F4462 /* PCFPushAnalyticsSpec.m */; };
 		B69DB855864EFF3C8A64A111 /* geofence_one_item_persisted_5.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB695AA3A9187DAFF6E1C /* geofence_one_item_persisted_5.json */; };
 		B69DB881E85129B57179A77C /* geofence_status.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DBAD25FFA79474C2A9724 /* geofence_status.json */; };
 		B69DBAA0AFF58A8E0E8336A3 /* PCFPushGeofenceResponseData+Loaders.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DB5BF328BE4F37EF7354F /* PCFPushGeofenceResponseData+Loaders.m */; };
@@ -126,6 +127,7 @@
 		B69DB760E9EB3FC425F7065C /* PCFPushGeofenceHandlerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushGeofenceHandlerSpec.m; sourceTree = "<group>"; };
 		B69DB7C339931AD8EBD81D16 /* PCFPushGeofenceResponseData+Loaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PCFPushGeofenceResponseData+Loaders.h"; sourceTree = "<group>"; };
 		B69DB8B8004B79E41AAA3C12 /* geofence_one_item_persisted_4.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_persisted_4.json; sourceTree = "<group>"; };
+		B69DBA57F87E491AF87F4462 /* PCFPushAnalyticsSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushAnalyticsSpec.m; sourceTree = "<group>"; };
 		B69DBAC46347E818249DBAE7 /* geofence_one_item_bad_radius.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_bad_radius.json; sourceTree = "<group>"; };
 		B69DBAD25FFA79474C2A9724 /* geofence_status.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_status.json; sourceTree = "<group>"; };
 		B69DBC7FC41BE5435F83A2AD /* geofence_one_item_persisted_7.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_persisted_7.json; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				B69DB760E9EB3FC425F7065C /* PCFPushGeofenceHandlerSpec.m */,
 				B69DB56F0AB90D9795383DC6 /* PCFPushGeofenceStatusUtilSpec.m */,
 				B69DB43F807692606F21D2F5 /* PCFPushGeofenceStatusSpec.m */,
+				B69DBA57F87E491AF87F4462 /* PCFPushAnalyticsSpec.m */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -452,6 +455,7 @@
 				B69DBD13EE0D7A03D7C2C186 /* PCFPushGeofenceHandlerSpec.m in Sources */,
 				B69DBC468B6BA4BB464C2C1B /* PCFPushGeofenceStatusUtilSpec.m in Sources */,
 				B69DBC9013D7BFD369ECFE01 /* PCFPushGeofenceStatusSpec.m in Sources */,
+				B69DB70C4805223B09942CE8 /* PCFPushAnalyticsSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -569,6 +573,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 			};
 			name = Debug;
@@ -577,6 +582,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 			};
 			name = Release;
 		};

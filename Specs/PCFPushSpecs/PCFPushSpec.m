@@ -4,7 +4,7 @@
 
 #import "Kiwi.h"
 #import "PCFPush.h"
-#import "PCFPushErrors.h"
+#import "PCFPushAnalytics.h"
 #import "PCFPushParameters.h"
 #import "PCFPushClientTest.h"
 #import "PCFPushSpecsHelper.h"
@@ -986,7 +986,7 @@ describe(@"PCFPush", ^{
                         fail(@"unregistration failure block executed");
                     }];
 
-                    [[theValue(successBlockExecuted) shouldEventually] beTrue];
+                    [[theValue(successBlockExecuted) should] beTrue];
                     [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
                 });
             });
@@ -1008,7 +1008,7 @@ describe(@"PCFPush", ^{
                         fail(@"unregistration failure block executed");
                     }];
 
-                    [[theValue(successBlockExecuted) shouldEventually] beTrue];
+                    [[theValue(successBlockExecuted) should] beTrue];
                     [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
                 });
             });
@@ -1567,6 +1567,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notifications with nil data", ^{
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
                 [PCFPush didReceiveRemoteNotification:nil completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1576,6 +1577,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notification when the user data is empty", ^{
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
                 [PCFPush didReceiveRemoteNotification:@{} completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1585,6 +1587,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notification when it's some regular push message (not a background fetch)", ^{
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"alert" : @"some message" } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1594,12 +1597,24 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore background notifications that are not for us", ^{
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
                     [[error should] beNil];
                     wasCompletionHandlerCalled = YES;
                 }];
+            });
+
+            it(@"should log analytics events for notifications with receipt IDs", ^{
+                [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:)];
+                [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [[theValue(wasIgnored) should] beYes];
+                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                    [[error should] beNil];
+                    wasCompletionHandlerCalled = YES;
+                }];
+
             });
         });
 
