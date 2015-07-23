@@ -12,7 +12,6 @@ static NSString *const KEY_DEVICE_ALIAS                 = @"PCF_PUSH_DEVICE_ALIA
 static NSString *const KEY_TAGS                         = @"PCF_PUSH_TAGS";
 static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_LAST_MODIFIED_TIME";
 static NSString *const KEY_ARE_GEOFENCES_ENABLED        = @"PCF_PUSH_ARE_GEOFENCES_ENABLED";
-static NSString *const KEY_ARE_ANALYTICS_ENABLED        = @"PCF_PUSH_ARE_ANALYTICS_ENABLED";
 
 @implementation PCFPushPersistentStorage
 
@@ -42,14 +41,11 @@ static NSString *const KEY_ARE_ANALYTICS_ENABLED        = @"PCF_PUSH_ARE_ANALYTI
                       KEY_TAGS,
                       KEY_GEOFENCES_LAST_MODIFIED_TIME,
                       KEY_ARE_GEOFENCES_ENABLED,
-                      KEY_ARE_ANALYTICS_ENABLED,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
         [self removeObjectForKey:key];
     }];
-
-    [PCFPushPersistentStorage setAreAnalyticsEnabled:YES];
 }
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken
@@ -142,18 +138,4 @@ static NSString *const KEY_ARE_ANALYTICS_ENABLED        = @"PCF_PUSH_ARE_ANALYTI
     [self persistValue:@(areGeofencesEnabled) forKey:KEY_ARE_GEOFENCES_ENABLED];
 }
 
-+ (BOOL)areAnalyticsEnabled
-{
-    id value = [self persistedValueForKey:KEY_ARE_ANALYTICS_ENABLED];
-    if (value) {
-        return [value boolValue];
-    } else {
-        return YES;
-    }
-}
-
-+ (void)setAreAnalyticsEnabled:(BOOL)areAnalyticsEnabled
-{
-    [self persistValue:@(areAnalyticsEnabled) forKey:KEY_ARE_ANALYTICS_ENABLED];
-}
 @end

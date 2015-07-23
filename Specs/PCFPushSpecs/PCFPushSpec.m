@@ -11,6 +11,7 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceUpdater.h"
 #import "PCFPushGeofenceHandler.h"
+#import "PCFPushApplicationUtil.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushGeofenceStatusUtil.h"
 #import "PCFPushRegistrationPutRequestData.h"
@@ -1567,7 +1568,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notifications with nil data", ^{
-                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
                 [PCFPush didReceiveRemoteNotification:nil completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1577,7 +1578,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notification when the user data is empty", ^{
-                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
                 [PCFPush didReceiveRemoteNotification:@{} completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1587,7 +1588,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore notification when it's some regular push message (not a background fetch)", ^{
-                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"alert" : @"some message" } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1597,7 +1598,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should ignore background notifications that are not for us", ^{
-                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1606,15 +1607,59 @@ describe(@"PCFPush", ^{
                 }];
             });
 
-            it(@"should log analytics events for notifications with receipt IDs", ^{
-                [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:)];
-                [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
-                    [[theValue(wasIgnored) should] beYes];
-                    [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
-                    [[error should] beNil];
-                    wasCompletionHandlerCalled = YES;
-                }];
+            context(@"analytics", ^{
 
+                beforeEach(^{
+                    [helper setupAnalyticsStorage];
+                });
+
+                it(@"should log analytics events for receiving notifications in the background", ^{
+                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateBackground)];
+                    [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                        [[theValue(wasIgnored) should] beYes];
+                        [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                        [[error should] beNil];
+                        wasCompletionHandlerCalled = YES;
+                    }];
+                });
+
+                it(@"should log analytics events for receiving notifications in the foreground", ^{
+                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
+                    [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                        [[theValue(wasIgnored) should] beYes];
+                        [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                        [[error should] beNil];
+                        wasCompletionHandlerCalled = YES;
+                    }];
+                });
+
+                it(@"should log analytics events for opening notifications that have been previously received", ^{
+                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateInactive)];
+                    [PCFPushPersistentStorage setServerDeviceID:@"MY_DEVICE_UUID"];
+                    [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:helper.params];
+                    [[PCFPushAnalytics should] receive:@selector(logOpenedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                        [[theValue(wasIgnored) should] beYes];
+                        [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                        [[error should] beNil];
+                        wasCompletionHandlerCalled = YES;
+                    }];
+                });
+
+                it(@"should log analytics events for opening notifications that have not been previously received", ^{
+                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateInactive)];
+                    [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(logOpenedRemoteNotification:parameters:)];
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                        [[theValue(wasIgnored) should] beYes];
+                        [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                        [[error should] beNil];
+                        wasCompletionHandlerCalled = YES;
+                    }];
+                });
             });
         });
 
@@ -1647,17 +1692,17 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should process geofence on exiting region", ^{
-                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
             });
 
             it(@"should process geofence inside region", ^{
-                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler should] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
             });
 
             it(@"should not process geofence", ^{
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
             });
@@ -1671,17 +1716,17 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should process geofence on exiting region", ^{
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didExitRegion:region];
             });
 
             it(@"should process geofence inside region", ^{
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateInside forRegion:region];
             });
 
             it(@"should not process geofence", ^{
-                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:tags:)];
+                [[PCFPushGeofenceHandler shouldNot] receive:@selector(processRegion:store:engine:state:parameters:)];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateOutside forRegion:region];
                 [[PCFPushClient shared] locationManager:locationManager didDetermineState:CLRegionStateUnknown forRegion:region];
             });

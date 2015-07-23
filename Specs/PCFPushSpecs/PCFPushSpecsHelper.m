@@ -4,13 +4,15 @@
 
 #import "Kiwi.h"
 
-#import "PCFPushSpecsHelper.h"
-#import "PCFPushPersistentStorage.h"
+#import <CoreData/CoreData.h>
 #import "PCFPushParameters.h"
-#import "PCFPushBackEndRegistrationResponseDataTest.h"
-#import "NSURLConnection+PCFBackEndConnection.h"
-#import "PCFPushRegistrationData.h"
+#import "PCFPushSpecsHelper.h"
 #import "PCFPushGeofenceUpdater.h"
+#import "PCFPushAnalyticsStorage.h"
+#import "PCFPushRegistrationData.h"
+#import "PCFPushPersistentStorage.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
+#import "PCFPushBackEndRegistrationResponseDataTest.h"
 
 #if !__has_feature(objc_arc)
 #error This spec must be compiled with ARC to work properly
@@ -64,6 +66,9 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
     self.backEndDeviceId = nil;
     self.tags1 = nil;
     self.tags2 = nil;
+
+    [PCFPushAnalyticsStorage setSharedManager:nil];
+    self.analyticsStorage = nil;
 }
 
 #pragma mark - Parameters helpers
@@ -223,6 +228,20 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:PCF_NEVER_UPDATED_GEOFENCES];
         return nil;
     }];
+}
+
+#pragma mark - Analytics Helpers
+
+- (void)setupAnalyticsStorage
+{
+    self.analyticsStorage = PCFPushAnalyticsStorage.shared;
+    [self.analyticsStorage.managedObjectContext stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
+        void (^block)() = params[0];
+        // Execute asynchronous blocks immediately for tests
+        [self.analyticsStorage.managedObjectContext performBlockAndWait:block];
+        return nil;
+    }];
+    [self.analyticsStorage flushDatabase];
 }
 
 @end

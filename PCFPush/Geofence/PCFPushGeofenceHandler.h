@@ -18,7 +18,7 @@
                 store:(PCFPushGeofencePersistentStore *)store
                engine:(PCFPushGeofenceEngine *)engine
                 state:(CLRegionState)state
-                 tags:(NSSet *)subscribedTags;
+           parameters:(PCFPushParameters *)parameters;
 
 + (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet*)subscribedTags;
 

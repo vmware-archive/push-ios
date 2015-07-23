@@ -6,6 +6,8 @@
 #import "Kiwi.h"
 #import <CoreData/CoreData.h>
 #import "PCFPushAnalytics.h"
+#import "PCFPushParameters.h"
+#import "PCFPushSpecsHelper.h"
 #import "PCFPushAnalyticsEvent.h"
 #import "PCFPushAnalyticsStorage.h"
 #import "PCFPushPersistentStorage.h"
@@ -18,28 +20,29 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
     describe(@"Logging an event", ^{
 
-        __block PCFPushAnalyticsStorage *storage;
+        __block PCFPushSpecsHelper *helper;
         __block NSString *entityName;
+        __block PCFPushParameters *parametersWithAnalyticsEnabled;
+        __block PCFPushParameters *parametersWithAnalyticsDisabled;
 
         beforeEach(^{
             entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
 
-            storage = PCFPushAnalyticsStorage.shared;
-            [storage.managedObjectContext stub:@selector(performBlock:) withBlock:^id(NSArray *params) {
-                void (^block)() = params[0];
-                // Execute asynchronous blocks immediately for tests
-                [storage.managedObjectContext performBlockAndWait:block];
-                return nil;
-            }];
+            helper = [[PCFPushSpecsHelper alloc] init];
+            [helper setupAnalyticsStorage];
+            [helper setupDefaultPLIST];
+            parametersWithAnalyticsDisabled = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
+            parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
+        });
 
-            // Clear database before each test
-            [storage flushDatabase];
-            [PCFPushAnalyticsStorage setSharedManager:nil];
+        afterEach(^{
+            [helper reset];
+            helper = nil;
         });
 
         it(@"should let you log an event successfully", ^{
 
-            [PCFPushAnalytics logEvent:@"TEST_EVENT"];
+            [PCFPushAnalytics logEvent:@"TEST_EVENT" parameters:parametersWithAnalyticsEnabled];
 
             NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
             [[theValue(events.count) should] equal:theValue(1)];
@@ -48,11 +51,19 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
             [[event.eventType should] equal:@"TEST_EVENT"];
         });
 
+        it(@"should suppress logging if analytics are disabled", ^{
+
+            [PCFPushAnalytics logEvent:@"TEST_EVENT" parameters:parametersWithAnalyticsDisabled];
+
+            NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
+            [[events should] beEmpty];
+        });
+
         it(@"should let you log several event successfully", ^{
 
-            [PCFPushAnalytics logEvent:@"TEST_EVENT1"];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT2"];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT3"];
+            [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
 
             NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
             [[theValue(events.count) should] equal:theValue(3)];
@@ -60,7 +71,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
         it(@"should let you set the event fields", ^{
 
-            [PCFPushAnalytics logEvent:@"AMAZING_EVENT" withParameters:@{ @"receiptId":@"TEST_RECEIPT_ID", @"deviceUuid":@"TEST_DEVICE_UUID", @"geofenceId":@"TEST_GEOFENCE_ID", @"locationId":@"TEST_LOCATION_ID" }];
+            [PCFPushAnalytics logEvent:@"AMAZING_EVENT" fields:@{@"receiptId" : @"TEST_RECEIPT_ID", @"deviceUuid" : @"TEST_DEVICE_UUID", @"geofenceId" : @"TEST_GEOFENCE_ID", @"locationId" : @"TEST_LOCATION_ID"} parameters:parametersWithAnalyticsEnabled];
 
             NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
             [[theValue(events.count) should] equal:theValue(1)];
@@ -78,7 +89,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
             [PCFPushPersistentStorage setServerDeviceID:@"TEST_DEVICE_UUID"];
 
-            [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID"];
+            [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
 
             NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
             [[theValue(events.count) should] equal:theValue(1)];
@@ -89,6 +100,42 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
             [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
             [[event.geofenceId should] beNil];
             [[event.locationId should] beNil];
+            [[event.eventTime shouldNot] beNil];
+        });
+
+        it(@"should let you log when remote notifications are opened", ^{
+
+            [PCFPushPersistentStorage setServerDeviceID:@"TEST_DEVICE_UUID"];
+
+            [PCFPushAnalytics logOpenedRemoteNotification:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
+
+            NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
+            [[theValue(events.count) should] equal:theValue(1)];
+            PCFPushAnalyticsEvent *event = events.lastObject;
+            [[event should] beKindOfClass:NSClassFromString(entityName)];
+            [[event.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED];
+            [[event.receiptId should] equal:@"TEST_RECEIPT_ID"];
+            [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
+            [[event.geofenceId should] beNil];
+            [[event.locationId should] beNil];
+            [[event.eventTime shouldNot] beNil];
+        });
+
+        it(@"should let you log when geofence is triggered", ^{
+
+            [PCFPushPersistentStorage setServerDeviceID:@"TEST_DEVICE_UUID"];
+
+            [PCFPushAnalytics logTriggeredGeofenceId:57L locationId:923L parameters:parametersWithAnalyticsEnabled];
+
+            NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName];
+            [[theValue(events.count) should] equal:theValue(1)];
+            PCFPushAnalyticsEvent *event = events.lastObject;
+            [[event should] beKindOfClass:NSClassFromString(entityName)];
+            [[event.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER];
+            [[event.receiptId should] beNil];
+            [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
+            [[event.geofenceId should] equal:@"57"];
+            [[event.locationId should] equal:@"923"];
             [[event.eventTime shouldNot] beNil];
         });
     });

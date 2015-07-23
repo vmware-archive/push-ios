@@ -5,28 +5,33 @@
 #import <objc/runtime.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import "PCFPushClient.h"
 #import "PCFPushDebug.h"
+#import "PCFPushClient.h"
 #import "PCFPushErrors.h"
 #import "PCFPushAnalytics.h"
 #import "PCFNotifications.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushParameters.h"
 #import "PCFPushURLConnection.h"
-#import "PCFPushGeofenceUpdater.h"
-#import "PCFPushGeofenceRegistrar.h"
-#import "NSObject+PCFJSONizable.h"
-#import "PCFPushGeofencePersistentStore.h"
-#import "PCFPushPersistentStorage.h"
-#import "PCFPushRegistrationResponseData.h"
 #import "PCFPushGeofenceEngine.h"
+#import "PCFPushGeofenceUpdater.h"
+#import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceHandler.h"
+#import "PCFPushApplicationUtil.h"
+#import "PCFPushGeofenceRegistrar.h"
+#import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofencePersistentStore.h"
+#import "PCFPushRegistrationResponseData.h"
+#import "PCFPushAnalyticsStorage.h"
+#import "PCFPushAnalyticsEvent.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
 static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
 static NSString const* kPCFPushGeofenceUpdateAvailable = @"pivotal.push.geofence_update_available";
+
+BOOL hasAlreadyReceivedNotification(NSString *receiptId);
 
 static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
@@ -446,10 +451,26 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
             handler(NO, UIBackgroundFetchResultFailed, error);
 
         }];
+
     } else {
 
-        if (userInfo[@"receiptId"]) {
-            [PCFPushAnalytics logReceivedRemoteNotification:userInfo[@"receiptId"]];
+        NSString *receiptId = userInfo[@"receiptId"];
+        
+        if (receiptId) {
+
+            UIApplicationState applicationState = PCFPushApplicationUtil.applicationState;
+
+            if (applicationState == UIApplicationStateBackground || applicationState == UIApplicationStateActive) {
+
+                [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+
+            } else if (applicationState == UIApplicationStateInactive) {
+
+                if (!hasAlreadyReceivedNotification(receiptId)) {
+                    [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                }
+                [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
+            }
         }
 
         handler(YES, UIBackgroundFetchResultNoData, nil);
@@ -465,7 +486,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }
 
     PCFPushLog(@"locationManager:didExitRegion %@", region.identifier);
-    [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside tags:self.registrationParameters.pushTags];
+    [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateOutside parameters:self.registrationParameters];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region
@@ -495,7 +516,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     if (state == CLRegionStateInside) {
         // Device entered geofence. Trigger notification.
-        [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateInside tags:self.registrationParameters.pushTags];
+        [PCFPushGeofenceHandler processRegion:region store:self.store engine:self.engine state:CLRegionStateInside parameters:self.registrationParameters];
     }
 }
 
@@ -505,3 +526,13 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 }
 
 @end
+
+BOOL hasAlreadyReceivedNotification(NSString *receiptId)
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    NSString *s = [NSString stringWithFormat:@"receiptId == '%@' AND eventType == '%@'", receiptId, PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED ];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:s];
+
+    NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:predicate];
+    return events.count > 0;
+}

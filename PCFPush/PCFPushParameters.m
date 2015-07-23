@@ -62,7 +62,6 @@ void pcfPushResetOnceToken() {
     parameters.pushTags = [PCFPushPersistentStorage tags];
     parameters.pushDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     parameters.areGeofencesEnabled = [PCFPushPersistentStorage areGeofencesEnabled];
-    parameters.areAnalyticsEnabled = [PCFPushPersistentStorage areAnalyticsEnabled];
     return parameters;
 }
 
@@ -78,24 +77,30 @@ void pcfPushResetOnceToken() {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
-                id propertyValue = [plist valueForKey:plistPropertyName];
-                if (propertyValue) {
 
-                    if ([propertyValue isKindOfClass:[NSString class]]) {
-                        [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
+                if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && plist[@"pivotal.push.areAnalyticsEnabled"]) {
+                    params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
 
-                    } else if ([propertyValue isKindOfClass:[NSArray class]]) {
-                        NSArray *inputArray = (NSArray*) propertyValue;
-                        NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:inputArray.count];
-                        for (NSString *s in inputArray) {
-                            [resultArray addObject:[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                } else {
+
+                    id propertyValue = plist[plistPropertyName];
+                    if (propertyValue) {
+
+                        if ([propertyValue isKindOfClass:[NSString class]]) {
+                            [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
+
+                        } else if ([propertyValue isKindOfClass:[NSArray class]]) {
+                            NSArray *inputArray = (NSArray*) propertyValue;
+                            NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:inputArray.count];
+                            for (NSString *s in inputArray) {
+                                [resultArray addObject:[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
+                            }
+                            [params setValue:[NSArray arrayWithArray:resultArray] forKeyPath:propertyName];
+
+                        } else {
+                            [params setValue:propertyValue forKeyPath:propertyName];
                         }
-                        [params setValue:[NSArray arrayWithArray:resultArray] forKeyPath:propertyName];
-
-                    } else {
-                        [params setValue:propertyValue forKeyPath:propertyName];
                     }
-
                 }
             }];
         } @catch (NSException *exception) {
@@ -108,7 +113,9 @@ void pcfPushResetOnceToken() {
 
 + (PCFPushParameters *)parameters
 {
-    return [[self alloc] init];
+    PCFPushParameters *parameters = [[PCFPushParameters alloc] init];
+    parameters.areAnalyticsEnabled = YES;
+    return parameters;
 }
 
 - (NSString *)variantUUID

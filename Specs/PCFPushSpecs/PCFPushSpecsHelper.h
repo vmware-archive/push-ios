@@ -4,8 +4,9 @@
 
 #import <UIKit/UIKit.h>
 
-@class PCFPushPersistentStorage;
 @class PCFPushParameters;
+@class PCFPushAnalyticsStorage;
+@class PCFPushPersistentStorage;
 
 OBJC_EXPORT NSString *const TEST_PUSH_API_URL_1;
 OBJC_EXPORT NSString *const TEST_VARIANT_UUID_1;
@@ -37,6 +38,7 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 @property NSSet *tags2;
 @property NSDate *testGeofenceDate;
 @property PCFPushParameters *params;
+@property PCFPushAnalyticsStorage *analyticsStorage;
 
 // Spec Helper lifecycle
 - (instancetype) init;
@@ -61,5 +63,8 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 - (void)setupGeofencesForFailedUpdate;
 - (void)setupGeofencesForFailedUpdateWithBlock:(void(^)(NSArray *))block;
 - (void)setupClearGeofencesForSuccess;
+
+// Analytics helpers
+- (void)setupAnalyticsStorage;
 
 @end;

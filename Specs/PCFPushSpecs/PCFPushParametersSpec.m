@@ -5,13 +5,13 @@
 #import <objc/runtime.h>
 
 #import "Kiwi.h"
-#import "PCFPushParameters.h"
-#import "PCFClassPropertyUtility.h"
-#import "PCFPushSpecsHelper.h"
-#import "PCFPushPersistentStorage.h"
 #import "PCFHardwareUtil.h"
+#import "PCFPushParameters.h"
+#import "PCFPushSpecsHelper.h"
+#import "PCFClassPropertyUtility.h"
+#import "PCFPushPersistentStorage.h"
 
-SPEC_BEGIN(PCFRegistrationParametersSpec)
+SPEC_BEGIN(PCFPushParametersSpec)
 
 void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *model) {
     NSDictionary *properties = [PCFClassPropertyUtility propertiesForClass:[PCFPushParameters class]];
@@ -154,6 +154,17 @@ describe(@"PCFRegistrationParameters", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
             [[theValue(model.areGeofencesEnabled) should] beYes];
+        });
+    });
+
+    context(@"reading the areAnalyticsEnabled value", ^{
+
+        it(@"should initialize successfully and indicate that parameters are valid if areAnalyticsEnabled is false", ^{
+            [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.areAnalyticsEnabled) should] beNo];
         });
     });
 

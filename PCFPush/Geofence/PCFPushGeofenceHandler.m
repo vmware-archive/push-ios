@@ -4,17 +4,18 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
-#import "PCFPushGeofenceHandler.h"
-#import "PCFPushGeofencePersistentStore.h"
-#import "PCFPushGeofenceLocationMap.h"
-#import "PCFPushGeofenceData.h"
-#import "PCFPushPersistentStorage.h"
-#import "PCFPushGeofenceEngine.h"
 #import "PCFPushDebug.h"
-#import "PCFPushGeofenceLocation.h"
 #import "PCFTagsHelper.h"
-#import "PCFPushGeofenceDataList.h"
+#import "PCFPushAnalytics.h"
+#import "PCFPushParameters.h"
 #import "PCFPushGeofenceUtil.h"
+#import "PCFPushGeofenceData.h"
+#import "PCFPushGeofenceEngine.h"
+#import "PCFPushGeofenceHandler.h"
+#import "PCFPushGeofenceLocation.h"
+#import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofenceLocationMap.h"
+#import "PCFPushGeofencePersistentStore.h"
 
 @interface PCFPushGeofenceHandler()
 
@@ -180,7 +181,7 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
                 store:(PCFPushGeofencePersistentStore *)store
                engine:(PCFPushGeofenceEngine *)engine
                 state:(CLRegionState)state
-                 tags:(NSSet *)subscribedTags
+           parameters:(PCFPushParameters *)parameters
 {
     if (!store) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"store may not be nil" userInfo:nil];
@@ -208,14 +209,19 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     if (pcfPushIsItemExpired(geofence)) {
 
         PCFPushCriticalLog(@"Geofence '%@' has expired. Clearing geofence.", region.identifier);
-        clearGeofence(geofence, engine, subscribedTags); // Clears all the locations at the same geofence since they expire at the same time.
+        clearGeofence(geofence, engine, parameters.pushTags); // Clears all the locations at the same geofence since they expire at the same time.
 
     } else if (shouldTriggerNotification(geofence, state)) {
 
         PCFPushCriticalLog(@"Triggering geofence '%@'.", region.identifier);
         UILocalNotification *localNotification = notificationFromGeofence(geofence, state);
         [UIApplication.sharedApplication presentLocalNotificationNow:localNotification];
-        clearLocation(region.identifier, geofence, engine, subscribedTags); // Clear just this one location.
+        clearLocation(region.identifier, geofence, engine, parameters.pushTags); // Clear just this one location.
+
+        if (parameters.areAnalyticsEnabled) {
+            int64_t locationId = pcfPushLocationIdForRequestId(region.identifier);
+            [PCFPushAnalytics logTriggeredGeofenceId:geofenceId locationId:locationId parameters:parameters];
+        }
     }
 }
 

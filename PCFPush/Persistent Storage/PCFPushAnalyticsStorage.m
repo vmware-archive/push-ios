@@ -181,14 +181,20 @@ static dispatch_once_t onceToken;
 
 - (NSArray *)managedObjectsWithEntityName:(NSString *)entityName
 {
+    return [self managedObjectsWithEntityName:entityName predicate:nil];
+}
+
+- (NSArray *) managedObjectsWithEntityName:(NSString*)entityName predicate:(NSPredicate*)predicate
+{
     __block NSArray *managedObjects;
     [self.managedObjectContext performBlockAndWait:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entityName];
 
+        request.predicate = predicate;
+
         if ([NSClassFromString(entityName) conformsToProtocol:@protocol(PCFSortDescriptors)]) {
             Class<PCFSortDescriptors> klass = (Class<PCFSortDescriptors>) NSClassFromString(entityName);
-            NSArray *sortDescriptors = [klass defaultSortDescriptors];
-            [request setSortDescriptors:sortDescriptors];
+            request.sortDescriptors = [klass defaultSortDescriptors];
         }
         NSError *error;
         managedObjects = [self.managedObjectContext executeFetchRequest:request error:&error];

@@ -17,6 +17,9 @@
 
 - (NSArray *)managedObjectsWithEntityName:(NSString *)entityName;
 
+- (NSArray *) managedObjectsWithEntityName:(NSString*)entityName predicate:(NSPredicate*)predicate;
+
 - (void)deleteManagedObjects:(NSArray *)managedObjects;
+
 
 @end

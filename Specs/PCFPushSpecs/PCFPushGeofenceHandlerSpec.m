@@ -4,14 +4,17 @@
 
 #import <CoreLocation/CoreLocation.h>
 #import "Kiwi.h"
+#import "PCFPushAnalytics.h"
+#import "PCFPushParameters.h"
 #import "PCFPushGeofenceData.h"
 #import "PCFPushGeofenceEngine.h"
 #import "PCFPushGeofenceHandler.h"
-#import "PCFPushPersistentStorage.h"
 #import "NSObject+PCFJSONizable.h"
+#import "PCFPushPersistentStorage.h"
+#import "PCFPushGeofenceLocationMap.h"
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushGeofenceDataList+Loaders.h"
-#import "PCFPushGeofenceLocationMap.h"
+#import "PCFPushSpecsHelper.h"
 
 typedef id (^StubBlock)(NSArray*);
 
@@ -49,7 +52,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
 
     describe(@"PCFPushGeofenceHandler", ^{
 
-        __block CLLocationManager *locationManager;
+        __block PCFPushSpecsHelper *helper;
         __block PCFPushGeofenceEngine *engine;
         __block PCFPushGeofencePersistentStore *store;
         __block PCFPushGeofenceData *geofence2Enter;
@@ -60,7 +63,6 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block PCFPushGeofenceData *geofence7NulliOSData;
         __block PCFPushGeofenceLocationMap *expectedMapToClear;
         __block UIApplication *application;
-        __block PCFPushGeofenceDataList *fiveItemGeofenceList;
         __block CLRegion *region2;
         __block CLRegion *region3;
         __block CLRegion *region4;
@@ -68,11 +70,13 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         __block CLRegion *region6;
         __block CLRegion *region7;
         __block CLRegion *badRegion;
+        __block PCFPushParameters *parametersWithAnalyticsEnabled;
+        __block PCFPushParameters *parametersWithAnalyticsDisabled;
 
         describe(@"handling geofence events", ^{
 
             beforeEach(^{
-                locationManager = [CLLocationManager mock];
+                helper = [[PCFPushSpecsHelper alloc] init];
                 store = [PCFPushGeofencePersistentStore mock];
                 engine = [PCFPushGeofenceEngine mock];
                 application = [UIApplication mock];
@@ -88,7 +92,6 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[geofence6EmptyiOSData shouldNot] beNil];
                 geofence7NulliOSData = loadGeofence([self class], @"geofence_one_item_persisted_7");
                 [[geofence7NulliOSData shouldNot] beNil];
-                fiveItemGeofenceList = loadGeofenceList([self class], @"geofence_five_items_with_tags");
                 region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_2_66"];
                 region3 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_3_66"];
                 region4 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@"PCF_4_66"];
@@ -99,6 +102,14 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 expectedMapToClear = [PCFPushGeofenceLocationMap map];
                 [UIApplication stub:@selector(sharedApplication) andReturn:application];
                 [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
+                [PCFPushPersistentStorage reset];
+                [helper setupDefaultPLIST];
+                parametersWithAnalyticsDisabled = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
+                parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
+            });
+
+            afterEach(^{
+                [helper reset];
             });
 
             context(@"unknown state", ^{
@@ -107,27 +118,30 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
-                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateUnknown tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateUnknown parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should not trigger a local notification at all ever if the state is unknown (3)", ^{
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateUnknown tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateUnknown parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should not trigger a local notification at all ever if the state is unknown (4)", ^{
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateUnknown tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateUnknown parameters:parametersWithAnalyticsEnabled];
                 });
             });
 
             context(@"entering a geofence", ^{
 
-                it(@"should trigger a local notification with the enter trigger type", ^{
+                it(@"should trigger a local notification with the enter trigger type (analytics on)", ^{
                     [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
                         UILocalNotification *notification = params[0];
                         [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
@@ -138,14 +152,32 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
-                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(2L), theValue(66L), any(), nil];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
+                });
+
+                it(@"should trigger a local notification with the enter trigger type (analytics off)", ^{
+                    [application stub:@selector(presentLocalNotificationNow:) withBlock:^id(NSArray *params) {
+                        UILocalNotification *notification = params[0];
+                        [[notification.userInfo[@"pivotal.push.geofence_trigger_condition"] should] equal:@"enter"];
+                        return nil;
+                    }];
+
+                    [expectedMapToClear put:geofence2Enter locationIndex:0];
+                    [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
+                    [[application should] receive:@selector(presentLocalNotificationNow:)];
+                    [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
+                    [helper setupDefaultPLISTWithFile:@"Pivotal-AnalyticsDisabled"];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsDisabled];
                 });
 
                 it(@"should not trigger a local notification with the exit trigger type", ^{
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
             });
 
@@ -155,7 +187,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
-                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateOutside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateOutside parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should trigger a local notification with the exit trigger type", ^{
@@ -169,7 +202,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside tags:nil];
+                    [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(3L), theValue(66L), any(), nil];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside parameters:parametersWithAnalyticsEnabled];
                 });
             });
 
@@ -179,7 +213,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
-                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should ignore geofences if the user is not subscribed to one of its tags", ^{
@@ -187,7 +222,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
-                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should trigger geofences if the user is subscribed to one of its tags", ^{
@@ -196,7 +232,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application should] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
-                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(4L), theValue(66L), any(), nil];
+                    [PCFPushGeofenceHandler processRegion:region4 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
             });
 
@@ -212,7 +249,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(2L, geofence2Enter)];
-                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should not trigger when entering a location that has expired (in a geofence with several locations)", ^{
@@ -222,7 +260,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(5L, geofence5EnterThreeLocations)];
-                    [PCFPushGeofenceHandler processRegion:region5 store:store engine:engine state:CLRegionStateInside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region5 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 });
 
                 it(@"should not trigger when exiting a location that has expired (in a geofence with only one location)", ^{
@@ -230,19 +269,20 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside tags:nil];
+                    [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                    [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside parameters:parametersWithAnalyticsEnabled];
                 });
             });
 
             it(@"should require a persistent store", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceHandler processRegion:region2 store:nil engine:engine state:CLRegionStateInside tags:nil];
+                    [PCFPushGeofenceHandler processRegion:region2 store:nil engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 }) should] raiseWithName:NSInvalidArgumentException];
             });
 
             it(@"should require an engine", ^{
                 [[theBlock(^{
-                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:nil state:CLRegionStateInside tags:nil];
+                    [PCFPushGeofenceHandler processRegion:region2 store:store engine:nil state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
                 }) should] raiseWithName:NSInvalidArgumentException];
             });
 
@@ -250,22 +290,25 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [[store shouldNot] receive:@selector(objectForKeyedSubscript:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
                 CLRegion *emptyRegion = [[CLRegion alloc] init];
-                [PCFPushGeofenceHandler processRegion:emptyRegion store:store engine:engine state:CLRegionStateInside tags:nil];
+                [PCFPushGeofenceHandler processRegion:emptyRegion store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should ignore geofence events for regions with bad identifiers", ^{
                 [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [[store shouldNot] receive:@selector(objectForKeyedSubscript:)];
-                [PCFPushGeofenceHandler processRegion:badRegion store:store engine:engine state:CLRegionStateInside tags:nil];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                [PCFPushGeofenceHandler processRegion:badRegion store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should ignore geofence events for non-existent objects", ^{
                 [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [store stub:@selector(objectForKeyedSubscript:) andReturn:nil];
-                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateInside tags:nil];
+                [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
+                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should not populate fields with nil values", ^{
@@ -289,7 +332,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments:expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(6L, geofence6EmptyiOSData)];
-                [PCFPushGeofenceHandler processRegion:region6 store:store engine:engine state:CLRegionStateInside tags:nil];
+                [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(6L), theValue(68L), any(), nil];
+                [PCFPushGeofenceHandler processRegion:region6 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should not populate fields with NSNull values", ^{
@@ -313,7 +357,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments:expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(7L, geofence7NulliOSData)];
-                [PCFPushGeofenceHandler processRegion:region7 store:store engine:engine state:CLRegionStateInside tags:nil];
+                [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(7L), theValue(70L), any(), nil];
+                [PCFPushGeofenceHandler processRegion:region7 store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should populate only iOS 7.0 fields on location notifications on devices < iOS 8.0", ^{
@@ -343,7 +388,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments: expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside tags:nil];
+                [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(3L), theValue(66L), any(), nil];
+                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside parameters:parametersWithAnalyticsEnabled];
             });
 
             it(@"should populate all the fields on location notifications on up-to-date devices", ^{
@@ -375,7 +421,8 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                 [[application should] receive:@selector(presentLocalNotificationNow:) withArguments: expectedNotification, nil];
                 [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(3L, geofence3Exit)];
-                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside tags:nil];
+                [[PCFPushAnalytics should] receive:@selector(logTriggeredGeofenceId:locationId:parameters:) withArguments:theValue(3L), theValue(66L), any(), nil];
+                [PCFPushGeofenceHandler processRegion:region3 store:store engine:engine state:CLRegionStateOutside parameters:parametersWithAnalyticsEnabled];
             });
         });
     });
