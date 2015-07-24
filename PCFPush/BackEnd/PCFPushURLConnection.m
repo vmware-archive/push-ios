@@ -19,6 +19,7 @@ NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofences";
+static NSString *const kAnalyticsRequestPath = @"v1/analytics";
 static NSString *const kTimestampParam = @"timestamp";
 static NSString *const kDeviceUuidParam = @"device_uuid";
 static NSString *const kPlatformParam = @"platform=ios";
@@ -26,7 +27,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 @implementation NSURL (Additions)
 
-- (NSURL *)URLByAppendingQueryString:(NSString *)queryString {
+- (NSURL *)URLByAppendingQueryString:(NSString *)queryString
+{
     if (![queryString length]) {
         return self;
     }
@@ -41,8 +43,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 + (void)unregisterDeviceID:(NSString *)deviceID
                 parameters:(PCFPushParameters *)parameters
-                   success:(void (^)(NSURLResponse *response, NSData *data))success
-                   failure:(void (^)(NSError *error))failure
+                   success:(void (^)(NSURLResponse *, NSData *))success
+                   failure:(void (^)(NSError *))failure
 {
     PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
     NSMutableURLRequest *request = [PCFPushURLConnection unregisterRequestForBackEndDeviceID:deviceID];
@@ -58,8 +60,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 + (void)registerWithParameters:(PCFPushParameters *)parameters
                    deviceToken:(NSData *)deviceToken
-                       success:(void (^)(NSURLResponse *response, NSData *data))success
-                       failure:(void (^)(NSError *error))failure
+                       success:(void (^)(NSURLResponse *, NSData *))success
+                       failure:(void (^)(NSError *))failure
 {
     PCFPushLog(@"Register with push server for device token: %@", deviceToken);
     NSMutableURLRequest *request = [PCFPushURLConnection registerRequestForAPNSDeviceToken:deviceToken
@@ -73,8 +75,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
                                 parameters:(PCFPushParameters *)parameters
                                deviceToken:(NSData *)deviceToken
-                                   success:(void (^)(NSURLResponse *response, NSData *data))success
-                                   failure:(void (^)(NSError *error))failure
+                                   success:(void (^)(NSURLResponse *, NSData *))success
+                                   failure:(void (^)(NSError *))failure
 {
     PCFPushLog(@"Update Registration with push server for device ID: %@", deviceID);
     NSMutableURLRequest *request = [PCFPushURLConnection updateRequestForDeviceID:deviceID
@@ -88,11 +90,36 @@ static NSTimeInterval kRequestTimeout = 60.0;
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
                             timestamp:(int64_t)timestamp
                            deviceUuid:(NSString *)deviceUuid
-                              success:(void (^)(NSURLResponse *response, NSData *data))success
-                              failure:(void (^)(NSError *error))failure
+                              success:(void (^)(NSURLResponse *, NSData *))success
+                              failure:(void (^)(NSError *))failure
 {
     PCFPushLog(@"Geofence update request with push server with timestamp %lld", timestamp);
     NSURLRequest *request = [PCFPushURLConnection geofenceRequestWithTimestamp:timestamp parameters:parameters deviceUuid:deviceUuid];
+
+    [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                            success:success
+                                            failure:failure];
+}
+
++ (void)analyticsRequestWithEvents:(NSArray*)events
+                        parameters:(PCFPushParameters *)parameters
+                           success:(void (^)(NSURLResponse *, NSData *))success
+                           failure:(void (^)(NSError *))failure
+{
+    if (!events) {
+        [NSException raise:NSInvalidArgumentException format:@"events may not be nil"];
+    }
+
+    if (events.count == 0) {
+      [NSException raise:NSInvalidArgumentException format:@"events may not be empty"];
+    }
+
+    if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
+        [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
+    }
+
+    PCFPushLog(@"Posting %d analytics event to server.", events.count);
+    NSURLRequest *request = [PCFPushURLConnection analyticsPostRequestWithEvents:events parameters:parameters];
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
@@ -252,6 +279,40 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     return request;
+}
+
+#pragma mark - Analytics
+
++ (NSURLRequest *)analyticsPostRequestWithEvents:(NSArray*)events
+                                      parameters:(PCFPushParameters *)parameters
+{
+
+    if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
+        [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
+    }
+
+    NSURL *requestURL = [[NSURL URLWithString:kAnalyticsRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:kPlatformParam];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [PCFPushURLConnection requestBodyForEvents:events];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
+    return request;
+}
+
++ (NSData *)requestBodyForEvents:(NSArray*)events
+{
+    NSDictionary *payloadDictionary = @{
+            @"events" : events,
+    };
+    NSError *error;
+    NSData *bodyData = [payloadDictionary pcfPushToJSONData:&error];
+    if (!bodyData) {
+        PCFPushCriticalLog(@"Error while converting analytics event to JSON: %@ %@", error, error.userInfo);
+        return nil;
+    }
+
+    return bodyData;
 }
 
 #pragma mark - Helpers

@@ -47,7 +47,7 @@ describe(@"PCFPush", ^{
 
             beforeEach(^{
                 [helper setupDefaultPLIST];
-                [helper setupSuccessfulAsyncRequest];
+                [helper setupSuccessfulAsyncRegistrationRequest];
                 [PCFPushGeofenceStatusUtil stub:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
             });
 
@@ -91,7 +91,7 @@ describe(@"PCFPush", ^{
 
             beforeEach(^{
                 [helper setupDefaultPLIST];
-                [helper setupSuccessfulAsyncRequest];
+                [helper setupSuccessfulAsyncRegistrationRequest];
                 [PCFPushGeofenceStatusUtil stub:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
             });
 
@@ -153,7 +153,7 @@ describe(@"PCFPush", ^{
 
             testBlock = ^(SEL sel, id newPersistedValue, NSString *expectedHttpMethod, BOOL areGeofencesEnabled) {
 
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
                     [[request.HTTPMethod should] equal:expectedHttpMethod];
 
@@ -603,7 +603,7 @@ describe(@"PCFPush", ^{
 
                 [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
 
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
                     [[request.HTTPMethod should] equal:@"POST"];
 
@@ -660,7 +660,7 @@ describe(@"PCFPush", ^{
 
                 it(@"when geofences were never updated (and the geofence update passes)", ^{
 
-                    [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                    [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
                         registrationRequestCount += 1;
                     }];
 
@@ -685,7 +685,7 @@ describe(@"PCFPush", ^{
 
                 it(@"when geofences were never updated (and the geofence update fails)", ^{
 
-                    [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                    [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
                         registrationRequestCount += 1;
                     }];
 
@@ -737,7 +737,7 @@ describe(@"PCFPush", ^{
 
                 [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
 
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
                     [[request.HTTPMethod should] equal:@"POST"];
 
@@ -779,7 +779,7 @@ describe(@"PCFPush", ^{
                     fail(@"should not have failed");
                 };
 
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
                     registrationRequestCount += 1;
                 }];
 
@@ -1160,7 +1160,7 @@ describe(@"PCFPush", ^{
 
                 [helper setupDefaultPersistedParameters];
 
-                [helper setupSuccessfulAsyncRequestWithBlock:^(NSURLRequest *request) {
+                [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
                     [[request.HTTPMethod should] equal:@"PUT"];
 

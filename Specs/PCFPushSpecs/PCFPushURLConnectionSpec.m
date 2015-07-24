@@ -4,22 +4,32 @@
 
 #import "Kiwi.h"
 
-#import "NSURLConnection+PCFBackEndConnection.h"
-#import "PCFPushURLConnection.h"
-#import "PCFPushParameters.h"
-#import "PCFPushErrors.h"
-#import "PCFPushSpecsHelper.h"
 #import "PCFPushClient.h"
+#import "PCFPushErrors.h"
+#import "PCFPushAnalytics.h"
+#import "PCFPushParameters.h"
+#import "PCFPushSpecsHelper.h"
+#import "PCFPushURLConnection.h"
+#import "PCFPushAnalyticsEvent.h"
+#import "PCFPushAnalyticsStorage.h"
+#import "NSURLConnection+PCFBackEndConnection.h"
 
 SPEC_BEGIN(PCFPushURLConnectionSpec)
 
 describe(@"PCFPushBackEndConnection", ^{
+
     __block PCFPushSpecsHelper *helper;
+    __block NSArray *events;
 
     beforeEach ( ^{
         [PCFPushClient resetSharedClient];
         helper = [[PCFPushSpecsHelper alloc] init];
         [helper setupParameters];
+        [helper setupDefaultPersistedParameters];
+        [helper setupAnalyticsStorage];
+        [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:helper.params];
+        [PCFPushAnalytics logTriggeredGeofenceId:27L locationId:81L parameters:helper.params];
+        events = [helper.analyticsStorage managedObjectsWithEntityName:NSStringFromClass(PCFPushAnalyticsEvent.class)];
 	});
 
     afterEach ( ^{
@@ -120,6 +130,109 @@ describe(@"PCFPushBackEndConnection", ^{
             [[theBlock( ^{
                 [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:nil success:^(NSURLResponse *response, NSData *data) {} failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
+        });
+    });
+
+    context(@"posting analytics events", ^{
+        it(@"should require an events array", ^{
+            [[theBlock( ^{
+                [PCFPushURLConnection analyticsRequestWithEvents:nil parameters:helper.params  success:^(NSURLResponse *response, NSData *data) {} failure:^(NSError *error) {}];
+            }) should] raiseWithName:NSInvalidArgumentException];
+        });
+
+        it(@"should require a non-empty events array", ^{
+            [[theBlock( ^{
+                [PCFPushURLConnection analyticsRequestWithEvents:@[] parameters:helper.params  success:^(NSURLResponse *response, NSData *data) {} failure:^(NSError *error) {}];
+            }) should] raiseWithName:NSInvalidArgumentException];
+        });
+
+        it(@"should require a parameters object", ^{
+            [[theBlock( ^{
+                [PCFPushURLConnection analyticsRequestWithEvents:events parameters:nil  success:^(NSURLResponse *response, NSData *data) {} failure:^(NSError *error) {}];
+            }) should] raiseWithName:NSInvalidArgumentException];
+        });
+
+        it(@"should not require a success block", ^{
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [[theBlock( ^{
+                [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:nil failure:^(NSError *error) {}];
+            }) shouldNot] raise];
+        });
+
+        it(@"should not require a failure block", ^{
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [[theBlock( ^{
+                [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:^(NSURLResponse *response, NSData *data) {} failure:nil];
+            }) shouldNot] raise];
+        });
+
+        it(@"should serialize event data into the POST message body", ^{
+            __block BOOL wasExpectedResult = NO;
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+                NSString *authValue = request.allHTTPHeaderFields[kPCFPushBasicAuthorizationKey];
+                [[authValue shouldNot] beNil];
+                [[authValue should] startWithString:@"Basic "];
+                [[authValue should] endWithString:helper.base64AuthString1];
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+                [[json[@"events"] shouldNot] beNil];
+                [[json[@"events"] should] haveCountOf:2];
+                id event1 = json[@"events"][0];
+                [[event1[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER];
+                [[event1[@"geofenceId"] should] equal:@"27"];
+                [[event1[@"locationId"] should] equal:@"81"];
+                id event2 = json[@"events"][1];
+                [[event2[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED];
+                [[event2[@"receiptId"] should] equal:@"RECEIPT1"];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:^(NSURLResponse *response, NSData *data) {
+                wasExpectedResult = YES;
+
+            } failure:^(NSError *error) {
+                fail(@"Should not have failed");
+            }];
+            [[theValue(wasExpectedResult) should] beTrue];
+            [[theValue(didMakeRequest) should] beTrue];
+        });
+
+
+        it(@"should handle HTTP errors", ^{
+            __block BOOL wasExpectedResult = NO;
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:^(NSURLResponse *response, NSData *data) {
+                fail(@"Should not have succeeded");
+
+            } failure:^(NSError *error) {
+                wasExpectedResult = YES;
+                [[error shouldNot] beNil];
+            }];
+            [[theValue(wasExpectedResult) should] beTrue];
+            [[theValue(didMakeRequest) should] beTrue];
         });
     });
 

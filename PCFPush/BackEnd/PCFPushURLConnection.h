@@ -12,24 +12,29 @@ extern NSString *const kPCFPushBasicAuthorizationKey;
 
 + (void)unregisterDeviceID:(NSString *)deviceID
                 parameters:(PCFPushParameters *)parameters
-                   success:(void (^)(NSURLResponse *response, NSData *data))success
-                   failure:(void (^)(NSError *error))failure;
+                   success:(void (^)(NSURLResponse *, NSData *))success
+                   failure:(void (^)(NSError *))failure;
 
 + (void)registerWithParameters:(PCFPushParameters *)parameters
                    deviceToken:(NSData *)deviceToken
-                       success:(void (^)(NSURLResponse *response, NSData *data))success
-                       failure:(void (^)(NSError *error))failure;
+                       success:(void (^)(NSURLResponse *, NSData *))success
+                       failure:(void (^)(NSError *))failure;
 
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
                             parameters:(PCFPushParameters *)parameters
                            deviceToken:(NSData *)deviceToken
-                               success:(void (^)(NSURLResponse *response, NSData *data))success
-                               failure:(void (^)(NSError *error))failure;
+                               success:(void (^)(NSURLResponse *, NSData *))success
+                               failure:(void (^)(NSError *))failure;
 
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
                             timestamp:(int64_t)timestamp
                            deviceUuid:(NSString *)deviceUuid
-                              success:(void (^)(NSURLResponse *response, NSData *data))success
-                              failure:(void (^)(NSError *error))failure;
+                              success:(void (^)(NSURLResponse *, NSData *))success
+                              failure:(void (^)(NSError *))failure;
+
++ (void)analyticsRequestWithEvents:(NSArray*)events
+                        parameters:(PCFPushParameters *)parameters
+                           success:(void (^)(NSURLResponse *, NSData *))success
+                           failure:(void (^)(NSError *))failure;
 
 @end

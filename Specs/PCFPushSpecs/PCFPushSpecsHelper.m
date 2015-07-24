@@ -132,12 +132,12 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
     }];
 }
 
-- (void)setupSuccessfulAsyncRequest
+- (void)setupSuccessfulAsyncRegistrationRequest
 {
-    [self setupSuccessfulAsyncRequestWithBlock:nil];
+    [self setupSuccessfulAsyncRegistrationRequestWithBlock:nil];
 }
 
-- (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block
+- (void)setupSuccessfulAsyncRegistrationRequestWithBlock:(void(^)(NSURLRequest*))block
 {
     [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
         if (block) {

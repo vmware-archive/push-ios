@@ -53,8 +53,8 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 
 // NSURLConnectionHelpers
 - (void)setupAsyncRequestWithBlock:(void(^)(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError))block;
-- (void)setupSuccessfulAsyncRequest;
-- (void)setupSuccessfulAsyncRequestWithBlock:(void(^)(NSURLRequest*))block;
+- (void)setupSuccessfulAsyncRegistrationRequest;
+- (void)setupSuccessfulAsyncRegistrationRequestWithBlock:(void(^)(NSURLRequest*))block;
 - (void)setupSuccessfulDeleteAsyncRequestAndReturnStatus:(NSInteger)status;
 
 // Geofence update helpers
