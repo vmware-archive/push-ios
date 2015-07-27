@@ -31,7 +31,15 @@ static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
 static NSString const* kPCFPushGeofenceUpdateAvailable = @"pivotal.push.geofence_update_available";
 
-BOOL hasAlreadyReceivedNotification(NSString *receiptId);
+BOOL hasAlreadyReceivedNotification(NSString *receiptId)
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    NSString *s = [NSString stringWithFormat:@"receiptId == '%@' AND eventType == '%@'", receiptId, PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED ];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:s];
+
+    NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:predicate];
+    return events.count > 0;
+}
 
 static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
@@ -64,6 +72,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
         self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     }
     return self;
 }
@@ -525,14 +535,65 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     PCFPushCriticalLog(@"Started monitoring region '%@'. Total number of monitored geofence locations: %d", region.identifier, self.locationManager.monitoredRegions.count);
 }
 
+#pragma mark - Analytics
+
+- (void)cleanEventsDatabase:(PCFPushParameters *)parameters
+{
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
+    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
+
+        NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
+        if (postingErrorEvents && postingErrorEvents.count > 0) {
+            [PCFPushAnalyticsStorage.shared setEventsStatus:postingErrorEvents status:PCFPushEventStatusNotPosted];
+        }
+
+        NSArray *postingEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
+        if (postingEvents && postingEvents.count > 0) {
+            [PCFPushAnalyticsStorage.shared setEventsStatus:postingEvents status:PCFPushEventStatusNotPosted];
+        }
+    }];
+}
+
+- (void)sendEventsWithParameters:(PCFPushParameters *)parameters
+{
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
+    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
+        
+        NSArray *events = PCFPushAnalyticsStorage.shared.unpostedEvents;
+
+        if (events && events.count > 0) {
+            [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPosting];
+
+            [PCFPushURLConnection analyticsRequestWithEvents:events parameters:parameters success:^(NSURLResponse *response, NSData *data) {
+
+                PCFPushLog(@"Posted %d analytics events to the server successfully.", events.count);
+                [PCFPushAnalyticsStorage.shared deleteManagedObjects:events];
+
+            } failure:^(NSError *error) {
+
+                PCFPushCriticalLog(@"Error posting %d analytics events to server: %@", events.count, error);
+                [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPostingError];
+            }];
+        }
+    }];
+}
+
+- (void)willEnterForeground:(NSNotification *)notification
+{
+    [self cleanEventsDatabase:self.registrationParameters];
+}
+
+- (void)didEnterBackground:(NSNotification *)notification
+{
+    [self sendEventsWithParameters:self.registrationParameters];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 @end
 
-BOOL hasAlreadyReceivedNotification(NSString *receiptId)
-{
-    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
-    NSString *s = [NSString stringWithFormat:@"receiptId == '%@' AND eventType == '%@'", receiptId, PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED ];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:s];
-
-    NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:predicate];
-    return events.count > 0;
-}

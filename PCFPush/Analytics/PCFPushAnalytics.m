@@ -10,6 +10,7 @@
 #import "PCFPushAnalyticsStorage.h"
 #import "PCFPushAnalyticsEvent.h"
 #import "PCFPushParameters.h"
+#import "PCFPushURLConnection.h"
 
 @implementation PCFPushAnalytics
 
@@ -70,6 +71,7 @@
     event.deviceUuid = fields[@"deviceUuid"];
     event.geofenceId = fields[@"geofenceId"];
     event.locationId = fields[@"locationId"];
+    event.status = @(PCFPushEventStatusNotPosted);
 }
 
 @end

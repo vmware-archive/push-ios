@@ -25,6 +25,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 @implementation PCFPushAnalyticsEvent
 
+@dynamic status; // the status field is not serialized for transmission to the remote server
 @dynamic receiptId;
 @dynamic eventType;
 @dynamic eventTime;

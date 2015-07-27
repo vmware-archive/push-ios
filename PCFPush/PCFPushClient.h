@@ -37,4 +37,8 @@
 - (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
 
+- (void)cleanEventsDatabase:(PCFPushParameters *)parameters;
+
+- (void)sendEventsWithParameters:(PCFPushParameters *)parameters;
+
 @end

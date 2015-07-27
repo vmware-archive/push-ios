@@ -196,9 +196,11 @@ describe(@"PCFPushBackEndConnection", ^{
                 [[event1[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER];
                 [[event1[@"geofenceId"] should] equal:@"27"];
                 [[event1[@"locationId"] should] equal:@"81"];
+                [[event1[@"status"] should] beNil];
                 id event2 = json[@"events"][1];
                 [[event2[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED];
                 [[event2[@"receiptId"] should] equal:@"RECEIPT1"];
+                [[event2[@"status"] should] beNil];
 
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
@@ -237,60 +239,58 @@ describe(@"PCFPushBackEndConnection", ^{
     });
 
     context(@"geofence updates", ^{
-            __block BOOL wasExpectedResult = NO;
+        __block BOOL wasExpectedResult = NO;
 
-            beforeEach ( ^{
+        beforeEach ( ^{
+            wasExpectedResult = NO;
+        });
+
+        afterEach ( ^{
+            [[theValue(wasExpectedResult) should] beTrue];
+        });
+
+        it(@"should handle a success request", ^{
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                //TODO: Verify basic auth once we have a real server
+
+                [[request.HTTPMethod should] equal:@"GET"];
+                [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
+
+                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+
+                CompletionHandler handler = params[2];
+                handler(response, nil, nil);
+                return nil;
+            }];
+            [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
+                wasExpectedResult = YES;
+            }                                           failure:^(NSError *error) {
                 wasExpectedResult = NO;
-            });
+            }];
+        });
 
-            afterEach ( ^{
-                [[theValue(wasExpectedResult) should] beTrue];
-            });
+        it(@"should handle a failure request", ^{
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                //TODO: Verify basic auth once we have a real server
 
-            it(@"should handle a success request", ^{
-                [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                    NSURLRequest *request = params[0];
-                    //TODO: Verify basic auth once we have a real server
+                [[request.HTTPMethod should] equal:@"GET"];
+                [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
 
-                    [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
+                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
 
-                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                CompletionHandler handler = params[2];
+                handler(response, nil, nil);
+                return nil;
+            }];
 
-                    CompletionHandler handler = params[2];
-                    handler(response, nil, nil);
-                    return nil;
-                }];
-                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
-                    wasExpectedResult = YES;
-                }                                           failure:^(NSError *error) {
-                    wasExpectedResult = NO;
-                }];
-            });
-
-            it(@"should handle a failure request", ^{
-                [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                    NSURLRequest *request = params[0];
-                    //TODO: Verify basic auth once we have a real server
-
-                    [[request.HTTPMethod should] equal:@"GET"];
-                    [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
-
-                    NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
-
-                    CompletionHandler handler = params[2];
-                    handler(response, nil, nil);
-                    return nil;
-                }];
-
-                [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
-                    wasExpectedResult = NO;
-                }                                           failure:^(NSError *error) {
-                    wasExpectedResult = YES;
-                }];
-            });
-
-
+            [PCFPushURLConnection geofenceRequestWithParameters:helper.params timestamp:77777L deviceUuid:@"DEVICE_UUID" success:^(NSURLResponse *response, NSData *data) {
+                wasExpectedResult = NO;
+            }  failure:^(NSError *error) {
+                wasExpectedResult = YES;
+            }];
+        });
     });
 
     context(@"valid object arguments", ^{

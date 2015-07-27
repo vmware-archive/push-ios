@@ -7,8 +7,16 @@
 #import "PCFMapping.h"
 #import "PCFSortDescriptors.h"
 
+typedef NS_ENUM(NSUInteger, PCFPushEventStatus) {
+    PCFPushEventStatusNotPosted,
+    PCFPushEventStatusPosting,
+    PCFPushEventStatusPosted,
+    PCFPushEventStatusPostingError,
+};
+
 @interface PCFPushAnalyticsEvent : NSManagedObject <PCFMapping, PCFSortDescriptors>
 
+@property (nonatomic, readwrite) NSNumber *status;
 @property (nonatomic, readwrite) NSString *eventType;
 @property (nonatomic, readwrite) NSString *eventTime;
 @property (nonatomic, readwrite) NSString *receiptId;

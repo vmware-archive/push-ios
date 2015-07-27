@@ -108,6 +108,7 @@ static dispatch_once_t onceToken;
     [analyticEventEntity setManagedObjectClassName:entityName];
     [_managedObjectModel setEntities:@[analyticEventEntity]];
 
+    NSAttributeDescription *statusDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(status)) type:NSInteger16AttributeType optional:true];
     NSAttributeDescription *receiptIdDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(receiptId)) type:NSStringAttributeType optional:true];
     NSAttributeDescription *eventTypeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true];
     NSAttributeDescription *eventTimeDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true];
@@ -116,6 +117,7 @@ static dispatch_once_t onceToken;
     NSAttributeDescription *locationIdDescription = [self attributeDescriptionWithName:NSStringFromSelector(@selector(locationId)) type:NSStringAttributeType optional:true];
 
     [analyticEventEntity setProperties:@[
+            statusDescription,
             receiptIdDescription,
             eventTypeDescription,
             eventTimeDescription,
@@ -179,6 +181,35 @@ static dispatch_once_t onceToken;
     }];
 }
 
+- (NSArray *)events
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    return [self managedObjectsWithEntityName:entityName];
+}
+
+- (NSArray *)eventsWithStatus:(PCFPushEventStatus)status
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"status == %u", status];
+    return [self managedObjectsWithEntityName:entityName predicate:predicate];
+}
+
+- (NSArray*) unpostedEvents
+{
+    NSArray *notPostedEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusNotPosted];
+    NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
+
+    NSMutableArray *events = [NSMutableArray arrayWithCapacity:(notPostedEvents.count + postingErrorEvents.count)];
+    if (notPostedEvents) {
+        [events addObjectsFromArray:notPostedEvents];
+    }
+    if (postingErrorEvents) {
+        [events addObjectsFromArray:postingErrorEvents];
+    }
+
+    return events;
+}
+
 - (NSArray *)managedObjectsWithEntityName:(NSString *)entityName
 {
     return [self managedObjectsWithEntityName:entityName predicate:nil];
@@ -200,6 +231,21 @@ static dispatch_once_t onceToken;
         managedObjects = [self.managedObjectContext executeFetchRequest:request error:&error];
     }];
     return managedObjects;
+}
+
+- (void)setEventsStatus:(NSArray *)events status:(PCFPushEventStatus)status
+{
+    [self.managedObjectContext performBlockAndWait:^{
+
+        for (PCFPushAnalyticsEvent *event in events) {
+            event.status = @(status);
+        }
+
+        NSError *saveError;
+        if (![self.managedObjectContext save:&saveError]) {
+            PCFPushCriticalLog(@"Error setting %d analytics events to status %d: %@", events.count, status, saveError);
+        }
+    }];
 }
 
 @end
