@@ -117,10 +117,11 @@ static NSTimeInterval kRequestTimeout = 60.0;
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
+    
+//    if (success) {success(nil, nil);}
 
-    PCFPushLog(@"Posting %d analytics event to server.", events.count);
     NSURLRequest *request = [PCFPushURLConnection analyticsPostRequestWithEvents:events parameters:parameters];
-
+    
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
                                             failure:failure];

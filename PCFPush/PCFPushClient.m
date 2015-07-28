@@ -23,7 +23,6 @@
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushRegistrationResponseData.h"
 #import "PCFPushAnalyticsStorage.h"
-#import "PCFPushAnalyticsEvent.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -72,8 +71,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
         self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        [self cleanEventsDatabase:self.registrationParameters];
     }
     return self;
 }
@@ -545,14 +544,16 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
     [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
 
-        NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
-        if (postingErrorEvents && postingErrorEvents.count > 0) {
-            [PCFPushAnalyticsStorage.shared setEventsStatus:postingErrorEvents status:PCFPushEventStatusNotPosted];
-        }
-
         NSArray *postingEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
         if (postingEvents && postingEvents.count > 0) {
+            PCFPushLog(@"Found %d analytics events with status 'posting'. Setting their status to 'not posted'.", postingEvents.count);
             [PCFPushAnalyticsStorage.shared setEventsStatus:postingEvents status:PCFPushEventStatusNotPosted];
+        }
+
+        NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
+        if (postingErrorEvents && postingErrorEvents.count > 0) {
+            PCFPushLog(@"Found %d analytics events with status 'posting error'. Setting their status to 'not posted'.", postingErrorEvents.count);
+            [PCFPushAnalyticsStorage.shared setEventsStatus:postingErrorEvents status:PCFPushEventStatusNotPosted];
         }
     }];
 }
@@ -570,6 +571,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         if (events && events.count > 0) {
             [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPosting];
 
+            PCFPushLog(@"Posting %d analytics events to the server...", events.count);
+
             [PCFPushURLConnection analyticsRequestWithEvents:events parameters:parameters success:^(NSURLResponse *response, NSData *data) {
 
                 PCFPushLog(@"Posted %d analytics events to the server successfully.", events.count);
@@ -582,11 +585,6 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
             }];
         }
     }];
-}
-
-- (void)willEnterForeground:(NSNotification *)notification
-{
-    [self cleanEventsDatabase:self.registrationParameters];
 }
 
 - (void)didEnterBackground:(NSNotification *)notification
