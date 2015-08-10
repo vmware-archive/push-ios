@@ -136,6 +136,11 @@ describe(@"PCFPush", ^{
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
+
+        it(@"should let you set request headers", ^{
+            [PCFPush setRequestHeaders:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
+            [[[PCFPushPersistentStorage requestHeaders] should] equal:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
+        });
     });
 
     describe(@"a push registration with an existing registration", ^{

@@ -32,6 +32,9 @@
 + (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled;
 + (BOOL)areGeofencesEnabled;
 
++ (void)setRequestHeaders:(NSDictionary *)requestHeaders;
++ (NSDictionary *)requestHeaders;
+
 + (void)reset;
 
 @end

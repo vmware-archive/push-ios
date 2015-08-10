@@ -82,4 +82,9 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     return [PCFPushPersistentStorage serverDeviceID];
 }
 
++ (void) setRequestHeaders:(NSDictionary*)headers
+{
+    [PCFPushPersistentStorage setRequestHeaders:headers];
+}
+
 @end

@@ -190,4 +190,7 @@
  */
 + (NSString *) deviceUuid;
 
+
++ (void) setRequestHeaders:(NSDictionary*)headers;
+
 @end
