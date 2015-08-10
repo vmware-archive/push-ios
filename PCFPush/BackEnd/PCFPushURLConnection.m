@@ -16,7 +16,7 @@
 #import "PCFPushPersistentStorage.h"
 
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
-
+NSString *const kPCFPushContentTypeKey = @"Content-Type";
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofences";
 static NSString *const kTimestampParam = @"timestamp";
@@ -26,7 +26,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 @implementation NSURL (Additions)
 
-- (NSURL *)URLByAppendingQueryString:(NSString *)queryString {
+- (NSURL *)URLByAppendingQueryString:(NSString *)queryString
+{
     if (![queryString length]) {
         return self;
     }
@@ -37,6 +38,24 @@ static NSTimeInterval kRequestTimeout = 60.0;
 
 @end
 
+void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
+{
+    if (dictionary) {
+        [dictionary enumerateKeysAndObjectsUsingBlock:^(id headerName, id headerValue, BOOL *stop) {
+            if (!headerName || ![headerName isKindOfClass:NSString.class]) {
+                return;
+            }
+            if (!headerValue || ![headerValue isKindOfClass:NSString.class]) {
+                return;
+            }
+            if ([headerName isEqualToString:kPCFPushBasicAuthorizationKey] || [headerName isEqualToString:kPCFPushContentTypeKey]) {
+                return;
+            }
+            [request setValue:headerValue forHTTPHeaderField:headerName];
+        }];
+    }
+}
+
 @implementation PCFPushURLConnection
 
 + (void)unregisterDeviceID:(NSString *)deviceID
@@ -45,11 +64,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
                    failure:(void (^)(NSError *error))failure
 {
     PCFPushLog(@"Unregister with push server device ID: %@", deviceID);
-    NSMutableURLRequest *request = [PCFPushURLConnection unregisterRequestForBackEndDeviceID:deviceID];
+    NSMutableURLRequest *request = [PCFPushURLConnection unregisterRequestForBackEndDeviceID:deviceID parameters:parameters];
 
     if (request) {
-        [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
-
         [NSURLConnection pcfPushSendAsynchronousRequest:request
                                                 success:success
                                                 failure:failure];
@@ -139,7 +156,8 @@ static NSTimeInterval kRequestTimeout = 60.0;
     request.HTTPMethod = method;
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPBody = [PCFPushURLConnection requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/json" forHTTPHeaderField:kPCFPushContentTypeKey];
+    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
     PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
     return request;
 }
@@ -221,6 +239,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
 #pragma mark - Unregister Request
 
 + (NSMutableURLRequest *)unregisterRequestForBackEndDeviceID:(NSString *)backEndDeviceUUID
+                                                  parameters:(PCFPushParameters *)parameters
 {
     if (!backEndDeviceUUID) {
         return nil;
@@ -230,7 +249,9 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSURL *deviceURL = [rootURL URLByAppendingPathComponent:[backEndDeviceUUID stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
+    [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPMethod = @"DELETE";
+    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
     return request;
 }
 
@@ -251,6 +272,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
     NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
+    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
     return request;
 }
 

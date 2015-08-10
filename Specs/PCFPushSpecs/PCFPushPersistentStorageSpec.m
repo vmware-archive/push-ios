@@ -25,6 +25,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
+        [[[PCFPushPersistentStorage requestHeaders] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
     });
@@ -73,7 +74,12 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beTrue];
     });
-    
+
+    it(@"should be able to save request heades", ^{
+        [PCFPushPersistentStorage setRequestHeaders:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
+        [[[PCFPushPersistentStorage requestHeaders] should] equal:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
+    });
+
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
         [PCFPushPersistentStorage setServerDeviceID:helper.backEndDeviceId];
@@ -83,6 +89,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setTags:helper.tags2];
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:888L];
         [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
+        [PCFPushPersistentStorage setRequestHeaders:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -90,6 +97,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantUUID] should] beNil];
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
+        [[[PCFPushPersistentStorage requestHeaders] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beFalse];
     });
