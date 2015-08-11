@@ -18,9 +18,6 @@
     <key>pivotal.push.platformSecretProduction</key>
     <string> No secret is as strong as its blabbiest keeper</string>
 
-    <key>pivotal.push.trustAllSslCertificates</key>
-    <false/>
-
     <key>pivotal.push.pinnedSslCertificateNames</key>
     <array>
         <string>CATS    </string>

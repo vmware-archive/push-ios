@@ -4,8 +4,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PCFPush.h"
 
 @interface PCFPushURLConnectionDelegate : NSObject<NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+
++ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback;
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
                           queue:(NSOperationQueue *)queue

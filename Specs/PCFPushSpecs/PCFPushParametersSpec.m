@@ -22,13 +22,12 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
         // Also, don't check the validity of the tags and alias parameters.  They are permitted to be nil or empty.
         // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 
-        if (propertyType.length < 1) return NO;
+        if (propertyType.length <= 1) return NO;
 
         return !([propertyName isEqualToString:@"pushTags"] ||
                  [propertyName isEqualToString:@"pushDeviceAlias"] ||
                  [propertyName isEqualToString:@"areGeofencesEnabled"] ||
                  [propertyName isEqualToString:@"areAnalyticsEnabled"] ||
-                 [propertyName isEqualToString:@"trustAllSslCertificates"] ||
                  [propertyName isEqualToString:@"pinnedSslCertificateNames"]);
     };
 
@@ -82,7 +81,7 @@ describe(@"PCFRegistrationParameters", ^{
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
 
-        it(@"should require all push properties (except tags, device alias, trustAllSslCertificates, and geofences enabled) to be non-nil and non-empty", ^{
+        it(@"should require all push properties (except tags, device alias, and geofences enabled) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
         });
@@ -127,8 +126,8 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.pushTags should] beNil];
             [[theValue(model.areGeofencesEnabled) should] beFalse];
             [[theValue(model.areAnalyticsEnabled) should] beTrue];
-            [[theValue(model.trustAllSslCertificates) should] beFalse];
             [[model.pinnedSslCertificateNames should] containObjectsInArray:@[ @"certificate.der", @"DOGS", @"CATS" ]];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModeSystemDefault)];
         });
     });
 
@@ -141,7 +140,60 @@ describe(@"PCFRegistrationParameters", ^{
         it(@"should initialize successfully and indicate that parameters are valid", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[theValue(model.trustAllSslCertificates) should] beTrue];
+        });
+    });
+
+    context(@"parsing SSL certificate validation mode settings", ^{
+
+        it(@"should parse 'default'", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModeSystemDefault)];
+        });
+
+        it(@"should parse 'callback'", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-SslCallback" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModeCustomCallback)];
+        });
+
+        it(@"should parse 'trustall'", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-SslTrustAll" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModeTrustAll)];
+        });
+
+        it(@"should parse 'pinned'", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-SslPinned" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModePinned)];
+        });
+
+        it(@"should use 'default' as a default", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-SslEmpty" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModeSystemDefault)];
+        });
+
+        it(@"should throw an error if the setting is invalid", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-SslInvalidValue" ofType:@"plist"]];
+            [[model should] beNil];
+        });
+    });
+
+    context(@"ssl pinning", ^{
+
+        it(@"should require a list of pinned SSL certificates if using 'pinned' certificate mode", ^{
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-MissingPinnedCertificates" ofType:@"plist"]];
+            [[model shouldNot] beNil];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModePinned)];
+            [[model.pinnedSslCertificateNames should] beNil];
+            [[theValue([model arePushParametersValid]) should] beNo];
         });
     });
 

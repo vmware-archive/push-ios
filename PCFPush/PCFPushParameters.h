@@ -8,6 +8,13 @@ extern void pcfPushResetOnceToken(); // For unit tests
 
 extern BOOL pcfPushIsAPNSSandbox();
 
+typedef NS_ENUM(NSInteger, PCFPushSslCertValidationMode) {
+    PCFPushSslCertValidationModeSystemDefault,
+    PCFPushSslCertValidationModeTrustAll,
+    PCFPushSslCertValidationModePinned,
+    PCFPushSslCertValidationModeCustomCallback,
+};
+
 /**
  * Defines the set of parameters used while registering the device for push notifications or analyitcs.
  * Pass to one of the `register` methods in the `PCFPush` class.
@@ -24,7 +31,7 @@ extern BOOL pcfPushIsAPNSSandbox();
 @property (copy) NSString *productionPushVariantUUID;
 @property (copy) NSString *productionPushVariantSecret;
 @property (copy) NSArray *pinnedSslCertificateNames;
-@property (assign) BOOL trustAllSslCertificates;
+@property (assign) PCFPushSslCertValidationMode sslCertValidationMode;
 @property (copy) NSSet *pushTags;
 @property BOOL areGeofencesEnabled;
 @property BOOL areAnalyticsEnabled;

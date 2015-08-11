@@ -77,8 +77,22 @@ void pcfPushResetOnceToken() {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
+                id propertyValue = [plist valueForKey:plistPropertyName];
 
-                if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && plist[@"pivotal.push.areAnalyticsEnabled"]) {
+                if (propertyName && [propertyName isEqualToString:@"sslCertValidationMode"]) {
+                   if (!propertyValue || ![propertyValue isKindOfClass:NSString.class] || [propertyValue length] == 0 || [[propertyValue lowercaseString] isEqualToString:@"default"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeSystemDefault;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"trustall"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeTrustAll;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"pinned"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModePinned;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"callback"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeCustomCallback;
+                   } else {
+                       [NSException raise:NSInvalidArgumentException format:@"invalid sslCertValidationMode"];
+                   }
+
+                } else if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && plist[@"pivotal.push.areAnalyticsEnabled"]) {
                     params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
 
                 } else {
@@ -90,7 +104,7 @@ void pcfPushResetOnceToken() {
                             [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
 
                         } else if ([propertyValue isKindOfClass:[NSArray class]]) {
-                            NSArray *inputArray = (NSArray*) propertyValue;
+                            NSArray *inputArray = (NSArray *) propertyValue;
                             NSMutableArray *resultArray = [NSMutableArray arrayWithCapacity:inputArray.count];
                             for (NSString *s in inputArray) {
                                 [resultArray addObject:[s stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]]];
@@ -145,10 +159,6 @@ void pcfPushResetOnceToken() {
             return;
         }
 
-        if ([propertyName isEqualToString:@"trustAllSslCertificates"]) {
-            return;
-        }
-
         id propertyValue = [self valueForKeyPath:propertyName];
         if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
             PCFPushCriticalLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
@@ -156,6 +166,16 @@ void pcfPushResetOnceToken() {
             *stop = YES;
         }
     }];
+
+    if (!result) {
+        return result;
+    }
+
+    if (self.sslCertValidationMode == PCFPushSslCertValidationModePinned && (!self.pinnedSslCertificateNames || [self.pinnedSslCertificateNames count] == 0)) {
+        PCFPushCriticalLog(@"Error: could not find any pinned SSL certificate filenames in the settings. Please provide them in your pivotal.plist file.");
+        return NO;
+    }
+
     return result;
 }
 
@@ -170,7 +190,7 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
                 @"pivotal.push.analyticsEnabled" : @"areAnalyticsEnabled",
-                @"pivotal.push.trustAllSslCertificates" : @"trustAllSslCertificates",
+                @"pivotal.push.sslCertValidationMode" : @"sslCertValidationMode",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };
     }
