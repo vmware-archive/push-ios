@@ -66,6 +66,12 @@
 		F10922451B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922411B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json */; };
 		F10922461B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922421B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json */; };
 		F10922471B4B07AD003BF725 /* geofence_three_items_with_tag.json in Resources */ = {isa = PBXBuildFile; fileRef = F10922431B4B07AD003BF725 /* geofence_three_items_with_tag.json */; };
+		F10AE88A1B7A70EB009BD2C7 /* Pivotal-SslCallback.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE8871B7A70EB009BD2C7 /* Pivotal-SslCallback.plist */; };
+		F10AE88B1B7A70EB009BD2C7 /* Pivotal-SslPinned.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE8881B7A70EB009BD2C7 /* Pivotal-SslPinned.plist */; };
+		F10AE88C1B7A70EB009BD2C7 /* Pivotal-SslTrustAll.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE8891B7A70EB009BD2C7 /* Pivotal-SslTrustAll.plist */; };
+		F10AE88E1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE88D1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist */; };
+		F10AE8901B7A8901009BD2C7 /* Pivotal-SslInvalidValue.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE88F1B7A8901009BD2C7 /* Pivotal-SslInvalidValue.plist */; };
+		F10AE8921B7A8A8E009BD2C7 /* Pivotal-SslEmpty.plist in Resources */ = {isa = PBXBuildFile; fileRef = F10AE8911B7A8A8E009BD2C7 /* Pivotal-SslEmpty.plist */; };
 		F13F81D71B545F9A00D55224 /* Pivotal-BadPinnedCertificate.plist in Resources */ = {isa = PBXBuildFile; fileRef = F13F81D61B545F9A00D55224 /* Pivotal-BadPinnedCertificate.plist */; };
 		F1CD947D19004FE80086A590 /* Pivotal-Valid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */; };
 		F1CD94811900666F0086A590 /* Pivotal-Invalid.plist in Resources */ = {isa = PBXBuildFile; fileRef = F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */; };
@@ -147,6 +153,12 @@
 		F10922411B4B07AD003BF725 /* geofence_response_data_one_other_item_with_no_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_other_item_with_no_tag.json; sourceTree = "<group>"; };
 		F10922421B4B07AD003BF725 /* geofence_response_data_one_other_item_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_response_data_one_other_item_with_tag.json; sourceTree = "<group>"; };
 		F10922431B4B07AD003BF725 /* geofence_three_items_with_tag.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = geofence_three_items_with_tag.json; sourceTree = "<group>"; };
+		F10AE8871B7A70EB009BD2C7 /* Pivotal-SslCallback.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-SslCallback.plist"; sourceTree = "<group>"; };
+		F10AE8881B7A70EB009BD2C7 /* Pivotal-SslPinned.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-SslPinned.plist"; sourceTree = "<group>"; };
+		F10AE8891B7A70EB009BD2C7 /* Pivotal-SslTrustAll.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-SslTrustAll.plist"; sourceTree = "<group>"; };
+		F10AE88D1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-MissingPinnedCertificates.plist"; sourceTree = "<group>"; };
+		F10AE88F1B7A8901009BD2C7 /* Pivotal-SslInvalidValue.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-SslInvalidValue.plist"; sourceTree = "<group>"; };
+		F10AE8911B7A8A8E009BD2C7 /* Pivotal-SslEmpty.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pivotal-SslEmpty.plist"; sourceTree = "<group>"; };
 		F13F81D61B545F9A00D55224 /* Pivotal-BadPinnedCertificate.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Pivotal-BadPinnedCertificate.plist"; sourceTree = "<group>"; };
 		F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Valid.plist"; sourceTree = "<group>"; };
 		F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "Pivotal-Invalid.plist"; sourceTree = "<group>"; };
@@ -246,12 +258,18 @@
 				11F37BF41ADD62C8001011C9 /* geofence_response_data_one_item.json */,
 				11F37BF51ADD62C8001011C9 /* geofence_response_data_one_other_item.json */,
 				11F37BF61ADD62C8001011C9 /* geofence_three_items.json */,
-				F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */,
 				F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */,
+				F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */,
 				B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */,
 				B6AAEF958FD1CB06277607D7 /* Pivotal-Empty.plist */,
+				F10AE88D1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist */,
 				F13F81D61B545F9A00D55224 /* Pivotal-BadPinnedCertificate.plist */,
 				B6AAEAB49D1EA1D6775A4EE8 /* Pivotal-ExtraParameters.plist */,
+				F10AE8911B7A8A8E009BD2C7 /* Pivotal-SslEmpty.plist */,
+				F10AE8871B7A70EB009BD2C7 /* Pivotal-SslCallback.plist */,
+				F10AE8881B7A70EB009BD2C7 /* Pivotal-SslPinned.plist */,
+				F10AE8891B7A70EB009BD2C7 /* Pivotal-SslTrustAll.plist */,
+				F10AE88F1B7A8901009BD2C7 /* Pivotal-SslInvalidValue.plist */,
 				B69DB8B8004B79E41AAA3C12 /* geofence_one_item_persisted_4.json */,
 				B69DB2931A317F32444F08D5 /* geofence_five_items_with_tags.json */,
 				B69DB695AA3A9187DAFF6E1C /* geofence_one_item_persisted_5.json */,
@@ -356,8 +374,10 @@
 				11F37C021ADD62C8001011C9 /* geofence_response_data_one_item.json in Resources */,
 				11F37BFD1ADD62C8001011C9 /* geofence_response_data_all_items_culled.json in Resources */,
 				11F37BFF1ADD62C8001011C9 /* geofence_response_data_delete_one.json in Resources */,
+				F10AE88C1B7A70EB009BD2C7 /* Pivotal-SslTrustAll.plist in Resources */,
 				11F37BFA1ADD62C8001011C9 /* geofence_one_item_persisted_2.json in Resources */,
 				F10922471B4B07AD003BF725 /* geofence_three_items_with_tag.json in Resources */,
+				F10AE8901B7A8901009BD2C7 /* Pivotal-SslInvalidValue.plist in Resources */,
 				11F37C0C1ADD8C03001011C9 /* geofence_location_1.json in Resources */,
 				F107D7D91B4AFBB900C0C8A7 /* geofence_one_item_with_tag.json in Resources */,
 				11F37C001ADD62C8001011C9 /* geofence_response_data_delete_one_other.json in Resources */,
@@ -365,14 +385,17 @@
 				F10922441B4B07AD003BF725 /* geofence_response_data_one_item_with_tag.json in Resources */,
 				F1CD94811900666F0086A590 /* Pivotal-Invalid.plist in Resources */,
 				235BB251199C085200B9EE63 /* InfoPlist.strings in Resources */,
+				F10AE88B1B7A70EB009BD2C7 /* Pivotal-SslPinned.plist in Resources */,
 				11F37BF81ADD62C8001011C9 /* geofence_one_item.json in Resources */,
 				11F37C0E1ADD9AB6001011C9 /* geofence_with_locations_1.json in Resources */,
 				F1CD947D19004FE80086A590 /* Pivotal-Valid.plist in Resources */,
+				F10AE8921B7A8A8E009BD2C7 /* Pivotal-SslEmpty.plist in Resources */,
 				B6AAEE0D6C25F43D62FE3DF1 /* Pivotal-Empty.plist in Resources */,
 				11F37BFB1ADD62C8001011C9 /* geofence_one_item_persisted_3.json in Resources */,
 				11F37BFC1ADD62C8001011C9 /* geofence_one_item_persisted_bad.json in Resources */,
 				11F37BF71ADD62C8001011C9 /* geofence_five_items.json in Resources */,
 				11F37BFE1ADD62C8001011C9 /* geofence_response_data_complex.json in Resources */,
+				F10AE88E1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist in Resources */,
 				11F37C011ADD62C8001011C9 /* geofence_response_data_empty.json in Resources */,
 				B6AAEEB4854C71C7A968F1DD /* Pivotal-ExtraParameters.plist in Resources */,
 				B69DB029DD6EC4142DEAC23B /* geofence_one_item_persisted_4.json in Resources */,
@@ -380,6 +403,7 @@
 				B69DB4A145327A56F17FD1F8 /* geofence_five_items_with_tags.json in Resources */,
 				B69DB855864EFF3C8A64A111 /* geofence_one_item_persisted_5.json in Resources */,
 				B69DB881E85129B57179A77C /* geofence_status.json in Resources */,
+				F10AE88A1B7A70EB009BD2C7 /* Pivotal-SslCallback.plist in Resources */,
 				B69DB2EC10BEC11E1505CADE /* geofence_one_item_bad_radius.json in Resources */,
 				B69DB6FC0DEEBFF0E9814EB6 /* geofence_response_data_one_item_bad_trigger.json in Resources */,
 				B69DB6E0BB51A375CB11DD5C /* geofence_one_item_persisted_6.json in Resources */,

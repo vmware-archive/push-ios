@@ -6,6 +6,8 @@
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushErrors.h"
 
+typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationChallenge *);
+
 /**
  * Primary entry point for the PCF Push Client SDK library.
  *
@@ -190,7 +192,40 @@
  */
 + (NSString *) deviceUuid;
 
-
+/**
+ * Call this method in order to inject custom headers into any HTTP requests made by the Push SDK.  All values should be pairs of
+ * (NSString, NSString) values.  Note that you can not provide any 'Authorization' or 'Content-Type' headers via this method; they will
+ * be ignored by the Push SDK.
+ *
+ * In order for this method to take effect you will need to call it *before* `registerForPCFPushNotificationsWithDeviceToken`.
+ *
+ * example:
+ *
+ *     [PCFPush setRequestHeaders:@{ @"Cookie:"@"MY_SESSION_COOKIE", @"My-Special-Custom-Header":@"My-Special-Custom-Value" }];
+ *     ...
+ *     [PCFPush registerForPCFPushNotificationsWithDeviceToken:@"My-Device-Token" ... ...];
+ */
 + (void) setRequestHeaders:(NSDictionary*)headers;
+
+/**
+ * Call this method in order to provide a callback for custom SSL authentication when using the 'callback' SSL authentication mode.
+ * The callback must be a block that receives the arguments (NSURLConnection *, NSURLAuthenticationChallenge *) and will be
+ * called when the SDK's NSURLConnectionDelegate object's `connection:willSendRequestForAuthenticationChallenge:` method gets
+ * called when attempting to make an HTTPS network request.
+ *
+ * example:
+ *
+ *     [PCFPush setAuthenticationCallback:^(NSURLConnection *connection, NSURLAuthenticationChallenge *challenge) {
+ *
+ *         // Handle the SSL challenge here!
+ *
+ *     }];
+ *
+ * Please see Apple's documentation for the [NSURLConnectionDelegate connection:willSendRequestForAuthenticationChallenge]
+ * (https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLConnectionDelegate_Protocol/index.html#//apple_ref/occ/intfm/NSURLConnectionDelegate/connection:willSendRequestForAuthenticationChallenge:)
+ * method for more information on how to handle the callback.
+ *
+ */
++ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback;
 
 @end

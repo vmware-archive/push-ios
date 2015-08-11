@@ -78,7 +78,21 @@ void pcfPushResetOnceToken() {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
                 id propertyValue = [plist valueForKey:plistPropertyName];
-                if (propertyValue) {
+
+                if (propertyName && [propertyName isEqualToString:@"sslCertValidationMode"]) {
+                   if (!propertyValue || ![propertyValue isKindOfClass:NSString.class] || [propertyValue length] == 0 || [[propertyValue lowercaseString] isEqualToString:@"default"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeSystemDefault;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"trustall"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeTrustAll;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"pinned"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModePinned;
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"callback"]) {
+                       params.sslCertValidationMode = PCFPushSslCertValidationModeCustomCallback;
+                   } else {
+                       [NSException raise:NSInvalidArgumentException format:@"invalid sslCertValidationMode"];
+                   }
+
+                } else if (propertyValue) {
 
                     if ([propertyValue isKindOfClass:[NSString class]]) {
                         [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
@@ -137,10 +151,6 @@ void pcfPushResetOnceToken() {
             return;
         }
 
-        if ([propertyName isEqualToString:@"trustAllSslCertificates"]) {
-            return;
-        }
-
         id propertyValue = [self valueForKeyPath:propertyName];
         if (!propertyValue || ([propertyValue respondsToSelector:@selector(length)] && [propertyValue length] <= 0)) {
             PCFPushCriticalLog(@"PCFPushParameters failed validation caused by an invalid parameter %@.", propertyName);
@@ -148,6 +158,16 @@ void pcfPushResetOnceToken() {
             *stop = YES;
         }
     }];
+
+    if (!result) {
+        return result;
+    }
+
+    if (self.sslCertValidationMode == PCFPushSslCertValidationModePinned && (!self.pinnedSslCertificateNames || [self.pinnedSslCertificateNames count] == 0)) {
+        PCFPushCriticalLog(@"Error: could not find any pinned SSL certificate filenames in the settings. Please provide them in your pivotal.plist file.");
+        return NO;
+    }
+
     return result;
 }
 
@@ -161,7 +181,7 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
-                @"pivotal.push.trustAllSslCertificates" : @"trustAllSslCertificates",
+                @"pivotal.push.sslCertValidationMode" : @"sslCertValidationMode",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };
     }

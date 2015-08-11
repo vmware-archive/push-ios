@@ -18,15 +18,15 @@
     <key>pivotal.push.platformSecretProduction</key>
     <string>PROD Put sweet chili sauce on everything</string>
 
-    <key>pivotal.push.trustAllSslCertificates</key>
-    <true/>
-
     <key>pivotal.push.pinnedSslCertificateNames</key>
     <array>
       <string>CATS</string>
       <string>DOGS</string>
       <string>certificate.der</string>
     </array>
+
+    <key>pivotal.push.sslCertValidationMode</key>
+    <string>default</string>
 
   </dict>
 </plist>

@@ -8,6 +8,7 @@
 #import "PCFPushClient.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushGeofenceStatusUtil.h"
+#import "PCFPushURLConnectionDelegate.h"
 #import "PCFTagsHelper.h"
 
 // Error domain
@@ -85,6 +86,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void) setRequestHeaders:(NSDictionary*)headers
 {
     [PCFPushPersistentStorage setRequestHeaders:headers];
+}
+
++ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback
+{
+    [PCFPushURLConnectionDelegate setAuthenticationCallback:authenticationCallback];
 }
 
 @end
