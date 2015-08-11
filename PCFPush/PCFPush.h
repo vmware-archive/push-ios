@@ -213,6 +213,8 @@ typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationCha
  * called when the SDK's NSURLConnectionDelegate object's `connection:willSendRequestForAuthenticationChallenge:` method gets
  * called when attempting to make an HTTPS network request.
  *
+ * In order for this method to take effect you will need to call it *before* `registerForPCFPushNotificationsWithDeviceToken`.
+*
  * example:
  *
  *     [PCFPush setAuthenticationCallback:^(NSURLConnection *connection, NSURLAuthenticationChallenge *challenge) {
@@ -220,6 +222,8 @@ typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationCha
  *         // Handle the SSL challenge here!
  *
  *     }];
+ *     ...
+ *     [PCFPush registerForPCFPushNotificationsWithDeviceToken:@"My-Device-Token" ... ...];
  *
  * Please see Apple's documentation for the [NSURLConnectionDelegate connection:willSendRequestForAuthenticationChallenge]
  * (https://developer.apple.com/library/mac/documentation/Foundation/Reference/NSURLConnectionDelegate_Protocol/index.html#//apple_ref/occ/intfm/NSURLConnectionDelegate/connection:willSendRequestForAuthenticationChallenge:)
