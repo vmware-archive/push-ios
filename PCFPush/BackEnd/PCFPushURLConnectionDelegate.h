@@ -8,7 +8,7 @@
 
 @interface PCFPushURLConnectionDelegate : NSObject<NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
-+ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback;
++ (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback;
 
 - (instancetype)initWithRequest:(NSURLRequest *)request
                           queue:(NSOperationQueue *)queue

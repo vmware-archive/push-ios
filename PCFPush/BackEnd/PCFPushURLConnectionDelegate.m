@@ -10,7 +10,7 @@
 
 typedef void (^CompletionHandler)(NSURLResponse*, NSData*, NSError*);
 
-static AuthenticationCallback _authenticationCallback = nil;
+static PCFPushAuthenticationCallback _authenticationCallback = nil;
 
 @interface PCFPushURLConnectionDelegate ()
 
@@ -25,7 +25,7 @@ static AuthenticationCallback _authenticationCallback = nil;
 
 @implementation PCFPushURLConnectionDelegate
 
-+ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback
++ (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback
 {
     _authenticationCallback = authenticationCallback;
 }

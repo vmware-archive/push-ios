@@ -6,7 +6,10 @@
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushErrors.h"
 
-typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationChallenge *);
+/**
+ * A callback that is used to provide custom SSL authentication when using the "callback" sslCertValidationMode.
+ */
+typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthenticationChallenge *);
 
 /**
  * Primary entry point for the PCF Push Client SDK library.
@@ -214,7 +217,7 @@ typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationCha
  * called when attempting to make an HTTPS network request.
  *
  * In order for this method to take effect you will need to call it *before* `registerForPCFPushNotificationsWithDeviceToken`.
-*
+ *
  * example:
  *
  *     [PCFPush setAuthenticationCallback:^(NSURLConnection *connection, NSURLAuthenticationChallenge *challenge) {
@@ -230,6 +233,6 @@ typedef void (^AuthenticationCallback)(NSURLConnection *, NSURLAuthenticationCha
  * method for more information on how to handle the callback.
  *
  */
-+ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback;
++ (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback;
 
 @end

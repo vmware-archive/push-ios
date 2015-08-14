@@ -88,7 +88,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [PCFPushPersistentStorage setRequestHeaders:headers];
 }
 
-+ (void) setAuthenticationCallback:(AuthenticationCallback)authenticationCallback
++ (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback
 {
     [PCFPushURLConnectionDelegate setAuthenticationCallback:authenticationCallback];
 }
