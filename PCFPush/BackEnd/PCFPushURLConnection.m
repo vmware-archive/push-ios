@@ -117,8 +117,6 @@ static NSTimeInterval kRequestTimeout = 60.0;
     if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
-    
-//    if (success) {success(nil, nil);}
 
     NSURLRequest *request = [PCFPushURLConnection analyticsPostRequestWithEvents:events parameters:parameters];
     
@@ -292,7 +290,7 @@ static NSTimeInterval kRequestTimeout = 60.0;
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
 
-    NSURL *requestURL = [[NSURL URLWithString:kAnalyticsRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:kPlatformParam];
+    NSURL *requestURL = [NSURL URLWithString:kAnalyticsRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = @"POST";
     request.HTTPBody = [PCFPushURLConnection requestBodyForEvents:events];
