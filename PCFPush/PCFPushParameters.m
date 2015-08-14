@@ -82,7 +82,7 @@ void pcfPushResetOnceToken() {
                 if (propertyName && [propertyName isEqualToString:@"sslCertValidationMode"]) {
                    if (!propertyValue || ![propertyValue isKindOfClass:NSString.class] || [propertyValue length] == 0 || [[propertyValue lowercaseString] isEqualToString:@"default"]) {
                        params.sslCertValidationMode = PCFPushSslCertValidationModeSystemDefault;
-                   } else if ([[propertyValue lowercaseString] isEqualToString:@"trustall"]) {
+                   } else if ([[propertyValue lowercaseString] isEqualToString:@"trustall"] || [[propertyValue lowercaseString] isEqualToString:@"trust_all"]) {
                        params.sslCertValidationMode = PCFPushSslCertValidationModeTrustAll;
                    } else if ([[propertyValue lowercaseString] isEqualToString:@"pinned"]) {
                        params.sslCertValidationMode = PCFPushSslCertValidationModePinned;
