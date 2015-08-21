@@ -67,4 +67,9 @@ typedef NS_ENUM(NSInteger, PCFPushSslCertValidationMode) {
  */
 - (NSString *)variantSecret;
 
+/**
+ * Returns 'YES' if the PLIST areAnalyticsEnabled parameter and the server version supports analytics
+ */
+- (BOOL) areAnalyticsEnabledAndAvailable;
+
 @end

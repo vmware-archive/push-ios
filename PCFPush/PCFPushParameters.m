@@ -6,6 +6,9 @@
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFHardwareUtil.h"
+#import "NSString+Version.h"
+
+#define SERVER_ANALYTICS_VERSION @"1.3.2"
 
 static dispatch_once_t onceToken;
 
@@ -189,7 +192,7 @@ void pcfPushResetOnceToken() {
                 @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
                 @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
                 @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
-                @"pivotal.push.analyticsEnabled" : @"areAnalyticsEnabled",
+                @"pivotal.push.areAnalyticsEnabled" : @"areAnalyticsEnabled",
                 @"pivotal.push.sslCertValidationMode" : @"sslCertValidationMode",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"
         };
@@ -199,6 +202,20 @@ void pcfPushResetOnceToken() {
             block(plistPropertyName, propertyName, stop);
         }];
     }
+}
+
+- (BOOL) areAnalyticsEnabledAndAvailable
+{
+    if (!self.areAnalyticsEnabled) {
+        return NO;
+    }
+
+    NSString *serverVersion = [PCFPushPersistentStorage serverVersion];
+    if (!serverVersion) {
+        return NO;
+    }
+
+    return [serverVersion isNewerOrSameVersionThan:SERVER_ANALYTICS_VERSION];
 }
 
 @end

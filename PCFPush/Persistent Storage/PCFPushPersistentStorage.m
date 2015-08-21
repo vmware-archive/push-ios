@@ -13,6 +13,8 @@ static NSString *const KEY_TAGS                         = @"PCF_PUSH_TAGS";
 static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_LAST_MODIFIED_TIME";
 static NSString *const KEY_ARE_GEOFENCES_ENABLED        = @"PCF_PUSH_ARE_GEOFENCES_ENABLED";
 static NSString *const KEY_REQUEST_HEADERS              = @"PCF_PUSH_REQUEST_HEADERS";
+static NSString *const KEY_SERVER_VERSION               = @"PCF_PUSH_SERVER_VERSION";
+static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERSION_TIME_POLLED";
 
 @implementation PCFPushPersistentStorage
 
@@ -43,6 +45,8 @@ static NSString *const KEY_REQUEST_HEADERS              = @"PCF_PUSH_REQUEST_HEA
                       KEY_GEOFENCES_LAST_MODIFIED_TIME,
                       KEY_ARE_GEOFENCES_ENABLED,
                       KEY_REQUEST_HEADERS,
+                      KEY_SERVER_VERSION,
+                      KEY_SERVER_VERSION_TIME_POLLED,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -148,6 +152,26 @@ static NSString *const KEY_REQUEST_HEADERS              = @"PCF_PUSH_REQUEST_HEA
 + (NSDictionary *)requestHeaders
 {
     return [self persistedValueForKey:KEY_REQUEST_HEADERS];
+}
+
++ (void)setServerVersion:(NSString*)version
+{
+    [self persistValue:version forKey:KEY_SERVER_VERSION];
+}
+
++ (NSString*)serverVersion
+{
+    return [self persistedValueForKey:KEY_SERVER_VERSION];
+}
+
++ (void)setServerVersionTimePolled:(NSDate*)timestamp
+{
+    [self persistValue:timestamp forKey:KEY_SERVER_VERSION_TIME_POLLED];
+}
+
++ (NSDate*)serverVersionTimePolled
+{
+    return [self persistedValueForKey:KEY_SERVER_VERSION_TIME_POLLED];
 }
 
 @end

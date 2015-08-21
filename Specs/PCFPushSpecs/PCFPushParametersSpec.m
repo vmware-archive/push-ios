@@ -275,6 +275,42 @@ describe(@"PCFRegistrationParameters", ^{
             [[theValue(pcfPushIsAPNSSandbox()) should] beFalse];
         });
     });
+
+    context(@"are analytics available", ^{
+
+        it(@"analytics are not available if the PLIST parameter is no", ^{
+            [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
+            [[theValue(model.areAnalyticsEnabledAndAvailable) should] beNo];
+        });
+
+        context(@"the areAnalyticsAvailable=YES in the PLIST", ^{
+
+            beforeEach(^{
+                [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+                model = [PCFPushParameters defaultParameters];
+            });
+
+            it(@"analytics are not available if the server version is not set", ^{
+                [[theValue(model.areAnalyticsEnabledAndAvailable) should] beNo];
+            });
+
+            it(@"analytics are not available if the server version is old", ^{
+                [PCFPushPersistentStorage setServerVersion:@"1.3.1"];
+                [[theValue(model.areAnalyticsEnabledAndAvailable) should] beNo];
+            });
+
+            it(@"analytics are not available if the server version is current", ^{
+                [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+                [[theValue(model.areAnalyticsEnabledAndAvailable) should] beYes];
+            });
+
+            it(@"analytics are not available if the server version is newer", ^{
+                [PCFPushPersistentStorage setServerVersion:@"1.3.3"];
+                [[theValue(model.areAnalyticsEnabledAndAvailable) should] beYes];
+            });
+        });
+    });
 });
 
 SPEC_END

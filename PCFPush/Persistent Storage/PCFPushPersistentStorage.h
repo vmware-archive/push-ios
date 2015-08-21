@@ -35,6 +35,12 @@
 + (void)setRequestHeaders:(NSDictionary *)requestHeaders;
 + (NSDictionary *)requestHeaders;
 
++ (void)setServerVersion:(NSString*)version;
++ (NSString*)serverVersion;
+
++ (void)setServerVersionTimePolled:(NSDate*)timestamp;
++ (NSDate*)serverVersionTimePolled;
+
 + (void)reset;
 
 @end

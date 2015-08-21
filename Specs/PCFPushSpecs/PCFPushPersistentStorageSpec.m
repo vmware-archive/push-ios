@@ -26,6 +26,8 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage tags] should] beNil];
         [[[PCFPushPersistentStorage requestHeaders] should] beNil];
+        [[[PCFPushPersistentStorage serverVersion] should] beNil];
+        [[[PCFPushPersistentStorage serverVersionTimePolled] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
     });
@@ -80,6 +82,17 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage requestHeaders] should] equal:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
     });
 
+    it(@"should be able to save the server version", ^{
+        [PCFPushPersistentStorage setServerVersion:@"1.3.3.7"];
+        [[[PCFPushPersistentStorage serverVersion] should] equal:@"1.3.3.7"];
+    });
+
+    it(@"should be able to save the server version time polled", ^{
+        NSDate *testDate = [NSDate date];
+        [PCFPushPersistentStorage setServerVersionTimePolled:testDate];
+        [[[PCFPushPersistentStorage serverVersionTimePolled] should] equal:testDate];
+    });
+
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
         [PCFPushPersistentStorage setServerDeviceID:helper.backEndDeviceId];
@@ -90,6 +103,8 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setGeofenceLastModifiedTime:888L];
         [PCFPushPersistentStorage setAreGeofencesEnabled:YES];
         [PCFPushPersistentStorage setRequestHeaders:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
+        [PCFPushPersistentStorage setServerVersion:@"3.4.5.6"];
+        [PCFPushPersistentStorage setServerVersionTimePolled:[NSDate date]];
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -100,6 +115,8 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage requestHeaders] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
+        [[[PCFPushPersistentStorage serverVersion] should] beNil];
+        [[[PCFPushPersistentStorage serverVersionTimePolled] should] beNil];
     });
 });
 
