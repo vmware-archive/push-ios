@@ -64,7 +64,7 @@ static PCFPushAuthenticationCallback _authenticationCallback = nil;
     NSHTTPURLResponse *httpURLResponse = (NSHTTPURLResponse*)response;
 
     if (![self isSuccessfulResponseCode:httpURLResponse]) {
-        self.resultantError = [PCFPushErrorUtil errorWithCode:PCFPushBackEndRegistrationFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %ld", (long)httpURLResponse.statusCode]];
+        self.resultantError = [PCFPushErrorUtil errorWithCode:PCFPushBackEndConnectionFailedHTTPStatusCode localizedDescription:[NSString stringWithFormat:@"Received failure HTTP status code when attemping registration with back-end server: %ld", (long) httpURLResponse.statusCode]];
         return;
     }
 }

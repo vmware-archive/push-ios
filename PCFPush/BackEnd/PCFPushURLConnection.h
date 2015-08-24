@@ -37,4 +37,10 @@ extern NSString *const kPCFPushBasicAuthorizationKey;
                            success:(void (^)(NSURLResponse *, NSData *))success
                            failure:(void (^)(NSError *))failure;
 
++ (void)versionRequestWithParameters:(PCFPushParameters *)parameters
+                             success:(void (^)(NSURLResponse *, NSData *))success
+                          oldVersion:(void (^)())oldVersion
+                    retryableFailure:(void (^)(NSError *))retryableFailure
+                        fatalFailure:(void (^)(NSError *))fatalFailure;
+
 @end

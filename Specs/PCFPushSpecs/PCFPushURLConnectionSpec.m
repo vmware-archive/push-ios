@@ -173,18 +173,18 @@ describe(@"PCFPushBackEndConnection", ^{
             }) shouldNot] raise];
         });
 
-        it(@"should serialize event data into the POST message body", ^{
+        it(@"should serialize event data into the POST message body and make a successful request", ^{
             __block BOOL wasExpectedResult = NO;
             __block BOOL didMakeRequest = NO;
 
+            [PCFPushPersistentStorage setRequestHeaders:@{ @"ORANGE":@"KITTY", @"Basic":@"Should be ignored" } ];
+
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
                 didMakeRequest = YES;
-                NSString *authValue = request.allHTTPHeaderFields[kPCFPushBasicAuthorizationKey];
-                [[authValue shouldNot] beNil];
-                [[authValue should] startWithString:@"Basic "];
-                [[authValue should] endWithString:helper.base64AuthString1];
 
                 [[request.HTTPMethod should] equal:@"POST"];
+                [[request.allHTTPHeaderFields[@"Authorization"] should] equal:[@"Basic  " stringByAppendingString:helper.base64AuthString1]];
+                [[request.allHTTPHeaderFields[@"ORANGE"] should] equal:@"KITTY"];
 
                 [[request.HTTPBody shouldNot] beNil];
                 NSError *error;
@@ -275,7 +275,6 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should handle a failure request", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
-                //TODO: Verify basic auth once we have a real server
 
                 [[request.HTTPMethod should] equal:@"GET"];
                 [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
@@ -419,7 +418,7 @@ describe(@"PCFPushBackEndConnection", ^{
                                                  failure:^(NSError *error) {
                                                      wasExpectedResult = YES;
                                                      [[error.domain should] equal:PCFPushErrorDomain];
-                                                     [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationAuthenticationError)];
+                                                     [[theValue(error.code) should] equal:theValue(PCFPushBackEndAuthenticationError)];
                                                  }];
         });
 
@@ -580,6 +579,183 @@ describe(@"PCFPushBackEndConnection", ^{
                     failure:^(NSError *error) {
                         wasExpectedResult = YES;
                     }];
+        });
+    });
+
+    describe(@"version check", ^{
+
+        __block BOOL wasExpectedResult = NO;
+        __block void (^handlerBlock)(NSHTTPURLResponse **, NSData **, NSError **);
+
+        beforeEach ( ^{
+            wasExpectedResult = NO;
+            handlerBlock = nil;
+
+            [PCFPushPersistentStorage setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
+
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+
+                [[request.allHTTPHeaderFields[@"Authorization"] should] beNil];
+                [[request.allHTTPHeaderFields[@"OOH"] should] equal:@"LA LA"];
+                [[request.HTTPMethod should] equal:@"GET"];
+
+                NSHTTPURLResponse *response = nil;
+                NSData *data = nil;
+                NSError *error = nil;
+                if (handlerBlock) {
+                    handlerBlock(&response, &data, &error);
+                }
+
+                CompletionHandler handler = params[2];
+                handler(response, data, error);
+                return nil;
+            }];
+        });
+
+        afterEach ( ^{
+            [[theValue(wasExpectedResult) should] beTrue];
+        });
+
+        it(@"should let you check the server version succcessfully", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = YES;
+                    [[data shouldNot] beNil];
+                    NSError *error = nil;
+                    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+                    [[error should] beNil];
+                    [[json shouldNot] beNil];
+                    [[json[@"version"] should] equal:@"1.3.3.7"];
+
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
+        });
+
+        it(@"should interpret 404 errors as an old server version", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                *data = [@"404 not found dude" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = YES;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
+        });
+
+        it(@"should interpret crazy authentication errors as fatal errors", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUserAuthenticationRequired userInfo:nil];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                    [[error.domain should] equal:PCFPushErrorDomain];
+                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndAuthenticationError)];
+                }];
+        });
+
+        it(@"should interpret connection errors as retryable errors", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorNetworkConnectionLost userInfo:nil];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                    [[error.domain should] equal:NSURLErrorDomain];
+                    [[theValue(error.code) should] equal:theValue(NSURLErrorNetworkConnectionLost)];
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
+        });
+
+        it(@"should interpret other 4xx errors as fatal server errors", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:401 HTTPVersion:nil headerFields:nil];
+                *data = [@"401 not authorized dude" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                    [[error shouldNot] beNil];
+                }];
+        });
+
+        it(@"should interpret other HTTP errors as retryable server errors", ^{
+
+            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *data = [@"500 the server is flipping out dude" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                    [[error shouldNot] beNil];
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
+        });
+
+        it(@"should consider nil responses and nil errors as retryable errors", ^{
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params
+                success:^(NSURLResponse *response, NSData *data) {
+                    wasExpectedResult = NO;
+                } oldVersion:^{
+                    wasExpectedResult = NO;
+                } retryableFailure:^(NSError *error) {
+                    wasExpectedResult = YES;
+                    [[error.domain should] equal:PCFPushErrorDomain];
+                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionEmptyErrorAndResponse)];
+                } fatalFailure:^(NSError *error) {
+                    wasExpectedResult = NO;
+                }];
         });
     });
 });

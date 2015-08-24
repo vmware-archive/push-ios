@@ -17,19 +17,24 @@ OBJC_EXPORT NSString *const PCFPushErrorDomain;
 typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
 
     /**
+     * The connection returned both nil error and response data. This shouldn't happen.
+     */
+    PCFPushBackEndConnectionEmptyErrorAndResponse = 18,
+
+    /**
      * The back-end server returned a response that was not an HTTP response object
      */
     PCFPushBackEndRegistrationNotHTTPResponseError = 19,
 
     /**
-     * Failed to authenticate while registering with the back-end server
+     * Failed to authenticate while communicating with the back-end server. Can happen if the platform_uuid/platform_secret parameters are wrong.
      */
-    PCFPushBackEndRegistrationAuthenticationError = 20,
+    PCFPushBackEndAuthenticationError = 20,
 
     /**
      * The back-end server returned a failure (i.e.: < 200 or >= 300) HTTP status code while attempting to register.
      */
-    PCFPushBackEndRegistrationFailedHTTPStatusCode = 22,
+    PCFPushBackEndConnectionFailedHTTPStatusCode = 22,
     
     /**
      * The back-end server returned an empty response while attempting to register.
@@ -39,7 +44,7 @@ typedef NS_ENUM(NSInteger, PCFPushErrorCodes) {
     /**
      * Failed to build a valid unregistration request.
      */
-    PCFPushBackEndUnregistrationFailedRequestStatusCode = 32,
+    PCFPushBackEndInvalidRequestStatusCode = 32,
 
     /**
      * The registration request JSON data object was badly formatted.

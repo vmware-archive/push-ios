@@ -14,12 +14,14 @@
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFTagsHelper.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushErrors.h"
 
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 NSString *const kPCFPushContentTypeKey = @"Content-Type";
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofences";
 static NSString *const kAnalyticsRequestPath = @"v1/analytics";
+static NSString *const kVersionRequestPath = @"v1/version";
 static NSString *const kTimestampParam = @"timestamp";
 static NSString *const kDeviceUuidParam = @"device_uuid";
 static NSString *const kPlatformParam = @"platform=ios";
@@ -70,7 +72,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     if (request) {
         [NSURLConnection pcfPushSendAsynchronousRequest:request
                                                 success:success
-                                                failure:failure];
+                                                failure:^(NSURLResponse *response, NSError *error) {
+                                                    if (failure) {
+                                                        failure(error);
+                                                    }
+                                                }];
     }
 }
 
@@ -85,7 +91,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
-                                            failure:failure];
+                                            failure:^(NSURLResponse *response, NSError *error) {
+                                                if (failure) {
+                                                    failure(error);
+                                                }
+                                            }];
 }
 
 + (void)updateRegistrationWithDeviceID:(NSString *)deviceID
@@ -100,7 +110,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
                                                                        parameters:parameters];
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
-                                            failure:failure];
+                                            failure:^(NSURLResponse *response, NSError *error) {
+                                                if (failure) {
+                                                    failure(error);
+                                                }
+                                            }];
 }
 
 + (void)geofenceRequestWithParameters:(PCFPushParameters *)parameters
@@ -114,7 +128,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
-                                            failure:failure];
+                                            failure:^(NSURLResponse *response, NSError *error) {
+                                                if (failure) {
+                                                    failure(error);
+                                                }
+                                            }];
 }
 
 + (void)analyticsRequestWithEvents:(NSArray*)events
@@ -138,7 +156,53 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     
     [NSURLConnection pcfPushSendAsynchronousRequest:request
                                             success:success
-                                            failure:failure];
+                                            failure:^(NSURLResponse *response, NSError *error) {
+                                                if (failure) {
+                                                    failure(error);
+                                                }
+                                            }];
+}
+
++ (void)versionRequestWithParameters:(PCFPushParameters *)parameters
+                             success:(void (^)(NSURLResponse *, NSData *))success
+                          oldVersion:(void (^)())oldVersion
+                    retryableFailure:(void (^)(NSError *))retryableFailure
+                        fatalFailure:(void (^)(NSError *))fatalFailure
+{
+    PCFPushLog(@"Requesting current back-end server version...");
+    NSURLRequest *request = [PCFPushURLConnection versionRequestWithParameters:parameters];
+
+    [NSURLConnection pcfPushSendAsynchronousRequest:request
+                                            success:success
+                                            failure:^(NSURLResponse *response, NSError *error) {
+
+                                                if (response) {
+
+                                                    if ([response isKindOfClass:NSHTTPURLResponse.class]) {
+                                                        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+
+                                                        if (httpResponse.statusCode == 404) {
+                                                            if (oldVersion) {
+                                                                oldVersion();
+                                                            }
+                                                        } else if (httpResponse.statusCode >= 400 && httpResponse.statusCode < 500) {
+                                                            if (fatalFailure) {
+                                                                fatalFailure(error);
+                                                            }
+                                                        } else if (retryableFailure) {
+                                                            retryableFailure(error);
+                                                        }
+                                                    }
+
+                                                } else if (error && [error.domain isEqualToString:PCFPushErrorDomain] && (error.code == PCFPushBackEndAuthenticationError)) {
+                                                    if (fatalFailure) {
+                                                        fatalFailure(error);
+                                                    }
+
+                                                } else if (retryableFailure) {
+                                                    retryableFailure(error);
+                                                }
+                                            }];
 }
 
 #pragma mark - Registration Request
@@ -317,6 +381,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     request.HTTPBody = [PCFPushURLConnection requestBodyForEvents:events];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
+    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
     return request;
 }
 
@@ -333,6 +398,21 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     }
 
     return bodyData;
+}
+
+#pragma mark - Version Request
+
++ (NSURLRequest *)versionRequestWithParameters:(PCFPushParameters *)parameters
+{
+    if (!parameters || !parameters.variantUUID || !parameters.variantSecret) {
+        [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
+    }
+
+    NSURL *requestURL = [NSURL URLWithString:kVersionRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
+    request.HTTPMethod = @"GET";
+    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
+    return request;
 }
 
 #pragma mark - Helpers

@@ -9,13 +9,13 @@ typedef void (^CompletionHandler)(NSURLResponse *response, NSData *data, NSError
 @interface NSURLConnection (PCFBackEndConnection)
 
 + (void)pcfPushSendAsynchronousRequest:(NSURLRequest *)request
-                               success:(void (^)(NSURLResponse *response, NSData *data))success
-                               failure:(void (^)(NSError *error))failure;
+                               success:(void (^)(NSURLResponse *, NSData *))success
+                               failure:(void (^)(NSURLResponse *, NSError *))failure;
 
 + (void)pcfPushSendAsynchronousRequest:(NSURLRequest *)request
                                  queue:(NSOperationQueue *)queue
-                               success:(void (^)(NSURLResponse *response, NSData *data))success
-                               failure:(void (^)(NSError *error))failure;
+                               success:(void (^)(NSURLResponse *, NSData *))success
+                               failure:(void (^)(NSURLResponse *, NSError *))failure;
 
 + (void)pcfPushSendAsynchronousRequestWrapper:(NSURLRequest *)request
                                         queue:(NSOperationQueue *)queue

@@ -837,7 +837,7 @@ describe(@"PCFPush", ^{
                                                      }
                                                      failure:^(NSError *error) {
                                                          [[error.domain should] equal:PCFPushErrorDomain];
-                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndRegistrationFailedHTTPStatusCode)];
+                                                         [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
                                                          [[[PCFPush deviceUuid] should] beNil];
                                                          wasExpectedResult = YES;
                                                      }];
