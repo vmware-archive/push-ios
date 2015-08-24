@@ -43,4 +43,10 @@ extern NSString *const kPCFPushBasicAuthorizationKey;
                     retryableFailure:(void (^)(NSError *))retryableFailure
                         fatalFailure:(void (^)(NSError *))fatalFailure;
 
+// Retries up to three times with a pause in between each attempt
++ (void)versionRequestWithParameters:(PCFPushParameters *)parameters
+                             success:(void (^)(NSString *))success
+                          oldVersion:(void (^)())oldVersion
+                             failure:(void (^)(NSError *))failure;
+
 @end

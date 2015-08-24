@@ -15,6 +15,7 @@
 #import "PCFTagsHelper.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushErrors.h"
+#import "PCFPushErrorUtil.h"
 
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 NSString *const kPCFPushContentTypeKey = @"Content-Type";
@@ -203,6 +204,62 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
                                                     retryableFailure(error);
                                                 }
                                             }];
+}
+
+// Retries up to three times with a pause in between each attempt
++ (void)versionRequestWithParameters:(PCFPushParameters *)parameters
+                             success:(void (^)(NSString *))success
+                          oldVersion:(void (^)())oldVersion
+                             failure:(void (^)(NSError *))failure
+{
+    __block int attemptNumber = 0;
+
+    __block void (^makeRequestBlock)();
+
+    void (^successBlock)(NSURLResponse *, NSData *) = ^(NSURLResponse *response, NSData *data) {
+        if (success) {
+            NSError *error = nil;
+            id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+            if (json && json[@"version"]) {
+                success(json[@"version"]);
+            } else if (failure) {
+                failure([PCFPushErrorUtil errorWithCode:PCFPushBackEndDataUnparseable localizedDescription:@"Could not parse server version response data"]);
+            }
+        }
+    };
+
+    void (^oldVersionBlock)() = ^{
+        if(oldVersion) {
+            oldVersion();
+        }
+    };
+
+    void (^fatalFailureBlock)(NSError *) = ^(NSError *error) {
+        if (failure) {
+            failure(error);
+        }
+    };
+
+    void (^retryableFailureBlock)(NSError *) = ^(NSError *error) {
+        if (attemptNumber >= 2) {
+            if (failure) {
+                failure(error);
+            }
+        } else {
+            attemptNumber += 1;
+            makeRequestBlock();
+        }
+    };
+
+    makeRequestBlock = ^{
+        [PCFPushURLConnection versionRequestWithParameters:parameters
+                                                   success:successBlock
+                                                oldVersion:oldVersionBlock
+                                          retryableFailure:retryableFailureBlock
+                                              fatalFailure:fatalFailureBlock];
+    };
+
+    makeRequestBlock();
 }
 
 #pragma mark - Registration Request

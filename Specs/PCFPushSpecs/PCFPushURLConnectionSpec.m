@@ -17,6 +17,8 @@
 
 SPEC_BEGIN(PCFPushURLConnectionSpec)
 
+typedef void (^RetryableRequestHandlerBlock)(NSHTTPURLResponse **, NSData **, NSError **);
+
 describe(@"PCFPushBackEndConnection", ^{
 
     __block PCFPushSpecsHelper *helper;
@@ -585,7 +587,7 @@ describe(@"PCFPushBackEndConnection", ^{
     describe(@"version check", ^{
 
         __block BOOL wasExpectedResult = NO;
-        __block void (^handlerBlock)(NSHTTPURLResponse **, NSData **, NSError **);
+        __block RetryableRequestHandlerBlock handlerBlock;
 
         beforeEach ( ^{
             wasExpectedResult = NO;
@@ -718,7 +720,8 @@ describe(@"PCFPushBackEndConnection", ^{
                     wasExpectedResult = NO;
                 } fatalFailure:^(NSError *error) {
                     wasExpectedResult = YES;
-                    [[error shouldNot] beNil];
+                    [[error.domain should] equal:PCFPushErrorDomain];
+                    [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
                 }];
         });
 
@@ -756,6 +759,198 @@ describe(@"PCFPushBackEndConnection", ^{
                 } fatalFailure:^(NSError *error) {
                     wasExpectedResult = NO;
                 }];
+        });
+    });
+
+    describe(@"retrying version requests", ^{
+
+        __block BOOL wasExpectedResult;
+        __block int numberOfRequestsExecuted;
+        __block NSMutableArray *handlerBlocks;
+        __block void (^addHandlerBlock)(RetryableRequestHandlerBlock);
+        __block RetryableRequestHandlerBlock successfulCall;
+        __block RetryableRequestHandlerBlock oldVersionCall;
+        __block RetryableRequestHandlerBlock failedCall;
+        __block RetryableRequestHandlerBlock fatalCall;
+
+        beforeEach ( ^{
+            wasExpectedResult = NO;
+            numberOfRequestsExecuted = 0;
+            handlerBlocks = [NSMutableArray array];
+            addHandlerBlock = ^(RetryableRequestHandlerBlock handlerBlock) {
+                [handlerBlocks addObject:[handlerBlock copy]];
+            };
+
+            successfulCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            failedCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *data = [@"Transient error" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            fatalCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:418 HTTPVersion:nil headerFields:nil];
+                *data = [@"I'm a teapot" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            oldVersionCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                *data = [@"404 error chumps" dataUsingEncoding:NSUTF8StringEncoding];
+            };
+
+            [PCFPushPersistentStorage setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
+
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                numberOfRequestsExecuted += 1;
+                NSURLRequest *request = params[0];
+
+                [[request.allHTTPHeaderFields[@"Authorization"] should] beNil];
+                [[request.allHTTPHeaderFields[@"OOH"] should] equal:@"LA LA"];
+                [[request.HTTPMethod should] equal:@"GET"];
+
+                NSHTTPURLResponse *response = nil;
+                NSData *data = nil;
+                NSError *error = nil;
+
+                RetryableRequestHandlerBlock handlerBlock = (RetryableRequestHandlerBlock) handlerBlocks[0];
+                if (handlerBlock) {
+                    [handlerBlocks removeObjectAtIndex:0];
+                    handlerBlock(&response, &data, &error);
+                }
+
+                CompletionHandler handler = params[2];
+                handler(response, data, error);
+                return nil;
+            }];
+        });
+
+        afterEach ( ^{
+            [[theValue(wasExpectedResult) should] beTrue];
+        });
+
+        it(@"should return a version data string after a successful request", ^{
+
+            addHandlerBlock(successfulCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = YES;
+                [[version should] equal:@"1.3.3.7"];
+            } oldVersion:^{
+                wasExpectedResult = NO;
+            } failure:^(NSError *error){
+                wasExpectedResult = NO;
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(1)];
+        });
+
+        it(@"should return an error if the result data doesn't parse", ^{
+
+            addHandlerBlock(^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *data = [@"NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
+            });
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = NO;
+            } oldVersion:^{
+                wasExpectedResult = NO;
+            } failure:^(NSError *error){
+                wasExpectedResult = YES;
+                [[error.domain should] equal:PCFPushErrorDomain];
+                [[theValue(error.code) should] equal:theValue(PCFPushBackEndDataUnparseable)];
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(1)];
+        });
+
+        it(@"should return an old version error if the server returns a 404 error", ^{
+
+            addHandlerBlock(oldVersionCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = NO;
+            } oldVersion:^{
+                wasExpectedResult = YES;
+            } failure:^(NSError *error){
+                wasExpectedResult = NO;
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(1)];
+        });
+
+        it(@"should return a fatal error if the server returns another 4xx error", ^{
+
+            addHandlerBlock(fatalCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = NO;
+            } oldVersion:^{
+                wasExpectedResult = NO;
+            } failure:^(NSError *error){
+                wasExpectedResult = YES;
+                [[error.domain should] equal:PCFPushErrorDomain];
+                [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(1)];
+        });
+
+        it(@"should retry three times and then return an error if there is some kind of transient error", ^{
+
+            addHandlerBlock(failedCall);
+            addHandlerBlock(failedCall);
+            addHandlerBlock(failedCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = NO;
+            } oldVersion:^{
+                wasExpectedResult = NO;
+            } failure:^(NSError *error){
+                wasExpectedResult = YES;
+                [[error.domain should] equal:PCFPushErrorDomain];
+                [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(3)];
+        });
+
+        it(@"should retry three times and then return the version is there are two errors and a successful call", ^{
+
+            addHandlerBlock(failedCall);
+            addHandlerBlock(failedCall);
+            addHandlerBlock(successfulCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = YES;
+                [[version should] equal:@"1.3.3.7"];
+            } oldVersion:^{
+                wasExpectedResult = NO;
+            } failure:^(NSError *error){
+                wasExpectedResult = NO;
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(3)];
+        });
+
+        it(@"should retry three times and then return an old version if there are two errors and then a 404", ^{
+
+            addHandlerBlock(failedCall);
+            addHandlerBlock(failedCall);
+            addHandlerBlock(oldVersionCall);
+
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+                wasExpectedResult = NO;
+            } oldVersion:^{
+                wasExpectedResult = YES;
+            } failure:^(NSError *error){
+                wasExpectedResult = NO;
+            }];
+
+            [[theValue(numberOfRequestsExecuted) should] equal:theValue(3)];
         });
     });
 });
