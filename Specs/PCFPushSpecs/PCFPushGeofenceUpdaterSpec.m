@@ -219,7 +219,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
             });
 
             afterEach(^{
-                [[theValue(wasExpectedResult) shouldEventually] beYes];
+                [[theValue(wasExpectedResult) should] beYes];
             });
 
             it(@"should read the geofence update from the request data if in debug mode", ^{
@@ -230,7 +230,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 PCFPushGeofenceResponseData *expectedResponseData = [[PCFPushGeofenceResponseData alloc] init];
                 expectedResponseData.lastModified = 123456789123456789L;
-                [[engine shouldEventually] receive:@selector(processResponseData:withTimestamp:withTags:) withArguments:expectedResponseData, theValue(7777L), [NSSet set], nil];
+                [[engine should] receive:@selector(processResponseData:withTimestamp:withTags:) withArguments:expectedResponseData, theValue(7777L), [NSSet set], nil];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.geofence_update_json" : @"{\"last_modified\":123456789123456789}" };
 
@@ -248,7 +248,7 @@ SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
 
                 [[PCFPushPersistentStorage shouldNot] receive:@selector(setGeofenceLastModifiedTime:)];
 
-                [[engine shouldNotEventually] receive:@selector(processResponseData:withTimestamp:withTags:)];
+                [[engine shouldNot] receive:@selector(processResponseData:withTimestamp:withTags:)];
 
                 NSDictionary *userInfo = @{ @"pivotal.push.geofence_update_json" : @"I AM NOT JSON" };
 

@@ -95,8 +95,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type: NSData."];
     }
 
-    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
-        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
+    if (self.registrationParameters.areAnalyticsEnabled) {
+        [PCFPushAnalytics setupAnalytics:self.registrationParameters];
     }
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
@@ -145,8 +145,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure
 {
-    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
-        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
+    if (self.registrationParameters.areAnalyticsEnabled) {
+        [PCFPushAnalytics setupAnalytics:self.registrationParameters];
     }
 
     if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
@@ -283,8 +283,8 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 - (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
 {
-    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
-        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
+    if (self.registrationParameters.areAnalyticsEnabled) {
+        [PCFPushAnalytics setupAnalytics:self.registrationParameters];
     }
 
     self.registrationParameters.pushTags = tags;

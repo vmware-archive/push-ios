@@ -30,6 +30,7 @@ describe(@"PCFPushBackEndConnection", ^{
         [helper setupParameters];
         [helper setupDefaultPersistedParameters];
         [helper setupAnalyticsStorage];
+        [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
         [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:helper.params];
         [PCFPushAnalytics logTriggeredGeofenceId:27L locationId:81L parameters:helper.params];
         events = [helper.analyticsStorage managedObjectsWithEntityName:NSStringFromClass(PCFPushAnalyticsEvent.class)];
@@ -138,6 +139,7 @@ describe(@"PCFPushBackEndConnection", ^{
     });
 
     context(@"posting analytics events", ^{
+
         it(@"should require an events array", ^{
             [[theBlock( ^{
                 [PCFPushURLConnection analyticsRequestWithEvents:nil parameters:helper.params  success:^(NSURLResponse *response, NSData *data) {} failure:^(NSError *error) {}];

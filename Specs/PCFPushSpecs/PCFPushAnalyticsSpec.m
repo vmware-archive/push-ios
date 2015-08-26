@@ -26,6 +26,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         [helper setupDefaultPLIST];
         parametersWithAnalyticsDisabled = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
         parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
+        [PCFPushAnalytics resetAnalytics];
     });
 
     afterEach(^{
@@ -34,12 +35,40 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         helper = nil;
     });
 
+    describe(@"checking polling time", ^{
+
+        it(@"it should never be polling time if analytics are disabled", ^{
+           [[theValue([PCFPushAnalytics isAnalyticsPollingTime:parametersWithAnalyticsDisabled]) should] beNo];
+        });
+
+        context(@"when analytics are enabled", ^{
+
+            it(@"should be polling time if the server version has not been fetched before", ^{
+                [PCFPushPersistentStorage setServerVersionTimePolled:nil];
+                [[theValue([PCFPushAnalytics isAnalyticsPollingTime:parametersWithAnalyticsEnabled]) should] beYes];
+            });
+
+            it(@"should be polling time if the server version has been fetched more than 1 minute ago (debug mode)", ^{
+                [PCFPushPersistentStorage setServerVersionTimePolled:[NSDate dateWithTimeIntervalSince1970:0]];
+                [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:(60 + 1)]];
+                [[theValue([PCFPushAnalytics isAnalyticsPollingTime:parametersWithAnalyticsEnabled]) should] beYes];
+            });
+
+            it(@"should not be polling time if the server version has been fetched less than 1 minute ago (debug mode)", ^{
+                [PCFPushPersistentStorage setServerVersionTimePolled:[NSDate dateWithTimeIntervalSince1970:0]];
+                [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:(60 - 1)]];
+                [[theValue([PCFPushAnalytics isAnalyticsPollingTime:parametersWithAnalyticsEnabled]) should] beNo];
+            });
+        });
+    });
+
     describe(@"Logging an event", ^{
 
         __block NSString *entityName;
 
         beforeEach(^{
             entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
         });
 
         describe(@"logging events", ^{
@@ -163,7 +192,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 successBlock(@"5.32.80");
             }];
 
-            [[PCFPushAnalytics should] receive:@selector(cleanEventsDatabase)];
+            [[PCFPushAnalytics should] receive:@selector(prepareEventsDatabase)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -178,7 +207,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 oldVersionBlock();
             }];
 
-            [[PCFPushAnalytics shouldNot] receive:@selector(cleanEventsDatabase)];
+            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -197,7 +226,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 errorBlock([PCFPushErrorUtil errorWithCode:0 localizedDescription:nil]);
             }];
 
-            [[PCFPushAnalytics shouldNot] receive:@selector(cleanEventsDatabase)];
+            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -207,15 +236,18 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         });
     });
 
-    describe(@"cleaning events database", ^{
+    describe(@"preparing the events database", ^{
 
         it(@"should do nothing if the events database is empty", ^{
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-            [PCFPushAnalytics cleanEventsDatabase];
+            [PCFPushAnalytics prepareEventsDatabase];
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
         });
 
         it(@"should set events with the 'posting' and 'posting error' statuses to 'not posted'", ^{
+
+            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+
             [PCFPushAnalytics logEvent:@"NOT_POSTED" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"POSTING" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"POSTED" parameters:parametersWithAnalyticsEnabled];
@@ -234,7 +266,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
             [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
 
-            [PCFPushAnalytics cleanEventsDatabase];
+            [PCFPushAnalytics prepareEventsDatabase];
 
             [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
 
@@ -254,6 +286,9 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
     describe(@"sending events", ^{
 
+        beforeEach(^{
+            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+        });
 
         it(@"should do nothing if analytics is disabled", ^{
 
@@ -268,8 +303,6 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         });
 
         it(@"should do nothing if the events database is empty", ^{
-
-            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
 
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
                 fail(@"Should not have made request");
@@ -303,7 +336,6 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
-            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
             [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
@@ -331,7 +363,6 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
             }];
 
-            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
             [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];

@@ -13,6 +13,9 @@
 
 @interface PCFPushAnalytics : NSObject
 
+// Used in unit tests
++ (void)resetAnalytics;
+
 + (void)logReceivedRemoteNotification:(NSString *)receiptId parameters:(PCFPushParameters *)parameters;
 
 + (void)logOpenedRemoteNotification:(NSString *)receiptId parameters:(PCFPushParameters *)parameters;
@@ -27,7 +30,9 @@
 
 + (void)checkAnalytics:(PCFPushParameters *)parameters;
 
-+ (void)cleanEventsDatabase;
++ (void)setupAnalytics:(PCFPushParameters *)parameters;
+
++ (void)prepareEventsDatabase;
 
 + (void)sendEventsWithParameters:(PCFPushParameters *)parameters;
 

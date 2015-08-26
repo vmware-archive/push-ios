@@ -28,6 +28,7 @@ describe(@"PCFPush", ^{
         [PCFPushClient resetSharedClient];
         helper = [[PCFPushSpecsHelper alloc] init];
         [helper setupParameters];
+        [PCFPushAnalytics resetAnalytics];
     });
 
     afterEach(^{
@@ -57,7 +58,7 @@ describe(@"PCFPush", ^{
             });
 
             afterEach(^{
-                [[theValue(succeeded) shouldEventually] equal:theValue(YES)];
+                [[theValue(succeeded) should] equal:theValue(YES)];
             });
 
             it(@"should accept a nil deviceAlias", ^{
@@ -213,7 +214,7 @@ describe(@"PCFPush", ^{
                     [[requestBody.deviceAlias should] equal:TEST_DEVICE_ALIAS_1];
                 }];
 
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                 [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
                 [helper setupDefaultPersistedParameters];
@@ -237,8 +238,8 @@ describe(@"PCFPush", ^{
         });
 
         afterEach(^{
-            [[theValue(successCount) shouldEventually] equal:theValue(1)];
-            [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+            [[theValue(successCount) should] equal:theValue(1)];
+            [[theValue(updateRegistrationCount) should] equal:theValue(1)];
         });
 
         context(@"with no geofence update in the past (i.e.: geofences have been disabled)", ^{
@@ -616,7 +617,7 @@ describe(@"PCFPush", ^{
                 }];
                 [[PCFPushGeofenceUpdater should] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
 
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
 
                 [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
@@ -641,7 +642,7 @@ describe(@"PCFPush", ^{
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS areGeofencesEnabled:YES success:successBlock failure:failureBlock];
 
-                [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+                [[theValue(wasSuccessBlockExecuted) should] beTrue];
 
                 [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beYes];
@@ -668,7 +669,7 @@ describe(@"PCFPush", ^{
                 });
 
                 afterEach(^{
-                    [[NSURLConnection shouldEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
+                    [[NSURLConnection should] receive:@selector(sendAsynchronousRequest:queue:completionHandler:) withCount:1];
                     [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                     [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beYes];
                 });
@@ -694,7 +695,7 @@ describe(@"PCFPush", ^{
                     [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS areGeofencesEnabled:YES success:successBlock failure:failureBlock];
                     [[theValue(registrationRequestCount) should] equal:theValue(1)]; // Shows that the second registration request was a no-op
                     [[theValue(geofenceUpdateCount) should] equal:theValue(1)];
-                    [[theValue(wasSuccessBlockExecuted) shouldEventually] beYes];
+                    [[theValue(wasSuccessBlockExecuted) should] beYes];
                     [[theValue(wasFailBlockExecuted) should] beNo];
                 });
 
@@ -750,7 +751,7 @@ describe(@"PCFPush", ^{
                 [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:)];
                 [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearAllGeofences:)];
 
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withCount:1];
 
                 [helper setupSuccessfulAsyncRegistrationRequestWithBlock:^(NSURLRequest *request) {
 
@@ -775,7 +776,7 @@ describe(@"PCFPush", ^{
 
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS areGeofencesEnabled:NO success:successBlock failure:failureBlock];
 
-                [[theValue(wasSuccessBlockExecuted) shouldEventually] beTrue];
+                [[theValue(wasSuccessBlockExecuted) should] beTrue];
 
                 [[[PCFPush deviceUuid] should] equal:TEST_DEVICE_UUID];
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
@@ -999,7 +1000,7 @@ describe(@"PCFPush", ^{
                     [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
 
                     [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
-                    [[NSURLConnection shouldNotEventually] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
+                    [[NSURLConnection shouldNot] receive:@selector(sendAsynchronousRequest:queue:completionHandler:)];
 
                     [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                         successBlockExecuted = YES;
@@ -1021,7 +1022,7 @@ describe(@"PCFPush", ^{
 
                     [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
                     [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
-                    [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
+                    [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                     [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                         successBlockExecuted = YES;
@@ -1053,7 +1054,7 @@ describe(@"PCFPush", ^{
                 [[PCFPushGeofenceUpdater should] receive:@selector(clearAllGeofences:)];
                 [[[PCFPushPersistentStorage serverDeviceID] shouldNot] beNil];
                 [[[PCFPush deviceUuid] shouldNot] beNil];
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     fail(@"unregistration success block executed");
@@ -1064,7 +1065,7 @@ describe(@"PCFPush", ^{
                     [[[PCFPush deviceUuid] shouldNot] beNil];
                 }];
 
-                [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+                [[theValue(failureBlockExecuted) should] beTrue];
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
             });
         });
@@ -1091,7 +1092,7 @@ describe(@"PCFPush", ^{
                     return nil;
                 }];
 
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                 [PCFPush unregisterFromPCFPushNotificationsWithSuccess:^{
                     fail(@"unregistration success block executed incorrectly");
@@ -1101,7 +1102,7 @@ describe(@"PCFPush", ^{
                     [[[PCFPush deviceUuid] shouldNot] beNil];
                 }];
 
-                [[theValue(failureBlockExecuted) shouldEventually] beTrue];
+                [[theValue(failureBlockExecuted) should] beTrue];
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
             });
         });
@@ -1114,7 +1115,7 @@ describe(@"PCFPush", ^{
                 [helper setupDefaultPersistedParameters];
                 [helper setupSuccessfulDeleteAsyncRequestAndReturnStatus:204];
 
-                [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
+                [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
                 [[[PCFPush deviceUuid] shouldNot] beNil];
                 [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearAllGeofences:)];
@@ -1127,7 +1128,7 @@ describe(@"PCFPush", ^{
                     fail(@"unregistration failure block executed");
                 }];
 
-                [[theValue(successBlockExecuted) shouldEventually] beTrue];
+                [[theValue(successBlockExecuted) should] beTrue];
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
             });
         });
@@ -1166,7 +1167,7 @@ describe(@"PCFPush", ^{
                     wasFailureBlockCalled = YES;
                 }];
 
-                [[theValue(wasFailureBlockCalled) shouldEventually] beTrue];
+                [[theValue(wasFailureBlockCalled) should] beTrue];
             });
         });
 
@@ -1211,7 +1212,7 @@ describe(@"PCFPush", ^{
             });
 
             afterEach(^{
-                [[theValue(wasExpectedBlockCalled) shouldEventually] beTrue];
+                [[theValue(wasExpectedBlockCalled) should] beTrue];
             });
 
             context(@"geofences enabled", ^{
@@ -1355,7 +1356,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(1)];
                 });
 
                 it(@"should be able to register to some new tags and then clear the currently monitored geofences", ^{
@@ -1378,7 +1379,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags2];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(1)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(1)];
                 });
 
                 it(@"should not call the update API if provided the same tags (i.e.: no-op)", ^{
@@ -1393,7 +1394,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
                 });
 
                 it(@"should not call the update API if provided tags that differ only by case (i.e.: no-op)", ^{
@@ -1413,7 +1414,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
                 });
 
                 it(@"should not call the update API if provided the same tags (and then clear the geofences)", ^{
@@ -1434,7 +1435,7 @@ describe(@"PCFPush", ^{
                     }];
 
                     [[[PCFPushPersistentStorage tags] should] equal:helper.tags1];
-                    [[theValue(updateRegistrationCount) shouldEventually] equal:theValue(0)];
+                    [[theValue(updateRegistrationCount) should] equal:theValue(0)];
                 });
             });
         });
@@ -1452,8 +1453,8 @@ describe(@"PCFPush", ^{
             });
 
             afterEach(^{
-                [[theValue(wasFailBlockCalled) shouldEventually] beTrue];
-                [[theValue(wasRequestCalled) shouldEventually] beTrue];
+                [[theValue(wasFailBlockCalled) should] beTrue];
+                [[theValue(wasRequestCalled) should] beTrue];
             });
 
             it(@"Should fail correctly if there is a network error", ^{
@@ -1516,7 +1517,7 @@ describe(@"PCFPush", ^{
             });
 
             afterEach(^{
-                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+                [[theValue(wasCompletionHandlerCalled) should] beYes];
             });
 
             it(@"should process geofence updates with some data available on server", ^{
@@ -1563,7 +1564,7 @@ describe(@"PCFPush", ^{
         context(@"geofences are disabled", ^{
 
             afterEach(^{
-                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+                [[theValue(wasCompletionHandlerCalled) should] beYes];
             });
 
             it(@"should process geofence updates with some data available on server", ^{
@@ -1589,7 +1590,7 @@ describe(@"PCFPush", ^{
             });
 
             afterEach(^{
-                [[theValue(wasCompletionHandlerCalled) shouldEventually] beYes];
+                [[theValue(wasCompletionHandlerCalled) should] beYes];
             });
 
             it(@"should ignore notifications with nil data", ^{
@@ -1665,8 +1666,9 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should log analytics events for opening notifications that have been previously received", ^{
-                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateInactive)];
                     [PCFPushPersistentStorage setServerDeviceID:@"MY_DEVICE_UUID"];
+                    [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+                    [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateInactive)];
                     [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:helper.params];
                     [[PCFPushAnalytics should] receive:@selector(logOpenedRemoteNotification:parameters:)];
                     [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];

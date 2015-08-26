@@ -13,11 +13,22 @@
 #import "PCFPushClient.h"
 
 static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+static BOOL areAnalyticsSetUp = NO;
 
 @implementation PCFPushAnalytics
 
+// Used in unit tests
++ (void)resetAnalytics
+{
+    areAnalyticsSetUp = NO;
+}
+
 + (void)logReceivedRemoteNotification:(NSString *)receiptId parameters:(PCFPushParameters *)parameters
 {
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
     NSDictionary *fields = @{ @"receiptId":receiptId, @"deviceUuid":[PCFPushPersistentStorage serverDeviceID]};
     PCFPushLog(@"Logging received remote notification for receiptId:%@", receiptId);
     [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED fields:fields parameters:parameters];
@@ -25,6 +36,10 @@ static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 + (void)logOpenedRemoteNotification:(NSString *)receiptId parameters:(PCFPushParameters *)parameters
 {
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
     NSDictionary *fields = @{ @"receiptId":receiptId, @"deviceUuid":[PCFPushPersistentStorage serverDeviceID]};
     PCFPushLog(@"Logging opened remote notification for receiptId:%@", receiptId);
     [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED fields:fields parameters:parameters];
@@ -32,6 +47,10 @@ static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 + (void)logTriggeredGeofenceId:(int64_t)geofenceId locationId:(int64_t)locationId parameters:(PCFPushParameters *)parameters
 {
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
     NSDictionary *fields = @{ @"geofenceId":[NSString stringWithFormat:@"%lld", geofenceId], @"locationId":[NSString stringWithFormat:@"%lld", locationId], @"deviceUuid":[PCFPushPersistentStorage serverDeviceID]};
     PCFPushLog(@"Logging triggered geofenceId %lld and locationId %lld", geofenceId, locationId);
     [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER fields:fields parameters:parameters];
@@ -46,8 +65,7 @@ static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
           fields:(NSDictionary *)fields
       parameters:(PCFPushParameters *)parameters
 {
-    if (!parameters.areAnalyticsEnabled) {
-        PCFPushLog(@"Analytics disabled. Event will not be logged.");
+    if (!parameters.areAnalyticsEnabledAndAvailable) {
         return;
     }
 
@@ -78,41 +96,73 @@ static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 + (BOOL)isAnalyticsPollingTime:(PCFPushParameters *)parameters
 {
-    // TODO - check if 24 hours have passed since the last poll
-    return parameters.areAnalyticsEnabled;
+    if (!parameters.areAnalyticsEnabled) {
+        return NO;
+    }
+
+    NSDate *lastPollingTime = PCFPushPersistentStorage.serverVersionTimePolled;
+    if (!lastPollingTime) {
+        return YES;
+    }
+
+    NSTimeInterval pollingInterval;
+    if (pcfPushIsAPNSSandbox()) {
+        pollingInterval = 60; // 1 minute in debug (sandbox) builds
+    } else {
+        pollingInterval = 24 * 60 * 60; // 24 hours in release builds
+    };
+
+    return NSDate.date.timeIntervalSince1970 >= lastPollingTime.timeIntervalSince1970 + pollingInterval;
+}
+
++ (void)setupAnalytics:(PCFPushParameters *)parameters
+{
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
+    if ([PCFPushAnalytics isAnalyticsPollingTime:parameters]) {
+        [PCFPushAnalytics checkAnalytics:parameters];
+
+    } else if (!areAnalyticsSetUp && parameters.areAnalyticsEnabledAndAvailable) {
+        [PCFPushAnalytics prepareEventsDatabase];
+    }
 }
 
 + (void)checkAnalytics:(PCFPushParameters *)parameters
 {
-    if (parameters.areAnalyticsEnabled) {
-
-        [PCFPushURLConnection versionRequestWithParameters:parameters success:^(NSString *version) {
-
-            PCFPushLog(@"PCF Push server is version '%@'. Push analytics are enabled.", version);
-
-            [PCFPushPersistentStorage setServerVersion:version];
-            [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
-
-            if (parameters.areAnalyticsEnabledAndAvailable) {
-                [PCFPushAnalytics cleanEventsDatabase];
-            }
-
-        } oldVersion:^{
-
-            PCFPushLog(@"PCF Push server version is old. Push analytics are disabled.");
-
-            [PCFPushPersistentStorage setServerVersion:nil];
-            [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
-
-        } failure:^(NSError *error) {
-
-            PCFPushLog(@"Not able to successfully check the PCF Push server version");
-        }];
+    if (!parameters.areAnalyticsEnabled) {
+        return;
     }
+
+    [PCFPushURLConnection versionRequestWithParameters:parameters success:^(NSString *version) {
+
+        PCFPushLog(@"PCF Push server is version '%@'. Push analytics are enabled.", version);
+
+        [PCFPushPersistentStorage setServerVersion:version];
+        [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
+
+        if (!areAnalyticsSetUp && parameters.areAnalyticsEnabledAndAvailable) {
+            [PCFPushAnalytics prepareEventsDatabase];
+        }
+
+    } oldVersion:^{
+
+        PCFPushLog(@"PCF Push server version is old. Push analytics are disabled.");
+
+        [PCFPushPersistentStorage setServerVersion:nil];
+        [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
+
+    } failure:^(NSError *error) {
+
+        PCFPushLog(@"Not able to successfully check the PCF Push server version");
+    }];
 }
 
-+ (void)cleanEventsDatabase
++ (void)prepareEventsDatabase
 {
+    areAnalyticsSetUp = YES;
+
     [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
 
         NSArray *postingEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
@@ -133,6 +183,8 @@ static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
             // Ensure that we register for the background notification so that we can send analytics events later
             [[NSNotificationCenter defaultCenter] addObserver:PCFPushClient.shared selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        } else {
+            PCFPushLog(@"There are no unposted analytics events at this time.");
         }
     }];
 }
