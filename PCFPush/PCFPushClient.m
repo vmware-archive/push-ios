@@ -18,11 +18,11 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushGeofenceHandler.h"
 #import "PCFPushApplicationUtil.h"
+#import "PCFPushAnalyticsStorage.h"
 #import "PCFPushGeofenceRegistrar.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushGeofencePersistentStore.h"
 #import "PCFPushRegistrationResponseData.h"
-#import "PCFPushAnalyticsStorage.h"
 
 typedef void (^RegistrationBlock)(NSURLResponse *response, id responseData);
 
@@ -30,7 +30,7 @@ static PCFPushClient *_sharedPCFPushClient;
 static dispatch_once_t _sharedPCFPushClientToken;
 static NSString const* kPCFPushGeofenceUpdateAvailable = @"pivotal.push.geofence_update_available";
 
-BOOL hasAlreadyReceivedNotification(NSString *receiptId)
+static BOOL hasAlreadyReceivedNotification(NSString *receiptId)
 {
     NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
     NSString *s = [NSString stringWithFormat:@"receiptId == '%@' AND eventType == '%@'", receiptId, PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED ];
@@ -71,8 +71,6 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
         self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [self cleanEventsDatabase:self.registrationParameters];
     }
     return self;
 }
@@ -93,8 +91,12 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         [NSException raise:NSInvalidArgumentException format:@"Device Token cannot not be nil."];
     }
 
-    if (![deviceToken isKindOfClass:[NSData class]]) {
+    if (![deviceToken isKindOfClass:NSData.class]) {
         [NSException raise:NSInvalidArgumentException format:@"Device Token type does not match expected type: NSData."];
+    }
+
+    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
+        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
     }
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
@@ -143,6 +145,10 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure
 {
+    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
+        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
+    }
+
     if ([PCFPushPersistentStorage lastGeofencesModifiedTime] != PCF_NEVER_UPDATED_GEOFENCES ) {
         [PCFPushGeofenceUpdater clearAllGeofences:self.engine];
     }
@@ -277,6 +283,10 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 - (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
 {
+    if ([PCFPushAnalytics isAnalyticsPollingTime:self.registrationParameters]) {
+        [PCFPushAnalytics checkAnalytics:self.registrationParameters];
+    }
+
     self.registrationParameters.pushTags = tags;
 
     if ([PCFPushClient isClearGeofencesRequired:self.registrationParameters]) {
@@ -471,14 +481,24 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
             if (applicationState == UIApplicationStateBackground || applicationState == UIApplicationStateActive) {
 
+                // Ensure that we register for the background notification so that we can send analytics events later
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
                 [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
 
             } else if (applicationState == UIApplicationStateInactive) {
 
-                if (!hasAlreadyReceivedNotification(receiptId)) {
-                    [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
-                }
-                [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
+                // Ensure that we register for the background notification so that we can send analytics events later
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
+                // TODO - figure out why performing this block in the managed object context causes the tests to fail
+                [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
+
+                    if (!hasAlreadyReceivedNotification(receiptId)) {
+                        [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                    }
+                    [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
+                }];
             }
         }
 
@@ -536,60 +556,9 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 #pragma mark - Analytics
 
-- (void)cleanEventsDatabase:(PCFPushParameters *)parameters
-{
-    if (!parameters.areAnalyticsEnabled) {
-        return;
-    }
-
-    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
-
-        NSArray *postingEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
-        if (postingEvents && postingEvents.count > 0) {
-            PCFPushLog(@"Found %d analytics events with status 'posting'. Setting their status to 'not posted'.", postingEvents.count);
-            [PCFPushAnalyticsStorage.shared setEventsStatus:postingEvents status:PCFPushEventStatusNotPosted];
-        }
-
-        NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
-        if (postingErrorEvents && postingErrorEvents.count > 0) {
-            PCFPushLog(@"Found %d analytics events with status 'posting error'. Setting their status to 'not posted'.", postingErrorEvents.count);
-            [PCFPushAnalyticsStorage.shared setEventsStatus:postingErrorEvents status:PCFPushEventStatusNotPosted];
-        }
-    }];
-}
-
-- (void)sendEventsWithParameters:(PCFPushParameters *)parameters
-{
-    if (!parameters.areAnalyticsEnabled) {
-        return;
-    }
-
-    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
-        
-        NSArray *events = PCFPushAnalyticsStorage.shared.unpostedEvents;
-
-        if (events && events.count > 0) {
-            [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPosting];
-
-            PCFPushLog(@"Posting %d analytics events to the server...", events.count);
-
-            [PCFPushURLConnection analyticsRequestWithEvents:events parameters:parameters success:^(NSURLResponse *response, NSData *data) {
-
-                PCFPushLog(@"Posted %d analytics events to the server successfully.", events.count);
-                [PCFPushAnalyticsStorage.shared deleteManagedObjects:events];
-
-            } failure:^(NSError *error) {
-
-                PCFPushCriticalLog(@"Error posting %d analytics events to server: %@", events.count, error);
-                [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPostingError];
-            }];
-        }
-    }];
-}
-
 - (void)didEnterBackground:(NSNotification *)notification
 {
-    [self sendEventsWithParameters:self.registrationParameters];
+    [PCFPushAnalytics sendEventsWithParameters:self.registrationParameters];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 

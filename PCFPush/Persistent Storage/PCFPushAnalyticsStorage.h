@@ -12,7 +12,7 @@
 
 + (void)setSharedManager:(PCFPushAnalyticsStorage *)manager;
 
-- (void)flushDatabase;
+- (void)resetDatabase;
 
 - (NSManagedObjectContext *)managedObjectContext;
 

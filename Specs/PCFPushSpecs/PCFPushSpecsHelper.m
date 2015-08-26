@@ -7,6 +7,7 @@
 #import <CoreData/CoreData.h>
 #import "PCFPushParameters.h"
 #import "PCFPushSpecsHelper.h"
+#import "PCFPushURLConnection.h"
 #import "PCFPushGeofenceUpdater.h"
 #import "PCFPushAnalyticsStorage.h"
 #import "PCFPushRegistrationData.h"
@@ -115,6 +116,22 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 }
 
 #pragma mark - NSURLConnection Helpers
+
+- (void)setupVersionRequestWithBlock:(void(^)( void(^successBlock)(NSString*), void(^oldVersionBlock)(void), void(^errorBlock)(NSError *error)))block;
+{
+    [PCFPushURLConnection stub:@selector(versionRequestWithParameters:success:oldVersion:failure:) withBlock:^id(NSArray *params) {
+
+        void (^successBlock)(NSString*) = (void (^)(NSString*)) params[1];
+        void (^oldVersionBlock)() = (void (^)()) params[2];
+        void (^failureBlock)(NSError*) = (void (^)(NSError*)) params[3];
+
+        if (block) {
+            block(successBlock, oldVersionBlock, failureBlock);
+        }
+
+        return nil;
+    }];
+}
 
 - (void)setupAsyncRequestWithBlock:(void(^)(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError))block {
     [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
@@ -241,7 +258,13 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         [self.analyticsStorage.managedObjectContext performBlockAndWait:block];
         return nil;
     }];
-    [self.analyticsStorage flushDatabase];
+}
+
+- (void)resetAnalyticsStorage
+{
+    [self.analyticsStorage resetDatabase];
+    [PCFPushAnalyticsStorage setSharedManager:nil];
+    self.analyticsStorage = nil;
 }
 
 @end

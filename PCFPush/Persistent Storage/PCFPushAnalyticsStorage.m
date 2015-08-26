@@ -47,7 +47,7 @@ static dispatch_once_t onceToken;
 }
 
 // Used in unit tests
-- (void)flushDatabase
+- (void)resetDatabase
 {
     [_managedObjectContext lock];
     NSArray *stores = [_persistentStoreCoordinator persistentStores];

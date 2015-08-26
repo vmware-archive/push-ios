@@ -5,6 +5,7 @@
 #import "Kiwi.h"
 #import "PCFPush.h"
 #import "PCFPushAnalytics.h"
+#import "PCFPushErrorUtil.h"
 #import "PCFPushParameters.h"
 #import "PCFPushClientTest.h"
 #import "PCFPushSpecsHelper.h"
@@ -17,7 +18,6 @@
 #import "PCFPushRegistrationPutRequestData.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
-#import "PCFPushAnalyticsStorage.h"
 
 SPEC_BEGIN(PCFPushSpecs)
 
@@ -35,6 +35,10 @@ describe(@"PCFPush", ^{
     });
 
     describe(@"setting parameters", ^{
+
+        beforeEach(^{
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
+        });
 
         describe(@"empty and nillable parameters", ^{
 
@@ -211,6 +215,7 @@ describe(@"PCFPush", ^{
 
                 [[NSURLConnection shouldEventually] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
 
+                [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
                 [helper setupDefaultPersistedParameters];
                 [helper setupDefaultPLIST];
 
@@ -595,6 +600,10 @@ describe(@"PCFPush", ^{
 
     describe(@"successful push registration", ^{
 
+        beforeEach(^{
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
+        });
+
         context(@"geofences enabled", ^{
             it(@"should make a POST request to the server and update geofences on a new registration", ^{
 
@@ -816,6 +825,7 @@ describe(@"PCFPush", ^{
 
         beforeEach(^{
             wasExpectedResult = NO;
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
         });
 
         afterEach(^{
@@ -955,6 +965,11 @@ describe(@"PCFPush", ^{
     });
 
     describe(@"unregistration", ^{
+
+        beforeEach(^{
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
+        });
+
         describe(@"successful unregistration from push server", ^{
 
             __block BOOL successBlockExecuted = NO;
@@ -1119,6 +1134,10 @@ describe(@"PCFPush", ^{
     });
 
     describe(@"subscribing to tags", ^{
+
+        beforeEach(^{
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
+        });
 
         describe(@"ensuring the device is registered", ^{
 
@@ -1619,6 +1638,10 @@ describe(@"PCFPush", ^{
                     [helper setupAnalyticsStorage];
                 });
 
+                afterEach(^{
+                    [helper resetAnalyticsStorage];
+                });
+
                 it(@"should log analytics events for receiving notifications in the background", ^{
                     [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateBackground)];
                     [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
@@ -1744,6 +1767,7 @@ describe(@"PCFPush", ^{
         beforeEach(^{
             [helper setupDefaultPLIST];
             [helper setupDefaultPersistedParameters];
+            [PCFPushAnalytics stub:@selector(isAnalyticsPollingTime:) andReturn:theValue(NO)];
         });
 
         it(@"should return an error if not already registered", ^{
@@ -1828,171 +1852,6 @@ describe(@"PCFPush", ^{
                 } failure:^(NSError *error) {
                     fail(@"Should not have failed.");
                 }];
-            });
-        });
-    });
-
-    describe(@"analytics", ^{
-
-        __block PCFPushParameters *parametersWithAnalyticsEnabled;
-        __block PCFPushParameters *parametersWithAnalyticsDisabled;
-        __block PCFPushClient *client = PCFPushClient.shared;
-
-        beforeEach(^{
-            [helper setupAnalyticsStorage];
-            [helper setupDefaultPLIST];
-            parametersWithAnalyticsDisabled = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
-            parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
-            client = [PCFPushClient shared];
-        });
-
-        describe(@"cleaning events database", ^{
-
-            it(@"should do nothing if analytics is disabled", ^{
-
-                [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-                PCFPushAnalyticsEvent *eventBefore = PCFPushAnalyticsStorage.shared.events[0];
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
-                [PCFPushAnalyticsStorage.shared setEventsStatus:@[eventBefore] status:PCFPushEventStatusPostingError];
-
-                [client cleanEventsDatabase:parametersWithAnalyticsDisabled];
-                
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
-                PCFPushAnalyticsEvent *eventAfter = PCFPushAnalyticsStorage.shared.events[0];
-                [[eventAfter.status should] equal:@(PCFPushEventStatusPostingError)];
-            });
-
-            it(@"should do nothing if the events database is empty", ^{
-                [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-                [client cleanEventsDatabase:parametersWithAnalyticsEnabled];
-                [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-            });
-            
-            it(@"should set events with the 'posting' and 'posting error' statuses to 'not posted'", ^{
-                [PCFPushAnalytics logEvent:@"NOT_POSTED" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"POSTING" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"POSTED" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"POSTING_ERROR" parameters:parametersWithAnalyticsEnabled];
-
-                NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
-
-                PCFPushAnalyticsEvent *postingEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING'"]][0];
-                [PCFPushAnalyticsStorage.shared setEventsStatus:@[postingEvent] status:PCFPushEventStatusPosting];
-
-                PCFPushAnalyticsEvent *postingErrorEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING_ERROR'"]][0];
-                [PCFPushAnalyticsStorage.shared setEventsStatus:@[postingErrorEvent] status:PCFPushEventStatusPostingError];
-
-                PCFPushAnalyticsEvent *postedEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTED'"]][0];
-                [PCFPushAnalyticsStorage.shared setEventsStatus:@[postedEvent] status:PCFPushEventStatusPosted];
-
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
-
-                [client cleanEventsDatabase:parametersWithAnalyticsEnabled];
-
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
-
-                NSArray *notPostedEventsAfter = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusNotPosted];
-                [[notPostedEventsAfter should] haveCountOf:3];
-
-                NSArray *postingEventsAfter = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
-                [[postingEventsAfter should] beEmpty];
-
-                NSArray *postingErrorEventsAfter = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
-                [[postingErrorEventsAfter should] beEmpty];
-
-                NSArray *postedEventsAfter = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosted];
-                [[postedEventsAfter should] haveCountOf:1];
-            });
-        });
-
-        describe(@"sending events", ^{
-
-            it(@"should do nothing if analytics is disabled", ^{
-
-                [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-
-                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                    fail(@"Should not have made request");
-                }];
-
-                [client sendEventsWithParameters:parametersWithAnalyticsDisabled];
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
-            });
-
-            it(@"should do nothing if the events database is empty", ^{
-
-                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                    fail(@"Should not have made request");
-                }];
-
-                [client sendEventsWithParameters:parametersWithAnalyticsDisabled];
-                [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-            });
-
-            it(@"should send events to the server and delete them after they are posted successfully", ^{
-
-                __block BOOL didMakeRequest = NO;
-
-                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                    didMakeRequest = YES;
-
-                    [[request.HTTPMethod should] equal:@"POST"];
-
-                    [[request.HTTPBody shouldNot] beNil];
-                    NSError *error;
-                    id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
-                    [[json shouldNot] beNil];
-                    [[error should] beNil];
-
-                    NSArray *events = PCFPushAnalyticsStorage.shared.events;
-                    [[events should] haveCountOf:3];
-                    [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
-                    [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
-                    [[[events[2] status] should] equal:@(PCFPushEventStatusPosting)];
-
-                    *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
-                }];
-
-                [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
-
-                [client sendEventsWithParameters:parametersWithAnalyticsEnabled];
-
-                [[theValue(didMakeRequest) should] beTrue];
-                [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-            });
-
-            it(@"should mark events with an error status if they fail to send", ^{
-
-                __block BOOL didMakeRequest = NO;
-
-                [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                    didMakeRequest = YES;
-
-                    NSArray *events = PCFPushAnalyticsStorage.shared.events;
-                    [[events should] haveCountOf:3];
-                    [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
-                    [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
-                    [[[events[2] status] should] equal:@(PCFPushEventStatusPosting)];
-
-                    *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
-                }];
-
-                [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
-                [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
-                [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
-
-                [client sendEventsWithParameters:parametersWithAnalyticsEnabled];
-
-                [[theValue(didMakeRequest) should] beTrue];
-                NSArray *events = PCFPushAnalyticsStorage.shared.events;
-                [[events should] haveCountOf:3];
-                [[[events[0] status] should] equal:@(PCFPushEventStatusPostingError)];
-                [[[events[1] status] should] equal:@(PCFPushEventStatusPostingError)];
-                [[[events[2] status] should] equal:@(PCFPushEventStatusPostingError)];
             });
         });
     });

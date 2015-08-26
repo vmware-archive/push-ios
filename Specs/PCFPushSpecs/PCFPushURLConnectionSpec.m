@@ -17,7 +17,7 @@
 
 SPEC_BEGIN(PCFPushURLConnectionSpec)
 
-typedef void (^RetryableRequestHandlerBlock)(NSHTTPURLResponse **, NSData **, NSError **);
+typedef void (^RetryableRequestHandlerBlock)(NSURLResponse **, NSData **, NSError **);
 
 describe(@"PCFPushBackEndConnection", ^{
 
@@ -36,6 +36,7 @@ describe(@"PCFPushBackEndConnection", ^{
 	});
 
     afterEach ( ^{
+        [helper resetAnalyticsStorage];
         [helper reset];
         helper = nil;
 	});
@@ -589,29 +590,21 @@ describe(@"PCFPushBackEndConnection", ^{
         __block BOOL wasExpectedResult = NO;
         __block RetryableRequestHandlerBlock handlerBlock;
 
-        beforeEach ( ^{
+        beforeEach (^{
             wasExpectedResult = NO;
             handlerBlock = nil;
 
             [PCFPushPersistentStorage setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
 
-            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSURLRequest *request = params[0];
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
 
                 [[request.allHTTPHeaderFields[@"Authorization"] should] beNil];
                 [[request.allHTTPHeaderFields[@"OOH"] should] equal:@"LA LA"];
                 [[request.HTTPMethod should] equal:@"GET"];
 
-                NSHTTPURLResponse *response = nil;
-                NSData *data = nil;
-                NSError *error = nil;
                 if (handlerBlock) {
-                    handlerBlock(&response, &data, &error);
+                    handlerBlock(resultResponse, resultData, resultError);
                 }
-
-                CompletionHandler handler = params[2];
-                handler(response, data, error);
-                return nil;
             }];
         });
 
@@ -621,7 +614,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should let you check the server version succcessfully", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
             };
@@ -647,7 +640,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should interpret 404 errors as an old server version", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
                 *data = [@"404 not found dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
@@ -666,7 +659,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should interpret crazy authentication errors as fatal errors", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorUserAuthenticationRequired userInfo:nil];
             };
 
@@ -686,7 +679,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should interpret connection errors as retryable errors", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *error = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorNetworkConnectionLost userInfo:nil];
             };
 
@@ -706,7 +699,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should interpret other 4xx errors as fatal server errors", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:401 HTTPVersion:nil headerFields:nil];
                 *data = [@"401 not authorized dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
@@ -727,7 +720,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should interpret other HTTP errors as retryable server errors", ^{
 
-            handlerBlock = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
                 *data = [@"500 the server is flipping out dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
@@ -781,22 +774,22 @@ describe(@"PCFPushBackEndConnection", ^{
                 [handlerBlocks addObject:[handlerBlock copy]];
             };
 
-            successfulCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            successfulCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
-            failedCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            failedCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
                 *data = [@"Transient error" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
-            fatalCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            fatalCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:418 HTTPVersion:nil headerFields:nil];
                 *data = [@"I'm a teapot" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
-            oldVersionCall = ^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            oldVersionCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
                 *data = [@"404 error chumps" dataUsingEncoding:NSUTF8StringEncoding];
             };
@@ -849,16 +842,16 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should return an error if the result data doesn't parse", ^{
 
-            addHandlerBlock(^(NSHTTPURLResponse **response, NSData **data, NSError **error) {
+            addHandlerBlock(^(NSURLResponse **response, NSData **data, NSError **error) {
                 *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
             });
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = NO;
             } oldVersion:^{
                 wasExpectedResult = NO;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = YES;
                 [[error.domain should] equal:PCFPushErrorDomain];
                 [[theValue(error.code) should] equal:theValue(PCFPushBackEndDataUnparseable)];
@@ -871,11 +864,11 @@ describe(@"PCFPushBackEndConnection", ^{
 
             addHandlerBlock(oldVersionCall);
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = NO;
             } oldVersion:^{
                 wasExpectedResult = YES;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = NO;
             }];
 
@@ -886,11 +879,11 @@ describe(@"PCFPushBackEndConnection", ^{
 
             addHandlerBlock(fatalCall);
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = NO;
             } oldVersion:^{
                 wasExpectedResult = NO;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = YES;
                 [[error.domain should] equal:PCFPushErrorDomain];
                 [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
@@ -905,11 +898,11 @@ describe(@"PCFPushBackEndConnection", ^{
             addHandlerBlock(failedCall);
             addHandlerBlock(failedCall);
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = NO;
             } oldVersion:^{
                 wasExpectedResult = NO;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = YES;
                 [[error.domain should] equal:PCFPushErrorDomain];
                 [[theValue(error.code) should] equal:theValue(PCFPushBackEndConnectionFailedHTTPStatusCode)];
@@ -924,12 +917,12 @@ describe(@"PCFPushBackEndConnection", ^{
             addHandlerBlock(failedCall);
             addHandlerBlock(successfulCall);
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = YES;
                 [[version should] equal:@"1.3.3.7"];
             } oldVersion:^{
                 wasExpectedResult = NO;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = NO;
             }];
 
@@ -942,11 +935,11 @@ describe(@"PCFPushBackEndConnection", ^{
             addHandlerBlock(failedCall);
             addHandlerBlock(oldVersionCall);
 
-            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version){
+            [PCFPushURLConnection versionRequestWithParameters:helper.params success:^(NSString *version) {
                 wasExpectedResult = NO;
             } oldVersion:^{
                 wasExpectedResult = YES;
-            } failure:^(NSError *error){
+            } failure:^(NSError *error) {
                 wasExpectedResult = NO;
             }];
 

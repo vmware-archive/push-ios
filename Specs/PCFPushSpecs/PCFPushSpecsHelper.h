@@ -56,6 +56,7 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 - (void)setupSuccessfulAsyncRegistrationRequest;
 - (void)setupSuccessfulAsyncRegistrationRequestWithBlock:(void(^)(NSURLRequest*))block;
 - (void)setupSuccessfulDeleteAsyncRequestAndReturnStatus:(NSInteger)status;
+- (void)setupVersionRequestWithBlock:(void(^)( void(^successBlock)(NSString*), void(^oldVersionBlock)(void), void(^errorBlock)(NSError *error)))block;
 
 // Geofence update helpers
 - (void)setupGeofencesForSuccessfulUpdateWithLastModifiedTime:(int64_t)lastModifiedTime;
@@ -66,5 +67,6 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 
 // Analytics helpers
 - (void)setupAnalyticsStorage;
+- (void)resetAnalyticsStorage;
 
 @end;

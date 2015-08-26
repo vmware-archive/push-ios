@@ -23,4 +23,12 @@
 
 + (void)logEvent:(NSString *)eventName fields:(NSDictionary *)dictionary parameters:(PCFPushParameters *)parameters;
 
++ (BOOL)isAnalyticsPollingTime:(PCFPushParameters *)parameters;
+
++ (void)checkAnalytics:(PCFPushParameters *)parameters;
+
++ (void)cleanEventsDatabase;
+
++ (void)sendEventsWithParameters:(PCFPushParameters *)parameters;
+
 @end

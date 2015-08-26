@@ -8,9 +8,11 @@
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushAnalyticsStorage.h"
-#import "PCFPushAnalyticsEvent.h"
 #import "PCFPushParameters.h"
 #import "PCFPushURLConnection.h"
+#import "PCFPushClient.h"
+
+static UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
 @implementation PCFPushAnalytics
 
@@ -74,4 +76,103 @@
     event.status = @(PCFPushEventStatusNotPosted);
 }
 
++ (BOOL)isAnalyticsPollingTime:(PCFPushParameters *)parameters
+{
+    // TODO - check if 24 hours have passed since the last poll
+    return parameters.areAnalyticsEnabled;
+}
+
++ (void)checkAnalytics:(PCFPushParameters *)parameters
+{
+    if (parameters.areAnalyticsEnabled) {
+
+        [PCFPushURLConnection versionRequestWithParameters:parameters success:^(NSString *version) {
+
+            PCFPushLog(@"PCF Push server is version '%@'. Push analytics are enabled.", version);
+
+            [PCFPushPersistentStorage setServerVersion:version];
+            [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
+
+            if (parameters.areAnalyticsEnabledAndAvailable) {
+                [PCFPushAnalytics cleanEventsDatabase];
+            }
+
+        } oldVersion:^{
+
+            PCFPushLog(@"PCF Push server version is old. Push analytics are disabled.");
+
+            [PCFPushPersistentStorage setServerVersion:nil];
+            [PCFPushPersistentStorage setServerVersionTimePolled:NSDate.date];
+
+        } failure:^(NSError *error) {
+
+            PCFPushLog(@"Not able to successfully check the PCF Push server version");
+        }];
+    }
+}
+
++ (void)cleanEventsDatabase
+{
+    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
+
+        NSArray *postingEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPosting];
+        if (postingEvents && postingEvents.count > 0) {
+            PCFPushLog(@"Found %d analytics events with status 'posting'. Setting their status to 'not posted'.", postingEvents.count);
+            [PCFPushAnalyticsStorage.shared setEventsStatus:postingEvents status:PCFPushEventStatusNotPosted];
+        }
+
+        NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
+        if (postingErrorEvents && postingErrorEvents.count > 0) {
+            PCFPushLog(@"Found %d analytics events with status 'posting error'. Setting their status to 'not posted'.", postingErrorEvents.count);
+            [PCFPushAnalyticsStorage.shared setEventsStatus:postingErrorEvents status:PCFPushEventStatusNotPosted];
+        }
+
+        NSArray *unpostedEvents = PCFPushAnalyticsStorage.shared.unpostedEvents;
+        if (unpostedEvents && unpostedEvents.count > 0) {
+            PCFPushLog(@"There are %d unposted events. They will be sent when the process goes into the background.", unpostedEvents.count);
+
+            // Ensure that we register for the background notification so that we can send analytics events later
+            [[NSNotificationCenter defaultCenter] addObserver:PCFPushClient.shared selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+        }
+    }];
+}
+
++ (void)sendEventsWithParameters:(PCFPushParameters *)parameters
+{
+    if (!parameters.areAnalyticsEnabledAndAvailable) {
+        return;
+    }
+
+    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlockAndWait:^{
+
+        backgroundTaskIdentifier = [UIApplication.sharedApplication beginBackgroundTaskWithName:@"io.pivotal.push.android.uploadAnalyticsEvents" expirationHandler:^{
+
+              PCFPushCriticalLog(@"Process timeout error posting analytics events to server.  Will attempt to send them at the end of the next session...");
+              [UIApplication.sharedApplication endBackgroundTask:backgroundTaskIdentifier];
+          }];
+
+        NSArray *events = PCFPushAnalyticsStorage.shared.unpostedEvents;
+
+        if (events && events.count > 0) {
+            [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPosting];
+
+            PCFPushLog(@"Posting %d analytics events to the server...", events.count);
+
+            [PCFPushURLConnection analyticsRequestWithEvents:events parameters:parameters success:^(NSURLResponse *response, NSData *data) {
+
+                PCFPushLog(@"Posted %d analytics events to the server successfully.", events.count);
+                [PCFPushAnalyticsStorage.shared deleteManagedObjects:events];
+
+                [UIApplication.sharedApplication endBackgroundTask:backgroundTaskIdentifier];
+
+            } failure:^(NSError *error) {
+
+                PCFPushCriticalLog(@"Error posting %d analytics events to server: %@", events.count, error);
+                [PCFPushAnalyticsStorage.shared setEventsStatus:events status:PCFPushEventStatusPostingError];
+
+                [UIApplication.sharedApplication endBackgroundTask:backgroundTaskIdentifier];
+            }];
+        }
+    }];
+}
 @end
