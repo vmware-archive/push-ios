@@ -7,6 +7,7 @@
 #import "PCFPushDebug.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushURLConnectionDelegate.h"
+#import "PCFPushURLConnection.h"
 
 static BOOL isSuccessfulStatusForHTTPResponse(NSHTTPURLResponse *response)
 {
@@ -89,7 +90,14 @@ static BOOL isAuthError(NSError *error)
             }
 
         } else if (connectionError) {
-            PCFPushCriticalLog(@"NSURLRequest failed with error: %@ %@", connectionError, connectionError.userInfo);
+
+            // Don't print 404 version check errors - they are not scary.
+            if (!([response isKindOfClass:NSHTTPURLResponse.class] &&
+                    ((NSHTTPURLResponse*)response).statusCode == 404 &&
+                    [response.URL.absoluteString hasSuffix:kPCFPushVersionRequestPath])) {
+
+                PCFPushCriticalLog(@"NSURLRequest failed with error: %@ %@", connectionError, connectionError.userInfo);
+            }
             if (failure) {
                 failure(response, connectionError);
             }

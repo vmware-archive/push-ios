@@ -19,10 +19,10 @@
 
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 NSString *const kPCFPushContentTypeKey = @"Content-Type";
+NSString *const kPCFPushVersionRequestPath = @"v1/version";
 static NSString *const kRegistrationRequestPath = @"v1/registration";
 static NSString *const kGeofencesRequestPath = @"v1/geofences";
 static NSString *const kAnalyticsRequestPath = @"v1/analytics";
-static NSString *const kVersionRequestPath = @"v1/version";
 static NSString *const kTimestampParam = @"timestamp";
 static NSString *const kDeviceUuidParam = @"device_uuid";
 static NSString *const kPlatformParam = @"platform=ios";
@@ -465,7 +465,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
         [NSException raise:NSInvalidArgumentException format:@"PCFPushParameters may not be nil"];
     }
 
-    NSURL *requestURL = [NSURL URLWithString:kVersionRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
+    NSURL *requestURL = [NSURL URLWithString:kPCFPushVersionRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = @"GET";
     addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
