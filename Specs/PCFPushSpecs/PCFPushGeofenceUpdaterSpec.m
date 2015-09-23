@@ -20,7 +20,7 @@ static GeofenceRequestStub successfulGeofenceRequestStub(NSUInteger httpStatus, 
         if (block) {
             block();
         }
-        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:httpStatus HTTPVersion:nil headerFields:nil];
+        NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:httpStatus HTTPVersion:nil headerFields:nil];
         void(^completionHandler)(NSURLResponse *, NSData *) = params[3];
         completionHandler(response, data);
         return nil;

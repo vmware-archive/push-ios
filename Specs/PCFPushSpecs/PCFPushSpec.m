@@ -835,7 +835,7 @@ describe(@"PCFPush", ^{
 
         it(@"should handle an HTTP status error", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:400 HTTPVersion:nil headerFields:nil];
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
@@ -856,7 +856,7 @@ describe(@"PCFPush", ^{
 
         it(@"should handle a successful response with empty data", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 NSData *newData = [NSData data];
                 CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
@@ -878,7 +878,7 @@ describe(@"PCFPush", ^{
 
         it(@"should handle a successful response with nil data", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
@@ -899,7 +899,7 @@ describe(@"PCFPush", ^{
 
         it(@"should handle a successful response with zero-length", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 NSData *newData = [@"" dataUsingEncoding:NSUTF8StringEncoding];
                 CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
@@ -921,7 +921,7 @@ describe(@"PCFPush", ^{
 
         it(@"should handle a successful response that contains unparseable text", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 NSData *newData = [@"This is not JSON" dataUsingEncoding:NSUTF8StringEncoding];
                 CompletionHandler handler = params[2];
                 handler(newResponse, newData, nil);
@@ -942,7 +942,7 @@ describe(@"PCFPush", ^{
 
         it(@"should require a device_uuid in the server response", ^{
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
-                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 NSDictionary *newJSON = @{@"os" : @"AmigaOS"};
                 NSError *error;
                 NSData *newData = [NSJSONSerialization dataWithJSONObject:newJSON options:NSJSONWritingPrettyPrinted error:&error];

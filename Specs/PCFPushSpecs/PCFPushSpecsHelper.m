@@ -163,7 +163,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         }
         __block NSData *newData;
         __block NSHTTPURLResponse *newResponse;
-        newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+        newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""] statusCode:200 HTTPVersion:nil headerFields:nil];
         NSDictionary *dict = @{
                 PCFPushRegistrationAttributes.deviceOS : TEST_OS,
                 PCFPushRegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
@@ -190,7 +190,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         __block NSHTTPURLResponse *newResponse;
 
         if ([request.HTTPMethod isEqualToString:@"DELETE"]) {
-            newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:status HTTPVersion:nil headerFields:nil];
+            newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:status HTTPVersion:nil headerFields:nil];
         } else {
             fail(@"Request method must be DELETE");
         }

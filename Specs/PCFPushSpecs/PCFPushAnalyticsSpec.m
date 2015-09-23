@@ -333,7 +333,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
                 [[[events[2] status] should] equal:@(PCFPushEventStatusPosting)];
 
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
             [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
@@ -360,7 +360,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
                 [[[events[2] status] should] equal:@(PCFPushEventStatusPosting)];
 
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:500 HTTPVersion:nil headerFields:nil];
             }];
 
             [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];

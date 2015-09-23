@@ -160,7 +160,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should not require a success block", ^{
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
             [[theBlock( ^{
@@ -170,7 +170,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should not require a failure block", ^{
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
             [[theBlock( ^{
@@ -208,7 +208,7 @@ describe(@"PCFPushBackEndConnection", ^{
                 [[event2[@"receiptId"] should] equal:@"RECEIPT1"];
                 [[event2[@"status"] should] beNil];
 
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
             [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:^(NSURLResponse *response, NSData *data) {
@@ -228,7 +228,7 @@ describe(@"PCFPushBackEndConnection", ^{
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
                 didMakeRequest = YES;
 
-                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:500 HTTPVersion:nil headerFields:nil];
             }];
 
             [PCFPushURLConnection analyticsRequestWithEvents:events parameters:helper.params success:^(NSURLResponse *response, NSData *data) {
@@ -264,7 +264,7 @@ describe(@"PCFPushBackEndConnection", ^{
                 [[request.allHTTPHeaderFields[@"Authorization"] should] equal:[@"Basic  " stringByAppendingString:helper.base64AuthString1]];
                 [[request.allHTTPHeaderFields[@"RABBIT SEASON"] should] equal:@"DUCK SEASON"];
 
-                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(response, nil, nil);
@@ -285,7 +285,7 @@ describe(@"PCFPushBackEndConnection", ^{
                 [[request.URL.absoluteString should] endWithString:@"?timestamp=77777&device_uuid=DEVICE_UUID&platform=ios"];
                 [[request.allHTTPHeaderFields[@"Authorization"] should] equal:[@"Basic  " stringByAppendingString:helper.base64AuthString1]];
 
-                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:400 HTTPVersion:nil headerFields:nil];
+                NSHTTPURLResponse *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:400 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(response, nil, nil);
@@ -324,7 +324,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"POST"];
 
-                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
@@ -357,7 +357,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"POST"];
 
-                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
@@ -388,7 +388,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"POST"];
 
-                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
@@ -478,7 +478,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"DELETE"];
 
-                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
@@ -545,7 +545,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"PUT"];
 
-                newResponse = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 CompletionHandler handler = params[2];
                 handler(newResponse, nil, nil);
                 return nil;
@@ -617,7 +617,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should let you check the server version succcessfully", ^{
 
             handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
@@ -643,7 +643,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should interpret 404 errors as an old server version", ^{
 
             handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:404 HTTPVersion:nil headerFields:nil];
                 *data = [@"404 not found dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
@@ -702,7 +702,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should interpret other 4xx errors as fatal server errors", ^{
 
             handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:401 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:401 HTTPVersion:nil headerFields:nil];
                 *data = [@"401 not authorized dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
@@ -723,7 +723,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should interpret other HTTP errors as retryable server errors", ^{
 
             handlerBlock = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:500 HTTPVersion:nil headerFields:nil];
                 *data = [@"500 the server is flipping out dude" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
@@ -777,22 +777,22 @@ describe(@"PCFPushBackEndConnection", ^{
             };
 
             successfulCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"{\"version\":\"1.3.3.7\"}" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
             failedCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:500 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:500 HTTPVersion:nil headerFields:nil];
                 *data = [@"Transient error" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
             fatalCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:418 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:418 HTTPVersion:nil headerFields:nil];
                 *data = [@"I'm a teapot" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
             oldVersionCall = ^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:404 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:404 HTTPVersion:nil headerFields:nil];
                 *data = [@"404 error chumps" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
@@ -845,7 +845,7 @@ describe(@"PCFPushBackEndConnection", ^{
         it(@"should return an error if the result data doesn't parse", ^{
 
             addHandlerBlock(^(NSURLResponse **response, NSData **data, NSError **error) {
-                *response = [[NSHTTPURLResponse alloc] initWithURL:nil statusCode:200 HTTPVersion:nil headerFields:nil];
+                *response = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
                 *data = [@"NOT JSON" dataUsingEncoding:NSUTF8StringEncoding];
             });
 
