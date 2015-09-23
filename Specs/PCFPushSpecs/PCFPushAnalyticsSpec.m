@@ -69,6 +69,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         beforeEach(^{
             entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
             [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+            [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:1337.0]];
         });
 
         describe(@"logging events", ^{
@@ -82,6 +83,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 PCFPushAnalyticsEvent *event = events.lastObject;
                 [[event should] beKindOfClass:NSClassFromString(entityName)];
                 [[event.eventType should] equal:@"TEST_EVENT"];
+                [[event.eventTime should] equal:@"1337000"];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -116,7 +118,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
                 [[event.geofenceId should] equal:@"TEST_GEOFENCE_ID"];
                 [[event.locationId should] equal:@"TEST_LOCATION_ID"];
-                [[event.eventTime shouldNot] beNil];
+                [[event.eventTime should] equal:@"1337000"];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -135,7 +137,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
                 [[event.geofenceId should] beNil];
                 [[event.locationId should] beNil];
-                [[event.eventTime shouldNot] beNil];
+                [[event.eventTime should] equal:@"1337000"];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -154,7 +156,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
                 [[event.geofenceId should] beNil];
                 [[event.locationId should] beNil];
-                [[event.eventTime shouldNot] beNil];
+                [[event.eventTime should] equal:@"1337000"];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -173,7 +175,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
                 [[event.geofenceId should] equal:@"57"];
                 [[event.locationId should] equal:@"923"];
-                [[event.eventTime shouldNot] beNil];
+                [[event.eventTime should] equal:@"1337000"];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
         });

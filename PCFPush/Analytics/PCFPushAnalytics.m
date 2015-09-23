@@ -86,7 +86,10 @@ static BOOL areAnalyticsSetUp = NO;
     NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(PCFPushAnalyticsEvent.class) inManagedObjectContext:context];
     PCFPushAnalyticsEvent *event = [[PCFPushAnalyticsEvent alloc] initWithEntity:description insertIntoManagedObjectContext:context];
     event.eventType = eventType;
-    event.eventTime = [NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]];
+    
+    int64_t date = (int64_t) ([[NSDate date] timeIntervalSince1970] * 1000.0);
+    event.eventTime = [NSString stringWithFormat:@"%lld", date];
+    
     event.receiptId = fields[@"receiptId"];
     event.deviceUuid = fields[@"deviceUuid"];
     event.geofenceId = fields[@"geofenceId"];
