@@ -78,7 +78,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should accept an empty tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a nil deviceAlias and nil tags", ^{
@@ -86,7 +86,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should accept an empty deviceAlias and empty tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
         });
 
@@ -102,11 +102,11 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should accept a nil failureBlock", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:nil];
             });
 
             it(@"should accept a nil successBlock", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:failureBlock];
             });
         });
 
@@ -132,13 +132,13 @@ describe(@"PCFPush", ^{
 
         it(@"should raise an exception if the APNS device token is nil", ^{
             [[theBlock(^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:nil tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:nil tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
         it(@"should raise an exception if the APNS device token is empty", ^{
             [[theBlock(^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
             }) should] raiseWithName:NSInvalidArgumentException];
         });
 
@@ -153,8 +153,8 @@ describe(@"PCFPush", ^{
         __block NSInteger successCount;
         __block NSInteger updateRegistrationCount;
         __block void (^testBlock)(SEL, id, NSString*, BOOL);
-        __block NSSet *expectedSubscribeTags;
-        __block NSSet *expectedUnsubscribeTags;
+        __block NSSet<NSString*> *expectedSubscribeTags;
+        __block NSSet<NSString*> *expectedUnsubscribeTags;
 
         beforeEach(^{
             successCount = 0;
@@ -183,13 +183,13 @@ describe(@"PCFPush", ^{
                         [[requestPutBody shouldNot] beNil];
 
                         if (expectedSubscribeTags) {
-                            [[[NSSet setWithArray:requestPutBody.subscribeTags] should] equal:expectedSubscribeTags];
+                            [[[NSSet<NSString*> setWithArray:requestPutBody.subscribeTags] should] equal:expectedSubscribeTags];
                         } else {
                             [[requestPutBody.subscribeTags should] beNil];
                         }
 
                         if (expectedUnsubscribeTags) {
-                            [[[NSSet setWithArray:requestPutBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
+                            [[[NSSet<NSString*> setWithArray:requestPutBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
                         } else {
                             [[requestPutBody.unsubscribeTags should] beNil];
                         }
@@ -203,7 +203,7 @@ describe(@"PCFPush", ^{
                         [[requestPostBody shouldNot] beNil];
 
                         if (expectedSubscribeTags) {
-                            [[[NSSet setWithArray:requestPostBody.tags] should] equal:expectedSubscribeTags];
+                            [[[NSSet<NSString*> setWithArray:requestPostBody.tags] should] equal:expectedSubscribeTags];
                         } else {
                             [[requestPostBody.tags should] beNil];
                         }
@@ -292,7 +292,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration and geofences after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
-                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    expectedUnsubscribeTags = [NSSet<NSString*> setWithArray:@[@"DIFFERENT TAG"]];
                     testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT", YES);
                 });
 
@@ -303,7 +303,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration and geofences after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set], @"PUT", YES);
+                    testBlock(@selector(setTags:), [NSSet<NSString*> set], @"PUT", YES);
                 });
 
                 it(@"should update the push registration and geofences after tags change to nil", ^{
@@ -313,7 +313,7 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should update the push registration and geofences after tags change to empty", ^{
-                    helper.params.pushTags = [NSSet set];
+                    helper.params.pushTags = [NSSet<NSString*> set];
                     expectedUnsubscribeTags = helper.tags1;
                     testBlock(@selector(setTags:), helper.tags1, @"PUT", YES);
                 });
@@ -366,7 +366,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration and geofences after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
-                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    expectedUnsubscribeTags = [NSSet<NSString*> setWithArray:@[@"DIFFERENT TAG"]];
                     testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT", NO);
                 });
 
@@ -377,7 +377,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration and geofences after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set], @"PUT", NO);
+                    testBlock(@selector(setTags:), [NSSet<NSString*> set], @"PUT", NO);
                 });
 
                 it(@"should update the push registration and geofences after tags change to nil", ^{
@@ -387,7 +387,7 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should update the push registration and geofences after tags change to empty", ^{
-                    helper.params.pushTags = [NSSet set];
+                    helper.params.pushTags = [NSSet<NSString*> set];
                     expectedUnsubscribeTags = helper.tags1;
                     testBlock(@selector(setTags:), helper.tags1, @"PUT", NO);
                 });
@@ -436,7 +436,7 @@ describe(@"PCFPush", ^{
 
                     it(@"should update the push registration after the tags change to a different value", ^{
                         expectedSubscribeTags = helper.tags1;
-                        expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                        expectedUnsubscribeTags = [NSSet<NSString*> setWithArray:@[@"DIFFERENT TAG"]];
                         testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT", YES);
                     });
 
@@ -447,7 +447,7 @@ describe(@"PCFPush", ^{
 
                     it(@"should update the push registration after tags initially set from empty", ^{
                         expectedSubscribeTags = helper.tags1;
-                        testBlock(@selector(setTags:), [NSSet set], @"PUT", YES);
+                        testBlock(@selector(setTags:), [NSSet<NSString*> set], @"PUT", YES);
                     });
 
                     it(@"should update the push registration after tags change to nil", ^{
@@ -457,7 +457,7 @@ describe(@"PCFPush", ^{
                     });
 
                     it(@"should update the push registration after tags change to empty", ^{
-                        helper.params.pushTags = [NSSet set];
+                        helper.params.pushTags = [NSSet<NSString*> set];
                         expectedUnsubscribeTags = helper.tags1;
                         testBlock(@selector(setTags:), helper.tags1, @"PUT", YES);
                     });
@@ -496,7 +496,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration after the tags change to a different value", ^{
                     expectedSubscribeTags = helper.tags1;
-                    expectedUnsubscribeTags = [NSSet setWithArray:@[@"DIFFERENT TAG"]];
+                    expectedUnsubscribeTags = [NSSet<NSString*> setWithArray:@[@"DIFFERENT TAG"]];
                     testBlock(@selector(setTags:), expectedUnsubscribeTags, @"PUT", NO);
                 });
 
@@ -507,7 +507,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should update the push registration after tags initially set from empty", ^{
                     expectedSubscribeTags = helper.tags1;
-                    testBlock(@selector(setTags:), [NSSet set], @"PUT", NO);
+                    testBlock(@selector(setTags:), [NSSet<NSString*> set], @"PUT", NO);
                 });
 
                 it(@"should update the push registration after tags change to nil", ^{
@@ -517,7 +517,7 @@ describe(@"PCFPush", ^{
                 });
 
                 it(@"should update the push registration after tags change to empty", ^{
-                    helper.params.pushTags = [NSSet set];
+                    helper.params.pushTags = [NSSet<NSString*> set];
                     expectedUnsubscribeTags = helper.tags1;
                     testBlock(@selector(setTags:), helper.tags1, @"PUT", NO);
                 });
@@ -609,7 +609,7 @@ describe(@"PCFPush", ^{
             it(@"should make a POST request to the server and update geofences on a new registration", ^{
 
                 __block BOOL wasSuccessBlockExecuted = NO;
-                __block NSSet *expectedTags = helper.tags1;
+                __block NSSet<NSString*> *expectedTags = helper.tags1;
 
                 [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:999L withBlock:^void(NSArray *params) {
                     int64_t timestamp = [params[2] longLongValue];
@@ -627,7 +627,7 @@ describe(@"PCFPush", ^{
                     PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
                     [[error should] beNil];
                     [[requestBody shouldNot] beNil];
-                    [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
+                    [[[NSSet<NSString*> setWithArray:requestBody.tags] should] equal:expectedTags];
                 }];
 
                 [helper setupDefaultPLIST];
@@ -741,7 +741,7 @@ describe(@"PCFPush", ^{
             it(@"should make a POST request to the server", ^{
 
                 __block BOOL wasSuccessBlockExecuted = NO;
-                __block NSSet *expectedTags = helper.tags1;
+                __block NSSet<NSString*> *expectedTags = helper.tags1;
 
                 [helper setupGeofencesForSuccessfulUpdateWithLastModifiedTime:999L withBlock:^void(NSArray *params) {
                     int64_t timestamp = [params[2] longLongValue];
@@ -761,7 +761,7 @@ describe(@"PCFPush", ^{
                     PCFPushRegistrationPostRequestData *requestBody = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
                     [[error should] beNil];
                     [[requestBody shouldNot] beNil];
-                    [[[NSSet setWithArray:requestBody.tags] should] equal:expectedTags];
+                    [[[NSSet<NSString*> setWithArray:requestBody.tags] should] equal:expectedTags];
                 }];
 
                 [helper setupDefaultPLIST];
@@ -1174,8 +1174,8 @@ describe(@"PCFPush", ^{
         describe(@"successful attempts", ^{
 
             __block NSInteger updateRegistrationCount;
-            __block NSSet *expectedSubscribeTags;
-            __block NSSet *expectedUnsubscribeTags;
+            __block NSSet<NSString*> *expectedSubscribeTags;
+            __block NSSet<NSString*> *expectedUnsubscribeTags;
             __block BOOL wasExpectedBlockCalled;
 
             beforeEach(^{
@@ -1199,12 +1199,12 @@ describe(@"PCFPush", ^{
                     [[requestBody shouldNot] beNil];
 
                     if (expectedSubscribeTags) {
-                        [[[NSSet setWithArray:requestBody.subscribeTags] should] equal:expectedSubscribeTags];
+                        [[[NSSet<NSString*> setWithArray:requestBody.subscribeTags] should] equal:expectedSubscribeTags];
                     } else {
                         [[requestBody.subscribeTags should] beNil];
                     }
                     if (expectedUnsubscribeTags) {
-                        [[[NSSet setWithArray:requestBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
+                        [[[NSSet<NSString*> setWithArray:requestBody.unsubscribeTags] should] equal:expectedUnsubscribeTags];
                     } else {
                         [[requestBody.unsubscribeTags should] beNil];
                     }
@@ -1402,7 +1402,7 @@ describe(@"PCFPush", ^{
                     [[PCFPushGeofenceUpdater shouldNot] receive:@selector(startGeofenceUpdate:userInfo:timestamp:tags:success:failure:) withCount:1];
                     [[PCFPushGeofenceUpdater shouldNot] receive:@selector(clearAllGeofences:)];
 
-                    NSMutableSet *uppercaseTags = [NSMutableSet setWithCapacity:helper.tags1.count];
+                    NSMutableSet<NSString*> *uppercaseTags = [NSMutableSet<NSString*> setWithCapacity:helper.tags1.count];
                     for (NSString *tag in helper.tags1) {
                         [uppercaseTags addObject:[tag uppercaseString]];
                     }

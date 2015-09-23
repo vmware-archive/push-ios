@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, PCFPushSslCertValidationMode) {
 @property (copy) NSString *productionPushVariantSecret;
 @property (copy) NSArray *pinnedSslCertificateNames;
 @property (assign) PCFPushSslCertValidationMode sslCertValidationMode;
-@property (copy) NSSet *pushTags;
+@property (copy) NSSet<NSString*> *pushTags;
 @property BOOL areGeofencesEnabled;
 @property BOOL areAnalyticsEnabled;
 

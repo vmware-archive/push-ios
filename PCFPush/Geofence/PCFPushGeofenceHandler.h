@@ -20,6 +20,6 @@
                 state:(CLRegionState)state
            parameters:(PCFPushParameters *)parameters;
 
-+ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet*)subscribedTags;
++ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet<NSString*> *)subscribedTags;
 
 @end

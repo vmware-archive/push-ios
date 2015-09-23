@@ -116,7 +116,7 @@
         if ([value isKindOfClass:[NSArray class]]) {
             NSArray *tags = (NSArray *) value;
             if (tags.count > 0) {
-                self.tags = [NSSet setWithArray:tags];
+                self.tags = [NSSet<NSString*> setWithArray:tags];
             }
         }
         return YES;
@@ -166,8 +166,8 @@
 
     } else if ([propertyName isEqualToString:@"tags"]) {
 
-        if ([value isKindOfClass:[NSSet class]]) {
-            NSSet *tags = (NSSet *) value;
+        if ([value isKindOfClass:[NSSet<NSString*> class]]) {
+            NSSet<NSString*> *tags = (NSSet<NSString*> *) value;
             if (tags.count > 0) {
                 destination[@"tags"] = tags.allObjects;
             }

@@ -64,7 +64,7 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  *
  *     // Continue registration with PCF Push
  *     [PCFPush registerForPCFPushNotificationsWithDeviceToken: deviceToken
- *                                                        tags: [NSSet setWithArray:@[ LIST_OF_TAGS_TO_SUBSCRIBE_TO ]
+ *                                                        tags: [NSSet<NSString*> setWithArray:@[ LIST_OF_TAGS_TO_SUBSCRIBE_TO ]
  *                                                 deviceAlias: UIDevice.currentDevice.name // or whatever device alias you want to use
  *                                                     success: ^{  success callback }
  *                                                     failure: ^(NSError *error) {  error callback }
@@ -73,7 +73,7 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  *
  */
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
-                                                  tags:(NSSet *)tags
+                                                  tags:(NSSet<NSString*> *)tags
                                            deviceAlias:(NSString *)deviceAlias
                                    areGeofencesEnabled:(BOOL)areGeofencesEnabled
                                                success:(void (^)(void))success
@@ -96,7 +96,7 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  * @param failure block that will be executed if subscription fails. This callback will be called on the main
  *                queue. May be 'nil'.
  */
-+ (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure;
++ (void) subscribeToTags:(NSSet<NSString*> *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure;
 
 /**
  * Asynchronously unregisters the device and application from receiving push notifications.  If the application

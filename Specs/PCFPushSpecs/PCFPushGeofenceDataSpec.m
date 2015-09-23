@@ -190,10 +190,10 @@ describe(@"PCFPushGeofenceData", ^{
             [[model.tags should] beNil];
 
             model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : @[@"TAG1"]}];
-            [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG1" ] ] ];
+            [[model.tags should] equal:[NSSet<NSString*> setWithArray:@[ @"TAG1" ] ] ];
 
             model = [PCFPushGeofenceData pcfPushFromDictionary:@{@"tags" : @[@"TAG2", @"TAG3"]}];
-            [[model.tags should] equal:[NSSet setWithArray:@[ @"TAG2", @"TAG3" ] ] ];
+            [[model.tags should] equal:[NSSet<NSString*> setWithArray:@[ @"TAG2", @"TAG3" ] ] ];
         });
     });
     
@@ -227,7 +227,7 @@ describe(@"PCFPushGeofenceData", ^{
 
                 model.locations = @[ location1, location2 ];
 
-                model.tags = [NSSet setWithArray:@[ @"PETE", @"REPEAT" ]];
+                model.tags = [NSSet<NSString*> setWithArray:@[ @"PETE", @"REPEAT" ]];
             });
 
             afterEach(^{
@@ -337,19 +337,19 @@ describe(@"PCFPushGeofenceData", ^{
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
-                model.tags = (NSSet*)(id)[NSNull null];
+                model.tags = (NSSet<NSString*>*)(id)[NSNull null];
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
-                model.tags = [NSSet set];
+                model.tags = [NSSet<NSString*> set];
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] beNil];
 
-                model.tags = [NSSet setWithObject:@"CACTUS"];
+                model.tags = [NSSet<NSString*> setWithObject:@"CACTUS"];
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] equal:@[@"CACTUS"]];
 
-                model.tags = [NSSet setWithArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
+                model.tags = [NSSet<NSString*> setWithArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
                 dict = [model pcfPushToFoundationType];
                 [[dict[@"tags"] should] containObjectsInArray:@[@"SNAKES", @"TUMBLEWEED", @"SAND", @"ROCKS"]];
             });
@@ -377,7 +377,7 @@ describe(@"PCFPushGeofenceData", ^{
             PCFPushGeofenceData *data1 = [[PCFPushGeofenceData alloc] init];
             data1.id = 10;
             data1.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
-            data1.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
+            data1.tags = [NSSet<NSString*> setWithArray:@[@"TAG1", @"TAG2"]];
             data1.data = @{ @"CAT" : @"PRETTY" };
             data1.triggerType = PCFPushTriggerTypeEnter;
             data1.locations = @[ location1 ];
@@ -386,7 +386,7 @@ describe(@"PCFPushGeofenceData", ^{
             PCFPushGeofenceData *data2 = [[PCFPushGeofenceData alloc] init];
             data2.id = 10;
             data2.expiryTime = [NSDate dateWithTimeIntervalSince1970:1000.0];
-            data2.tags = [NSSet setWithArray:@[@"TAG1", @"TAG2"]];
+            data2.tags = [NSSet<NSString*> setWithArray:@[@"TAG1", @"TAG2"]];
             data2.data = @{ @"CAT" : @"PRETTY" };
             data2.triggerType = PCFPushTriggerTypeEnter;
             data2.locations = @[ location2 ];

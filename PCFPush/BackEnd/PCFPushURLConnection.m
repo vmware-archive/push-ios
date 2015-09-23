@@ -371,7 +371,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     requestData.os = [PCFHardwareUtil operatingSystem];
     requestData.osVersion = [PCFHardwareUtil operatingSystemVersion];
 
-    NSSet *savedTags = [PCFPushPersistentStorage tags];
+    NSSet<NSString*> *savedTags = [PCFPushPersistentStorage tags];
     PCFTagsHelper *tagsHelper = [PCFTagsHelper tagsHelperWithSavedTags:savedTags newTags:parameters.pushTags];
     if (tagsHelper.subscribeTags && tagsHelper.subscribeTags.count > 0) {
         requestData.subscribeTags = tagsHelper.subscribeTags.allObjects;

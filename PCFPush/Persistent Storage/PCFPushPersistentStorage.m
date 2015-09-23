@@ -104,16 +104,16 @@ static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERS
     return [self persistedValueForKey:KEY_BACK_END_DEVICE_ID];
 }
 
-+ (void)setTags:(NSSet *)tags
++ (void)setTags:(NSSet<NSString*> *)tags
 {
     [self persistValue:tags.allObjects forKey:KEY_TAGS];
 }
 
-+ (NSSet *)tags
++ (NSSet<NSString*> *)tags
 {
-    NSArray *tagsArray = [self persistedValueForKey:KEY_TAGS];
+    NSArray<NSString*> *tagsArray = [self persistedValueForKey:KEY_TAGS];
     if (tagsArray) {
-        return [NSSet setWithArray:tagsArray];
+        return [NSSet<NSString*> setWithArray:tagsArray];
     } else {
         return nil;
     }

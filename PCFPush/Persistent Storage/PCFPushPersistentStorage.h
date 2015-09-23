@@ -23,8 +23,8 @@
 + (void)setServerDeviceID:(NSString *)serverDeviceID;
 + (NSString *)serverDeviceID;
 
-+ (void)setTags:(NSSet *)tags;
-+ (NSSet *)tags;
++ (void)setTags:(NSSet<NSString*> *)tags;
++ (NSSet<NSString*> *)tags;
 
 + (void)setGeofenceLastModifiedTime:(int64_t)lastModifiedTime;
 + (int64_t)lastGeofencesModifiedTime;

@@ -127,11 +127,11 @@
         return;
     }
 
-    NSArray *filenames = [self geofenceFilenamesAtPath:geofencesPath];
+    NSArray<NSString*> *filenames = [self geofenceFilenamesAtPath:geofencesPath];
     if (!filenames) {
         return;
     }
-    NSMutableSet *filenamesToDelete = [NSMutableSet setWithArray:filenames];
+    NSMutableSet<NSString*> *filenamesToDelete = [NSMutableSet<NSString*> setWithArray:filenames];
 
     // Write updated geofences
     __block NSError *error = nil;
@@ -179,19 +179,19 @@
     return YES;
 }
 
-- (NSArray*) geofenceFilenamesAtPath:(NSString*)path
+- (NSArray<NSString*> *) geofenceFilenamesAtPath:(NSString*)path
 {
     NSError *error = nil;
-    NSArray *urls = [self.fileManager contentsOfDirectoryAtPath:path error:&error];
+    NSArray<NSString*> *urls = [self.fileManager contentsOfDirectoryAtPath:path error:&error];
     if (!urls) {
         PCFPushCriticalLog(@"Error reading contents of directory %@: %@", path, error);
         return nil;
     }
 
     NSPredicate *filter = [NSPredicate predicateWithFormat:@"self BEGINSWITH 'PCF_PUSH_GEOFENCE_' AND self ENDSWITH '.json'"];
-    NSArray *filteredFilenames = [urls filteredArrayUsingPredicate:filter];
+    NSArray<NSString*> *filteredFilenames = [urls filteredArrayUsingPredicate:filter];
 
-    NSMutableArray *result = [NSMutableArray arrayWithCapacity:filteredFilenames.count];
+    NSMutableArray<NSString*> *result = [NSMutableArray arrayWithCapacity:filteredFilenames.count];
     for (NSString *filteredFilename in filteredFilenames) {
         [result addObject:[path stringByAppendingPathComponent:filteredFilename]];
     }

@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, PCFPushTriggerType) {
 @property NSDate *expiryTime;
 @property NSArray *locations;
 @property NSDictionary *data;
-@property NSSet *tags;
+@property NSSet<NSString*> *tags;
 @property PCFPushTriggerType triggerType;
 
 - (instancetype)newCopyWithoutLocations;

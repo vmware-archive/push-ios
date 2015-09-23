@@ -263,7 +263,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return registrationBlock;
 }
 
-+ (void)startGeofenceUpdateWithTags:(NSSet *)subscribedTags
++ (void)startGeofenceUpdateWithTags:(NSSet<NSString*> *)subscribedTags
                        successBlock:(void (^)())successBlock
                             failure:(void (^)(NSError *))failureBlock
 {
@@ -281,7 +281,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     }];
 }
 
-- (void) subscribeToTags:(NSSet *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
+- (void) subscribeToTags:(NSSet<NSString*> *)tags deviceToken:(NSData *)deviceToken deviceUuid:(NSString *)deviceUuid success:(void (^)(void))success failure:(void (^)(NSError*))failure
 {
     if (self.registrationParameters.areAnalyticsEnabled) {
         [PCFPushAnalytics setupAnalytics:self.registrationParameters];
@@ -399,7 +399,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 
 + (BOOL)areTagsTheSame:(PCFPushParameters *)parameters
 {
-    NSSet *savedTags = [PCFPushPersistentStorage tags];
+    NSSet<NSString*> *savedTags = [PCFPushPersistentStorage tags];
     BOOL areSavedTagsNilOrEmpty = savedTags == nil || savedTags.count == 0;
     BOOL areNewTagsNilOrEmpty = parameters.pushTags == nil || parameters.pushTags.count == 0;
     if ((areNewTagsNilOrEmpty && !areSavedTagsNilOrEmpty) || (!areNewTagsNilOrEmpty && ![parameters.pushTags isEqualToSet:savedTags])) {

@@ -40,7 +40,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
         __block PCFPushGeofenceDataList *oneItemBadRadiusGeofenceList;
         __block PCFPushGeofenceDataList *expectedGeofencesToStore;
         __block PCFPushGeofenceLocationMap *expectedGeofencesToRegister;
-        __block NSSet *emptySubscribedTags;
+        __block NSSet<NSString*> *emptySubscribedTags;
 
         beforeEach(^{
             emptyResponseData = loadResponseData([self class], @"geofence_response_data_empty");
@@ -63,7 +63,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
             emptyGeofenceList = [PCFPushGeofenceDataList list];
             expectedGeofencesToRegister = [PCFPushGeofenceLocationMap map];
             expectedGeofencesToStore = [PCFPushGeofenceDataList list];
-            emptySubscribedTags = [NSSet set];
+            emptySubscribedTags = [NSSet<NSString*> set];
             [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:0]]; // Pretend the time is always zero so that nothing is expired.
         });
 
@@ -273,7 +273,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemWithTagGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:emptyResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"pineapples"]];
+                    [engine processResponseData:emptyResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
                 });
 
                 it(@"should register one item from the store with an unsubscribed tag and an empty response data", ^{
@@ -299,7 +299,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemWithTagGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneOtherItemWithNoTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"pineapples"]];
+                    [engine processResponseData:oneOtherItemWithNoTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
                 });
 
                 it(@"update one item with tag to an item with a different tag while subscribed to no tag", ^{
@@ -315,7 +315,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemWithTagGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"pineapples"]];
+                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
                 });
 
                 it(@"update one item with a tag to an item with a different tag while subscribed to a new tag", ^{
@@ -324,7 +324,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemWithTagGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"ice cream"]];
+                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"ice cream"]];
                 });
 
                 it(@"update one item with no items currently registered with a subscribed tag", ^{
@@ -333,7 +333,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:emptyGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"ice cream"]];
+                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"ice cream"]];
                 });
 
                 it(@"update one item with no items currently registered with an unsubscribed tag", ^{
@@ -358,7 +358,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneOtherItemWithTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"pineapples"]];
+                    [engine processResponseData:oneOtherItemWithTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
                 });
 
                 it(@"update one item with no tag to an item with a tag while subscribed to a different tag", ^{
@@ -366,7 +366,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneOtherItemWithTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"ice cream"]];
+                    [engine processResponseData:oneOtherItemWithTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"ice cream"]];
                 });
 
                 it(@"update one item with no tag to an item with no tag while subscribed to a tag", ^{
@@ -375,7 +375,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store should] receive:@selector(currentlyRegisteredGeofences) andReturn:oneItemGeofenceList];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneOtherItemWithNoTagResponseData withTimestamp:50L withTags:[NSSet setWithObject:@"pineapples"]];
+                    [engine processResponseData:oneOtherItemWithNoTagResponseData withTimestamp:50L withTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
                 });
             });
 
@@ -392,7 +392,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                     [[store shouldNot] receive:@selector(currentlyRegisteredGeofences)];
                     [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                     [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:0L withTags:[NSSet setWithObject:@"ice cream"]];
+                    [engine processResponseData:oneItemWithTagResponseData withTimestamp:0L withTags:[NSSet<NSString*> setWithObject:@"ice cream"]];
                 });
 
                 it(@"update one item with no items currently registered with an unsubscribed tag", ^{
@@ -664,7 +664,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                 [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
 
-                [engine clearLocations:oneItemMapToClear withTags:[NSSet setWithObject:@"ducks"]];
+                [engine clearLocations:oneItemMapToClear withTags:[NSSet<NSString*> setWithObject:@"ducks"]];
             });
 
             it(@"should be able to clear one item while subscribed to the items tag", ^{
@@ -682,7 +682,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 [[store should] receive:@selector(saveRegisteredGeofences:) withArguments:expectedGeofencesToStore, nil];
                 [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
 
-                [engine clearLocations:oneItemMapToClear withTags:[NSSet setWithObject:@"rats"]];
+                [engine clearLocations:oneItemMapToClear withTags:[NSSet<NSString*> setWithObject:@"rats"]];
             });
         });
 
@@ -722,7 +722,7 @@ SPEC_BEGIN(PCFPushGeofenceEngineSpec)
                 expectedGeofencesToStore = oneItemWithTagGeofenceList;
 
                 [[registrar should] receive:@selector(registerGeofences:list:) withArguments:expectedGeofencesToRegister, expectedGeofencesToStore, nil];
-                [engine reregisterCurrentLocationsWithTags:[NSSet setWithObject:@"pineapples"]];
+                [engine reregisterCurrentLocationsWithTags:[NSSet<NSString*> setWithObject:@"pineapples"]];
             });
 
             it(@"should unregister tagged locations when there are no currently subscribed tags", ^{

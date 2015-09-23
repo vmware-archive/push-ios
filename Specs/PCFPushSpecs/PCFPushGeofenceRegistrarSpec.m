@@ -125,7 +125,7 @@ describe(@"PCFPushGeofenceRegistrar", ^{
             CLRegion *region1 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(5.0, 5.0) radius:10.0 identifier:@"REGION1"];
             CLRegion *region2 = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(6.0, 6.0) radius:11.0 identifier:@"REGION2"];
             NSSet* expectedGeofences = [NSSet setWithArray:@[ region1, region2 ]];
-            NSMutableSet* actualGeofences = [NSMutableSet set];
+            NSMutableSet<NSString*> * actualGeofences = [NSMutableSet<NSString*> set];
             [[PCFPushGeofenceStatusUtil should] receive:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:) withArguments:theValue(NO), any(), theValue(0), any(), nil];
             [locationManager stub:@selector(monitoredRegions) andReturn:expectedGeofences];
             [locationManager stub:@selector(stopMonitoringForRegion:) withBlock:^id(NSArray *params) {

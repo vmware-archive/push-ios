@@ -47,7 +47,7 @@ static BOOL isAtLeastiOS8_2()
 SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
 
     beforeEach(^{
-        [PCFPushPersistentStorage setTags:[NSSet set]];
+        [PCFPushPersistentStorage setTags:[NSSet<NSString*> set]];
     });
 
     describe(@"PCFPushGeofenceHandler", ^{
@@ -218,7 +218,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 });
 
                 it(@"should ignore geofences if the user is not subscribed to one of its tags", ^{
-                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"TUESDAY", @"WEDNESDAY"]]];
+                    [PCFPushPersistentStorage setTags:[NSSet<NSString*> setWithArray:@[ @"TUESDAY", @"WEDNESDAY"]]];
                     [[engine shouldNot] receive:@selector(clearLocations:withTags:)];
                     [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                     [store stub:@selector(objectForKeyedSubscript:) withBlock:geofenceWithId(4L, geofence4EnterWithTags)];
@@ -227,7 +227,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 });
 
                 it(@"should trigger geofences if the user is subscribed to one of its tags", ^{
-                    [PCFPushPersistentStorage setTags:[NSSet setWithArray:@[ @"THURSDAY", @"FRIDAY"]]];
+                    [PCFPushPersistentStorage setTags:[NSSet<NSString*> setWithArray:@[ @"THURSDAY", @"FRIDAY"]]];
                     [expectedMapToClear put:geofence4EnterWithTags locationIndex:0];
                     [[engine should] receive:@selector(clearLocations:withTags:) withArguments:expectedMapToClear, nil];
                     [[application should] receive:@selector(presentLocalNotificationNow:)];

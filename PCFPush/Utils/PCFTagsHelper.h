@@ -4,13 +4,13 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSSet *pcfPushLowercaseTags(NSSet *tags);
+extern NSSet<NSString*> *pcfPushLowercaseTags(NSSet<NSString*> *tags);
 
 @interface PCFTagsHelper : NSObject
 
-@property (nonatomic) NSSet *subscribeTags;
-@property (nonatomic) NSSet *unsubscribeTags;
+@property (nonatomic) NSSet<NSString*> *subscribeTags;
+@property (nonatomic) NSSet<NSString*> *unsubscribeTags;
 
-+ (instancetype) tagsHelperWithSavedTags:(NSSet*)savedTags newTags:(NSSet*)newTags;
++ (instancetype) tagsHelperWithSavedTags:(NSSet<NSString*> *)savedTags newTags:(NSSet<NSString*> *)newTags;
 
 @end

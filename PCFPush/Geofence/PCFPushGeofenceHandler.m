@@ -24,7 +24,7 @@
 
 @end
 
-static BOOL isUserSubscribedToGeofenceTag(PCFPushGeofenceData *geofence, NSSet *subscribedTags)
+static BOOL isUserSubscribedToGeofenceTag(PCFPushGeofenceData *geofence, NSSet<NSString*> *subscribedTags)
 {
     if (geofence.tags) {
         BOOL intersects = [subscribedTags intersectsSet:pcfPushLowercaseTags(geofence.tags)];
@@ -43,7 +43,7 @@ static BOOL shouldTriggerNotification(PCFPushGeofenceData *geofence, CLRegionSta
         return NO;
     }
 
-    NSSet *subscribedTags = pcfPushLowercaseTags([PCFPushPersistentStorage tags]);
+    NSSet<NSString*> *subscribedTags = pcfPushLowercaseTags([PCFPushPersistentStorage tags]);
     if (!isUserSubscribedToGeofenceTag(geofence, subscribedTags)) {
         return NO;
     }
@@ -137,7 +137,7 @@ static UILocalNotification *notificationFromGeofence(PCFPushGeofenceData *geofen
     return notification;
 }
 
-static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet *subscribedTags)
+static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet<NSString*> *subscribedTags)
 {
     PCFPushGeofenceLocationMap *locationsToClear = [PCFPushGeofenceLocationMap map];
     for (PCFPushGeofenceLocation *location in geofence.locations) {
@@ -150,7 +150,7 @@ static void clearGeofence(PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *
     [engine clearLocations:locationsToClear withTags:subscribedTags];
 }
 
-static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet *subscribedTags)
+static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PCFPushGeofenceEngine *engine, NSSet<NSString*> *subscribedTags)
 {
     int64_t locationId = pcfPushLocationIdForRequestId(requestId);
     if (locationId >= 0) {
@@ -229,7 +229,7 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
     }
 }
 
-+ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet*)subscribedTags
++ (void) reregisterGeofencesWithEngine:(PCFPushGeofenceEngine *)engine subscribedTags:(NSSet<NSString*> *)subscribedTags
 {
     [engine reregisterCurrentLocationsWithTags:subscribedTags];
 }

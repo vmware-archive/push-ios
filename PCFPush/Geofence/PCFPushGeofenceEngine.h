@@ -14,10 +14,10 @@
 
 - (id)initWithRegistrar:(PCFPushGeofenceRegistrar *)registrar store:(PCFPushGeofencePersistentStore *)store;
 
-- (void)processResponseData:(PCFPushGeofenceResponseData *)responseData withTimestamp:(int64_t)timestamp withTags:(NSSet *)tags;
+- (void)processResponseData:(PCFPushGeofenceResponseData *)responseData withTimestamp:(int64_t)timestamp withTags:(NSSet<NSString*> *)tags;
 
-- (void)clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear withTags:(NSSet *)subscribedTags;
+- (void)clearLocations:(PCFPushGeofenceLocationMap *)locationsToClear withTags:(NSSet<NSString*> *)subscribedTags;
 
-- (void)reregisterCurrentLocationsWithTags:(NSSet*)subscribedTags;
+- (void)reregisterCurrentLocationsWithTags:(NSSet<NSString*> *)subscribedTags;
 
 @end

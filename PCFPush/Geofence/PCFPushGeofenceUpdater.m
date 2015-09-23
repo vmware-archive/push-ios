@@ -26,7 +26,7 @@ static BOOL hasGeofencesInRequest(NSDictionary *userInfo)
 + (void) startGeofenceUpdate:(PCFPushGeofenceEngine *)engine
                     userInfo:(NSDictionary *)userInfo
                    timestamp:(int64_t)timestamp
-                        tags:(NSSet *)subscribedTags
+                        tags:(NSSet<NSString*> *)subscribedTags
                      success:(void (^)(void))successBlock
                      failure:(void (^)(NSError *error))failureBlock
 {

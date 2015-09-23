@@ -72,7 +72,7 @@ describe(@"PCFRegistrationParameters", ^{
 
         beforeEach(^{
             model = [PCFPushParameters parameters];
-            [model setPushTags:[NSSet setWithArray:@[@"TAG1", @"TAG2"]]];
+            [model setPushTags:[NSSet<NSString*> setWithArray:@[@"TAG1", @"TAG2"]]];
             [model setPushDeviceAlias:TEST_DEVICE_ALIAS];
             [model setPushAPIURL:TEST_PUSH_API_URL_1];
             [model setDevelopmentPushVariantSecret:TEST_VARIANT_SECRET];
@@ -102,7 +102,7 @@ describe(@"PCFRegistrationParameters", ^{
         });
 
         it(@"should allow the tags to be empty", ^{
-            model.pushTags = [NSSet set];
+            model.pushTags = [NSSet<NSString*> set];
             [[theValue([model arePushParametersValid]) should] beTrue];
         });
     });

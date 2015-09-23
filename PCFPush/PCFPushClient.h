@@ -28,7 +28,7 @@
 - (void)unregisterForRemoteNotificationsWithSuccess:(void (^)(void))success
                                             failure:(void (^)(NSError *error))failure;
 
-- (void) subscribeToTags:(NSSet *)tags
+- (void) subscribeToTags:(NSSet<NSString*> *)tags
              deviceToken:(NSData *)deviceToken
               deviceUuid:(NSString *)deviceUuid
                  success:(void (^)(void))success

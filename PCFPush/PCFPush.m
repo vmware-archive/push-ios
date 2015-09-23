@@ -17,7 +17,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 @implementation PCFPush
 
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
-                                                  tags:(NSSet *)tags
+                                                  tags:(NSSet<NSString*> *)tags
                                            deviceAlias:(NSString *)deviceAlias
                                    areGeofencesEnabled:(BOOL)areGeofencesEnabled
                                                success:(void (^)(void))successBlock
@@ -29,7 +29,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
-+ (void) subscribeToTags:(NSSet *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure
++ (void) subscribeToTags:(NSSet<NSString*> *)tags success:(void (^)(void))success failure:(void (^)(NSError*))failure
 {
     NSData *deviceToken = [PCFPushPersistentStorage APNSDeviceToken];
     NSString *deviceUuid = [PCFPushPersistentStorage serverDeviceID];

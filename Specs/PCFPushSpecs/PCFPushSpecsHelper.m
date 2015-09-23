@@ -51,8 +51,8 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         self.apnsDeviceToken = [@"TEST DEVICE TOKEN 1" dataUsingEncoding:NSUTF8StringEncoding];
         self.backEndDeviceId = @"BACK END DEVICE ID 1";
         self.base64AuthString1 = @"NDQ0LTU1NS02NjYtNzc3Ok5vIHNlY3JldCBpcyBhcyBzdHJvbmcgYXMgaXRzIGJsYWJiaWVzdCBrZWVwZXI=";
-        self.tags1 = [NSSet setWithArray:@[ @"tacos", @"burritos" ]];
-        self.tags2 = [NSSet setWithArray:@[ @"coconuts", @"papayas" ]];
+        self.tags1 = [NSSet<NSString*> setWithArray:@[ @"tacos", @"burritos" ]];
+        self.tags2 = [NSSet<NSString*> setWithArray:@[ @"coconuts", @"papayas" ]];
         self.testGeofenceDate = [NSDate date];
         
         [PCFPushPersistentStorage reset];
