@@ -6,6 +6,8 @@
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushErrors.h"
 
+extern NSString *const PCFPushSDKVersion;
+
 /**
  * A callback that is used to provide custom SSL authentication when using the "callback" sslCertValidationMode.
  */
@@ -234,5 +236,10 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  *
  */
 + (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback;
+
+/**
+ * Returns the version of the PCF Push SDK.
+ */
++ (NSString *) sdkVersion;
 
 @end

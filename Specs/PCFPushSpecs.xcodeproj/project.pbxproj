@@ -603,10 +603,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CURRENT_PROJECT_VERSION = 1.4.0;
 				ENABLE_TESTABILITY = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-D_PCF_PUSH_VERSION=\"$(CURRENT_PROJECT_VERSION)\"";
 			};
 			name = Debug;
 		};
@@ -614,8 +616,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CURRENT_PROJECT_VERSION = 1.4.0;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				OTHER_CFLAGS = "-D_PCF_PUSH_VERSION=\"$(CURRENT_PROJECT_VERSION)\"";
 			};
 			name = Release;
 		};

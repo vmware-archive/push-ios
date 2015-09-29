@@ -5,6 +5,7 @@
 #import <objc/runtime.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import "PCFPush.h"
 #import "PCFPushDebug.h"
 #import "PCFPushClient.h"
 #import "PCFPushErrors.h"
@@ -55,6 +56,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 {
     dispatch_once(&_sharedPCFPushClientToken, ^{
         if (!_sharedPCFPushClient) {
+            PCFPushLog(@"Initializing PCF Push SDK %@", [PCFPush sdkVersion]);
             _sharedPCFPushClient = [[PCFPushClient alloc] init];
         }
     });

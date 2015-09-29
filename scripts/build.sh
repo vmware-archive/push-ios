@@ -13,6 +13,8 @@ set -x
 # Options
 ######################
 
+PODSPEC=PCFPush.podspec
+
 REVEAL_ARCHIVE_IN_FINDER=true
 
 FRAMEWORK_NAME="${PROJECT_NAME}"
@@ -25,19 +27,37 @@ UNIVERSAL_LIBRARY_DIR="${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal"
 
 FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"
 
+###########################
+# Read version from podspec
+###########################
+
+set +x
+
+V=`awk -F'=|#+' '/^[ \t]*PCF_PUSH_VERSION/ { print $2 }' < $PODSPEC ` # Read the value of the PCF_PUSH_VERSION line. Keep the portion between the = and the # characters
+V=`echo "$V" | tr -d '[[:space:]]'` # Remove the whitespace
+V="${V%\'}" # Remove single quotes at the end of the line
+V="${V%\"}" # Remove double quotes at the end of the line
+V="${V#\'}" # Remove single quotes at the beginning of the line
+V="${V#\"}" # Remove double quotes at the beginning of the line
+
+if [ "$V" = "" ]; then
+  echo "ERROR: Could not successfully read the PCF_PUSH_VERSION value from the $PODSPEC file."
+  exit 1
+fi
+
+echo "PCF Push Version is '$V'."
+
+set -x
 
 ######################
 # Build Frameworks
 ######################
 
-xcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphonesimulator -target ${PROJECT_NAME} -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator | echo
+# Note that GCC_PREPROCESSOR_DEFINITIONS is used to set a compiler definition with the current project version and CURRENT_PROJECT_VERSION sets a build setting with the current project version (read from the PCFPush.podspec file above).
 
-xcodebuild -project ${PROJECT_NAME}.xcodeproj -sdk iphoneos -target ${PROJECT_NAME} -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos | echo
+xcodebuild -verbose GCC_PREPROCESSOR_DEFINITIONS="_PCF_PUSH_VERSION=\\\"$V\\\"" CURRENT_PROJECT_VERSION=$V -project ${PROJECT_NAME}.xcodeproj -sdk iphonesimulator -target ${PROJECT_NAME} -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator
 
-#xcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphoneos  BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" | echo
-
-#xcodebuild -target ${PROJECT_NAME} ONLY_ACTIVE_ARCH=NO -configuration ${CONFIGURATION} -sdk iphonesimulator  BUILD_DIR="${BUILD_DIR}" BUILD_ROOT="${BUILD_ROOT}" | echo
-
+xcodebuild -verbose GCC_PREPROCESSOR_DEFINITIONS="_PCF_PUSH_VERSION=\\\"$V\\\"" CURRENT_PROJECT_VERSION=$V -project ${PROJECT_NAME}.xcodeproj -sdk iphoneos -target ${PROJECT_NAME} -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos
 
 ######################
 # Create directory for universal

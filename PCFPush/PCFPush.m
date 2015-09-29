@@ -11,6 +11,16 @@
 #import "PCFPushURLConnectionDelegate.h"
 #import "PCFTagsHelper.h"
 
+// The current version code is read from "PCFPush.podspec" during a framework build.
+// In order to change the project version number, please edit the "PCFPush.podspec" file.
+#ifdef _PCF_PUSH_VERSION
+#define PCF_PUSH_VERSION @ _PCF_PUSH_VERSION
+#else
+#define PCF_PUSH_VERSION @ "0.0.0"
+#endif
+
+NSString *const PCFPushSDKVersion = PCF_PUSH_VERSION;
+
 // Error domain
 NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
@@ -91,6 +101,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 + (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback
 {
     [PCFPushURLConnectionDelegate setAuthenticationCallback:authenticationCallback];
+}
+
++ (NSString *) sdkVersion
+{
+    return PCFPushSDKVersion;
 }
 
 @end

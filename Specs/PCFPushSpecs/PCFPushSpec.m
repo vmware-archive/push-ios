@@ -34,6 +34,15 @@ describe(@"PCFPush", ^{
     afterEach(^{
         [helper reset];
     });
+    
+    describe(@"getting the version", ^{
+       
+        // Compare the version number to the one in the "PCFPush.podspec" file.
+        // Note that you must run "pod update" after changing the version number in "PCFPush.podspec".
+        it(@"should return the current SDK version", ^{
+            [[[PCFPush sdkVersion] should] equal:@"1.4.0"];
+        });
+    });
 
     describe(@"setting parameters", ^{
 
