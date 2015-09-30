@@ -262,9 +262,16 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
 - (void)resetAnalyticsStorage
 {
-    [self.analyticsStorage resetDatabase];
+    [self.analyticsStorage resetDatabase:NO];
     [PCFPushAnalyticsStorage setSharedManager:nil];
     self.analyticsStorage = nil;
+}
+
+- (void)resetAnalyticsStorageButKeepDatabaseFile
+{
+    [self.analyticsStorage resetDatabase:YES];
+    [PCFPushAnalyticsStorage setSharedManager:nil];
+    self.analyticsStorage = nil;    
 }
 
 @end

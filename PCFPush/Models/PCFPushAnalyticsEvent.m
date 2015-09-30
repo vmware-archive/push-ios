@@ -12,6 +12,7 @@ const struct EventRemoteAttributes {
     PCF_STRUCT_STRING *deviceUuid;
     PCF_STRUCT_STRING *geofenceId;
     PCF_STRUCT_STRING *locationId;
+    PCF_STRUCT_STRING *sdkVersion;
 } EventRemoteAttributes;
 
 const struct EventRemoteAttributes EventRemoteAttributes = {
@@ -21,6 +22,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
         .deviceUuid = @"deviceUuid",
         .geofenceId = @"geofenceId",
         .locationId = @"locationId",
+        .sdkVersion = @"sdkVersion",
 };
 
 @implementation PCFPushAnalyticsEvent
@@ -32,6 +34,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 @dynamic deviceUuid;
 @dynamic geofenceId;
 @dynamic locationId;
+@dynamic sdkVersion;
 
 #pragma mark - PCFSortDescriptors Protocol
 
@@ -54,6 +57,7 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
                 PCF_STR_PROP(deviceUuid) : EventRemoteAttributes.deviceUuid,
                 PCF_STR_PROP(geofenceId) : EventRemoteAttributes.geofenceId,
                 PCF_STR_PROP(locationId) : EventRemoteAttributes.locationId,
+                PCF_STR_PROP(sdkVersion) : EventRemoteAttributes.sdkVersion,
         };
     });
 

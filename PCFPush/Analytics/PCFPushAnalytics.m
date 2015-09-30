@@ -5,6 +5,7 @@
 
 #import "PCFPushAnalytics.h"
 #import <CoreData/CoreData.h>
+#import "PCFPush.h"
 #import "PCFPushDebug.h"
 #import "PCFPushPersistentStorage.h"
 #import "PCFPushAnalyticsStorage.h"
@@ -29,7 +30,8 @@ static BOOL areAnalyticsSetUp = NO;
         return;
     }
 
-    NSDictionary *fields = @{ @"receiptId":receiptId, @"deviceUuid":[PCFPushPersistentStorage serverDeviceID]};
+    NSString *serverDeviceId = [PCFPushPersistentStorage serverDeviceID];
+    NSDictionary *fields = @{ @"receiptId":receiptId, @"deviceUuid":serverDeviceId};
     PCFPushLog(@"Logging received remote notification for receiptId:%@", receiptId);
     [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED fields:fields parameters:parameters];
 }
@@ -84,12 +86,17 @@ static BOOL areAnalyticsSetUp = NO;
                    fields:(NSDictionary *)fields
 {
     NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(PCFPushAnalyticsEvent.class) inManagedObjectContext:context];
+    
     PCFPushAnalyticsEvent *event = [[PCFPushAnalyticsEvent alloc] initWithEntity:description insertIntoManagedObjectContext:context];
-    event.eventType = eventType;
     
-    int64_t date = (int64_t) ([[NSDate date] timeIntervalSince1970] * 1000.0);
+    if (description.propertiesByName[@"sdkVersion"]) {
+        // V2+ data model
+        event.sdkVersion = PCFPush.sdkVersion;
+    }
+    
+    int64_t date = (int64_t) (NSDate.date.timeIntervalSince1970 * 1000.0);
     event.eventTime = [NSString stringWithFormat:@"%lld", date];
-    
+    event.eventType = eventType;
     event.receiptId = fields[@"receiptId"];
     event.deviceUuid = fields[@"deviceUuid"];
     event.geofenceId = fields[@"geofenceId"];

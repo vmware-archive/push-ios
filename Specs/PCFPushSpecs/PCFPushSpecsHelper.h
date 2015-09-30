@@ -68,5 +68,6 @@ OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 // Analytics helpers
 - (void)setupAnalyticsStorage;
 - (void)resetAnalyticsStorage;
+- (void)resetAnalyticsStorageButKeepDatabaseFile;
 
 @end;

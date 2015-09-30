@@ -5,6 +5,7 @@
 
 #import "Kiwi.h"
 #import <CoreData/CoreData.h>
+#import "PCFPush.h"
 #import "PCFPushErrorUtil.h"
 #import "PCFPushAnalytics.h"
 #import "PCFPushParameters.h"
@@ -18,6 +19,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
     __block PCFPushSpecsHelper *helper;
     __block PCFPushParameters *parametersWithAnalyticsEnabled;
     __block PCFPushParameters *parametersWithAnalyticsDisabled;
+    __block NSString *entityName;
 
     beforeEach(^{
         helper = [[PCFPushSpecsHelper alloc] init];
@@ -27,12 +29,104 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         parametersWithAnalyticsDisabled = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-AnalyticsDisabled" ofType:@"plist"]];
         parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
         [PCFPushAnalytics resetAnalytics];
+        entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
     });
 
     afterEach(^{
         [helper resetAnalyticsStorage];
         [helper reset];
         helper = nil;
+    });
+
+    describe(@"data migration", ^{
+
+        beforeEach(^{
+            [helper resetAnalyticsStorage];
+            [PCFPushPersistentStorage reset];
+            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+            [PCFPushPersistentStorage setServerDeviceID:@"TEST_DEVICE_UUID"];
+        });
+
+        it(@"V1 -> V1 should skip migration", ^{
+            
+            [PCFPushAnalyticsStorage stub:@selector(newestManagedObjectModel) andReturn:PCFPushAnalyticsStorage.managedObjectModelV1];
+            [PCFPushAnalyticsStorage stub:@selector(allManagedObjectModels) andReturn:@[PCFPushAnalyticsStorage.managedObjectModelV1]];
+            
+            [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
+            
+            NSArray *eventsBeforeMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsBeforeMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventBeforeMigration = eventsBeforeMigration.lastObject;
+            [[eventBeforeMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventBeforeMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+
+            [helper resetAnalyticsStorageButKeepDatabaseFile];
+            
+            [PCFPushPersistentStorage reset];
+            
+            NSArray *eventsAfterMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsAfterMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventAfterMigration = eventsAfterMigration.lastObject;
+            [[eventAfterMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventAfterMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+            [[theValue(PCFPushAnalyticsStorage.numberOfMigrationsExecuted) should] equal:theValue(0)];
+        });
+        
+        it(@"V1 -> V2 should do migration", ^{
+
+            [PCFPushAnalyticsStorage stub:@selector(newestManagedObjectModel) andReturn:PCFPushAnalyticsStorage.managedObjectModelV1];
+            [PCFPushAnalyticsStorage stub:@selector(allManagedObjectModels) andReturn:@[PCFPushAnalyticsStorage.managedObjectModelV1]];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
+
+            NSArray *eventsBeforeMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsBeforeMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventBeforeMigration = eventsBeforeMigration.lastObject;
+            [[eventBeforeMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventBeforeMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+
+            [helper resetAnalyticsStorageButKeepDatabaseFile];
+            
+            [PCFPushAnalyticsStorage stub:@selector(newestManagedObjectModel) andReturn:PCFPushAnalyticsStorage.managedObjectModelV2];
+            [PCFPushAnalyticsStorage stub:@selector(allManagedObjectModels) andReturn:@[PCFPushAnalyticsStorage.managedObjectModelV1, PCFPushAnalyticsStorage.managedObjectModelV2]];
+            
+            [PCFPushPersistentStorage reset];
+            
+            NSArray *eventsAfterMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsAfterMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventAfterMigration = eventsAfterMigration.lastObject;
+            [[eventAfterMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventAfterMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+            [[eventAfterMigration.sdkVersion should] beNil];
+            [[theValue(PCFPushAnalyticsStorage.numberOfMigrationsExecuted) should] equal:theValue(1)];
+        });
+        
+        it(@"V2 -> V2 should skip migration", ^{
+            
+            [PCFPushAnalyticsStorage stub:@selector(newestManagedObjectModel) andReturn:PCFPushAnalyticsStorage.managedObjectModelV2];
+            [PCFPushAnalyticsStorage stub:@selector(allManagedObjectModels) andReturn:@[PCFPushAnalyticsStorage.managedObjectModelV1, PCFPushAnalyticsStorage.managedObjectModelV2]];
+            
+            [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
+            
+            NSArray *eventsBeforeMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsBeforeMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventBeforeMigration = eventsBeforeMigration.lastObject;
+            [[eventBeforeMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventBeforeMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+            [[eventBeforeMigration.sdkVersion should] equal:PCFPushSDKVersion];
+            
+            [helper resetAnalyticsStorageButKeepDatabaseFile];
+            
+            [PCFPushPersistentStorage reset];
+            
+            NSArray *eventsAfterMigration = [PCFPushAnalyticsStorage.shared events];
+            [[eventsAfterMigration should] haveCountOf:1];
+            PCFPushAnalyticsEvent *eventAfterMigration = eventsAfterMigration.lastObject;
+            [[eventAfterMigration should] beKindOfClass:NSClassFromString(entityName)];
+            [[eventAfterMigration.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+            [[eventAfterMigration.sdkVersion should] equal:PCFPushSDKVersion];
+            [[theValue(PCFPushAnalyticsStorage.numberOfMigrationsExecuted) should] equal:theValue(0)];
+        });
     });
 
     describe(@"checking polling time", ^{
@@ -64,10 +158,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
     describe(@"Logging an event", ^{
 
-        __block NSString *entityName;
-
         beforeEach(^{
-            entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
             [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
             [NSDate stub:@selector(date) andReturn:[NSDate dateWithTimeIntervalSince1970:1337.0]];
         });
@@ -84,6 +175,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event should] beKindOfClass:NSClassFromString(entityName)];
                 [[event.eventType should] equal:@"TEST_EVENT"];
                 [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -119,6 +211,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.geofenceId should] equal:@"TEST_GEOFENCE_ID"];
                 [[event.locationId should] equal:@"TEST_LOCATION_ID"];
                 [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -138,6 +231,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.geofenceId should] beNil];
                 [[event.locationId should] beNil];
                 [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -157,6 +251,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.geofenceId should] beNil];
                 [[event.locationId should] beNil];
                 [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
 
@@ -176,6 +271,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.geofenceId should] equal:@"57"];
                 [[event.locationId should] equal:@"923"];
                 [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
         });

@@ -12,7 +12,13 @@
 
 + (void)setSharedManager:(PCFPushAnalyticsStorage *)manager;
 
-- (void)resetDatabase;
++ (NSManagedObjectModel *)newestManagedObjectModel;
++ (NSManagedObjectModel *)managedObjectModelV1;
++ (NSManagedObjectModel *)managedObjectModelV2;
++ (NSArray<NSManagedObjectModel*>*)allManagedObjectModels;
++ (NSUInteger)numberOfMigrationsExecuted;
+
+- (void)resetDatabase:(BOOL)keepDatabaseFile;
 
 - (NSManagedObjectContext *)managedObjectContext;
 
