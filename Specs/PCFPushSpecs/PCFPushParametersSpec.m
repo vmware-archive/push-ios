@@ -311,6 +311,77 @@ describe(@"PCFRegistrationParameters", ^{
             });
         });
     });
+    
+    context(@"overriding properties", ^{
+        
+        beforeEach(^{
+            [NSBundle stub:@selector(mainBundle) andReturn:[NSBundle bundleForClass:[self class]]];
+        });
+
+        it(@"should let you override the pushAPIURL parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"CATS" forKey:@"override.pivotal.push.serviceUrl"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.pushAPIURL should] equal:@"CATS"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.serviceUrl"];
+        });
+        
+        it(@"should let you override the model.developmentPushVariantSecret parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"PARROTS" forKey:@"override.pivotal.push.platformSecretDevelopment"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.developmentPushVariantSecret should] equal:@"PARROTS"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformSecretDevelopment"];
+        });
+        
+        it(@"should let you override the model.productionPushVariantSecret parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"CACTUS" forKey:@"override.pivotal.push.platformSecretProduction"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.productionPushVariantSecret should] equal:@"CACTUS"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformSecretProduction"];
+        });
+        
+        it(@"should let you override the model.developmentPushVariantUUID parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"MONKEYS" forKey:@"override.pivotal.push.platformUuidDevelopment"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.developmentPushVariantUUID should] equal:@"MONKEYS"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformUuidDevelopment"];
+        });
+        
+        it(@"should let you override the model.productionPushVariantUUID parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"BANANAS" forKey:@"override.pivotal.push.platformUuidProduction"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.productionPushVariantUUID should] equal:@"BANANAS"];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformUuidProduction"];
+        });
+        
+        it(@"should let you override the model.areAnalyticsEnabled parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"NO" forKey:@"override.pivotal.push.areAnalyticsEnabled"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue([model areAnalyticsEnabled]) should] beNo];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.areAnalyticsEnabled"];
+        });
+        
+        it(@"should let you override the model.sslCertValidationMode parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"pinned" forKey:@"override.pivotal.push.sslCertValidationMode"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[theValue(model.sslCertValidationMode) should] equal:theValue(PCFPushSslCertValidationModePinned)];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.sslCertValidationMode"];
+        });
+        
+        it(@"should let you override the model.pinnedSslCertificateNames parameter", ^{
+            [[NSUserDefaults standardUserDefaults] setValue:@"FUZZY BUNNY ELBOW DROP" forKey:@"override.pivotal.push.pinnedSslCertificateNames"];
+            model = [PCFPushParameters defaultParameters];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+            [[model.pinnedSslCertificateNames should] containObjectsInArray:@[@"FUZZY", @"BUNNY", @"ELBOW", @"DROP"]];
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.pinnedSslCertificateNames"];
+        });
+    });
 });
 
 SPEC_END

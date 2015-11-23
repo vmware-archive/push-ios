@@ -79,10 +79,23 @@ void pcfPushResetOnceToken() {
     if (path) {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
+            
+            // Scan through all of the properties defined in the PCFPushParameters class
             [PCFPushParameters enumerateParametersWithBlock:^(id plistPropertyName, id propertyName, BOOL *stop) {
                 id propertyValue = [plist valueForKey:plistPropertyName];
-
+                
+                // Check if the NSUserDefaults contains an overriding property value.
+                // e.g.: if the parameter is "pivotal.push.serviceUrl" then the override property name is "override.pivotal.push.serviceUrl".
+                // These property overrides can also be set at runtime using the command line arguments.
+                NSString *overridePropertyName = [@"override." stringByAppendingString:(NSString*)plistPropertyName];
+                NSString *overridePropertyValue = [[NSUserDefaults standardUserDefaults] valueForKey:overridePropertyName];
+                
                 if (propertyName && [propertyName isEqualToString:@"sslCertValidationMode"]) {
+                    
+                    if (overridePropertyValue) {
+                        propertyValue = overridePropertyValue;
+                    }
+
                    if (!propertyValue || ![propertyValue isKindOfClass:NSString.class] || [propertyValue length] == 0 || [[propertyValue lowercaseString] isEqualToString:@"default"]) {
                        params.sslCertValidationMode = PCFPushSslCertValidationModeSystemDefault;
                    } else if ([[propertyValue lowercaseString] isEqualToString:@"trustall"] || [[propertyValue lowercaseString] isEqualToString:@"trust_all"]) {
@@ -95,13 +108,28 @@ void pcfPushResetOnceToken() {
                        [NSException raise:NSInvalidArgumentException format:@"invalid sslCertValidationMode"];
                    }
 
-                } else if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && plist[@"pivotal.push.areAnalyticsEnabled"]) {
-                    params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
+                } else if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && (overridePropertyValue || plist[@"pivotal.push.areAnalyticsEnabled"])) {
+                    
+                    if (overridePropertyValue) {
+                        params.areAnalyticsEnabled = [overridePropertyValue boolValue];
+                    } else {
+                        params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
+                    }
 
                 } else {
 
-                    id propertyValue = plist[plistPropertyName];
+                    id propertyValue;
+                    if (overridePropertyValue) {
+                        propertyValue = overridePropertyValue;
+                    } else {
+                        propertyValue = plist[plistPropertyName];
+                    }
+                    
                     if (propertyValue) {
+                        
+                        if ([propertyName isEqualToString:@"pinnedSslCertificateNames"] && overridePropertyValue) {
+                            propertyValue = [overridePropertyValue componentsSeparatedByString:@" "];
+                        }
 
                         if ([propertyValue isKindOfClass:[NSString class]]) {
                             [params setValue:[propertyValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] forKeyPath:propertyName];
