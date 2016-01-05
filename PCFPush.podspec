@@ -5,7 +5,7 @@
 # the version number into the Info.plist file).  Note that we don't make any attempt to get the current version number into the Info.plist when building via Cocoapods since a Cocoapods
 # project doesn't use an individual Info.plist file for frameworks.
 
-PCF_PUSH_VERSION = "1.4.0" # Update this version when you release an update to this repo.  Make sure to run 'pod update' to propagate the change into the Pods project settings.
+PCF_PUSH_VERSION = "1.5.0" # Update this version when you release an update to this repo.  Make sure to run 'pod update' to propagate the change into the Pods project settings.
 
 Pod::Spec.new do |s|
   s.name         = 'PCFPush'
