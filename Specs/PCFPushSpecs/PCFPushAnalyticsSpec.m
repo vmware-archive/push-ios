@@ -274,6 +274,26 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 [[event.sdkVersion should] equal:PCFPushSDKVersion];
                 [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
             });
+
+            it(@"should let you log when a heartbeat is received", ^{
+
+                [PCFPushPersistentStorage setServerDeviceID:@"TEST_DEVICE_UUID"];
+
+                [PCFPushAnalytics logReceivedHeartbeat:@"TEST_RECEIPT_ID" parameters:parametersWithAnalyticsEnabled];
+
+                NSArray *events = [PCFPushAnalyticsStorage.shared events];
+                [[theValue(events.count) should] equal:theValue(1)];
+                PCFPushAnalyticsEvent *event = events.lastObject;
+                [[event should] beKindOfClass:NSClassFromString(entityName)];
+                [[event.eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_HEARTBEAT];
+                [[event.receiptId should] equal:@"TEST_RECEIPT_ID"];
+                [[event.deviceUuid should] equal:@"TEST_DEVICE_UUID"];
+                [[event.geofenceId should] beNil];
+                [[event.locationId should] beNil];
+                [[event.eventTime should] equal:@"1337000"];
+                [[event.sdkVersion should] equal:PCFPushSDKVersion];
+                [[event.status should] equal:@(PCFPushEventStatusNotPosted)];
+            });
         });
     });
 

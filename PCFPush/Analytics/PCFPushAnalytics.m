@@ -58,6 +58,18 @@ static BOOL areAnalyticsSetUp = NO;
     [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER fields:fields parameters:parameters];
 }
 
++ (void)logReceivedHeartbeat:(NSString *)receiptId parameters:(PCFPushParameters *)parameters
+{
+    if (!parameters.areAnalyticsEnabled) {
+        return;
+    }
+
+    NSString *serverDeviceId = [PCFPushPersistentStorage serverDeviceID];
+    NSDictionary *fields = @{ @"receiptId":receiptId, @"deviceUuid":serverDeviceId};
+    PCFPushLog(@"Logging received heartbeat for receiptId:%@", receiptId);
+    [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_HEARTBEAT fields:fields parameters:parameters];
+}
+
 + (void)logEvent:(NSString *)eventType parameters:(PCFPushParameters *)parameters
 {
     [PCFPushAnalytics logEvent:eventType fields:nil parameters:parameters];

@@ -50,6 +50,10 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
     return isContentAvailable && isGeofenceUpdateAvailable;
 }
 
+static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
+    return dictionary[@"pcf.push.heartbeat.sentAt"] != nil;
+}
+
 @implementation PCFPushClient
 
 + (instancetype)shared
@@ -479,28 +483,35 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
         
         if (receiptId) {
 
-            UIApplicationState applicationState = PCFPushApplicationUtil.applicationState;
+            if (isHeartbeatNotification(userInfo)) {
 
-            if (applicationState == UIApplicationStateBackground || applicationState == UIApplicationStateActive) {
+                [PCFPushAnalytics logReceivedHeartbeat:receiptId parameters:self.registrationParameters];
 
-                // Ensure that we register for the background notification so that we can send analytics events later
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+            } else {
 
-                [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                UIApplicationState applicationState = PCFPushApplicationUtil.applicationState;
 
-            } else if (applicationState == UIApplicationStateInactive) {
+                if (applicationState == UIApplicationStateBackground || applicationState == UIApplicationStateActive) {
 
-                // Ensure that we register for the background notification so that we can send analytics events later
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+                    // Ensure that we register for the background notification so that we can send analytics events later
+                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-                // TODO - figure out why performing this block in the managed object context causes the tests to fail
-                [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
+                    [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
 
-                    if (!hasAlreadyReceivedNotification(receiptId)) {
-                        [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
-                    }
-                    [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
-                }];
+                } else if (applicationState == UIApplicationStateInactive) {
+
+                    // Ensure that we register for the background notification so that we can send analytics events later
+                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
+                    // TODO - figure out why performing this block in the managed object context causes the tests to fail
+                    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
+
+                        if (!hasAlreadyReceivedNotification(receiptId)) {
+                            [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                        }
+                        [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
+                    }];
+                }
             }
         }
 
@@ -565,4 +576,5 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 }
 
 @end
+
 

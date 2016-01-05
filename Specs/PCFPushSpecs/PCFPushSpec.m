@@ -40,7 +40,7 @@ describe(@"PCFPush", ^{
         // Compare the version number to the one in the "PCFPush.podspec" file.
         // Note that you must run "pod update" after changing the version number in "PCFPush.podspec".
         it(@"should return the current SDK version", ^{
-            [[[PCFPush sdkVersion] should] equal:@"1.4.0"];
+            [[[PCFPush sdkVersion] should] equal:@"1.5.0"];
         });
     });
 
@@ -1700,6 +1700,17 @@ describe(@"PCFPush", ^{
                         wasCompletionHandlerCalled = YES;
                     }];
                 });
+
+                it(@"should log a heartbeat analytics event when a heartbeat notification is received", ^{
+                    [[PCFPushAnalytics should] receive:@selector(logReceivedHeartbeat:parameters:)];
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1}, @"receiptId":@"TEST_RECEIPT_ID", @"pcf.push.heartbeat.sentAt":@123456789 } completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                        [[theValue(wasIgnored) should] beYes];
+                        [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
+                        [[error should] beNil];
+                        wasCompletionHandlerCalled = YES;
+                    }];
+                });
+
             });
         });
 

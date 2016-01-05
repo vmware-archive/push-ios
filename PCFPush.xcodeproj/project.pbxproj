@@ -195,6 +195,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		11DD31E81C3C554C0008754E /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				B69DB38561BF54DB47646538 /* PCFPushAnalytics.h */,
+				B69DBE5774B090E6B652F14C /* PCFPushAnalytics.m */,
+			);
+			name = Analytics;
+			sourceTree = "<group>";
+		};
 		B69DBEF70B27BFBEB49BD7DC /* Geofence */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,10 +243,15 @@
 		F131CADC1B0D05B7004101F5 /* PCFPush */ = {
 			isa = PBXGroup;
 			children = (
+				11DD31E81C3C554C0008754E /* Analytics */,
 				F131CAF61B0D0663004101F5 /* BackEnd */,
 				F131CAFB1B0D0663004101F5 /* Categories */,
-				F131CB0B1B0D0663004101F5 /* Info.plist */,
+				B69DBEF70B27BFBEB49BD7DC /* Geofence */,
 				F131CB0C1B0D0663004101F5 /* Models */,
+				F131CB281B0D0664004101F5 /* Persistent Storage */,
+				F131CB2B1B0D0664004101F5 /* Protocols */,
+				F131CB2E1B0D0664004101F5 /* Utils */,
+				F131CB0B1B0D0663004101F5 /* Info.plist */,
 				F131CB211B0D0663004101F5 /* PCFPush-Prefix.pch */,
 				F131CB221B0D0663004101F5 /* PCFPush.h */,
 				F131CB231B0D0663004101F5 /* PCFPush.m */,
@@ -245,12 +259,6 @@
 				F131CB251B0D0663004101F5 /* PCFPushClient.m */,
 				F131CB261B0D0664004101F5 /* PCFPushParameters.h */,
 				F131CB271B0D0664004101F5 /* PCFPushParameters.m */,
-				F131CB281B0D0664004101F5 /* Persistent Storage */,
-				F131CB2B1B0D0664004101F5 /* Protocols */,
-				F131CB2E1B0D0664004101F5 /* Utils */,
-				B69DBEF70B27BFBEB49BD7DC /* Geofence */,
-				B69DBE5774B090E6B652F14C /* PCFPushAnalytics.m */,
-				B69DB38561BF54DB47646538 /* PCFPushAnalytics.h */,
 			);
 			path = PCFPush;
 			sourceTree = "<group>";
