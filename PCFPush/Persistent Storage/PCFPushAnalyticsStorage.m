@@ -127,84 +127,81 @@ static dispatch_once_t onceToken;
 
 + (NSManagedObjectModel *)newestManagedObjectModel
 {
-    return [PCFPushAnalyticsStorage managedObjectModelV2];
+    return [PCFPushAnalyticsStorage managedObjectModelV3];
 }
 
 + (NSArray<NSManagedObjectModel *> *)allManagedObjectModels
 {
-    return @[ PCFPushAnalyticsStorage.managedObjectModelV1, PCFPushAnalyticsStorage.managedObjectModelV2 ];
+    return @[ PCFPushAnalyticsStorage.managedObjectModelV1, PCFPushAnalyticsStorage.managedObjectModelV2, PCFPushAnalyticsStorage.managedObjectModelV3 ];
+}
+
++ (NSArray<__kindof NSPropertyDescription*>*)getV1Properties
+{
+    NSAttributeDescription *statusDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(status)) type:NSInteger16AttributeType];
+    NSAttributeDescription *receiptIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(receiptId)) type:NSStringAttributeType];
+    NSAttributeDescription *eventTypeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType];
+    NSAttributeDescription *eventTimeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType];
+    NSAttributeDescription *deviceUuidDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(deviceUuid)) type:NSStringAttributeType];
+    NSAttributeDescription *geofenceIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(geofenceId)) type:NSStringAttributeType];
+    NSAttributeDescription *locationIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(locationId)) type:NSStringAttributeType];
+
+    return @[ statusDescription, receiptIdDescription, eventTypeDescription, eventTimeDescription, deviceUuidDescription, geofenceIdDescription, locationIdDescription ];
+}
+
++ (NSArray<__kindof NSPropertyDescription*>*)getV2Properties
+{
+    NSAttributeDescription *sdkVersionDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(sdkVersion)) type:NSStringAttributeType];
+
+    return [PCFPushAnalyticsStorage.getV1Properties arrayByAddingObject:sdkVersionDescription];
+}
+
++ (NSArray<__kindof NSPropertyDescription*>*)getV3Properties
+{
+    NSAttributeDescription *platformTypeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(platformType)) type:NSStringAttributeType];
+    NSAttributeDescription *platformUuidDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(platformUuid)) type:NSStringAttributeType];
+
+    return [PCFPushAnalyticsStorage.getV2Properties arrayByAddingObjectsFromArray:@[platformTypeDescription, platformUuidDescription]];
+}
+
++ (NSArray<NSEntityDescription*> *)entityDescriptionsWithProperties:(NSArray<__kindof NSPropertyDescription *>*)entities
+{
+    NSString *entityName = NSStringFromClass([PCFPushAnalyticsEvent class]);
+    NSEntityDescription *entityDescription = [[NSEntityDescription alloc] init];
+    [entityDescription setName:entityName];
+    [entityDescription setManagedObjectClassName:entityName];
+    [entityDescription setProperties:entities];
+    return @[entityDescription];
 }
 
 + (NSManagedObjectModel *)managedObjectModelV1
 {
     NSManagedObjectModel *model = [[NSManagedObjectModel alloc] init];
-    NSString *entityName = NSStringFromClass([PCFPushAnalyticsEvent class]);
-    NSEntityDescription *analyticEventEntity = [[NSEntityDescription alloc] init];
-    [analyticEventEntity setName:entityName];
-    [analyticEventEntity setManagedObjectClassName:entityName];
-    [model setEntities:@[analyticEventEntity]];
-
-    NSAttributeDescription *statusDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(status)) type:NSInteger16AttributeType optional:true];
-    NSAttributeDescription *receiptIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(receiptId)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *eventTypeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *eventTimeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *deviceUuidDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(deviceUuid)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *geofenceIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(geofenceId)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *locationIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(locationId)) type:NSStringAttributeType optional:true];
-
-    [analyticEventEntity setProperties:@[
-            statusDescription,
-            receiptIdDescription,
-            eventTypeDescription,
-            eventTimeDescription,
-            deviceUuidDescription,
-            geofenceIdDescription,
-            locationIdDescription,
-    ]];
-
+    NSArray<NSEntityDescription*> *entityDescriptions = [PCFPushAnalyticsStorage entityDescriptionsWithProperties:PCFPushAnalyticsStorage.getV1Properties];
+    [model setEntities:entityDescriptions];
     return model;
 }
 
 + (NSManagedObjectModel *)managedObjectModelV2
 {
     NSManagedObjectModel *model = [[NSManagedObjectModel alloc] init];
-    NSString *entityName = NSStringFromClass([PCFPushAnalyticsEvent class]);
-    NSEntityDescription *analyticEventEntity = [[NSEntityDescription alloc] init];
-    [analyticEventEntity setName:entityName];
-    [analyticEventEntity setManagedObjectClassName:entityName];
-    [model setEntities:@[analyticEventEntity]];
-    
-    NSAttributeDescription *statusDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(status)) type:NSInteger16AttributeType optional:true];
-    NSAttributeDescription *receiptIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(receiptId)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *eventTypeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *eventTimeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *deviceUuidDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(deviceUuid)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *geofenceIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(geofenceId)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *locationIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(locationId)) type:NSStringAttributeType optional:true];
-    NSAttributeDescription *sdkVersionDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(sdkVersion)) type:NSStringAttributeType optional:true];  // NEW in V2
-    
-    [analyticEventEntity setProperties:@[
-                                         statusDescription,
-                                         receiptIdDescription,
-                                         eventTypeDescription,
-                                         eventTimeDescription,
-                                         deviceUuidDescription,
-                                         geofenceIdDescription,
-                                         locationIdDescription,
-                                         sdkVersionDescription,
-                                         ]];
-    
+    NSArray<NSEntityDescription*> *entityDescriptions = [PCFPushAnalyticsStorage entityDescriptionsWithProperties:PCFPushAnalyticsStorage.getV2Properties];
+    [model setEntities:entityDescriptions];
     return model;
 }
 
-+ (NSAttributeDescription *)attributeDescriptionWithName:(NSString *)name
-                                                    type:(NSAttributeType)attributeType
-                                                optional:(BOOL)isOptional
++ (NSManagedObjectModel *)managedObjectModelV3
 {
+    NSManagedObjectModel *model = [[NSManagedObjectModel alloc] init];
+    NSArray<NSEntityDescription*> *entityDescriptions = [PCFPushAnalyticsStorage entityDescriptionsWithProperties:PCFPushAnalyticsStorage.getV3Properties];
+    [model setEntities:entityDescriptions];
+    return model;
+}
+
++ (NSAttributeDescription *)attributeDescriptionWithName:(NSString *)name type:(NSAttributeType)attributeType {
     NSAttributeDescription *attribute = [[NSAttributeDescription alloc] init];
     attribute.name = name;
     attribute.attributeType = attributeType;
-    attribute.optional = isOptional;
+    attribute.optional = YES;
     return attribute;
 }
 
@@ -377,8 +374,6 @@ static dispatch_once_t onceToken;
 
 + (BOOL) migrateStore:(NSURL*)sourceStore tempStore:(NSURL*)tempStore destinationModel:(NSManagedObjectModel*)destinationModel
 {
-    BOOL success = NO;
-    
     NSError *error = nil;
     NSManagedObjectModel *sourceModel = [PCFPushAnalyticsStorage sourceModelForStore:sourceStore];
     if (!sourceModel) {
@@ -392,7 +387,7 @@ static dispatch_once_t onceToken;
         
         NSURL *destinationURL = tempStore;
         
-        success = [migrationManager migrateStoreFromURL:sourceStore
+        BOOL success = [migrationManager migrateStoreFromURL:sourceStore
                                                    type:NSSQLiteStoreType
                                                 options:nil
                                        withMappingModel:mappingModel

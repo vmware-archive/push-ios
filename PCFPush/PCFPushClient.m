@@ -485,6 +485,8 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
 
             if (isHeartbeatNotification(userInfo)) {
 
+                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
                 [PCFPushAnalytics logReceivedHeartbeat:receiptId parameters:self.registrationParameters];
 
             } else {

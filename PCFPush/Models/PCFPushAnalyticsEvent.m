@@ -13,16 +13,20 @@ const struct EventRemoteAttributes {
     PCF_STRUCT_STRING *geofenceId;
     PCF_STRUCT_STRING *locationId;
     PCF_STRUCT_STRING *sdkVersion;
+    PCF_STRUCT_STRING *platformType;
+    PCF_STRUCT_STRING *platformUuid;
 } EventRemoteAttributes;
 
 const struct EventRemoteAttributes EventRemoteAttributes = {
-        .receiptId  = @"receiptId",
-        .eventType  = @"eventType",
-        .eventTime  = @"eventTime",
-        .deviceUuid = @"deviceUuid",
-        .geofenceId = @"geofenceId",
-        .locationId = @"locationId",
-        .sdkVersion = @"sdkVersion",
+        .receiptId    = @"receiptId",
+        .eventType    = @"eventType",
+        .eventTime    = @"eventTime",
+        .deviceUuid   = @"deviceUuid",
+        .geofenceId   = @"geofenceId",
+        .locationId   = @"locationId",
+        .sdkVersion   = @"sdkVersion",
+        .platformType = @"platformType",
+        .platformUuid = @"platformUuid",
 };
 
 @implementation PCFPushAnalyticsEvent
@@ -35,6 +39,8 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 @dynamic geofenceId;
 @dynamic locationId;
 @dynamic sdkVersion;
+@dynamic platformType;
+@dynamic platformUuid;
 
 #pragma mark - PCFSortDescriptors Protocol
 
@@ -51,13 +57,15 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
-                PCF_STR_PROP(receiptId)  : EventRemoteAttributes.receiptId,
-                PCF_STR_PROP(eventType)  : EventRemoteAttributes.eventType,
-                PCF_STR_PROP(eventTime)  : EventRemoteAttributes.eventTime,
-                PCF_STR_PROP(deviceUuid) : EventRemoteAttributes.deviceUuid,
-                PCF_STR_PROP(geofenceId) : EventRemoteAttributes.geofenceId,
-                PCF_STR_PROP(locationId) : EventRemoteAttributes.locationId,
-                PCF_STR_PROP(sdkVersion) : EventRemoteAttributes.sdkVersion,
+                PCF_STR_PROP(receiptId)    : EventRemoteAttributes.receiptId,
+                PCF_STR_PROP(eventType)    : EventRemoteAttributes.eventType,
+                PCF_STR_PROP(eventTime)    : EventRemoteAttributes.eventTime,
+                PCF_STR_PROP(deviceUuid)   : EventRemoteAttributes.deviceUuid,
+                PCF_STR_PROP(geofenceId)   : EventRemoteAttributes.geofenceId,
+                PCF_STR_PROP(locationId)   : EventRemoteAttributes.locationId,
+                PCF_STR_PROP(sdkVersion)   : EventRemoteAttributes.sdkVersion,
+                PCF_STR_PROP(platformType) : EventRemoteAttributes.platformType,
+                PCF_STR_PROP(platformUuid) : EventRemoteAttributes.platformUuid,
         };
     });
 

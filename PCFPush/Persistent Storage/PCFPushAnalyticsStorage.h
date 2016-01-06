@@ -15,6 +15,7 @@
 + (NSManagedObjectModel *)newestManagedObjectModel;
 + (NSManagedObjectModel *)managedObjectModelV1;
 + (NSManagedObjectModel *)managedObjectModelV2;
++ (NSManagedObjectModel *)managedObjectModelV3;
 + (NSArray<NSManagedObjectModel*>*)allManagedObjectModels;
 + (NSUInteger)numberOfMigrationsExecuted;
 

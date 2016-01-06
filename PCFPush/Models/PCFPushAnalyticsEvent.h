@@ -24,5 +24,7 @@ typedef NS_ENUM(NSUInteger, PCFPushEventStatus) {
 @property (nonatomic, readwrite) NSString *geofenceId;
 @property (nonatomic, readwrite) NSString *locationId;
 @property (nonatomic, readwrite) NSString *sdkVersion;
+@property (nonatomic, readwrite) NSString *platformType;
+@property (nonatomic, readwrite) NSString *platformUuid;
 
 @end

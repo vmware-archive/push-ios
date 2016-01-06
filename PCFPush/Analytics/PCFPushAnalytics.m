@@ -85,7 +85,7 @@ static BOOL areAnalyticsSetUp = NO;
 
     NSManagedObjectContext *context = PCFPushAnalyticsStorage.shared.managedObjectContext;
     [context performBlock:^{
-        [PCFPushAnalytics insertIntoContext:context eventWithType:eventType fields:fields];
+        [PCFPushAnalytics insertIntoContext:context eventWithType:eventType fields:fields parameters:parameters];
         NSError *error;
         if (![context save:&error]) {
             PCFPushCriticalLog(@"Managed Object Context failed to save: %@ %@", error, error.userInfo);
@@ -96,6 +96,7 @@ static BOOL areAnalyticsSetUp = NO;
 + (void)insertIntoContext:(NSManagedObjectContext *)context
             eventWithType:(NSString *)eventType
                    fields:(NSDictionary *)fields
+               parameters:(PCFPushParameters *)parameters
 {
     NSEntityDescription *description = [NSEntityDescription entityForName:NSStringFromClass(PCFPushAnalyticsEvent.class) inManagedObjectContext:context];
     
@@ -105,7 +106,17 @@ static BOOL areAnalyticsSetUp = NO;
         // V2+ data model
         event.sdkVersion = PCFPush.sdkVersion;
     }
-    
+
+    if (description.propertiesByName[@"platformType"]) {
+        // V3+ data model
+        event.platformType = @"ios";
+    }
+
+    if (description.propertiesByName[@"platformUuid"]) {
+        // V3+ data model
+        event.platformUuid = parameters.variantUUID;
+    }
+
     int64_t date = (int64_t) (NSDate.date.timeIntervalSince1970 * 1000.0);
     event.eventTime = [NSString stringWithFormat:@"%lld", date];
     event.eventType = eventType;
