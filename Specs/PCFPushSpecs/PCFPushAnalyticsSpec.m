@@ -256,7 +256,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         });
     });
 
-    describe(@"Logging an event", ^{
+    describe(@"logging an event", ^{
 
         beforeEach(^{
             [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
@@ -420,7 +420,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 successBlock(@"5.32.80");
             }];
 
-            [[PCFPushAnalytics should] receive:@selector(prepareEventsDatabase)];
+            [[PCFPushAnalytics should] receive:@selector(prepareEventsDatabase:)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -435,7 +435,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 oldVersionBlock();
             }];
 
-            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase)];
+            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase:)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -449,12 +449,11 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
             [PCFPushPersistentStorage setServerVersion:@"1.0.0"];
             [PCFPushPersistentStorage setServerVersionTimePolled:[NSDate dateWithTimeIntervalSince1970:50]];
 
-
             [helper setupVersionRequestWithBlock:^(void (^successBlock)(NSString *), void (^oldVersionBlock)(), void (^errorBlock)(NSError *)) {
                 errorBlock([PCFPushErrorUtil errorWithCode:0 localizedDescription:nil]);
             }];
 
-            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase)];
+            [[PCFPushAnalytics shouldNot] receive:@selector(prepareEventsDatabase:)];
 
             [PCFPushAnalytics checkAnalytics:parametersWithAnalyticsEnabled];
 
@@ -468,7 +467,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
         it(@"should do nothing if the events database is empty", ^{
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
-            [PCFPushAnalytics prepareEventsDatabase];
+            [PCFPushAnalytics prepareEventsDatabase:parametersWithAnalyticsEnabled];
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
         });
 
@@ -481,20 +480,21 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
             [PCFPushAnalytics logEvent:@"POSTED" parameters:parametersWithAnalyticsEnabled];
             [PCFPushAnalytics logEvent:@"POSTING_ERROR" parameters:parametersWithAnalyticsEnabled];
 
-            NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
-
-            PCFPushAnalyticsEvent *postingEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING'"]][0];
+            PCFPushAnalyticsEvent *postingEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING'"] fetchLimit:0][0];
             [PCFPushAnalyticsStorage.shared setEventsStatus:@[postingEvent] status:PCFPushEventStatusPosting];
 
-            PCFPushAnalyticsEvent *postingErrorEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING_ERROR'"]][0];
+            PCFPushAnalyticsEvent *postingErrorEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTING_ERROR'"] fetchLimit:0][0];
             [PCFPushAnalyticsStorage.shared setEventsStatus:@[postingErrorEvent] status:PCFPushEventStatusPostingError];
 
-            PCFPushAnalyticsEvent *postedEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTED'"]][0];
+            PCFPushAnalyticsEvent *postedEvent = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:[NSPredicate predicateWithFormat:@"eventType == 'POSTED'"] fetchLimit:0][0];
             [PCFPushAnalyticsStorage.shared setEventsStatus:@[postedEvent] status:PCFPushEventStatusPosted];
 
             [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
 
-            [PCFPushAnalytics prepareEventsDatabase];
+            [[PCFPushAnalytics shouldNot] receive:@selector(sendEventsWithParameters:)];
+            [[PCFPushAnalytics should] receive:@selector(sendEventsFromMainQueueWithParameters:)];
+
+            [PCFPushAnalytics prepareEventsDatabase:parametersWithAnalyticsEnabled];
 
             [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
 
@@ -516,6 +516,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
 
         beforeEach(^{
             [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+            [PCFPushPersistentStorage setServerDeviceID:TEST_DEVICE_UUID];
         });
 
         it(@"should do nothing if analytics is disabled", ^{
@@ -540,7 +541,7 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
         });
 
-        it(@"should send events to the server and delete them after they are posted successfully", ^{
+        it(@"should send 'notification opened', 'geofence location trigger' and 'heartbeat' events to the server and delete them after they are posted successfully", ^{
 
             __block BOOL didMakeRequest = NO;
 
@@ -564,15 +565,188 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];
 
-            [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logTriggeredGeofenceId:22L locationId:33L parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logReceivedHeartbeat:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT2" parameters:parametersWithAnalyticsEnabled];
             [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
 
             [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
 
             [[theValue(didMakeRequest) should] beTrue];
             [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
+        });
+
+        it(@"should set the status of 'notification received' events to 'posted' after they are sent successfully", ^{
+
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+
+                NSArray *events = PCFPushAnalyticsStorage.shared.events;
+                [[events should] haveCountOf:1];
+                [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
+
+            [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
+
+            [[theValue(didMakeRequest) should] beTrue];
+            NSArray *events = PCFPushAnalyticsStorage.shared.events;
+            [[events should] haveCountOf:1];
+            [[[events[0] status] should] equal:@(PCFPushEventStatusPosted)];
+        });
+
+        it(@"should clean up 'notification received' events if they are sent at the same times as 'notification opened' events with the same receipt id", ^{
+
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+
+                NSArray *events = PCFPushAnalyticsStorage.shared.events;
+                [[events should] haveCountOf:2];
+                [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
+                [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:2];
+
+            [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
+
+            [[theValue(didMakeRequest) should] beTrue];
+            [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
+        });
+
+        it(@"should keep 'notification received' events if they have a different receipt id from the 'notification opened' events being sent at the same time", ^{
+
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+
+                NSArray *events = PCFPushAnalyticsStorage.shared.events;
+                [[events should] haveCountOf:2];
+                [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
+                [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"RECEIPT2" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:2];
+
+            [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
+
+            [[theValue(didMakeRequest) should] beTrue];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
+            [[PCFPushAnalyticsStorage.shared.events[0].receiptId should] equal:@"RECEIPT2"];
+            [[PCFPushAnalyticsStorage.shared.events[0].eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
+        });
+
+        it(@"should delete posted 'notification received' events from the store when it receives a 'notification opened' event with the same receipt id", ^{
+
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+
+                NSArray *events = PCFPushAnalyticsStorage.shared.events;
+                [[events should] haveCountOf:2];
+                [[[events[0] status] should] equal:@(PCFPushEventStatusPosted)];
+                [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalyticsStorage.shared setEventsStatus:PCFPushAnalyticsStorage.shared.events status:PCFPushEventStatusPosted];
+
+            [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:2];
+
+            [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
+
+            [[theValue(didMakeRequest) should] beTrue];
+            [[PCFPushAnalyticsStorage.shared.events should] beEmpty];
+        });
+
+        it(@"should not delete 'notification received' from storage when it receives a 'notification opened' event with a different receipt id", ^{
+
+            __block BOOL didMakeRequest = NO;
+
+            [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
+                didMakeRequest = YES;
+
+                [[request.HTTPMethod should] equal:@"POST"];
+
+                [[request.HTTPBody shouldNot] beNil];
+                NSError *error;
+                id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
+                [[json shouldNot] beNil];
+                [[error should] beNil];
+
+                NSArray *events = PCFPushAnalyticsStorage.shared.events;
+                [[events should] haveCountOf:2];
+                [[[events[0] status] should] equal:@(PCFPushEventStatusPosted)];
+                [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
+
+                *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+            }];
+
+            [PCFPushAnalytics logReceivedRemoteNotification:@"RECEIPT2" parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalyticsStorage.shared setEventsStatus:PCFPushAnalyticsStorage.shared.events status:PCFPushEventStatusPosted];
+
+            [PCFPushAnalytics logOpenedRemoteNotification:@"RECEIPT1" parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:2];
+
+            [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
+
+            [[theValue(didMakeRequest) should] beTrue];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
+            [[PCFPushAnalyticsStorage.shared.events[0].receiptId should] equal:@"RECEIPT2"];
+            [[PCFPushAnalyticsStorage.shared.events[0].eventType should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED];
         });
 
         it(@"should mark events with an error status if they fail to send", ^{
@@ -583,27 +757,64 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
                 didMakeRequest = YES;
 
                 NSArray *events = PCFPushAnalyticsStorage.shared.events;
-                [[events should] haveCountOf:3];
+                [[events should] haveCountOf:4];
                 [[[events[0] status] should] equal:@(PCFPushEventStatusPosting)];
                 [[[events[1] status] should] equal:@(PCFPushEventStatusPosting)];
                 [[[events[2] status] should] equal:@(PCFPushEventStatusPosting)];
+                [[[events[3] status] should] equal:@(PCFPushEventStatusPosting)];
 
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:500 HTTPVersion:nil headerFields:nil];
             }];
 
-            [PCFPushAnalytics logEvent:@"TEST_EVENT1" parameters:parametersWithAnalyticsEnabled];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT2" parameters:parametersWithAnalyticsEnabled];
-            [PCFPushAnalytics logEvent:@"TEST_EVENT3" parameters:parametersWithAnalyticsEnabled];
-            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
+            [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_HEARTBEAT parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED parameters:parametersWithAnalyticsEnabled];
+            [PCFPushAnalytics logEvent:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED parameters:parametersWithAnalyticsEnabled];
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:4];
 
             [PCFPushAnalytics sendEventsWithParameters:parametersWithAnalyticsEnabled];
 
             [[theValue(didMakeRequest) should] beTrue];
             NSArray *events = PCFPushAnalyticsStorage.shared.events;
-            [[events should] haveCountOf:3];
+            [[events should] haveCountOf:4];
             [[[events[0] status] should] equal:@(PCFPushEventStatusPostingError)];
             [[[events[1] status] should] equal:@(PCFPushEventStatusPostingError)];
             [[[events[2] status] should] equal:@(PCFPushEventStatusPostingError)];
+            [[[events[3] status] should] equal:@(PCFPushEventStatusPostingError)];
+        });
+    });
+
+    describe(@"cleaning up the events database", ^{
+
+        it(@"should remove the one oldest item when adding one new item when the database is at capacity", ^{
+
+            [PCFPushAnalyticsStorage stub:@selector(maximumNumberOfEvents) andReturn:theValue(3)];
+            [PCFPushPersistentStorage setServerVersion:@"1.3.2"];
+
+            [PCFPushAnalytics logEvent:@"EVENT1" parameters:parametersWithAnalyticsEnabled];
+
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:1];
+
+            [PCFPushAnalytics logEvent:@"EVENT2" parameters:parametersWithAnalyticsEnabled];
+
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:2];
+
+            [PCFPushAnalytics logEvent:@"EVENT3" parameters:parametersWithAnalyticsEnabled];
+
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
+
+            [PCFPushAnalytics logEvent:@"EVENT4" parameters:parametersWithAnalyticsEnabled];
+
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
+
+            [PCFPushAnalytics logEvent:@"EVENT5" parameters:parametersWithAnalyticsEnabled];
+
+            [[PCFPushAnalyticsStorage.shared.events should] haveCountOf:3];
+
+            NSArray<PCFPushAnalyticsEvent*> *events = PCFPushAnalyticsStorage.shared.events;
+            [[events[0].eventType should] equal:@"EVENT3"];
+            [[events[1].eventType should] equal:@"EVENT4"];
+            [[events[2].eventType should] equal:@"EVENT5"];
         });
     });
 

@@ -1604,6 +1604,7 @@ describe(@"PCFPush", ^{
 
             it(@"should ignore notifications with nil data", ^{
                 [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(sendEventsWithParameters:)];
                 [PCFPush didReceiveRemoteNotification:nil completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1614,6 +1615,7 @@ describe(@"PCFPush", ^{
 
             it(@"should ignore notification when the user data is empty", ^{
                 [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(sendEventsWithParameters:)];
                 [PCFPush didReceiveRemoteNotification:@{} completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1624,6 +1626,7 @@ describe(@"PCFPush", ^{
 
             it(@"should ignore notification when it's some regular push message (not a background fetch)", ^{
                 [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(sendEventsWithParameters:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"alert" : @"some message" } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1634,6 +1637,7 @@ describe(@"PCFPush", ^{
 
             it(@"should ignore background notifications that are not for us", ^{
                 [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                [[PCFPushAnalytics shouldNot] receive:@selector(sendEventsWithParameters:)];
                 [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 } }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                     [[theValue(wasIgnored) should] beYes];
                     [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1655,6 +1659,7 @@ describe(@"PCFPush", ^{
                 it(@"should log analytics events for receiving notifications in the background", ^{
                     [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateBackground)];
                     [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
                     [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1666,6 +1671,7 @@ describe(@"PCFPush", ^{
                 it(@"should log analytics events for receiving notifications in the foreground", ^{
                     [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateActive)];
                     [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
                     [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1681,6 +1687,7 @@ describe(@"PCFPush", ^{
                     [PCFPushAnalytics logReceivedRemoteNotification:@"TEST_RECEIPT_ID" parameters:helper.params];
                     [[PCFPushAnalytics should] receive:@selector(logOpenedRemoteNotification:parameters:)];
                     [[PCFPushAnalytics shouldNot] receive:@selector(logReceivedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
                     [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1693,6 +1700,7 @@ describe(@"PCFPush", ^{
                     [PCFPushApplicationUtil stub:@selector(applicationState) andReturn:theValue(UIApplicationStateInactive)];
                     [[PCFPushAnalytics should] receive:@selector(logReceivedRemoteNotification:parameters:)];
                     [[PCFPushAnalytics should] receive:@selector(logOpenedRemoteNotification:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
                     [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1 }, @"receiptId":@"TEST_RECEIPT_ID" }  completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
@@ -1703,6 +1711,7 @@ describe(@"PCFPush", ^{
 
                 it(@"should log a heartbeat analytics event when a heartbeat notification is received", ^{
                     [[PCFPushAnalytics should] receive:@selector(logReceivedHeartbeat:parameters:)];
+                    [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
                     [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1}, @"receiptId":@"TEST_RECEIPT_ID", @"pcf.push.heartbeat.sentAt":@123456789 } completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];

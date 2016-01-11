@@ -37,6 +37,4 @@
 - (void)didReceiveRemoteNotification:(NSDictionary*)userInfo
                    completionHandler:(void (^)(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error))handler;
 
-- (void)didEnterBackground:(NSNotification *)notification;
-
 @end

@@ -37,7 +37,7 @@ static BOOL hasAlreadyReceivedNotification(NSString *receiptId)
     NSString *s = [NSString stringWithFormat:@"receiptId == '%@' AND eventType == '%@'", receiptId, PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED ];
     NSPredicate *predicate = [NSPredicate predicateWithFormat:s];
 
-    NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:predicate];
+    NSArray *events = [PCFPushAnalyticsStorage.shared managedObjectsWithEntityName:entityName predicate:predicate fetchLimit:0];
     return events.count > 0;
 }
 
@@ -464,18 +464,20 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"handler may not be nil" userInfo:nil];
     }
 
-    if (self.registrationParameters.areGeofencesEnabled && isGeofenceUpdate(userInfo)) {
+    if (isGeofenceUpdate(userInfo)) {
 
-        int64_t timestamp = [PCFPushPersistentStorage lastGeofencesModifiedTime];
-        [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp tags:self.registrationParameters.pushTags success:^{
+        if (self.registrationParameters.areGeofencesEnabled) {
 
-            handler(NO, UIBackgroundFetchResultNewData, nil);
+            int64_t timestamp = [PCFPushPersistentStorage lastGeofencesModifiedTime];
+            [PCFPushGeofenceUpdater startGeofenceUpdate:self.engine userInfo:userInfo timestamp:timestamp tags:self.registrationParameters.pushTags success:^{
+                handler(NO, UIBackgroundFetchResultNewData, nil);
+            } failure:^(NSError *error) {
+                handler(NO, UIBackgroundFetchResultFailed, error);
+            }];
 
-        } failure:^(NSError *error) {
-
-            handler(NO, UIBackgroundFetchResultFailed, error);
-
-        }];
+        } else {
+            handler(YES, UIBackgroundFetchResultNoData, nil);
+        }
 
     } else {
 
@@ -485,9 +487,8 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
 
             if (isHeartbeatNotification(userInfo)) {
 
-                [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
                 [PCFPushAnalytics logReceivedHeartbeat:receiptId parameters:self.registrationParameters];
+                [PCFPushAnalytics sendEventsWithParameters:self.registrationParameters];
 
             } else {
 
@@ -495,24 +496,17 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
 
                 if (applicationState == UIApplicationStateBackground || applicationState == UIApplicationStateActive) {
 
-                    // Ensure that we register for the background notification so that we can send analytics events later
-                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
                     [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                    [PCFPushAnalytics sendEventsWithParameters:self.registrationParameters];
 
                 } else if (applicationState == UIApplicationStateInactive) {
 
-                    // Ensure that we register for the background notification so that we can send analytics events later
-                    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+                    if (!hasAlreadyReceivedNotification(receiptId)) {
+                        [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
+                    }
 
-                    // TODO - figure out why performing this block in the managed object context causes the tests to fail
-                    [PCFPushAnalyticsStorage.shared.managedObjectContext performBlock:^{
-
-                        if (!hasAlreadyReceivedNotification(receiptId)) {
-                            [PCFPushAnalytics logReceivedRemoteNotification:receiptId parameters:self.registrationParameters];
-                        }
-                        [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
-                    }];
+                    [PCFPushAnalytics logOpenedRemoteNotification:receiptId parameters:self.registrationParameters];
+                    [PCFPushAnalytics sendEventsWithParameters:self.registrationParameters];
                 }
             }
         }

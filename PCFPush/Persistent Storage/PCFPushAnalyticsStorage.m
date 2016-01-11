@@ -140,7 +140,7 @@ static dispatch_once_t onceToken;
     NSAttributeDescription *statusDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(status)) type:NSInteger16AttributeType];
     NSAttributeDescription *receiptIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(receiptId)) type:NSStringAttributeType];
     NSAttributeDescription *eventTypeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventType)) type:NSStringAttributeType];
-    NSAttributeDescription *eventTimeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType];
+    NSAttributeDescription *eventTimeDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(eventTime)) type:NSStringAttributeType]; // TODO - consider changing to be an integer type (since there is a sort on this field) -- or make an index for this field
     NSAttributeDescription *deviceUuidDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(deviceUuid)) type:NSStringAttributeType];
     NSAttributeDescription *geofenceIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(geofenceId)) type:NSStringAttributeType];
     NSAttributeDescription *locationIdDescription = [PCFPushAnalyticsStorage attributeDescriptionWithName:NSStringFromSelector(@selector(locationId)) type:NSStringAttributeType];
@@ -265,25 +265,25 @@ static dispatch_once_t onceToken;
 
 #pragma mark - Query helper methods
 
-- (NSArray *)events
+- (NSArray<PCFPushAnalyticsEvent*> *)events
 {
     NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
     return [self managedObjectsWithEntityName:entityName];
 }
 
-- (NSArray *)eventsWithStatus:(PCFPushEventStatus)status
+- (NSArray<PCFPushAnalyticsEvent*> *)eventsWithStatus:(PCFPushEventStatus)status
 {
     NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"status == %u", status];
-    return [self managedObjectsWithEntityName:entityName predicate:predicate];
+    return [self managedObjectsWithEntityName:entityName predicate:predicate fetchLimit:0];
 }
 
-- (NSArray*) unpostedEvents
+- (NSArray<PCFPushAnalyticsEvent*> *) unpostedEvents
 {
-    NSArray *notPostedEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusNotPosted];
-    NSArray *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
+    NSArray<PCFPushAnalyticsEvent*> *notPostedEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusNotPosted];
+    NSArray<PCFPushAnalyticsEvent*> *postingErrorEvents = [PCFPushAnalyticsStorage.shared eventsWithStatus:PCFPushEventStatusPostingError];
 
-    NSMutableArray *events = [NSMutableArray arrayWithCapacity:(notPostedEvents.count + postingErrorEvents.count)];
+    NSMutableArray<PCFPushAnalyticsEvent*> *events = [NSMutableArray<PCFPushAnalyticsEvent*> arrayWithCapacity:(notPostedEvents.count + postingErrorEvents.count)];
     if (notPostedEvents) {
         [events addObjectsFromArray:notPostedEvents];
     }
@@ -294,30 +294,35 @@ static dispatch_once_t onceToken;
     return events;
 }
 
-- (NSArray *)managedObjectsWithEntityName:(NSString *)entityName
+- (NSArray<PCFPushAnalyticsEvent*> *)managedObjectsWithEntityName:(NSString *)entityName
 {
-    return [self managedObjectsWithEntityName:entityName predicate:nil];
+    return [self managedObjectsWithEntityName:entityName predicate:nil fetchLimit:0];
 }
 
-- (NSArray *) managedObjectsWithEntityName:(NSString*)entityName predicate:(NSPredicate*)predicate
+- (NSArray<PCFPushAnalyticsEvent*> *)managedObjectsWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate fetchLimit:(NSUInteger)fetchLimit
 {
-    __block NSArray *managedObjects;
+    __block NSArray<PCFPushAnalyticsEvent*> *events;
+
     [self.managedObjectContext performBlockAndWait:^{
         NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:entityName];
 
         request.predicate = predicate;
+
+        if (fetchLimit > 0) {
+            request.fetchLimit = fetchLimit;
+        }
 
         if ([NSClassFromString(entityName) conformsToProtocol:@protocol(PCFSortDescriptors)]) {
             Class<PCFSortDescriptors> klass = (Class<PCFSortDescriptors>) NSClassFromString(entityName);
             request.sortDescriptors = [klass defaultSortDescriptors];
         }
         NSError *error;
-        managedObjects = [self.managedObjectContext executeFetchRequest:request error:&error];
+        events = [self.managedObjectContext executeFetchRequest:request error:&error];
     }];
-    return managedObjects;
+    return events;
 }
 
-- (void)setEventsStatus:(NSArray *)events status:(PCFPushEventStatus)status
+- (void)setEventsStatus:(NSArray<PCFPushAnalyticsEvent*> *)events status:(PCFPushEventStatus)status
 {
     [self.managedObjectContext performBlockAndWait:^{
 
@@ -330,6 +335,49 @@ static dispatch_once_t onceToken;
             PCFPushCriticalLog(@"Error setting %d analytics events to status %d: %@", events.count, status, saveError);
         }
     }];
+}
+
+#pragma mark - Database cleanup helper methods
+
+// Deletes the oldest item from the database if the database size exceeds a threshold
+- (void) cleanupDatabase
+{
+    NSUInteger numberOfEvents = self.numberOfEvents;
+    NSUInteger maximumNumberOfEvents = PCFPushAnalyticsStorage.maximumNumberOfEvents;
+
+    if (numberOfEvents >= maximumNumberOfEvents) {
+        NSUInteger numberOfEventsToDelete = numberOfEvents - maximumNumberOfEvents + 1;
+        PCFPushLog(@"Database currently has %d items. Maximum size (%d items) reached. Deleting the %d oldest items.", numberOfEvents, maximumNumberOfEvents, numberOfEventsToDelete);
+        [self deleteOldestEvents:numberOfEventsToDelete];
+    } else {
+        PCFPushLog(@"Database currently has %d items. Cleanup not required.", numberOfEvents);
+    }
+}
+
+- (NSUInteger) numberOfEvents
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:entityName inManagedObjectContext:self.managedObjectContext]];
+    [request setIncludesSubentities:NO];
+    NSError *error;
+    NSUInteger count = [self.managedObjectContext countForFetchRequest:request error:&error];
+    if (count == NSNotFound) {
+        return 0;
+    }
+    return count;
+}
+
++ (NSUInteger) maximumNumberOfEvents
+{
+    return 100;
+}
+
+- (void) deleteOldestEvents:(NSUInteger)numberOfEvents
+{
+    NSString *entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+    NSArray *eventsToDelete = [self managedObjectsWithEntityName:entityName predicate:nil fetchLimit:numberOfEvents]; // Note: assumes items are sorted in ascending order by eventTime
+    [self deleteManagedObjects:eventsToDelete];
 }
 
 #pragma mark - Migration helper methods
@@ -431,6 +479,5 @@ static dispatch_once_t onceToken;
 {
     return _numberOfMigrations;
 }
-
 
 @end

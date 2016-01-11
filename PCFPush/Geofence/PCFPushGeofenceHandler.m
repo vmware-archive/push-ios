@@ -220,11 +220,9 @@ static void clearLocation(NSString *requestId, PCFPushGeofenceData *geofence, PC
         clearLocation(region.identifier, geofence, engine, parameters.pushTags); // Clear just this one location.
 
         if (parameters.areAnalyticsEnabled) {
-            // Ensure that we register for the background notification so that we can send analytics events later
-            [[NSNotificationCenter defaultCenter] addObserver:PCFPushClient.shared selector:@selector(didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-
             int64_t locationId = pcfPushLocationIdForRequestId(region.identifier);
             [PCFPushAnalytics logTriggeredGeofenceId:geofenceId locationId:locationId parameters:parameters];
+            [PCFPushAnalytics sendEventsWithParameters:parameters];
         }
     }
 }

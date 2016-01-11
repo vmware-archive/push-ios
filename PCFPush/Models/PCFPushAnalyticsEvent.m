@@ -46,7 +46,8 @@ const struct EventRemoteAttributes EventRemoteAttributes = {
 
 + (NSArray *)defaultSortDescriptors
 {
-    return @[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:NO]];
+    return @[[NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(eventTime)) ascending:YES]];
+    // TODO - change to a sort descriptor that uses a comparator that sorts via an int
 }
 
 #pragma mark - PCFMapping Protocol

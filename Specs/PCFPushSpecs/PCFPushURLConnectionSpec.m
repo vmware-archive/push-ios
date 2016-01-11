@@ -193,20 +193,23 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPBody shouldNot] beNil];
                 NSError *error;
+
                 id json = [NSJSONSerialization JSONObjectWithData:request.HTTPBody options:0 error:&error];
                 [[json shouldNot] beNil];
                 [[error should] beNil];
                 [[json[@"events"] shouldNot] beNil];
                 [[json[@"events"] should] haveCountOf:2];
-                id event1 = json[@"events"][0];
+
+                id event2 = json[@"events"][0];
+                [[event2[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED];
+                [[event2[@"receiptId"] should] equal:@"RECEIPT1"];
+                [[event2[@"status"] should] beNil];
+
+                id event1 = json[@"events"][1];
                 [[event1[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_GEOFENCE_LOCATION_TRIGGER];
                 [[event1[@"geofenceId"] should] equal:@"27"];
                 [[event1[@"locationId"] should] equal:@"81"];
                 [[event1[@"status"] should] beNil];
-                id event2 = json[@"events"][1];
-                [[event2[@"eventType"] should] equal:PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED];
-                [[event2[@"receiptId"] should] equal:@"RECEIPT1"];
-                [[event2[@"status"] should] beNil];
 
                 *resultResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
             }];

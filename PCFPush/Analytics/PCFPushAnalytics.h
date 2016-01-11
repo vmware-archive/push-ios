@@ -4,8 +4,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "PCFPushAnalyticsEvent.h"
 
 @class PCFPushParameters;
+@class PCFPushAnalyticsEvent;
 
 #define PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_RECEIVED      @"pcf_push_event_type_push_notification_received"
 #define PCF_PUSH_EVENT_TYPE_PUSH_NOTIFICATION_OPENED        @"pcf_push_event_type_push_notification_opened"
@@ -35,8 +37,14 @@
 
 + (void)setupAnalytics:(PCFPushParameters *)parameters;
 
-+ (void)prepareEventsDatabase;
++ (void)prepareEventsDatabase:(PCFPushParameters*)parameters;
 
 + (void)sendEventsWithParameters:(PCFPushParameters *)parameters;
+
++ (void)sendEventsFromMainQueueWithParameters:(PCFPushParameters *)parameters;
+
++ (void) processEvents:(PCFPushAnalyticsEventArray *)events
+  andFindItemsToDelete:(PCFPushAnalyticsEventArray * __autoreleasing *)arrayOfItemsToDelete
+        andItemsToSetToPostedStatus:(PCFPushAnalyticsEventArray * __autoreleasing *)arrayOfItemsToSetToPostedStatus;
 
 @end

@@ -23,18 +23,24 @@
 
 - (NSManagedObjectContext *)managedObjectContext;
 
-- (NSArray *)events;
+- (NSArray<PCFPushAnalyticsEvent*> *)events;
 
-- (NSArray *)eventsWithStatus:(PCFPushEventStatus)status;
+- (NSArray<PCFPushAnalyticsEvent*> *)eventsWithStatus:(PCFPushEventStatus)status;
 
-- (NSArray*) unpostedEvents;
+- (NSArray<PCFPushAnalyticsEvent*> *) unpostedEvents;
 
-- (NSArray *)managedObjectsWithEntityName:(NSString *)entityName;
+- (NSArray<PCFPushAnalyticsEvent*> *)managedObjectsWithEntityName:(NSString *)entityName;
 
-- (NSArray *) managedObjectsWithEntityName:(NSString*)entityName predicate:(NSPredicate*)predicate;
+- (NSArray<PCFPushAnalyticsEvent*> *)managedObjectsWithEntityName:(NSString *)entityName predicate:(NSPredicate *)predicate fetchLimit:(NSUInteger)fetchLimit;
 
 - (void)deleteManagedObjects:(NSArray *)managedObjects;
 
-- (void)setEventsStatus:(NSArray *)events status:(PCFPushEventStatus)status;
+- (void)setEventsStatus:(NSArray<PCFPushAnalyticsEvent*> *)events status:(PCFPushEventStatus)status;
+
+- (NSUInteger) numberOfEvents;
+
+- (void) cleanupDatabase;
+
++ (NSUInteger) maximumNumberOfEvents;
 
 @end

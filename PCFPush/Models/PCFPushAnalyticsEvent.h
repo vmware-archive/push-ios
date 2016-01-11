@@ -28,3 +28,6 @@ typedef NS_ENUM(NSUInteger, PCFPushEventStatus) {
 @property (nonatomic, readwrite) NSString *platformUuid;
 
 @end
+
+typedef NSArray<PCFPushAnalyticsEvent*> PCFPushAnalyticsEventArray;
+typedef NSMutableArray<PCFPushAnalyticsEvent*> PCFPushAnalyticsEventMutableArray;
