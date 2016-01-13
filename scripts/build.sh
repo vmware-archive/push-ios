@@ -33,17 +33,7 @@ FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"
 
 set +x
 
-V=`awk -F'=|#+' '/^[ \t]*PCF_PUSH_VERSION/ { print $2 }' < $PODSPEC ` # Read the value of the PCF_PUSH_VERSION line. Keep the portion between the = and the # characters
-V=`echo "$V" | tr -d '[[:space:]]'` # Remove the whitespace
-V="${V%\'}" # Remove single quotes at the end of the line
-V="${V%\"}" # Remove double quotes at the end of the line
-V="${V#\'}" # Remove single quotes at the beginning of the line
-V="${V#\"}" # Remove double quotes at the beginning of the line
-
-if [ "$V" = "" ]; then
-  echo "ERROR: Could not successfully read the PCF_PUSH_VERSION value from the $PODSPEC file."
-  exit 1
-fi
+V=$(cat version)
 
 echo "PCF Push Version is '$V'."
 
