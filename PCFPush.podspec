@@ -7,7 +7,7 @@
 
 # You can bump the versions programmatically by using the version resource on Concourse.
 
-PCF_PUSH_VERSION = $(cat version)
+PCF_PUSH_VERSION = File.read("version")
 
 Pod::Spec.new do |s|
   s.name         = 'PCFPush'
