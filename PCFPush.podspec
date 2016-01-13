@@ -7,7 +7,7 @@
 
 # You can bump the versions programmatically by using the version resource on Concourse.
 
-PCF_PUSH_VERSION = File.read("version")
+PCF_PUSH_VERSION = ENV["IOS_SDK_VERSION"] || File.read("version").strip
 
 Pod::Spec.new do |s|
   s.name         = 'PCFPush'
