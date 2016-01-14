@@ -1712,7 +1712,7 @@ describe(@"PCFPush", ^{
                 it(@"should log a heartbeat analytics event when a heartbeat notification is received", ^{
                     [[PCFPushAnalytics should] receive:@selector(logReceivedHeartbeat:parameters:)];
                     [[PCFPushAnalytics should] receive:@selector(sendEventsWithParameters:)];
-                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1}, @"receiptId":@"TEST_RECEIPT_ID", @"pcf.push.heartbeat.sentAt":@123456789 } completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
+                    [PCFPush didReceiveRemoteNotification:@{ @"aps" : @{ @"content-available" : @1}, @"receiptId":@"TEST_RECEIPT_ID", @"pcf.push.heartbeat.sentToDeviceAt":@123456789 } completionHandler:^(BOOL wasIgnored, UIBackgroundFetchResult fetchResult, NSError *error) {
                         [[theValue(wasIgnored) should] beYes];
                         [[theValue(fetchResult) should] equal:theValue(UIBackgroundFetchResultNoData)];
                         [[error should] beNil];

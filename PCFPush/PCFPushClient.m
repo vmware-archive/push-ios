@@ -51,7 +51,7 @@ static BOOL isGeofenceUpdate(NSDictionary* userInfo)
 }
 
 static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
-    return dictionary[@"pcf.push.heartbeat.sentAt"] != nil;
+    return dictionary[@"pcf.push.heartbeat.sentToDeviceAt"] != nil;
 }
 
 @implementation PCFPushClient
