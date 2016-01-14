@@ -41,6 +41,7 @@ describe(@"PCFPush", ^{
         // Note that you must run "pod update" after changing the version number in "PCFPush.podspec".
         it(@"should return the current SDK version", ^{
             [[[PCFPush sdkVersion] shouldNot] beNil];
+            [[[PCFPush sdkVersion] shouldNot] equal:@"0.0.0"];
         });
     });
 
