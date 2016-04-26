@@ -22,10 +22,12 @@
 NSString *const TEST_PUSH_API_URL_1   = @"http://test.url.com";
 NSString *const TEST_VARIANT_UUID_1   = @"444-555-666-777";
 NSString *const TEST_VARIANT_SECRET_1 = @"No secret is as strong as its blabbiest keeper";
+NSString *const TEST_CUSTOM_USER_ID_1 = @"Too much burrito";
 NSString *const TEST_DEVICE_ALIAS_1   = @"Let's watch cat videos";
 
 NSString *const TEST_VARIANT_UUID        = @"123-456-789";
 NSString *const TEST_VARIANT_SECRET      = @"My cat's breath smells like cat food";
+NSString *const TEST_CUSTOM_USER_ID      = @"not customer id";
 NSString *const TEST_DEVICE_ALIAS        = @"l33t devices of badness";
 NSString *const TEST_DEVICE_MANUFACTURER = @"Commodore";
 NSString *const TEST_DEVICE_MODEL        = @"64C";
@@ -87,6 +89,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
     params.productionPushVariantUUID = TEST_VARIANT_UUID_1;
     params.productionPushVariantSecret = TEST_VARIANT_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
+    params.pushCustomUserId = TEST_CUSTOM_USER_ID_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;
     params.pushTags = self.tags1;
     params.areGeofencesEnabled = geofencesEnabled;
@@ -98,6 +101,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 {
     [PCFPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
     [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
+    [PCFPushPersistentStorage setCustomUserId:TEST_CUSTOM_USER_ID_1];
     [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
     [PCFPushPersistentStorage setAPNSDeviceToken:self.apnsDeviceToken];
     [PCFPushPersistentStorage setServerDeviceID:self.backEndDeviceId];
@@ -167,6 +171,7 @@ NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
         NSDictionary *dict = @{
                 PCFPushRegistrationAttributes.deviceOS : TEST_OS,
                 PCFPushRegistrationAttributes.deviceOSVersion : TEST_OS_VERSION,
+                PCFPushRegistrationAttributes.customUserId : TEST_CUSTOM_USER_ID,
                 PCFPushRegistrationAttributes.deviceAlias : TEST_DEVICE_ALIAS,
                 PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
                 PCFPushRegistrationAttributes.deviceModel : TEST_DEVICE_MODEL,

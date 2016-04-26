@@ -19,7 +19,7 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
     BOOL (^shouldTestProperty)(NSString *, NSString *) = ^BOOL(NSString *propertyName, NSString *propertyType) {
 
         // Primitives use single character property types.  Don't check those.
-        // Also, don't check the validity of the tags and alias parameters.  They are permitted to be nil or empty.
+        // Also, don't check the validity of the tags, custom user ID, and alias parameters.  They are permitted to be nil or empty.
         // https://developer.apple.com/library/mac/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtPropertyIntrospection.html
 
         if (propertyType.length <= 1) return NO;
@@ -28,6 +28,7 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
                  [propertyName isEqualToString:@"pushDeviceAlias"] ||
                  [propertyName isEqualToString:@"areGeofencesEnabled"] ||
                  [propertyName isEqualToString:@"areAnalyticsEnabled"] ||
+                 [propertyName isEqualToString:@"pushCustomUserId"] ||
                  [propertyName isEqualToString:@"pinnedSslCertificateNames"]);
     };
 
@@ -75,15 +76,26 @@ describe(@"PCFRegistrationParameters", ^{
             [model setPushTags:[NSSet<NSString*> setWithArray:@[@"TAG1", @"TAG2"]]];
             [model setPushDeviceAlias:TEST_DEVICE_ALIAS];
             [model setPushAPIURL:TEST_PUSH_API_URL_1];
+            [model setPushCustomUserId:TEST_CUSTOM_USER_ID_1];
             [model setDevelopmentPushVariantSecret:TEST_VARIANT_SECRET];
             [model setProductionPushVariantSecret:TEST_VARIANT_SECRET];
             [model setDevelopmentPushVariantUUID:TEST_VARIANT_UUID];
             [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
         });
 
-        it(@"should require all push properties (except tags, device alias, and geofences enabled) to be non-nil and non-empty", ^{
+        it(@"should require all push properties (except tags, device alias, custom user ID, and geofences enabled) to be non-nil and non-empty", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
             checkParametersAreValid(model);
+        });
+
+        it(@"should allow the custom user ID to be nil", ^{
+            model.pushCustomUserId = nil;
+            [[theValue([model arePushParametersValid]) should] beTrue];
+        });
+
+        it(@"should allow the custom user ID to be empty", ^{
+            model.pushCustomUserId = @"";
+            [[theValue([model arePushParametersValid]) should] beTrue];
         });
 
         it(@"should allow the device alias to be nil", ^{
@@ -123,6 +135,7 @@ describe(@"PCFRegistrationParameters", ^{
             [[model.productionPushVariantSecret should] equal:@"No secret is as strong as its blabbiest keeper"];
             [[model.productionPushVariantUUID should] equal:@"444-555-666-777"];
             [[model.pushDeviceAlias should] beNil];
+            [[model.pushCustomUserId should] beNil];
             [[model.pushTags should] beNil];
             [[theValue(model.areGeofencesEnabled) should] beFalse];
             [[theValue(model.areAnalyticsEnabled) should] beTrue];
@@ -186,7 +199,7 @@ describe(@"PCFRegistrationParameters", ^{
         });
     });
 
-    context(@"ssl pinning", ^{
+    context(@"SSL pinning", ^{
 
         it(@"should require a list of pinned SSL certificates if using 'pinned' certificate mode", ^{
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-MissingPinnedCertificates" ofType:@"plist"]];
@@ -235,9 +248,13 @@ describe(@"PCFRegistrationParameters", ^{
         });
     });
 
-    context(@"ignoring the tags and device alias parameters from plist", ^{
+    context(@"ignoring the tags, custom user ID and device alias parameters from plist", ^{
         beforeEach(^{
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-ExtraParameters" ofType:@"plist"]];
+        });
+
+        it(@"should ignore the custom user ID in the plist", ^{
+            [[model.pushCustomUserId should] beNil];
         });
 
         it(@"should ignore the device alias in the plist", ^{

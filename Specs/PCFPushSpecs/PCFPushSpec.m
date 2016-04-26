@@ -71,32 +71,40 @@ describe(@"PCFPush", ^{
                 [[theValue(succeeded) should] equal:theValue(YES)];
             });
 
+            it(@"should accept a nil custom user ID", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+            });
+
+            it(@"should accept an empty custom user ID", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:@"" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+            });
+
             it(@"should accept a nil deviceAlias", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:nil customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty deviceAlias", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a non-empty deviceAlias and tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a nil tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:@"NOT EMPTY" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept a nil deviceAlias and nil tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:nil deviceAlias:nil customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty deviceAlias and empty tags", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
         });
 
@@ -222,6 +230,7 @@ describe(@"PCFPush", ^{
                     [[requestBody shouldNot] beNil];
                     [[requestBody.variantUUID should] beNil];
                     [[requestBody.deviceAlias should] equal:TEST_DEVICE_ALIAS_1];
+                    [[requestBody.customUserId should] equal:TEST_CUSTOM_USER_ID_1];
                 }];
 
                 [[NSURLConnection should] receive:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:)];
@@ -241,7 +250,7 @@ describe(@"PCFPush", ^{
                     fail(@"registration failure block executed");
                 };
 
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.params.pushTags deviceAlias:helper.params.pushDeviceAlias areGeofencesEnabled:areGeofencesEnabled success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.params.pushTags deviceAlias:helper.params.pushDeviceAlias customUserId:helper.params.pushCustomUserId areGeofencesEnabled:areGeofencesEnabled success:successBlock failure:failureBlock];
 
                 [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] equal:theValue(areGeofencesEnabled)];
             };
@@ -266,6 +275,8 @@ describe(@"PCFPush", ^{
 
                 afterEach(^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
+                    [[[PCFPushPersistentStorage customUserId] should] equal:helper.params.pushCustomUserId];
+                    [[[PCFPushPersistentStorage deviceAlias] should] equal:helper.params.pushDeviceAlias];
                 });
 
                 it(@"should do a new push registration and geofences after the variantUuid changes", ^{
@@ -286,6 +297,14 @@ describe(@"PCFPush", ^{
                 it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
                     expectedSubscribeTags = helper.tags1;
                     testBlock(@selector(setVariantSecret:), nil, @"POST", YES);
+                });
+
+                it(@"should update the push registration and geofences after the customUserId changes (with geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), @"DIFFERENT STRING", @"PUT", YES);
+                });
+
+                it(@"should update the push registration and geofences after the customUserId is initially set (with geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), nil, @"PUT", YES);
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
@@ -340,6 +359,8 @@ describe(@"PCFPush", ^{
 
                 afterEach(^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                    [[[PCFPushPersistentStorage customUserId] should] equal:helper.params.pushCustomUserId];
+                    [[[PCFPushPersistentStorage deviceAlias] should] equal:helper.params.pushDeviceAlias];
                 });
 
                 it(@"should do a new push registration and geofences after the variantUuid changes", ^{
@@ -360,6 +381,14 @@ describe(@"PCFPush", ^{
                 it(@"should do a new push registration and geofences after the variantSecret is initially set", ^{
                     expectedSubscribeTags = helper.tags1;
                     testBlock(@selector(setVariantSecret:), nil, @"POST", NO);
+                });
+
+                it(@"should update the push registration and geofences after the customUserId changes (with geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), @"DIFFERENT STRING", @"PUT", NO);
+                });
+
+                it(@"should update the push registration and geofences after the customUserId is initially set (with geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), nil, @"PUT", NO);
                 });
 
                 it(@"should update the push registration and geofences after the deviceAlias changes (with geofence update)", ^{
@@ -417,12 +446,22 @@ describe(@"PCFPush", ^{
 
                 afterEach(^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(1337L)];
+                    [[[PCFPushPersistentStorage customUserId] should] equal:helper.params.pushCustomUserId];
+                    [[[PCFPushPersistentStorage deviceAlias] should] equal:helper.params.pushDeviceAlias];
                 });
 
                 context(@"tags the same", ^{
 
                     beforeEach(^{
                         [[PCFPushGeofenceHandler shouldNot] receive:@selector(reregisterGeofencesWithEngine:subscribedTags:)];
+                    });
+
+                    it(@"should update the push registration after the customUserId changes (without geofence update)", ^{
+                        testBlock(@selector(setCustomUserId:), @"DIFFERENT STRING", @"PUT", YES);
+                    });
+
+                    it(@"should update the push registration after the customUserId is initially set (without geofence update)", ^{
+                        testBlock(@selector(setCustomUserId:), nil, @"PUT", YES);
                     });
 
                     it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
@@ -490,6 +529,16 @@ describe(@"PCFPush", ^{
 
                 afterEach(^{
                     [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
+                    [[[PCFPushPersistentStorage customUserId] should] equal:helper.params.pushCustomUserId];
+                    [[[PCFPushPersistentStorage deviceAlias] should] equal:helper.params.pushDeviceAlias];
+                });
+
+                it(@"should update the push registration after the customUserId changes (without geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), @"DIFFERENT STRING", @"PUT", NO);
+                });
+
+                it(@"should update the push registration after the customUserId is initially set (without geofence update)", ^{
+                    testBlock(@selector(setCustomUserId:), nil, @"PUT", NO);
                 });
 
                 it(@"should update the push registration after the deviceAlias changes (without geofence update)", ^{
@@ -650,7 +699,7 @@ describe(@"PCFPush", ^{
                     fail(@"registration failure block executed");
                 };
 
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS areGeofencesEnabled:YES success:successBlock failure:failureBlock];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:TEST_DEVICE_ALIAS customUserId:TEST_CUSTOM_USER_ID areGeofencesEnabled:YES success:successBlock failure:failureBlock];
 
                 [[theValue(wasSuccessBlockExecuted) should] beTrue];
 

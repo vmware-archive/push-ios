@@ -7,6 +7,7 @@
 
 struct PCFPushRegistrationAttributes {
     PCF_STRUCT_STRING *variantUUID;
+    PCF_STRUCT_STRING *customUserId;
     PCF_STRUCT_STRING *deviceAlias;
     PCF_STRUCT_STRING *deviceManufacturer;
     PCF_STRUCT_STRING *deviceModel;
@@ -21,6 +22,7 @@ extern const struct PCFPushRegistrationAttributes PCFPushRegistrationAttributes;
 @interface PCFPushRegistrationData : NSObject <PCFMapping>
 
 @property NSString *variantUUID;
+@property NSString *customUserId;
 @property NSString *deviceAlias;
 @property NSString *deviceManufacturer;
 @property NSString *deviceModel;

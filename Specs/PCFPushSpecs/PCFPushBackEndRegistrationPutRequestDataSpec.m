@@ -40,6 +40,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
         
         it(@"should start as nil", ^{
             [[model.variantUUID should] beNil];
+            [[model.customUserId should] beNil];
             [[model.deviceAlias should] beNil];
             [[model.deviceManufacturer should] beNil];
             [[model.deviceModel should] beNil];
@@ -55,6 +56,11 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             [[model.variantUUID should] equal:TEST_VARIANT_UUID];
         });
         
+        it(@"should have a custom_user_id", ^{
+            model.customUserId = TEST_CUSTOM_USER_ID;
+            [[model.customUserId should] equal:TEST_CUSTOM_USER_ID];
+        });
+
         it(@"should have a device_alias", ^{
             model.deviceAlias = TEST_DEVICE_ALIAS;
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
@@ -127,6 +133,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
         it(@"should construct a complete request object", ^{
             NSError *error;
             NSDictionary *dict = @{
+                                   PCFPushRegistrationAttributes.customUserId       : TEST_CUSTOM_USER_ID,
                                    PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
                                    PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
                                    PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
@@ -144,7 +151,8 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             model = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
-            [[model.osVersion should] equal:TEST_OS_VERSION ];
+            [[model.osVersion should] equal:TEST_OS_VERSION];
+            [[model.customUserId should] equal:TEST_CUSTOM_USER_ID];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
@@ -159,6 +167,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             NSDictionary *dict = @{
                                    PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
                                    PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                   PCFPushRegistrationAttributes.customUserId       : TEST_CUSTOM_USER_ID,
                                    PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
                                    PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
                                    PCFPushRegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
@@ -174,6 +183,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
             [[model.osVersion should] equal:TEST_OS_VERSION ];
+            [[model.customUserId should] equal:TEST_CUSTOM_USER_ID];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
@@ -188,6 +198,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             NSDictionary *dict = @{
                                    PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
                                    PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                   PCFPushRegistrationAttributes.customUserId       : TEST_CUSTOM_USER_ID,
                                    PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
                                    PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
                                    PCFPushRegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
@@ -203,7 +214,8 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             model = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
-            [[model.osVersion should] equal:TEST_OS_VERSION ];
+            [[model.osVersion should] equal:TEST_OS_VERSION];
+            [[model.customUserId should] equal:TEST_CUSTOM_USER_ID];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
@@ -218,6 +230,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             NSDictionary *dict = @{
                                    PCFPushRegistrationAttributes.deviceOS           : TEST_OS,
                                    PCFPushRegistrationAttributes.deviceOSVersion    : TEST_OS_VERSION,
+                                   PCFPushRegistrationAttributes.customUserId       : TEST_CUSTOM_USER_ID,
                                    PCFPushRegistrationAttributes.deviceAlias        : TEST_DEVICE_ALIAS,
                                    PCFPushRegistrationAttributes.deviceManufacturer : TEST_DEVICE_MANUFACTURER,
                                    PCFPushRegistrationAttributes.deviceModel        : TEST_DEVICE_MODEL,
@@ -233,7 +246,8 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             model = [PCFPushRegistrationPutRequestData pcfPushFromJSONData:data error:&error];
             [[error should] beNil];
             [[model.os should] equal:TEST_OS];
-            [[model.osVersion should] equal:TEST_OS_VERSION ];
+            [[model.osVersion should] equal:TEST_OS_VERSION];
+            [[model.customUserId should] equal:TEST_CUSTOM_USER_ID];
             [[model.deviceAlias should] equal:TEST_DEVICE_ALIAS];
             [[model.deviceManufacturer should] equal:TEST_DEVICE_MANUFACTURER];
             [[model.deviceModel should] equal:TEST_DEVICE_MODEL];
@@ -260,6 +274,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             
             beforeEach(^{
                 model.variantUUID = TEST_VARIANT_UUID;
+                model.customUserId = TEST_CUSTOM_USER_ID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
                 model.deviceModel = TEST_DEVICE_MODEL;
@@ -273,6 +288,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[PCFPushRegistrationAttributes.variantUUID] should] equal:TEST_VARIANT_UUID];
+                [[dict[PCFPushRegistrationAttributes.customUserId] should] equal:TEST_CUSTOM_USER_ID];
                 [[dict[PCFPushRegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
                 [[dict[PCFPushRegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
                 [[dict[PCFPushRegistrationAttributes.deviceModel] should] equal:TEST_DEVICE_MODEL];
@@ -300,6 +316,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             
             beforeEach(^{
                 model.variantUUID = TEST_VARIANT_UUID;
+                model.customUserId = TEST_CUSTOM_USER_ID;
                 model.deviceAlias = TEST_DEVICE_ALIAS;
                 model.deviceManufacturer = TEST_DEVICE_MANUFACTURER;
                 model.deviceModel = TEST_DEVICE_MODEL;
@@ -312,6 +329,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[PCFPushRegistrationAttributes.variantUUID] should] equal:TEST_VARIANT_UUID];
+                [[dict[PCFPushRegistrationAttributes.customUserId] should] equal:TEST_CUSTOM_USER_ID];
                 [[dict[PCFPushRegistrationAttributes.deviceAlias] should] equal:TEST_DEVICE_ALIAS];
                 [[dict[PCFPushRegistrationAttributes.deviceManufacturer] should] equal:TEST_DEVICE_MANUFACTURER];
                 [[dict[PCFPushRegistrationAttributes.deviceModel] should] equal:TEST_DEVICE_MODEL];
@@ -340,6 +358,7 @@ describe(@"PCFPushBackEndRegistrationPutRequestData", ^{
             afterEach(^{
                 [[dict shouldNot] beNil];
                 [[dict[PCFPushRegistrationAttributes.variantUUID]  should] beNil];
+                [[dict[PCFPushRegistrationAttributes.customUserId]  should] beNil];
                 [[dict[PCFPushRegistrationAttributes.deviceAlias]  should] beNil];
                 [[dict[PCFPushRegistrationAttributes.deviceManufacturer]  should] beNil];
                 [[dict[PCFPushRegistrationAttributes.deviceModel]  should] beNil];

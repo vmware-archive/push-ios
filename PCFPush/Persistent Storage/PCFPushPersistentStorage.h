@@ -17,6 +17,9 @@
 + (void)setVariantSecret:(NSString *)variantSecret;
 + (NSString *)variantSecret;
 
++ (void)setCustomUserId:(NSString *)customUserId;
++ (NSString *)customUserId;
+
 + (void)setDeviceAlias:(NSString *)deviceAlias;
 + (NSString *)deviceAlias;
 

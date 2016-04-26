@@ -349,6 +349,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 {
     PCFPushRegistrationPostRequestData *requestData = [[PCFPushRegistrationPostRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
+    if (!parameters.pushCustomUserId) {
+        requestData.customUserId = @"";
+    } else {
+        requestData.customUserId = parameters.pushCustomUserId;
+    }
     requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = [PCFHardwareUtil deviceManufacturer];
     requestData.deviceModel = [PCFHardwareUtil deviceModel];
@@ -365,6 +370,11 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 {
     PCFPushRegistrationPutRequestData *requestData = [[PCFPushRegistrationPutRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
+    if (!parameters.pushCustomUserId) {
+        requestData.customUserId = @"";
+    } else {
+        requestData.customUserId = parameters.pushCustomUserId;
+    }
     requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = [PCFHardwareUtil deviceManufacturer];
     requestData.deviceModel = [PCFHardwareUtil deviceModel];

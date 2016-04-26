@@ -6,6 +6,7 @@
 
 const struct PCFPushRegistrationAttributes PCFPushRegistrationAttributes = {
     .variantUUID         = @"variant_uuid",
+    .customUserId        = @"custom_user_id",
     .deviceAlias         = @"device_alias",
     .deviceManufacturer  = @"device_manufacturer",
     .deviceModel         = @"device_model",
@@ -24,6 +25,7 @@ const struct PCFPushRegistrationAttributes PCFPushRegistrationAttributes = {
     dispatch_once(&onceToken, ^{
         localToRemoteMapping = @{
                                  PCF_STR_PROP(variantUUID) : PCFPushRegistrationAttributes.variantUUID,
+                                 PCF_STR_PROP(customUserId) : PCFPushRegistrationAttributes.customUserId,
                                  PCF_STR_PROP(deviceAlias) : PCFPushRegistrationAttributes.deviceAlias,
                                  PCF_STR_PROP(deviceManufacturer) : PCFPushRegistrationAttributes.deviceManufacturer,
                                  PCF_STR_PROP(deviceModel) : PCFPushRegistrationAttributes.deviceModel,

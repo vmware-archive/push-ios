@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, PCFPushSslCertValidationMode) {
 /**
  * Push Parameters
  */
+@property (copy) NSString *pushCustomUserId;
 @property (copy) NSString *pushDeviceAlias;
 @property (copy) NSString *pushAPIURL;
 @property (copy) NSString *developmentPushVariantUUID;

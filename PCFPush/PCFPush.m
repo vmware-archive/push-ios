@@ -33,7 +33,25 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
+    [PCFPush registerForPCFPushNotificationsWithDeviceToken:deviceToken
+                                                       tags:tags
+                                                deviceAlias:deviceAlias
+                                               customUserId:nil
+                                        areGeofencesEnabled:areGeofencesEnabled
+                                                    success:successBlock
+                                                    failure:failureBlock];
+}
+
++ (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
+                                                  tags:(NSSet<NSString*> *)tags
+                                           deviceAlias:(NSString *)deviceAlias
+                                          customUserId:(NSString *)customUserId
+                                   areGeofencesEnabled:(BOOL)areGeofencesEnabled
+                                               success:(void (^)(void))successBlock
+                                               failure:(void (^)(NSError *))failureBlock
+{
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
+    PCFPushClient.shared.registrationParameters.pushCustomUserId = customUserId;
     PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
     PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
     [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];

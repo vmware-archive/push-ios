@@ -233,6 +233,7 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
         [PCFPushPersistentStorage setVariantUUID:parameters.variantUUID];
         [PCFPushPersistentStorage setVariantSecret:parameters.variantSecret];
         [PCFPushPersistentStorage setDeviceAlias:parameters.pushDeviceAlias];
+        [PCFPushPersistentStorage setCustomUserId:parameters.pushCustomUserId];
         [PCFPushPersistentStorage setTags:parameters.pushTags];
 
         if (!parameters.areGeofencesEnabled) {
@@ -380,6 +381,12 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
     NSString *savedDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     if ((parameters.pushDeviceAlias == nil && savedDeviceAlias != nil) || (parameters.pushDeviceAlias != nil && ![parameters.pushDeviceAlias isEqualToString:savedDeviceAlias])) {
         PCFPushLog(@"Parameters specify a different deviceAlias. Update registration will be required.");
+        return NO;
+    }
+
+    NSString *savedCustomUserId = [PCFPushPersistentStorage customUserId];
+    if ((parameters.pushCustomUserId == nil && savedCustomUserId != nil) || (parameters.pushCustomUserId != nil && ![parameters.pushCustomUserId isEqualToString:savedCustomUserId])) {
+        PCFPushLog(@"Parameters specify a different customUserId. Update registration will be required.");
         return NO;
     }
     

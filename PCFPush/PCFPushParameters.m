@@ -63,6 +63,7 @@ void pcfPushResetOnceToken() {
 {
     PCFPushParameters *parameters = [self parametersWithContentsOfFile:[[NSBundle mainBundle] pathForResource:[PCFPushParameters defaultParameterFilename] ofType:@"plist"]];
     parameters.pushTags = [PCFPushPersistentStorage tags];
+    parameters.pushCustomUserId = [PCFPushPersistentStorage customUserId];
     parameters.pushDeviceAlias = [PCFPushPersistentStorage deviceAlias];
     parameters.areGeofencesEnabled = [PCFPushPersistentStorage areGeofencesEnabled];
     return parameters;

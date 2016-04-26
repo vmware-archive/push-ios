@@ -80,6 +80,20 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
                                    areGeofencesEnabled:(BOOL)areGeofencesEnabled
                                                success:(void (^)(void))success
                                                failure:(void (^)(NSError *))failure;
+/**
+ * Registers device for push notifications.
+ *
+ * As above, but allows the user to set a "custom user ID" which can be used
+ * to associate this device with a particular user.
+ *
+ */
++ (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
+                                                  tags:(NSSet<NSString*> *)tags
+                                           deviceAlias:(NSString *)deviceAlias
+                                          customUserId:(NSString *)customUserId
+                                   areGeofencesEnabled:(BOOL)areGeofencesEnabled
+                                               success:(void (^)(void))success
+                                               failure:(void (^)(NSError *))failure;
 
 /**
  * Sets the tags that the device should be subscribed to. Always provide the entire

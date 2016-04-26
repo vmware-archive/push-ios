@@ -28,6 +28,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage requestHeaders] should] beNil];
         [[[PCFPushPersistentStorage serverVersion] should] beNil];
         [[[PCFPushPersistentStorage serverVersionTimePolled] should] beNil];
+        [[[PCFPushPersistentStorage customUserId] should] beNil];
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
     });
@@ -52,6 +53,11 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage variantSecret] should] equal:(TEST_VARIANT_SECRET_1)];
     });
     
+    it(@"should be able to save the custom user ID", ^{
+        [PCFPushPersistentStorage setCustomUserId:TEST_CUSTOM_USER_ID];
+        [[[PCFPushPersistentStorage customUserId] should] equal:TEST_CUSTOM_USER_ID];
+    });
+
     it(@"should be able to save the device alias", ^{
         [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
         [[[PCFPushPersistentStorage deviceAlias] should] equal:TEST_DEVICE_ALIAS_1];
@@ -96,6 +102,7 @@ describe(@"PCFPushPersistentStorage", ^{
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
         [PCFPushPersistentStorage setServerDeviceID:helper.backEndDeviceId];
+        [PCFPushPersistentStorage setCustomUserId:TEST_CUSTOM_USER_ID];
         [PCFPushPersistentStorage setDeviceAlias:TEST_DEVICE_ALIAS_1];
         [PCFPushPersistentStorage setVariantUUID:TEST_VARIANT_UUID_1];
         [PCFPushPersistentStorage setVariantSecret:TEST_VARIANT_SECRET_1];
@@ -108,6 +115,7 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
+        [[[PCFPushPersistentStorage customUserId] should] beNil];
         [[[PCFPushPersistentStorage deviceAlias] should] beNil];
         [[[PCFPushPersistentStorage variantUUID] should] beNil];
         [[[PCFPushPersistentStorage variantSecret] should] beNil];
