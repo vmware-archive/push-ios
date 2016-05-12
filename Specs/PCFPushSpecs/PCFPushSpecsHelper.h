@@ -31,6 +31,8 @@ OBJC_EXPORT const double TEST_GEOFENCE_LATITUDE;
 OBJC_EXPORT const double TEST_GEOFENCE_LONGITUDE;
 OBJC_EXPORT const double TEST_GEOFENCE_RADIUS;
 
+OBJC_EXPORT NSString* stringWithLength(NSUInteger length);
+
 @interface PCFPushSpecsHelper : NSObject
 
 @property NSData *apnsDeviceToken;

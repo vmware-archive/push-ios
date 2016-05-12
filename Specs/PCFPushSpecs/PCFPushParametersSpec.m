@@ -117,6 +117,24 @@ describe(@"PCFRegistrationParameters", ^{
             model.pushTags = [NSSet<NSString*> set];
             [[theValue([model arePushParametersValid]) should] beTrue];
         });
+
+        it(@"should allow custom user IDs with length 254", ^{
+            model.pushCustomUserId = stringWithLength(254);
+            [[model.pushCustomUserId should] haveLengthOf:254];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+        });
+
+        it(@"should allow custom user IDs with length 255", ^{
+            model.pushCustomUserId = stringWithLength(255);
+            [[model.pushCustomUserId should] haveLengthOf:255];
+            [[theValue([model arePushParametersValid]) should] beTrue];
+        });
+
+        it(@"should allow custom user IDs with length 256", ^{
+            model.pushCustomUserId = stringWithLength(256);
+            [[model.pushCustomUserId should] haveLengthOf:256];
+            [[theValue([model arePushParametersValid]) should] beFalse];
+        });
     });
 
     context(@"initializing from the default plist file", ^{

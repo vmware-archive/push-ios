@@ -208,13 +208,21 @@ void pcfPushResetOnceToken() {
         return NO;
     }
 
-    return result;
+    if (self.pushCustomUserId && self.pushCustomUserId.length > 255) {
+        PCFPushCriticalLog(@"pushCustomUserId must have a length of fewer than or equal to 255, if present");
+        return NO;
+    }
+
+    return YES;
 }
 
 + (void) enumerateParametersWithBlock:(void (^)(id plistPropertyName, id propertyName, BOOL *stop))block
 {
     static NSDictionary *keys = nil;
     if (!keys) {
+
+        // List of all parameters in the Pivotal.plist file only.
+
         keys = @{
                 @"pivotal.push.serviceUrl" : @"pushAPIURL",
                 @"pivotal.push.platformUuidProduction" : @"productionPushVariantUUID",

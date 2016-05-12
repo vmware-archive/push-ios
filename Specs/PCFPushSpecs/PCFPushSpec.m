@@ -106,6 +106,26 @@ describe(@"PCFPush", ^{
             it(@"should accept an empty deviceAlias and empty tags", ^{
                 [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"" customUserId:@"MY AWESOME ID" areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
+
+            it(@"should accept a custom user ID with length 254", ^{
+                NSString *customUserId = stringWithLength(254);
+                [[customUserId should] haveLengthOf:254];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:customUserId areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+            });
+
+            it(@"should accept a custom user ID with length 255", ^{
+                NSString *customUserId = stringWithLength(255);
+                [[customUserId should] haveLengthOf:255];
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:customUserId areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+            });
+
+            it(@"should not accept a custom user ID with length 256", ^{
+                NSString *customUserId = stringWithLength(256);
+                [[customUserId should] haveLengthOf:256];
+                [[theBlock(^{
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:customUserId areGeofencesEnabled:NO success: successBlock failure:failureBlock];
+                }) should] raiseWithName:NSInvalidArgumentException];
+            });
         });
 
         describe(@"nil callbacks", ^{

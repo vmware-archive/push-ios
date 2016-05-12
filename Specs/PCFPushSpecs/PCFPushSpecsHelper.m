@@ -42,6 +42,11 @@ const double TEST_GEOFENCE_LONGITUDE        = -91.5;
 const double TEST_GEOFENCE_RADIUS           = 120;
 NSString *const TEST_GEOFENCE_LOCATION_NAME = @"robs_wizard_tacos";
 
+NSString* stringWithLength(NSUInteger length)
+{
+    return [@"X" stringByPaddingToLength:length withString:@"X" startingAtIndex:0];
+}
+
 @implementation PCFPushSpecsHelper
 
 # pragma mark - Spec Helper lifecycle
