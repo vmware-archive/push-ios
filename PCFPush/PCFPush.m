@@ -10,6 +10,7 @@
 #import "PCFPushGeofenceStatusUtil.h"
 #import "PCFPushURLConnectionDelegate.h"
 #import "PCFTagsHelper.h"
+#import "PCFPushDebug.h"
 
 // The current version code is read from "PCFPush.podspec" during a framework build.
 // In order to change the project version number, please edit the "PCFPush.podspec" file.
@@ -33,13 +34,10 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
-    [PCFPush registerForPCFPushNotificationsWithDeviceToken:deviceToken
-                                                       tags:tags
-                                                deviceAlias:deviceAlias
-                                               customUserId:nil
-                                        areGeofencesEnabled:areGeofencesEnabled
-                                                    success:successBlock
-                                                    failure:failureBlock];
+    PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
+    PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
+    PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
+    [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -50,6 +48,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
+    if (!customUserId) {
+        PCFPushLog(@"Custom User ID may not be nil.");
+        [NSException raise:NSInvalidArgumentException format:@"Custom User ID may not be nil."];
+    }
+    
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
     PCFPushClient.shared.registrationParameters.pushCustomUserId = customUserId;
     PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);

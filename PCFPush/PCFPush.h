@@ -86,6 +86,9 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  * As above, but allows the user to set a "custom user ID" which can be used
  * to associate this device with a particular user.
  *
+ * The custom user ID may not be `nil`.  If you have a custom user ID already set
+ * and you need to clear it, then set the custom user ID to an empty string.
+ *
  */
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
                                                   tags:(NSSet<NSString*> *)tags

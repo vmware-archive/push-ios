@@ -53,7 +53,9 @@ describe(@"PCFPush", ^{
 
         describe(@"empty and nillable parameters", ^{
 
-            __block BOOL succeeded = NO;
+            __block BOOL succeeded;
+            __block BOOL shouldHaveSucceeded;
+            
             __block void (^successBlock)() = ^{
                 succeeded = YES;
             };
@@ -62,17 +64,22 @@ describe(@"PCFPush", ^{
             };
 
             beforeEach(^{
+                succeeded = NO;
+                shouldHaveSucceeded = YES;
                 [helper setupDefaultPLIST];
                 [helper setupSuccessfulAsyncRegistrationRequest];
                 [PCFPushGeofenceStatusUtil stub:@selector(updateGeofenceStatusWithError:errorReason:number:fileManager:)];
             });
 
             afterEach(^{
-                [[theValue(succeeded) should] equal:theValue(YES)];
+                [[theValue(succeeded) should] equal:theValue(shouldHaveSucceeded)];
             });
 
-            it(@"should accept a nil custom user ID", ^{
-                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+            it(@"should not accept a nil custom user ID", ^{
+                shouldHaveSucceeded = NO;
+                [[theBlock(^{
+                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
+                }) should] raiseWithName:NSInvalidArgumentException];
             });
 
             it(@"should accept an empty custom user ID", ^{
@@ -120,6 +127,7 @@ describe(@"PCFPush", ^{
             });
 
             it(@"should not accept a custom user ID with length 256", ^{
+                shouldHaveSucceeded = NO;
                 NSString *customUserId = stringWithLength(256);
                 [[customUserId should] haveLengthOf:256];
                 [[theBlock(^{

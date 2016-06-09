@@ -349,9 +349,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 {
     PCFPushRegistrationPostRequestData *requestData = [[PCFPushRegistrationPostRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
-    if (!parameters.pushCustomUserId) {
-        requestData.customUserId = @"";
-    } else {
+    if (parameters.pushCustomUserId) {
         requestData.customUserId = parameters.pushCustomUserId;
     }
     requestData.deviceAlias = parameters.pushDeviceAlias;
