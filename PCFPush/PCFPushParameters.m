@@ -94,6 +94,7 @@ void pcfPushResetOnceToken() {
                 if (propertyName && [propertyName isEqualToString:@"sslCertValidationMode"]) {
                     
                     if (overridePropertyValue) {
+                        PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                         propertyValue = overridePropertyValue;
                     }
 
@@ -112,6 +113,7 @@ void pcfPushResetOnceToken() {
                 } else if ([propertyName isEqualToString:@"areAnalyticsEnabled"] && (overridePropertyValue || plist[@"pivotal.push.areAnalyticsEnabled"])) {
                     
                     if (overridePropertyValue) {
+                        PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                         params.areAnalyticsEnabled = [overridePropertyValue boolValue];
                     } else {
                         params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
@@ -121,6 +123,7 @@ void pcfPushResetOnceToken() {
 
                     id propertyValue;
                     if (overridePropertyValue) {
+                        PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                         propertyValue = overridePropertyValue;
                     } else {
                         propertyValue = plist[plistPropertyName];
@@ -129,6 +132,7 @@ void pcfPushResetOnceToken() {
                     if (propertyValue) {
                         
                         if ([propertyName isEqualToString:@"pinnedSslCertificateNames"] && overridePropertyValue) {
+                            PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                             propertyValue = [overridePropertyValue componentsSeparatedByString:@" "];
                         }
 
