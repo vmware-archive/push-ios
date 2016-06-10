@@ -75,11 +75,8 @@ describe(@"PCFPush", ^{
                 [[theValue(succeeded) should] equal:theValue(shouldHaveSucceeded)];
             });
 
-            it(@"should not accept a nil custom user ID", ^{
-                shouldHaveSucceeded = NO;
-                [[theBlock(^{
-                    [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
-                }) should] raiseWithName:NSInvalidArgumentException];
+            it(@"should accept a nil custom user ID", ^{
+                [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:helper.tags1 deviceAlias:@"NOT EMPTY" customUserId:nil areGeofencesEnabled:NO success:successBlock failure:failureBlock];
             });
 
             it(@"should accept an empty custom user ID", ^{

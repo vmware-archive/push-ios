@@ -34,10 +34,13 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
-    PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
-    PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
-    PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
-    [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
+    [PCFPush registerForPCFPushNotificationsWithDeviceToken:deviceToken
+                                                       tags:tags
+                                                deviceAlias:deviceAlias
+                                               customUserId:nil
+                                        areGeofencesEnabled:areGeofencesEnabled
+                                                    success:successBlock
+                                                    failure:failureBlock];
 }
 
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -48,11 +51,6 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
-    if (!customUserId) {
-        PCFPushLog(@"Custom User ID may not be nil.");
-        [NSException raise:NSInvalidArgumentException format:@"Custom User ID may not be nil."];
-    }
-    
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
     PCFPushClient.shared.registrationParameters.pushCustomUserId = customUserId;
     PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);

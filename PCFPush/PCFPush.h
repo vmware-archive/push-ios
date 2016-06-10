@@ -58,6 +58,10 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  * app then you can use the subscribeToTags method.  Note that you must have registered successfully
  * before you can use the subscribeToTags method.
  *
+ * Using this method to initialize push notifications will clear the current custom user ID, if there is one set.
+ * If you choose to use custom user IDs then please make sure to use the overloaded entry point that supports
+ * custom user IDs.
+ *
  * example:
  *
  * - (void) application:(UIApplication *)app didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
@@ -86,8 +90,8 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  * As above, but allows the user to set a "custom user ID" which can be used
  * to associate this device with a particular user.
  *
- * The custom user ID may not be `nil`.  If you have a custom user ID already set
- * and you need to clear it, then set the custom user ID to an empty string.
+ * If you have a custom user ID already set and you need to clear it, then set the
+ * custom user ID to an empty string or `nil`.
  *
  */
 + (void)registerForPCFPushNotificationsWithDeviceToken:(NSData *)deviceToken

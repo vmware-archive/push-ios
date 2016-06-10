@@ -349,9 +349,12 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 {
     PCFPushRegistrationPostRequestData *requestData = [[PCFPushRegistrationPostRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
-    if (parameters.pushCustomUserId) {
+
+    if (parameters.pushCustomUserId && parameters.pushCustomUserId.length > 0) {
+        // Only set the custom user ID in the POST request data if the user has provided a non-empty one.
         requestData.customUserId = parameters.pushCustomUserId;
     }
+
     requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = [PCFHardwareUtil deviceManufacturer];
     requestData.deviceModel = [PCFHardwareUtil deviceModel];
@@ -368,11 +371,16 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
 {
     PCFPushRegistrationPutRequestData *requestData = [[PCFPushRegistrationPutRequestData alloc] init];
     requestData.registrationToken = [PCFPushHexUtil hexDumpForData:apnsDeviceToken];
+
     if (!parameters.pushCustomUserId) {
+        // If the user requests a `nil` custom user ID then make sure to set it to an empty string
+        // in the PUT request data so that the server knows to clear the custom user ID.  If we set it
+        // to `nil` in the PUT request data then the server wouldn't see it and would ignore it.
         requestData.customUserId = @"";
     } else {
         requestData.customUserId = parameters.pushCustomUserId;
     }
+
     requestData.deviceAlias = parameters.pushDeviceAlias;
     requestData.deviceManufacturer = [PCFHardwareUtil deviceManufacturer];
     requestData.deviceModel = [PCFHardwareUtil deviceModel];

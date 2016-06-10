@@ -11,8 +11,10 @@
 #import "PCFPushSpecsHelper.h"
 #import "PCFPushURLConnection.h"
 #import "PCFPushAnalyticsEvent.h"
+#import "NSObject+PCFJSONizable.h"
 #import "PCFPushAnalyticsStorage.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 
 SPEC_BEGIN(PCFPushURLConnectionSpec)
@@ -303,7 +305,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
     });
 
-    context(@"valid object arguments on push registration", ^{
+    context(@"valid object arguments on new (POST) push registrations", ^{
         __block BOOL wasExpectedResult = NO;
 
         beforeEach ( ^{
@@ -327,6 +329,13 @@ describe(@"PCFPushBackEndConnection", ^{
 
                 [[request.HTTPMethod should] equal:@"POST"];
 
+                NSError *error;
+                [[request.HTTPBody shouldNot] beNil];
+
+                PCFPushRegistrationPostRequestData *requestData = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
+                [[requestData shouldNot] beNil];
+                [[requestData.customUserId should] equal:helper.params.pushCustomUserId];
+
                 newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
 
                 CompletionHandler handler = params[2];
@@ -340,6 +349,42 @@ describe(@"PCFPushBackEndConnection", ^{
                                                      wasExpectedResult = YES;
                                                  }
 
+                                                 failure:^(NSError *error) {
+                                                     wasExpectedResult = NO;
+                                                 }];
+        });
+
+        it(@"should omit the custom user ID field if the user doesn't provide one", ^{
+            
+            [PCFPushPersistentStorage setRequestHeaders:nil];
+            
+            [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
+                NSURLRequest *request = params[0];
+                
+                NSHTTPURLResponse *newResponse;
+                
+                NSError *error;
+                [[request.HTTPBody shouldNot] beNil];
+                
+                PCFPushRegistrationPostRequestData *requestData = [PCFPushRegistrationPostRequestData pcfPushFromJSONData:request.HTTPBody error:&error];
+                [[requestData shouldNot] beNil];
+                [[requestData.customUserId should] beNil];
+                
+                newResponse = [[NSHTTPURLResponse alloc] initWithURL:[NSURL URLWithString:@""]  statusCode:200 HTTPVersion:nil headerFields:nil];
+                
+                CompletionHandler handler = params[2];
+                handler(newResponse, nil, nil);
+                return nil;
+            }];
+
+            helper.params.pushCustomUserId = @"";
+
+            [PCFPushURLConnection registerWithParameters:helper.params
+                                             deviceToken:helper.apnsDeviceToken
+                                                 success:^(NSURLResponse *response, NSData *data) {
+                                                     wasExpectedResult = YES;
+                                                 }
+             
                                                  failure:^(NSError *error) {
                                                      wasExpectedResult = NO;
                                                  }];
