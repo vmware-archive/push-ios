@@ -1,6 +1,6 @@
 PODS:
   - Kiwi (2.4.0)
-  - PCFPush (1.6.0)
+  - PCFPush (1.7.0)
 
 DEPENDENCIES:
   - Kiwi
@@ -8,11 +8,11 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   PCFPush:
-    :path: ./
+    :path: "./"
 
 SPEC CHECKSUMS:
   Kiwi: f49c9d54b28917df5928fe44968a39ed198cb8a8
-  PCFPush: d6eda074eb2db68a805624738ead9fe8e2bef5d7
+  PCFPush: b9b90cbcb9e38c1662e5651b23660c04253c075a
 
 PODFILE CHECKSUM: 11804f03fc1722c41fdff5c866e2dc6be59eacb0
 
