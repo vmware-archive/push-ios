@@ -1,3 +1,5 @@
+source "https://github.com/CocoaPods/Old-Specs"
+
 workspace './PCFPush'
 xcodeproj 'Specs/PCFPushSpecs'
 
