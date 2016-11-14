@@ -302,7 +302,7 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
                 [[application shouldNot] receive:@selector(presentLocalNotificationNow:)];
                 [[store shouldNot] receive:@selector(objectForKeyedSubscript:)];
                 [[PCFPushAnalytics shouldNot] receive:@selector(logTriggeredGeofenceId:locationId:parameters:)];
-                CLRegion *emptyRegion = [[CLRegion alloc] init];
+                CLRegion *emptyRegion = [[CLCircularRegion alloc] initWithCenter:CLLocationCoordinate2DMake(0.0, 0.0) radius:0.0 identifier:@""];
                 [PCFPushGeofenceHandler processRegion:emptyRegion store:store engine:engine state:CLRegionStateInside parameters:parametersWithAnalyticsEnabled];
             });
 
