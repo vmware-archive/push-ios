@@ -16,12 +16,12 @@ Pod::Spec.new do |s|
   s.summary      = 'Pivotal CF Mobile Services Push Client SDK for iOS'
   s.homepage     = 'https://github.com/cfmobile'
   s.authors      = 'Rob Szumlakowski'
-  s.source       = { :git => 'https://github.com/cfmobile/push-ios.git', :tag => "1.6.0-final" }
-  s.framework    = "CoreLocation"
+  s.source       = { :git => 'https://github.com/cfmobile/push-ios.git', :tag => "1.7.0-final" }
+  s.frameworks   = "CoreLocation"
   s.requires_arc = true
   s.compiler_flags = "-D_PCF_PUSH_VERSION=\\\"#{PCF_PUSH_VERSION}\\\""
 
-  s.ios.deployment_target = '7.0' # PCF Push still supports iOS 7.0 if being built from source (i.e.: as a Cocoapod)
+  s.ios.deployment_target = '8.0'
 
   s.public_header_files = 'PCFPush/**/*.h'
   s.source_files = 'PCFPush/**/*.{h,m}'

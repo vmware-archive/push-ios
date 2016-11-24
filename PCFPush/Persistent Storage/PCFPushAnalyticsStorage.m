@@ -53,13 +53,13 @@ static dispatch_once_t onceToken;
 - (void)resetDatabase:(BOOL)keepDatabaseFile
 {
     if (!keepDatabaseFile) {
-        [_managedObjectContext lock];
-        NSArray *stores = [_persistentStoreCoordinator persistentStores];
-        for(NSPersistentStore *store in stores) {
-            [_persistentStoreCoordinator removePersistentStore:store error:nil];
-            [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
-        }
-        [_managedObjectContext unlock];
+        [_managedObjectContext performBlockAndWait:^{
+            NSArray *stores = [_persistentStoreCoordinator persistentStores];
+            for(NSPersistentStore *store in stores) {
+                [_persistentStoreCoordinator removePersistentStore:store error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:store.URL.path error:nil];
+            }
+        }];
     }
     _managedObjectModel = nil;
     _managedObjectContext = nil;

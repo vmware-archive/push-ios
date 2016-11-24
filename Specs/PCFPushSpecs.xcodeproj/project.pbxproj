@@ -330,12 +330,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1D1296918D9DB36002FE233 /* Build configuration list for PBXNativeTarget "PCFPushSpecs" */;
 			buildPhases = (
-				BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */,
+				BC9AD1A02C5940CB91F67BFD /* [CP] Check Pods Manifest.lock */,
 				F1D1295818D9DB35002FE233 /* Sources */,
 				F1D1295918D9DB35002FE233 /* Frameworks */,
 				F1D1295A18D9DB35002FE233 /* Resources */,
-				8971015423DB4043A8083210 /* Copy Pods Resources */,
-				82FEA45836E40E4A3E195325 /* Embed Pods Frameworks */,
+				8971015423DB4043A8083210 /* [CP] Copy Pods Resources */,
+				82FEA45836E40E4A3E195325 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -352,7 +352,7 @@
 		F1FDE2A018D799E4009EBE38 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0810;
 			};
 			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "PCFPushSpecs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -425,14 +425,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		82FEA45836E40E4A3E195325 /* Embed Pods Frameworks */ = {
+		82FEA45836E40E4A3E195325 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -440,14 +440,14 @@
 			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8971015423DB4043A8083210 /* Copy Pods Resources */ = {
+		8971015423DB4043A8083210 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,19 +455,19 @@
 			shellScript = "\"${SRCROOT}/../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BC9AD1A02C5940CB91F67BFD /* Check Pods Manifest.lock */ = {
+		BC9AD1A02C5940CB91F67BFD /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -561,7 +561,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "PCFPushSpecs/PCFPushSpecs-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.pivotal.ios.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -605,7 +605,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = "PCFPushSpecs/PCFPushSpecs-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "io.pivotal.ios.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -619,10 +619,27 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CURRENT_PROJECT_VERSION = 1.6.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-D_PCF_PUSH_VERSION=\"$(CURRENT_PROJECT_VERSION)\"";
 			};
@@ -632,9 +649,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_CODE_COVERAGE = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CURRENT_PROJECT_VERSION = 1.6.0;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				OTHER_CFLAGS = "-D_PCF_PUSH_VERSION=\"$(CURRENT_PROJECT_VERSION)\"";
 			};
 			name = Release;
