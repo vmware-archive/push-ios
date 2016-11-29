@@ -1,7 +1,9 @@
 language: objective-c
-xcode_workspace: MSSPush.xcworkspace
-xcode_scheme: MSSPushSpecs
-xcode_sdk: iphonesimulator7.0
+
+osx_image: xcode8.4
+xcode_workspace: PCFPush.xcworkspace
+xcode_scheme: ALL PCFPushSpecs
+xcode_sdk: iphonesimulator9.3
 
 notifications:
     webhooks:
@@ -9,9 +11,7 @@ notifications:
 
 before_install:
   - export LANG=en_US.UTF-8
+  - brew update
+  - brew outdated xctool || brew upgrade xctool
   - gem install cocoapods --no-rdoc --no-ri --no-document --quiet
   - pod install && cd $TRAVIS_BUILD_DIR
-
-before_script:
-  - brew update
-  - if brew outdated | grep -qx xctool; then brew upgrade xctool; fi
