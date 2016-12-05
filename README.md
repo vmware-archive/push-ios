@@ -1,3 +1,7 @@
+
+[![Build Status](https://travis-ci.org/cfmobile/push-ios.svg?branch=dev)](https://travis-ci.org/cfmobile/push-ios)
+
+
 iOS Push Client SDK
 ===================
 
