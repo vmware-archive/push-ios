@@ -29,6 +29,12 @@ describe(@"PCFPushPersistentStorage", ^{
         [[[PCFPushPersistentStorage serverVersion] should] beNil];
         [[[PCFPushPersistentStorage serverVersionTimePolled] should] beNil];
         [[[PCFPushPersistentStorage customUserId] should] beNil];
+        [[[PCFPushPersistentStorage pushApiUrl] should] beNil];
+        [[[PCFPushPersistentStorage developmentPushVariantUuid] should] beNil];
+        [[[PCFPushPersistentStorage developmentPushVariantSecret] should] beNil];
+        [[[PCFPushPersistentStorage productionPushVariantUuid] should] beNil];
+        [[[PCFPushPersistentStorage productionPushVariantSecret] should] beNil];
+        
         [[theValue([PCFPushPersistentStorage lastGeofencesModifiedTime]) should] equal:theValue(PCF_NEVER_UPDATED_GEOFENCES)];
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
     });
@@ -98,7 +104,32 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setServerVersionTimePolled:testDate];
         [[[PCFPushPersistentStorage serverVersionTimePolled] should] equal:testDate];
     });
-
+    
+    it(@"should save the push api url", ^{
+        [PCFPushPersistentStorage setPushApiUrl:@"testurl"];
+        [[[PCFPushPersistentStorage pushApiUrl] should] equal:@"testurl"];
+    });
+    
+    it(@"should save the push dev variant uuid", ^{
+        [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"testuuid"];
+        [[[PCFPushPersistentStorage developmentPushVariantUuid] should] equal:@"testuuid"];
+    });
+    
+    it(@"should save the push dev variant secret", ^{
+        [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"testsecret"];
+        [[[PCFPushPersistentStorage developmentPushVariantSecret] should] equal:@"testsecret"];
+    });
+    
+    it(@"should save the push prod variant uuid", ^{
+        [PCFPushPersistentStorage setProductionPushVariantUuid:@"testuuid"];
+        [[[PCFPushPersistentStorage productionPushVariantUuid] should] equal:@"testuuid"];
+    });
+    
+    it(@"should save the push prod variant secret", ^{
+        [PCFPushPersistentStorage setProductionPushVariantSecret:@"testsecret"];
+        [[[PCFPushPersistentStorage productionPushVariantSecret] should] equal:@"testsecret"];
+    });
+    
     it(@"should clear values after being reset", ^{
         [PCFPushPersistentStorage setAPNSDeviceToken:helper.apnsDeviceToken];
         [PCFPushPersistentStorage setServerDeviceID:helper.backEndDeviceId];
@@ -112,6 +143,12 @@ describe(@"PCFPushPersistentStorage", ^{
         [PCFPushPersistentStorage setRequestHeaders:@{ @"CATS":@"FUZZY", @"FISH":@"SWIMMY" }];
         [PCFPushPersistentStorage setServerVersion:@"3.4.5.6"];
         [PCFPushPersistentStorage setServerVersionTimePolled:[NSDate date]];
+        [PCFPushPersistentStorage setPushApiUrl:@"someurl"];
+        [PCFPushPersistentStorage setProductionPushVariantUuid:@"someuuid"];
+        [PCFPushPersistentStorage setProductionPushVariantSecret:@"somesecret"];
+        [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"someuuid"];
+        [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"somesecret"];
+        
         [PCFPushPersistentStorage reset];
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];
         [[[PCFPushPersistentStorage serverDeviceID] should] beNil];
@@ -125,6 +162,12 @@ describe(@"PCFPushPersistentStorage", ^{
         [[theValue([PCFPushPersistentStorage areGeofencesEnabled]) should] beNo];
         [[[PCFPushPersistentStorage serverVersion] should] beNil];
         [[[PCFPushPersistentStorage serverVersionTimePolled] should] beNil];
+        [[[PCFPushPersistentStorage pushApiUrl] should] beNil];
+        [[[PCFPushPersistentStorage developmentPushVariantUuid] should] beNil];
+        [[[PCFPushPersistentStorage developmentPushVariantSecret] should] beNil];
+        [[[PCFPushPersistentStorage productionPushVariantUuid] should] beNil];
+        [[[PCFPushPersistentStorage productionPushVariantSecret] should] beNil];
+        
     });
 });
 

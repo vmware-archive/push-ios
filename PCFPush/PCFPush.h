@@ -5,6 +5,7 @@
 #import <UIKit/UIKit.h>
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushErrors.h"
+#import "PCFPushServiceInfo.h"
 
 extern NSString *const PCFPushSDKVersion;
 
@@ -257,6 +258,32 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  *
  */
 + (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback;
+
+/**
+ * Call this method to set information about the push api service the SDK should register with.
+ * The platformInfo object must contain the following non-empty fields:
+ * 
+ *    serviceUrl                  - The URL of the PCF Push Server
+ *    platformUuidDevelopment     - The UUID of your push development platform.
+ *    platformSecretDevelopment   - The secret of your push development platform.
+ *    platformUuidProduction      - The UUID of your push production platform.
+ *    platformSecretProduction    - The secret of your push production platform.
+ *
+ * These settings will override the equivalent setting in the plist if both are defined.
+ *
+ * The backend settings defined here will be stored on the phone's persistent storage and saved across launches.
+ *
+ * In order for this method to take effect you will need to call it *before* `registerForPCFPushNotificationsWithDeviceToken`.
+ */
++ (void) setPushServiceInfo:(PCFPushServiceInfo *)serviceInfo;
+
+/**
+ * Call this method to clear the push service info, and use the values defined in the plist file.
+ *
+ * In order for this method to take effect you will need to call it *before* `registerForPCFPushNotificationsWithDeviceToken`.
+ *
+ */
++ (void) clearPushServiceInfo;
 
 /**
  * Returns the version of the PCF Push SDK.

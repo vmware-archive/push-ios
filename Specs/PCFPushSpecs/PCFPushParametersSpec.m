@@ -130,7 +130,7 @@ describe(@"PCFRegistrationParameters", ^{
             [[theValue([model arePushParametersValid]) should] beTrue];
         });
 
-        it(@"should allow custom user IDs with length 256", ^{
+        it(@"should not allow custom user IDs with length 256", ^{
             model.pushCustomUserId = stringWithLength(256);
             [[model.pushCustomUserId should] haveLengthOf:256];
             [[theValue([model arePushParametersValid]) should] beFalse];
@@ -174,6 +174,46 @@ describe(@"PCFRegistrationParameters", ^{
         });
     });
 
+    context(@"initializing with valid args from plist and persistent platformInfo", ^{
+        beforeEach(^{
+            [PCFPushPersistentStorage setPushApiUrl:@"http://platforminfotest.url.com"];
+            [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"platforminfo-dev-444-555-666-777"];
+            [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"platforminfo dev secret"];
+            [PCFPushPersistentStorage setProductionPushVariantUuid:@"platforminfo-prod-444-555-666-777"];
+            [PCFPushPersistentStorage setProductionPushVariantSecret:@"platforminfo prod secret"];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
+        });
+        
+        it(@"should initialize successfully and indicate platformInfo is valid", ^{
+            [[model shouldNot] beNil];
+            [[model.pushAPIURL should] equal:@"http://platforminfotest.url.com"];
+            [[model.developmentPushVariantUUID should] equal:@"platforminfo-dev-444-555-666-777"];
+            [[model.developmentPushVariantSecret should] equal:@"platforminfo dev secret"];
+            [[model.productionPushVariantUUID should] equal:@"platforminfo-prod-444-555-666-777"];
+            [[model.productionPushVariantSecret should] equal:@"platforminfo prod secret"];
+        });
+    });
+    
+    context(@"initializing with valid args from empty plist and persistent platformInfo", ^{
+        beforeEach(^{
+            [PCFPushPersistentStorage setPushApiUrl:@"http://platforminfotest.url.com"];
+            [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"platforminfo-dev-444-555-666-777"];
+            [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"platforminfo dev secret"];
+            [PCFPushPersistentStorage setProductionPushVariantUuid:@"platforminfo-prod-444-555-666-777"];
+            [PCFPushPersistentStorage setProductionPushVariantSecret:@"platforminfo prod secret"];
+            model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Empty" ofType:@"plist"]];
+        });
+        
+        it(@"should initialize successfully and indicate platformInfo is valid", ^{
+            [[model shouldNot] beNil];
+            [[model.pushAPIURL should] equal:@"http://platforminfotest.url.com"];
+            [[model.developmentPushVariantUUID should] equal:@"platforminfo-dev-444-555-666-777"];
+            [[model.developmentPushVariantSecret should] equal:@"platforminfo dev secret"];
+            [[model.productionPushVariantUUID should] equal:@"platforminfo-prod-444-555-666-777"];
+            [[model.productionPushVariantSecret should] equal:@"platforminfo prod secret"];
+        });
+    });
+    
     context(@"parsing SSL certificate validation mode settings", ^{
 
         it(@"should parse 'default'", ^{

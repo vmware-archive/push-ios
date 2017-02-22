@@ -18,6 +18,7 @@
 #import "PCFPushRegistrationPutRequestData.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
+#import "PCFPushServiceInfo.h"
 
 SPEC_BEGIN(PCFPushSpecs)
 
@@ -188,6 +189,39 @@ describe(@"PCFPush", ^{
         it(@"should let you set request headers", ^{
             [PCFPush setRequestHeaders:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
             [[[PCFPushPersistentStorage requestHeaders] should] equal:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
+        });
+        
+        
+        it(@"should set the service info", ^{
+            PCFPushServiceInfo *serviceInfo = [[PCFPushServiceInfo alloc] initWithApi:@"http://serviceinfo.com"
+                                                                     devPlatformUuid:@"1234-5678"
+                                                                   devPlatformSecret:@"dev-secret"
+                                                                    prodPlatformUuid:@"5678-1234"
+                                                                  prodPlatformSecret:@"prod-secret"];
+            [PCFPush setPushServiceInfo: serviceInfo];
+            
+            [[[PCFPushPersistentStorage pushApiUrl] should] equal:@"http://serviceinfo.com"];
+            [[[PCFPushPersistentStorage developmentPushVariantUuid] should] equal:@"1234-5678"];
+            [[[PCFPushPersistentStorage developmentPushVariantSecret] should] equal:@"dev-secret"];
+            [[[PCFPushPersistentStorage productionPushVariantUuid] should] equal:@"5678-1234"];
+            [[[PCFPushPersistentStorage productionPushVariantSecret] should] equal:@"prod-secret"];
+        });
+        
+        it(@"should clear the service info", ^{
+            PCFPushServiceInfo *serviceInfo = [[PCFPushServiceInfo alloc] initWithApi:@"http://serviceinfo.com"
+                                                                      devPlatformUuid:@"1234-5678"
+                                                                    devPlatformSecret:@"dev-secret"
+                                                                     prodPlatformUuid:@"5678-1234"
+                                                                   prodPlatformSecret:@"prod-secret"];
+            [PCFPush setPushServiceInfo: serviceInfo];
+            
+            [PCFPush clearPushServiceInfo];
+            
+            [[[PCFPushPersistentStorage pushApiUrl] should] beNil];
+            [[[PCFPushPersistentStorage developmentPushVariantUuid] should] beNil];
+            [[[PCFPushPersistentStorage developmentPushVariantSecret] should] beNil];
+            [[[PCFPushPersistentStorage productionPushVariantUuid] should] beNil];
+            [[[PCFPushPersistentStorage productionPushVariantSecret] should] beNil];
         });
     });
 

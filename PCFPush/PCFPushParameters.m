@@ -77,6 +77,14 @@ void pcfPushResetOnceToken() {
 + (PCFPushParameters *)parametersWithContentsOfFile:(NSString *)path
 {
     PCFPushParameters *params = [PCFPushParameters parameters];
+    
+    NSMutableDictionary *platformInfo = [[NSMutableDictionary alloc] init];
+    [platformInfo setValue:[PCFPushPersistentStorage pushApiUrl] forKey:@"pushAPIURL"];
+    [platformInfo setValue:[PCFPushPersistentStorage productionPushPlatformUuid] forKey:@"productionPushPlatformUUID"];
+    [platformInfo setValue:[PCFPushPersistentStorage productionPushPlatformSecret] forKey:@"productionPushPlatformSecret"];
+    [platformInfo setValue:[PCFPushPersistentStorage developmentPushPlatformUuid] forKey:@"developmentPushPlatformUUID"];
+    [platformInfo setValue:[PCFPushPersistentStorage developmentPushPlatformSecret] forKey:@"developmentPushPlatformSecret"];
+    
     if (path) {
         @try {
             NSDictionary *plist = [[NSDictionary alloc] initWithContentsOfFile:path];
@@ -118,7 +126,6 @@ void pcfPushResetOnceToken() {
                     } else {
                         params.areAnalyticsEnabled = [plist[@"pivotal.push.areAnalyticsEnabled"] boolValue];
                     }
-
                 } else {
 
                     id propertyValue;
@@ -126,11 +133,14 @@ void pcfPushResetOnceToken() {
                         PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                         propertyValue = overridePropertyValue;
                     } else {
-                        propertyValue = plist[plistPropertyName];
+                        if (platformInfo[propertyName]) {
+                            propertyValue = platformInfo[propertyName];
+                        } else {
+                            propertyValue = plist[plistPropertyName];
+                        }
                     }
                     
                     if (propertyValue) {
-                        
                         if ([propertyName isEqualToString:@"pinnedSslCertificateNames"] && overridePropertyValue) {
                             PCFPushLog(@"Using override value %@ for parameter %@", overridePropertyValue, overridePropertyName);
                             propertyValue = [overridePropertyValue componentsSeparatedByString:@" "];
@@ -170,12 +180,12 @@ void pcfPushResetOnceToken() {
 
 - (NSString *)variantUUID
 {
-    return pcfPushIsAPNSSandbox() ? self.developmentPushVariantUUID : self.productionPushVariantUUID;
+    return pcfPushIsAPNSSandbox() ? self.developmentPushPlatformUUID : self.productionPushPlatformUUID;
 }
 
 - (NSString *)variantSecret
 {
-    return pcfPushIsAPNSSandbox() ? self.developmentPushVariantSecret : self.productionPushVariantSecret;
+    return pcfPushIsAPNSSandbox() ? self.developmentPushPlatformSecret : self.productionPushPlatformSecret;
 }
 
 - (BOOL)arePushParametersValid;
@@ -229,10 +239,10 @@ void pcfPushResetOnceToken() {
 
         keys = @{
                 @"pivotal.push.serviceUrl" : @"pushAPIURL",
-                @"pivotal.push.platformUuidProduction" : @"productionPushVariantUUID",
-                @"pivotal.push.platformSecretProduction" : @"productionPushVariantSecret",
-                @"pivotal.push.platformUuidDevelopment" : @"developmentPushVariantUUID",
-                @"pivotal.push.platformSecretDevelopment" : @"developmentPushVariantSecret",
+                @"pivotal.push.platformUuidProduction" : @"productionPushPlatformUUID",
+                @"pivotal.push.platformSecretProduction" : @"productionPushPlatformSecret",
+                @"pivotal.push.platformUuidDevelopment" : @"developmentPushPlatformUUID",
+                @"pivotal.push.platformSecretDevelopment" : @"developmentPushPlatformSecret",
                 @"pivotal.push.areAnalyticsEnabled" : @"areAnalyticsEnabled",
                 @"pivotal.push.sslCertValidationMode" : @"sslCertValidationMode",
                 @"pivotal.push.pinnedSslCertificateNames" : @"pinnedSslCertificateNames"

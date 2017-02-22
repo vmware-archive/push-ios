@@ -17,6 +17,12 @@ static NSString *const KEY_REQUEST_HEADERS              = @"PCF_PUSH_REQUEST_HEA
 static NSString *const KEY_SERVER_VERSION               = @"PCF_PUSH_SERVER_VERSION";
 static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERSION_TIME_POLLED";
 
+static NSString *const KEY_PUSH_API_URL = @"PCF_PUSH_API_URL";
+static NSString *const KEY_PUSH_DEV_PLATFORM_UUID = @"PCF_PUSH_DEV_PLATFORM_UUID";
+static NSString *const KEY_PUSH_DEV_PLATFORM_SECRET = @"PCF_PUSH_DEV_PLATFORM_SECRET";
+static NSString *const KEY_PUSH_PROD_PLATFORM_UUID = @"PCF_PUSH_PROD_PLATFORM_UUID";
+static NSString *const KEY_PUSH_PROD_PLATFORM_SECRET = @"PCF_PUSH_PROD_PLATFORM_SECRET";
+
 @implementation PCFPushPersistentStorage
 
 + (void)persistValue:(id)value forKey:(id)key
@@ -49,6 +55,12 @@ static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERS
                       KEY_REQUEST_HEADERS,
                       KEY_SERVER_VERSION,
                       KEY_SERVER_VERSION_TIME_POLLED,
+                      
+                      KEY_PUSH_API_URL,
+                      KEY_PUSH_DEV_PLATFORM_UUID,
+                      KEY_PUSH_DEV_PLATFORM_SECRET,
+                      KEY_PUSH_PROD_PLATFORM_UUID,
+                      KEY_PUSH_PROD_PLATFORM_SECRET,
                       ];
     
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
@@ -184,6 +196,56 @@ static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERS
 + (NSDate*)serverVersionTimePolled
 {
     return [self persistedValueForKey:KEY_SERVER_VERSION_TIME_POLLED];
+}
+
++ (void) setPushApiUrl:(NSString *)url
+{
+    [self persistValue:url forKey:KEY_PUSH_API_URL];
+}
+
++ (NSString*)pushApiUrl
+{
+    return [self persistedValueForKey:KEY_PUSH_API_URL];
+}
+
++ (void) setDevelopmentPushPlatformUuid:(NSString *)developmentPushPlatformUuid
+{
+    [self persistValue:developmentPushPlatformUuid forKey:KEY_PUSH_DEV_PLATFORM_UUID];
+}
+
++ (NSString*)developmentPushPlatformUuid
+{
+    return [self persistedValueForKey:KEY_PUSH_DEV_PLATFORM_UUID];
+}
+
++ (void) setDevelopmentPushPlatformSecret:(NSString *)developmentPushPlatformSecret
+{
+    [self persistValue:developmentPushPlatformSecret forKey:KEY_PUSH_DEV_PLATFORM_SECRET];
+}
+
++ (NSString*)developmentPushPlatformSecret
+{
+    return [self persistedValueForKey:KEY_PUSH_DEV_PLATFORM_SECRET];
+}
+
++ (void) setProductionPushPlatformUuid:(NSString *)productionPushPlatformUuid
+{
+    [self persistValue:productionPushPlatformUuid forKey:KEY_PUSH_PROD_PLATFORM_UUID];
+}
+
++ (NSString*)productionPushPlatformUuid
+{
+    return [self persistedValueForKey:KEY_PUSH_PROD_PLATFORM_UUID];
+}
+
++ (void) setProductionPushPlatformSecret:(NSString *)productionPushPlatformSecret
+{
+    [self persistValue:productionPushPlatformSecret forKey:KEY_PUSH_PROD_PLATFORM_SECRET];
+}
+
++ (NSString*)productionPushPlatformSecret
+{
+    return [self persistedValueForKey:KEY_PUSH_PROD_PLATFORM_SECRET];
 }
 
 @end

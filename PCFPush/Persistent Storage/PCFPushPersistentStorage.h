@@ -44,6 +44,21 @@
 + (void)setServerVersionTimePolled:(NSDate*)timestamp;
 + (NSDate*)serverVersionTimePolled;
 
++ (void)setPushApiUrl:(NSString*)url;
++ (NSString*)pushApiUrl;
+
++ (void) setDevelopmentPushPlatformUuid:(NSString *)developmentPushPlatformUuid;
++ (NSString*)developmentPushPlatformUuid;
+
++ (void) setDevelopmentPushPlatformSecret:(NSString *)developmentPushPlatformSecret;
++ (NSString*)developmentPushPlatformSecret;
+
++ (void) setProductionPushPlatformUuid:(NSString *)productionPushPlatformUuid;
++ (NSString*)productionPushPlatformUuid;
+
++ (void) setProductionPushPlatformSecret:(NSString *)productionPushPlatformSecret;
++ (NSString*)productionPushPlatformSecret;
+
 + (void)reset;
 
 @end

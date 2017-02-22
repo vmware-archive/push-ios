@@ -37,6 +37,7 @@
 		235BB259199C085200B9EE63 /* PCFPushSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB249199C085200B9EE63 /* PCFPushSpec.m */; };
 		235BB25A199C085200B9EE63 /* PCFPushSpecsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24B199C085200B9EE63 /* PCFPushSpecsHelper.m */; };
 		235BB25C199C085200B9EE63 /* PCFPushParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* PCFPushParametersSpec.m */; };
+		5D2F2F8F1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */; };
 		B69DB029DD6EC4142DEAC23B /* geofence_one_item_persisted_4.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB8B8004B79E41AAA3C12 /* geofence_one_item_persisted_4.json */; };
 		B69DB084E799AB9858551D0C /* geofence_one_item_persisted_7.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DBC7FC41BE5435F83A2AD /* geofence_one_item_persisted_7.json */; };
 		B69DB2EC10BEC11E1505CADE /* geofence_one_item_bad_radius.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DBAC46347E818249DBAE7 /* geofence_one_item_bad_radius.json */; };
@@ -121,6 +122,7 @@
 		235BB24E199C085200B9EE63 /* PCFPushParametersSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushParametersSpec.m; sourceTree = "<group>"; };
 		34012CF2F59FEE470ECEC1F2 /* Pods-PCFPushSpecs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.release.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.release.xcconfig"; sourceTree = "<group>"; };
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushServiceInfoSpec.m; sourceTree = "<group>"; };
 		65DC33CB493A38EAF1259929 /* Pods-PCFPushSpecs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.debug.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B69DB00B8B5F2DE55A62352A /* geofence_one_item_persisted_6.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_persisted_6.json; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				B69DB43F807692606F21D2F5 /* PCFPushGeofenceStatusSpec.m */,
 				B69DBA57F87E491AF87F4462 /* PCFPushAnalyticsSpec.m */,
 				B69DB3BA9913F17BB626624D /* PCFPushVersionSpec.m */,
+				5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -353,6 +356,12 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0810;
+				TargetAttributes = {
+					F1D1295B18D9DB35002FE233 = {
+						DevelopmentTeam = BVZYXK966R;
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = F1FDE2A318D799E4009EBE38 /* Build configuration list for PBXProject "PCFPushSpecs" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -494,6 +503,7 @@
 				B6AAED08898E5D6E1F11927F /* PCFPushGeofenceResponseDataSpec.m in Sources */,
 				B6AAEC389EDA1FAD0F72FC84 /* PCFPushGeofenceDataListSpec.m in Sources */,
 				B6AAEDDDCADA3534DAD31793 /* PCFPushGeofenceDataList+Loaders.m in Sources */,
+				5D2F2F8F1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m in Sources */,
 				B6AAE0D7441B68807E4233B9 /* PCFPushGeofenceLocationMapSpec.m in Sources */,
 				B69DB63736EFDB4921867DC2 /* PCFPushGeofenceUpdaterSpec.m in Sources */,
 				B69DBC6CD4EC6094A62A5ABE /* PCFPushGeofenceRegistrarSpec.m in Sources */,
@@ -538,7 +548,9 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = BVZYXK966R;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -588,7 +600,9 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
+				DEVELOPMENT_TEAM = BVZYXK966R;
 				ENABLE_NS_ASSERTIONS = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",

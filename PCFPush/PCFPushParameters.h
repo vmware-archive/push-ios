@@ -27,10 +27,10 @@ typedef NS_ENUM(NSInteger, PCFPushSslCertValidationMode) {
 @property (copy) NSString *pushCustomUserId;
 @property (copy) NSString *pushDeviceAlias;
 @property (copy) NSString *pushAPIURL;
-@property (copy) NSString *developmentPushVariantUUID;
-@property (copy) NSString *developmentPushVariantSecret;
-@property (copy) NSString *productionPushVariantUUID;
-@property (copy) NSString *productionPushVariantSecret;
+@property (copy) NSString *developmentPushPlatformUUID;
+@property (copy) NSString *developmentPushPlatformSecret;
+@property (copy) NSString *productionPushPlatformUUID;
+@property (copy) NSString *productionPushPlatformSecret;
 @property (copy) NSArray *pinnedSslCertificateNames;
 @property (assign) PCFPushSslCertValidationMode sslCertValidationMode;
 @property (copy) NSSet<NSString*> *pushTags;

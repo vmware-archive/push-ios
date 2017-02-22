@@ -11,6 +11,7 @@
 #import "PCFPushURLConnectionDelegate.h"
 #import "PCFTagsHelper.h"
 #import "PCFPushDebug.h"
+#import "PCFPushServiceInfo.h"
 
 // The current version code is read from "PCFPush.podspec" during a framework build.
 // In order to change the project version number, please edit the "PCFPush.podspec" file.
@@ -51,10 +52,12 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
                                                success:(void (^)(void))successBlock
                                                failure:(void (^)(NSError *))failureBlock
 {
+    PCFPushClient.shared.registrationParameters = [PCFPushParameters defaultParameters];
     PCFPushClient.shared.registrationParameters.pushDeviceAlias = deviceAlias;
     PCFPushClient.shared.registrationParameters.pushCustomUserId = customUserId;
     PCFPushClient.shared.registrationParameters.pushTags = pcfPushLowercaseTags(tags);
     PCFPushClient.shared.registrationParameters.areGeofencesEnabled = areGeofencesEnabled;
+   
     [PCFPushClient.shared registerWithPCFPushWithDeviceToken:deviceToken success:successBlock failure:failureBlock];
 }
 
@@ -127,4 +130,26 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     return PCFPushSDKVersion;
 }
 
++ (void) setPushServiceInfo:(PCFPushServiceInfo*)serviceInfo
+{
+    if (serviceInfo) {
+        [PCFPushPersistentStorage setPushApiUrl:serviceInfo.pushApiUrl];
+        [PCFPushPersistentStorage setProductionPushPlatformUuid:serviceInfo.productionPushPlatformUuid];
+        [PCFPushPersistentStorage setProductionPushPlatformSecret:serviceInfo.productionPushPlatformSecret];
+        [PCFPushPersistentStorage setDevelopmentPushPlatformUuid:serviceInfo.developmentPushPlatformUuid];
+        [PCFPushPersistentStorage setDevelopmentPushPlatformSecret:serviceInfo.developmentPushPlatformSecret];
+    }
+}
+
++ (void) clearPushServiceInfo
+{
+    [PCFPushPersistentStorage setPushApiUrl:nil];
+    [PCFPushPersistentStorage setProductionPushPlatformUuid:nil];
+    [PCFPushPersistentStorage setProductionPushPlatformSecret:nil];
+    [PCFPushPersistentStorage setDevelopmentPushPlatformUuid:nil];
+    [PCFPushPersistentStorage setDevelopmentPushPlatformSecret:nil];
+}
+
 @end
+
+
