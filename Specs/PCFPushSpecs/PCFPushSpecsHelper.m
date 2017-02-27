@@ -89,10 +89,10 @@ NSString* stringWithLength(NSUInteger length)
 - (PCFPushParameters *)setupParametersWithGeofencesEnabled:(BOOL)geofencesEnabled
 {
     PCFPushParameters *params = [PCFPushParameters parameters];
-    params.developmentPushVariantUUID = TEST_VARIANT_UUID_1;
-    params.developmentPushVariantSecret = TEST_VARIANT_SECRET_1;
-    params.productionPushVariantUUID = TEST_VARIANT_UUID_1;
-    params.productionPushVariantSecret = TEST_VARIANT_SECRET_1;
+    params.developmentPushPlatformUUID = TEST_VARIANT_UUID_1;
+    params.developmentPushPlatformSecret = TEST_VARIANT_SECRET_1;
+    params.productionPushPlatformUUID = TEST_VARIANT_UUID_1;
+    params.productionPushPlatformSecret = TEST_VARIANT_SECRET_1;
     params.pushAPIURL = TEST_PUSH_API_URL_1;
     params.pushCustomUserId = TEST_CUSTOM_USER_ID_1;
     params.pushDeviceAlias = TEST_DEVICE_ALIAS_1;

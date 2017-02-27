@@ -77,10 +77,10 @@ describe(@"PCFRegistrationParameters", ^{
             [model setPushDeviceAlias:TEST_DEVICE_ALIAS];
             [model setPushAPIURL:TEST_PUSH_API_URL_1];
             [model setPushCustomUserId:TEST_CUSTOM_USER_ID_1];
-            [model setDevelopmentPushVariantSecret:TEST_VARIANT_SECRET];
-            [model setProductionPushVariantSecret:TEST_VARIANT_SECRET];
-            [model setDevelopmentPushVariantUUID:TEST_VARIANT_UUID];
-            [model setProductionPushVariantUUID:TEST_VARIANT_UUID];
+            [model setDevelopmentPushPlatformSecret:TEST_VARIANT_SECRET];
+            [model setProductionPushPlatformSecret:TEST_VARIANT_SECRET];
+            [model setDevelopmentPushPlatformUUID:TEST_VARIANT_UUID];
+            [model setProductionPushPlatformUUID:TEST_VARIANT_UUID];
         });
 
         it(@"should require all push properties (except tags, device alias, custom user ID, and geofences enabled) to be non-nil and non-empty", ^{
@@ -148,10 +148,10 @@ describe(@"PCFRegistrationParameters", ^{
             [[model shouldNot] beNil];
             [[theValue([model arePushParametersValid]) should] beTrue];
             [[model.pushAPIURL should] equal:@"http://test.url.com"];
-            [[model.developmentPushVariantSecret should] equal:@"No secret is as strong as its blabbiest keeper"];
-            [[model.developmentPushVariantUUID should] equal:@"444-555-666-777"];
-            [[model.productionPushVariantSecret should] equal:@"No secret is as strong as its blabbiest keeper"];
-            [[model.productionPushVariantUUID should] equal:@"444-555-666-777"];
+            [[model.developmentPushPlatformSecret should] equal:@"No secret is as strong as its blabbiest keeper"];
+            [[model.developmentPushPlatformUUID should] equal:@"444-555-666-777"];
+            [[model.productionPushPlatformSecret should] equal:@"No secret is as strong as its blabbiest keeper"];
+            [[model.productionPushPlatformUUID should] equal:@"444-555-666-777"];
             [[model.pushDeviceAlias should] beNil];
             [[model.pushCustomUserId should] beNil];
             [[model.pushTags should] beNil];
@@ -177,40 +177,40 @@ describe(@"PCFRegistrationParameters", ^{
     context(@"initializing with valid args from plist and persistent platformInfo", ^{
         beforeEach(^{
             [PCFPushPersistentStorage setPushApiUrl:@"http://platforminfotest.url.com"];
-            [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"platforminfo-dev-444-555-666-777"];
-            [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"platforminfo dev secret"];
-            [PCFPushPersistentStorage setProductionPushVariantUuid:@"platforminfo-prod-444-555-666-777"];
-            [PCFPushPersistentStorage setProductionPushVariantSecret:@"platforminfo prod secret"];
+            [PCFPushPersistentStorage setDevelopmentPushPlatformUuid:@"platforminfo-dev-444-555-666-777"];
+            [PCFPushPersistentStorage setDevelopmentPushPlatformSecret:@"platforminfo dev secret"];
+            [PCFPushPersistentStorage setProductionPushPlatformUuid:@"platforminfo-prod-444-555-666-777"];
+            [PCFPushPersistentStorage setProductionPushPlatformSecret:@"platforminfo prod secret"];
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Valid" ofType:@"plist"]];
         });
         
         it(@"should initialize successfully and indicate platformInfo is valid", ^{
             [[model shouldNot] beNil];
             [[model.pushAPIURL should] equal:@"http://platforminfotest.url.com"];
-            [[model.developmentPushVariantUUID should] equal:@"platforminfo-dev-444-555-666-777"];
-            [[model.developmentPushVariantSecret should] equal:@"platforminfo dev secret"];
-            [[model.productionPushVariantUUID should] equal:@"platforminfo-prod-444-555-666-777"];
-            [[model.productionPushVariantSecret should] equal:@"platforminfo prod secret"];
+            [[model.developmentPushPlatformUUID should] equal:@"platforminfo-dev-444-555-666-777"];
+            [[model.developmentPushPlatformSecret should] equal:@"platforminfo dev secret"];
+            [[model.productionPushPlatformUUID should] equal:@"platforminfo-prod-444-555-666-777"];
+            [[model.productionPushPlatformSecret should] equal:@"platforminfo prod secret"];
         });
     });
     
     context(@"initializing with valid args from empty plist and persistent platformInfo", ^{
         beforeEach(^{
             [PCFPushPersistentStorage setPushApiUrl:@"http://platforminfotest.url.com"];
-            [PCFPushPersistentStorage setDevelopmentPushVariantUuid:@"platforminfo-dev-444-555-666-777"];
-            [PCFPushPersistentStorage setDevelopmentPushVariantSecret:@"platforminfo dev secret"];
-            [PCFPushPersistentStorage setProductionPushVariantUuid:@"platforminfo-prod-444-555-666-777"];
-            [PCFPushPersistentStorage setProductionPushVariantSecret:@"platforminfo prod secret"];
+            [PCFPushPersistentStorage setDevelopmentPushPlatformUuid:@"platforminfo-dev-444-555-666-777"];
+            [PCFPushPersistentStorage setDevelopmentPushPlatformSecret:@"platforminfo dev secret"];
+            [PCFPushPersistentStorage setProductionPushPlatformUuid:@"platforminfo-prod-444-555-666-777"];
+            [PCFPushPersistentStorage setProductionPushPlatformSecret:@"platforminfo prod secret"];
             model = [PCFPushParameters parametersWithContentsOfFile:[[NSBundle bundleForClass:[self class]] pathForResource:@"Pivotal-Empty" ofType:@"plist"]];
         });
         
         it(@"should initialize successfully and indicate platformInfo is valid", ^{
             [[model shouldNot] beNil];
             [[model.pushAPIURL should] equal:@"http://platforminfotest.url.com"];
-            [[model.developmentPushVariantUUID should] equal:@"platforminfo-dev-444-555-666-777"];
-            [[model.developmentPushVariantSecret should] equal:@"platforminfo dev secret"];
-            [[model.productionPushVariantUUID should] equal:@"platforminfo-prod-444-555-666-777"];
-            [[model.productionPushVariantSecret should] equal:@"platforminfo prod secret"];
+            [[model.developmentPushPlatformUUID should] equal:@"platforminfo-dev-444-555-666-777"];
+            [[model.developmentPushPlatformSecret should] equal:@"platforminfo dev secret"];
+            [[model.productionPushPlatformUUID should] equal:@"platforminfo-prod-444-555-666-777"];
+            [[model.productionPushPlatformSecret should] equal:@"platforminfo prod secret"];
         });
     });
     
@@ -401,35 +401,35 @@ describe(@"PCFRegistrationParameters", ^{
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.serviceUrl"];
         });
         
-        it(@"should let you override the model.developmentPushVariantSecret parameter", ^{
+        it(@"should let you override the model.developmentPushPlatformSecret parameter", ^{
             [[NSUserDefaults standardUserDefaults] setValue:@"PARROTS" forKey:@"override.pivotal.push.platformSecretDevelopment"];
             model = [PCFPushParameters defaultParameters];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[model.developmentPushVariantSecret should] equal:@"PARROTS"];
+            [[model.developmentPushPlatformSecret should] equal:@"PARROTS"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformSecretDevelopment"];
         });
         
-        it(@"should let you override the model.productionPushVariantSecret parameter", ^{
+        it(@"should let you override the model.productionPushPlatformSecret parameter", ^{
             [[NSUserDefaults standardUserDefaults] setValue:@"CACTUS" forKey:@"override.pivotal.push.platformSecretProduction"];
             model = [PCFPushParameters defaultParameters];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[model.productionPushVariantSecret should] equal:@"CACTUS"];
+            [[model.productionPushPlatformSecret should] equal:@"CACTUS"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformSecretProduction"];
         });
         
-        it(@"should let you override the model.developmentPushVariantUUID parameter", ^{
+        it(@"should let you override the model.developmentPushPlatformUUID parameter", ^{
             [[NSUserDefaults standardUserDefaults] setValue:@"MONKEYS" forKey:@"override.pivotal.push.platformUuidDevelopment"];
             model = [PCFPushParameters defaultParameters];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[model.developmentPushVariantUUID should] equal:@"MONKEYS"];
+            [[model.developmentPushPlatformUUID should] equal:@"MONKEYS"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformUuidDevelopment"];
         });
         
-        it(@"should let you override the model.productionPushVariantUUID parameter", ^{
+        it(@"should let you override the model.productionPushPlatformUUID parameter", ^{
             [[NSUserDefaults standardUserDefaults] setValue:@"BANANAS" forKey:@"override.pivotal.push.platformUuidProduction"];
             model = [PCFPushParameters defaultParameters];
             [[theValue([model arePushParametersValid]) should] beTrue];
-            [[model.productionPushVariantUUID should] equal:@"BANANAS"];
+            [[model.productionPushPlatformUUID should] equal:@"BANANAS"];
             [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"override.pivotal.push.platformUuidProduction"];
         });
         

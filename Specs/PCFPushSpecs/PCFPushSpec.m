@@ -201,10 +201,10 @@ describe(@"PCFPush", ^{
             [PCFPush setPushServiceInfo: serviceInfo];
             
             [[[PCFPushPersistentStorage pushApiUrl] should] equal:@"http://serviceinfo.com"];
-            [[[PCFPushPersistentStorage developmentPushVariantUuid] should] equal:@"1234-5678"];
-            [[[PCFPushPersistentStorage developmentPushVariantSecret] should] equal:@"dev-secret"];
-            [[[PCFPushPersistentStorage productionPushVariantUuid] should] equal:@"5678-1234"];
-            [[[PCFPushPersistentStorage productionPushVariantSecret] should] equal:@"prod-secret"];
+            [[[PCFPushPersistentStorage developmentPushPlatformUuid] should] equal:@"1234-5678"];
+            [[[PCFPushPersistentStorage developmentPushPlatformSecret] should] equal:@"dev-secret"];
+            [[[PCFPushPersistentStorage productionPushPlatformUuid] should] equal:@"5678-1234"];
+            [[[PCFPushPersistentStorage productionPushPlatformSecret] should] equal:@"prod-secret"];
         });
         
         it(@"should clear the service info", ^{
@@ -218,10 +218,10 @@ describe(@"PCFPush", ^{
             [PCFPush clearPushServiceInfo];
             
             [[[PCFPushPersistentStorage pushApiUrl] should] beNil];
-            [[[PCFPushPersistentStorage developmentPushVariantUuid] should] beNil];
-            [[[PCFPushPersistentStorage developmentPushVariantSecret] should] beNil];
-            [[[PCFPushPersistentStorage productionPushVariantUuid] should] beNil];
-            [[[PCFPushPersistentStorage productionPushVariantSecret] should] beNil];
+            [[[PCFPushPersistentStorage developmentPushPlatformUuid] should] beNil];
+            [[[PCFPushPersistentStorage developmentPushPlatformSecret] should] beNil];
+            [[[PCFPushPersistentStorage productionPushPlatformUuid] should] beNil];
+            [[[PCFPushPersistentStorage productionPushPlatformSecret] should] beNil];
         });
     });
 
