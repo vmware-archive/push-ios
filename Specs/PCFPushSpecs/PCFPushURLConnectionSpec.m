@@ -14,6 +14,7 @@
 #import "NSObject+PCFJSONizable.h"
 #import "PCFPushAnalyticsStorage.h"
 #import "PCFPushPersistentStorage.h"
+#import "PCFPushSecretUtil.h"
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 
@@ -184,7 +185,7 @@ describe(@"PCFPushBackEndConnection", ^{
             __block BOOL wasExpectedResult = NO;
             __block BOOL didMakeRequest = NO;
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"ORANGE":@"KITTY", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"ORANGE":@"KITTY", @"Basic":@"Should be ignored" } ];
 
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
                 didMakeRequest = YES;
@@ -260,7 +261,7 @@ describe(@"PCFPushBackEndConnection", ^{
         });
 
         it(@"should handle a success request", ^{
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"RABBIT SEASON":@"DUCK SEASON", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"RABBIT SEASON":@"DUCK SEASON", @"Basic":@"Should be ignored" } ];
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
 
@@ -318,7 +319,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should have basic auth headers in the request", ^{
 
-            [PCFPushPersistentStorage setRequestHeaders:nil];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:nil];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -356,7 +357,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should omit the custom user ID field if the user doesn't provide one", ^{
             
-            [PCFPushPersistentStorage setRequestHeaders:nil];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:nil];
             
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -392,7 +393,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should add configurable headers to the request without affecting the basic auth header", ^{
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"CHIPMUNKS":@"SUPER CUTE", @"RABBITS":@"THEY EAT YOUR GARDEN", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"CHIPMUNKS":@"SUPER CUTE", @"RABBITS":@"THEY EAT YOUR GARDEN", @"Basic":@"Should be ignored" } ];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -424,7 +425,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should ignore custom headers with dumb values", ^{
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"NOT A STRING VALUE":@(YES) }];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"NOT A STRING VALUE":@(YES) }];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -513,7 +514,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should let you unregister successfully", ^{
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"RACCOONS":@"REALLY RUN THE CITY", @"SQUIRRELS":@"THINK THEY ARE NUTS", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"RACCOONS":@"REALLY RUN THE CITY", @"SQUIRRELS":@"THINK THEY ARE NUTS", @"Basic":@"Should be ignored" } ];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -581,7 +582,7 @@ describe(@"PCFPushBackEndConnection", ^{
 
         it(@"should let you update your push registration successfully", ^{
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"SNAZZY":@"RING TONE", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"SNAZZY":@"RING TONE", @"Basic":@"Should be ignored" } ];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 NSURLRequest *request = params[0];
@@ -644,7 +645,7 @@ describe(@"PCFPushBackEndConnection", ^{
             wasExpectedResult = NO;
             handlerBlock = nil;
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
 
             [helper setupAsyncRequestWithBlock:^(NSURLRequest *request, NSURLResponse **resultResponse, NSData **resultData, NSError **resultError) {
 
@@ -844,7 +845,7 @@ describe(@"PCFPushBackEndConnection", ^{
                 *data = [@"404 error chumps" dataUsingEncoding:NSUTF8StringEncoding];
             };
 
-            [PCFPushPersistentStorage setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
+            [[PCFPushSecretUtil getStorage] setRequestHeaders:@{ @"OOH":@"LA LA", @"Basic":@"Should be ignored" } ];
 
             [NSURLConnection stub:@selector(pcfPushSendAsynchronousRequestWrapper:queue:completionHandler:) withBlock:^id(NSArray *params) {
                 numberOfRequestsExecuted += 1;

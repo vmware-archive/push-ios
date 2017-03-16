@@ -13,7 +13,6 @@ static NSString *const KEY_DEVICE_ALIAS                 = @"PCF_PUSH_DEVICE_ALIA
 static NSString *const KEY_TAGS                         = @"PCF_PUSH_TAGS";
 static NSString *const KEY_GEOFENCES_LAST_MODIFIED_TIME = @"PCF_PUSH_GEOFENCES_LAST_MODIFIED_TIME";
 static NSString *const KEY_ARE_GEOFENCES_ENABLED        = @"PCF_PUSH_ARE_GEOFENCES_ENABLED";
-static NSString *const KEY_REQUEST_HEADERS              = @"PCF_PUSH_REQUEST_HEADERS";
 static NSString *const KEY_SERVER_VERSION               = @"PCF_PUSH_SERVER_VERSION";
 static NSString *const KEY_SERVER_VERSION_TIME_POLLED   = @"PCF_PUSH_SERVER_VERSION_TIME_POLLED";
 
@@ -22,6 +21,8 @@ static NSString *const KEY_PUSH_DEV_PLATFORM_UUID = @"PCF_PUSH_DEV_PLATFORM_UUID
 static NSString *const KEY_PUSH_DEV_PLATFORM_SECRET = @"PCF_PUSH_DEV_PLATFORM_SECRET";
 static NSString *const KEY_PUSH_PROD_PLATFORM_UUID = @"PCF_PUSH_PROD_PLATFORM_UUID";
 static NSString *const KEY_PUSH_PROD_PLATFORM_SECRET = @"PCF_PUSH_PROD_PLATFORM_SECRET";
+
+static NSString *const KEY_REQUEST_HEADERS_DEPRECATED = @"PCF_PUSH_REQUEST_HEADERS";
 
 @implementation PCFPushPersistentStorage
 
@@ -52,7 +53,6 @@ static NSString *const KEY_PUSH_PROD_PLATFORM_SECRET = @"PCF_PUSH_PROD_PLATFORM_
                       KEY_TAGS,
                       KEY_GEOFENCES_LAST_MODIFIED_TIME,
                       KEY_ARE_GEOFENCES_ENABLED,
-                      KEY_REQUEST_HEADERS,
                       KEY_SERVER_VERSION,
                       KEY_SERVER_VERSION_TIME_POLLED,
                       
@@ -66,6 +66,11 @@ static NSString *const KEY_PUSH_PROD_PLATFORM_SECRET = @"PCF_PUSH_PROD_PLATFORM_
     [keys enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop) {
         [self removeObjectForKey:key];
     }];
+}
+
++ (void)upgrade
+{
+    [self removeObjectForKey:KEY_REQUEST_HEADERS_DEPRECATED];
 }
 
 + (void)setAPNSDeviceToken:(NSData *)apnsDeviceToken
@@ -166,16 +171,6 @@ static NSString *const KEY_PUSH_PROD_PLATFORM_SECRET = @"PCF_PUSH_PROD_PLATFORM_
 + (void)setAreGeofencesEnabled:(BOOL)areGeofencesEnabled
 {
     [self persistValue:@(areGeofencesEnabled) forKey:KEY_ARE_GEOFENCES_ENABLED];
-}
-
-+ (void)setRequestHeaders:(NSDictionary *)requestHeaders
-{
-    [self persistValue:requestHeaders forKey:KEY_REQUEST_HEADERS];
-}
-
-+ (NSDictionary *)requestHeaders
-{
-    return [self persistedValueForKey:KEY_REQUEST_HEADERS];
 }
 
 + (void)setServerVersion:(NSString*)version

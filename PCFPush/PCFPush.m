@@ -12,6 +12,7 @@
 #import "PCFTagsHelper.h"
 #import "PCFPushDebug.h"
 #import "PCFPushServiceInfo.h"
+#import "PCFPushSecretUtil.h"
 
 // The current version code is read from "PCFPush.podspec" during a framework build.
 // In order to change the project version number, please edit the "PCFPush.podspec" file.
@@ -117,7 +118,7 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
 
 + (void) setRequestHeaders:(NSDictionary*)headers
 {
-    [PCFPushPersistentStorage setRequestHeaders:headers];
+    [[PCFPushSecretUtil getStorage] setRequestHeaders:headers];
 }
 
 + (void) setAuthenticationCallback:(PCFPushAuthenticationCallback)authenticationCallback
@@ -148,6 +149,11 @@ NSString *const PCFPushErrorDomain = @"PCFPushErrorDomain";
     [PCFPushPersistentStorage setProductionPushPlatformSecret:nil];
     [PCFPushPersistentStorage setDevelopmentPushPlatformUuid:nil];
     [PCFPushPersistentStorage setDevelopmentPushPlatformSecret:nil];
+}
+
++ (void) setPushSecretStorage:(id<PCFPushSecretStorage>)secretStorage
+{
+    [PCFPushSecretUtil setStorage:secretStorage];
 }
 
 @end

@@ -38,6 +38,7 @@
 		235BB25A199C085200B9EE63 /* PCFPushSpecsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24B199C085200B9EE63 /* PCFPushSpecsHelper.m */; };
 		235BB25C199C085200B9EE63 /* PCFPushParametersSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 235BB24E199C085200B9EE63 /* PCFPushParametersSpec.m */; };
 		5D2F2F8F1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */; };
+		5D6CAEFE1E7060B9001B3029 /* PCFPushInMemorySecretStorageSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D6CAEFD1E7060B9001B3029 /* PCFPushInMemorySecretStorageSpec.m */; };
 		B69DB029DD6EC4142DEAC23B /* geofence_one_item_persisted_4.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DB8B8004B79E41AAA3C12 /* geofence_one_item_persisted_4.json */; };
 		B69DB084E799AB9858551D0C /* geofence_one_item_persisted_7.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DBC7FC41BE5435F83A2AD /* geofence_one_item_persisted_7.json */; };
 		B69DB2EC10BEC11E1505CADE /* geofence_one_item_bad_radius.json in Resources */ = {isa = PBXBuildFile; fileRef = B69DBAC46347E818249DBAE7 /* geofence_one_item_bad_radius.json */; };
@@ -123,6 +124,7 @@
 		34012CF2F59FEE470ECEC1F2 /* Pods-PCFPushSpecs.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.release.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.release.xcconfig"; sourceTree = "<group>"; };
 		48E0BEE976B04ACBAB665052 /* libPods-ios.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ios.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushServiceInfoSpec.m; sourceTree = "<group>"; };
+		5D6CAEFD1E7060B9001B3029 /* PCFPushInMemorySecretStorageSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushInMemorySecretStorageSpec.m; sourceTree = "<group>"; };
 		65DC33CB493A38EAF1259929 /* Pods-PCFPushSpecs.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PCFPushSpecs.debug.xcconfig"; path = "../Pods/Target Support Files/Pods-PCFPushSpecs/Pods-PCFPushSpecs.debug.xcconfig"; sourceTree = "<group>"; };
 		982406CD77B04192B6EA55BA /* libPods-iOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-iOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B69DB00B8B5F2DE55A62352A /* geofence_one_item_persisted_6.json */ = {isa = PBXFileReference; lastKnownFileType = file.json; path = geofence_one_item_persisted_6.json; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				B69DBA57F87E491AF87F4462 /* PCFPushAnalyticsSpec.m */,
 				B69DB3BA9913F17BB626624D /* PCFPushVersionSpec.m */,
 				5D2F2F8E1E5E4DED00E974B3 /* PCFPushServiceInfoSpec.m */,
+				5D6CAEFD1E7060B9001B3029 /* PCFPushInMemorySecretStorageSpec.m */,
 			);
 			path = PCFPushSpecs;
 			sourceTree = "<group>";
@@ -241,7 +244,6 @@
 			children = (
 				65DC33CB493A38EAF1259929 /* Pods-PCFPushSpecs.debug.xcconfig */,
 				34012CF2F59FEE470ECEC1F2 /* Pods-PCFPushSpecs.release.xcconfig */,
-				B69DB56E0A5016DA6384732E /* Pivotal-AnalyticsDisabled.plist */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -273,6 +275,7 @@
 				F1CD947C19004FE80086A590 /* Pivotal-Valid.plist */,
 				F1CD94801900666F0086A590 /* Pivotal-Invalid.plist */,
 				B6AAEFF215AF196CD6B9B940 /* Pivotal.plist */,
+				B69DB56E0A5016DA6384732E /* Pivotal-AnalyticsDisabled.plist */,
 				B6AAEF958FD1CB06277607D7 /* Pivotal-Empty.plist */,
 				F10AE88D1B7A747E009BD2C7 /* Pivotal-MissingPinnedCertificates.plist */,
 				F13F81D61B545F9A00D55224 /* Pivotal-BadPinnedCertificate.plist */,
@@ -509,6 +512,7 @@
 				B69DBC6CD4EC6094A62A5ABE /* PCFPushGeofenceRegistrarSpec.m in Sources */,
 				B69DBAA0AFF58A8E0E8336A3 /* PCFPushGeofenceResponseData+Loaders.m in Sources */,
 				B69DBD2526A022C80E82BA78 /* PCFPushGeofencePersistentStoreSpec.m in Sources */,
+				5D6CAEFE1E7060B9001B3029 /* PCFPushInMemorySecretStorageSpec.m in Sources */,
 				B69DBD13EE0D7A03D7C2C186 /* PCFPushGeofenceHandlerSpec.m in Sources */,
 				B69DBC468B6BA4BB464C2C1B /* PCFPushGeofenceStatusUtilSpec.m in Sources */,
 				B69DBC9013D7BFD369ECFE01 /* PCFPushGeofenceStatusSpec.m in Sources */,

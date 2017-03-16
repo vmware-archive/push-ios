@@ -19,6 +19,7 @@
 #import "PCFPushRegistrationPostRequestData.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFPushServiceInfo.h"
+#import "PCFPushSecretUtil.h"
 
 SPEC_BEGIN(PCFPushSpecs)
 
@@ -188,7 +189,7 @@ describe(@"PCFPush", ^{
 
         it(@"should let you set request headers", ^{
             [PCFPush setRequestHeaders:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
-            [[[PCFPushPersistentStorage requestHeaders] should] equal:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
+            [[[[PCFPushSecretUtil getStorage] requestHeaders] should] equal:@{ @"TACOS":@"SPICY", @"CANDY":@"HAPPY" }];
         });
         
         
@@ -225,6 +226,20 @@ describe(@"PCFPush", ^{
         });
     });
 
+    describe(@"upgrade", ^{
+        beforeEach(^{
+            [helper setupDefaultPLIST];
+            [helper setupSuccessfulAsyncRegistrationRequest];
+            
+            [[NSUserDefaults standardUserDefaults] setObject:@{@"header": @"value"} forKey:@"PCF_PUSH_REQUEST_HEADERS"];
+        });
+        
+        it(@"clears any persisted request headers", ^{
+            [PCFPush registerForPCFPushNotificationsWithDeviceToken:helper.apnsDeviceToken tags:[NSSet<NSString*> set] deviceAlias:@"NOT EMPTY" areGeofencesEnabled:NO success:nil failure:nil];
+            [[[[NSUserDefaults standardUserDefaults] objectForKey:@"PCF_PUSH_REQUEST_HEADERS"] should] beNil];
+        });
+    });
+    
     describe(@"a push registration with an existing registration", ^{
 
         __block NSInteger successCount;

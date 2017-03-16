@@ -6,6 +6,7 @@
 #import "PCFPushGeofenceStatus.h"
 #import "PCFPushErrors.h"
 #import "PCFPushServiceInfo.h"
+#import "PCFPushSecretStorage.h"
 
 extern NSString *const PCFPushSDKVersion;
 
@@ -284,6 +285,14 @@ typedef void (^PCFPushAuthenticationCallback)(NSURLConnection *, NSURLAuthentica
  *
  */
 + (void) clearPushServiceInfo;
+
+/**
+ * Call this function to set how secrets should be stored. Currently this is used for storing additional headers that
+ * will be set when the push SDK makes any requests to the backend. By default these headers will be stored in 
+ * shared preferences, but you can provide your own implementation. An in-memory implementation is provided in
+ * PCFPushInMemorySecretStorage
+ */
++ (void) setPushSecretStorage:(id<PCFPushSecretStorage>)secretStorage;
 
 /**
  * Returns the version of the PCF Push SDK.

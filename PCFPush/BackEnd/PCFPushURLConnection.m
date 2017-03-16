@@ -13,9 +13,10 @@
 #import "PCFPushHexUtil.h"
 #import "NSURLConnection+PCFBackEndConnection.h"
 #import "PCFTagsHelper.h"
-#import "PCFPushPersistentStorage.h"
 #import "PCFPushErrors.h"
 #import "PCFPushErrorUtil.h"
+#import "PCFPushPersistentStorage.h"
+#import "PCFPushSecretUtil.h"
 
 NSString *const kPCFPushBasicAuthorizationKey = @"Authorization";
 NSString *const kPCFPushContentTypeKey = @"Content-Type";
@@ -303,8 +304,10 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPBody = [PCFPushURLConnection requestBodyDataForForAPNSDeviceToken:APNSDeviceToken method:method parameters:parameters];
     [request setValue:@"application/json" forHTTPHeaderField:kPCFPushContentTypeKey];
-    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
-    PCFPushLog(@"Back-end registration request: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
+    
+    addCustomHeaders(request, [[PCFPushSecretUtil getStorage] requestHeaders]);
+    PCFPushLog(@"Back-end registration request body: \"%@\".", [[NSString alloc] initWithData:request.HTTPBody encoding:NSUTF8StringEncoding]);
+    PCFPushLog(@"Back-end registration request headers: \"%@\".", request.allHTTPHeaderFields);
     return request;
 }
 
@@ -413,7 +416,10 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:deviceURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
     request.HTTPMethod = @"DELETE";
-    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
+    addCustomHeaders(request, [[PCFPushSecretUtil getStorage] requestHeaders]);
+    
+    NSLog(@"unreister request headers: %@", request.allHTTPHeaderFields);
+    
     return request;
 }
 
@@ -434,7 +440,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     NSURL *requestURL = [[NSURL URLWithString:kGeofencesRequestPath relativeToURL:[PCFPushURLConnection baseURL]] URLByAppendingQueryString:[NSString stringWithFormat:@"%@=%lld&%@=%@&%@", kTimestampParam, timestamp, kDeviceUuidParam, deviceUuid, kPlatformParam]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
-    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
+    addCustomHeaders(request, [[PCFPushSecretUtil getStorage] requestHeaders]);
     return request;
 }
 
@@ -454,7 +460,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     request.HTTPBody = [PCFPushURLConnection requestBodyForEvents:events];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [PCFPushURLConnection addBasicAuthToURLRequest:request withVariantUUID:parameters.variantUUID variantSecret:parameters.variantSecret];
-    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
+    addCustomHeaders(request, [[PCFPushSecretUtil getStorage] requestHeaders]);
     return request;
 }
 
@@ -484,7 +490,7 @@ void addCustomHeaders(NSMutableURLRequest *request, NSDictionary *dictionary)
     NSURL *requestURL = [NSURL URLWithString:kPCFPushVersionRequestPath relativeToURL:[PCFPushURLConnection baseURL]];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestURL cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kRequestTimeout];
     request.HTTPMethod = @"GET";
-    addCustomHeaders(request, PCFPushPersistentStorage.requestHeaders);
+    addCustomHeaders(request, [[PCFPushSecretUtil getStorage] requestHeaders]);
     return request;
 }
 

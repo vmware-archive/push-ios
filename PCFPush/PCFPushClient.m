@@ -77,6 +77,7 @@ static BOOL isHeartbeatNotification(NSDictionary *dictionary) {
         self.registrar = [[PCFPushGeofenceRegistrar alloc] initWithLocationManager:self.locationManager];
         self.store = [[PCFPushGeofencePersistentStore alloc] initWithFileManager:[NSFileManager defaultManager]];
         self.engine = [[PCFPushGeofenceEngine alloc] initWithRegistrar:self.registrar store:self.store];
+        [PCFPushPersistentStorage upgrade];
     }
     return self;
 }
