@@ -10,6 +10,7 @@
 #import "PCFPushSecretStorage.h"
 #import "PCFPushInMemorySecretStorage.h"
 #import "PCFPushParameters.h"
+#import "PCFPushSecretUtil.h"
 
 @implementation PCFPushSecretUtil
 

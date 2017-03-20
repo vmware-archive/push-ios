@@ -21,6 +21,11 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5D3FC0441E805731004EFDEF /* PCFPushInMemorySecretStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D3FC0411E805731004EFDEF /* PCFPushInMemorySecretStorage.h */; };
+		5D3FC0451E805731004EFDEF /* PCFPushInMemorySecretStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D3FC0421E805731004EFDEF /* PCFPushInMemorySecretStorage.m */; };
+		5D3FC0461E805731004EFDEF /* PCFPushSecretStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D3FC0431E805731004EFDEF /* PCFPushSecretStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5D3FC0491E805784004EFDEF /* PCFPushSecretUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D3FC0471E805784004EFDEF /* PCFPushSecretUtil.h */; };
+		5D3FC04A1E805784004EFDEF /* PCFPushSecretUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D3FC0481E805784004EFDEF /* PCFPushSecretUtil.m */; };
 		AE3318301E66922E008BCFBA /* PCFPushServiceInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = AE33182E1E66922E008BCFBA /* PCFPushServiceInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE3318311E66922E008BCFBA /* PCFPushServiceInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = AE33182F1E66922E008BCFBA /* PCFPushServiceInfo.m */; };
 		B69DB0405BC715751A9AA3FB /* PCFPushGeofenceEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = B69DBC12B179541FF815537C /* PCFPushGeofenceEngine.m */; };
@@ -104,6 +109,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5D3FC0411E805731004EFDEF /* PCFPushInMemorySecretStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushInMemorySecretStorage.h; sourceTree = "<group>"; };
+		5D3FC0421E805731004EFDEF /* PCFPushInMemorySecretStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushInMemorySecretStorage.m; sourceTree = "<group>"; };
+		5D3FC0431E805731004EFDEF /* PCFPushSecretStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushSecretStorage.h; sourceTree = "<group>"; };
+		5D3FC0471E805784004EFDEF /* PCFPushSecretUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushSecretUtil.h; sourceTree = "<group>"; };
+		5D3FC0481E805784004EFDEF /* PCFPushSecretUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushSecretUtil.m; sourceTree = "<group>"; };
 		AE33182E1E66922E008BCFBA /* PCFPushServiceInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushServiceInfo.h; sourceTree = "<group>"; };
 		AE33182F1E66922E008BCFBA /* PCFPushServiceInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCFPushServiceInfo.m; sourceTree = "<group>"; };
 		B69DB00D33A7DABE6B065D5D /* PCFPushAnalyticsStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCFPushAnalyticsStorage.h; sourceTree = "<group>"; };
@@ -252,7 +262,7 @@
 				F131CAFB1B0D0663004101F5 /* Categories */,
 				B69DBEF70B27BFBEB49BD7DC /* Geofence */,
 				F131CB0C1B0D0663004101F5 /* Models */,
-				F131CB281B0D0664004101F5 /* Persistent Storage */,
+				F131CB281B0D0664004101F5 /* Storage */,
 				F131CB2B1B0D0664004101F5 /* Protocols */,
 				F131CB2E1B0D0664004101F5 /* Utils */,
 				F131CB0B1B0D0663004101F5 /* Info.plist */,
@@ -322,15 +332,18 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		F131CB281B0D0664004101F5 /* Persistent Storage */ = {
+		F131CB281B0D0664004101F5 /* Storage */ = {
 			isa = PBXGroup;
 			children = (
+				5D3FC0411E805731004EFDEF /* PCFPushInMemorySecretStorage.h */,
+				5D3FC0421E805731004EFDEF /* PCFPushInMemorySecretStorage.m */,
+				5D3FC0431E805731004EFDEF /* PCFPushSecretStorage.h */,
 				F131CB291B0D0664004101F5 /* PCFPushPersistentStorage.h */,
 				F131CB2A1B0D0664004101F5 /* PCFPushPersistentStorage.m */,
 				B69DB1FFC52E266A850BC3B0 /* PCFPushAnalyticsStorage.m */,
 				B69DB00D33A7DABE6B065D5D /* PCFPushAnalyticsStorage.h */,
 			);
-			path = "Persistent Storage";
+			path = Storage;
 			sourceTree = "<group>";
 		};
 		F131CB2B1B0D0664004101F5 /* Protocols */ = {
@@ -345,6 +358,8 @@
 		F131CB2E1B0D0664004101F5 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				5D3FC0471E805784004EFDEF /* PCFPushSecretUtil.h */,
+				5D3FC0481E805784004EFDEF /* PCFPushSecretUtil.m */,
 				F131CB2F1B0D0664004101F5 /* PCFHardwareUtil.h */,
 				F131CB301B0D0664004101F5 /* PCFHardwareUtil.m */,
 				F131CB311B0D0664004101F5 /* PCFNotifications.h */,
@@ -373,7 +388,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D3FC0461E805731004EFDEF /* PCFPushSecretStorage.h in Headers */,
 				F131CB7A1B0D0664004101F5 /* PCFPush.h in Headers */,
+				5D3FC0491E805784004EFDEF /* PCFPushSecretUtil.h in Headers */,
 				F131CB6A1B0D0664004101F5 /* PCFPushGeofenceStatus.h in Headers */,
 				F131CB911B0D0664004101F5 /* PCFPushErrors.h in Headers */,
 				F131CB5B1B0D0664004101F5 /* PCFPushGeofenceData.h in Headers */,
@@ -395,6 +412,7 @@
 				F131CB761B0D0664004101F5 /* PCFPushRegistrationResponseData.h in Headers */,
 				F131CB731B0D0664004101F5 /* PCFPushRegistrationPutRequestData.h in Headers */,
 				F131CB441B0D0664004101F5 /* NSObject+PCFJSONizable.h in Headers */,
+				5D3FC0441E805731004EFDEF /* PCFPushInMemorySecretStorage.h in Headers */,
 				F131CB6D1B0D0664004101F5 /* PCFPushRegistrationData.h in Headers */,
 				F131CB411B0D0664004101F5 /* PCFPushURLConnection.h in Headers */,
 				F131CB3E1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.h in Headers */,
@@ -512,8 +530,10 @@
 				F131CB6E1B0D0664004101F5 /* PCFPushRegistrationData.m in Sources */,
 				F131CB711B0D0664004101F5 /* PCFPushRegistrationPostRequestData.m in Sources */,
 				F131CB651B0D0664004101F5 /* PCFPushGeofenceLocationMap.m in Sources */,
+				5D3FC0451E805731004EFDEF /* PCFPushInMemorySecretStorage.m in Sources */,
 				F131CB931B0D0664004101F5 /* PCFPushErrorUtil.m in Sources */,
 				F131CB8F1B0D0664004101F5 /* PCFPushDebug.m in Sources */,
+				5D3FC04A1E805784004EFDEF /* PCFPushSecretUtil.m in Sources */,
 				F131CB771B0D0664004101F5 /* PCFPushRegistrationResponseData.m in Sources */,
 				F131CB3F1B0D0664004101F5 /* NSURLConnection+PCFBackEndConnection.m in Sources */,
 				F131CB5F1B0D0664004101F5 /* PCFPushGeofenceDataList.m in Sources */,
