@@ -50,6 +50,10 @@ SPEC_BEGIN(PCFPushGeofenceHandlerSpec)
         [PCFPushPersistentStorage setTags:[NSSet<NSString*> set]];
     });
 
+    afterAll(^{
+        [PCFPushPersistentStorage reset];
+    });
+
     describe(@"PCFPushGeofenceHandler", ^{
 
         __block PCFPushSpecsHelper *helper;

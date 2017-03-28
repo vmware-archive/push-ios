@@ -30,12 +30,14 @@ SPEC_BEGIN(PCFPushAnalyticsSpec)
         parametersWithAnalyticsEnabled = [PCFPushParameters defaultParameters];
         [PCFPushAnalytics resetAnalytics];
         entityName = NSStringFromClass(PCFPushAnalyticsEvent.class);
+
     });
 
     afterEach(^{
         [helper resetAnalyticsStorage];
         [helper reset];
         helper = nil;
+        [PCFPushPersistentStorage reset];
     });
 
     describe(@"data migration", ^{

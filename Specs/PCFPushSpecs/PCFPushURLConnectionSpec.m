@@ -45,6 +45,10 @@ describe(@"PCFPushBackEndConnection", ^{
         helper = nil;
 	});
 
+    afterAll(^{
+        [PCFPushPersistentStorage reset];
+    });
+    
     context(@"registration bad object arguments", ^{
         it(@"should require an APNS device token", ^{
             [[theBlock( ^{ [PCFPushURLConnection registerWithParameters:helper.params

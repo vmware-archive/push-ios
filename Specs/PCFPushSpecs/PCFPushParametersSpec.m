@@ -55,6 +55,10 @@ void (^checkParametersAreValid)(PCFPushParameters *) = ^(PCFPushParameters *mode
     }];
 };
 
+afterAll(^{
+    [PCFPushPersistentStorage reset];
+});
+
 describe(@"PCFRegistrationParameters", ^{
 
     __block PCFPushSpecsHelper *helper = nil;
@@ -67,6 +71,10 @@ describe(@"PCFRegistrationParameters", ^{
     afterEach(^{
         model = nil;
         [helper reset];
+    });
+    
+    afterAll(^{
+        [PCFPushPersistentStorage reset];
     });
 
     context(@"initializing with bad arguments programatically", ^{

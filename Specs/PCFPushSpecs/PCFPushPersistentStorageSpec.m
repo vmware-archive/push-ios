@@ -17,6 +17,10 @@ describe(@"PCFPushPersistentStorage", ^{
         helper = [[PCFPushSpecsHelper alloc] init];
         [PCFPushPersistentStorage reset];
     });
+    
+    afterAll(^{
+        [PCFPushPersistentStorage reset];
+    });
                    
     it(@"should start empty", ^{
         [[[PCFPushPersistentStorage APNSDeviceToken] should] beNil];

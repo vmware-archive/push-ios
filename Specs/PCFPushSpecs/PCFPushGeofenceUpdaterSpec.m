@@ -40,6 +40,9 @@ static GeofenceRequestStub failedGeofenceRequestStub(void (^block)())
 }
 
 SPEC_BEGIN(PCFPushGeofenceUpdaterSpec)
+    afterAll(^{
+        [PCFPushPersistentStorage reset];
+    });
 
     describe(@"PCFPushGeofenceUpdater", ^{
 

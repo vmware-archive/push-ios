@@ -33,8 +33,13 @@ describe(@"PCFPush", ^{
         [PCFPushAnalytics resetAnalytics];
     });
 
+    
     afterEach(^{
         [helper reset];
+    });
+    
+    afterAll(^{
+       [PCFPushPersistentStorage reset];
     });
     
     describe(@"getting the version", ^{
