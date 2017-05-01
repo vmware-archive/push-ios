@@ -12,6 +12,7 @@
 @class CLLocationManager;
 @class CLRegion;
 
+
 @interface PCFPushGeofenceRegistrar : NSObject
 
 - (instancetype) initWithLocationManager:(CLLocationManager*)locationManager;

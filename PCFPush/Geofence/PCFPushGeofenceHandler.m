@@ -3,7 +3,7 @@
 // Copyright (c) 2015 Pivotal. All rights reserved.
 //
 
-#import <CoreLocation/CoreLocation.h>
+
 #import "PCFPushDebug.h"
 #import "PCFPushClient.h"
 #import "PCFTagsHelper.h"
