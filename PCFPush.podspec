@@ -7,11 +7,11 @@
 
 # You can bump the versions programmatically by using the version resource on Concourse.
 
-PCF_PUSH_VERSION = ENV["IOS_SDK_VERSION"] || File.read("version").strip
 
 Pod::Spec.new do |s|
+  s.version = ENV["IOS_SDK_VERSION"] || File.read("version").strip
+
   s.name         = 'PCFPush'
-  s.version      = PCF_PUSH_VERSION
   s.license      = { :type => 'CUSTOM', :file => 'LICENSE' }
   s.summary      = 'Pivotal CF Mobile Services Push Client SDK for iOS'
   s.homepage     = 'https://github.com/cfmobile'
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/cfmobile/push-ios.git', :tag => "1.7.0-final" }
   s.frameworks   = "CoreLocation"
   s.requires_arc = true
-  s.compiler_flags = "-D_PCF_PUSH_VERSION=\\\"#{PCF_PUSH_VERSION}\\\""
+  s.compiler_flags = "-D_PCF_PUSH_VERSION=\\\"#{s.version}\\\""
 
   s.ios.deployment_target = '8.0'
 
