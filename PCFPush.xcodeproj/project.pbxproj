@@ -58,7 +58,6 @@
 		F131CB421B0D0664004101F5 /* PCFPushURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CAFA1B0D0663004101F5 /* PCFPushURLConnection.m */; };
 		F131CB441B0D0664004101F5 /* NSObject+PCFJSONizable.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CAFC1B0D0663004101F5 /* NSObject+PCFJSONizable.h */; };
 		F131CB451B0D0664004101F5 /* NSObject+PCFJSONizable.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CAFD1B0D0663004101F5 /* NSObject+PCFJSONizable.m */; };
-		F131CB591B0D0664004101F5 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F131CB0B1B0D0663004101F5 /* Info.plist */; };
 		F131CB5B1B0D0664004101F5 /* PCFPushGeofenceData.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB0D1B0D0663004101F5 /* PCFPushGeofenceData.h */; };
 		F131CB5C1B0D0664004101F5 /* PCFPushGeofenceData.m in Sources */ = {isa = PBXBuildFile; fileRef = F131CB0E1B0D0663004101F5 /* PCFPushGeofenceData.m */; };
 		F131CB5E1B0D0664004101F5 /* PCFPushGeofenceDataList.h in Headers */ = {isa = PBXBuildFile; fileRef = F131CB0F1B0D0663004101F5 /* PCFPushGeofenceDataList.h */; };
@@ -496,7 +495,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F131CB591B0D0664004101F5 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
